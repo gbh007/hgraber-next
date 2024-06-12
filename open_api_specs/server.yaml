@@ -1,0 +1,323 @@
+openapi: 3.0.0
+
+info:
+  title: Task manager
+  version: 0.0.0
+
+security:
+  - headerAuth: []
+
+paths:
+  /api/file/{id}:
+    get:
+      description: Получение тела файла (изображения страницы)
+      summary: Получение тела файла
+      parameters:
+        - name: id
+          description: ID файла для получения
+          in: path
+          required: true
+          schema:
+            type: string
+      tags:
+        - book
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/system/info:
+    get:
+      description: Получение общей информации о системе
+      summary: Текущее состояние системы
+      responses:
+        200:
+          description: Информация о системе
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SystemInfo"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      tags:
+        - parse
+
+  /api/book:
+    post:
+      description: Информация о книге
+      summary: Информация о книге
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+              required:
+                - id
+      responses:
+        200:
+          description: Информация о книге
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookDetails"
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      tags:
+        - book
+
+servers:
+  - url: http://localhost:8080/
+
+tags:
+  - name: user
+    description: Взаимодействие с данными пользователя
+  - name: books
+    description: Взаимодействие с данными списков книг
+  - name: book
+    description: Взаимодействие с данными книги
+  - name: parse
+    description: Взаимодействие с системами парсинга и обработки первичных данных
+
+components:
+  schemas:
+    SystemInfo:
+      type: object
+      description: Информация о системе
+      properties:
+        count:
+          type: integer
+          description: Количество книг
+        not_load_count:
+          type: integer
+          description: Количество не обработанных книг
+        page_count:
+          type: integer
+          description: Количество страниц
+        not_load_page_count:
+          type: integer
+          description: Количество не загруженных страниц
+        pages_size:
+          type: integer
+          format: int64
+          description: Объем загруженных изображений в байтах
+        pages_size_formatted:
+          type: string
+          description: Объем загруженных изображений в человеко-читаемом формате
+        monitor:
+          type: object
+          description: Данные системы мониторинга
+          properties:
+            workers:
+              type: array
+              description: Данные об обработчиках
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Название обработчика
+                  in_queue:
+                    type: integer
+                    description: В очереди на обработку
+                  in_work:
+                    type: integer
+                    description: В обработке
+                  runners:
+                    type: integer
+                    description: Количество экземпляров обработчика (потоков)
+                required:
+                  - name
+                  - in_queue
+                  - in_work
+                  - runners
+      required:
+        - count
+        - not_load_count
+        - page_count
+        - not_load_page_count
+        - pages_size
+        - pages_size_formatted
+    BookDetails:
+      type: object
+      description: Данные книги
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID книги
+        created:
+          type: string
+          format: date-time
+          description: Время создания книги в системе
+        preview_url:
+          type: string
+          format: uri
+          description: Ссылка для предпросмотра изображения книги
+        parsed_name:
+          type: boolean
+          description: Было ли обработано название книги
+        name:
+          type: string
+          description: Название книги
+        parsed_page:
+          type: boolean
+          description: Были ли обработаны страницы
+        page_count:
+          type: integer
+          description: Количество страниц
+        page_loaded_percent:
+          type: number
+          description: Процент загруженных страниц
+          maximum: 100
+          minimum: 0
+        rating:
+          type: integer
+          description: Рейтинг книги
+          maximum: 5
+          minimum: 0
+        attributes:
+          type: array
+          description: Данные атрибутов книги
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: название атрибута
+              values:
+                type: array
+                description: значения атрибута
+                items:
+                  type: string
+            required:
+              - name
+              - values
+        pages:
+          type: array
+          description: данные страниц книги
+          items:
+            type: object
+            properties:
+              page_number:
+                type: integer
+                description: номер страницы в книге
+                minimum: 1
+              preview_url:
+                type: string
+                format: uri
+                description: ссылка на изображение для предпросмотра
+              rating:
+                type: integer
+                description: рейтинг страницы
+                maximum: 5
+                minimum: 0
+            required:
+              - page_number
+      required:
+        - id
+        - created
+        - parsed_name
+        - name
+        - parsed_page
+        - page_count
+        - page_loaded_percent
+    ErrorResponse:
+      type: object
+      description: Данные ошибки
+      properties:
+        inner_code:
+          type: string
+          description: Внутренний код ошибки
+        details:
+          type: string
+          description: Детальные данные ошибки
+      required:
+        - inner_code
+  securitySchemes:
+    headerAuth:
+      name: X-HG-Token
+      in: header
+      type: apiKey
+      description: Авторизация через заголовок
