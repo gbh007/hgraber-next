@@ -1,17 +1,111 @@
 openapi: 3.0.0
 
 info:
-  title: Task manager
+  title: HGraber next
   version: 0.0.0
+
+servers:
+  - url: http://localhost:8080/
 
 security:
   - headerAuth: []
 
 paths:
+  /api/user/registration:
+    post:
+      description: Регистрация нового пользователя
+      summary: Регистрация нового пользователя
+      tags:
+        - user
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  description: Логин пользователя
+                password:
+                  type: string
+                  description: Пароль пользователя
+                name:
+                  type: string
+                  description: Отображаемое имя пользователя
+              required:
+                - login
+                - password
+      responses:
+        204:
+          description: Успешная регистрация пользователя
+        400:
+          description: Пользовательская ошибка при создании пользователя
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка при создании пользователя
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/user/login:
+    post:
+      description: Авторизация пользователя
+      summary: Авторизация пользователя
+      tags:
+        - user
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  description: Логин пользователя
+                password:
+                  type: string
+                  description: Пароль пользователя
+              required:
+                - login
+                - password
+      responses:
+        200:
+          description: Успешная авторизация
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Токен доступа пользователя
+                required:
+                  - token
+        400:
+          description: Пользовательская ошибка при авторизации
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/file/{id}:
     get:
       description: Получение тела файла (изображения страницы)
       summary: Получение тела файла
+      tags:
+        - book
       parameters:
         - name: id
           description: ID файла для получения
@@ -19,8 +113,6 @@ paths:
           required: true
           schema:
             type: string
-      tags:
-        - book
       responses:
         200:
           description: Успешный ответ с данными
@@ -59,10 +151,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /api/system/info:
     get:
       description: Получение общей информации о системе
       summary: Текущее состояние системы
+      tags:
+        - parse
       responses:
         200:
           description: Информация о системе
@@ -88,13 +183,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      tags:
-        - parse
 
-  /api/book:
+  /api/book/details:
     post:
       description: Информация о книге
       summary: Информация о книге
+      tags:
+        - book
       requestBody:
         content:
           application/json:
@@ -144,21 +239,375 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+  /api/rate:
+    post:
+      description: Изменение рейтинга книги или страницы в ней
+      summary: Изменение рейтинга книги или страницы в ней
       tags:
         - book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                page:
+                  type: integer
+                  description: Номер страницы
+                rating:
+                  type: integer
+                  description: Рейтинг
+                  minimum: 0
+                  maximum: 5
+              required:
+                - id
+                - rating
+      responses:
+        204:
+          description: Успешное изменение рейтинга
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
-servers:
-  - url: http://localhost:8080/
+  /api/book/list:
+    post:
+      description: Список книг
+      summary: Список книг
+      tags:
+        - book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                count:
+                  type: integer
+                  description: Количество книг на странице
+                page:
+                  type: integer
+                  description: Номер страницы
+                  minimum: 1
+              required:
+                - count
+      responses:
+        200:
+          description: Данные книг
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books:
+                    type: array
+                    description: Список книг
+                    items:
+                      $ref: "#/components/schemas/BookShortInfo"
+                  pages:
+                    type: array
+                    description: Форматированный список страниц
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: integer
+                          description: Номер страницы
+                        is_current:
+                          type: boolean
+                          description: Это активная страница (по факту запрошенная)
+                        is_separator:
+                          type: boolean
+                          description: Это разделитель страниц
+                      required:
+                        - value
+                        - is_current
+                        - is_separator
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/system/handle:
+    post:
+      description: Обработка ссылок на новые книги
+      summary: Обработка ссылок на новые книги
+      tags:
+        - parse
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                urls:
+                  type: array
+                  description: Ссылки на внешние системы
+                  items:
+                    type: string
+                    format: uri
+              required:
+                - urls
+      responses:
+        200:
+          description: Итог обработки
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_count:
+                    type: integer
+                    description: Общее количество обработанных
+                  loaded_count:
+                    type: integer
+                    description: Количество загруженных (успешно обработанных)
+                  duplicate_count:
+                    type: integer
+                    description: Количество дубликатов (пропущенных)
+                  error_count:
+                    type: integer
+                    description: Количество неудачных обработок
+                  not_handled:
+                    type: array
+                    description: Не обработанные ссылки
+                    items:
+                      type: string
+                      format: uri
+                  details:
+                    type: array
+                    description: Подробности результата обработки
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          format: uri
+                          description: Изначальная ссылка
+                        is_duplicate:
+                          type: boolean
+                          description: Эта дубликат другой книги
+                        duplicate_id:
+                          type: string
+                          format: uuid
+                          description: ID книги в системе которую дублирует текущая
+                        is_handled:
+                          type: boolean
+                          description: Книга успешно обработана и добавлена в систему
+                        error_reason:
+                          type: string
+                          description: Описание ошибки которое произошло во время обработки
+                      required:
+                        - url
+                        - is_duplicate
+                        - is_handled
+                required:
+                  - total_count
+                  - loaded_count
+                  - duplicate_count
+                  - error_count
+                  - details
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/agent/task/export:
+    post:
+      description: Экспорт книг в другую систему
+      summary: Экспорт книг в другую систему
+      tags:
+        - agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                  description: Время создание книги от
+                to:
+                  type: string
+                  format: date-time
+                  description: Время создание книги до
+                exporter:
+                  type: string
+                  format: uuid
+                  description: ID агента
+              required:
+                - from
+                - to
+                - exporter
+      responses:
+        204:
+          description: Успешное создание задачи экспорта
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/agent/new:
+    post:
+      description: Создание нового агента
+      summary: Создание нового агента
+      tags:
+        - agent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Название агента
+                addr:
+                  type: string
+                  description: Адрес агента
+                  example: http://example.com
+                token:
+                  type: string
+                  description: Токен доступа к агенту
+                can_parse:
+                  type: boolean
+                  description: Может ли агент обрабатывать ссылки внешних систем
+                can_export:
+                  type: boolean
+                  description: Может ли агент экспортировать данные из системы
+              required:
+                - name
+                - addr
+                - token
+      responses:
+        204:
+          description: Успешное создание агента
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
 tags:
   - name: user
     description: Взаимодействие с данными пользователя
-  - name: books
-    description: Взаимодействие с данными списков книг
   - name: book
     description: Взаимодействие с данными книги
   - name: parse
     description: Взаимодействие с системами парсинга и обработки первичных данных
+  - name: agent
+    description: Взаимодействие с системами агентов
 
 components:
   schemas:
@@ -219,6 +668,63 @@ components:
         - not_load_page_count
         - pages_size
         - pages_size_formatted
+
+    BookShortInfo:
+      type: object
+      description: Данные книги в упрощенном формате
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID книги
+        created:
+          type: string
+          format: date-time
+          description: Время создания книги в системе
+        preview_url:
+          type: string
+          format: uri
+          description: Ссылка для предпросмотра изображения книги
+        parsed_name:
+          type: boolean
+          description: Было ли обработано название книги
+        name:
+          type: string
+          description: Название книги
+        parsed_page:
+          type: boolean
+          description: Были ли обработаны страницы
+        page_count:
+          type: integer
+          description: Количество страниц
+        page_loaded_percent:
+          type: number
+          description: Процент загруженных страниц
+          maximum: 100
+          minimum: 0
+        rating:
+          type: integer
+          description: Рейтинг книги
+          maximum: 5
+          minimum: 0
+        tags:
+          type: array
+          description: Список тегов (одноименный атрибут) книги
+          items:
+            type: string
+        has_more_tags:
+          type: boolean
+          description: Есть теги которые не были включены в список
+      required:
+        - id
+        - created
+        - parsed_name
+        - name
+        - parsed_page
+        - page_count
+        - page_loaded_percent
+        - has_more_tags
+
     BookDetails:
       type: object
       description: Данные книги
@@ -303,6 +809,7 @@ components:
         - parsed_page
         - page_count
         - page_loaded_percent
+
     ErrorResponse:
       type: object
       description: Данные ошибки
@@ -315,6 +822,7 @@ components:
           description: Детальные данные ошибки
       required:
         - inner_code
+
   securitySchemes:
     headerAuth:
       name: X-HG-Token
