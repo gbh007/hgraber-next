@@ -1,0 +1,520 @@
+openapi: 3.0.0
+
+info:
+  title: HGraber agent next
+  version: 0.0.0
+
+servers:
+  - url: http://localhost:8081/
+
+security:
+  - headerAuth: []
+
+tags:
+  - name: core
+    description: Базовое API агента
+  - name: parsing
+    description: API агента для парсинга книг и закачки страниц
+  - name: export
+    description: API агента для экспорта
+
+paths:
+  /api/core/status:
+    get:
+      description: Получение данных о состоянии агента
+      summary: Получение данных о состоянии агента
+      tags:
+        - core
+      responses:
+        200:
+          description: Успешное получение статуса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  start_at:
+                    type: string
+                    format: date-time
+                    description: Время запуска агента
+                  status:
+                    type: string
+                    description: Текущее состояние агента
+                    enum:
+                      - ok
+                      - warning
+                      - error
+                  problems:
+                    type: array
+                    description: Список проблем
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Тип проблемы
+                          enum:
+                            - info
+                            - warning
+                            - error
+                        details:
+                          type: string
+                          description: Описание проблемы
+                      required:
+                        - type
+                        - details
+                required:
+                  - start_at
+                  - status
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/book/check:
+    post:
+      description: Предварительная проверка ссылок на новые книги
+      summary: Предварительная проверка ссылок на новые книги
+      tags:
+        - parsing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                urls:
+                  type: array
+                  description: Ссылки на внешние системы
+                  items:
+                    type: string
+                    format: uri
+              required:
+                - urls
+      responses:
+        200:
+          description: Успешная проверка
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    description: Результат обработки
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          format: uri
+                          description: Ссылка на внешнюю систему
+                        result:
+                          type: string
+                          description: Результат проверки
+                          enum:
+                            - ok
+                            - unsupported
+                            - error
+                        error_details:
+                          type: string
+                          description: Данные об ошибке во время обработки
+                        possible_duplicates:
+                          type: array
+                          description: Список возможных ссылок дубликатов (зеркала внешних систем и т.п.)
+                          items:
+                            type: string
+                            format: uri
+                      required:
+                        - url
+                        - result
+                required:
+                  - result
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/book:
+    post:
+      description: Обработка новой книги
+      summary: Обработка новой книги
+      tags:
+        - parsing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: Ссылка на внешнюю систему
+              required:
+                - url
+      responses:
+        200:
+          description: Успешная обработка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookDetails"
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/page/check:
+    post:
+      description: Предварительная проверка ссылок для загрузки страниц
+      summary: Предварительная проверка ссылок для загрузки страниц
+      tags:
+        - parsing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                urls:
+                  type: array
+                  description: Ссылки на внешние системы
+                  items:
+                    type: object
+                    properties:
+                      book_url:
+                        type: string
+                        format: uri
+                        description: Ссылка на книгу во внешней системе
+                      image_url:
+                        type: string
+                        format: uri
+                        description: Ссылка на изображение во внешней системе
+                    required:
+                      - book_url
+                      - image_url
+              required:
+                - urls
+      responses:
+        200:
+          description: Успешная проверка
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    description: Результат обработки
+                    items:
+                      type: object
+                      properties:
+                        book_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на книгу во внешней системе
+                        image_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на изображение во внешней системе
+                        result:
+                          type: string
+                          description: Результат проверки
+                          enum:
+                            - ok
+                            - unsupported
+                            - error
+                        error_details:
+                          type: string
+                          description: Данные об ошибке во время обработки
+                      required:
+                        - book_url
+                        - image_url
+                        - result
+                required:
+                  - result
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/page:
+    post:
+      description: Загрузка изображения страницы
+      summary: Загрузка изображения страницы
+      tags:
+        - parsing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_url:
+                  type: string
+                  format: uri
+                  description: Ссылка на книгу во внешней системе
+                image_url:
+                  type: string
+                  format: uri
+                  description: Ссылка на изображение во внешней системе
+              required:
+                - book_url
+                - image_url
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/export/archive:
+    post:
+      description: Загрузка архива
+      summary: Загрузка архива
+      tags:
+        - export
+      parameters:
+        - name: book-id
+          description: ID книги в системе
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: book-name
+          description: Название книги
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        204:
+          description: Успешная загрузка
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      description: Данные ошибки
+      properties:
+        inner_code:
+          type: string
+          description: Внутренний код ошибки
+        details:
+          type: string
+          description: Детальные данные ошибки
+      required:
+        - inner_code
+
+    BookDetails:
+      type: object
+      description: Данные книги
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Ссылка на внешнюю систему
+        name:
+          type: string
+          description: Название книги
+        page_count:
+          type: integer
+          description: Количество страниц
+        attributes:
+          type: array
+          description: Данные атрибутов книги
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Код атрибута
+                enum:
+                  - author
+                  - category
+                  - character
+                  - group
+                  - language
+                  - parody
+                  - tag
+              values:
+                type: array
+                description: Значения атрибута
+                items:
+                  type: string
+            required:
+              - name
+              - values
+        pages:
+          type: array
+          description: данные страниц книги
+          items:
+            type: object
+            properties:
+              page_number:
+                type: integer
+                description: Номер страницы в книге
+                minimum: 1
+              url:
+                type: string
+                format: uri
+                description: Ссылка на изображение во внешней системе
+              filename:
+                type: string
+                description: Название файла с расширением
+                example: 1.jpg
+            required:
+              - page_number
+              - url
+              - filename
+      required:
+        - url
+        - name
+        - page_count
+        - attributes
+        - pages
+
+  securitySchemes:
+    headerAuth:
+      name: X-HG-Agent-Token
+      in: header
+      type: apiKey
+      description: Авторизация через заголовок

@@ -77,5 +77,6 @@ CREATE TABLE agents (
     token TEXT NOT NULL,
     can_parse BOOLEAN NOT NULL DEFAULT FALSE,
     can_export BOOLEAN NOT NULL DEFAULT FALSE,
+    priority INT NOT NULL DEFAULT 0,
     create_at TIMESTAMPTZ NOT NULL
 );

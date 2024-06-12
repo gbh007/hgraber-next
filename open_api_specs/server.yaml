@@ -157,7 +157,7 @@ paths:
       description: Получение общей информации о системе
       summary: Текущее состояние системы
       tags:
-        - parse
+        - parsing
       responses:
         200:
           description: Информация о системе
@@ -384,7 +384,7 @@ paths:
       description: Обработка ссылок на новые книги
       summary: Обработка ссылок на новые книги
       tags:
-        - parse
+        - parsing
       requestBody:
         content:
           application/json:
@@ -567,6 +567,9 @@ paths:
                 can_export:
                   type: boolean
                   description: Может ли агент экспортировать данные из системы
+                priority:
+                  type: integer
+                  description: Приоритет при выборе агентов
               required:
                 - name
                 - addr
@@ -604,7 +607,7 @@ tags:
     description: Взаимодействие с данными пользователя
   - name: book
     description: Взаимодействие с данными книги
-  - name: parse
+  - name: parsing
     description: Взаимодействие с системами парсинга и обработки первичных данных
   - name: agent
     description: Взаимодействие с системами агентов
