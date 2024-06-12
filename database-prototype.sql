@@ -9,7 +9,7 @@ CREATE TABLE books (
 
 CREATE TABLE files (
     id UUID PRIMARY KEY,
-    fullname TEXT NOT NULL,
+    filename TEXT NOT NULL,
     ext TEXT NOT NULL,
     md5_sum TEXT,
     sha256_sum TEXT,
@@ -21,11 +21,11 @@ CREATE TABLE pages (
     book_id UUID NOT NULL REFERENCES books (id) ON UPDATE CASCADE ON DELETE CASCADE,
     page_number INT NOT NULL,
     ext TEXT NOT NULL,
-    origin_url TEXT NOT NULL,
+    origin_url TEXT,
     create_at TIMESTAMPTZ NOT NULL,
     downloaded BOOL NOT NULL DEFAULT FALSE,
     load_at TIMESTAMPTZ,
-    file_id UUID NOT NULL REFERENCES files (id) ON UPDATE CASCADE ON DELETE SET NULL,
+    file_id UUID REFERENCES files (id) ON UPDATE CASCADE ON DELETE SET NULL,
     PRIMARY KEY (book_id, page_number)
 );
 
@@ -68,12 +68,14 @@ CREATE TABLE book_labels (
     book_id UUID NOT NULL REFERENCES books (id) ON UPDATE CASCADE ON DELETE CASCADE,
     page_number INT,
     name TEXT NOT NULL,
-    value TEXT NOT NULL
+    value TEXT NOT NULL,
+    create_at TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE agents (
     id UUID PRIMARY KEY,
     name TEXT NOT NULL,
+    addr TEXT NOT NULL,
     token TEXT NOT NULL,
     can_parse BOOLEAN NOT NULL DEFAULT FALSE,
     can_export BOOLEAN NOT NULL DEFAULT FALSE,
