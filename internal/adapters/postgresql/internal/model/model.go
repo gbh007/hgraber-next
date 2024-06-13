@@ -7,17 +7,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type Book struct {
-	ID               uuid.UUID      `db:"id"`
-	Name             sql.NullString `db:"name"`
-	OriginURL        sql.NullString `db:"origin_url"`
-	PageCount        sql.NullInt32  `db:"page_count"`
-	AttributesParsed bool           `db:"attributes_parsed"`
-	CreateAt         time.Time      `db:"create_at"`
-}
-
-
-
 type Attribute struct {
 	Code        string         `db:"code"`
 	Name        string         `db:"name"`

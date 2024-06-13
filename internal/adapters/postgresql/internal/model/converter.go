@@ -27,3 +27,10 @@ func StringToDB(s string) sql.NullString {
 		Valid:  s != "",
 	}
 }
+
+func Int32ToDB(i int) sql.NullInt32 {
+	return sql.NullInt32{
+		Int32: int32(i),
+		Valid: i != 0,
+	}
+}

@@ -19,7 +19,6 @@ type File struct {
 }
 
 func (f File) ToEntity() (entities.File, error) {
-
 	id, err := uuid.Parse(f.ID)
 	if err != nil {
 		return entities.File{}, err
