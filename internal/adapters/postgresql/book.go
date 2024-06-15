@@ -5,8 +5,10 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/url"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
 	"hgnext/internal/adapters/postgresql/internal/model"
@@ -26,10 +28,34 @@ func (d *Database) NewBook(ctx context.Context, book entities.Book) error {
 	return nil
 }
 
-func (d *Database) UpdateBookName(ctx context.Context, id uuid.UUID, name string) error {
-	res, err := d.db.ExecContext(ctx, `UPDATE books SET name = $1 WHERE id = $2;`, name, id.String())
+func (d *Database) UpdateBook(ctx context.Context, book entities.Book) error {
+	builder := squirrel.Update("books").
+		SetMap(
+			map[string]interface{}{
+				"name":              model.StringToDB(book.Name),
+				"origin_url":        model.URLToDB(book.OriginURL),
+				"page_count":        model.Int32ToDB(book.PageCount),
+				"attributes_parsed": book.AttributesParsed,
+			},
+		).
+		Where(squirrel.Eq{
+			"id": book.ID.String(),
+		})
+
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return err
+		return fmt.Errorf("storage: build query: %w", err)
+	}
+
+	d.logger.DebugContext(
+		ctx, "squirrel build request",
+		slog.String("query", query),
+		slog.Any("args", args),
+	)
+
+	res, err := d.db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("storage: exec query: %w", err)
 	}
 
 	if !d.isApply(ctx, res) {
@@ -85,7 +111,26 @@ func (d *Database) bookIDs(ctx context.Context, filter entities.BookFilter) ([]u
 	return ids, nil
 }
 
-func (d *Database) GetBook(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error) {
+func (d *Database) GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book, error) {
+	raw := new(model.Book)
+
+	err := d.db.GetContext(ctx, raw, `SELECT * FROM books WHERE id = $1 LIMIT 1;`, bookID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return entities.Book{}, fmt.Errorf("%w - %d", entities.BookNotFoundError, bookID)
+	}
+
+	if err != nil {
+		return entities.Book{}, err
+	}
+
+	b, err := raw.ToEntity()
+	if err != nil {
+		return entities.Book{}, err
+	}
+
+	return b, nil
+}
+func (d *Database) GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error) {
 	raw := new(model.Book)
 
 	err := d.db.GetContext(ctx, raw, `SELECT * FROM books WHERE id = $1 LIMIT 1;`, bookID)
@@ -141,7 +186,7 @@ func (d *Database) GetBooks(ctx context.Context, filter entities.BookFilter) ([]
 	}
 
 	for _, id := range ids {
-		book, err := d.GetBook(ctx, id)
+		book, err := d.GetBookFull(ctx, id)
 		if err != nil {
 			return nil, err
 		}

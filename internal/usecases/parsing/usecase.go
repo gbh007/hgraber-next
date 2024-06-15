@@ -12,8 +12,15 @@ import (
 )
 
 type Storage interface {
-	NewBook(ctx context.Context, book entities.Book) error
 	GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error)
+	GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
+
+	NewBook(ctx context.Context, book entities.Book) error
+
+	UpdateBook(ctx context.Context, book entities.Book) error
+	UpdateAttribute(ctx context.Context, id uuid.UUID, attrCode string, values []string) error
+	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error
+
 	Agents(ctx context.Context, canParse, canExport bool) ([]entities.Agent, error)
 }
 

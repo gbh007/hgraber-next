@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -27,6 +28,11 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.First
 
 	// Предварительная обработка, для уменьшения трафика на агенты
 	for _, u := range urls {
+		// Ссылки не могут содержать пробелы
+		if u.String() != strings.TrimSpace(u.String()) {
+			return entities.FirstHandleMultipleResult{}, fmt.Errorf("url (%s) have space", u.String())
+		}
+
 		ids, err := uc.storage.GetBookIDsByURL(ctx, u)
 		if err != nil {
 			return entities.FirstHandleMultipleResult{}, fmt.Errorf("url exists in storage check (%s): %w", u.String(), err)
