@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"net/url"
 	"time"
 
 	"github.com/google/uuid"
@@ -9,7 +10,7 @@ import (
 type Book struct {
 	ID               uuid.UUID
 	Name             string
-	OriginURL        string
+	OriginURL        *url.URL
 	PageCount        int
 	AttributesParsed bool
 	CreateAt         time.Time

@@ -17,7 +17,7 @@ func (d *Database) NewBook(ctx context.Context, book entities.Book) error {
 	_, err := d.db.ExecContext(
 		ctx,
 		`INSERT INTO books (id, name, origin_url, page_count, attributes_parsed, create_at) VALUES($1, $2, $3, $4, $5, $6);`,
-		book.ID.String(), model.StringToDB(book.Name), model.StringToDB(book.OriginURL), model.Int32ToDB(book.PageCount), book.AttributesParsed, book.CreateAt,
+		book.ID.String(), model.StringToDB(book.Name), model.StringToDB(book.OriginURL.String()), model.Int32ToDB(book.PageCount), book.AttributesParsed, book.CreateAt,
 	)
 	if err != nil {
 		return err
@@ -43,10 +43,6 @@ func (d *Database) GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUI
 	var idsRaw []string
 
 	err := d.db.SelectContext(ctx, &idsRaw, `SELECT id FROM books WHERE origin_url = $1;`, url.String())
-	if errors.Is(err, sql.ErrNoRows) {
-		return nil, fmt.Errorf("%w - %s", entities.BookNotFoundError, url.String())
-	}
-
 	if err != nil {
 		return nil, err
 	}

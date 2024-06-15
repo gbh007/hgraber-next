@@ -2,6 +2,7 @@ package model
 
 import (
 	"database/sql"
+	"net/url"
 	"time"
 
 	"github.com/google/uuid"
@@ -24,10 +25,19 @@ func (b Book) ToEntity() (entities.Book, error) {
 		return entities.Book{}, err
 	}
 
+	var originURL *url.URL
+
+	if b.OriginURL.Valid {
+		originURL, err = url.Parse(b.OriginURL.String)
+		if err != nil {
+			return entities.Book{}, err
+		}
+	}
+
 	return entities.Book{
 		ID:               id,
 		Name:             b.Name.String,
-		OriginURL:        b.OriginURL.String,
+		OriginURL:        originURL,
 		PageCount:        int(b.PageCount.Int32),
 		AttributesParsed: b.AttributesParsed,
 		CreateAt:         b.CreateAt,
