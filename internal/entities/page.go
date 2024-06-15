@@ -17,3 +17,11 @@ type Page struct {
 	LoadAt     time.Time
 	FileID     uuid.UUID
 }
+
+type PageForDownload struct {
+	BookID     uuid.UUID
+	PageNumber int
+	Ext        string
+	BookURL    *url.URL
+	ImageURL   *url.URL
+}

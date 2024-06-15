@@ -36,29 +36,6 @@ func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (e
 	return p, nil
 }
 
-func (d *Database) GetNotDownloadedPages(ctx context.Context) []entities.Page {
-	raw := make([]*model.Page, 0)
-
-	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM pages WHERE downloaded = FALSE;`)
-	if err != nil {
-		d.logger.ErrorContext(ctx, err.Error())
-
-		return []entities.Page{}
-	}
-
-	out := make([]entities.Page, len(raw))
-	for i, v := range raw {
-		out[i], err = v.ToEntity()
-		if err != nil {
-			d.logger.ErrorContext(ctx, err.Error())
-
-			return []entities.Page{}
-		}
-	}
-
-	return out
-}
-
 func (d *Database) UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageNumber int, downloaded bool, fileID uuid.UUID) error {
 	res, err := d.db.ExecContext(
 		ctx,

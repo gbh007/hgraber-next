@@ -3,7 +3,10 @@ package postgresql
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"log/slog"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
 	"hgnext/internal/adapters/postgresql/internal/model"
@@ -45,6 +48,40 @@ func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha
 
 	if !d.isApply(ctx, res) {
 		return entities.FileNotFoundError
+	}
+
+	return nil
+}
+
+func (d *Database) NewFile(ctx context.Context, file entities.File) error {
+	builder := squirrel.Insert("files").
+		Columns(
+			"id",
+			"filename",
+			"ext",
+			"create_at",
+		).
+		Values(
+			file.ID.String(),
+			file.Filename,
+			file.Ext,
+			file.CreateAt,
+		)
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("storage: build query: %w", err)
+	}
+
+	d.logger.DebugContext(
+		ctx, "squirrel build request",
+		slog.String("query", query),
+		slog.Any("args", args),
+	)
+
+	_, err = d.db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("storage: exec query: %w", err)
 	}
 
 	return nil

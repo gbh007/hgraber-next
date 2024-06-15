@@ -130,6 +130,7 @@ func (d *Database) GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book
 
 	return b, nil
 }
+
 func (d *Database) GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error) {
 	raw := new(model.Book)
 

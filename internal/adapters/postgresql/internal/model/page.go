@@ -57,3 +57,44 @@ func (p Page) ToEntity() (entities.Page, error) {
 		FileID:     fileID,
 	}, nil
 }
+
+type PageForDownload struct {
+	BookID     string         `db:"book_id"`
+	PageNumber int            `db:"page_number"`
+	Ext        string         `db:"ext"`
+	BookURL    sql.NullString `db:"book_url"`
+	ImageURL   sql.NullString `db:"image_url"`
+}
+
+func (p PageForDownload) ToEntity() (entities.PageForDownload, error) {
+	bookID, err := uuid.Parse(p.BookID)
+	if err != nil {
+		return entities.PageForDownload{}, err
+	}
+
+	var bookURL *url.URL
+
+	if p.BookURL.Valid {
+		bookURL, err = url.Parse(p.BookURL.String)
+		if err != nil {
+			return entities.PageForDownload{}, err
+		}
+	}
+
+	var imageURL *url.URL
+
+	if p.ImageURL.Valid {
+		imageURL, err = url.Parse(p.ImageURL.String)
+		if err != nil {
+			return entities.PageForDownload{}, err
+		}
+	}
+
+	return entities.PageForDownload{
+		BookID:     bookID,
+		PageNumber: p.PageNumber,
+		Ext:        p.Ext,
+		BookURL:    bookURL,
+		ImageURL:   imageURL,
+	}, nil
+}
