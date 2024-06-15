@@ -7,3 +7,10 @@ type SystemSizeInfo struct {
 	PageUnloadedCount int
 	PageFileSize      int64
 }
+
+type SystemWorkerStat struct {
+	Name         string
+	InQueueCount int
+	InWorkCount  int
+	RunnersCount int
+}

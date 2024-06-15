@@ -14,7 +14,7 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return entities.SystemSizeInfo{}, err
 	}
 
-	err = d.db.GetContext(ctx, &systemSize.BookUnparsedCount, `SELECT COUNT(*) FROM books WHERE name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE;`)
+	err = d.db.GetContext(ctx, &systemSize.BookUnparsedCount, `SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL;`)
 	if err != nil {
 		return entities.SystemSizeInfo{}, err
 	}

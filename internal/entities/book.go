@@ -28,3 +28,8 @@ type BookFilter struct {
 	Offset   int
 	NewFirst bool
 }
+
+type BookWithAgent struct {
+	Book
+	AgentID uuid.UUID
+}

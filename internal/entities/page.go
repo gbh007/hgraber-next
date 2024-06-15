@@ -25,3 +25,8 @@ type PageForDownload struct {
 	BookURL    *url.URL
 	ImageURL   *url.URL
 }
+
+type PageForDownloadWithAgent struct {
+	PageForDownload
+	AgentID uuid.UUID
+}

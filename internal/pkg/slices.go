@@ -22,3 +22,17 @@ func MapWithError[A, B any](a []A, c func(A) (B, error)) (b []B, err error) {
 
 	return b, nil
 }
+
+func SliceFilter[T any](s []T, f func(T) bool) []T {
+	out := make([]T, 0, len(s))
+
+	for _, v := range s {
+		if !f(v) {
+			continue
+		}
+
+		out = append(out, v)
+	}
+
+	return out
+}
