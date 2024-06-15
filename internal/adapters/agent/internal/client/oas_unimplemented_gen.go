@@ -36,7 +36,7 @@ func (UnimplementedHandler) APIExportArchivePost(ctx context.Context, req APIExp
 // Предварительная проверка ссылок на новые книги.
 //
 // POST /api/parsing/book/check
-func (UnimplementedHandler) APIParsingBookCheckPost(ctx context.Context, req OptAPIParsingBookCheckPostReq) (r APIParsingBookCheckPostRes, _ error) {
+func (UnimplementedHandler) APIParsingBookCheckPost(ctx context.Context, req *APIParsingBookCheckPostReq) (r APIParsingBookCheckPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -45,7 +45,7 @@ func (UnimplementedHandler) APIParsingBookCheckPost(ctx context.Context, req Opt
 // Обработка новой книги.
 //
 // POST /api/parsing/book
-func (UnimplementedHandler) APIParsingBookPost(ctx context.Context, req OptAPIParsingBookPostReq) (r APIParsingBookPostRes, _ error) {
+func (UnimplementedHandler) APIParsingBookPost(ctx context.Context, req *APIParsingBookPostReq) (r APIParsingBookPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -54,7 +54,7 @@ func (UnimplementedHandler) APIParsingBookPost(ctx context.Context, req OptAPIPa
 // Предварительная проверка ссылок для загрузки страниц.
 //
 // POST /api/parsing/page/check
-func (UnimplementedHandler) APIParsingPageCheckPost(ctx context.Context, req OptAPIParsingPageCheckPostReq) (r APIParsingPageCheckPostRes, _ error) {
+func (UnimplementedHandler) APIParsingPageCheckPost(ctx context.Context, req *APIParsingPageCheckPostReq) (r APIParsingPageCheckPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -63,6 +63,6 @@ func (UnimplementedHandler) APIParsingPageCheckPost(ctx context.Context, req Opt
 // Загрузка изображения страницы.
 //
 // POST /api/parsing/page
-func (UnimplementedHandler) APIParsingPagePost(ctx context.Context, req OptAPIParsingPagePostReq) (r APIParsingPagePostRes, _ error) {
+func (UnimplementedHandler) APIParsingPagePost(ctx context.Context, req *APIParsingPagePostReq) (r APIParsingPagePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

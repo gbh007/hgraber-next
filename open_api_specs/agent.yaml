@@ -98,6 +98,7 @@ paths:
       tags:
         - parsing
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -182,6 +183,7 @@ paths:
       tags:
         - parsing
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -232,6 +234,7 @@ paths:
       tags:
         - parsing
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -326,6 +329,7 @@ paths:
       tags:
         - parsing
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -396,6 +400,7 @@ paths:
           schema:
             type: string
       requestBody:
+        required: true
         content:
           application/octet-stream:
             schema:
@@ -480,8 +485,9 @@ components:
                 description: Значения атрибута
                 items:
                   type: string
+
             required:
-              - name
+              - code
               - values
         pages:
           type: array

@@ -3,10 +3,11 @@ package postgresql
 import (
 	"context"
 	"database/sql"
-	"hgnext/internal/adapters/postgresql/internal/model"
-	"hgnext/internal/entities"
 
 	"github.com/google/uuid"
+
+	"hgnext/internal/adapters/postgresql/internal/model"
+	"hgnext/internal/entities"
 )
 
 func (d *Database) GetUnHashedFiles(ctx context.Context) []entities.File {

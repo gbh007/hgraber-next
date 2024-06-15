@@ -1,0 +1,19 @@
+run:
+  skip-files:
+    - ".*_gen\\.go"
+
+linters-settings:
+  goimports:
+    local-prefixes: hgnext
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(hgnext)
+
+linters:
+  # disable-all: true
+  enable:
+    - gci
+    - goimports
+    - wsl

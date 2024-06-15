@@ -18,7 +18,7 @@ var _ Handler = UnimplementedHandler{}
 // Создание нового агента.
 //
 // POST /api/agent/new
-func (UnimplementedHandler) APIAgentNewPost(ctx context.Context, req OptAPIAgentNewPostReq) (r APIAgentNewPostRes, _ error) {
+func (UnimplementedHandler) APIAgentNewPost(ctx context.Context, req *APIAgentNewPostReq) (r APIAgentNewPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -27,7 +27,7 @@ func (UnimplementedHandler) APIAgentNewPost(ctx context.Context, req OptAPIAgent
 // Экспорт книг в другую систему.
 //
 // POST /api/agent/task/export
-func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req OptAPIAgentTaskExportPostReq) (r APIAgentTaskExportPostRes, _ error) {
+func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) (r APIAgentTaskExportPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -36,7 +36,7 @@ func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req OptA
 // Информация о книге.
 //
 // POST /api/book/details
-func (UnimplementedHandler) APIBookDetailsPost(ctx context.Context, req OptAPIBookDetailsPostReq) (r APIBookDetailsPostRes, _ error) {
+func (UnimplementedHandler) APIBookDetailsPost(ctx context.Context, req *APIBookDetailsPostReq) (r APIBookDetailsPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -45,7 +45,7 @@ func (UnimplementedHandler) APIBookDetailsPost(ctx context.Context, req OptAPIBo
 // Список книг.
 //
 // POST /api/book/list
-func (UnimplementedHandler) APIBookListPost(ctx context.Context, req OptAPIBookListPostReq) (r APIBookListPostRes, _ error) {
+func (UnimplementedHandler) APIBookListPost(ctx context.Context, req *APIBookListPostReq) (r APIBookListPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -63,7 +63,7 @@ func (UnimplementedHandler) APIFileIDGet(ctx context.Context, params APIFileIDGe
 // Изменение рейтинга книги или страницы в ней.
 //
 // POST /api/rate
-func (UnimplementedHandler) APIRatePost(ctx context.Context, req OptAPIRatePostReq) (r APIRatePostRes, _ error) {
+func (UnimplementedHandler) APIRatePost(ctx context.Context, req *APIRatePostReq) (r APIRatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -72,7 +72,7 @@ func (UnimplementedHandler) APIRatePost(ctx context.Context, req OptAPIRatePostR
 // Обработка ссылок на новые книги.
 //
 // POST /api/system/handle
-func (UnimplementedHandler) APISystemHandlePost(ctx context.Context, req OptAPISystemHandlePostReq) (r APISystemHandlePostRes, _ error) {
+func (UnimplementedHandler) APISystemHandlePost(ctx context.Context, req *APISystemHandlePostReq) (r APISystemHandlePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -90,7 +90,7 @@ func (UnimplementedHandler) APISystemInfoGet(ctx context.Context) (r APISystemIn
 // Авторизация пользователя.
 //
 // POST /api/user/login
-func (UnimplementedHandler) APIUserLoginPost(ctx context.Context, req OptAPIUserLoginPostReq) (r APIUserLoginPostRes, _ error) {
+func (UnimplementedHandler) APIUserLoginPost(ctx context.Context, req *APIUserLoginPostReq) (r APIUserLoginPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -99,6 +99,6 @@ func (UnimplementedHandler) APIUserLoginPost(ctx context.Context, req OptAPIUser
 // Регистрация нового пользователя.
 //
 // POST /api/user/registration
-func (UnimplementedHandler) APIUserRegistrationPost(ctx context.Context, req OptAPIUserRegistrationPostReq) (r APIUserRegistrationPostRes, _ error) {
+func (UnimplementedHandler) APIUserRegistrationPost(ctx context.Context, req *APIUserRegistrationPostReq) (r APIUserRegistrationPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

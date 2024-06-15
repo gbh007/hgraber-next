@@ -25,25 +25,25 @@ type Handler interface {
 	// Предварительная проверка ссылок на новые книги.
 	//
 	// POST /api/parsing/book/check
-	APIParsingBookCheckPost(ctx context.Context, req OptAPIParsingBookCheckPostReq) (APIParsingBookCheckPostRes, error)
+	APIParsingBookCheckPost(ctx context.Context, req *APIParsingBookCheckPostReq) (APIParsingBookCheckPostRes, error)
 	// APIParsingBookPost implements POST /api/parsing/book operation.
 	//
 	// Обработка новой книги.
 	//
 	// POST /api/parsing/book
-	APIParsingBookPost(ctx context.Context, req OptAPIParsingBookPostReq) (APIParsingBookPostRes, error)
+	APIParsingBookPost(ctx context.Context, req *APIParsingBookPostReq) (APIParsingBookPostRes, error)
 	// APIParsingPageCheckPost implements POST /api/parsing/page/check operation.
 	//
 	// Предварительная проверка ссылок для загрузки страниц.
 	//
 	// POST /api/parsing/page/check
-	APIParsingPageCheckPost(ctx context.Context, req OptAPIParsingPageCheckPostReq) (APIParsingPageCheckPostRes, error)
+	APIParsingPageCheckPost(ctx context.Context, req *APIParsingPageCheckPostReq) (APIParsingPageCheckPostRes, error)
 	// APIParsingPagePost implements POST /api/parsing/page operation.
 	//
 	// Загрузка изображения страницы.
 	//
 	// POST /api/parsing/page
-	APIParsingPagePost(ctx context.Context, req OptAPIParsingPagePostReq) (APIParsingPagePostRes, error)
+	APIParsingPagePost(ctx context.Context, req *APIParsingPagePostReq) (APIParsingPagePostRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

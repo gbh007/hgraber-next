@@ -2,9 +2,10 @@ package postgresql
 
 import (
 	"context"
-	"hgnext/internal/adapters/postgresql/internal/model"
 
 	"github.com/google/uuid"
+
+	"hgnext/internal/adapters/postgresql/internal/model"
 )
 
 func (d *Database) getBookAttr(ctx context.Context, bookID uuid.UUID) ([]*model.BookAttribute, error) {

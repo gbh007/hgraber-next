@@ -453,7 +453,7 @@ func (s *Server) handleAPIParsingBookCheckPostRequest(args [0]string, argsEscape
 		}
 
 		type (
-			Request  = OptAPIParsingBookCheckPostReq
+			Request  = *APIParsingBookCheckPostReq
 			Params   = struct{}
 			Response = APIParsingBookCheckPostRes
 		)
@@ -608,7 +608,7 @@ func (s *Server) handleAPIParsingBookPostRequest(args [0]string, argsEscaped boo
 		}
 
 		type (
-			Request  = OptAPIParsingBookPostReq
+			Request  = *APIParsingBookPostReq
 			Params   = struct{}
 			Response = APIParsingBookPostRes
 		)
@@ -763,7 +763,7 @@ func (s *Server) handleAPIParsingPageCheckPostRequest(args [0]string, argsEscape
 		}
 
 		type (
-			Request  = OptAPIParsingPageCheckPostReq
+			Request  = *APIParsingPageCheckPostReq
 			Params   = struct{}
 			Response = APIParsingPageCheckPostRes
 		)
@@ -918,7 +918,7 @@ func (s *Server) handleAPIParsingPagePostRequest(args [0]string, argsEscaped boo
 		}
 
 		type (
-			Request  = OptAPIParsingPagePostReq
+			Request  = *APIParsingPagePostReq
 			Params   = struct{}
 			Response = APIParsingPagePostRes
 		)

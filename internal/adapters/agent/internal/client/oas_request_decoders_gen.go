@@ -35,9 +35,6 @@ func (s *Server) decodeAPIExportArchivePostRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -53,7 +50,7 @@ func (s *Server) decodeAPIExportArchivePostRequest(r *http.Request) (
 }
 
 func (s *Server) decodeAPIParsingBookCheckPostRequest(r *http.Request) (
-	req OptAPIParsingBookCheckPostReq,
+	req *APIParsingBookCheckPostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -72,9 +69,6 @@ func (s *Server) decodeAPIParsingBookCheckPostRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -82,7 +76,7 @@ func (s *Server) decodeAPIParsingBookCheckPostRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -90,14 +84,13 @@ func (s *Server) decodeAPIParsingBookCheckPostRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptAPIParsingBookCheckPostReq
+		var request APIParsingBookCheckPostReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -114,28 +107,21 @@ func (s *Server) decodeAPIParsingBookCheckPostRequest(r *http.Request) (
 			return req, close, err
 		}
 		if err := func() error {
-			if value, ok := request.Get(); ok {
-				if err := func() error {
-					if err := value.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					return err
-				}
+			if err := request.Validate(); err != nil {
+				return err
 			}
 			return nil
 		}(); err != nil {
 			return req, close, errors.Wrap(err, "validate")
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeAPIParsingBookPostRequest(r *http.Request) (
-	req OptAPIParsingBookPostReq,
+	req *APIParsingBookPostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -154,9 +140,6 @@ func (s *Server) decodeAPIParsingBookPostRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -164,7 +147,7 @@ func (s *Server) decodeAPIParsingBookPostRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -172,14 +155,13 @@ func (s *Server) decodeAPIParsingBookPostRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptAPIParsingBookPostReq
+		var request APIParsingBookPostReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -195,14 +177,14 @@ func (s *Server) decodeAPIParsingBookPostRequest(r *http.Request) (
 			}
 			return req, close, err
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeAPIParsingPageCheckPostRequest(r *http.Request) (
-	req OptAPIParsingPageCheckPostReq,
+	req *APIParsingPageCheckPostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -221,9 +203,6 @@ func (s *Server) decodeAPIParsingPageCheckPostRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -231,7 +210,7 @@ func (s *Server) decodeAPIParsingPageCheckPostRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -239,14 +218,13 @@ func (s *Server) decodeAPIParsingPageCheckPostRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptAPIParsingPageCheckPostReq
+		var request APIParsingPageCheckPostReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -263,28 +241,21 @@ func (s *Server) decodeAPIParsingPageCheckPostRequest(r *http.Request) (
 			return req, close, err
 		}
 		if err := func() error {
-			if value, ok := request.Get(); ok {
-				if err := func() error {
-					if err := value.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					return err
-				}
+			if err := request.Validate(); err != nil {
+				return err
 			}
 			return nil
 		}(); err != nil {
 			return req, close, errors.Wrap(err, "validate")
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeAPIParsingPagePostRequest(r *http.Request) (
-	req OptAPIParsingPagePostReq,
+	req *APIParsingPagePostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -303,9 +274,6 @@ func (s *Server) decodeAPIParsingPagePostRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -313,7 +281,7 @@ func (s *Server) decodeAPIParsingPagePostRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -321,14 +289,13 @@ func (s *Server) decodeAPIParsingPagePostRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptAPIParsingPagePostReq
+		var request APIParsingPagePostReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -344,7 +311,7 @@ func (s *Server) decodeAPIParsingPagePostRequest(r *http.Request) (
 			}
 			return req, close, err
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}

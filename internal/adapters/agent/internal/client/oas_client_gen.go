@@ -40,25 +40,25 @@ type Invoker interface {
 	// Предварительная проверка ссылок на новые книги.
 	//
 	// POST /api/parsing/book/check
-	APIParsingBookCheckPost(ctx context.Context, request OptAPIParsingBookCheckPostReq) (APIParsingBookCheckPostRes, error)
+	APIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (APIParsingBookCheckPostRes, error)
 	// APIParsingBookPost invokes POST /api/parsing/book operation.
 	//
 	// Обработка новой книги.
 	//
 	// POST /api/parsing/book
-	APIParsingBookPost(ctx context.Context, request OptAPIParsingBookPostReq) (APIParsingBookPostRes, error)
+	APIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (APIParsingBookPostRes, error)
 	// APIParsingPageCheckPost invokes POST /api/parsing/page/check operation.
 	//
 	// Предварительная проверка ссылок для загрузки страниц.
 	//
 	// POST /api/parsing/page/check
-	APIParsingPageCheckPost(ctx context.Context, request OptAPIParsingPageCheckPostReq) (APIParsingPageCheckPostRes, error)
+	APIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (APIParsingPageCheckPostRes, error)
 	// APIParsingPagePost invokes POST /api/parsing/page operation.
 	//
 	// Загрузка изображения страницы.
 	//
 	// POST /api/parsing/page
-	APIParsingPagePost(ctx context.Context, request OptAPIParsingPagePostReq) (APIParsingPagePostRes, error)
+	APIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (APIParsingPagePostRes, error)
 }
 
 // Client implements OAS client.
@@ -352,12 +352,12 @@ func (c *Client) sendAPIExportArchivePost(ctx context.Context, request APIExport
 // Предварительная проверка ссылок на новые книги.
 //
 // POST /api/parsing/book/check
-func (c *Client) APIParsingBookCheckPost(ctx context.Context, request OptAPIParsingBookCheckPostReq) (APIParsingBookCheckPostRes, error) {
+func (c *Client) APIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (APIParsingBookCheckPostRes, error) {
 	res, err := c.sendAPIParsingBookCheckPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIParsingBookCheckPost(ctx context.Context, request OptAPIParsingBookCheckPostReq) (res APIParsingBookCheckPostRes, err error) {
+func (c *Client) sendAPIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (res APIParsingBookCheckPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book/check"),
@@ -459,12 +459,12 @@ func (c *Client) sendAPIParsingBookCheckPost(ctx context.Context, request OptAPI
 // Обработка новой книги.
 //
 // POST /api/parsing/book
-func (c *Client) APIParsingBookPost(ctx context.Context, request OptAPIParsingBookPostReq) (APIParsingBookPostRes, error) {
+func (c *Client) APIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (APIParsingBookPostRes, error) {
 	res, err := c.sendAPIParsingBookPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIParsingBookPost(ctx context.Context, request OptAPIParsingBookPostReq) (res APIParsingBookPostRes, err error) {
+func (c *Client) sendAPIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (res APIParsingBookPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book"),
@@ -566,12 +566,12 @@ func (c *Client) sendAPIParsingBookPost(ctx context.Context, request OptAPIParsi
 // Предварительная проверка ссылок для загрузки страниц.
 //
 // POST /api/parsing/page/check
-func (c *Client) APIParsingPageCheckPost(ctx context.Context, request OptAPIParsingPageCheckPostReq) (APIParsingPageCheckPostRes, error) {
+func (c *Client) APIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (APIParsingPageCheckPostRes, error) {
 	res, err := c.sendAPIParsingPageCheckPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIParsingPageCheckPost(ctx context.Context, request OptAPIParsingPageCheckPostReq) (res APIParsingPageCheckPostRes, err error) {
+func (c *Client) sendAPIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (res APIParsingPageCheckPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/page/check"),
@@ -673,12 +673,12 @@ func (c *Client) sendAPIParsingPageCheckPost(ctx context.Context, request OptAPI
 // Загрузка изображения страницы.
 //
 // POST /api/parsing/page
-func (c *Client) APIParsingPagePost(ctx context.Context, request OptAPIParsingPagePostReq) (APIParsingPagePostRes, error) {
+func (c *Client) APIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (APIParsingPagePostRes, error) {
 	res, err := c.sendAPIParsingPagePost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIParsingPagePost(ctx context.Context, request OptAPIParsingPagePostReq) (res APIParsingPagePostRes, err error) {
+func (c *Client) sendAPIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (res APIParsingPagePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/page"),

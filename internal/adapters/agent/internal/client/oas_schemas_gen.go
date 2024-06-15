@@ -710,13 +710,13 @@ func (*BookDetails) aPIParsingBookPostRes() {}
 
 type BookDetailsAttributesItem struct {
 	// Код атрибута.
-	Code OptBookDetailsAttributesItemCode `json:"code"`
+	Code BookDetailsAttributesItemCode `json:"code"`
 	// Значения атрибута.
 	Values []string `json:"values"`
 }
 
 // GetCode returns the value of Code.
-func (s *BookDetailsAttributesItem) GetCode() OptBookDetailsAttributesItemCode {
+func (s *BookDetailsAttributesItem) GetCode() BookDetailsAttributesItemCode {
 	return s.Code
 }
 
@@ -726,7 +726,7 @@ func (s *BookDetailsAttributesItem) GetValues() []string {
 }
 
 // SetCode sets the value of Code.
-func (s *BookDetailsAttributesItem) SetCode(val OptBookDetailsAttributesItemCode) {
+func (s *BookDetailsAttributesItem) SetCode(val BookDetailsAttributesItemCode) {
 	s.Code = val
 }
 
@@ -892,236 +892,6 @@ func (s *HeaderAuth) GetAPIKey() string {
 // SetAPIKey sets the value of APIKey.
 func (s *HeaderAuth) SetAPIKey(val string) {
 	s.APIKey = val
-}
-
-// NewOptAPIParsingBookCheckPostReq returns new OptAPIParsingBookCheckPostReq with value set to v.
-func NewOptAPIParsingBookCheckPostReq(v APIParsingBookCheckPostReq) OptAPIParsingBookCheckPostReq {
-	return OptAPIParsingBookCheckPostReq{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptAPIParsingBookCheckPostReq is optional APIParsingBookCheckPostReq.
-type OptAPIParsingBookCheckPostReq struct {
-	Value APIParsingBookCheckPostReq
-	Set   bool
-}
-
-// IsSet returns true if OptAPIParsingBookCheckPostReq was set.
-func (o OptAPIParsingBookCheckPostReq) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptAPIParsingBookCheckPostReq) Reset() {
-	var v APIParsingBookCheckPostReq
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptAPIParsingBookCheckPostReq) SetTo(v APIParsingBookCheckPostReq) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptAPIParsingBookCheckPostReq) Get() (v APIParsingBookCheckPostReq, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptAPIParsingBookCheckPostReq) Or(d APIParsingBookCheckPostReq) APIParsingBookCheckPostReq {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptAPIParsingBookPostReq returns new OptAPIParsingBookPostReq with value set to v.
-func NewOptAPIParsingBookPostReq(v APIParsingBookPostReq) OptAPIParsingBookPostReq {
-	return OptAPIParsingBookPostReq{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptAPIParsingBookPostReq is optional APIParsingBookPostReq.
-type OptAPIParsingBookPostReq struct {
-	Value APIParsingBookPostReq
-	Set   bool
-}
-
-// IsSet returns true if OptAPIParsingBookPostReq was set.
-func (o OptAPIParsingBookPostReq) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptAPIParsingBookPostReq) Reset() {
-	var v APIParsingBookPostReq
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptAPIParsingBookPostReq) SetTo(v APIParsingBookPostReq) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptAPIParsingBookPostReq) Get() (v APIParsingBookPostReq, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptAPIParsingBookPostReq) Or(d APIParsingBookPostReq) APIParsingBookPostReq {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptAPIParsingPageCheckPostReq returns new OptAPIParsingPageCheckPostReq with value set to v.
-func NewOptAPIParsingPageCheckPostReq(v APIParsingPageCheckPostReq) OptAPIParsingPageCheckPostReq {
-	return OptAPIParsingPageCheckPostReq{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptAPIParsingPageCheckPostReq is optional APIParsingPageCheckPostReq.
-type OptAPIParsingPageCheckPostReq struct {
-	Value APIParsingPageCheckPostReq
-	Set   bool
-}
-
-// IsSet returns true if OptAPIParsingPageCheckPostReq was set.
-func (o OptAPIParsingPageCheckPostReq) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptAPIParsingPageCheckPostReq) Reset() {
-	var v APIParsingPageCheckPostReq
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptAPIParsingPageCheckPostReq) SetTo(v APIParsingPageCheckPostReq) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptAPIParsingPageCheckPostReq) Get() (v APIParsingPageCheckPostReq, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptAPIParsingPageCheckPostReq) Or(d APIParsingPageCheckPostReq) APIParsingPageCheckPostReq {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptAPIParsingPagePostReq returns new OptAPIParsingPagePostReq with value set to v.
-func NewOptAPIParsingPagePostReq(v APIParsingPagePostReq) OptAPIParsingPagePostReq {
-	return OptAPIParsingPagePostReq{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptAPIParsingPagePostReq is optional APIParsingPagePostReq.
-type OptAPIParsingPagePostReq struct {
-	Value APIParsingPagePostReq
-	Set   bool
-}
-
-// IsSet returns true if OptAPIParsingPagePostReq was set.
-func (o OptAPIParsingPagePostReq) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptAPIParsingPagePostReq) Reset() {
-	var v APIParsingPagePostReq
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptAPIParsingPagePostReq) SetTo(v APIParsingPagePostReq) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptAPIParsingPagePostReq) Get() (v APIParsingPagePostReq, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptAPIParsingPagePostReq) Or(d APIParsingPagePostReq) APIParsingPagePostReq {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptBookDetailsAttributesItemCode returns new OptBookDetailsAttributesItemCode with value set to v.
-func NewOptBookDetailsAttributesItemCode(v BookDetailsAttributesItemCode) OptBookDetailsAttributesItemCode {
-	return OptBookDetailsAttributesItemCode{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptBookDetailsAttributesItemCode is optional BookDetailsAttributesItemCode.
-type OptBookDetailsAttributesItemCode struct {
-	Value BookDetailsAttributesItemCode
-	Set   bool
-}
-
-// IsSet returns true if OptBookDetailsAttributesItemCode was set.
-func (o OptBookDetailsAttributesItemCode) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptBookDetailsAttributesItemCode) Reset() {
-	var v BookDetailsAttributesItemCode
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptBookDetailsAttributesItemCode) SetTo(v BookDetailsAttributesItemCode) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptBookDetailsAttributesItemCode) Get() (v BookDetailsAttributesItemCode, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptBookDetailsAttributesItemCode) Or(d BookDetailsAttributesItemCode) BookDetailsAttributesItemCode {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
 }
 
 // NewOptString returns new OptString with value set to v.

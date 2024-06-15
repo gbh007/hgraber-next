@@ -28,25 +28,25 @@ type Invoker interface {
 	// Создание нового агента.
 	//
 	// POST /api/agent/new
-	APIAgentNewPost(ctx context.Context, request OptAPIAgentNewPostReq) (APIAgentNewPostRes, error)
+	APIAgentNewPost(ctx context.Context, request *APIAgentNewPostReq) (APIAgentNewPostRes, error)
 	// APIAgentTaskExportPost invokes POST /api/agent/task/export operation.
 	//
 	// Экспорт книг в другую систему.
 	//
 	// POST /api/agent/task/export
-	APIAgentTaskExportPost(ctx context.Context, request OptAPIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error)
+	APIAgentTaskExportPost(ctx context.Context, request *APIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error)
 	// APIBookDetailsPost invokes POST /api/book/details operation.
 	//
 	// Информация о книге.
 	//
 	// POST /api/book/details
-	APIBookDetailsPost(ctx context.Context, request OptAPIBookDetailsPostReq) (APIBookDetailsPostRes, error)
+	APIBookDetailsPost(ctx context.Context, request *APIBookDetailsPostReq) (APIBookDetailsPostRes, error)
 	// APIBookListPost invokes POST /api/book/list operation.
 	//
 	// Список книг.
 	//
 	// POST /api/book/list
-	APIBookListPost(ctx context.Context, request OptAPIBookListPostReq) (APIBookListPostRes, error)
+	APIBookListPost(ctx context.Context, request *APIBookListPostReq) (APIBookListPostRes, error)
 	// APIFileIDGet invokes GET /api/file/{id} operation.
 	//
 	// Получение тела файла (изображения страницы).
@@ -58,13 +58,13 @@ type Invoker interface {
 	// Изменение рейтинга книги или страницы в ней.
 	//
 	// POST /api/rate
-	APIRatePost(ctx context.Context, request OptAPIRatePostReq) (APIRatePostRes, error)
+	APIRatePost(ctx context.Context, request *APIRatePostReq) (APIRatePostRes, error)
 	// APISystemHandlePost invokes POST /api/system/handle operation.
 	//
 	// Обработка ссылок на новые книги.
 	//
 	// POST /api/system/handle
-	APISystemHandlePost(ctx context.Context, request OptAPISystemHandlePostReq) (APISystemHandlePostRes, error)
+	APISystemHandlePost(ctx context.Context, request *APISystemHandlePostReq) (APISystemHandlePostRes, error)
 	// APISystemInfoGet invokes GET /api/system/info operation.
 	//
 	// Получение общей информации о системе.
@@ -76,13 +76,13 @@ type Invoker interface {
 	// Авторизация пользователя.
 	//
 	// POST /api/user/login
-	APIUserLoginPost(ctx context.Context, request OptAPIUserLoginPostReq) (APIUserLoginPostRes, error)
+	APIUserLoginPost(ctx context.Context, request *APIUserLoginPostReq) (APIUserLoginPostRes, error)
 	// APIUserRegistrationPost invokes POST /api/user/registration operation.
 	//
 	// Регистрация нового пользователя.
 	//
 	// POST /api/user/registration
-	APIUserRegistrationPost(ctx context.Context, request OptAPIUserRegistrationPostReq) (APIUserRegistrationPostRes, error)
+	APIUserRegistrationPost(ctx context.Context, request *APIUserRegistrationPostReq) (APIUserRegistrationPostRes, error)
 }
 
 // Client implements OAS client.
@@ -140,12 +140,12 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Создание нового агента.
 //
 // POST /api/agent/new
-func (c *Client) APIAgentNewPost(ctx context.Context, request OptAPIAgentNewPostReq) (APIAgentNewPostRes, error) {
+func (c *Client) APIAgentNewPost(ctx context.Context, request *APIAgentNewPostReq) (APIAgentNewPostRes, error) {
 	res, err := c.sendAPIAgentNewPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIAgentNewPost(ctx context.Context, request OptAPIAgentNewPostReq) (res APIAgentNewPostRes, err error) {
+func (c *Client) sendAPIAgentNewPost(ctx context.Context, request *APIAgentNewPostReq) (res APIAgentNewPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/agent/new"),
@@ -247,12 +247,12 @@ func (c *Client) sendAPIAgentNewPost(ctx context.Context, request OptAPIAgentNew
 // Экспорт книг в другую систему.
 //
 // POST /api/agent/task/export
-func (c *Client) APIAgentTaskExportPost(ctx context.Context, request OptAPIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error) {
+func (c *Client) APIAgentTaskExportPost(ctx context.Context, request *APIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error) {
 	res, err := c.sendAPIAgentTaskExportPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIAgentTaskExportPost(ctx context.Context, request OptAPIAgentTaskExportPostReq) (res APIAgentTaskExportPostRes, err error) {
+func (c *Client) sendAPIAgentTaskExportPost(ctx context.Context, request *APIAgentTaskExportPostReq) (res APIAgentTaskExportPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/agent/task/export"),
@@ -354,12 +354,12 @@ func (c *Client) sendAPIAgentTaskExportPost(ctx context.Context, request OptAPIA
 // Информация о книге.
 //
 // POST /api/book/details
-func (c *Client) APIBookDetailsPost(ctx context.Context, request OptAPIBookDetailsPostReq) (APIBookDetailsPostRes, error) {
+func (c *Client) APIBookDetailsPost(ctx context.Context, request *APIBookDetailsPostReq) (APIBookDetailsPostRes, error) {
 	res, err := c.sendAPIBookDetailsPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIBookDetailsPost(ctx context.Context, request OptAPIBookDetailsPostReq) (res APIBookDetailsPostRes, err error) {
+func (c *Client) sendAPIBookDetailsPost(ctx context.Context, request *APIBookDetailsPostReq) (res APIBookDetailsPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/book/details"),
@@ -461,12 +461,12 @@ func (c *Client) sendAPIBookDetailsPost(ctx context.Context, request OptAPIBookD
 // Список книг.
 //
 // POST /api/book/list
-func (c *Client) APIBookListPost(ctx context.Context, request OptAPIBookListPostReq) (APIBookListPostRes, error) {
+func (c *Client) APIBookListPost(ctx context.Context, request *APIBookListPostReq) (APIBookListPostRes, error) {
 	res, err := c.sendAPIBookListPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIBookListPost(ctx context.Context, request OptAPIBookListPostReq) (res APIBookListPostRes, err error) {
+func (c *Client) sendAPIBookListPost(ctx context.Context, request *APIBookListPostReq) (res APIBookListPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/book/list"),
@@ -690,12 +690,12 @@ func (c *Client) sendAPIFileIDGet(ctx context.Context, params APIFileIDGetParams
 // Изменение рейтинга книги или страницы в ней.
 //
 // POST /api/rate
-func (c *Client) APIRatePost(ctx context.Context, request OptAPIRatePostReq) (APIRatePostRes, error) {
+func (c *Client) APIRatePost(ctx context.Context, request *APIRatePostReq) (APIRatePostRes, error) {
 	res, err := c.sendAPIRatePost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIRatePost(ctx context.Context, request OptAPIRatePostReq) (res APIRatePostRes, err error) {
+func (c *Client) sendAPIRatePost(ctx context.Context, request *APIRatePostReq) (res APIRatePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/rate"),
@@ -797,12 +797,12 @@ func (c *Client) sendAPIRatePost(ctx context.Context, request OptAPIRatePostReq)
 // Обработка ссылок на новые книги.
 //
 // POST /api/system/handle
-func (c *Client) APISystemHandlePost(ctx context.Context, request OptAPISystemHandlePostReq) (APISystemHandlePostRes, error) {
+func (c *Client) APISystemHandlePost(ctx context.Context, request *APISystemHandlePostReq) (APISystemHandlePostRes, error) {
 	res, err := c.sendAPISystemHandlePost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPISystemHandlePost(ctx context.Context, request OptAPISystemHandlePostReq) (res APISystemHandlePostRes, err error) {
+func (c *Client) sendAPISystemHandlePost(ctx context.Context, request *APISystemHandlePostReq) (res APISystemHandlePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/system/handle"),
@@ -1008,12 +1008,12 @@ func (c *Client) sendAPISystemInfoGet(ctx context.Context) (res APISystemInfoGet
 // Авторизация пользователя.
 //
 // POST /api/user/login
-func (c *Client) APIUserLoginPost(ctx context.Context, request OptAPIUserLoginPostReq) (APIUserLoginPostRes, error) {
+func (c *Client) APIUserLoginPost(ctx context.Context, request *APIUserLoginPostReq) (APIUserLoginPostRes, error) {
 	res, err := c.sendAPIUserLoginPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIUserLoginPost(ctx context.Context, request OptAPIUserLoginPostReq) (res APIUserLoginPostRes, err error) {
+func (c *Client) sendAPIUserLoginPost(ctx context.Context, request *APIUserLoginPostReq) (res APIUserLoginPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/user/login"),
@@ -1082,12 +1082,12 @@ func (c *Client) sendAPIUserLoginPost(ctx context.Context, request OptAPIUserLog
 // Регистрация нового пользователя.
 //
 // POST /api/user/registration
-func (c *Client) APIUserRegistrationPost(ctx context.Context, request OptAPIUserRegistrationPostReq) (APIUserRegistrationPostRes, error) {
+func (c *Client) APIUserRegistrationPost(ctx context.Context, request *APIUserRegistrationPostReq) (APIUserRegistrationPostRes, error) {
 	res, err := c.sendAPIUserRegistrationPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIUserRegistrationPost(ctx context.Context, request OptAPIUserRegistrationPostReq) (res APIUserRegistrationPostRes, err error) {
+func (c *Client) sendAPIUserRegistrationPost(ctx context.Context, request *APIUserRegistrationPostReq) (res APIUserRegistrationPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/user/registration"),

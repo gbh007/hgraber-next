@@ -2,10 +2,11 @@ package model
 
 import (
 	"database/sql"
-	"hgnext/internal/entities"
 	"time"
 
 	"github.com/google/uuid"
+
+	"hgnext/internal/entities"
 )
 
 type File struct {

@@ -6,6 +6,15 @@ var (
 	BookNotFoundError         = errors.New("book not found")
 	PageNotFoundError         = errors.New("page not found")
 	FileNotFoundError         = errors.New("file not found")
+	AgentNotFoundError        = errors.New("agent not found")
 	BookAlreadyExistsError    = errors.New("book already exists")
 	UnsupportedAttributeError = errors.New("attribute is not supported")
+)
+
+var (
+	AgentAPIUnauthorized    = errors.New("agent: unauthorized")
+	AgentAPIForbidden       = errors.New("agent: forbidden")
+	AgentAPIBadRequest      = errors.New("agent: bad request")
+	AgentAPIInternalError   = errors.New("agent: internal error")
+	AgentAPIUnknownResponse = errors.New("agent: unknown response")
 )

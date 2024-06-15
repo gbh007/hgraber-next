@@ -5,10 +5,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"hgnext/internal/adapters/postgresql/internal/model"
-	"hgnext/internal/entities"
+	"net/url"
 
 	"github.com/google/uuid"
+
+	"hgnext/internal/adapters/postgresql/internal/model"
+	"hgnext/internal/entities"
 )
 
 func (d *Database) NewBook(ctx context.Context, book entities.Book) error {
@@ -37,12 +39,12 @@ func (d *Database) UpdateBookName(ctx context.Context, id uuid.UUID, name string
 	return nil
 }
 
-func (d *Database) GetBookIDsByURL(ctx context.Context, url string) ([]uuid.UUID, error) {
+func (d *Database) GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error) {
 	var idsRaw []string
 
-	err := d.db.SelectContext(ctx, &idsRaw, `SELECT id FROM books WHERE origin_url = $1;`, url)
+	err := d.db.SelectContext(ctx, &idsRaw, `SELECT id FROM books WHERE origin_url = $1;`, url.String())
 	if errors.Is(err, sql.ErrNoRows) {
-		return nil, fmt.Errorf("%w - %s", entities.BookNotFoundError, url)
+		return nil, fmt.Errorf("%w - %s", entities.BookNotFoundError, url.String())
 	}
 
 	if err != nil {
@@ -147,6 +149,7 @@ func (d *Database) GetBooks(ctx context.Context, filter entities.BookFilter) ([]
 		if err != nil {
 			return nil, err
 		}
+
 		out = append(out, book)
 	}
 

@@ -19,6 +19,7 @@ paths:
         - user
       security: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -60,6 +61,7 @@ paths:
         - user
       security: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -191,6 +193,7 @@ paths:
       tags:
         - book
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -247,6 +250,7 @@ paths:
       tags:
         - book
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -308,6 +312,7 @@ paths:
       tags:
         - book
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -386,6 +391,7 @@ paths:
       tags:
         - parsing
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -490,6 +496,7 @@ paths:
       tags:
         - agent
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -546,6 +553,7 @@ paths:
       tags:
         - agent
       requestBody:
+        required: true
         content:
           application/json:
             schema:

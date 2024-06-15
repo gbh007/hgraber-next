@@ -4,11 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"hgnext/internal/adapters/postgresql/internal/model"
-	"hgnext/internal/entities"
 	"time"
 
 	"github.com/google/uuid"
+
+	"hgnext/internal/adapters/postgresql/internal/model"
+	"hgnext/internal/entities"
 )
 
 func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (entities.Page, error) {

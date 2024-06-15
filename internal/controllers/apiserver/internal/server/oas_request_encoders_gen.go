@@ -12,19 +12,13 @@ import (
 )
 
 func encodeAPIAgentNewPostRequest(
-	req OptAPIAgentNewPostReq,
+	req *APIAgentNewPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := new(jx.Encoder)
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)
@@ -32,19 +26,13 @@ func encodeAPIAgentNewPostRequest(
 }
 
 func encodeAPIAgentTaskExportPostRequest(
-	req OptAPIAgentTaskExportPostReq,
+	req *APIAgentTaskExportPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := new(jx.Encoder)
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)
@@ -52,19 +40,13 @@ func encodeAPIAgentTaskExportPostRequest(
 }
 
 func encodeAPIBookDetailsPostRequest(
-	req OptAPIBookDetailsPostReq,
+	req *APIBookDetailsPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := new(jx.Encoder)
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)
@@ -72,19 +54,13 @@ func encodeAPIBookDetailsPostRequest(
 }
 
 func encodeAPIBookListPostRequest(
-	req OptAPIBookListPostReq,
+	req *APIBookListPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := new(jx.Encoder)
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)
@@ -92,19 +68,13 @@ func encodeAPIBookListPostRequest(
 }
 
 func encodeAPIRatePostRequest(
-	req OptAPIRatePostReq,
+	req *APIRatePostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := new(jx.Encoder)
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)
@@ -112,19 +82,13 @@ func encodeAPIRatePostRequest(
 }
 
 func encodeAPISystemHandlePostRequest(
-	req OptAPISystemHandlePostReq,
+	req *APISystemHandlePostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := new(jx.Encoder)
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)
@@ -132,19 +96,13 @@ func encodeAPISystemHandlePostRequest(
 }
 
 func encodeAPIUserLoginPostRequest(
-	req OptAPIUserLoginPostReq,
+	req *APIUserLoginPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := new(jx.Encoder)
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)
@@ -152,19 +110,13 @@ func encodeAPIUserLoginPostRequest(
 }
 
 func encodeAPIUserRegistrationPostRequest(
-	req OptAPIUserRegistrationPostReq,
+	req *APIUserRegistrationPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := new(jx.Encoder)
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)

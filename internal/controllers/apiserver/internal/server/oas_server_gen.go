@@ -13,25 +13,25 @@ type Handler interface {
 	// Создание нового агента.
 	//
 	// POST /api/agent/new
-	APIAgentNewPost(ctx context.Context, req OptAPIAgentNewPostReq) (APIAgentNewPostRes, error)
+	APIAgentNewPost(ctx context.Context, req *APIAgentNewPostReq) (APIAgentNewPostRes, error)
 	// APIAgentTaskExportPost implements POST /api/agent/task/export operation.
 	//
 	// Экспорт книг в другую систему.
 	//
 	// POST /api/agent/task/export
-	APIAgentTaskExportPost(ctx context.Context, req OptAPIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error)
+	APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error)
 	// APIBookDetailsPost implements POST /api/book/details operation.
 	//
 	// Информация о книге.
 	//
 	// POST /api/book/details
-	APIBookDetailsPost(ctx context.Context, req OptAPIBookDetailsPostReq) (APIBookDetailsPostRes, error)
+	APIBookDetailsPost(ctx context.Context, req *APIBookDetailsPostReq) (APIBookDetailsPostRes, error)
 	// APIBookListPost implements POST /api/book/list operation.
 	//
 	// Список книг.
 	//
 	// POST /api/book/list
-	APIBookListPost(ctx context.Context, req OptAPIBookListPostReq) (APIBookListPostRes, error)
+	APIBookListPost(ctx context.Context, req *APIBookListPostReq) (APIBookListPostRes, error)
 	// APIFileIDGet implements GET /api/file/{id} operation.
 	//
 	// Получение тела файла (изображения страницы).
@@ -43,13 +43,13 @@ type Handler interface {
 	// Изменение рейтинга книги или страницы в ней.
 	//
 	// POST /api/rate
-	APIRatePost(ctx context.Context, req OptAPIRatePostReq) (APIRatePostRes, error)
+	APIRatePost(ctx context.Context, req *APIRatePostReq) (APIRatePostRes, error)
 	// APISystemHandlePost implements POST /api/system/handle operation.
 	//
 	// Обработка ссылок на новые книги.
 	//
 	// POST /api/system/handle
-	APISystemHandlePost(ctx context.Context, req OptAPISystemHandlePostReq) (APISystemHandlePostRes, error)
+	APISystemHandlePost(ctx context.Context, req *APISystemHandlePostReq) (APISystemHandlePostRes, error)
 	// APISystemInfoGet implements GET /api/system/info operation.
 	//
 	// Получение общей информации о системе.
@@ -61,13 +61,13 @@ type Handler interface {
 	// Авторизация пользователя.
 	//
 	// POST /api/user/login
-	APIUserLoginPost(ctx context.Context, req OptAPIUserLoginPostReq) (APIUserLoginPostRes, error)
+	APIUserLoginPost(ctx context.Context, req *APIUserLoginPostReq) (APIUserLoginPostRes, error)
 	// APIUserRegistrationPost implements POST /api/user/registration operation.
 	//
 	// Регистрация нового пользователя.
 	//
 	// POST /api/user/registration
-	APIUserRegistrationPost(ctx context.Context, req OptAPIUserRegistrationPostReq) (APIUserRegistrationPostRes, error)
+	APIUserRegistrationPost(ctx context.Context, req *APIUserRegistrationPostReq) (APIUserRegistrationPostRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

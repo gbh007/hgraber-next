@@ -139,7 +139,7 @@ func (s *Server) handleAPIAgentNewPostRequest(args [0]string, argsEscaped bool, 
 		}
 
 		type (
-			Request  = OptAPIAgentNewPostReq
+			Request  = *APIAgentNewPostReq
 			Params   = struct{}
 			Response = APIAgentNewPostRes
 		)
@@ -294,7 +294,7 @@ func (s *Server) handleAPIAgentTaskExportPostRequest(args [0]string, argsEscaped
 		}
 
 		type (
-			Request  = OptAPIAgentTaskExportPostReq
+			Request  = *APIAgentTaskExportPostReq
 			Params   = struct{}
 			Response = APIAgentTaskExportPostRes
 		)
@@ -449,7 +449,7 @@ func (s *Server) handleAPIBookDetailsPostRequest(args [0]string, argsEscaped boo
 		}
 
 		type (
-			Request  = OptAPIBookDetailsPostReq
+			Request  = *APIBookDetailsPostReq
 			Params   = struct{}
 			Response = APIBookDetailsPostRes
 		)
@@ -604,7 +604,7 @@ func (s *Server) handleAPIBookListPostRequest(args [0]string, argsEscaped bool, 
 		}
 
 		type (
-			Request  = OptAPIBookListPostReq
+			Request  = *APIBookListPostReq
 			Params   = struct{}
 			Response = APIBookListPostRes
 		)
@@ -914,7 +914,7 @@ func (s *Server) handleAPIRatePostRequest(args [0]string, argsEscaped bool, w ht
 		}
 
 		type (
-			Request  = OptAPIRatePostReq
+			Request  = *APIRatePostReq
 			Params   = struct{}
 			Response = APIRatePostRes
 		)
@@ -1069,7 +1069,7 @@ func (s *Server) handleAPISystemHandlePostRequest(args [0]string, argsEscaped bo
 		}
 
 		type (
-			Request  = OptAPISystemHandlePostReq
+			Request  = *APISystemHandlePostReq
 			Params   = struct{}
 			Response = APISystemHandlePostRes
 		)
@@ -1320,7 +1320,7 @@ func (s *Server) handleAPIUserLoginPostRequest(args [0]string, argsEscaped bool,
 		}
 
 		type (
-			Request  = OptAPIUserLoginPostReq
+			Request  = *APIUserLoginPostReq
 			Params   = struct{}
 			Response = APIUserLoginPostRes
 		)
@@ -1431,7 +1431,7 @@ func (s *Server) handleAPIUserRegistrationPostRequest(args [0]string, argsEscape
 		}
 
 		type (
-			Request  = OptAPIUserRegistrationPostReq
+			Request  = *APIUserRegistrationPostReq
 			Params   = struct{}
 			Response = APIUserRegistrationPostRes
 		)

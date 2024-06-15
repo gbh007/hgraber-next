@@ -1,0 +1,167 @@
+package postgresql
+
+import (
+	"context"
+	"fmt"
+	"log/slog"
+
+	"github.com/Masterminds/squirrel"
+	"github.com/google/uuid"
+
+	"hgnext/internal/adapters/postgresql/internal/model"
+	"hgnext/internal/entities"
+	"hgnext/internal/pkg"
+)
+
+func (d *Database) Agents(ctx context.Context, canParse, canExport bool) ([]entities.Agent, error) {
+	raw := make([]model.Agent, 0)
+
+	builder := squirrel.Select("*").From("agents").OrderBy("priority DESC")
+
+	if canParse {
+		builder = builder.Where(squirrel.Eq{
+			"can_parse": true,
+		})
+	}
+
+	if canExport {
+		builder = builder.Where(squirrel.Eq{
+			"can_export": true,
+		})
+	}
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("storage: build query: %w", err)
+	}
+
+	d.logger.DebugContext(
+		ctx, "squirrel build request",
+		slog.String("query", query),
+		slog.Any("args", args),
+	)
+
+	err = d.db.SelectContext(ctx, &raw, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("storage: exec query: %w", err)
+	}
+
+	result, err := pkg.MapWithError(raw, func(a model.Agent) (entities.Agent, error) {
+		return a.ToEntity()
+	})
+	if err != nil {
+		return nil, fmt.Errorf("storage: convert: %w", err)
+	}
+
+	return result, nil
+}
+
+func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
+	builder := squirrel.Insert("agents").
+		Columns(
+			"id",
+			"name",
+			"addr",
+			"token",
+			"can_parse",
+			"can_export",
+			"priority",
+			"create_at",
+		).
+		Values(
+			agent.ID.String(),
+			agent.Name,
+			agent.Addr,
+			agent.Token,
+			agent.CanParse,
+			agent.CanExport,
+			agent.Priority,
+			agent.CreateAt,
+		)
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("storage: build query: %w", err)
+	}
+
+	d.logger.DebugContext(
+		ctx, "squirrel build request",
+		slog.String("query", query),
+		slog.Any("args", args),
+	)
+
+	_, err = d.db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("storage: exec query: %w", err)
+	}
+
+	return nil
+}
+
+func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error {
+	builder := squirrel.Update("agents").
+		SetMap(
+			map[string]interface{}{
+				"name":       agent.Name,
+				"addr":       agent.Addr,
+				"token":      agent.Token,
+				"can_parse":  agent.CanParse,
+				"can_export": agent.CanExport,
+				"priority":   agent.Priority,
+			},
+		).
+		Where(squirrel.Eq{
+			"id": agent.ID.String(),
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("storage: build query: %w", err)
+	}
+
+	d.logger.DebugContext(
+		ctx, "squirrel build request",
+		slog.String("query", query),
+		slog.Any("args", args),
+	)
+
+	res, err := d.db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("storage: exec query: %w", err)
+	}
+
+	if !d.isApply(ctx, res) {
+		return entities.AgentNotFoundError
+	}
+
+	return nil
+}
+
+func (d *Database) DeleteAgent(ctx context.Context, id uuid.UUID) error {
+	builder := squirrel.Delete("agents").
+		Where(squirrel.Eq{
+			"id": id.String(),
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("storage: build query: %w", err)
+	}
+
+	d.logger.DebugContext(
+		ctx, "squirrel build request",
+		slog.String("query", query),
+		slog.Any("args", args),
+	)
+
+	res, err := d.db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("storage: exec query: %w", err)
+	}
+
+	if !d.isApply(ctx, res) {
+		return entities.AgentNotFoundError
+	}
+
+	return nil
+}
