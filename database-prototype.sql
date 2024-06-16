@@ -1,3 +1,6 @@
+-- CREATE ROLE hgrabernextuser WITH LOGIN PASSWORD 'hgrabernextpass';
+-- CREATE DATABASE hgrabernext OWNER hgrabernextuser;
+
 CREATE TABLE books (
     id UUID PRIMARY KEY,
     name TEXT,
@@ -33,30 +36,54 @@ CREATE TABLE attributes (
     code TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     plural_name TEXT NOT NULL,
+    order INT NOT NULL DEFAULT 999,
     description TEXT
 );
 
 INSERT INTO
-    attributes (code, name, plural_name)
-VALUES ('tag', 'Тэг', 'Теги'),
-    ('author', 'Автор', 'Авторы'),
+    attributes (
+        code,
+        name,
+        plural_name,
+        order
+    )
+VALUES ('tag', 'Тэг', 'Теги', 1),
+    (
+        'author',
+        'Автор',
+        'Авторы',
+        3
+    ),
     (
         'character',
         'Персонаж',
-        'Персонажи'
+        'Персонажи',
+        4
     ),
-    ('language', 'Языки', 'Языки'),
+    (
+        'language',
+        'Языки',
+        'Языки',
+        6
+    ),
     (
         'category',
         'Категория',
-        'Категории'
+        'Категории',
+        2
     ),
     (
         'parody',
         'Пародия',
-        'Пародии'
+        'Пародии',
+        7
     ),
-    ('group', 'Группа', 'Группы');
+    (
+        'group',
+        'Группа',
+        'Группы',
+        5
+    );
 
 CREATE TABLE book_attributes (
     book_id UUID NOT NULL REFERENCES books (id) ON UPDATE CASCADE ON DELETE CASCADE,

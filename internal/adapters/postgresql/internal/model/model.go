@@ -9,6 +9,7 @@ type Attribute struct {
 	Code        string         `db:"code"`
 	Name        string         `db:"name"`
 	PluralName  string         `db:"plural_name"`
+	Order       int            `db:"order"`
 	Description sql.NullString `db:"description"`
 }
 

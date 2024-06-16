@@ -23,12 +23,6 @@ type BookFull struct {
 	Attributes map[string][]string
 }
 
-type BookFilter struct {
-	Limit    int
-	Offset   int
-	NewFirst bool
-}
-
 type BookWithAgent struct {
 	Book
 	AgentID uuid.UUID

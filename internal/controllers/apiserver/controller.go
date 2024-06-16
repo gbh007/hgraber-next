@@ -19,7 +19,11 @@ type parseUseCases interface {
 
 type webAPIUseCases interface {
 	SystemInfo(ctx context.Context) (entities.SystemSizeInfoWithMonitor, error)
+
 	File(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
+
+	Book(ctx context.Context, bookID uuid.UUID) (entities.BookToWeb, error)
+	BookList(ctx context.Context, filter entities.BookFilter) ([]entities.BookToWeb, []int, error)
 }
 
 type Controller struct {

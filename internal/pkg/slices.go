@@ -36,3 +36,13 @@ func SliceFilter[T any](s []T, f func(T) bool) []T {
 
 	return out
 }
+
+func SliceReduce[T, V any](s []T, f func(sum V, e T) V) V {
+	var v V
+
+	for _, e := range s {
+		v = f(v, e)
+	}
+
+	return v
+}

@@ -37,3 +37,14 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 
 	return systemSize, nil
 }
+
+func (d *Database) BookCount(ctx context.Context) (int, error) {
+	var c int
+
+	err := d.db.GetContext(ctx, &c, `SELECT COUNT(*) FROM books;`)
+	if err != nil {
+		return 0, err
+	}
+
+	return c, nil
+}

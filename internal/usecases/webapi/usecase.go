@@ -12,6 +12,9 @@ import (
 
 type storage interface {
 	SystemSize(ctx context.Context) (entities.SystemSizeInfo, error)
+	GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	GetBooks(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
+	BookCount(ctx context.Context) (int, error)
 }
 
 type workerManager interface {

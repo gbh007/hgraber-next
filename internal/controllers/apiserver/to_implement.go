@@ -17,14 +17,6 @@ func (c *Controller) APIAgentTaskExportPost(ctx context.Context, req *server.API
 	return nil, errImplementMe
 }
 
-func (c *Controller) APIBookDetailsPost(ctx context.Context, req *server.APIBookDetailsPostReq) (server.APIBookDetailsPostRes, error) {
-	return nil, errImplementMe
-}
-
-func (c *Controller) APIBookListPost(ctx context.Context, req *server.APIBookListPostReq) (server.APIBookListPostRes, error) {
-	return nil, errImplementMe
-}
-
 func (c *Controller) APIRatePost(ctx context.Context, req *server.APIRatePostReq) (server.APIRatePostRes, error) {
 	return nil, errImplementMe
 }
