@@ -11,7 +11,7 @@ import (
 	"hgnext/internal/entities"
 )
 
-type Storage interface {
+type storage interface {
 	GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error)
 	GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
 
@@ -30,30 +30,30 @@ type Storage interface {
 	Agents(ctx context.Context, canParse, canExport bool) ([]entities.Agent, error)
 }
 
-type AgentSystem interface {
+type agentSystem interface {
 	BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) (entities.AgentBookDetails, error)
 	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]entities.AgentBookCheckResult, error)
 	PageLoad(ctx context.Context, agentID uuid.UUID, url entities.AgentPageURL) (io.Reader, error)
 	PagesCheck(ctx context.Context, agentID uuid.UUID, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
 }
 
-type FileStorage interface {
+type fileStorage interface {
 	Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
 }
 
 type UseCase struct {
 	logger *slog.Logger
 
-	storage     Storage
-	agentSystem AgentSystem
-	fileStorage FileStorage
+	storage     storage
+	agentSystem agentSystem
+	fileStorage fileStorage
 }
 
 func New(
 	logger *slog.Logger,
-	storage Storage,
-	agentSystem AgentSystem,
-	fileStorage FileStorage,
+	storage storage,
+	agentSystem agentSystem,
+	fileStorage fileStorage,
 ) *UseCase {
 	return &UseCase{
 		logger:      logger,

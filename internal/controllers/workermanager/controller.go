@@ -22,7 +22,7 @@ type Controller struct {
 	logger      *slog.Logger
 }
 
-func New(logger *slog.Logger, workerUnits []WorkerUnit) *Controller {
+func New(logger *slog.Logger, workerUnits ...WorkerUnit) *Controller {
 	return &Controller{
 		logger:      logger,
 		workerUnits: workerUnits,

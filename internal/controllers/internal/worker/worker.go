@@ -61,6 +61,10 @@ func (w *Worker[T]) RunnersCount() int {
 	return int(w.runnersCount.Load())
 }
 
+func (w *Worker[T]) Name() string {
+	return w.name
+}
+
 func (w *Worker[T]) handleOne(ctx context.Context, value T) {
 	defer func() {
 		if p := recover(); p != nil {
