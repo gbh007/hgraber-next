@@ -150,7 +150,8 @@ func (d *Database) GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.
 	}
 
 	out := entities.BookFull{
-		Book: b,
+		Book:       b,
+		Attributes: make(map[string][]string, 7),
 	}
 
 	attributes, err := d.getBookAttr(ctx, bookID)

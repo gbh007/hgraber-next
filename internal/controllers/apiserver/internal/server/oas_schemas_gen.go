@@ -1041,6 +1041,20 @@ func (s *BookShortInfo) SetHasMoreTags(val bool) {
 	s.HasMoreTags = val
 }
 
+type Cookies struct {
+	APIKey string
+}
+
+// GetAPIKey returns the value of APIKey.
+func (s *Cookies) GetAPIKey() string {
+	return s.APIKey
+}
+
+// SetAPIKey sets the value of APIKey.
+func (s *Cookies) SetAPIKey(val string) {
+	s.APIKey = val
+}
+
 // Данные ошибки.
 // Ref: #/components/schemas/ErrorResponse
 type ErrorResponse struct {

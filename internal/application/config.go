@@ -7,6 +7,7 @@ type Config struct {
 	FilePath              string `envconfig:"FILE_PATH"`
 	WebServerAddr         string `envconfig:"WEB_SERVER_ADDR"`
 	ExternalWebServerAddr string `envconfig:"EXTERNAL_WEB_SERVER_ADDR"`
+	WebStaticDir          string `envconfig:"WEB_STATIC_DIR"`
 	Debug                 bool   `envconfig:"DEBUG"`
 }
 

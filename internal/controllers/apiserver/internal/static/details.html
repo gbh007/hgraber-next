@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>HGraber</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="/css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="/css/rating.css"
+    />
+    <script src="/js/rating.js"></script>
+  </head>
+
+  <body>
+    <style>
+      .book-details {
+        display: flex;
+      }
+
+      .book-details *[t="red"] {
+        color: red;
+      }
+
+      .book-details *[t="bred"] {
+        background: pink;
+      }
+
+      .book-details a.load,
+      .book-details a.read {
+        text-align: center;
+        flex-grow: 1;
+      }
+
+      span.tag {
+        border-radius: 3px;
+        padding: 3px;
+        margin: 2px;
+        background-color: var(--app-background);
+        display: inline-block;
+      }
+
+      div.preview {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 10px;
+      }
+
+      div.preview > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      img.main-preview {
+        max-width: 15vw;
+        max-height: 50vh;
+      }
+
+      img.preview {
+        max-width: 400px;
+        max-height: 200px;
+      }
+
+      div.app-container {
+        margin: 5px;
+        padding: 5px;
+      }
+
+      div.book-info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex-grow: 1;
+        padding: 10px;
+      }
+
+      div.book-info-panel {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      div.bottom-buttons {
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+
+    <div class="app-header">
+      <a href="/">Главная</a>
+      <a href="/list.html">Список книг</a>
+      <a href="/settings.html">Настройки</a>
+    </div>
+
+    <div class="app-body">
+      <div id="title"></div>
+    </div>
+
+    <script>
+      const bookID = new URLSearchParams(window.location.search).get("book");
+
+      window.addEventListener("load", async function () {
+        let bookNode = document.getElementById("title");
+        try {
+          let response = await fetch("/api/book/details", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: bookID }),
+          });
+
+          if (!response.ok) {
+            throw new Error(await response.text());
+          }
+
+          let data = await response.json();
+
+          bookNode.innerHTML = generateHTMLBookDetails(data);
+          refreshRatings();
+        } catch (err) {
+          bookNode.innerHTML = `<div class="app-error-container">${err}</div>`;
+        }
+      });
+
+      function generateHTMLTagArea(tags, displayName) {
+        return `<span>
+          <span>${displayName}: </span>
+          ${(tags || [])
+            .map((tagname, ind) => `<span class="tag">${tagname}</span>`)
+            .join("")}
+        </span>`;
+      }
+
+      function generateHTMLBookDetails(book) {
+        return `<div
+          class="app-container book-details"
+          t="${book.parsed_name ? "" : "bred"}"
+        >
+          <div>
+            ${
+              !book.preview_url
+                ? `<span></span>`
+                : `<img class="main-preview" src="${book.preview_url}"/>`
+            }
+          </div>
+          <div class="book-info">
+            <h1 
+              t="${book.parsed_name ? "" : "red"}"
+            >${book.name}</h1>
+            <div class="book-info-panel">
+              <span>
+                #${book.id}
+                <span 
+                  class="rating"
+                  book="${book.id}"
+                  rating="${book.rating}"
+                  unprocessed
+                ></span>
+              </span>
+              <span
+                t="${book.parsed_page ? "" : "red"}"
+              >Страниц: ${book.page_count}</span>
+              <span
+                t="${book.page_loaded_percent != 100.0 ? "red" : ""}"
+              >Загружено: ${book.page_loaded_percent}%</span>
+              <span>${new Date(book.created).toLocaleString()}</span>
+            </div>
+            ${book.attributes
+              .map((attr) => generateHTMLTagArea(attr.values, attr.name))
+              .join("\n")}
+            <div class="bottom-buttons">
+              <a class="app-button load" href="#">Скачать</a>
+              <a class="app-button read" href="/read.html?book=${
+                book.id
+              }">Читать</a>
+            </div>
+          </div>
+        </div>
+        ${
+          book.pages && book.pages.length
+            ? `<div class="preview">${book.pages
+                .map((page, index) => {
+                  if (!page.preview_url) return "";
+
+                  return `<div class="app-container">
+                    <a href="/read.html?book=${book.id}&page=${page.page_number}">
+                      <img class="preview" src="${page.preview_url}"/>
+                    </a>
+                    <span
+                      class="rating"
+                      book="${book.id}"
+                      page="${page.page_number}"
+                      rating="${page.rating}"
+                      unprocessed
+                    ></span>
+                  </div>`;
+                })
+                .join("")}</div>`
+            : ""
+        }`;
+      }
+    </script>
+  </body>
+</html>

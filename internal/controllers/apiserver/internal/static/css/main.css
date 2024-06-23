@@ -1,0 +1,94 @@
+:root {
+  --app-background: #dfdfdf;
+  --container-background: #fff;
+  --app-primary: #ffa500;
+  --app-secondary: #fff0d6;
+  --app-color: #000;
+  --app-error-background: #fd000047;
+  --app-font-family: system-ui;
+  --color-shadow: #00000029;
+}
+
+body {
+  background: var(--app-background);
+  color: var(--app-color);
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  padding: 0px;
+  min-height: 100vh;
+  font-family: var(--app-font-family);
+}
+
+div.app-header {
+  background: var(--app-primary);
+  min-height: 10px;
+  padding: 10px;
+}
+
+div.app-header {
+  border-radius: 0px 0px 10px 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+div.app-header > a {
+  text-decoration: none;
+  color: var(--app-color);
+  border-radius: 5px;
+  padding: 5px;
+  background: var(--app-secondary);
+  font-family: var(--app-font-family);
+}
+
+div.app-body {
+  padding: 10px;
+  flex-grow: 1;
+}
+
+div.app-error-container {
+  padding: 10px;
+  background: var(--app-error-background);
+}
+
+div.app-container {
+  background: var(--container-background);
+  border-radius: 10px;
+  padding: 10px;
+  /* box-shadow: 0px 2px 6px var(--color-shadow); */
+}
+
+a.app-button,
+button.app {
+  border: 1px solid var(--app-primary);
+  background: var(--app-secondary);
+  border-radius: 3px;
+  padding: 3px;
+  box-sizing: border-box;
+  font-family: var(--app-font-family);
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--app-color);
+}
+
+a.app-button:hover,
+button.app:hover {
+  border: 1px solid var(--app-secondary);
+  background: var(--app-primary);
+}
+
+textarea.app,
+input.app {
+  border: 1px solid var(--app-primary);
+  background: var(--container-background);
+  border-radius: 3px;
+  padding: 3px;
+  box-sizing: border-box;
+  font-family: var(--app-font-family);
+}
+
+textarea.app:focus,
+input.app:focus {
+  border: 1px dotted var(--app-primary);
+  background: var(--app-secondary);
+}

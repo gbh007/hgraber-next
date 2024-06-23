@@ -91,6 +91,7 @@ func Serve() {
 		parsingUseCases,
 		webAPIUseCases,
 		cfg.Debug,
+		cfg.WebStaticDir,
 	)
 	if err != nil {
 		logger.ErrorContext(

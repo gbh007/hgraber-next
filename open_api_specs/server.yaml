@@ -9,6 +9,7 @@ servers:
 
 security:
   - headerAuth: []
+  - cookies: []
 
 paths:
   /api/user/registration:
@@ -840,3 +841,8 @@ components:
       in: header
       type: apiKey
       description: Авторизация через заголовок
+    cookies:
+      name: X-HG-Token
+      in: cookie
+      type: apiKey
+      description: Авторизация через печеньки

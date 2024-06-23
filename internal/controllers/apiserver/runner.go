@@ -5,6 +5,8 @@ import (
 	"errors"
 	"net/http"
 	"time"
+
+	"hgnext/internal/controllers/apiserver/internal/static"
 )
 
 func (c *Controller) Name() string {
@@ -14,8 +16,19 @@ func (c *Controller) Name() string {
 func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	done := make(chan struct{})
 
+	mux := http.NewServeMux()
+
+	// обработчик статики
+	if c.staticDir != "" {
+		mux.Handle("/", http.FileServer(http.Dir(c.staticDir)))
+	} else {
+		mux.Handle("/", http.FileServer(http.FS(static.StaticDir)))
+	}
+
+	mux.Handle("/api/", c.logIO(cors(c.ogenServer)))
+
 	server := &http.Server{
-		Handler: c.logIO(cors(c.ogenServer)),
+		Handler: mux,
 		Addr:    c.serverAddr,
 	}
 

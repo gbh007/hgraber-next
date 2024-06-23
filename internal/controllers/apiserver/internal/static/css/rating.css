@@ -1,0 +1,34 @@
+.rating {
+  white-space: nowrap;
+}
+
+.rating-select {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border: 1px solid black;
+  border-radius: 4px;
+  margin: 2px;
+  cursor: pointer;
+  /* background: #b0c4de; */
+}
+
+span.rating-select[rating="1"] {
+  background: #ff0000;
+}
+
+span.rating-select[rating="2"] {
+  background: #ffa500;
+}
+
+span.rating-select[rating="3"] {
+  background: #ffff00;
+}
+
+span.rating-select[rating="4"] {
+  background: #90ee90;
+}
+
+span.rating-select[rating="5"] {
+  background: #008000;
+}

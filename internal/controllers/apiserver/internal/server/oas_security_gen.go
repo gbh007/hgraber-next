@@ -14,6 +14,9 @@ import (
 
 // SecurityHandler is handler for security parameters.
 type SecurityHandler interface {
+	// HandleCookies handles cookies security.
+	// Авторизация через печеньки.
+	HandleCookies(ctx context.Context, operationName string, t Cookies) (context.Context, error)
 	// HandleHeaderAuth handles headerAuth security.
 	// Авторизация через заголовок.
 	HandleHeaderAuth(ctx context.Context, operationName string, t HeaderAuth) (context.Context, error)
@@ -34,6 +37,27 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 	return "", false
 }
 
+func (s *Server) securityCookies(ctx context.Context, operationName string, req *http.Request) (context.Context, bool, error) {
+	var t Cookies
+	const parameterName = "X-HG-Token"
+	var value string
+	switch cookie, err := req.Cookie(parameterName); {
+	case err == nil: // if NO error
+		value = cookie.Value
+	case errors.Is(err, http.ErrNoCookie):
+		return ctx, false, nil
+	default:
+		return nil, false, errors.Wrap(err, "get cookie value")
+	}
+	t.APIKey = value
+	rctx, err := s.sec.HandleCookies(ctx, operationName, t)
+	if errors.Is(err, ogenerrors.ErrSkipServerSecurity) {
+		return nil, false, nil
+	} else if err != nil {
+		return nil, false, err
+	}
+	return rctx, true, err
+}
 func (s *Server) securityHeaderAuth(ctx context.Context, operationName string, req *http.Request) (context.Context, bool, error) {
 	var t HeaderAuth
 	const parameterName = "X-HG-Token"
@@ -53,11 +77,25 @@ func (s *Server) securityHeaderAuth(ctx context.Context, operationName string, r
 
 // SecuritySource is provider of security values (tokens, passwords, etc.).
 type SecuritySource interface {
+	// Cookies provides cookies security value.
+	// Авторизация через печеньки.
+	Cookies(ctx context.Context, operationName string) (Cookies, error)
 	// HeaderAuth provides headerAuth security value.
 	// Авторизация через заголовок.
 	HeaderAuth(ctx context.Context, operationName string) (HeaderAuth, error)
 }
 
+func (s *Client) securityCookies(ctx context.Context, operationName string, req *http.Request) error {
+	t, err := s.sec.Cookies(ctx, operationName)
+	if err != nil {
+		return errors.Wrap(err, "security source \"Cookies\"")
+	}
+	req.AddCookie(&http.Cookie{
+		Name:  "X-HG-Token",
+		Value: t.APIKey,
+	})
+	return nil
+}
 func (s *Client) securityHeaderAuth(ctx context.Context, operationName string, req *http.Request) error {
 	t, err := s.sec.HeaderAuth(ctx, operationName)
 	if err != nil {

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>HGraber</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="/css/main.css"
+    />
+  </head>
+
+  <body>
+    <style>
+      div.app-container {
+        margin-bottom: 20px;
+      }
+
+      .top-bar-settings > table {
+        display: inline-block;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .top-bar-settings > table td {
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      .top-bar-settings > table td.head {
+        border-bottom: 2px dashed black;
+        font-weight: bold;
+      }
+    </style>
+
+    <div class="app-header">
+      <a href="/">Главная</a>
+      <a href="/list.html">Список книг</a>
+      <a href="/settings.html">Настройки</a>
+    </div>
+
+    <div class="app-body">
+      <div class="app-container top-bar-settings">
+        <table>
+          <tbody>
+            <tr>
+              <td class="head" colspan="2">Данные приложения</td>
+            </tr>
+            <tr>
+              <td>Количество на странице</td>
+              <td><input class="app" type="number" id="on-page" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="app-container">
+        <input
+          class="app"
+          value=""
+          placeholder="Токен"
+          id="token"
+          type="password"
+        />
+        <button class="app" onclick="login();">Авторизоваться</button>
+        <span style="color: red" id="login-error"></span>
+      </div>
+    </div>
+
+    <script>
+      function updateBookOnPageCount(count) {
+        let data = JSON.parse(localStorage.getItem("settings")) || {};
+        data.book_on_page = parseInt(count);
+        localStorage.setItem("settings", JSON.stringify(data));
+      }
+
+      function getBookOnPageCount() {
+        let data = JSON.parse(localStorage.getItem("settings")) || {};
+        return data.book_on_page || 12;
+      }
+
+      window.addEventListener("load", async function () {
+        let onPageInputNode = document.getElementById("on-page");
+
+        onPageInputNode.value = getBookOnPageCount();
+        onPageInputNode.oninput = (v) => updateBookOnPageCount(v.target.value);
+      });
+    </script>
+
+    <script>
+      async function login() {
+        let token = document.getElementById("token");
+        let errorBox = document.getElementById("login-error");
+        errorBox.innerText = "";
+
+        try {
+          let response = await fetch("/api/login", {
+            method: "POST",
+            body: JSON.stringify({ token: token.value }),
+          });
+
+          if (!response.ok) {
+            throw new Error(await response.text());
+          }
+        } catch (err) {
+          errorBox.innerText = err;
+        }
+      }
+    </script>
+  </body>
+</html>

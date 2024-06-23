@@ -207,11 +207,23 @@ func (c *Client) sendAPIAgentNewPost(ctx context.Context, request *APIAgentNewPo
 				return res, errors.Wrap(err, "security \"HeaderAuth\"")
 			}
 		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, "APIAgentNewPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
 
 		if ok := func() bool {
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{0b00000010},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {
@@ -314,11 +326,23 @@ func (c *Client) sendAPIAgentTaskExportPost(ctx context.Context, request *APIAge
 				return res, errors.Wrap(err, "security \"HeaderAuth\"")
 			}
 		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, "APIAgentTaskExportPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
 
 		if ok := func() bool {
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{0b00000010},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {
@@ -421,11 +445,23 @@ func (c *Client) sendAPIBookDetailsPost(ctx context.Context, request *APIBookDet
 				return res, errors.Wrap(err, "security \"HeaderAuth\"")
 			}
 		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, "APIBookDetailsPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
 
 		if ok := func() bool {
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{0b00000010},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {
@@ -528,11 +564,23 @@ func (c *Client) sendAPIBookListPost(ctx context.Context, request *APIBookListPo
 				return res, errors.Wrap(err, "security \"HeaderAuth\"")
 			}
 		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, "APIBookListPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
 
 		if ok := func() bool {
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{0b00000010},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {
@@ -650,11 +698,23 @@ func (c *Client) sendAPIFileIDGet(ctx context.Context, params APIFileIDGetParams
 				return res, errors.Wrap(err, "security \"HeaderAuth\"")
 			}
 		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, "APIFileIDGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
 
 		if ok := func() bool {
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{0b00000010},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {
@@ -757,11 +817,23 @@ func (c *Client) sendAPIRatePost(ctx context.Context, request *APIRatePostReq) (
 				return res, errors.Wrap(err, "security \"HeaderAuth\"")
 			}
 		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, "APIRatePost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
 
 		if ok := func() bool {
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{0b00000010},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {
@@ -864,11 +936,23 @@ func (c *Client) sendAPISystemHandlePost(ctx context.Context, request *APISystem
 				return res, errors.Wrap(err, "security \"HeaderAuth\"")
 			}
 		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, "APISystemHandlePost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
 
 		if ok := func() bool {
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{0b00000010},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {
@@ -968,11 +1052,23 @@ func (c *Client) sendAPISystemInfoGet(ctx context.Context) (res APISystemInfoGet
 				return res, errors.Wrap(err, "security \"HeaderAuth\"")
 			}
 		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, "APISystemInfoGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
 
 		if ok := func() bool {
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{0b00000010},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {

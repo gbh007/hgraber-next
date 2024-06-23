@@ -27,8 +27,9 @@ type webAPIUseCases interface {
 }
 
 type Controller struct {
-	logger *slog.Logger
-	debug  bool
+	logger    *slog.Logger
+	debug     bool
+	staticDir string
 
 	parseUseCases  parseUseCases
 	webAPIUseCases webAPIUseCases
@@ -48,6 +49,7 @@ func New(
 	parseUseCases parseUseCases,
 	webAPIUseCases webAPIUseCases,
 	debug bool,
+	staticDir string,
 ) (*Controller, error) {
 	u, err := url.Parse(externalServerAddr)
 	if err != nil {
@@ -62,6 +64,7 @@ func New(
 		parseUseCases:              parseUseCases,
 		webAPIUseCases:             webAPIUseCases,
 		debug:                      debug,
+		staticDir:                  staticDir,
 	}
 
 	ogenServer, err := server.NewServer(

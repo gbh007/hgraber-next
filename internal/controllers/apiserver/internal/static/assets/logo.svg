@@ -1,0 +1,10 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <text x="5" y="45" style="font: 50px sytem-ui; font-weight: bold;" fill="#ff9100">H</text>
+    <text x="55" y="92" style="font: 50px sytem-ui; font-weight: bold;" fill="#ff9100">G</text>
+    <rect width="94" height="47" x="3" y="50" stroke="#ffbb62" stroke-width="3" fill="none" rx="10" />
+    <rect width="47" height="94" x="3" y="3" stroke="#ffbb62" stroke-width="3" fill="none" rx="10" />
+    <path d="M10 75 C 20 85, 30 85, 40 75" stroke="#0099e5" fill="transparent" />
+    <path d="M10 75 C 20 65, 30 65, 40 75" stroke="#0099e5" fill="transparent" />
+    <circle cx="25" cy="75" r="2" fill="#ff0000" />
+    <circle cx="25" cy="75" r="7" stroke="#000000" fill="none" />
+</svg>

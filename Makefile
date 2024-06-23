@@ -15,4 +15,5 @@ run: create_build_dir
 	APP_WEB_SERVER_ADDR=127.0.0.1:8080 \
 	APP_EXTERNAL_WEB_SERVER_ADDR=http://localhost:8080 \
 	APP_DEBUG=true \
+	APP_WEB_STATIC_DIR=internal/controllers/apiserver/internal/static \
 	./_build/server

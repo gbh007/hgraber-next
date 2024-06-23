@@ -2,6 +2,7 @@ package postgresql
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"hgnext/internal/entities"
@@ -30,10 +31,14 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return entities.SystemSizeInfo{}, fmt.Errorf("get unloaded page count: %w", err)
 	}
 
-	err = d.db.GetContext(ctx, &systemSize.PageFileSize, `SELECT SUM(f."size") FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL;`)
+	size := sql.NullInt64{}
+
+	err = d.db.GetContext(ctx, &size, `SELECT SUM(f."size") FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL;`)
 	if err != nil {
 		return entities.SystemSizeInfo{}, fmt.Errorf("get page file size: %w", err)
 	}
+
+	systemSize.PageFileSize = size.Int64
 
 	return systemSize, nil
 }
