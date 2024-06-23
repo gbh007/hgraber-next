@@ -22,7 +22,6 @@
       media="screen"
       href="/css/rating.css"
     />
-    <script src="/js/rating.js"></script>
 
     <style>
       body {
@@ -137,7 +136,8 @@
                   :book="book.id"
                   :rating="book.rating"
                   unprocessed
-                ></span>
+                  >R{{book.rating||0}}</span
+                >
               </span>
               <span style="grid-area: pgc" :t="book.parsed_page ? '' : 'red'"
                 >Страниц: {{book.page_count}}</span

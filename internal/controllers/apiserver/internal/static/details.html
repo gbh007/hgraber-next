@@ -6,6 +6,9 @@
     <title>HGraber</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
     <link
       rel="stylesheet"
@@ -19,10 +22,7 @@
       media="screen"
       href="/css/rating.css"
     />
-    <script src="/js/rating.js"></script>
-  </head>
 
-  <body>
     <style>
       .book-details {
         display: flex;
@@ -96,6 +96,10 @@
       }
     </style>
 
+    <script src="/js/pages/details.js"></script>
+  </head>
+
+  <body id="app">
     <div class="app-header">
       <a href="/">Главная</a>
       <a href="/list.html">Список книг</a>
@@ -103,113 +107,83 @@
     </div>
 
     <div class="app-body">
-      <div id="title"></div>
-    </div>
-
-    <script>
-      const bookID = new URLSearchParams(window.location.search).get("book");
-
-      window.addEventListener("load", async function () {
-        let bookNode = document.getElementById("title");
-        try {
-          let response = await fetch("/api/book/details", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: bookID }),
-          });
-
-          if (!response.ok) {
-            throw new Error(await response.text());
-          }
-
-          let data = await response.json();
-
-          bookNode.innerHTML = generateHTMLBookDetails(data);
-          refreshRatings();
-        } catch (err) {
-          bookNode.innerHTML = `<div class="app-error-container">${err}</div>`;
-        }
-      });
-
-      function generateHTMLTagArea(tags, displayName) {
-        return `<span>
-          <span>${displayName}: </span>
-          ${(tags || [])
-            .map((tagname, ind) => `<span class="tag">${tagname}</span>`)
-            .join("")}
-        </span>`;
-      }
-
-      function generateHTMLBookDetails(book) {
-        return `<div
+      <div class="app-error-container" v-if="appState.bookError">
+        {{appState.bookError}}
+      </div>
+      <div id="title" v-else-if="appState.book.id">
+        <div
           class="app-container book-details"
-          t="${book.parsed_name ? "" : "bred"}"
+          :t="appState.book.parsed_name ? '' : 'bred'"
         >
           <div>
-            ${
-              !book.preview_url
-                ? `<span></span>`
-                : `<img class="main-preview" src="${book.preview_url}"/>`
-            }
+            <img
+              v-if="appState.book.preview_url"
+              class="main-preview"
+              :src="appState.book.preview_url"
+            />
+            <span v-else></span>
           </div>
           <div class="book-info">
-            <h1 
-              t="${book.parsed_name ? "" : "red"}"
-            >${book.name}</h1>
+            <h1 :t="appState.book.parsed_name ? '' : 'red'">
+              {{appState.book.name}}
+            </h1>
             <div class="book-info-panel">
               <span>
-                #${book.id}
-                <span 
+                #{{appState.book.id}}
+                <span
                   class="rating"
-                  book="${book.id}"
-                  rating="${book.rating}"
+                  :book="appState.book.id"
+                  :rating="appState.book.rating"
                   unprocessed
-                ></span>
+                  >R{{appState.book.rating || 0}}</span
+                >
               </span>
-              <span
-                t="${book.parsed_page ? "" : "red"}"
-              >Страниц: ${book.page_count}</span>
-              <span
-                t="${book.page_loaded_percent != 100.0 ? "red" : ""}"
-              >Загружено: ${book.page_loaded_percent}%</span>
-              <span>${new Date(book.created).toLocaleString()}</span>
+              <span :t="appState.book.parsed_page ? '' : 'red'"
+                >Страниц: {{appState.book.page_count}}</span
+              >
+              <span :t="appState.book.page_loaded_percent != 100.0 ? 'red' : ''"
+                >Загружено: {{appState.book.page_loaded_percent}}%</span
+              >
+              <span>{{new Date(appState.book.created).toLocaleString()}}</span>
             </div>
-            ${book.attributes
-              .map((attr) => generateHTMLTagArea(attr.values, attr.name))
-              .join("\n")}
+            <span v-for="attr in (appState.book.attributes || [])">
+              <span>{{attr.name}}: </span>
+              <span class="tag" v-for="tagname in (attr.values || [])"
+                >{{tagname}}</span
+              >
+            </span>
             <div class="bottom-buttons">
               <a class="app-button load" href="#">Скачать</a>
-              <a class="app-button read" href="/read.html?book=${
-                book.id
-              }">Читать</a>
+              <a
+                class="app-button read"
+                :href="'/read.html?book='+appState.book.id"
+                >Читать</a
+              >
             </div>
           </div>
         </div>
-        ${
-          book.pages && book.pages.length
-            ? `<div class="preview">${book.pages
-                .map((page, index) => {
-                  if (!page.preview_url) return "";
-
-                  return `<div class="app-container">
-                    <a href="/read.html?book=${book.id}&page=${page.page_number}">
-                      <img class="preview" src="${page.preview_url}"/>
-                    </a>
-                    <span
-                      class="rating"
-                      book="${book.id}"
-                      page="${page.page_number}"
-                      rating="${page.rating}"
-                      unprocessed
-                    ></span>
-                  </div>`;
-                })
-                .join("")}</div>`
-            : ""
-        }`;
-      }
-    </script>
+        <div class="preview">
+          <div
+            class="app-container"
+            v-for="page in (appState.book.pages || []).filter(page=>page.preview_url)"
+          >
+            <a
+              :href="'/read.html?book='+appState.book.id+'&page='+page.page_number"
+            >
+              <img class="preview" :src="page.preview_url" />
+            </a>
+            <span
+              class="rating"
+              :book="appState.book.id"
+              :page="page.page_number"
+              :rating="page.rating"
+              unprocessed
+              >R{{page.rating||0}}</span
+            >
+          </div>
+          `;
+        </div>
+      </div>
+    </div>
   </body>
 </html>

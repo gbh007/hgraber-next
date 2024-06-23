@@ -19,7 +19,6 @@
       media="screen"
       href="/css/rating.css"
     />
-    <script src="/js/rating.js"></script>
   </head>
 
   <body>
@@ -66,7 +65,7 @@
         document.getElementById("page-number").innerText = page.page_number;
         let rating = document.getElementById("rating");
         rating.innerHTML = `<span class="rating" book="${bookID}" page="${page.page_number}" rating="${page.rating}" unprocessed></span>`;
-        refreshRatings();
+        // refreshRatings();
       }
 
       async function goPage(pageNumberNew) {
