@@ -20,7 +20,7 @@ func (uc *UseCase) BookList(ctx context.Context, filter entities.BookFilter) ([]
 	}
 
 	// FIXME: тут костыли, необходимо отказаться от расчета на сервере
-	pages := generatePagination(totalToPages(filter.Offset, filter.Limit)+1, total)
+	pages := generatePagination(totalToPages(filter.Offset, filter.Limit)+1, totalToPages(total, filter.Limit))
 
 	return pkg.Map(books, uc.bookConvert), pages, nil
 }

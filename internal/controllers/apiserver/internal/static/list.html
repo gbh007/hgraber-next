@@ -6,6 +6,9 @@
     <title>HGraber</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
     <link
       rel="stylesheet"
@@ -20,9 +23,7 @@
       href="/css/rating.css"
     />
     <script src="/js/rating.js"></script>
-  </head>
 
-  <body>
     <style>
       body {
         text-align: center;
@@ -86,6 +87,10 @@
       }
     </style>
 
+    <script src="/js/pages/list.js"></script>
+  </head>
+
+  <body id="app">
     <div class="app-header">
       <a href="/">Главная</a>
       <a href="/list.html">Список книг</a>
@@ -93,132 +98,69 @@
     </div>
 
     <div class="app-body">
-      <div id="paginator"></div>
-      <div id="book-list"></div>
-    </div>
-
-    <script>
-      let countOnPage = getBookOnPageCount();
-
-      function getBookOnPageCount() {
-        let data = JSON.parse(localStorage.getItem("settings")) || {};
-        return data.book_on_page || 12;
-      }
-
-      async function renderPages(pageNumber = 1) {
-        let tl = document.getElementById("book-list");
-
-        try {
-          let response = await fetch("/api/book/list", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              count: countOnPage,
-              page: pageNumber,
-            }),
-          });
-
-          if (!response.ok) {
-            throw new Error(await response.text());
-          }
-
-          let data = await response.json();
-
-          tl.innerHTML = "";
-
-          let builder = "";
-
-          data.books.map((info) => (builder += generateHTMLFromBookInfo(info)));
-
-          renderPaginate(data.pages);
-
-          tl.innerHTML = builder;
-          refreshRatings();
-        } catch (err) {
-          tl.innerHTML = `<div class="app-error-container">${err}</div>`;
-        }
-      }
-
-      function renderPaginate(pages) {
-        let paginator = document.getElementById("paginator");
-        paginator.innerHTML = "";
-        pages.forEach((page) => {
-          let pg = document.createElement("span");
-          pg.innerText = page.is_separator ? "..." : page.value;
-          pg.className = "page";
-          pg.setAttribute("current", page.is_current ? "true" : "false");
-          pg.setAttribute("separator", page.is_separator ? "true" : "false");
-          pg.onclick = () => {
-            if (page.is_separator) return;
-            renderPages(page.value);
-          };
-          paginator.appendChild(pg);
-        });
-      }
-
-      window.addEventListener("load", async function () {
-        try {
-          renderPages(1);
-        } catch (err) {
-          document.getElementById(
-            "book-list"
-          ).innerHTML = `<div class="app-error-container">${err}</div>`;
-        }
-      });
-
-      function generateHTMLFromBookInfo(book) {
-        return `<div class="app-container">
-          <div
-            class="book"
-            t="${book.parsed_name ? "" : "bred"}"
+      <div class="app-error-container" v-if="appState.booksError">
+        {{appState.booksError}}
+      </div>
+      <template v-else>
+        <div id="paginator">
+          <span
+            v-for="page in (appState.pages || [])"
+            class="page"
+            :current="page.is_current ? 'true' : 'false'"
+            :separator="page.is_separator ? 'true' : 'false'"
+            @click="renderPages(page.value)"
           >
-            <a 
-              href="/details.html?book=${book.id}"
-              style="grid-area: img;"
-            >
-              ${
-                !book.preview_url
-                  ? ""
-                  : `<img style="max-width: 100%; max-height: 100%;" src="${book.preview_url}" />`
-              }
-            </a>
-            <span
-              style="grid-area: name;"
-              t="${book.parsed_name ? "" : "red"}"
-            >${book.name}</span>
-            <span style="grid-area: id;">
-              #${book.id}
+            {{page.is_separator ? "..." : page.value}}
+          </span>
+        </div>
+        <div id="book-list">
+          <div
+            class="app-container"
+            v-for="book in (appState.books || [])"
+            :key="book.id"
+          >
+            <div class="book" :t="book.parsed_name ? '' : 'bred'">
+              <a :href="'/details.html?book='+book.id" style="grid-area: img">
+                <img
+                  style="max-width: 100%; max-height: 100%"
+                  v-if="book.preview_url"
+                  :src="book.preview_url"
+                />
+              </a>
+              <span style="grid-area: name" :t="book.parsed_name ? '' : 'red'"
+                >{{book.name}}</span
+              >
+              <span style="grid-area: id">
+                #{{book.id}}
+                <span
+                  class="rating"
+                  :book="book.id"
+                  :rating="book.rating"
+                  unprocessed
+                ></span>
+              </span>
+              <span style="grid-area: pgc" :t="book.parsed_page ? '' : 'red'"
+                >Страниц: {{book.page_count}}</span
+              >
               <span
-                class="rating"
-                book="${book.id}"
-                rating="${book.rating}"
-                unprocessed
-              ></span>
-            </span>
-            <span
-              style="grid-area: pgc;"
-              t="${book.parsed_page ? "" : "red"}"
-            >Страниц: ${book.page_count}</span>
-            <span
-              style="grid-area: pgp;"
-              t="${book.page_loaded_percent != 100.0 ? "red" : ""}"
-            >Загружено: ${book.page_loaded_percent}%</span>
-            <span style="grid-area: dt;">${new Date(
-              book.created
-            ).toLocaleString()}</span>
+                style="grid-area: pgp"
+                :t="book.page_loaded_percent != 100.0 ? 'red' : ''"
+                >Загружено: {{book.page_loaded_percent}}%</span
+              >
+              <span style="grid-area: dt"
+                >{{new Date( book.created ).toLocaleString()}}</span
+              >
 
-            <span style="grid-area: tag;">${(book.tags || [])
-              .map((tagname, ind) => {
-                return `<span class="tag">${tagname}</span>`;
-              })
-              .join("")}
-            ${book.has_more_tags ? `<b>и больше!</b>` : ""} 
-            </span>
+              <span style="grid-area: tag">
+                <span class="tag" v-for="tagname in (book.tags || [])"
+                  >{{tagname}}</span
+                >
+                <b v-if="book.has_more_tags">и больше!</b>
+              </span>
+            </div>
           </div>
-        </div>`;
-      }
-    </script>
+        </div>
+      </template>
+    </div>
   </body>
 </html>

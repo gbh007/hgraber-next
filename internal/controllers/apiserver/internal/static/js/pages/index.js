@@ -41,7 +41,7 @@ const app = Vue.createApp({
         });
     }
 
-    Vue.onMounted(() => {
+    Vue.onBeforeMount(() => {
       remakeInfo();
       appState.stateIntervalID = setInterval(remakeInfo, 10000);
     });
