@@ -16,7 +16,9 @@ import (
 func (d *Database) Agents(ctx context.Context, canParse, canExport bool) ([]entities.Agent, error) {
 	raw := make([]model.Agent, 0)
 
-	builder := squirrel.Select("*").From("agents").OrderBy("priority DESC")
+	builder := squirrel.Select("*").
+		PlaceholderFormat(squirrel.Dollar).
+		From("agents").OrderBy("priority DESC")
 
 	if canParse {
 		builder = builder.Where(squirrel.Eq{
@@ -100,6 +102,7 @@ func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 
 func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error {
 	builder := squirrel.Update("agents").
+		PlaceholderFormat(squirrel.Dollar).
 		SetMap(
 			map[string]interface{}{
 				"name":       agent.Name,
@@ -139,6 +142,7 @@ func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error 
 
 func (d *Database) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 	builder := squirrel.Delete("agents").
+		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
 			"id": id.String(),
 		})

@@ -1,3 +1,7 @@
 package main
 
-func main() {}
+import "hgnext/internal/application"
+
+func main() {
+	application.Serve()
+}

@@ -10,8 +10,10 @@ import (
 	"hgnext/internal/adapters/agent"
 	"hgnext/internal/adapters/files"
 	"hgnext/internal/adapters/postgresql"
+	"hgnext/internal/controllers/apiserver"
 	"hgnext/internal/controllers/workermanager"
 	"hgnext/internal/usecases/parsing"
+	"hgnext/internal/usecases/webapi"
 )
 
 func Serve() {
@@ -80,8 +82,28 @@ func Serve() {
 		workermanager.NewPageDownloader(parsingUseCases, logger),
 	)
 
+	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage)
+
+	apiController, err := apiserver.New(
+		logger,
+		cfg.WebServerAddr,
+		cfg.ExternalWebServerAddr,
+		parsingUseCases,
+		webAPIUseCases,
+		cfg.Debug,
+	)
+	if err != nil {
+		logger.ErrorContext(
+			ctx, "fail to create api server",
+			slog.Any("error", err),
+		)
+
+		os.Exit(1)
+	}
+
 	asyncController := New(logger)
 	asyncController.RegisterRunner(workersController)
+	asyncController.RegisterRunner(apiController)
 
 	logger.InfoContext(ctx, "application start")
 	defer logger.InfoContext(ctx, "application stop")

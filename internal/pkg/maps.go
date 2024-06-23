@@ -12,7 +12,7 @@ func SliceToMap[K comparable, V, T any](s []T, cv func(T) (K, V)) map[K]V {
 }
 
 func MapToSlice[K comparable, V, T any](m map[K]V, cv func(K, V) T) []T {
-	result := make([]T, len(m))
+	result := make([]T, 0, len(m))
 
 	for k, v := range m {
 		e := cv(k, v)

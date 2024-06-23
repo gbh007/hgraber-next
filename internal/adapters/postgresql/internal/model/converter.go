@@ -18,7 +18,7 @@ func TimeToDB(t time.Time) sql.NullTime {
 func UUIDToDB(u uuid.UUID) sql.NullString {
 	return sql.NullString{
 		String: u.String(),
-		Valid:  u == uuid.Nil,
+		Valid:  u != uuid.Nil,
 	}
 }
 

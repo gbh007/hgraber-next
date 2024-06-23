@@ -45,6 +45,7 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book entiti
 		return fmt.Errorf("update pages: %w", err)
 	}
 
+	book.Name = info.Name
 	book.AttributesParsed = true
 	book.PageCount = info.PageCount
 

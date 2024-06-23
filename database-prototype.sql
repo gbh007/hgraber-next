@@ -36,16 +36,16 @@ CREATE TABLE attributes (
     code TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     plural_name TEXT NOT NULL,
-    order INT NOT NULL DEFAULT 999,
+    "order" INT NOT NULL DEFAULT 999,
     description TEXT
 );
 
 INSERT INTO
     attributes (
-        code,
-        name,
+        "code",
+        "name",
         plural_name,
-        order
+        "order"
     )
 VALUES ('tag', 'Тэг', 'Теги', 1),
     (

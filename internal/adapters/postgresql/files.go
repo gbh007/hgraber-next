@@ -55,6 +55,7 @@ func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha
 
 func (d *Database) NewFile(ctx context.Context, file entities.File) error {
 	builder := squirrel.Insert("files").
+		PlaceholderFormat(squirrel.Dollar).
 		Columns(
 			"id",
 			"filename",

@@ -30,6 +30,7 @@ func (d *Database) NewBook(ctx context.Context, book entities.Book) error {
 
 func (d *Database) UpdateBook(ctx context.Context, book entities.Book) error {
 	builder := squirrel.Update("books").
+		PlaceholderFormat(squirrel.Dollar).
 		SetMap(
 			map[string]interface{}{
 				"name":              model.StringToDB(book.Name),

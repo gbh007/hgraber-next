@@ -122,7 +122,8 @@ handler:
 			break handler
 
 		case <-timer.C:
-			if len(w.queue) > 0 {
+			// FIXME: сейчас это скорее заглушка, чтобы не было избыточных переобработок.
+			if len(w.queue) > 0 || w.inWorkRunnersCount.Load() > 0 {
 				continue
 			}
 
