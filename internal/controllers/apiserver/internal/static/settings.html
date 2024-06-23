@@ -6,6 +6,9 @@
     <title>HGraber</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
     <link
       rel="stylesheet"
@@ -13,9 +16,7 @@
       media="screen"
       href="/css/main.css"
     />
-  </head>
 
-  <body>
     <style>
       div.app-container {
         margin-bottom: 20px;
@@ -39,6 +40,10 @@
       }
     </style>
 
+    <script src="/js/pages/settings.js"></script>
+  </head>
+
+  <body id="app">
     <div class="app-header">
       <a href="/">Главная</a>
       <a href="/list.html">Список книг</a>
@@ -54,64 +59,23 @@
             </tr>
             <tr>
               <td>Количество на странице</td>
-              <td><input class="app" type="number" id="on-page" /></td>
+              <td>
+                <input
+                  class="app"
+                  type="number"
+                  id="on-page"
+                  v-model="appState.bookOnPage"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <button class="app" @click="saveSettings()">Сохранить</button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-
-      <div class="app-container">
-        <input
-          class="app"
-          value=""
-          placeholder="Токен"
-          id="token"
-          type="password"
-        />
-        <button class="app" onclick="login();">Авторизоваться</button>
-        <span style="color: red" id="login-error"></span>
-      </div>
     </div>
-
-    <script>
-      function updateBookOnPageCount(count) {
-        let data = JSON.parse(localStorage.getItem("settings")) || {};
-        data.book_on_page = parseInt(count);
-        localStorage.setItem("settings", JSON.stringify(data));
-      }
-
-      function getBookOnPageCount() {
-        let data = JSON.parse(localStorage.getItem("settings")) || {};
-        return data.book_on_page || 12;
-      }
-
-      window.addEventListener("load", async function () {
-        let onPageInputNode = document.getElementById("on-page");
-
-        onPageInputNode.value = getBookOnPageCount();
-        onPageInputNode.oninput = (v) => updateBookOnPageCount(v.target.value);
-      });
-    </script>
-
-    <script>
-      async function login() {
-        let token = document.getElementById("token");
-        let errorBox = document.getElementById("login-error");
-        errorBox.innerText = "";
-
-        try {
-          let response = await fetch("/api/login", {
-            method: "POST",
-            body: JSON.stringify({ token: token.value }),
-          });
-
-          if (!response.ok) {
-            throw new Error(await response.text());
-          }
-        } catch (err) {
-          errorBox.innerText = err;
-        }
-      }
-    </script>
   </body>
 </html>
