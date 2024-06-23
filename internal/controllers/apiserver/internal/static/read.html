@@ -6,6 +6,9 @@
     <title>HGraber</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
     <link
       rel="stylesheet"
@@ -19,9 +22,7 @@
       media="screen"
       href="/css/rating.css"
     />
-  </head>
 
-  <body>
     <style>
       body {
         text-align: center;
@@ -33,6 +34,11 @@
         white-space: nowrap;
       }
     </style>
+
+    <script src="/js/pages/read.js"></script>
+  </head>
+
+  <body id="app">
     <div class="app-header">
       <a href="/">Главная</a>
       <a href="/list.html">Список книг</a>
@@ -41,92 +47,23 @@
 
     <div class="app-body">
       <div class="app-container">
-        Страница <span id="page-number">1</span> из
-        <span id="page-count">1</span>
-        <span id="rating"></span>
+        Страница
+        <span id="page-number">{{appState.activePage.page_number}}</span> из
+        <span id="page-count">{{(appState.book.pages||[]).length}}</span>
+        <span id="rating"> R{{appState.activePage.rating || 0}}</span>
       </div>
       <div class="view">
-        <img src="" id="main-image" style="max-width: 100%; max-height: 100%" />
+        <div class="app-error-container" v-if="appState.bookError">
+          {{appState.bookError}}
+        </div>
+        <img
+          :src="appState.activePage.preview_url"
+          id="main-image"
+          style="max-width: 100%; max-height: 100%"
+          v-else-if="appState.activePage.preview_url"
+          @click="goGo"
+        />
       </div>
     </div>
-
-    <script>
-      let pageNumber = 1;
-      let pages = [];
-
-      const bookID = new URLSearchParams(window.location.search).get("book");
-      pageNumber =
-        parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
-
-      function updatePage(page) {
-        document
-          .getElementById("main-image")
-          .setAttribute("src", page.preview_url);
-        document.getElementById("page-number").innerText = page.page_number;
-        let rating = document.getElementById("rating");
-        rating.innerHTML = `<span class="rating" book="${bookID}" page="${page.page_number}" rating="${page.rating}" unprocessed></span>`;
-        // refreshRatings();
-      }
-
-      async function goPage(pageNumberNew) {
-        updatePage(pages[pageNumberNew - 1]);
-        pageNumber = pageNumberNew;
-      }
-
-      function prevPage() {
-        if (pageNumber == 1) return;
-
-        goPage(pageNumber - 1);
-      }
-
-      function nextPage() {
-        if (pageNumber == pages.length) return;
-
-        goPage(pageNumber + 1);
-      }
-
-      window.addEventListener("load", async function () {
-        document.getElementById("main-image").onclick = (event) => {
-          const pos = document
-            .getElementById("main-image")
-            .getBoundingClientRect();
-          const dx = (event.pageX - pos.left) / (pos.right - pos.left);
-          if (dx < 0.3) {
-            prevPage();
-          } else {
-            nextPage();
-          }
-        };
-
-        try {
-          let response = await fetch("/api/book/details", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: bookID }),
-          });
-
-          if (!response.ok) {
-            throw new Error(await response.text());
-          }
-
-          let data = await response.json();
-
-          pages = data.pages || [];
-          document.getElementById("page-count").innerText = pages.length;
-          goPage(pageNumber);
-        } catch (err) {
-          document.getElementById(
-            "page-number"
-          ).innerHTML = `<div class="app-error-container">${err}</div>`;
-        }
-      });
-
-      window.addEventListener("keydown", function (event) {
-        if (event.keyCode === 37) prevPage();
-        if (event.keyCode === 39) nextPage();
-      });
-    </script>
   </body>
 </html>
