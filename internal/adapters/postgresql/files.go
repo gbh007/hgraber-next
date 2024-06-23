@@ -13,27 +13,23 @@ import (
 	"hgnext/internal/entities"
 )
 
-func (d *Database) GetUnHashedFiles(ctx context.Context) []entities.File {
+func (d *Database) GetUnHashedFiles(ctx context.Context) ([]entities.File, error) {
 	raw := make([]*model.File, 0)
 
 	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM files WHERE md5_sum IS NULL OR sha256_sum IS NULL OR "size" IS NULL;`)
 	if err != nil {
-		d.logger.ErrorContext(ctx, err.Error())
-
-		return []entities.File{}
+		return nil, fmt.Errorf("exec: %w", err)
 	}
 
 	out := make([]entities.File, len(raw))
 	for i, v := range raw {
 		out[i], err = v.ToEntity()
 		if err != nil {
-			d.logger.ErrorContext(ctx, err.Error())
-
-			return []entities.File{}
+			return nil, fmt.Errorf("convert %s: %w", v.ID, err)
 		}
 	}
 
-	return out
+	return out, nil
 }
 
 func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha256Sum string, size int64) error {

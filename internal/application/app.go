@@ -12,6 +12,7 @@ import (
 	"hgnext/internal/adapters/postgresql"
 	"hgnext/internal/controllers/apiserver"
 	"hgnext/internal/controllers/workermanager"
+	"hgnext/internal/usecases/filelogic"
 	"hgnext/internal/usecases/parsing"
 	"hgnext/internal/usecases/webapi"
 )
@@ -75,11 +76,13 @@ func Serve() {
 	}
 
 	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorage)
+	fileUseCases := filelogic.New(logger, storage, fileStorage)
 
 	workersController := workermanager.New(
 		logger,
 		workermanager.NewBookParser(parsingUseCases, logger),
 		workermanager.NewPageDownloader(parsingUseCases, logger),
+		workermanager.NewHasher(fileUseCases, logger),
 	)
 
 	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage)
