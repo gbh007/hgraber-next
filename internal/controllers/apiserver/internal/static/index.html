@@ -6,6 +6,9 @@
     <title>HGraber</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
     <link
       rel="stylesheet"
@@ -13,9 +16,6 @@
       media="screen"
       href="/css/main.css"
     />
-  </head>
-
-  <body>
     <style>
       #index-info ul {
         padding: 0px;
@@ -31,6 +31,11 @@
         margin-bottom: unset;
       }
     </style>
+
+    <script src="/js/pages/index.js"></script>
+  </head>
+
+  <body id="app">
     <div class="app-header">
       <a href="/">Главная</a>
       <a href="/list.html">Список книг</a>
@@ -38,22 +43,66 @@
     </div>
 
     <div class="app-body">
-      <div class="app-container" id="index-info"></div>
+      <div class="app-container" id="index-info">
+        <div class="app-error-container" v-if="appState.stateError">
+          {{appState.stateError}}
+        </div>
+        <ul v-else>
+          <li>Всего <b>{{appState.state.count || 0}}</b> тайтлов</li>
+          <li>
+            Всего незагруженно
+            <b>{{appState.state.not_load_count || 0}}</b> тайтлов
+          </li>
+          <li>Всего <b>{{appState.state.page_count || 0}}</b> страниц</li>
+          <li>
+            Всего незагруженно
+            <b>{{appState.state.not_load_page_count || 0}}</b> страниц
+          </li>
+          <li>
+            Объем страниц:
+            <b>{{appState.state.pages_size_formatted || 0}}</b>
+          </li>
+        </ul>
+      </div>
 
-      <div class="app-container">
+      <!-- FIXME: реализовать -->
+      <!-- <div class="app-container">
         <div>
           Скачать архивы С
           <input class="app" value="" placeholder="С" id="load-from" />
           По
           <input class="app" value="" placeholder="По" id="load-to" />
-          <button class="app" onclick="saveToZIP();">Загрузить</button>
+          <button class="app" @click="saveToZIP();">Загрузить</button>
         </div>
         <div>
           <span style="color: red" id="save-to-zip-error"></span>
         </div>
-      </div>
+      </div> -->
 
-      <div class="app-container" id="info-workers"></div>
+      <div class="app-container" id="info-workers">
+        <div class="app-error-container" v-if="appState.stateError">
+          {{appState.stateError}}
+        </div>
+        <table v-else>
+          <thead>
+            <tr>
+              <td>Название</td>
+              <td>В очереди</td>
+              <td>В работе</td>
+              <td>Раннеров</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="worker in ((appState.state.monitor||{}).workers || [])">
+              <td>{{worker.name}}</td>
+              <td>{{worker.in_queue}}</td>
+              <td>{{worker.in_work}}</td>
+              <td>{{worker.runners}}</td>
+            </tr>
+          </tbody>
+          <tbody></tbody>
+        </table>
+      </div>
 
       <div class="app-container" style="display: flex">
         <div style="display: flex; flex-direction: column">
@@ -61,104 +110,27 @@
             class="app"
             rows="10"
             cols="50"
-            value=""
+            v-model="appState.urlsRaw"
             placeholder="Загрузить новые книги"
-            id="new-book-urls"
           ></textarea>
-          <button class="app" onclick="loadBooks();">Загрузить</button>
+          <button class="app" @click="loadBooks();">Загрузить</button>
         </div>
-        <div
-          id="new-book-urls-info"
-          style="display: flex; flex-direction: column; margin-left: 10px"
-        ></div>
+        <div style="display: flex; flex-direction: column; margin-left: 10px">
+          <div class="app-error-container" v-if="appState.urlsError">
+            {{appState.urlsError}}
+          </div>
+          <template v-else>
+            <div><b>Всего: </b>{{appState.urlsResult.total_count || 0}}</div>
+            <div>
+              <b>Загружено: </b>{{appState.urlsResult.loaded_count || 0}}
+            </div>
+            <div>
+              <b>Дубликаты: </b>{{appState.urlsResult.duplicate_count || 0}}
+            </div>
+            <div><b>Ошибки: </b>{{appState.urlsResult.error_count || 0}}</div>
+          </template>
+        </div>
       </div>
     </div>
-
-    <script>
-      async function remakeInfo() {
-        let indexInfo = document.getElementById("index-info");
-        let infoWorkers = document.getElementById("info-workers");
-        try {
-          let response = await fetch("/api/system/info", { method: "GET" });
-
-          if (!response.ok) {
-            throw new Error(await response.text());
-          }
-
-          let data = await response.json();
-
-          indexInfo.innerHTML = `
-    <ul>
-      <li>Всего <b>${data.count || 0}</b> тайтлов</li>
-      <li>Всего незагруженно <b>${data.not_load_count || 0}</b> тайтлов</li>
-      <li>Всего <b>${data.page_count || 0}</b> страниц</li>
-      <li>Всего незагруженно <b>${
-        data.not_load_page_count || 0
-      }</b> страниц</li>
-      <li>Объем страниц: <b>${data.pages_size_formatted || ""}</b></li>
-    </ul>`;
-          infoWorkers.innerHTML =
-            `<table>
-              <thead>
-                <tr>
-                  <td>Название</td>
-                  <td>В очереди</td>
-                  <td>В работе</td>
-                  <td>Раннеров</td>
-                </tr>
-              </thead>
-              <tbody>` +
-            data.monitor.workers
-              .map((w) => {
-                return `<tr>
-                  <td>${w.name}</td>
-                  <td>${w.in_queue}</td>
-                  <td>${w.in_work}</td>
-                  <td>${w.runners}</td>
-                </tr>`;
-              })
-              .join("") +
-            `<tbody>
-          </table>`;
-        } catch (err) {
-          indexInfo.innerHTML = `<div class="app-error-container">${err}</div>`;
-          infoWorkers.innerHTML = `<div class="app-error-container">${err}</div>`;
-        }
-      }
-
-      window.addEventListener("load", function () {
-        remakeInfo();
-        setInterval(remakeInfo, 10000);
-      });
-    </script>
-
-    <script>
-      async function loadBooks() {
-        let urlsInput = document.getElementById("new-book-urls");
-        let loadedInfo = document.getElementById("new-book-urls-info");
-
-        try {
-          let response = await fetch("/api/system/handle", {
-            method: "POST",
-            body: JSON.stringify({ urls: urlsInput.value.split("\n") }),
-          });
-
-          if (!response.ok) {
-            throw new Error(await response.text());
-          }
-
-          let data = await response.json();
-          loadedInfo.innerHTML = [
-            `<div><b>Всего: </b>${data.total_count || 0}</div>`,
-            `<div><b>Загружено: </b>${data.loaded_count || 0}</div>`,
-            `<div><b>Дубликаты: </b>${data.duplicate_count || 0}</div>`,
-            `<div><b>Ошибки: </b>${data.error_count || 0}</div>`,
-          ].join("\n");
-          urlsInput.value = (data.not_handled || []).join("\n");
-        } catch (err) {
-          loadedInfo.innerHTML = `<div class="app-error-container">${err}</div>`;
-        }
-      }
-    </script>
   </body>
 </html>
