@@ -36,7 +36,3 @@ type APISystemInfoGetRes interface {
 type APIUserLoginPostRes interface {
 	aPIUserLoginPostRes()
 }
-
-type APIUserRegistrationPostRes interface {
-	aPIUserRegistrationPostRes()
-}

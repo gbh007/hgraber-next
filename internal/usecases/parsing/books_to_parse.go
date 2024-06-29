@@ -11,14 +11,18 @@ import (
 )
 
 func (uc *UseCase) BooksToParse(ctx context.Context) ([]entities.BookWithAgent, error) {
-	agents, err := uc.storage.Agents(ctx, true, false)
-	if err != nil {
-		return nil, fmt.Errorf("get agents: %w", err)
-	}
-
 	books, err := uc.storage.UnprocessedBooks(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("books from storage: %w", err)
+	}
+
+	if len(books) == 0 {
+		return []entities.BookWithAgent{}, nil
+	}
+
+	agents, err := uc.storage.Agents(ctx, true, false)
+	if err != nil {
+		return nil, fmt.Errorf("get agents: %w", err)
 	}
 
 	books = pkg.SliceFilter(books, func(b entities.Book) bool {

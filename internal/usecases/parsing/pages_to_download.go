@@ -10,14 +10,18 @@ import (
 )
 
 func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownloadWithAgent, error) {
-	agents, err := uc.storage.Agents(ctx, true, false)
-	if err != nil {
-		return nil, fmt.Errorf("get agents: %w", err)
-	}
-
 	pages, err := uc.storage.NotDownloadedPages(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("pages from storage: %w", err)
+	}
+
+	if len(pages) == 0 {
+		return []entities.PageForDownloadWithAgent{}, nil
+	}
+
+	agents, err := uc.storage.Agents(ctx, true, false)
+	if err != nil {
+		return nil, fmt.Errorf("get agents: %w", err)
 	}
 
 	pages = pkg.SliceFilter(pages, func(b entities.PageForDownload) bool {

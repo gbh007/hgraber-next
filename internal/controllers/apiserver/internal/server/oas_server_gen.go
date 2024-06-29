@@ -58,16 +58,10 @@ type Handler interface {
 	APISystemInfoGet(ctx context.Context) (APISystemInfoGetRes, error)
 	// APIUserLoginPost implements POST /api/user/login operation.
 	//
-	// Авторизация пользователя.
+	// Проставление токена в куки.
 	//
 	// POST /api/user/login
 	APIUserLoginPost(ctx context.Context, req *APIUserLoginPostReq) (APIUserLoginPostRes, error)
-	// APIUserRegistrationPost implements POST /api/user/registration operation.
-	//
-	// Регистрация нового пользователя.
-	//
-	// POST /api/user/registration
-	APIUserRegistrationPost(ctx context.Context, req *APIUserRegistrationPostReq) (APIUserRegistrationPostRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

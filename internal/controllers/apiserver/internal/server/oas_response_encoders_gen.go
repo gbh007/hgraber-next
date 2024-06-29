@@ -10,6 +10,9 @@ import (
 	"github.com/go-faster/jx"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/trace"
+
+	"github.com/ogen-go/ogen/conv"
+	"github.com/ogen-go/ogen/uri"
 )
 
 func encodeAPIAgentNewPostResponse(response APIAgentNewPostRes, w http.ResponseWriter, span trace.Span) error {
@@ -594,16 +597,28 @@ func encodeAPISystemInfoGetResponse(response APISystemInfoGetRes, w http.Respons
 
 func encodeAPIUserLoginPostResponse(response APIUserLoginPostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *APIUserLoginPostOK:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
+	case *APIUserLoginPostNoContent:
+		// Encoding response headers.
+		{
+			h := uri.NewHeaderEncoder(w.Header())
+			// Encode "Set-Cookie" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Set-Cookie",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.SetCookie.Get(); ok {
+						return e.EncodeValue(conv.StringToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Set-Cookie header")
+				}
+			}
 		}
+		w.WriteHeader(204)
+		span.SetStatus(codes.Ok, http.StatusText(204))
 
 		return nil
 
@@ -621,45 +636,6 @@ func encodeAPIUserLoginPostResponse(response APIUserLoginPostRes, w http.Respons
 		return nil
 
 	case *APIUserLoginPostInternalServerError:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(500)
-		span.SetStatus(codes.Error, http.StatusText(500))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-
-	default:
-		return errors.Errorf("unexpected response type: %T", response)
-	}
-}
-
-func encodeAPIUserRegistrationPostResponse(response APIUserRegistrationPostRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *APIUserRegistrationPostNoContent:
-		w.WriteHeader(204)
-		span.SetStatus(codes.Ok, http.StatusText(204))
-
-		return nil
-
-	case *APIUserRegistrationPostBadRequest:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(400)
-		span.SetStatus(codes.Error, http.StatusText(400))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-
-	case *APIUserRegistrationPostInternalServerError:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))

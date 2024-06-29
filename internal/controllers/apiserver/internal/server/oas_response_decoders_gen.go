@@ -11,7 +11,9 @@ import (
 	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
 
+	"github.com/ogen-go/ogen/conv"
 	"github.com/ogen-go/ogen/ogenerrors"
+	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 )
 
@@ -1450,41 +1452,48 @@ func decodeAPISystemInfoGetResponse(resp *http.Response) (res APISystemInfoGetRe
 
 func decodeAPIUserLoginPostResponse(resp *http.Response) (res APIUserLoginPostRes, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
-		if err != nil {
-			return res, errors.Wrap(err, "parse media type")
-		}
-		switch {
-		case ct == "application/json":
-			buf, err := io.ReadAll(resp.Body)
-			if err != nil {
-				return res, err
+	case 204:
+		// Code 204.
+		var wrapper APIUserLoginPostNoContent
+		h := uri.NewHeaderDecoder(resp.Header)
+		// Parse "Set-Cookie" header.
+		{
+			cfg := uri.HeaderParameterDecodingConfig{
+				Name:    "Set-Cookie",
+				Explode: false,
 			}
-			d := jx.DecodeBytes(buf)
-
-			var response APIUserLoginPostOK
 			if err := func() error {
-				if err := response.Decode(d); err != nil {
-					return err
-				}
-				if err := d.Skip(); err != io.EOF {
-					return errors.New("unexpected trailing data")
+				if err := h.HasParam(cfg); err == nil {
+					if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+						var wrapperDotSetCookieVal string
+						if err := func() error {
+							val, err := d.DecodeValue()
+							if err != nil {
+								return err
+							}
+
+							c, err := conv.ToString(val)
+							if err != nil {
+								return err
+							}
+
+							wrapperDotSetCookieVal = c
+							return nil
+						}(); err != nil {
+							return err
+						}
+						wrapper.SetCookie.SetTo(wrapperDotSetCookieVal)
+						return nil
+					}); err != nil {
+						return err
+					}
 				}
 				return nil
 			}(); err != nil {
-				err = &ogenerrors.DecodeBodyError{
-					ContentType: ct,
-					Body:        buf,
-					Err:         err,
-				}
-				return res, err
+				return res, errors.Wrap(err, "parse Set-Cookie header")
 			}
-			return &response, nil
-		default:
-			return res, validate.InvalidContentType(ct)
 		}
+		return &wrapper, nil
 	case 400:
 		// Code 400.
 		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
@@ -1535,85 +1544,6 @@ func decodeAPIUserLoginPostResponse(resp *http.Response) (res APIUserLoginPostRe
 			d := jx.DecodeBytes(buf)
 
 			var response APIUserLoginPostInternalServerError
-			if err := func() error {
-				if err := response.Decode(d); err != nil {
-					return err
-				}
-				if err := d.Skip(); err != io.EOF {
-					return errors.New("unexpected trailing data")
-				}
-				return nil
-			}(); err != nil {
-				err = &ogenerrors.DecodeBodyError{
-					ContentType: ct,
-					Body:        buf,
-					Err:         err,
-				}
-				return res, err
-			}
-			return &response, nil
-		default:
-			return res, validate.InvalidContentType(ct)
-		}
-	}
-	return res, validate.UnexpectedStatusCode(resp.StatusCode)
-}
-
-func decodeAPIUserRegistrationPostResponse(resp *http.Response) (res APIUserRegistrationPostRes, _ error) {
-	switch resp.StatusCode {
-	case 204:
-		// Code 204.
-		return &APIUserRegistrationPostNoContent{}, nil
-	case 400:
-		// Code 400.
-		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
-		if err != nil {
-			return res, errors.Wrap(err, "parse media type")
-		}
-		switch {
-		case ct == "application/json":
-			buf, err := io.ReadAll(resp.Body)
-			if err != nil {
-				return res, err
-			}
-			d := jx.DecodeBytes(buf)
-
-			var response APIUserRegistrationPostBadRequest
-			if err := func() error {
-				if err := response.Decode(d); err != nil {
-					return err
-				}
-				if err := d.Skip(); err != io.EOF {
-					return errors.New("unexpected trailing data")
-				}
-				return nil
-			}(); err != nil {
-				err = &ogenerrors.DecodeBodyError{
-					ContentType: ct,
-					Body:        buf,
-					Err:         err,
-				}
-				return res, err
-			}
-			return &response, nil
-		default:
-			return res, validate.InvalidContentType(ct)
-		}
-	case 500:
-		// Code 500.
-		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
-		if err != nil {
-			return res, errors.Wrap(err, "parse media type")
-		}
-		switch {
-		case ct == "application/json":
-			buf, err := io.ReadAll(resp.Body)
-			if err != nil {
-				return res, err
-			}
-			d := jx.DecodeBytes(buf)
-
-			var response APIUserRegistrationPostInternalServerError
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

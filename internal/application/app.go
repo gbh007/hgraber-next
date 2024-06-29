@@ -95,6 +95,7 @@ func Serve() {
 		webAPIUseCases,
 		cfg.Debug,
 		cfg.WebStaticDir,
+		cfg.APIToken,
 	)
 	if err != nil {
 		logger.ErrorContext(

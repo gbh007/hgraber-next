@@ -603,100 +603,36 @@ type APIUserLoginPostInternalServerError ErrorResponse
 
 func (*APIUserLoginPostInternalServerError) aPIUserLoginPostRes() {}
 
-type APIUserLoginPostOK struct {
-	// Токен доступа пользователя.
+// APIUserLoginPostNoContent is response for APIUserLoginPost operation.
+type APIUserLoginPostNoContent struct {
+	SetCookie OptString
+}
+
+// GetSetCookie returns the value of SetCookie.
+func (s *APIUserLoginPostNoContent) GetSetCookie() OptString {
+	return s.SetCookie
+}
+
+// SetSetCookie sets the value of SetCookie.
+func (s *APIUserLoginPostNoContent) SetSetCookie(val OptString) {
+	s.SetCookie = val
+}
+
+func (*APIUserLoginPostNoContent) aPIUserLoginPostRes() {}
+
+type APIUserLoginPostReq struct {
+	// Токен пользователя.
 	Token string `json:"token"`
 }
 
 // GetToken returns the value of Token.
-func (s *APIUserLoginPostOK) GetToken() string {
+func (s *APIUserLoginPostReq) GetToken() string {
 	return s.Token
 }
 
 // SetToken sets the value of Token.
-func (s *APIUserLoginPostOK) SetToken(val string) {
+func (s *APIUserLoginPostReq) SetToken(val string) {
 	s.Token = val
-}
-
-func (*APIUserLoginPostOK) aPIUserLoginPostRes() {}
-
-type APIUserLoginPostReq struct {
-	// Логин пользователя.
-	Login string `json:"login"`
-	// Пароль пользователя.
-	Password string `json:"password"`
-}
-
-// GetLogin returns the value of Login.
-func (s *APIUserLoginPostReq) GetLogin() string {
-	return s.Login
-}
-
-// GetPassword returns the value of Password.
-func (s *APIUserLoginPostReq) GetPassword() string {
-	return s.Password
-}
-
-// SetLogin sets the value of Login.
-func (s *APIUserLoginPostReq) SetLogin(val string) {
-	s.Login = val
-}
-
-// SetPassword sets the value of Password.
-func (s *APIUserLoginPostReq) SetPassword(val string) {
-	s.Password = val
-}
-
-type APIUserRegistrationPostBadRequest ErrorResponse
-
-func (*APIUserRegistrationPostBadRequest) aPIUserRegistrationPostRes() {}
-
-type APIUserRegistrationPostInternalServerError ErrorResponse
-
-func (*APIUserRegistrationPostInternalServerError) aPIUserRegistrationPostRes() {}
-
-// APIUserRegistrationPostNoContent is response for APIUserRegistrationPost operation.
-type APIUserRegistrationPostNoContent struct{}
-
-func (*APIUserRegistrationPostNoContent) aPIUserRegistrationPostRes() {}
-
-type APIUserRegistrationPostReq struct {
-	// Логин пользователя.
-	Login string `json:"login"`
-	// Пароль пользователя.
-	Password string `json:"password"`
-	// Отображаемое имя пользователя.
-	Name OptString `json:"name"`
-}
-
-// GetLogin returns the value of Login.
-func (s *APIUserRegistrationPostReq) GetLogin() string {
-	return s.Login
-}
-
-// GetPassword returns the value of Password.
-func (s *APIUserRegistrationPostReq) GetPassword() string {
-	return s.Password
-}
-
-// GetName returns the value of Name.
-func (s *APIUserRegistrationPostReq) GetName() OptString {
-	return s.Name
-}
-
-// SetLogin sets the value of Login.
-func (s *APIUserRegistrationPostReq) SetLogin(val string) {
-	s.Login = val
-}
-
-// SetPassword sets the value of Password.
-func (s *APIUserRegistrationPostReq) SetPassword(val string) {
-	s.Password = val
-}
-
-// SetName sets the value of Name.
-func (s *APIUserRegistrationPostReq) SetName(val OptString) {
-	s.Name = val
 }
 
 // Данные книги.

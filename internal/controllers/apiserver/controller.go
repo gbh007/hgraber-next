@@ -40,6 +40,7 @@ type Controller struct {
 
 	externalServerScheme       string
 	externalServerHostWithPort string
+	token                      string
 }
 
 func New(
@@ -50,6 +51,7 @@ func New(
 	webAPIUseCases webAPIUseCases,
 	debug bool,
 	staticDir string,
+	token string,
 ) (*Controller, error) {
 	u, err := url.Parse(externalServerAddr)
 	if err != nil {
@@ -65,6 +67,7 @@ func New(
 		webAPIUseCases:             webAPIUseCases,
 		debug:                      debug,
 		staticDir:                  staticDir,
+		token:                      token,
 	}
 
 	ogenServer, err := server.NewServer(

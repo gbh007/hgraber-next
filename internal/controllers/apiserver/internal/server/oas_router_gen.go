@@ -281,60 +281,24 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'u': // Prefix: "user/"
+			case 'u': // Prefix: "user/login"
 				origElem := elem
-				if l := len("user/"); len(elem) >= l && elem[0:l] == "user/" {
+				if l := len("user/login"); len(elem) >= l && elem[0:l] == "user/login" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					break
-				}
-				switch elem[0] {
-				case 'l': // Prefix: "login"
-					origElem := elem
-					if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
-						elem = elem[l:]
-					} else {
-						break
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleAPIUserLoginPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
 					}
 
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIUserLoginPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				case 'r': // Prefix: "registration"
-					origElem := elem
-					if l := len("registration"); len(elem) >= l && elem[0:l] == "registration" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIUserRegistrationPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
+					return
 				}
 
 				elem = origElem
@@ -683,68 +647,28 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 'u': // Prefix: "user/"
+			case 'u': // Prefix: "user/login"
 				origElem := elem
-				if l := len("user/"); len(elem) >= l && elem[0:l] == "user/" {
+				if l := len("user/login"); len(elem) >= l && elem[0:l] == "user/login" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					break
-				}
-				switch elem[0] {
-				case 'l': // Prefix: "login"
-					origElem := elem
-					if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
-						elem = elem[l:]
-					} else {
-						break
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = "APIUserLoginPost"
+						r.summary = "Проставление токена в куки"
+						r.operationID = ""
+						r.pathPattern = "/api/user/login"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
 					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = "APIUserLoginPost"
-							r.summary = "Авторизация пользователя"
-							r.operationID = ""
-							r.pathPattern = "/api/user/login"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				case 'r': // Prefix: "registration"
-					origElem := elem
-					if l := len("registration"); len(elem) >= l && elem[0:l] == "registration" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = "APIUserRegistrationPost"
-							r.summary = "Регистрация нового пользователя"
-							r.operationID = ""
-							r.pathPattern = "/api/user/registration"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
 				}
 
 				elem = origElem

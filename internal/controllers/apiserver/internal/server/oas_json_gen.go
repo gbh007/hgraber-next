@@ -2741,28 +2741,28 @@ func (s *APIUserLoginPostInternalServerError) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
-func (s *APIUserLoginPostOK) Encode(e *jx.Encoder) {
+func (s *APIUserLoginPostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIUserLoginPostOK) encodeFields(e *jx.Encoder) {
+func (s *APIUserLoginPostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("token")
 		e.Str(s.Token)
 	}
 }
 
-var jsonFieldsNameOfAPIUserLoginPostOK = [1]string{
+var jsonFieldsNameOfAPIUserLoginPostReq = [1]string{
 	0: "token",
 }
 
-// Decode decodes APIUserLoginPostOK from json.
-func (s *APIUserLoginPostOK) Decode(d *jx.Decoder) error {
+// Decode decodes APIUserLoginPostReq from json.
+func (s *APIUserLoginPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIUserLoginPostOK to nil")
+		return errors.New("invalid: unable to decode APIUserLoginPostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -2785,125 +2785,12 @@ func (s *APIUserLoginPostOK) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIUserLoginPostOK")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIUserLoginPostOK) {
-					name = jsonFieldsNameOfAPIUserLoginPostOK[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIUserLoginPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIUserLoginPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIUserLoginPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIUserLoginPostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("login")
-		e.Str(s.Login)
-	}
-	{
-		e.FieldStart("password")
-		e.Str(s.Password)
-	}
-}
-
-var jsonFieldsNameOfAPIUserLoginPostReq = [2]string{
-	0: "login",
-	1: "password",
-}
-
-// Decode decodes APIUserLoginPostReq from json.
-func (s *APIUserLoginPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIUserLoginPostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "login":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Login = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"login\"")
-			}
-		case "password":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Str()
-				s.Password = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"password\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
 		return errors.Wrap(err, "decode APIUserLoginPostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2945,212 +2832,6 @@ func (s *APIUserLoginPostReq) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIUserLoginPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIUserRegistrationPostBadRequest as json.
-func (s *APIUserRegistrationPostBadRequest) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIUserRegistrationPostBadRequest from json.
-func (s *APIUserRegistrationPostBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIUserRegistrationPostBadRequest to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIUserRegistrationPostBadRequest(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIUserRegistrationPostBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIUserRegistrationPostBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIUserRegistrationPostInternalServerError as json.
-func (s *APIUserRegistrationPostInternalServerError) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIUserRegistrationPostInternalServerError from json.
-func (s *APIUserRegistrationPostInternalServerError) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIUserRegistrationPostInternalServerError to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIUserRegistrationPostInternalServerError(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIUserRegistrationPostInternalServerError) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIUserRegistrationPostInternalServerError) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIUserRegistrationPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIUserRegistrationPostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("login")
-		e.Str(s.Login)
-	}
-	{
-		e.FieldStart("password")
-		e.Str(s.Password)
-	}
-	{
-		if s.Name.Set {
-			e.FieldStart("name")
-			s.Name.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfAPIUserRegistrationPostReq = [3]string{
-	0: "login",
-	1: "password",
-	2: "name",
-}
-
-// Decode decodes APIUserRegistrationPostReq from json.
-func (s *APIUserRegistrationPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIUserRegistrationPostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "login":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Login = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"login\"")
-			}
-		case "password":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Str()
-				s.Password = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"password\"")
-			}
-		case "name":
-			if err := func() error {
-				s.Name.Reset()
-				if err := s.Name.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIUserRegistrationPostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIUserRegistrationPostReq) {
-					name = jsonFieldsNameOfAPIUserRegistrationPostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIUserRegistrationPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIUserRegistrationPostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

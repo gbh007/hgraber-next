@@ -8,6 +8,7 @@ type Config struct {
 	WebServerAddr         string `envconfig:"WEB_SERVER_ADDR"`
 	ExternalWebServerAddr string `envconfig:"EXTERNAL_WEB_SERVER_ADDR"`
 	WebStaticDir          string `envconfig:"WEB_STATIC_DIR"`
+	APIToken              string `envconfig:"API_TOKEN"`
 	Debug                 bool   `envconfig:"DEBUG"`
 }
 

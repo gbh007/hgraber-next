@@ -12,52 +12,10 @@ security:
   - cookies: []
 
 paths:
-  /api/user/registration:
-    post:
-      description: Регистрация нового пользователя
-      summary: Регистрация нового пользователя
-      tags:
-        - user
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                login:
-                  type: string
-                  description: Логин пользователя
-                password:
-                  type: string
-                  description: Пароль пользователя
-                name:
-                  type: string
-                  description: Отображаемое имя пользователя
-              required:
-                - login
-                - password
-      responses:
-        204:
-          description: Успешная регистрация пользователя
-        400:
-          description: Пользовательская ошибка при создании пользователя
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка при создании пользователя
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
   /api/user/login:
     post:
-      description: Авторизация пользователя
-      summary: Авторизация пользователя
+      description: Проставление токена в куки
+      summary: Проставление токена в куки
       tags:
         - user
       security: []
@@ -68,28 +26,19 @@ paths:
             schema:
               type: object
               properties:
-                login:
+                token:
                   type: string
-                  description: Логин пользователя
-                password:
-                  type: string
-                  description: Пароль пользователя
+                  description: Токен пользователя
               required:
-                - login
-                - password
+                - token
       responses:
-        200:
+        204:
           description: Успешная авторизация
-          content:
-            application/json:
+          headers:
+            Set-Cookie:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    description: Токен доступа пользователя
-                required:
-                  - token
+                type: string
+                description: Токен доступа
         400:
           description: Пользовательская ошибка при авторизации
           content:

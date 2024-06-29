@@ -87,18 +87,9 @@ func (UnimplementedHandler) APISystemInfoGet(ctx context.Context) (r APISystemIn
 
 // APIUserLoginPost implements POST /api/user/login operation.
 //
-// Авторизация пользователя.
+// Проставление токена в куки.
 //
 // POST /api/user/login
 func (UnimplementedHandler) APIUserLoginPost(ctx context.Context, req *APIUserLoginPostReq) (r APIUserLoginPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIUserRegistrationPost implements POST /api/user/registration operation.
-//
-// Регистрация нового пользователя.
-//
-// POST /api/user/registration
-func (UnimplementedHandler) APIUserRegistrationPost(ctx context.Context, req *APIUserRegistrationPostReq) (r APIUserRegistrationPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

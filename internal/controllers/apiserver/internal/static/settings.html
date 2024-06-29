@@ -76,6 +76,21 @@
           </tbody>
         </table>
       </div>
+
+      <div class="app-container">
+        <div class="app-error-container" v-if="appState.tokenError">
+          {{appState.tokenError}}
+        </div>
+        <input
+          class="app"
+          v-model="appState.token"
+          placeholder="Токен"
+          id="token"
+          type="password"
+        />
+        <button class="app" @click="login();">Авторизоваться</button>
+        <span style="color: red" id="login-error"></span>
+      </div>
     </div>
   </body>
 </html>
