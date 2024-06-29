@@ -1,5 +1,4 @@
--- CREATE ROLE hgrabernextuser WITH LOGIN PASSWORD 'hgrabernextpass';
--- CREATE DATABASE hgrabernext OWNER hgrabernextuser;
+-- +goose Up
 
 CREATE TABLE books (
     id UUID PRIMARY KEY,

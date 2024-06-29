@@ -3,6 +3,7 @@ package postgresql
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log/slog"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -20,10 +21,15 @@ type Database struct {
 func New(ctx context.Context, dataSourceName string, logger *slog.Logger) (*Database, error) {
 	dbpool, err := pgxpool.New(ctx, dataSourceName)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("create pool: %w", err)
 	}
 
 	db := sqlx.NewDb(stdlib.OpenDBFromPool(dbpool), "pgx")
+
+	err = migrate(ctx, logger, db.DB)
+	if err != nil {
+		return nil, fmt.Errorf("migrate: %w", err)
+	}
 
 	return &Database{
 		pool:   dbpool,
