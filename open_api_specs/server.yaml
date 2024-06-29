@@ -453,6 +453,7 @@ paths:
                 addr:
                   type: string
                   description: Адрес агента
+                  format: uri
                   example: http://example.com
                 token:
                   type: string

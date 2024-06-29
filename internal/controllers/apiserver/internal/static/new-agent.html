@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>HGraber</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="/css/main.css"
+    />
+
+    <style>
+      div.app-container {
+        margin-bottom: 20px;
+      }
+
+      .top-bar-settings > table {
+        display: inline-block;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .top-bar-settings > table td {
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      .top-bar-settings > table td.head {
+        border-bottom: 2px dashed black;
+        font-weight: bold;
+      }
+    </style>
+
+    <script src="/js/pages/new-agent.js"></script>
+  </head>
+
+  <body id="app">
+    <div class="app-header">
+      <a href="/">Главная</a>
+      <a href="/list.html">Список книг</a>
+      <a href="/settings.html">Настройки</a>
+    </div>
+
+    <div class="app-body">
+      <div
+        class="app-container"
+        style="display: flex; flex-direction: column; row-gap: 10px"
+      >
+        <div class="app-error-container" v-if="appState.agentError">
+          {{appState.agentError}}
+        </div>
+
+        <label>
+          <span>Название</span>
+          <input
+            class="app"
+            v-model="appState.name"
+            placeholder="Название"
+            type="text"
+            autocomplete="off"
+          />
+        </label>
+
+        <label>
+          <span>Адрес</span>
+          <input
+            class="app"
+            v-model="appState.addr"
+            placeholder="Адрес"
+            type="url"
+            autocomplete="off"
+          />
+        </label>
+
+        <label>
+          <span>Токен</span>
+          <input
+            class="app"
+            v-model="appState.token"
+            placeholder="Токен"
+            type="password"
+            autocomplete="off"
+          />
+        </label>
+
+        <label>
+          <span>Поддерживает парсинг</span>
+          <input
+            class="app"
+            v-model="appState.canParse"
+            placeholder="Поддерживает парсинг"
+            type="checkbox"
+            autocomplete="off"
+          />
+        </label>
+
+        <label>
+          <span>Поддерживает экспорт</span>
+          <input
+            class="app"
+            v-model="appState.canExport"
+            placeholder="Поддерживает экспорт"
+            type="checkbox"
+            autocomplete="off"
+          />
+        </label>
+
+        <label>
+          <span>Приоритет</span>
+          <input
+            class="app"
+            v-model="appState.priority"
+            placeholder="Приоритет"
+            type="number"
+            autocomplete="off"
+          />
+        </label>
+
+        <button class="app" @click="create();">Создать</button>
+      </div>
+    </div>
+  </body>
+</html>

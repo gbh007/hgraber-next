@@ -26,6 +26,10 @@ type webAPIUseCases interface {
 	BookList(ctx context.Context, filter entities.BookFilter) ([]entities.BookToWeb, []int, error)
 }
 
+type agentUseCases interface {
+	NewAgent(ctx context.Context, agent entities.Agent) error
+}
+
 type Controller struct {
 	logger    *slog.Logger
 	debug     bool
@@ -33,6 +37,7 @@ type Controller struct {
 
 	parseUseCases  parseUseCases
 	webAPIUseCases webAPIUseCases
+	agentUseCases  agentUseCases
 
 	ogenServer *server.Server
 
@@ -49,6 +54,7 @@ func New(
 	externalServerAddr string,
 	parseUseCases parseUseCases,
 	webAPIUseCases webAPIUseCases,
+	agentUseCases agentUseCases,
 	debug bool,
 	staticDir string,
 	token string,
@@ -65,6 +71,7 @@ func New(
 		externalServerHostWithPort: u.Host,
 		parseUseCases:              parseUseCases,
 		webAPIUseCases:             webAPIUseCases,
+		agentUseCases:              agentUseCases,
 		debug:                      debug,
 		staticDir:                  staticDir,
 		token:                      token,

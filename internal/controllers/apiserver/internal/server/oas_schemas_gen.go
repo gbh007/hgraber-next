@@ -31,7 +31,7 @@ type APIAgentNewPostReq struct {
 	// Название агента.
 	Name string `json:"name"`
 	// Адрес агента.
-	Addr string `json:"addr"`
+	Addr url.URL `json:"addr"`
 	// Токен доступа к агенту.
 	Token string `json:"token"`
 	// Может ли агент обрабатывать ссылки внешних систем.
@@ -48,7 +48,7 @@ func (s *APIAgentNewPostReq) GetName() string {
 }
 
 // GetAddr returns the value of Addr.
-func (s *APIAgentNewPostReq) GetAddr() string {
+func (s *APIAgentNewPostReq) GetAddr() url.URL {
 	return s.Addr
 }
 
@@ -78,7 +78,7 @@ func (s *APIAgentNewPostReq) SetName(val string) {
 }
 
 // SetAddr sets the value of Addr.
-func (s *APIAgentNewPostReq) SetAddr(val string) {
+func (s *APIAgentNewPostReq) SetAddr(val url.URL) {
 	s.Addr = val
 }
 

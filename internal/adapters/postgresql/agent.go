@@ -60,6 +60,7 @@ func (d *Database) Agents(ctx context.Context, canParse, canExport bool) ([]enti
 
 func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 	builder := squirrel.Insert("agents").
+		PlaceholderFormat(squirrel.Dollar).
 		Columns(
 			"id",
 			"name",
@@ -73,7 +74,7 @@ func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 		Values(
 			agent.ID.String(),
 			agent.Name,
-			agent.Addr,
+			agent.Addr.String(),
 			agent.Token,
 			agent.CanParse,
 			agent.CanExport,
@@ -83,7 +84,7 @@ func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return fmt.Errorf("storage: build query: %w", err)
+		return fmt.Errorf("build query: %w", err)
 	}
 
 	d.logger.DebugContext(
@@ -94,7 +95,7 @@ func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 
 	_, err = d.db.ExecContext(ctx, query, args...)
 	if err != nil {
-		return fmt.Errorf("storage: exec query: %w", err)
+		return fmt.Errorf("exec query: %w", err)
 	}
 
 	return nil
@@ -106,7 +107,7 @@ func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error 
 		SetMap(
 			map[string]interface{}{
 				"name":       agent.Name,
-				"addr":       agent.Addr,
+				"addr":       agent.Addr.String(),
 				"token":      agent.Token,
 				"can_parse":  agent.CanParse,
 				"can_export": agent.CanExport,
@@ -119,7 +120,7 @@ func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error 
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return fmt.Errorf("storage: build query: %w", err)
+		return fmt.Errorf("build query: %w", err)
 	}
 
 	d.logger.DebugContext(
@@ -130,7 +131,7 @@ func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error 
 
 	res, err := d.db.ExecContext(ctx, query, args...)
 	if err != nil {
-		return fmt.Errorf("storage: exec query: %w", err)
+		return fmt.Errorf("exec query: %w", err)
 	}
 
 	if !d.isApply(ctx, res) {
@@ -149,7 +150,7 @@ func (d *Database) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return fmt.Errorf("storage: build query: %w", err)
+		return fmt.Errorf("build query: %w", err)
 	}
 
 	d.logger.DebugContext(
@@ -160,7 +161,7 @@ func (d *Database) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 
 	res, err := d.db.ExecContext(ctx, query, args...)
 	if err != nil {
-		return fmt.Errorf("storage: exec query: %w", err)
+		return fmt.Errorf("exec query: %w", err)
 	}
 
 	if !d.isApply(ctx, res) {

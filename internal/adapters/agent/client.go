@@ -35,11 +35,12 @@ func (c *Client) SetAgent(agent entities.Agent) error {
 	c.agentMutex.Lock()
 	defer c.agentMutex.Unlock()
 
-	a, err := adapter.New(agent.Addr, agent.Token)
+	a, err := adapter.New(agent.Addr.String(), agent.Token)
 	if err != nil {
 		return err
 	}
 
+	// TODO: проверить отсутствие утечек соединений
 	c.agents[agent.ID] = a
 
 	return nil

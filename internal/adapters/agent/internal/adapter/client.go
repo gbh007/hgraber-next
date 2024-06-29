@@ -13,6 +13,7 @@ type Adapter struct {
 	rawClient *client.Client
 }
 
+// TODO: возможно стоит вынести инициализацию HTTP клиента наружу
 func New(baseURL string, token string) (*Adapter, error) {
 	httpClient := http.Client{
 		Transport: http.DefaultTransport,

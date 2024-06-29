@@ -143,7 +143,7 @@ func (s *APIAgentNewPostReq) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("addr")
-		e.Str(s.Addr)
+		json.EncodeURI(e, s.Addr)
 	}
 	{
 		e.FieldStart("token")
@@ -202,8 +202,8 @@ func (s *APIAgentNewPostReq) Decode(d *jx.Decoder) error {
 		case "addr":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := d.Str()
-				s.Addr = string(v)
+				v, err := json.DecodeURI(d)
+				s.Addr = v
 				if err != nil {
 					return err
 				}

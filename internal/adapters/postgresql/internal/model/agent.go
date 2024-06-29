@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/google/uuid"
@@ -22,13 +24,18 @@ type Agent struct {
 func (a Agent) ToEntity() (entities.Agent, error) {
 	id, err := uuid.Parse(a.ID)
 	if err != nil {
-		return entities.Agent{}, err
+		return entities.Agent{}, fmt.Errorf("parse id: %w", err)
+	}
+
+	addr, err := url.Parse(a.Addr)
+	if err != nil {
+		return entities.Agent{}, fmt.Errorf("parse addr: %w", err)
 	}
 
 	return entities.Agent{
 		ID:        id,
 		Name:      a.Name,
-		Addr:      a.Addr,
+		Addr:      *addr,
 		Token:     a.Token,
 		CanParse:  a.CanParse,
 		CanExport: a.CanExport,

@@ -10,7 +10,7 @@ import (
 type Agent struct {
 	ID        uuid.UUID
 	Name      string
-	Addr      string
+	Addr      url.URL
 	Token     string
 	CanParse  bool
 	CanExport bool
