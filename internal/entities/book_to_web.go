@@ -2,6 +2,7 @@ package entities
 
 import (
 	"math"
+	"time"
 
 	"hgnext/internal/pkg"
 )
@@ -10,6 +11,9 @@ type BookFilter struct {
 	Limit    int
 	Offset   int
 	NewFirst bool
+
+	From time.Time
+	To   time.Time
 }
 
 func (f *BookFilter) FillNewest(page, count int) {

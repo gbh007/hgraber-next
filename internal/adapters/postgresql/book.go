@@ -90,14 +90,50 @@ func (d *Database) GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUI
 func (d *Database) bookIDs(ctx context.Context, filter entities.BookFilter) ([]uuid.UUID, error) {
 	idsRaw := make([]string, 0)
 
-	query := `SELECT id FROM books ORDER BY id ASC LIMIT $1 OFFSET $2;`
-	if filter.NewFirst {
-		query = `SELECT id FROM books ORDER BY id DESC LIMIT $1 OFFSET $2;`
+	builder := squirrel.Select("id").
+		PlaceholderFormat(squirrel.Dollar).
+		From("books")
+
+	if filter.Limit > 0 {
+		builder = builder.Limit(uint64(filter.Limit))
 	}
 
-	err := d.db.SelectContext(ctx, &idsRaw, query, filter.Limit, filter.Offset)
+	if filter.Offset > 0 {
+		builder = builder.Offset(uint64(filter.Offset))
+	}
+
+	if filter.NewFirst {
+		builder = builder.OrderBy("id DESC")
+	} else {
+		builder = builder.OrderBy("id ASC")
+	}
+
+	if !filter.From.IsZero() {
+		builder = builder.Where(squirrel.GtOrEq{
+			"create_at": filter.From,
+		})
+	}
+
+	if !filter.To.IsZero() {
+		builder = builder.Where(squirrel.Lt{
+			"create_at": filter.To,
+		})
+	}
+
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("build query: %w", err)
+	}
+
+	d.logger.DebugContext(
+		ctx, "squirrel build request",
+		slog.String("query", query),
+		slog.Any("args", args),
+	)
+
+	err = d.db.SelectContext(ctx, &idsRaw, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query: %w", err)
 	}
 
 	ids := make([]uuid.UUID, len(idsRaw))
@@ -105,7 +141,7 @@ func (d *Database) bookIDs(ctx context.Context, filter entities.BookFilter) ([]u
 	for i, idRaw := range idsRaw {
 		ids[i], err = uuid.Parse(idRaw)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("parse uuid: %w", err)
 		}
 	}
 
@@ -141,13 +177,15 @@ func (d *Database) GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.
 	}
 
 	if err != nil {
-		return entities.BookFull{}, err
+		return entities.BookFull{}, fmt.Errorf("get book :%w", err)
 	}
 
 	b, err := raw.ToEntity()
 	if err != nil {
-		return entities.BookFull{}, err
+		return entities.BookFull{}, fmt.Errorf("convert book :%w", err)
 	}
+
+	// FIXME: переместить подобную логику в юзкейсы (сделать юзкес обогатитель, который должен иметь возможность управлять полнотой компонентов в сборке)
 
 	out := entities.BookFull{
 		Book:       b,
@@ -156,7 +194,7 @@ func (d *Database) GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.
 
 	attributes, err := d.getBookAttr(ctx, bookID)
 	if err != nil {
-		return entities.BookFull{}, err
+		return entities.BookFull{}, fmt.Errorf("get attributes :%w", err)
 	}
 
 	for _, attribute := range attributes {
@@ -165,36 +203,41 @@ func (d *Database) GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.
 
 	pages, err := d.getBookPages(ctx, bookID)
 	if err != nil {
-		return entities.BookFull{}, err
+		return entities.BookFull{}, fmt.Errorf("get pages :%w", err)
 	}
 
 	for _, pageRaw := range pages {
 		page, err := pageRaw.ToEntity()
 		if err != nil {
-			return entities.BookFull{}, err
+			return entities.BookFull{}, fmt.Errorf("convert page :%w", err)
 		}
 
 		out.Pages = append(out.Pages, page)
+	}
+
+	out.Labels, err = d.Labels(ctx, bookID)
+	if err != nil {
+		return entities.BookFull{}, fmt.Errorf("get labels :%w", err)
 	}
 
 	return out, nil
 }
 
 func (d *Database) GetBooks(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error) {
-	out := make([]entities.BookFull, 0)
-
 	ids, err := d.bookIDs(ctx, filter)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, id := range ids {
+	out := make([]entities.BookFull, len(ids))
+
+	for i, id := range ids {
 		book, err := d.GetBookFull(ctx, id)
 		if err != nil {
 			return nil, err
 		}
 
-		out = append(out, book)
+		out[i] = book
 	}
 
 	return out, nil

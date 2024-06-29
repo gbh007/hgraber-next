@@ -2,7 +2,6 @@ package model
 
 import (
 	"database/sql"
-	"time"
 )
 
 type Attribute struct {
@@ -17,12 +16,4 @@ type BookAttribute struct {
 	BookID string `db:"book_id"`
 	Attr   string `db:"attr"`
 	Value  string `db:"value"`
-}
-
-type BookLabel struct {
-	BookID     string        `db:"book_id"`
-	PageNumber sql.NullInt32 `db:"page_number"`
-	Name       string        `db:"name"`
-	Value      string        `db:"value"`
-	CreateAt   time.Time     `db:"create_at"`
 }

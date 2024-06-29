@@ -21,6 +21,7 @@ type BookFull struct {
 	Book
 	Pages      []Page
 	Attributes map[string][]string
+	Labels     []BookLabel
 }
 
 type BookWithAgent struct {

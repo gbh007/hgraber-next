@@ -95,7 +95,8 @@ CREATE TABLE book_labels (
     page_number INT,
     name TEXT NOT NULL,
     value TEXT NOT NULL,
-    create_at TIMESTAMPTZ NOT NULL
+    create_at TIMESTAMPTZ NOT NULL,
+    PRIMARY KEY (book_id, page_number, name)
 );
 
 CREATE TABLE agents (
