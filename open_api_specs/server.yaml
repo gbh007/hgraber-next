@@ -193,68 +193,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/rate:
-    post:
-      description: Изменение рейтинга книги или страницы в ней
-      summary: Изменение рейтинга книги или страницы в ней
-      tags:
-        - book
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                  description: ID книги
-                page:
-                  type: integer
-                  description: Номер страницы
-                rating:
-                  type: integer
-                  description: Рейтинг
-                  minimum: 0
-                  maximum: 5
-              required:
-                - id
-                - rating
-      responses:
-        204:
-          description: Успешное изменение рейтинга
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
   /api/book/list:
     post:
       description: Список книг
@@ -663,11 +601,6 @@ components:
           description: Процент загруженных страниц
           maximum: 100
           minimum: 0
-        rating:
-          type: integer
-          description: Рейтинг книги
-          maximum: 5
-          minimum: 0
         tags:
           type: array
           description: Список тегов (одноименный атрибут) книги
@@ -719,11 +652,6 @@ components:
           description: Процент загруженных страниц
           maximum: 100
           minimum: 0
-        rating:
-          type: integer
-          description: Рейтинг книги
-          maximum: 5
-          minimum: 0
         attributes:
           type: array
           description: Данные атрибутов книги
@@ -755,11 +683,6 @@ components:
                 type: string
                 format: uri
                 description: ссылка на изображение для предпросмотра
-              rating:
-                type: integer
-                description: рейтинг страницы
-                maximum: 5
-                minimum: 0
             required:
               - page_number
       required:

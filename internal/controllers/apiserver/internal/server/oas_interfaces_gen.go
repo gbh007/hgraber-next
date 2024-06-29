@@ -21,10 +21,6 @@ type APIFileIDGetRes interface {
 	aPIFileIDGetRes()
 }
 
-type APIRatePostRes interface {
-	aPIRatePostRes()
-}
-
 type APISystemHandlePostRes interface {
 	aPISystemHandlePostRes()
 }

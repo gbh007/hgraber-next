@@ -16,7 +16,3 @@ func (c *Controller) APIAgentNewPost(ctx context.Context, req *server.APIAgentNe
 func (c *Controller) APIAgentTaskExportPost(ctx context.Context, req *server.APIAgentTaskExportPostReq) (server.APIAgentTaskExportPostRes, error) {
 	return nil, errImplementMe
 }
-
-func (c *Controller) APIRatePost(ctx context.Context, req *server.APIRatePostReq) (server.APIRatePostRes, error) {
-	return nil, errImplementMe
-}

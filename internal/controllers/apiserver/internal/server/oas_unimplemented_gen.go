@@ -58,15 +58,6 @@ func (UnimplementedHandler) APIFileIDGet(ctx context.Context, params APIFileIDGe
 	return r, ht.ErrNotImplemented
 }
 
-// APIRatePost implements POST /api/rate operation.
-//
-// Изменение рейтинга книги или страницы в ней.
-//
-// POST /api/rate
-func (UnimplementedHandler) APIRatePost(ctx context.Context, req *APIRatePostReq) (r APIRatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // APISystemHandlePost implements POST /api/system/handle operation.
 //
 // Обработка ссылок на новые книги.

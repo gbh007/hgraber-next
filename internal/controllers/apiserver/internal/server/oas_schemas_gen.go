@@ -348,70 +348,6 @@ type APIFileIDGetUnauthorized ErrorResponse
 
 func (*APIFileIDGetUnauthorized) aPIFileIDGetRes() {}
 
-type APIRatePostBadRequest ErrorResponse
-
-func (*APIRatePostBadRequest) aPIRatePostRes() {}
-
-type APIRatePostForbidden ErrorResponse
-
-func (*APIRatePostForbidden) aPIRatePostRes() {}
-
-type APIRatePostInternalServerError ErrorResponse
-
-func (*APIRatePostInternalServerError) aPIRatePostRes() {}
-
-// APIRatePostNoContent is response for APIRatePost operation.
-type APIRatePostNoContent struct{}
-
-func (*APIRatePostNoContent) aPIRatePostRes() {}
-
-type APIRatePostNotFound ErrorResponse
-
-func (*APIRatePostNotFound) aPIRatePostRes() {}
-
-type APIRatePostReq struct {
-	// ID книги.
-	ID uuid.UUID `json:"id"`
-	// Номер страницы.
-	Page OptInt `json:"page"`
-	// Рейтинг.
-	Rating int `json:"rating"`
-}
-
-// GetID returns the value of ID.
-func (s *APIRatePostReq) GetID() uuid.UUID {
-	return s.ID
-}
-
-// GetPage returns the value of Page.
-func (s *APIRatePostReq) GetPage() OptInt {
-	return s.Page
-}
-
-// GetRating returns the value of Rating.
-func (s *APIRatePostReq) GetRating() int {
-	return s.Rating
-}
-
-// SetID sets the value of ID.
-func (s *APIRatePostReq) SetID(val uuid.UUID) {
-	s.ID = val
-}
-
-// SetPage sets the value of Page.
-func (s *APIRatePostReq) SetPage(val OptInt) {
-	s.Page = val
-}
-
-// SetRating sets the value of Rating.
-func (s *APIRatePostReq) SetRating(val int) {
-	s.Rating = val
-}
-
-type APIRatePostUnauthorized ErrorResponse
-
-func (*APIRatePostUnauthorized) aPIRatePostRes() {}
-
 type APISystemHandlePostBadRequest ErrorResponse
 
 func (*APISystemHandlePostBadRequest) aPISystemHandlePostRes() {}
@@ -654,8 +590,6 @@ type BookDetails struct {
 	PageCount int `json:"page_count"`
 	// Процент загруженных страниц.
 	PageLoadedPercent float64 `json:"page_loaded_percent"`
-	// Рейтинг книги.
-	Rating OptInt `json:"rating"`
 	// Данные атрибутов книги.
 	Attributes []BookDetailsAttributesItem `json:"attributes"`
 	// Данные страниц книги.
@@ -700,11 +634,6 @@ func (s *BookDetails) GetPageCount() int {
 // GetPageLoadedPercent returns the value of PageLoadedPercent.
 func (s *BookDetails) GetPageLoadedPercent() float64 {
 	return s.PageLoadedPercent
-}
-
-// GetRating returns the value of Rating.
-func (s *BookDetails) GetRating() OptInt {
-	return s.Rating
 }
 
 // GetAttributes returns the value of Attributes.
@@ -757,11 +686,6 @@ func (s *BookDetails) SetPageLoadedPercent(val float64) {
 	s.PageLoadedPercent = val
 }
 
-// SetRating sets the value of Rating.
-func (s *BookDetails) SetRating(val OptInt) {
-	s.Rating = val
-}
-
 // SetAttributes sets the value of Attributes.
 func (s *BookDetails) SetAttributes(val []BookDetailsAttributesItem) {
 	s.Attributes = val
@@ -806,8 +730,6 @@ type BookDetailsPagesItem struct {
 	PageNumber int `json:"page_number"`
 	// Ссылка на изображение для предпросмотра.
 	PreviewURL OptURI `json:"preview_url"`
-	// Рейтинг страницы.
-	Rating OptInt `json:"rating"`
 }
 
 // GetPageNumber returns the value of PageNumber.
@@ -820,11 +742,6 @@ func (s *BookDetailsPagesItem) GetPreviewURL() OptURI {
 	return s.PreviewURL
 }
 
-// GetRating returns the value of Rating.
-func (s *BookDetailsPagesItem) GetRating() OptInt {
-	return s.Rating
-}
-
 // SetPageNumber sets the value of PageNumber.
 func (s *BookDetailsPagesItem) SetPageNumber(val int) {
 	s.PageNumber = val
@@ -833,11 +750,6 @@ func (s *BookDetailsPagesItem) SetPageNumber(val int) {
 // SetPreviewURL sets the value of PreviewURL.
 func (s *BookDetailsPagesItem) SetPreviewURL(val OptURI) {
 	s.PreviewURL = val
-}
-
-// SetRating sets the value of Rating.
-func (s *BookDetailsPagesItem) SetRating(val OptInt) {
-	s.Rating = val
 }
 
 // Данные книги в упрощенном формате.
@@ -859,8 +771,6 @@ type BookShortInfo struct {
 	PageCount int `json:"page_count"`
 	// Процент загруженных страниц.
 	PageLoadedPercent float64 `json:"page_loaded_percent"`
-	// Рейтинг книги.
-	Rating OptInt `json:"rating"`
 	// Список тегов (одноименный атрибут) книги.
 	Tags []string `json:"tags"`
 	// Есть теги которые не были включены в список.
@@ -905,11 +815,6 @@ func (s *BookShortInfo) GetPageCount() int {
 // GetPageLoadedPercent returns the value of PageLoadedPercent.
 func (s *BookShortInfo) GetPageLoadedPercent() float64 {
 	return s.PageLoadedPercent
-}
-
-// GetRating returns the value of Rating.
-func (s *BookShortInfo) GetRating() OptInt {
-	return s.Rating
 }
 
 // GetTags returns the value of Tags.
@@ -960,11 +865,6 @@ func (s *BookShortInfo) SetPageCount(val int) {
 // SetPageLoadedPercent sets the value of PageLoadedPercent.
 func (s *BookShortInfo) SetPageLoadedPercent(val float64) {
 	s.PageLoadedPercent = val
-}
-
-// SetRating sets the value of Rating.
-func (s *BookShortInfo) SetRating(val OptInt) {
-	s.Rating = val
 }
 
 // SetTags sets the value of Tags.

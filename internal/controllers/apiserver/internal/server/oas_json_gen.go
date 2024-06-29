@@ -1602,326 +1602,6 @@ func (s *APIFileIDGetUnauthorized) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes APIRatePostBadRequest as json.
-func (s *APIRatePostBadRequest) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIRatePostBadRequest from json.
-func (s *APIRatePostBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIRatePostBadRequest to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIRatePostBadRequest(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIRatePostBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIRatePostBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIRatePostForbidden as json.
-func (s *APIRatePostForbidden) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIRatePostForbidden from json.
-func (s *APIRatePostForbidden) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIRatePostForbidden to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIRatePostForbidden(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIRatePostForbidden) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIRatePostForbidden) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIRatePostInternalServerError as json.
-func (s *APIRatePostInternalServerError) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIRatePostInternalServerError from json.
-func (s *APIRatePostInternalServerError) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIRatePostInternalServerError to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIRatePostInternalServerError(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIRatePostInternalServerError) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIRatePostInternalServerError) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIRatePostNotFound as json.
-func (s *APIRatePostNotFound) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIRatePostNotFound from json.
-func (s *APIRatePostNotFound) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIRatePostNotFound to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIRatePostNotFound(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIRatePostNotFound) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIRatePostNotFound) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIRatePostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIRatePostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("id")
-		json.EncodeUUID(e, s.ID)
-	}
-	{
-		if s.Page.Set {
-			e.FieldStart("page")
-			s.Page.Encode(e)
-		}
-	}
-	{
-		e.FieldStart("rating")
-		e.Int(s.Rating)
-	}
-}
-
-var jsonFieldsNameOfAPIRatePostReq = [3]string{
-	0: "id",
-	1: "page",
-	2: "rating",
-}
-
-// Decode decodes APIRatePostReq from json.
-func (s *APIRatePostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIRatePostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "id":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := json.DecodeUUID(d)
-				s.ID = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"id\"")
-			}
-		case "page":
-			if err := func() error {
-				s.Page.Reset()
-				if err := s.Page.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page\"")
-			}
-		case "rating":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Int()
-				s.Rating = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"rating\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIRatePostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000101,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIRatePostReq) {
-					name = jsonFieldsNameOfAPIRatePostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIRatePostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIRatePostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIRatePostUnauthorized as json.
-func (s *APIRatePostUnauthorized) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIRatePostUnauthorized from json.
-func (s *APIRatePostUnauthorized) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIRatePostUnauthorized to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIRatePostUnauthorized(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIRatePostUnauthorized) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIRatePostUnauthorized) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode encodes APISystemHandlePostBadRequest as json.
 func (s *APISystemHandlePostBadRequest) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
@@ -2880,12 +2560,6 @@ func (s *BookDetails) encodeFields(e *jx.Encoder) {
 		e.Float64(s.PageLoadedPercent)
 	}
 	{
-		if s.Rating.Set {
-			e.FieldStart("rating")
-			s.Rating.Encode(e)
-		}
-	}
-	{
 		if s.Attributes != nil {
 			e.FieldStart("attributes")
 			e.ArrStart()
@@ -2907,18 +2581,17 @@ func (s *BookDetails) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfBookDetails = [11]string{
-	0:  "id",
-	1:  "created",
-	2:  "preview_url",
-	3:  "parsed_name",
-	4:  "name",
-	5:  "parsed_page",
-	6:  "page_count",
-	7:  "page_loaded_percent",
-	8:  "rating",
-	9:  "attributes",
-	10: "pages",
+var jsonFieldsNameOfBookDetails = [10]string{
+	0: "id",
+	1: "created",
+	2: "preview_url",
+	3: "parsed_name",
+	4: "name",
+	5: "parsed_page",
+	6: "page_count",
+	7: "page_loaded_percent",
+	8: "attributes",
+	9: "pages",
 }
 
 // Decode decodes BookDetails from json.
@@ -3023,16 +2696,6 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"page_loaded_percent\"")
-			}
-		case "rating":
-			if err := func() error {
-				s.Rating.Reset()
-				if err := s.Rating.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"rating\"")
 			}
 		case "attributes":
 			if err := func() error {
@@ -3269,18 +2932,11 @@ func (s *BookDetailsPagesItem) encodeFields(e *jx.Encoder) {
 			s.PreviewURL.Encode(e)
 		}
 	}
-	{
-		if s.Rating.Set {
-			e.FieldStart("rating")
-			s.Rating.Encode(e)
-		}
-	}
 }
 
-var jsonFieldsNameOfBookDetailsPagesItem = [3]string{
+var jsonFieldsNameOfBookDetailsPagesItem = [2]string{
 	0: "page_number",
 	1: "preview_url",
-	2: "rating",
 }
 
 // Decode decodes BookDetailsPagesItem from json.
@@ -3313,16 +2969,6 @@ func (s *BookDetailsPagesItem) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"preview_url\"")
-			}
-		case "rating":
-			if err := func() error {
-				s.Rating.Reset()
-				if err := s.Rating.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"rating\"")
 			}
 		default:
 			return d.Skip()
@@ -3424,12 +3070,6 @@ func (s *BookShortInfo) encodeFields(e *jx.Encoder) {
 		e.Float64(s.PageLoadedPercent)
 	}
 	{
-		if s.Rating.Set {
-			e.FieldStart("rating")
-			s.Rating.Encode(e)
-		}
-	}
-	{
 		if s.Tags != nil {
 			e.FieldStart("tags")
 			e.ArrStart()
@@ -3445,18 +3085,17 @@ func (s *BookShortInfo) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfBookShortInfo = [11]string{
-	0:  "id",
-	1:  "created",
-	2:  "preview_url",
-	3:  "parsed_name",
-	4:  "name",
-	5:  "parsed_page",
-	6:  "page_count",
-	7:  "page_loaded_percent",
-	8:  "rating",
-	9:  "tags",
-	10: "has_more_tags",
+var jsonFieldsNameOfBookShortInfo = [10]string{
+	0: "id",
+	1: "created",
+	2: "preview_url",
+	3: "parsed_name",
+	4: "name",
+	5: "parsed_page",
+	6: "page_count",
+	7: "page_loaded_percent",
+	8: "tags",
+	9: "has_more_tags",
 }
 
 // Decode decodes BookShortInfo from json.
@@ -3562,16 +3201,6 @@ func (s *BookShortInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"page_loaded_percent\"")
 			}
-		case "rating":
-			if err := func() error {
-				s.Rating.Reset()
-				if err := s.Rating.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"rating\"")
-			}
 		case "tags":
 			if err := func() error {
 				s.Tags = make([]string, 0)
@@ -3592,7 +3221,7 @@ func (s *BookShortInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"tags\"")
 			}
 		case "has_more_tags":
-			requiredBitSet[1] |= 1 << 2
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				v, err := d.Bool()
 				s.HasMoreTags = bool(v)
@@ -3614,7 +3243,7 @@ func (s *BookShortInfo) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111011,
-		0b00000100,
+		0b00000010,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

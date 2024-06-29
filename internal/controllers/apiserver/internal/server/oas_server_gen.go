@@ -38,12 +38,6 @@ type Handler interface {
 	//
 	// GET /api/file/{id}
 	APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (APIFileIDGetRes, error)
-	// APIRatePost implements POST /api/rate operation.
-	//
-	// Изменение рейтинга книги или страницы в ней.
-	//
-	// POST /api/rate
-	APIRatePost(ctx context.Context, req *APIRatePostReq) (APIRatePostRes, error)
 	// APISystemHandlePost implements POST /api/system/handle operation.
 	//
 	// Обработка ссылок на новые книги.

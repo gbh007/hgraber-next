@@ -67,20 +67,6 @@ func encodeAPIBookListPostRequest(
 	return nil
 }
 
-func encodeAPIRatePostRequest(
-	req *APIRatePostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
 func encodeAPISystemHandlePostRequest(
 	req *APISystemHandlePostReq,
 	r *http.Request,

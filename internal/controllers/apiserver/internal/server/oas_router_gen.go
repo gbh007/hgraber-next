@@ -203,27 +203,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'r': // Prefix: "rate"
-				origElem := elem
-				if l := len("rate"); len(elem) >= l && elem[0:l] == "rate" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleAPIRatePostRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
-					}
-
-					return
-				}
-
-				elem = origElem
 			case 's': // Prefix: "system/"
 				origElem := elem
 				if l := len("system/"); len(elem) >= l && elem[0:l] == "system/" {
@@ -550,31 +529,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.pathPattern = "/api/file/{id}"
 						r.args = args
 						r.count = 1
-						return r, true
-					default:
-						return
-					}
-				}
-
-				elem = origElem
-			case 'r': // Prefix: "rate"
-				origElem := elem
-				if l := len("rate"); len(elem) >= l && elem[0:l] == "rate" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "POST":
-						r.name = "APIRatePost"
-						r.summary = "Изменение рейтинга книги или страницы в ней"
-						r.operationID = ""
-						r.pathPattern = "/api/rate"
-						r.args = args
-						r.count = 0
 						return r, true
 					default:
 						return
