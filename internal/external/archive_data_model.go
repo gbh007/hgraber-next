@@ -97,7 +97,7 @@ func BookFromEntity(raw entities.BookFull) Book {
 	}
 
 	b.Labels = append(b.Labels, Label{
-		Name:     "hg5-id",
+		Name:     "hg5:id",
 		Value:    raw.ID.String(),
 		CreateAt: raw.CreateAt,
 	})
