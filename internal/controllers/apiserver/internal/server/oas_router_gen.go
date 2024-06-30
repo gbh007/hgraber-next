@@ -236,24 +236,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 'i': // Prefix: "info"
+				case 'i': // Prefix: "i"
 					origElem := elem
-					if l := len("info"); len(elem) >= l && elem[0:l] == "info" {
+					if l := len("i"); len(elem) >= l && elem[0:l] == "i" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "GET":
-							s.handleAPISystemInfoGetRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET")
+						break
+					}
+					switch elem[0] {
+					case 'm': // Prefix: "mport/archive"
+						origElem := elem
+						if l := len("mport/archive"); len(elem) >= l && elem[0:l] == "mport/archive" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPISystemImportArchivePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'n': // Prefix: "nfo"
+						origElem := elem
+						if l := len("nfo"); len(elem) >= l && elem[0:l] == "nfo" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleAPISystemInfoGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -573,28 +609,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				case 'i': // Prefix: "info"
+				case 'i': // Prefix: "i"
 					origElem := elem
-					if l := len("info"); len(elem) >= l && elem[0:l] == "info" {
+					if l := len("i"); len(elem) >= l && elem[0:l] == "i" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "GET":
-							r.name = "APISystemInfoGet"
-							r.summary = "Текущее состояние системы"
-							r.operationID = ""
-							r.pathPattern = "/api/system/info"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'm': // Prefix: "mport/archive"
+						origElem := elem
+						if l := len("mport/archive"); len(elem) >= l && elem[0:l] == "mport/archive" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "APISystemImportArchivePost"
+								r.summary = "Импорт новой книги"
+								r.operationID = ""
+								r.pathPattern = "/api/system/import/archive"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'n': // Prefix: "nfo"
+						origElem := elem
+						if l := len("nfo"); len(elem) >= l && elem[0:l] == "nfo" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "APISystemInfoGet"
+								r.summary = "Текущее состояние системы"
+								r.operationID = ""
+								r.pathPattern = "/api/system/info"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem

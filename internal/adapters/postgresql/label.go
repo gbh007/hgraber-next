@@ -25,7 +25,7 @@ func (d *Database) SetLabel(ctx context.Context, label entities.BookLabel) error
 		).
 		Values(
 			label.BookID.String(),
-			model.Int32ToDB(label.PageNumber),
+			label.PageNumber,
 			label.Name,
 			label.Value,
 			label.CreateAt,

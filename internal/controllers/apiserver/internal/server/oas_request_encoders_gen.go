@@ -81,6 +81,16 @@ func encodeAPISystemHandlePostRequest(
 	return nil
 }
 
+func encodeAPISystemImportArchivePostRequest(
+	req APISystemImportArchivePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/octet-stream"
+	body := req
+	ht.SetBody(r, body, contentType)
+	return nil
+}
+
 func encodeAPIUserLoginPostRequest(
 	req *APIUserLoginPostReq,
 	r *http.Request,

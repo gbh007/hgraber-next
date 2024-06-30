@@ -67,6 +67,15 @@ func (UnimplementedHandler) APISystemHandlePost(ctx context.Context, req *APISys
 	return r, ht.ErrNotImplemented
 }
 
+// APISystemImportArchivePost implements POST /api/system/import/archive operation.
+//
+// Импорт новой книги через архив.
+//
+// POST /api/system/import/archive
+func (UnimplementedHandler) APISystemImportArchivePost(ctx context.Context, req APISystemImportArchivePostReq) (r APISystemImportArchivePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APISystemInfoGet implements GET /api/system/info operation.
 //
 // Получение общей информации о системе.

@@ -25,6 +25,10 @@ type APISystemHandlePostRes interface {
 	aPISystemHandlePostRes()
 }
 
+type APISystemImportArchivePostRes interface {
+	aPISystemImportArchivePostRes()
+}
+
 type APISystemInfoGetRes interface {
 	aPISystemInfoGetRes()
 }

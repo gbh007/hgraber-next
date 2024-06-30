@@ -19,7 +19,7 @@ func (d *Database) NewBook(ctx context.Context, book entities.Book) error {
 	_, err := d.db.ExecContext(
 		ctx,
 		`INSERT INTO books (id, name, origin_url, page_count, attributes_parsed, create_at) VALUES($1, $2, $3, $4, $5, $6);`,
-		book.ID.String(), model.StringToDB(book.Name), model.StringToDB(book.OriginURL.String()), model.Int32ToDB(book.PageCount), book.AttributesParsed, book.CreateAt,
+		book.ID.String(), model.StringToDB(book.Name), model.URLToDB(book.OriginURL), model.Int32ToDB(book.PageCount), book.AttributesParsed, book.CreateAt,
 	)
 	if err != nil {
 		return err
@@ -103,9 +103,9 @@ func (d *Database) bookIDs(ctx context.Context, filter entities.BookFilter) ([]u
 	}
 
 	if filter.NewFirst {
-		builder = builder.OrderBy("id DESC")
+		builder = builder.OrderBy("create_at DESC")
 	} else {
-		builder = builder.OrderBy("id ASC")
+		builder = builder.OrderBy("create_at ASC")
 	}
 
 	if !filter.From.IsZero() {
@@ -241,4 +241,34 @@ func (d *Database) GetBooks(ctx context.Context, filter entities.BookFilter) ([]
 	}
 
 	return out, nil
+}
+
+func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {
+	builder := squirrel.Delete("books").
+		PlaceholderFormat(squirrel.Dollar).
+		Where(squirrel.Eq{
+			"id": id.String(),
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("build query: %w", err)
+	}
+
+	d.logger.DebugContext(
+		ctx, "squirrel build request",
+		slog.String("query", query),
+		slog.Any("args", args),
+	)
+
+	res, err := d.db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("exec query: %w", err)
+	}
+
+	if !d.isApply(ctx, res) {
+		return entities.BookNotFoundError
+	}
+
+	return nil
 }

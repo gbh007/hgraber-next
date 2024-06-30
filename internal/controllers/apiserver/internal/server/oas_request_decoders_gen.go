@@ -346,6 +346,40 @@ func (s *Server) decodeAPISystemHandlePostRequest(r *http.Request) (
 	}
 }
 
+func (s *Server) decodeAPISystemImportArchivePostRequest(r *http.Request) (
+	req APISystemImportArchivePostReq,
+	close func() error,
+	rerr error,
+) {
+	var closers []func() error
+	close = func() error {
+		var merr error
+		// Close in reverse order, to match defer behavior.
+		for i := len(closers) - 1; i >= 0; i-- {
+			c := closers[i]
+			merr = multierr.Append(merr, c())
+		}
+		return merr
+	}
+	defer func() {
+		if rerr != nil {
+			rerr = multierr.Append(rerr, close())
+		}
+	}()
+	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if err != nil {
+		return req, close, errors.Wrap(err, "parse media type")
+	}
+	switch {
+	case ct == "application/octet-stream":
+		reader := r.Body
+		request := APISystemImportArchivePostReq{Data: reader}
+		return request, close, nil
+	default:
+		return req, close, validate.InvalidContentType(ct)
+	}
+}
+
 func (s *Server) decodeAPIUserLoginPostRequest(r *http.Request) (
 	req *APIUserLoginPostReq,
 	close func() error,

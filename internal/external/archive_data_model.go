@@ -52,7 +52,7 @@ type Attribute struct {
 }
 
 func BookFromEntity(raw entities.BookFull) Book {
-	labels := make(map[int][]Label, raw.PageCount+1)
+	labels := make(map[int][]Label, raw.Book.PageCount+1)
 
 	for _, l := range raw.Labels {
 		labels[l.PageNumber] = append(labels[l.PageNumber], Label{
@@ -63,10 +63,10 @@ func BookFromEntity(raw entities.BookFull) Book {
 	}
 
 	b := Book{
-		Name:             raw.Name,
-		PageCount:        raw.PageCount,
-		CreateAt:         raw.CreateAt,
-		AttributesParsed: raw.AttributesParsed,
+		Name:             raw.Book.Name,
+		PageCount:        raw.Book.PageCount,
+		CreateAt:         raw.Book.CreateAt,
+		AttributesParsed: raw.Book.AttributesParsed,
 		Labels:           labels[0],
 		Attributes: pkg.MapToSlice(raw.Attributes, func(code string, values []string) Attribute {
 			return Attribute{
@@ -92,14 +92,14 @@ func BookFromEntity(raw entities.BookFull) Book {
 		}),
 	}
 
-	if raw.OriginURL != nil {
-		b.OriginURL = raw.OriginURL.String()
+	if raw.Book.OriginURL != nil {
+		b.OriginURL = raw.Book.OriginURL.String()
 	}
 
 	b.Labels = append(b.Labels, Label{
 		Name:     "hg5:id",
-		Value:    raw.ID.String(),
-		CreateAt: raw.CreateAt,
+		Value:    raw.Book.ID.String(),
+		CreateAt: raw.Book.CreateAt,
 	})
 
 	return b

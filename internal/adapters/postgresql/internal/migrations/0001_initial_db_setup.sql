@@ -92,7 +92,7 @@ CREATE TABLE book_attributes (
 
 CREATE TABLE book_labels (
     book_id UUID NOT NULL REFERENCES books (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    page_number INT,
+    page_number INT NOT NULL,
     name TEXT NOT NULL,
     value TEXT NOT NULL,
     create_at TIMESTAMPTZ NOT NULL,

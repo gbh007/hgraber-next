@@ -25,7 +25,7 @@ func NewExporter(useCases exportUnitUseCases, logger *slog.Logger) *worker.Worke
 			if err != nil {
 				logger.ErrorContext(
 					ctx, "fail export book",
-					slog.String("book_id", book.ID.String()),
+					slog.String("book_id", book.Book.ID.String()),
 					slog.String("agent_id", book.AgentID.String()),
 					slog.Any("error", err),
 				)

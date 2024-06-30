@@ -18,7 +18,7 @@ type Book struct {
 
 // FIXME: подумать что делать с такими моделями
 type BookFull struct {
-	Book
+	Book       Book
 	Pages      []Page
 	Attributes map[string][]string
 	Labels     []BookLabel

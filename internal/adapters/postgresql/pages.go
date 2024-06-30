@@ -53,23 +53,6 @@ func (d *Database) UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageN
 	return nil
 }
 
-func (d *Database) UpdatePage(ctx context.Context, id uuid.UUID, pageNumber int, downloaded bool, url string) error {
-	res, err := d.db.ExecContext(
-		ctx,
-		`UPDATE pages SET downloaded = $1, load_at = $2, url = $5 WHERE book_id = $3 AND page_number = $4;`,
-		downloaded, time.Now().UTC(), id.String(), pageNumber, url,
-	)
-	if err != nil {
-		return err
-	}
-
-	if !d.isApply(ctx, res) {
-		return entities.PageNotFoundError
-	}
-
-	return nil
-}
-
 func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error {
 	tx, err := d.db.BeginTxx(ctx, nil)
 	if err != nil {

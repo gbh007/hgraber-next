@@ -12,10 +12,19 @@ import (
 
 type fileStorage interface {
 	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
+	Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
 }
 
 type storage interface {
 	GetBooks(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
+
+	NewBook(ctx context.Context, book entities.Book) error
+	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error
+	SetLabel(ctx context.Context, label entities.BookLabel) error
+	UpdateAttribute(ctx context.Context, id uuid.UUID, attrCode string, values []string) error
+	NewFile(ctx context.Context, file entities.File) error
+
+	DeleteBook(ctx context.Context, id uuid.UUID) error
 }
 
 type agentSystem interface {

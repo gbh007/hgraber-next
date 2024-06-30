@@ -44,6 +44,12 @@ type Handler interface {
 	//
 	// POST /api/system/handle
 	APISystemHandlePost(ctx context.Context, req *APISystemHandlePostReq) (APISystemHandlePostRes, error)
+	// APISystemImportArchivePost implements POST /api/system/import/archive operation.
+	//
+	// Импорт новой книги через архив.
+	//
+	// POST /api/system/import/archive
+	APISystemImportArchivePost(ctx context.Context, req APISystemImportArchivePostReq) (APISystemImportArchivePostRes, error)
 	// APISystemInfoGet implements GET /api/system/info operation.
 	//
 	// Получение общей информации о системе.

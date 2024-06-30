@@ -29,16 +29,25 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			return
 		}
 
-		requestData, err := io.ReadAll(r.Body)
-		if err != nil {
-			c.logger.ErrorContext(
-				r.Context(), "read request to log",
-				slog.Any("error", err),
-			)
-		}
+		var (
+			responseData = "ignoring"
+			requestData  = "ignoring"
+		)
 
-		r.Body.Close()
-		r.Body = io.NopCloser(bytes.NewReader(requestData))
+		if r.URL.Path != "/api/system/import/archive" { // FIXME: вынести в конфигурацию или проверять по типу контента.
+			requestDataRaw, err := io.ReadAll(r.Body)
+			if err != nil {
+				c.logger.ErrorContext(
+					r.Context(), "read request to log",
+					slog.Any("error", err),
+				)
+			}
+
+			requestData = string(requestDataRaw)
+
+			r.Body.Close()
+			r.Body = io.NopCloser(bytes.NewReader(requestDataRaw))
+		}
 
 		rw := newResponseWrapper(w)
 
@@ -46,10 +55,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			next.ServeHTTP(rw, r)
 		}
 
-		var responseData = "ignoring"
-
-		// FIXME: не учтено экранирование пароля пользователя и т.п.
-		if !strings.HasPrefix(r.URL.Path, "/api/file") {
+		if !strings.HasPrefix(r.URL.Path, "/api/file") { // FIXME: вынести в конфигурацию или проверять по типу контента.
 			responseData = rw.body.String()
 		}
 
@@ -60,7 +66,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			slog.Group(
 				"request",
 				slog.Any("headers", r.Header),
-				slog.String("body", string(requestData)),
+				slog.String("body", requestData),
 			),
 			slog.Group(
 				"response",

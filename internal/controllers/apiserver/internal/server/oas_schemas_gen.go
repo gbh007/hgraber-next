@@ -519,6 +519,53 @@ type APISystemHandlePostUnauthorized ErrorResponse
 
 func (*APISystemHandlePostUnauthorized) aPISystemHandlePostRes() {}
 
+type APISystemImportArchivePostBadRequest ErrorResponse
+
+func (*APISystemImportArchivePostBadRequest) aPISystemImportArchivePostRes() {}
+
+type APISystemImportArchivePostForbidden ErrorResponse
+
+func (*APISystemImportArchivePostForbidden) aPISystemImportArchivePostRes() {}
+
+type APISystemImportArchivePostInternalServerError ErrorResponse
+
+func (*APISystemImportArchivePostInternalServerError) aPISystemImportArchivePostRes() {}
+
+type APISystemImportArchivePostOK struct {
+	// ID новой книги.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APISystemImportArchivePostOK) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APISystemImportArchivePostOK) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+func (*APISystemImportArchivePostOK) aPISystemImportArchivePostRes() {}
+
+type APISystemImportArchivePostReq struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APISystemImportArchivePostReq) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+type APISystemImportArchivePostUnauthorized ErrorResponse
+
+func (*APISystemImportArchivePostUnauthorized) aPISystemImportArchivePostRes() {}
+
 type APISystemInfoGetForbidden ErrorResponse
 
 func (*APISystemInfoGetForbidden) aPISystemInfoGetRes() {}
