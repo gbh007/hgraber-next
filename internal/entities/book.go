@@ -28,3 +28,8 @@ type BookWithAgent struct {
 	Book
 	AgentID uuid.UUID
 }
+
+type BookFullWithAgent struct {
+	BookFull
+	AgentID uuid.UUID
+}

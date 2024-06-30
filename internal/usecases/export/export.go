@@ -13,6 +13,7 @@ import (
 
 	"hgnext/internal/entities"
 	"hgnext/internal/external"
+	"hgnext/internal/pkg"
 )
 
 func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, from, to time.Time) error {
@@ -24,17 +25,39 @@ func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, from, to time.
 		return fmt.Errorf("get books from storage: %w", err)
 	}
 
-	// FIXME: отрефакторить на воркеров
-	for _, book := range books {
-		body, err := uc.newArchive(ctx, book)
-		if err != nil {
-			return fmt.Errorf("make archive %s: %w", book.ID.String(), err)
+	uc.tmpStorage.AddToExport(
+		pkg.Map(books, func(b entities.BookFull) entities.BookFullWithAgent {
+			return entities.BookFullWithAgent{
+				BookFull: b,
+				AgentID:  agentID,
+			}
+		}),
+	)
+
+	return nil
+}
+
+func (uc *UseCase) ExportList() []entities.BookFullWithAgent {
+	return uc.tmpStorage.ExportList()
+}
+
+func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWithAgent, retry bool) error {
+	body, err := uc.newArchive(ctx, book.BookFull)
+	if err != nil {
+		if retry {
+			uc.tmpStorage.AddToExport([]entities.BookFullWithAgent{book})
 		}
 
-		err = uc.agentSystem.ExportArchive(ctx, agentID, book.ID, book.Name, body)
-		if err != nil {
-			return fmt.Errorf("export archive %s to agent: %w", book.ID.String(), err)
+		return fmt.Errorf("make archive %s: %w", book.ID.String(), err)
+	}
+
+	err = uc.agentSystem.ExportArchive(ctx, book.AgentID, book.ID, book.Name, body)
+	if err != nil {
+		if retry {
+			uc.tmpStorage.AddToExport([]entities.BookFullWithAgent{book})
 		}
+
+		return fmt.Errorf("export archive %s to agent: %w", book.ID.String(), err)
 	}
 
 	return nil

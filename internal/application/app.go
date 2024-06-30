@@ -10,6 +10,7 @@ import (
 	"hgnext/internal/adapters/agent"
 	"hgnext/internal/adapters/files"
 	"hgnext/internal/adapters/postgresql"
+	"hgnext/internal/adapters/tmpdata"
 	"hgnext/internal/controllers/apiserver"
 	"hgnext/internal/controllers/workermanager"
 	agentUC "hgnext/internal/usecases/agent"
@@ -36,6 +37,8 @@ func Serve() {
 	}
 
 	logger := initLogger(cfg)
+
+	tmpStorage := tmpdata.New()
 
 	storage, err := postgresql.New(ctx, cfg.PostgreSQLConnection, logger)
 	if err != nil {
@@ -79,17 +82,18 @@ func Serve() {
 
 	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorage)
 	fileUseCases := filelogic.New(logger, storage, fileStorage)
+	exportUseCases := export.New(logger, storage, fileStorage, agentSystem, tmpStorage)
 
 	workersController := workermanager.New(
 		logger,
 		workermanager.NewBookParser(parsingUseCases, logger),
 		workermanager.NewPageDownloader(parsingUseCases, logger),
 		workermanager.NewHasher(fileUseCases, logger),
+		workermanager.NewExporter(exportUseCases, logger),
 	)
 
 	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage)
 	agentUseCases := agentUC.New(logger, agentSystem, storage)
-	exportUseCases := export.New(logger, storage, fileStorage, agentSystem)
 
 	apiController, err := apiserver.New(
 		logger,

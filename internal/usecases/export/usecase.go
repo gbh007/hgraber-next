@@ -22,12 +22,18 @@ type agentSystem interface {
 	ExportArchive(ctx context.Context, agentID uuid.UUID, bookID uuid.UUID, bookName string, body io.Reader) error
 }
 
+type tmpStorage interface {
+	AddToExport(books []entities.BookFullWithAgent)
+	ExportList() []entities.BookFullWithAgent
+}
+
 type UseCase struct {
 	logger *slog.Logger
 
 	storage     storage
 	fileStorage fileStorage
 	agentSystem agentSystem
+	tmpStorage  tmpStorage
 }
 
 func New(
@@ -35,11 +41,13 @@ func New(
 	storage storage,
 	fileStorage fileStorage,
 	agentSystem agentSystem,
+	tmpStorage tmpStorage,
 ) *UseCase {
 	return &UseCase{
 		logger:      logger,
 		storage:     storage,
 		fileStorage: fileStorage,
 		agentSystem: agentSystem,
+		tmpStorage:  tmpStorage,
 	}
 }
