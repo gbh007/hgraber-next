@@ -13,6 +13,7 @@ import (
 	"hgnext/internal/controllers/apiserver"
 	"hgnext/internal/controllers/workermanager"
 	agentUC "hgnext/internal/usecases/agent"
+	"hgnext/internal/usecases/export"
 	"hgnext/internal/usecases/filelogic"
 	"hgnext/internal/usecases/parsing"
 	"hgnext/internal/usecases/webapi"
@@ -88,6 +89,7 @@ func Serve() {
 
 	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage)
 	agentUseCases := agentUC.New(logger, agentSystem, storage)
+	exportUseCases := export.New(logger, storage, fileStorage, agentSystem)
 
 	apiController, err := apiserver.New(
 		logger,
@@ -96,6 +98,7 @@ func Serve() {
 		parsingUseCases,
 		webAPIUseCases,
 		agentUseCases,
+		exportUseCases,
 		cfg.Debug,
 		cfg.WebStaticDir,
 		cfg.APIToken,

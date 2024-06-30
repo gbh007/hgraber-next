@@ -6,6 +6,7 @@ import (
 	"io"
 	"log/slog"
 	"net/url"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -30,6 +31,10 @@ type agentUseCases interface {
 	NewAgent(ctx context.Context, agent entities.Agent) error
 }
 
+type exportUseCases interface {
+	Export(ctx context.Context, agentID uuid.UUID, from, to time.Time) error
+}
+
 type Controller struct {
 	logger    *slog.Logger
 	debug     bool
@@ -38,6 +43,7 @@ type Controller struct {
 	parseUseCases  parseUseCases
 	webAPIUseCases webAPIUseCases
 	agentUseCases  agentUseCases
+	exportUseCases exportUseCases
 
 	ogenServer *server.Server
 
@@ -55,6 +61,7 @@ func New(
 	parseUseCases parseUseCases,
 	webAPIUseCases webAPIUseCases,
 	agentUseCases agentUseCases,
+	exportUseCases exportUseCases,
 	debug bool,
 	staticDir string,
 	token string,
@@ -72,6 +79,7 @@ func New(
 		parseUseCases:              parseUseCases,
 		webAPIUseCases:             webAPIUseCases,
 		agentUseCases:              agentUseCases,
+		exportUseCases:             exportUseCases,
 		debug:                      debug,
 		staticDir:                  staticDir,
 		token:                      token,
