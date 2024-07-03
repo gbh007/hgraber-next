@@ -55,6 +55,34 @@
     </div>
 
     <div class="app-body">
+      <div
+        class="app-container"
+        style="display: flex; flex-direction: column; row-gap: 10px"
+      >
+        <b>Экспорт</b>
+
+        <div class="app-error-container" v-if="appState.exportError">
+          {{appState.exportError}}
+        </div>
+
+        <select class="app" v-model="appState.exportAgentID">
+          <option value="">Не выбран</option>
+          <option
+            v-for="agent in (appState.agents || []).filter(a=>a.can_export)"
+            :value="agent.id"
+          >
+            {{agent.name}}
+          </option>
+        </select>
+        <span
+          >С <input class="app" type="datetime-local" v-model="appState.from"
+        /></span>
+        <span
+          >По <input class="app" type="datetime-local" v-model="appState.to"
+        /></span>
+        <button class="app" @click="exportBooks()">Выгрузить</button>
+      </div>
+
       <div class="app-container" v-if="appState.agentStatusError">
         <div class="app-error-container">{{appState.agentStatusError}}</div>
       </div>

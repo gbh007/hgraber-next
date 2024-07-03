@@ -10,6 +10,10 @@ const app = Vue.createApp({
       agentError: "",
       agents: [],
       agentStatusError: "",
+      exportAgentID: "",
+      from: "",
+      to: "",
+      exportError: "",
     });
 
     function create() {
@@ -67,6 +71,25 @@ const app = Vue.createApp({
         });
     }
 
+    function exportBooks() {
+      axios
+        .post("/api/agent/task/export", {
+          from: new Date(appState.from).toJSON(),
+          to: new Date(appState.to).toJSON(),
+          exporter: appState.exportAgentID,
+        })
+        .then(function (response) {
+          appState.from = "";
+          appState.to = "";
+          appState.exportAgentID = "";
+          appState.exportError = "";
+        })
+        .catch(function (error) {
+          console.log(error);
+          appState.exportError = error.toString();
+        });
+    }
+
     Vue.onBeforeMount(() => {
       agents();
     });
@@ -76,6 +99,7 @@ const app = Vue.createApp({
       create,
       agents,
       deleteAgent,
+      exportBooks,
     };
   },
 });

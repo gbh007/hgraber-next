@@ -77,6 +77,7 @@ button.app:hover {
   background: var(--app-primary);
 }
 
+select.app,
 textarea.app,
 input.app {
   border: 1px solid var(--app-primary);
@@ -87,6 +88,7 @@ input.app {
   font-family: var(--app-font-family);
 }
 
+select.app:focus,
 textarea.app:focus,
 input.app:focus {
   border: 1px dotted var(--app-primary);
