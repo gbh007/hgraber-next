@@ -29,6 +29,8 @@ type webAPIUseCases interface {
 
 type agentUseCases interface {
 	NewAgent(ctx context.Context, agent entities.Agent) error
+	DeleteAgent(ctx context.Context, id uuid.UUID) error
+	Agents(ctx context.Context, canParse, canExport, includeStatus bool) ([]entities.AgentWithStatus, error)
 }
 
 type exportUseCases interface {

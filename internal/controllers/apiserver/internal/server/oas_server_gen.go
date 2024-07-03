@@ -8,6 +8,18 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// APIAgentDeletePost implements POST /api/agent/delete operation.
+	//
+	// Удаление агента.
+	//
+	// POST /api/agent/delete
+	APIAgentDeletePost(ctx context.Context, req *APIAgentDeletePostReq) (APIAgentDeletePostRes, error)
+	// APIAgentListPost implements POST /api/agent/list operation.
+	//
+	// Список агентов.
+	//
+	// POST /api/agent/list
+	APIAgentListPost(ctx context.Context, req *APIAgentListPostReq) (APIAgentListPostRes, error)
 	// APIAgentNewPost implements POST /api/agent/new operation.
 	//
 	// Создание нового агента.

@@ -12,6 +12,7 @@ import (
 type agentSystemAdapter interface {
 	SetAgent(agent entities.Agent) error
 	DeleteAgent(id uuid.UUID) error
+	Status(ctx context.Context, agentID uuid.UUID) (entities.AgentStatus, error)
 }
 
 type storage interface {

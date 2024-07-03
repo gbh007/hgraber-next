@@ -22,39 +22,83 @@
         margin-bottom: 20px;
       }
 
-      .top-bar-settings > table {
-        display: inline-block;
-        border-radius: 10px;
-        padding: 10px;
+      .agent-status[status="ok"] {
+        color: green;
       }
 
-      .top-bar-settings > table td {
-        padding: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
+      .agent-status[status="error"] {
+        color: red;
       }
 
-      .top-bar-settings > table td.head {
-        border-bottom: 2px dashed black;
-        font-weight: bold;
+      .agent-status[status="warning"] {
+        color: yellow;
+      }
+
+      .agent-status[status="offline"] {
+        color: gray;
+      }
+
+      .agent-status[status="unknown"] {
+        color: purple;
       }
     </style>
 
-    <script src="/js/pages/new-agent.js"></script>
+    <script src="/js/pages/agents.js"></script>
   </head>
 
   <body id="app">
     <div class="app-header">
       <a href="/">Главная</a>
       <a href="/list.html">Список книг</a>
+      <a href="/agents.html">Агенты</a>
       <a href="/settings.html">Настройки</a>
     </div>
 
     <div class="app-body">
+      <div class="app-container" v-if="appState.agentStatusError">
+        <div class="app-error-container">{{appState.agentStatusError}}</div>
+      </div>
+      <template v-else>
+        <div
+          class="app-container"
+          style="display: flex; flex-direction: column; row-gap: 10px"
+          v-for="agent in (appState.agents || [])"
+        >
+          <h3
+            class="agent-status"
+            :status="(agent.status || {}).status || 'unknown'"
+          >
+            {{agent.name}}
+          </h3>
+          <span v-if="agent.status && agent.status.start_at"
+            ><b>Запущен:</b> {{new
+            Date(agent.status.start_at).toLocaleString()}}</span
+          >
+          <span><b>ID:</b> {{agent.id}}</span>
+          <span><b>Адрес:</b> {{agent.addr}}</span>
+          <span
+            ><b>Может обрабатывать новые:</b> {{agent.can_parse?
+            'Да':'Нет'}}</span
+          >
+          <span
+            ><b>Может экспортировать:</b> {{agent.can_export? 'Да':'Нет'}}</span
+          >
+          <span><b>Приоритет:</b> {{agent.priority}}</span>
+          <span
+            ><b>Создан:</b> {{new Date(agent.create_at).toLocaleString()}}</span
+          >
+          <button class="app" @click="deleteAgent(agent.id)">
+            <b style="color: red">Удалить</b>
+          </button>
+        </div>
+      </template>
+
       <div
         class="app-container"
         style="display: flex; flex-direction: column; row-gap: 10px"
       >
+        <b>Создание агента</b>
+
         <div class="app-error-container" v-if="appState.agentError">
           {{appState.agentError}}
         </div>

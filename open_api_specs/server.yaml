@@ -551,6 +551,190 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/agent/list:
+    post:
+      description: Список агентов
+      summary: Список агентов
+      tags:
+        - agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                can_parse:
+                  type: boolean
+                  description: Может ли агент обрабатывать ссылки внешних систем
+                can_export:
+                  type: boolean
+                  description: Может ли агент экспортировать данные из системы
+                include_status:
+                  type: boolean
+                  description: Может ли агент экспортировать данные из системы
+      responses:
+        200:
+          description: Успешное получение информации
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: object
+                      description: Статус агента
+                      properties:
+                        start_at:
+                          type: string
+                          format: date-time
+                          description: Время запуска агента
+                        check_status_error:
+                          type: string
+                          description: Ошибка которая возникла при получении статуса
+                        status:
+                          type: string
+                          description: Текущее состояние агента
+                          enum:
+                            - ok
+                            - warning
+                            - error
+                            - offline
+                            - unknown
+                        problems:
+                          type: array
+                          description: Список проблем
+                          items:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                                description: Тип проблемы
+                                enum:
+                                  - info
+                                  - warning
+                                  - error
+                              details:
+                                type: string
+                                description: Описание проблемы
+                            required:
+                              - type
+                              - details
+                      required:
+                        - status
+                    id:
+                      type: string
+                      format: uuid
+                      description: ID агента
+                    name:
+                      type: string
+                      description: Название агента
+                    addr:
+                      type: string
+                      description: Адрес агента
+                      format: uri
+                      example: http://example.com
+                    can_parse:
+                      type: boolean
+                      description: Может ли агент обрабатывать ссылки внешних систем
+                    can_export:
+                      type: boolean
+                      description: Может ли агент экспортировать данные из системы
+                    priority:
+                      type: integer
+                      description: Приоритет при выборе агентов
+                    create_at:
+                      type: string
+                      format: date-time
+                      description: Время создания агента
+                  required:
+                    - id
+                    - name
+                    - addr
+                    - can_parse
+                    - can_export
+                    - priority
+                    - create_at
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/agent/delete:
+    post:
+      description: Удаление агента
+      summary: Удаление агента
+      tags:
+        - agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID агента
+              required:
+                - id
+      responses:
+        204:
+          description: Успешное удаление агента
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не существуют
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 tags:
   - name: user
     description: Взаимодействие с данными пользователя

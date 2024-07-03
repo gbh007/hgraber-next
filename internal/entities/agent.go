@@ -46,21 +46,6 @@ type AgentBookCheckResult struct {
 	ErrorReason        string
 }
 
-type AgentStatus struct {
-	StartAt   time.Time
-	IsOK      bool
-	IsWarning bool
-	IsError   bool
-	Problems  []AgentStatusProblem
-}
-
-type AgentStatusProblem struct {
-	IsInfo    bool
-	IsWarning bool
-	IsError   bool
-	Details   string
-}
-
 type AgentPageURL struct {
 	BookURL  url.URL
 	ImageURL url.URL

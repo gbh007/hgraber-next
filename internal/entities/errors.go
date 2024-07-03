@@ -12,6 +12,7 @@ var (
 )
 
 var (
+	AgentAPIOffline         = errors.New("agent: offline")
 	AgentAPIUnauthorized    = errors.New("agent: unauthorized")
 	AgentAPIForbidden       = errors.New("agent: forbidden")
 	AgentAPIBadRequest      = errors.New("agent: bad request")

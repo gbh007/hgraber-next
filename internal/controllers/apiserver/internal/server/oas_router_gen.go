@@ -73,6 +73,48 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
+				case 'd': // Prefix: "delete"
+					origElem := elem
+					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIAgentDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'l': // Prefix: "list"
+					origElem := elem
+					if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIAgentListPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				case 'n': // Prefix: "new"
 					origElem := elem
 					if l := len("new"); len(elem) >= l && elem[0:l] == "new" {
@@ -424,6 +466,56 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
+				case 'd': // Prefix: "delete"
+					origElem := elem
+					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "APIAgentDeletePost"
+							r.summary = "Удаление агента"
+							r.operationID = ""
+							r.pathPattern = "/api/agent/delete"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'l': // Prefix: "list"
+					origElem := elem
+					if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "APIAgentListPost"
+							r.summary = "Список агентов"
+							r.operationID = ""
+							r.pathPattern = "/api/agent/list"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				case 'n': // Prefix: "new"
 					origElem := elem
 					if l := len("new"); len(elem) >= l && elem[0:l] == "new" {

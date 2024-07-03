@@ -2,7 +2,9 @@ package adapter
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"syscall"
 
 	"hgnext/internal/adapters/agent/internal/client"
 	"hgnext/internal/entities"
@@ -11,6 +13,10 @@ import (
 
 func (a *Adapter) Status(ctx context.Context) (entities.AgentStatus, error) {
 	res, err := a.rawClient.APICoreStatusGet(ctx)
+	if errors.Is(err, syscall.ECONNREFUSED) {
+		return entities.AgentStatus{}, fmt.Errorf("%w: %w", entities.AgentAPIOffline, err)
+	}
+
 	if err != nil {
 		return entities.AgentStatus{}, err
 	}

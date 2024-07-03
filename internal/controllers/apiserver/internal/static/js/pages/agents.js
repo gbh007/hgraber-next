@@ -8,6 +8,8 @@ const app = Vue.createApp({
       canExport: false,
       priority: 0,
       agentError: "",
+      agents: [],
+      agentStatusError: "",
     });
 
     function create() {
@@ -28,6 +30,8 @@ const app = Vue.createApp({
           appState.canExport = false;
           appState.priority = 0;
           appState.agentError = "";
+
+          agents();
         })
         .catch(function (error) {
           console.log(error);
@@ -35,9 +39,43 @@ const app = Vue.createApp({
         });
     }
 
+    function deleteAgent(id) {
+      axios
+        .post("/api/agent/delete", {
+          id: id,
+        })
+        .then(function (response) {
+          agents();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+
+    function agents() {
+      axios
+        .post("/api/agent/list", {
+          include_status: true,
+        })
+        .then(function (response) {
+          appState.agents = response.data;
+          appState.agentStatusError = "";
+        })
+        .catch(function (error) {
+          console.log(error);
+          appState.agentStatusError = error.toString();
+        });
+    }
+
+    Vue.onBeforeMount(() => {
+      agents();
+    });
+
     return {
       appState,
       create,
+      agents,
+      deleteAgent,
     };
   },
 });

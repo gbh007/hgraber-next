@@ -13,6 +13,24 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// APIAgentDeletePost implements POST /api/agent/delete operation.
+//
+// Удаление агента.
+//
+// POST /api/agent/delete
+func (UnimplementedHandler) APIAgentDeletePost(ctx context.Context, req *APIAgentDeletePostReq) (r APIAgentDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIAgentListPost implements POST /api/agent/list operation.
+//
+// Список агентов.
+//
+// POST /api/agent/list
+func (UnimplementedHandler) APIAgentListPost(ctx context.Context, req *APIAgentListPostReq) (r APIAgentListPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIAgentNewPost implements POST /api/agent/new operation.
 //
 // Создание нового агента.

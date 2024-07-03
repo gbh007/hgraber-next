@@ -7,8 +7,398 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/go-faster/errors"
 	"github.com/google/uuid"
 )
+
+type APIAgentDeletePostBadRequest ErrorResponse
+
+func (*APIAgentDeletePostBadRequest) aPIAgentDeletePostRes() {}
+
+type APIAgentDeletePostForbidden ErrorResponse
+
+func (*APIAgentDeletePostForbidden) aPIAgentDeletePostRes() {}
+
+type APIAgentDeletePostInternalServerError ErrorResponse
+
+func (*APIAgentDeletePostInternalServerError) aPIAgentDeletePostRes() {}
+
+// APIAgentDeletePostNoContent is response for APIAgentDeletePost operation.
+type APIAgentDeletePostNoContent struct{}
+
+func (*APIAgentDeletePostNoContent) aPIAgentDeletePostRes() {}
+
+type APIAgentDeletePostNotFound ErrorResponse
+
+func (*APIAgentDeletePostNotFound) aPIAgentDeletePostRes() {}
+
+type APIAgentDeletePostReq struct {
+	// ID агента.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIAgentDeletePostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIAgentDeletePostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIAgentDeletePostUnauthorized ErrorResponse
+
+func (*APIAgentDeletePostUnauthorized) aPIAgentDeletePostRes() {}
+
+type APIAgentListPostBadRequest ErrorResponse
+
+func (*APIAgentListPostBadRequest) aPIAgentListPostRes() {}
+
+type APIAgentListPostForbidden ErrorResponse
+
+func (*APIAgentListPostForbidden) aPIAgentListPostRes() {}
+
+type APIAgentListPostInternalServerError ErrorResponse
+
+func (*APIAgentListPostInternalServerError) aPIAgentListPostRes() {}
+
+type APIAgentListPostOKApplicationJSON []APIAgentListPostOKItem
+
+func (*APIAgentListPostOKApplicationJSON) aPIAgentListPostRes() {}
+
+type APIAgentListPostOKItem struct {
+	// Статус агента.
+	Status OptAPIAgentListPostOKItemStatus `json:"status"`
+	// ID агента.
+	ID uuid.UUID `json:"id"`
+	// Название агента.
+	Name string `json:"name"`
+	// Адрес агента.
+	Addr url.URL `json:"addr"`
+	// Может ли агент обрабатывать ссылки внешних систем.
+	CanParse bool `json:"can_parse"`
+	// Может ли агент экспортировать данные из системы.
+	CanExport bool `json:"can_export"`
+	// Приоритет при выборе агентов.
+	Priority int `json:"priority"`
+	// Время создания агента.
+	CreateAt time.Time `json:"create_at"`
+}
+
+// GetStatus returns the value of Status.
+func (s *APIAgentListPostOKItem) GetStatus() OptAPIAgentListPostOKItemStatus {
+	return s.Status
+}
+
+// GetID returns the value of ID.
+func (s *APIAgentListPostOKItem) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIAgentListPostOKItem) GetName() string {
+	return s.Name
+}
+
+// GetAddr returns the value of Addr.
+func (s *APIAgentListPostOKItem) GetAddr() url.URL {
+	return s.Addr
+}
+
+// GetCanParse returns the value of CanParse.
+func (s *APIAgentListPostOKItem) GetCanParse() bool {
+	return s.CanParse
+}
+
+// GetCanExport returns the value of CanExport.
+func (s *APIAgentListPostOKItem) GetCanExport() bool {
+	return s.CanExport
+}
+
+// GetPriority returns the value of Priority.
+func (s *APIAgentListPostOKItem) GetPriority() int {
+	return s.Priority
+}
+
+// GetCreateAt returns the value of CreateAt.
+func (s *APIAgentListPostOKItem) GetCreateAt() time.Time {
+	return s.CreateAt
+}
+
+// SetStatus sets the value of Status.
+func (s *APIAgentListPostOKItem) SetStatus(val OptAPIAgentListPostOKItemStatus) {
+	s.Status = val
+}
+
+// SetID sets the value of ID.
+func (s *APIAgentListPostOKItem) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIAgentListPostOKItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetAddr sets the value of Addr.
+func (s *APIAgentListPostOKItem) SetAddr(val url.URL) {
+	s.Addr = val
+}
+
+// SetCanParse sets the value of CanParse.
+func (s *APIAgentListPostOKItem) SetCanParse(val bool) {
+	s.CanParse = val
+}
+
+// SetCanExport sets the value of CanExport.
+func (s *APIAgentListPostOKItem) SetCanExport(val bool) {
+	s.CanExport = val
+}
+
+// SetPriority sets the value of Priority.
+func (s *APIAgentListPostOKItem) SetPriority(val int) {
+	s.Priority = val
+}
+
+// SetCreateAt sets the value of CreateAt.
+func (s *APIAgentListPostOKItem) SetCreateAt(val time.Time) {
+	s.CreateAt = val
+}
+
+// Статус агента.
+type APIAgentListPostOKItemStatus struct {
+	// Время запуска агента.
+	StartAt OptDateTime `json:"start_at"`
+	// Ошибка которая возникла при получении статуса.
+	CheckStatusError OptString `json:"check_status_error"`
+	// Текущее состояние агента.
+	Status APIAgentListPostOKItemStatusStatus `json:"status"`
+	// Список проблем.
+	Problems []APIAgentListPostOKItemStatusProblemsItem `json:"problems"`
+}
+
+// GetStartAt returns the value of StartAt.
+func (s *APIAgentListPostOKItemStatus) GetStartAt() OptDateTime {
+	return s.StartAt
+}
+
+// GetCheckStatusError returns the value of CheckStatusError.
+func (s *APIAgentListPostOKItemStatus) GetCheckStatusError() OptString {
+	return s.CheckStatusError
+}
+
+// GetStatus returns the value of Status.
+func (s *APIAgentListPostOKItemStatus) GetStatus() APIAgentListPostOKItemStatusStatus {
+	return s.Status
+}
+
+// GetProblems returns the value of Problems.
+func (s *APIAgentListPostOKItemStatus) GetProblems() []APIAgentListPostOKItemStatusProblemsItem {
+	return s.Problems
+}
+
+// SetStartAt sets the value of StartAt.
+func (s *APIAgentListPostOKItemStatus) SetStartAt(val OptDateTime) {
+	s.StartAt = val
+}
+
+// SetCheckStatusError sets the value of CheckStatusError.
+func (s *APIAgentListPostOKItemStatus) SetCheckStatusError(val OptString) {
+	s.CheckStatusError = val
+}
+
+// SetStatus sets the value of Status.
+func (s *APIAgentListPostOKItemStatus) SetStatus(val APIAgentListPostOKItemStatusStatus) {
+	s.Status = val
+}
+
+// SetProblems sets the value of Problems.
+func (s *APIAgentListPostOKItemStatus) SetProblems(val []APIAgentListPostOKItemStatusProblemsItem) {
+	s.Problems = val
+}
+
+type APIAgentListPostOKItemStatusProblemsItem struct {
+	// Тип проблемы.
+	Type APIAgentListPostOKItemStatusProblemsItemType `json:"type"`
+	// Описание проблемы.
+	Details string `json:"details"`
+}
+
+// GetType returns the value of Type.
+func (s *APIAgentListPostOKItemStatusProblemsItem) GetType() APIAgentListPostOKItemStatusProblemsItemType {
+	return s.Type
+}
+
+// GetDetails returns the value of Details.
+func (s *APIAgentListPostOKItemStatusProblemsItem) GetDetails() string {
+	return s.Details
+}
+
+// SetType sets the value of Type.
+func (s *APIAgentListPostOKItemStatusProblemsItem) SetType(val APIAgentListPostOKItemStatusProblemsItemType) {
+	s.Type = val
+}
+
+// SetDetails sets the value of Details.
+func (s *APIAgentListPostOKItemStatusProblemsItem) SetDetails(val string) {
+	s.Details = val
+}
+
+// Тип проблемы.
+type APIAgentListPostOKItemStatusProblemsItemType string
+
+const (
+	APIAgentListPostOKItemStatusProblemsItemTypeInfo    APIAgentListPostOKItemStatusProblemsItemType = "info"
+	APIAgentListPostOKItemStatusProblemsItemTypeWarning APIAgentListPostOKItemStatusProblemsItemType = "warning"
+	APIAgentListPostOKItemStatusProblemsItemTypeError   APIAgentListPostOKItemStatusProblemsItemType = "error"
+)
+
+// AllValues returns all APIAgentListPostOKItemStatusProblemsItemType values.
+func (APIAgentListPostOKItemStatusProblemsItemType) AllValues() []APIAgentListPostOKItemStatusProblemsItemType {
+	return []APIAgentListPostOKItemStatusProblemsItemType{
+		APIAgentListPostOKItemStatusProblemsItemTypeInfo,
+		APIAgentListPostOKItemStatusProblemsItemTypeWarning,
+		APIAgentListPostOKItemStatusProblemsItemTypeError,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIAgentListPostOKItemStatusProblemsItemType) MarshalText() ([]byte, error) {
+	switch s {
+	case APIAgentListPostOKItemStatusProblemsItemTypeInfo:
+		return []byte(s), nil
+	case APIAgentListPostOKItemStatusProblemsItemTypeWarning:
+		return []byte(s), nil
+	case APIAgentListPostOKItemStatusProblemsItemTypeError:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIAgentListPostOKItemStatusProblemsItemType) UnmarshalText(data []byte) error {
+	switch APIAgentListPostOKItemStatusProblemsItemType(data) {
+	case APIAgentListPostOKItemStatusProblemsItemTypeInfo:
+		*s = APIAgentListPostOKItemStatusProblemsItemTypeInfo
+		return nil
+	case APIAgentListPostOKItemStatusProblemsItemTypeWarning:
+		*s = APIAgentListPostOKItemStatusProblemsItemTypeWarning
+		return nil
+	case APIAgentListPostOKItemStatusProblemsItemTypeError:
+		*s = APIAgentListPostOKItemStatusProblemsItemTypeError
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Текущее состояние агента.
+type APIAgentListPostOKItemStatusStatus string
+
+const (
+	APIAgentListPostOKItemStatusStatusOk      APIAgentListPostOKItemStatusStatus = "ok"
+	APIAgentListPostOKItemStatusStatusWarning APIAgentListPostOKItemStatusStatus = "warning"
+	APIAgentListPostOKItemStatusStatusError   APIAgentListPostOKItemStatusStatus = "error"
+	APIAgentListPostOKItemStatusStatusOffline APIAgentListPostOKItemStatusStatus = "offline"
+	APIAgentListPostOKItemStatusStatusUnknown APIAgentListPostOKItemStatusStatus = "unknown"
+)
+
+// AllValues returns all APIAgentListPostOKItemStatusStatus values.
+func (APIAgentListPostOKItemStatusStatus) AllValues() []APIAgentListPostOKItemStatusStatus {
+	return []APIAgentListPostOKItemStatusStatus{
+		APIAgentListPostOKItemStatusStatusOk,
+		APIAgentListPostOKItemStatusStatusWarning,
+		APIAgentListPostOKItemStatusStatusError,
+		APIAgentListPostOKItemStatusStatusOffline,
+		APIAgentListPostOKItemStatusStatusUnknown,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIAgentListPostOKItemStatusStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case APIAgentListPostOKItemStatusStatusOk:
+		return []byte(s), nil
+	case APIAgentListPostOKItemStatusStatusWarning:
+		return []byte(s), nil
+	case APIAgentListPostOKItemStatusStatusError:
+		return []byte(s), nil
+	case APIAgentListPostOKItemStatusStatusOffline:
+		return []byte(s), nil
+	case APIAgentListPostOKItemStatusStatusUnknown:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIAgentListPostOKItemStatusStatus) UnmarshalText(data []byte) error {
+	switch APIAgentListPostOKItemStatusStatus(data) {
+	case APIAgentListPostOKItemStatusStatusOk:
+		*s = APIAgentListPostOKItemStatusStatusOk
+		return nil
+	case APIAgentListPostOKItemStatusStatusWarning:
+		*s = APIAgentListPostOKItemStatusStatusWarning
+		return nil
+	case APIAgentListPostOKItemStatusStatusError:
+		*s = APIAgentListPostOKItemStatusStatusError
+		return nil
+	case APIAgentListPostOKItemStatusStatusOffline:
+		*s = APIAgentListPostOKItemStatusStatusOffline
+		return nil
+	case APIAgentListPostOKItemStatusStatusUnknown:
+		*s = APIAgentListPostOKItemStatusStatusUnknown
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APIAgentListPostReq struct {
+	// Может ли агент обрабатывать ссылки внешних систем.
+	CanParse OptBool `json:"can_parse"`
+	// Может ли агент экспортировать данные из системы.
+	CanExport OptBool `json:"can_export"`
+	// Может ли агент экспортировать данные из системы.
+	IncludeStatus OptBool `json:"include_status"`
+}
+
+// GetCanParse returns the value of CanParse.
+func (s *APIAgentListPostReq) GetCanParse() OptBool {
+	return s.CanParse
+}
+
+// GetCanExport returns the value of CanExport.
+func (s *APIAgentListPostReq) GetCanExport() OptBool {
+	return s.CanExport
+}
+
+// GetIncludeStatus returns the value of IncludeStatus.
+func (s *APIAgentListPostReq) GetIncludeStatus() OptBool {
+	return s.IncludeStatus
+}
+
+// SetCanParse sets the value of CanParse.
+func (s *APIAgentListPostReq) SetCanParse(val OptBool) {
+	s.CanParse = val
+}
+
+// SetCanExport sets the value of CanExport.
+func (s *APIAgentListPostReq) SetCanExport(val OptBool) {
+	s.CanExport = val
+}
+
+// SetIncludeStatus sets the value of IncludeStatus.
+func (s *APIAgentListPostReq) SetIncludeStatus(val OptBool) {
+	s.IncludeStatus = val
+}
+
+type APIAgentListPostUnauthorized ErrorResponse
+
+func (*APIAgentListPostUnauthorized) aPIAgentListPostRes() {}
 
 type APIAgentNewPostBadRequest ErrorResponse
 
@@ -981,6 +1371,52 @@ func (s *HeaderAuth) SetAPIKey(val string) {
 	s.APIKey = val
 }
 
+// NewOptAPIAgentListPostOKItemStatus returns new OptAPIAgentListPostOKItemStatus with value set to v.
+func NewOptAPIAgentListPostOKItemStatus(v APIAgentListPostOKItemStatus) OptAPIAgentListPostOKItemStatus {
+	return OptAPIAgentListPostOKItemStatus{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptAPIAgentListPostOKItemStatus is optional APIAgentListPostOKItemStatus.
+type OptAPIAgentListPostOKItemStatus struct {
+	Value APIAgentListPostOKItemStatus
+	Set   bool
+}
+
+// IsSet returns true if OptAPIAgentListPostOKItemStatus was set.
+func (o OptAPIAgentListPostOKItemStatus) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptAPIAgentListPostOKItemStatus) Reset() {
+	var v APIAgentListPostOKItemStatus
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptAPIAgentListPostOKItemStatus) SetTo(v APIAgentListPostOKItemStatus) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptAPIAgentListPostOKItemStatus) Get() (v APIAgentListPostOKItemStatus, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptAPIAgentListPostOKItemStatus) Or(d APIAgentListPostOKItemStatus) APIAgentListPostOKItemStatus {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptBool returns new OptBool with value set to v.
 func NewOptBool(v bool) OptBool {
 	return OptBool{
@@ -1021,6 +1457,52 @@ func (o OptBool) Get() (v bool, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptBool) Or(d bool) bool {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDateTime returns new OptDateTime with value set to v.
+func NewOptDateTime(v time.Time) OptDateTime {
+	return OptDateTime{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDateTime is optional time.Time.
+type OptDateTime struct {
+	Value time.Time
+	Set   bool
+}
+
+// IsSet returns true if OptDateTime was set.
+func (o OptDateTime) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDateTime) Reset() {
+	var v time.Time
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDateTime) SetTo(v time.Time) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDateTime) Get() (v time.Time, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDateTime) Or(d time.Time) time.Time {
 	if v, ok := o.Get(); ok {
 		return v
 	}
