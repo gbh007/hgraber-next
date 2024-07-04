@@ -1,11 +1,12 @@
 package entities
 
 type SystemSizeInfo struct {
-	BookCount         int
-	BookUnparsedCount int
-	PageCount         int
-	PageUnloadedCount int
-	PageFileSize      int64
+	BookCount            int
+	BookUnparsedCount    int
+	PageCount            int
+	PageUnloadedCount    int
+	PageWithoutBodyCount int
+	PageFileSize         int64
 }
 
 type SystemSizeInfoWithMonitor struct {

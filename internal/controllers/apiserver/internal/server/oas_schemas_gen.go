@@ -1891,6 +1891,8 @@ type SystemInfo struct {
 	PageCount int `json:"page_count"`
 	// Количество не загруженных страниц.
 	NotLoadPageCount int `json:"not_load_page_count"`
+	// Количество страниц без тела (файла).
+	PageWithoutBodyCount int `json:"page_without_body_count"`
 	// Объем загруженных изображений в байтах.
 	PagesSize int64 `json:"pages_size"`
 	// Объем загруженных изображений в человеко-читаемом
@@ -1918,6 +1920,11 @@ func (s *SystemInfo) GetPageCount() int {
 // GetNotLoadPageCount returns the value of NotLoadPageCount.
 func (s *SystemInfo) GetNotLoadPageCount() int {
 	return s.NotLoadPageCount
+}
+
+// GetPageWithoutBodyCount returns the value of PageWithoutBodyCount.
+func (s *SystemInfo) GetPageWithoutBodyCount() int {
+	return s.PageWithoutBodyCount
 }
 
 // GetPagesSize returns the value of PagesSize.
@@ -1953,6 +1960,11 @@ func (s *SystemInfo) SetPageCount(val int) {
 // SetNotLoadPageCount sets the value of NotLoadPageCount.
 func (s *SystemInfo) SetNotLoadPageCount(val int) {
 	s.NotLoadPageCount = val
+}
+
+// SetPageWithoutBodyCount sets the value of PageWithoutBodyCount.
+func (s *SystemInfo) SetPageWithoutBodyCount(val int) {
+	s.PageWithoutBodyCount = val
 }
 
 // SetPagesSize sets the value of PagesSize.

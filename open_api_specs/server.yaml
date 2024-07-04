@@ -110,6 +110,7 @@ paths:
       summary: Текущее состояние системы
       tags:
         - parsing
+        - system
       responses:
         200:
           description: Информация о системе
@@ -871,6 +872,9 @@ components:
         not_load_page_count:
           type: integer
           description: Количество не загруженных страниц
+        page_without_body_count:
+          type: integer
+          description: Количество страниц без тела (файла)
         pages_size:
           type: integer
           format: int64
@@ -912,6 +916,7 @@ components:
         - not_load_page_count
         - pages_size
         - pages_size_formatted
+        - page_without_body_count
 
     BookShortInfo:
       type: object

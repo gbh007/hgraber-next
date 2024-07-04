@@ -5672,6 +5672,10 @@ func (s *SystemInfo) encodeFields(e *jx.Encoder) {
 		e.Int(s.NotLoadPageCount)
 	}
 	{
+		e.FieldStart("page_without_body_count")
+		e.Int(s.PageWithoutBodyCount)
+	}
+	{
 		e.FieldStart("pages_size")
 		e.Int64(s.PagesSize)
 	}
@@ -5687,14 +5691,15 @@ func (s *SystemInfo) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfSystemInfo = [7]string{
+var jsonFieldsNameOfSystemInfo = [8]string{
 	0: "count",
 	1: "not_load_count",
 	2: "page_count",
 	3: "not_load_page_count",
-	4: "pages_size",
-	5: "pages_size_formatted",
-	6: "monitor",
+	4: "page_without_body_count",
+	5: "pages_size",
+	6: "pages_size_formatted",
+	7: "monitor",
 }
 
 // Decode decodes SystemInfo from json.
@@ -5754,8 +5759,20 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"not_load_page_count\"")
 			}
-		case "pages_size":
+		case "page_without_body_count":
 			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int()
+				s.PageWithoutBodyCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_without_body_count\"")
+			}
+		case "pages_size":
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := d.Int64()
 				s.PagesSize = int64(v)
@@ -5767,7 +5784,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"pages_size\"")
 			}
 		case "pages_size_formatted":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := d.Str()
 				s.PagesSizeFormatted = string(v)
@@ -5798,7 +5815,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00111111,
+		0b01111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

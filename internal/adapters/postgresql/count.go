@@ -31,6 +31,11 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return entities.SystemSizeInfo{}, fmt.Errorf("get unloaded page count: %w", err)
 	}
 
+	err = d.db.GetContext(ctx, &systemSize.PageWithoutBodyCount, `SELECT COUNT(*) FROM pages WHERE file_id IS NULL;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get page without body count: %w", err)
+	}
+
 	size := sql.NullInt64{}
 
 	err = d.db.GetContext(ctx, &size, `SELECT SUM(f."size") FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL;`)

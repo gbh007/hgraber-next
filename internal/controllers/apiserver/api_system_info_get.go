@@ -18,12 +18,13 @@ func (c *Controller) APISystemInfoGet(ctx context.Context) (server.APISystemInfo
 	}
 
 	return &server.SystemInfo{
-		Count:              info.BookCount,
-		NotLoadCount:       info.BookUnparsedCount,
-		PageCount:          info.PageCount,
-		NotLoadPageCount:   info.PageUnloadedCount,
-		PagesSize:          info.PageFileSize,
-		PagesSizeFormatted: entities.PrettySize(info.PageFileSize),
+		Count:                info.BookCount,
+		NotLoadCount:         info.BookUnparsedCount,
+		PageCount:            info.PageCount,
+		NotLoadPageCount:     info.PageUnloadedCount,
+		PageWithoutBodyCount: info.PageWithoutBodyCount,
+		PagesSize:            info.PageFileSize,
+		PagesSizeFormatted:   entities.PrettySize(info.PageFileSize),
 		Monitor: server.NewOptSystemInfoMonitor(server.SystemInfoMonitor{
 			Workers: pkg.Map(info.Workers, func(w entities.SystemWorkerStat) server.SystemInfoMonitorWorkersItem {
 				return server.SystemInfoMonitorWorkersItem{
