@@ -12,10 +12,12 @@ import (
 type storage interface {
 	DetachedFiles(ctx context.Context) ([]entities.File, error)
 	DeleteFile(ctx context.Context, id uuid.UUID) error
+	FileIDs(ctx context.Context) ([]uuid.UUID, error)
 }
 
 type fileStorage interface {
 	Delete(ctx context.Context, fileID uuid.UUID) error
+	IDs(ctx context.Context) ([]uuid.UUID, error)
 }
 
 type UseCase struct {

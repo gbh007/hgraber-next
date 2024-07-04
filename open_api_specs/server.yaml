@@ -842,6 +842,54 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/system/rpc/remove/mismatch-files:
+    post:
+      description: Удаление рассинхронизированных файлов (несоответствие файловой системы и БД)
+      summary: Удаление рассинхронизированных файлов
+      tags:
+        - system
+      responses:
+        200:
+          description: Успешное выполнение
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  remove_from_db:
+                    type: integer
+                    description: Количество удаленных файлов из БД
+                  remove_from_fs:
+                    type: integer
+                    description: Количество удаленных файлов из файловой системы
+                required:
+                  - remove_from_db
+                  - remove_from_fs
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 tags:
   - name: user
     description: Взаимодействие с данными пользователя

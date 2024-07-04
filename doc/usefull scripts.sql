@@ -1,4 +1,3 @@
--- Active: 1720072909115@@127.0.0.1@5432@hgrabernext
 -- Количество значений атрибутов
 SELECT COUNT(*), attr, value
 FROM book_attributes

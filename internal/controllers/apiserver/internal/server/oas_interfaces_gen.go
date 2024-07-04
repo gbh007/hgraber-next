@@ -49,6 +49,10 @@ type APISystemRPCRemoveDetachedFilesPostRes interface {
 	aPISystemRPCRemoveDetachedFilesPostRes()
 }
 
+type APISystemRPCRemoveMismatchFilesPostRes interface {
+	aPISystemRPCRemoveMismatchFilesPostRes()
+}
+
 type APIUserLoginPostRes interface {
 	aPIUserLoginPostRes()
 }

@@ -5,6 +5,8 @@ const app = Vue.createApp({
       deduplicateFilesError: "",
       removeDetachedFiles: null,
       removeDetachedFilesError: "",
+      removeMismatchFiles: null,
+      removeMismatchFilesError: "",
     });
 
     function deduplicateFiles() {
@@ -33,10 +35,24 @@ const app = Vue.createApp({
         });
     }
 
+    function removeMismatchFiles() {
+      axios
+        .post("/api/system/rpc/remove/mismatch-files")
+        .then(function (response) {
+          appState.removeMismatchFiles = response.data;
+          appState.removeMismatchFilesError = "";
+        })
+        .catch(function (error) {
+          console.log(error);
+          appState.removeMismatchFilesError = error.toString();
+        });
+    }
+
     return {
       appState,
       deduplicateFiles,
       removeDetachedFiles,
+      removeMismatchFiles,
     };
   },
 });

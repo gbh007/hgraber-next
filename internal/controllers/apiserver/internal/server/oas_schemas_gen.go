@@ -1109,6 +1109,52 @@ type APISystemRPCRemoveDetachedFilesPostUnauthorized ErrorResponse
 
 func (*APISystemRPCRemoveDetachedFilesPostUnauthorized) aPISystemRPCRemoveDetachedFilesPostRes() {}
 
+type APISystemRPCRemoveMismatchFilesPostBadRequest ErrorResponse
+
+func (*APISystemRPCRemoveMismatchFilesPostBadRequest) aPISystemRPCRemoveMismatchFilesPostRes() {}
+
+type APISystemRPCRemoveMismatchFilesPostForbidden ErrorResponse
+
+func (*APISystemRPCRemoveMismatchFilesPostForbidden) aPISystemRPCRemoveMismatchFilesPostRes() {}
+
+type APISystemRPCRemoveMismatchFilesPostInternalServerError ErrorResponse
+
+func (*APISystemRPCRemoveMismatchFilesPostInternalServerError) aPISystemRPCRemoveMismatchFilesPostRes() {
+}
+
+type APISystemRPCRemoveMismatchFilesPostOK struct {
+	// Количество удаленных файлов из БД.
+	RemoveFromDb int `json:"remove_from_db"`
+	// Количество удаленных файлов из файловой системы.
+	RemoveFromFs int `json:"remove_from_fs"`
+}
+
+// GetRemoveFromDb returns the value of RemoveFromDb.
+func (s *APISystemRPCRemoveMismatchFilesPostOK) GetRemoveFromDb() int {
+	return s.RemoveFromDb
+}
+
+// GetRemoveFromFs returns the value of RemoveFromFs.
+func (s *APISystemRPCRemoveMismatchFilesPostOK) GetRemoveFromFs() int {
+	return s.RemoveFromFs
+}
+
+// SetRemoveFromDb sets the value of RemoveFromDb.
+func (s *APISystemRPCRemoveMismatchFilesPostOK) SetRemoveFromDb(val int) {
+	s.RemoveFromDb = val
+}
+
+// SetRemoveFromFs sets the value of RemoveFromFs.
+func (s *APISystemRPCRemoveMismatchFilesPostOK) SetRemoveFromFs(val int) {
+	s.RemoveFromFs = val
+}
+
+func (*APISystemRPCRemoveMismatchFilesPostOK) aPISystemRPCRemoveMismatchFilesPostRes() {}
+
+type APISystemRPCRemoveMismatchFilesPostUnauthorized ErrorResponse
+
+func (*APISystemRPCRemoveMismatchFilesPostUnauthorized) aPISystemRPCRemoveMismatchFilesPostRes() {}
+
 type APIUserLoginPostBadRequest ErrorResponse
 
 func (*APIUserLoginPostBadRequest) aPIUserLoginPostRes() {}

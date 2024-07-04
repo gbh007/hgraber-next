@@ -121,6 +121,16 @@ func (UnimplementedHandler) APISystemRPCRemoveDetachedFilesPost(ctx context.Cont
 	return r, ht.ErrNotImplemented
 }
 
+// APISystemRPCRemoveMismatchFilesPost implements POST /api/system/rpc/remove/mismatch-files operation.
+//
+// Удаление рассинхронизированных файлов
+// (несоответствие файловой системы и БД).
+//
+// POST /api/system/rpc/remove/mismatch-files
+func (UnimplementedHandler) APISystemRPCRemoveMismatchFilesPost(ctx context.Context) (r APISystemRPCRemoveMismatchFilesPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIUserLoginPost implements POST /api/user/login operation.
 //
 // Проставление токена в куки.

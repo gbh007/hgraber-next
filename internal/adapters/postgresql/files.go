@@ -198,3 +198,14 @@ func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
 
 	return nil
 }
+
+func (d *Database) FileIDs(ctx context.Context) ([]uuid.UUID, error) {
+	raw := make([]uuid.UUID, 0)
+
+	err := d.db.SelectContext(ctx, &raw, `SELECT id FROM files;`)
+	if err != nil {
+		return nil, fmt.Errorf("exec: %w", err)
+	}
+
+	return raw, nil
+}

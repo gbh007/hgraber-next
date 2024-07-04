@@ -80,6 +80,13 @@ type Handler interface {
 	//
 	// POST /api/system/rpc/remove/detached-files
 	APISystemRPCRemoveDetachedFilesPost(ctx context.Context) (APISystemRPCRemoveDetachedFilesPostRes, error)
+	// APISystemRPCRemoveMismatchFilesPost implements POST /api/system/rpc/remove/mismatch-files operation.
+	//
+	// Удаление рассинхронизированных файлов
+	// (несоответствие файловой системы и БД).
+	//
+	// POST /api/system/rpc/remove/mismatch-files
+	APISystemRPCRemoveMismatchFilesPost(ctx context.Context) (APISystemRPCRemoveMismatchFilesPostRes, error)
 	// APIUserLoginPost implements POST /api/user/login operation.
 	//
 	// Проставление токена в куки.

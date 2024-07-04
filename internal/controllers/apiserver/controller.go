@@ -44,6 +44,7 @@ type deduplicateUseCases interface {
 
 type cleanupUseCases interface {
 	RemoveDetachedFiles(ctx context.Context) (count int, size int64, err error)
+	RemoveFilesInStoragesMismatch(ctx context.Context) (notInDBCount, notInFSCount int, err error)
 }
 
 type Controller struct {
