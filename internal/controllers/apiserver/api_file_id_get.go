@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 	"errors"
+	"mime"
 	"net/url"
 	"path"
 	"strings"
@@ -37,8 +38,18 @@ func (c *Controller) APIFileIDGet(ctx context.Context, params server.APIFileIDGe
 		}, nil
 	}
 
-	return &server.APIFileIDGetOK{
-		Data: body,
+	// Это не самый правильный и ленивый костыль, но пока его будет достаточно
+	contentType := mime.TypeByExtension(path.Ext(params.ID))
+
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+
+	return &server.APIFileIDGetOKHeaders{
+		ContentType: contentType,
+		Response: server.APIFileIDGetOK{
+			Data: body,
+		},
 	}, nil
 }
 

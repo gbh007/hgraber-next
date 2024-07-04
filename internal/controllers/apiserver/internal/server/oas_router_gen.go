@@ -335,6 +335,63 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				case 'r': // Prefix: "rpc/"
+					origElem := elem
+					if l := len("rpc/"); len(elem) >= l && elem[0:l] == "rpc/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'd': // Prefix: "deduplicate/files"
+						origElem := elem
+						if l := len("deduplicate/files"); len(elem) >= l && elem[0:l] == "deduplicate/files" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPISystemRPCDeduplicateFilesPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'r': // Prefix: "remove/detached-files"
+						origElem := elem
+						if l := len("remove/detached-files"); len(elem) >= l && elem[0:l] == "remove/detached-files" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPISystemRPCRemoveDetachedFilesPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -754,6 +811,71 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.summary = "Текущее состояние системы"
 								r.operationID = ""
 								r.pathPattern = "/api/system/info"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "rpc/"
+					origElem := elem
+					if l := len("rpc/"); len(elem) >= l && elem[0:l] == "rpc/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'd': // Prefix: "deduplicate/files"
+						origElem := elem
+						if l := len("deduplicate/files"); len(elem) >= l && elem[0:l] == "deduplicate/files" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "APISystemRPCDeduplicateFilesPost"
+								r.summary = "Дедупликация файлов"
+								r.operationID = ""
+								r.pathPattern = "/api/system/rpc/deduplicate/files"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'r': // Prefix: "remove/detached-files"
+						origElem := elem
+						if l := len("remove/detached-files"); len(elem) >= l && elem[0:l] == "remove/detached-files" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "APISystemRPCRemoveDetachedFilesPost"
+								r.summary = "Удаление несвязанных файлов"
+								r.operationID = ""
+								r.pathPattern = "/api/system/rpc/remove/detached-files"
 								r.args = args
 								r.count = 0
 								return r, true

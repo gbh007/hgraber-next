@@ -68,6 +68,18 @@ type Handler interface {
 	//
 	// GET /api/system/info
 	APISystemInfoGet(ctx context.Context) (APISystemInfoGetRes, error)
+	// APISystemRPCDeduplicateFilesPost implements POST /api/system/rpc/deduplicate/files operation.
+	//
+	// Дедупликация файлов.
+	//
+	// POST /api/system/rpc/deduplicate/files
+	APISystemRPCDeduplicateFilesPost(ctx context.Context) (APISystemRPCDeduplicateFilesPostRes, error)
+	// APISystemRPCRemoveDetachedFilesPost implements POST /api/system/rpc/remove/detached-files operation.
+	//
+	// Удаление несвязанных файлов.
+	//
+	// POST /api/system/rpc/remove/detached-files
+	APISystemRPCRemoveDetachedFilesPost(ctx context.Context) (APISystemRPCRemoveDetachedFilesPostRes, error)
 	// APIUserLoginPost implements POST /api/user/login operation.
 	//
 	// Проставление токена в куки.

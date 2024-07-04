@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>HGraber</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="/css/main.css"
+    />
+
+    <style>
+      div.app-container {
+        margin-bottom: 20px;
+      }
+    </style>
+
+    <script src="/js/pages/rpc.js"></script>
+  </head>
+
+  <body id="app">
+    <div class="app-header">
+      <a href="/">Главная</a>
+      <a href="/list.html">Список книг</a>
+      <a href="/agents.html">Агенты</a>
+      <a href="/settings.html">Настройки</a>
+    </div>
+
+    <div class="app-body">
+      <h1 style="color: red">
+        Операции на данной странице не являются обратимыми.<br />
+        Перед их выполнением рекомендуется произвести бекап как файлового
+        хранилища так и БД.
+      </h1>
+      <h2 style="color: red">
+        Операции на данной странице также являются медленными и тежеловесными,
+        не рекомендуется их выполнять без крайней необходимости.
+      </h2>
+      <div class="app-container" style="display: flex; flex-direction: column">
+        <h3>Очистка файлов дубликов</h3>
+        <div class="app-error-container" v-if="appState.deduplicateFilesError">
+          {{appState.deduplicateFilesError}}
+        </div>
+        <template v-if="appState.deduplicateFiles">
+          <span
+            >Количество очищенных: {{appState.deduplicateFiles.count||0}}</span
+          >
+          <span
+            >Объем очищенных:
+            {{appState.deduplicateFiles.pretty_size||''}}</span
+          >
+        </template>
+        <button class="app" @click="deduplicateFiles()">
+          Дедуплицировать файлы
+        </button>
+      </div>
+
+      <div class="app-container" style="display: flex; flex-direction: column">
+        <h3>Удаление ни с чем не связанных файлов</h3>
+        <div
+          class="app-error-container"
+          v-if="appState.removeDetachedFilesError"
+        >
+          {{appState.removeDetachedFilesError}}
+        </div>
+        <template v-if="appState.removeDetachedFiles">
+          <span
+            >Количество удаленных:
+            {{appState.removeDetachedFiles.count||0}}</span
+          >
+          <span
+            >Объем удаленных:
+            {{appState.removeDetachedFiles.pretty_size||''}}</span
+          >
+        </template>
+        <button class="app" @click="removeDetachedFiles()">
+          Удалить непривязанные файлы
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

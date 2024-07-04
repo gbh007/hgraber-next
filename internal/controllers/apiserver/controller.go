@@ -38,15 +38,25 @@ type exportUseCases interface {
 	ImportArchive(ctx context.Context, body io.Reader) (uuid.UUID, error)
 }
 
+type deduplicateUseCases interface {
+	DeduplicateFiles(ctx context.Context) (count int, size int64, err error)
+}
+
+type cleanupUseCases interface {
+	RemoveDetachedFiles(ctx context.Context) (count int, size int64, err error)
+}
+
 type Controller struct {
 	logger    *slog.Logger
 	debug     bool
 	staticDir string
 
-	parseUseCases  parseUseCases
-	webAPIUseCases webAPIUseCases
-	agentUseCases  agentUseCases
-	exportUseCases exportUseCases
+	parseUseCases       parseUseCases
+	webAPIUseCases      webAPIUseCases
+	agentUseCases       agentUseCases
+	exportUseCases      exportUseCases
+	deduplicateUseCases deduplicateUseCases
+	cleanupUseCases     cleanupUseCases
 
 	ogenServer *server.Server
 
@@ -65,6 +75,8 @@ func New(
 	webAPIUseCases webAPIUseCases,
 	agentUseCases agentUseCases,
 	exportUseCases exportUseCases,
+	deduplicateUseCases deduplicateUseCases,
+	cleanupUseCases cleanupUseCases,
 	debug bool,
 	staticDir string,
 	token string,
@@ -83,6 +95,8 @@ func New(
 		webAPIUseCases:             webAPIUseCases,
 		agentUseCases:              agentUseCases,
 		exportUseCases:             exportUseCases,
+		deduplicateUseCases:        deduplicateUseCases,
+		cleanupUseCases:            cleanupUseCases,
 		debug:                      debug,
 		staticDir:                  staticDir,
 		token:                      token,

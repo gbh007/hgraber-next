@@ -732,7 +732,33 @@ func (s APIFileIDGetOK) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*APIFileIDGetOK) aPIFileIDGetRes() {}
+// APIFileIDGetOKHeaders wraps APIFileIDGetOK with response headers.
+type APIFileIDGetOKHeaders struct {
+	ContentType string
+	Response    APIFileIDGetOK
+}
+
+// GetContentType returns the value of ContentType.
+func (s *APIFileIDGetOKHeaders) GetContentType() string {
+	return s.ContentType
+}
+
+// GetResponse returns the value of Response.
+func (s *APIFileIDGetOKHeaders) GetResponse() APIFileIDGetOK {
+	return s.Response
+}
+
+// SetContentType sets the value of ContentType.
+func (s *APIFileIDGetOKHeaders) SetContentType(val string) {
+	s.ContentType = val
+}
+
+// SetResponse sets the value of Response.
+func (s *APIFileIDGetOKHeaders) SetResponse(val APIFileIDGetOK) {
+	s.Response = val
+}
+
+func (*APIFileIDGetOKHeaders) aPIFileIDGetRes() {}
 
 type APIFileIDGetUnauthorized ErrorResponse
 
@@ -967,6 +993,121 @@ func (*APISystemInfoGetInternalServerError) aPISystemInfoGetRes() {}
 type APISystemInfoGetUnauthorized ErrorResponse
 
 func (*APISystemInfoGetUnauthorized) aPISystemInfoGetRes() {}
+
+type APISystemRPCDeduplicateFilesPostBadRequest ErrorResponse
+
+func (*APISystemRPCDeduplicateFilesPostBadRequest) aPISystemRPCDeduplicateFilesPostRes() {}
+
+type APISystemRPCDeduplicateFilesPostForbidden ErrorResponse
+
+func (*APISystemRPCDeduplicateFilesPostForbidden) aPISystemRPCDeduplicateFilesPostRes() {}
+
+type APISystemRPCDeduplicateFilesPostInternalServerError ErrorResponse
+
+func (*APISystemRPCDeduplicateFilesPostInternalServerError) aPISystemRPCDeduplicateFilesPostRes() {}
+
+type APISystemRPCDeduplicateFilesPostOK struct {
+	// Количество файлов дублей.
+	Count int `json:"count"`
+	// Размер файлов дублей.
+	Size int64 `json:"size"`
+	// Размер файлов дублей в человеко-читаемом формате.
+	PrettySize string `json:"pretty_size"`
+}
+
+// GetCount returns the value of Count.
+func (s *APISystemRPCDeduplicateFilesPostOK) GetCount() int {
+	return s.Count
+}
+
+// GetSize returns the value of Size.
+func (s *APISystemRPCDeduplicateFilesPostOK) GetSize() int64 {
+	return s.Size
+}
+
+// GetPrettySize returns the value of PrettySize.
+func (s *APISystemRPCDeduplicateFilesPostOK) GetPrettySize() string {
+	return s.PrettySize
+}
+
+// SetCount sets the value of Count.
+func (s *APISystemRPCDeduplicateFilesPostOK) SetCount(val int) {
+	s.Count = val
+}
+
+// SetSize sets the value of Size.
+func (s *APISystemRPCDeduplicateFilesPostOK) SetSize(val int64) {
+	s.Size = val
+}
+
+// SetPrettySize sets the value of PrettySize.
+func (s *APISystemRPCDeduplicateFilesPostOK) SetPrettySize(val string) {
+	s.PrettySize = val
+}
+
+func (*APISystemRPCDeduplicateFilesPostOK) aPISystemRPCDeduplicateFilesPostRes() {}
+
+type APISystemRPCDeduplicateFilesPostUnauthorized ErrorResponse
+
+func (*APISystemRPCDeduplicateFilesPostUnauthorized) aPISystemRPCDeduplicateFilesPostRes() {}
+
+type APISystemRPCRemoveDetachedFilesPostBadRequest ErrorResponse
+
+func (*APISystemRPCRemoveDetachedFilesPostBadRequest) aPISystemRPCRemoveDetachedFilesPostRes() {}
+
+type APISystemRPCRemoveDetachedFilesPostForbidden ErrorResponse
+
+func (*APISystemRPCRemoveDetachedFilesPostForbidden) aPISystemRPCRemoveDetachedFilesPostRes() {}
+
+type APISystemRPCRemoveDetachedFilesPostInternalServerError ErrorResponse
+
+func (*APISystemRPCRemoveDetachedFilesPostInternalServerError) aPISystemRPCRemoveDetachedFilesPostRes() {
+}
+
+type APISystemRPCRemoveDetachedFilesPostOK struct {
+	// Количество удаленных файлов.
+	Count int `json:"count"`
+	// Размер удаленных файлов.
+	Size int64 `json:"size"`
+	// Размер удаленных файлов в человеко-читаемом формате.
+	PrettySize string `json:"pretty_size"`
+}
+
+// GetCount returns the value of Count.
+func (s *APISystemRPCRemoveDetachedFilesPostOK) GetCount() int {
+	return s.Count
+}
+
+// GetSize returns the value of Size.
+func (s *APISystemRPCRemoveDetachedFilesPostOK) GetSize() int64 {
+	return s.Size
+}
+
+// GetPrettySize returns the value of PrettySize.
+func (s *APISystemRPCRemoveDetachedFilesPostOK) GetPrettySize() string {
+	return s.PrettySize
+}
+
+// SetCount sets the value of Count.
+func (s *APISystemRPCRemoveDetachedFilesPostOK) SetCount(val int) {
+	s.Count = val
+}
+
+// SetSize sets the value of Size.
+func (s *APISystemRPCRemoveDetachedFilesPostOK) SetSize(val int64) {
+	s.Size = val
+}
+
+// SetPrettySize sets the value of PrettySize.
+func (s *APISystemRPCRemoveDetachedFilesPostOK) SetPrettySize(val string) {
+	s.PrettySize = val
+}
+
+func (*APISystemRPCRemoveDetachedFilesPostOK) aPISystemRPCRemoveDetachedFilesPostRes() {}
+
+type APISystemRPCRemoveDetachedFilesPostUnauthorized ErrorResponse
+
+func (*APISystemRPCRemoveDetachedFilesPostUnauthorized) aPISystemRPCRemoveDetachedFilesPostRes() {}
 
 type APIUserLoginPostBadRequest ErrorResponse
 

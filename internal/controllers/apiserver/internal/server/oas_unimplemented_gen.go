@@ -103,6 +103,24 @@ func (UnimplementedHandler) APISystemInfoGet(ctx context.Context) (r APISystemIn
 	return r, ht.ErrNotImplemented
 }
 
+// APISystemRPCDeduplicateFilesPost implements POST /api/system/rpc/deduplicate/files operation.
+//
+// Дедупликация файлов.
+//
+// POST /api/system/rpc/deduplicate/files
+func (UnimplementedHandler) APISystemRPCDeduplicateFilesPost(ctx context.Context) (r APISystemRPCDeduplicateFilesPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APISystemRPCRemoveDetachedFilesPost implements POST /api/system/rpc/remove/detached-files operation.
+//
+// Удаление несвязанных файлов.
+//
+// POST /api/system/rpc/remove/detached-files
+func (UnimplementedHandler) APISystemRPCRemoveDetachedFilesPost(ctx context.Context) (r APISystemRPCRemoveDetachedFilesPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIUserLoginPost implements POST /api/user/login operation.
 //
 // Проставление токена в куки.

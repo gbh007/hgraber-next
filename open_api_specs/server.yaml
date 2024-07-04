@@ -69,7 +69,7 @@ paths:
         200:
           description: Успешный ответ с данными
           content:
-            application/octet-stream:
+            image/*:
               schema:
                 type: string
                 format: binary
@@ -735,6 +735,112 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/system/rpc/deduplicate/files:
+    post:
+      description: Дедупликация файлов
+      summary: Дедупликация файлов
+      tags:
+        - system
+      responses:
+        200:
+          description: Успешное выполнение
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: Количество файлов дублей
+                  size:
+                    type: integer
+                    format: int64
+                    description: Размер файлов дублей
+                  pretty_size:
+                    type: string
+                    description: Размер файлов дублей в человеко-читаемом формате
+                required:
+                  - count
+                  - size
+                  - pretty_size
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/system/rpc/remove/detached-files:
+    post:
+      description: Удаление несвязанных файлов
+      summary: Удаление несвязанных файлов
+      tags:
+        - system
+      responses:
+        200:
+          description: Успешное выполнение
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: Количество удаленных файлов
+                  size:
+                    type: integer
+                    format: int64
+                    description: Размер удаленных файлов
+                  pretty_size:
+                    type: string
+                    description: Размер удаленных файлов в человеко-читаемом формате
+                required:
+                  - count
+                  - size
+                  - pretty_size
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 tags:
   - name: user
     description: Взаимодействие с данными пользователя
@@ -744,6 +850,8 @@ tags:
     description: Взаимодействие с системами парсинга и обработки первичных данных
   - name: agent
     description: Взаимодействие с системами агентов
+  - name: system
+    description: Взаимодействие с системой граббера
 
 components:
   schemas:

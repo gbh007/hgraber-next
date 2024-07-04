@@ -41,6 +41,14 @@ type APISystemInfoGetRes interface {
 	aPISystemInfoGetRes()
 }
 
+type APISystemRPCDeduplicateFilesPostRes interface {
+	aPISystemRPCDeduplicateFilesPostRes()
+}
+
+type APISystemRPCRemoveDetachedFilesPostRes interface {
+	aPISystemRPCRemoveDetachedFilesPostRes()
+}
+
 type APIUserLoginPostRes interface {
 	aPIUserLoginPostRes()
 }
