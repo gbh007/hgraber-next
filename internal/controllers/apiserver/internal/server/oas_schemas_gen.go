@@ -1898,6 +1898,10 @@ type SystemInfo struct {
 	// Объем загруженных изображений в человеко-читаемом
 	// формате.
 	PagesSizeFormatted string `json:"pages_size_formatted"`
+	// Объем файлов в байтах.
+	FilesSize int64 `json:"files_size"`
+	// Объем файлов в человеко-читаемом формате.
+	FilesSizeFormatted string `json:"files_size_formatted"`
 	// Данные системы мониторинга.
 	Monitor OptSystemInfoMonitor `json:"monitor"`
 }
@@ -1935,6 +1939,16 @@ func (s *SystemInfo) GetPagesSize() int64 {
 // GetPagesSizeFormatted returns the value of PagesSizeFormatted.
 func (s *SystemInfo) GetPagesSizeFormatted() string {
 	return s.PagesSizeFormatted
+}
+
+// GetFilesSize returns the value of FilesSize.
+func (s *SystemInfo) GetFilesSize() int64 {
+	return s.FilesSize
+}
+
+// GetFilesSizeFormatted returns the value of FilesSizeFormatted.
+func (s *SystemInfo) GetFilesSizeFormatted() string {
+	return s.FilesSizeFormatted
 }
 
 // GetMonitor returns the value of Monitor.
@@ -1975,6 +1989,16 @@ func (s *SystemInfo) SetPagesSize(val int64) {
 // SetPagesSizeFormatted sets the value of PagesSizeFormatted.
 func (s *SystemInfo) SetPagesSizeFormatted(val string) {
 	s.PagesSizeFormatted = val
+}
+
+// SetFilesSize sets the value of FilesSize.
+func (s *SystemInfo) SetFilesSize(val int64) {
+	s.FilesSize = val
+}
+
+// SetFilesSizeFormatted sets the value of FilesSizeFormatted.
+func (s *SystemInfo) SetFilesSizeFormatted(val string) {
+	s.FilesSizeFormatted = val
 }
 
 // SetMonitor sets the value of Monitor.

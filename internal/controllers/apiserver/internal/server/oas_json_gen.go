@@ -5684,6 +5684,14 @@ func (s *SystemInfo) encodeFields(e *jx.Encoder) {
 		e.Str(s.PagesSizeFormatted)
 	}
 	{
+		e.FieldStart("files_size")
+		e.Int64(s.FilesSize)
+	}
+	{
+		e.FieldStart("files_size_formatted")
+		e.Str(s.FilesSizeFormatted)
+	}
+	{
 		if s.Monitor.Set {
 			e.FieldStart("monitor")
 			s.Monitor.Encode(e)
@@ -5691,7 +5699,7 @@ func (s *SystemInfo) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfSystemInfo = [8]string{
+var jsonFieldsNameOfSystemInfo = [10]string{
 	0: "count",
 	1: "not_load_count",
 	2: "page_count",
@@ -5699,7 +5707,9 @@ var jsonFieldsNameOfSystemInfo = [8]string{
 	4: "page_without_body_count",
 	5: "pages_size",
 	6: "pages_size_formatted",
-	7: "monitor",
+	7: "files_size",
+	8: "files_size_formatted",
+	9: "monitor",
 }
 
 // Decode decodes SystemInfo from json.
@@ -5707,7 +5717,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode SystemInfo to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -5795,6 +5805,30 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"pages_size_formatted\"")
 			}
+		case "files_size":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int64()
+				s.FilesSize = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"files_size\"")
+			}
+		case "files_size_formatted":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.FilesSizeFormatted = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"files_size_formatted\"")
+			}
 		case "monitor":
 			if err := func() error {
 				s.Monitor.Reset()
@@ -5814,8 +5848,9 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b01111111,
+	for i, mask := range [2]uint8{
+		0b11111111,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

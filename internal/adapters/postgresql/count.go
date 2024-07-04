@@ -45,6 +45,15 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 
 	systemSize.PageFileSize = size.Int64
 
+	size = sql.NullInt64{}
+
+	err = d.db.GetContext(ctx, &size, `SELECT SUM("size") FROM files WHERE "size" IS NOT NULL;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get file size: %w", err)
+	}
+
+	systemSize.FileSize = size.Int64
+
 	return systemSize, nil
 }
 

@@ -7,6 +7,7 @@ type SystemSizeInfo struct {
 	PageUnloadedCount    int
 	PageWithoutBodyCount int
 	PageFileSize         int64
+	FileSize             int64
 }
 
 type SystemSizeInfoWithMonitor struct {

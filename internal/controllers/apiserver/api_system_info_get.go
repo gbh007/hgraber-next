@@ -25,6 +25,8 @@ func (c *Controller) APISystemInfoGet(ctx context.Context) (server.APISystemInfo
 		PageWithoutBodyCount: info.PageWithoutBodyCount,
 		PagesSize:            info.PageFileSize,
 		PagesSizeFormatted:   entities.PrettySize(info.PageFileSize),
+		FilesSize:            info.FileSize,
+		FilesSizeFormatted:   entities.PrettySize(info.FileSize),
 		Monitor: server.NewOptSystemInfoMonitor(server.SystemInfoMonitor{
 			Workers: pkg.Map(info.Workers, func(w entities.SystemWorkerStat) server.SystemInfoMonitorWorkersItem {
 				return server.SystemInfoMonitorWorkersItem{

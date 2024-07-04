@@ -882,6 +882,13 @@ components:
         pages_size_formatted:
           type: string
           description: Объем загруженных изображений в человеко-читаемом формате
+        files_size:
+          type: integer
+          format: int64
+          description: Объем файлов в байтах
+        files_size_formatted:
+          type: string
+          description: Объем файлов в человеко-читаемом формате
         monitor:
           type: object
           description: Данные системы мониторинга
@@ -917,6 +924,8 @@ components:
         - pages_size
         - pages_size_formatted
         - page_without_body_count
+        - files_size
+        - files_size_formatted
 
     BookShortInfo:
       type: object
