@@ -16,22 +16,22 @@ type infoProvider interface {
 
 var (
 	bookDesc = prometheus.NewDesc(
-		"book_total",
+		prometheus.BuildFQName(SystemName, SubSystemName, "book_total"),
 		"Количество книг по статусам",
 		[]string{"type"}, nil,
 	)
 	pageDesc = prometheus.NewDesc(
-		"page_total",
+		prometheus.BuildFQName(SystemName, SubSystemName, "page_total"),
 		"Количество страниц по статусам",
 		[]string{"type"}, nil,
 	)
 	fileDesc = prometheus.NewDesc(
-		"file_bytes",
+		prometheus.BuildFQName(SystemName, SubSystemName, "file_bytes"),
 		"Размер файлов по статусам",
 		[]string{"type"}, nil,
 	)
 	workerDesc = prometheus.NewDesc(
-		"worker_total",
+		prometheus.BuildFQName(SystemName, SubSystemName, "worker_total"),
 		"Данные воркеров",
 		[]string{"worker_name", "counter"}, nil,
 	)
