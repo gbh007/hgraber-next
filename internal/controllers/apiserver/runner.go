@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 	"hgnext/internal/controllers/apiserver/internal/static"
 )
 
@@ -24,6 +26,8 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	} else {
 		mux.Handle("/", http.FileServer(http.FS(static.StaticDir)))
 	}
+
+	mux.Handle("/metrics", promhttp.Handler())
 
 	mux.Handle("/api/", c.logIO(cors(c.ogenServer)))
 

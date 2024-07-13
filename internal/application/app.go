@@ -13,6 +13,7 @@ import (
 	"hgnext/internal/adapters/tmpdata"
 	"hgnext/internal/controllers/apiserver"
 	"hgnext/internal/controllers/workermanager"
+	"hgnext/internal/metrics"
 	agentUC "hgnext/internal/usecases/agent"
 	"hgnext/internal/usecases/cleanup"
 	"hgnext/internal/usecases/deduplicator"
@@ -116,6 +117,16 @@ func Serve() {
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail to create api server",
+			slog.Any("error", err),
+		)
+
+		os.Exit(1)
+	}
+
+	err = metrics.RegisterSystemInfoCollector(logger, webAPIUseCases)
+	if err != nil {
+		logger.ErrorContext(
+			ctx, "fail to create system metric",
 			slog.Any("error", err),
 		)
 
