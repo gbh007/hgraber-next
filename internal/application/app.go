@@ -123,14 +123,16 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	err = metrics.RegisterSystemInfoCollector(logger, webAPIUseCases)
-	if err != nil {
-		logger.ErrorContext(
-			ctx, "fail to create system metric",
-			slog.Any("error", err),
-		)
+	if cfg.MetricTimeout > 0 {
+		err = metrics.RegisterSystemInfoCollector(logger, webAPIUseCases, cfg.MetricTimeout)
+		if err != nil {
+			logger.ErrorContext(
+				ctx, "fail to create system metric",
+				slog.Any("error", err),
+			)
 
-		os.Exit(1)
+			os.Exit(1)
+		}
 	}
 
 	asyncController := New(logger)

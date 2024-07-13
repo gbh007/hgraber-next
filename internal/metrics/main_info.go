@@ -42,15 +42,19 @@ var _ prometheus.Collector = (*SystemInfoCollector)(nil)
 type SystemInfoCollector struct {
 	logger       *slog.Logger
 	infoProvider infoProvider
+
+	timeout time.Duration
 }
 
 func RegisterSystemInfoCollector(
 	logger *slog.Logger,
 	infoProvider infoProvider,
+	timeout time.Duration,
 ) error {
 	return prometheus.Register(&SystemInfoCollector{
 		logger:       logger,
 		infoProvider: infoProvider,
+		timeout:      timeout,
 	})
 }
 
@@ -62,7 +66,7 @@ func (c *SystemInfoCollector) Describe(desc chan<- *prometheus.Desc) {
 
 //nolint:promlinter // ложно-положительное срабатывание
 func (c *SystemInfoCollector) Collect(metr chan<- prometheus.Metric) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*100)
+	ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
 	defer cancel()
 
 	res, err := c.infoProvider.SystemInfo(ctx)

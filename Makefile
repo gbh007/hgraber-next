@@ -17,4 +17,5 @@ run: create_build_dir
 	APP_DEBUG=true \
 	APP_WEB_STATIC_DIR=internal/controllers/apiserver/internal/static \
 	APP_API_TOKEN=local-next \
+	APP_METRIC_TIMEOUT=100ms \
 	./_build/server
