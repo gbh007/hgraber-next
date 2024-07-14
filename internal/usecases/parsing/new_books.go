@@ -88,6 +88,7 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.First
 					}
 				}
 
+				// TODO: потеря порядка, из-за множеств, возможно нет причины устранять
 				err = uc.storage.NewBook(ctx, entities.Book{
 					ID:        uuid.Must(uuid.NewV7()),
 					OriginURL: &u,

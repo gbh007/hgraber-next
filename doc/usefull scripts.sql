@@ -41,3 +41,50 @@ WHERE
         SELECT file_id
         FROM pages
     );
+
+-- Рассчет потенциальной компресии по автору
+SELECT pageinfo.*, fsinfo.*, ROUND(
+        (pageinfo."sum" - fsinfo."sum") * 100 / pageinfo."sum", 2
+    )
+FROM (
+        SELECT ap.value, count(*), SUM(ap."size")
+        FROM (
+                SELECT bo.value, f."size"
+                FROM (
+                        SELECT b.id, ba.value
+                        FROM
+                            books b
+                            LEFT JOIN book_attributes ba ON ba.book_id = b.id
+                            AND ba.attr = 'author'
+                        WHERE
+                            ba.book_id IS NOT NULL
+                    ) AS bo
+                    INNER JOIN pages p ON bo.id = p.book_id
+                    INNER JOIN files f ON f.id = p.file_id
+            ) AS ap
+        GROUP BY
+            ap.value
+        ORDER BY SUM(ap."size") DESC
+    ) AS pageinfo
+    LEFT JOIN (
+        SELECT ap.value, count(*), SUM(ap."size")
+        FROM (
+                SELECT bo.value, f."size"
+                FROM (
+                        SELECT b.id, ba.value
+                        FROM
+                            books b
+                            LEFT JOIN book_attributes ba ON ba.book_id = b.id
+                            AND ba.attr = 'author'
+                        WHERE
+                            ba.book_id IS NOT NULL
+                    ) AS bo
+                    INNER JOIN pages p ON bo.id = p.book_id
+                    INNER JOIN files f ON f.id = p.file_id
+                GROUP BY
+                    bo.value, f.md5_sum, f.sha256_sum, f."size"
+            ) AS ap
+        GROUP BY
+            ap.value
+        ORDER BY SUM(ap."size") DESC
+    ) AS fsinfo ON pageinfo.value = fsinfo.value;
