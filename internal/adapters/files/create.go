@@ -16,16 +16,16 @@ func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader) 
 
 	info, err := os.Stat(filepath)
 	if err != nil && !errors.Is(err, os.ErrNotExist) {
-		return fmt.Errorf("check: %w", err)
+		return fmt.Errorf("local fs: check: %w", err)
 	}
 
 	if info != nil {
-		return fmt.Errorf("file exists")
+		return fmt.Errorf("local fs: file exists")
 	}
 
 	f, err := os.Create(filepath)
 	if err != nil {
-		return fmt.Errorf("create: %w", err)
+		return fmt.Errorf("local fs: create: %w", err)
 	}
 
 	_, err = io.Copy(f, body)
@@ -35,12 +35,12 @@ func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader) 
 			s.logger.ErrorContext(ctx, "close on write error", slog.Any("error", fileCloseErr))
 		}
 
-		return fmt.Errorf("write file: %w", err)
+		return fmt.Errorf("local fs: write file: %w", err)
 	}
 
 	err = f.Close()
 	if err != nil {
-		return fmt.Errorf("close file: %w", err)
+		return fmt.Errorf("local fs: close file: %w", err)
 	}
 
 	return nil

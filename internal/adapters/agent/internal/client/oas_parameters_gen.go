@@ -112,3 +112,117 @@ func decodeAPIExportArchivePostParams(args [0]string, argsEscaped bool, r *http.
 	}
 	return params, nil
 }
+
+// APIFsCreatePostParams is parameters of POST /api/fs/create operation.
+type APIFsCreatePostParams struct {
+	// ID файла в системе.
+	FileID uuid.UUID
+}
+
+func unpackAPIFsCreatePostParams(packed middleware.Parameters) (params APIFsCreatePostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "file-id",
+			In:   "header",
+		}
+		params.FileID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAPIFsCreatePostParams(args [0]string, argsEscaped bool, r *http.Request) (params APIFsCreatePostParams, _ error) {
+	h := uri.NewHeaderDecoder(r.Header)
+	// Decode header: file-id.
+	if err := func() error {
+		cfg := uri.HeaderParameterDecodingConfig{
+			Name:    "file-id",
+			Explode: false,
+		}
+		if err := h.HasParam(cfg); err == nil {
+			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.FileID = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "file-id",
+			In:   "header",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// APIFsGetGetParams is parameters of GET /api/fs/get operation.
+type APIFsGetGetParams struct {
+	// ID файла в системе.
+	FileID uuid.UUID
+}
+
+func unpackAPIFsGetGetParams(packed middleware.Parameters) (params APIFsGetGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "file-id",
+			In:   "query",
+		}
+		params.FileID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAPIFsGetGetParams(args [0]string, argsEscaped bool, r *http.Request) (params APIFsGetGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: file-id.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "file-id",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.FileID = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "file-id",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}

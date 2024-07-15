@@ -102,6 +102,105 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
+			case 'f': // Prefix: "fs/"
+				origElem := elem
+				if l := len("fs/"); len(elem) >= l && elem[0:l] == "fs/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "create"
+					origElem := elem
+					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIFsCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'd': // Prefix: "delete"
+					origElem := elem
+					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIFsDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'g': // Prefix: "get"
+					origElem := elem
+					if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleAPIFsGetGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'i': // Prefix: "ids"
+					origElem := elem
+					if l := len("ids"); len(elem) >= l && elem[0:l] == "ids" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleAPIFsIdsGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
 			case 'p': // Prefix: "parsing/"
 				origElem := elem
 				if l := len("parsing/"); len(elem) >= l && elem[0:l] == "parsing/" {
@@ -345,6 +444,121 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					default:
 						return
 					}
+				}
+
+				elem = origElem
+			case 'f': // Prefix: "fs/"
+				origElem := elem
+				if l := len("fs/"); len(elem) >= l && elem[0:l] == "fs/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "create"
+					origElem := elem
+					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "APIFsCreatePost"
+							r.summary = "Создание нового файла"
+							r.operationID = ""
+							r.pathPattern = "/api/fs/create"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'd': // Prefix: "delete"
+					origElem := elem
+					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "APIFsDeletePost"
+							r.summary = "Удаление файла"
+							r.operationID = ""
+							r.pathPattern = "/api/fs/delete"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'g': // Prefix: "get"
+					origElem := elem
+					if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "APIFsGetGet"
+							r.summary = "Получение файла"
+							r.operationID = ""
+							r.pathPattern = "/api/fs/get"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'i': // Prefix: "ids"
+					origElem := elem
+					if l := len("ids"); len(elem) >= l && elem[0:l] == "ids" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "APIFsIdsGet"
+							r.summary = "Получение ID всех хранимых файлов"
+							r.operationID = ""
+							r.pathPattern = "/api/fs/ids"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem

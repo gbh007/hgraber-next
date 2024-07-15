@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
+	"github.com/google/uuid"
 )
 
 type APICoreStatusGetBadRequest ErrorResponse
@@ -226,6 +227,141 @@ func (s APIExportArchivePostReq) Read(p []byte) (n int, err error) {
 type APIExportArchivePostUnauthorized ErrorResponse
 
 func (*APIExportArchivePostUnauthorized) aPIExportArchivePostRes() {}
+
+type APIFsCreatePostBadRequest ErrorResponse
+
+func (*APIFsCreatePostBadRequest) aPIFsCreatePostRes() {}
+
+type APIFsCreatePostConflict ErrorResponse
+
+func (*APIFsCreatePostConflict) aPIFsCreatePostRes() {}
+
+type APIFsCreatePostForbidden ErrorResponse
+
+func (*APIFsCreatePostForbidden) aPIFsCreatePostRes() {}
+
+type APIFsCreatePostInternalServerError ErrorResponse
+
+func (*APIFsCreatePostInternalServerError) aPIFsCreatePostRes() {}
+
+// APIFsCreatePostNoContent is response for APIFsCreatePost operation.
+type APIFsCreatePostNoContent struct{}
+
+func (*APIFsCreatePostNoContent) aPIFsCreatePostRes() {}
+
+type APIFsCreatePostReq struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APIFsCreatePostReq) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+type APIFsCreatePostUnauthorized ErrorResponse
+
+func (*APIFsCreatePostUnauthorized) aPIFsCreatePostRes() {}
+
+type APIFsDeletePostBadRequest ErrorResponse
+
+func (*APIFsDeletePostBadRequest) aPIFsDeletePostRes() {}
+
+type APIFsDeletePostForbidden ErrorResponse
+
+func (*APIFsDeletePostForbidden) aPIFsDeletePostRes() {}
+
+type APIFsDeletePostInternalServerError ErrorResponse
+
+func (*APIFsDeletePostInternalServerError) aPIFsDeletePostRes() {}
+
+// APIFsDeletePostNoContent is response for APIFsDeletePost operation.
+type APIFsDeletePostNoContent struct{}
+
+func (*APIFsDeletePostNoContent) aPIFsDeletePostRes() {}
+
+type APIFsDeletePostNotFound ErrorResponse
+
+func (*APIFsDeletePostNotFound) aPIFsDeletePostRes() {}
+
+type APIFsDeletePostReq struct {
+	// ID файла для удаления.
+	FileID uuid.UUID `json:"file_id"`
+}
+
+// GetFileID returns the value of FileID.
+func (s *APIFsDeletePostReq) GetFileID() uuid.UUID {
+	return s.FileID
+}
+
+// SetFileID sets the value of FileID.
+func (s *APIFsDeletePostReq) SetFileID(val uuid.UUID) {
+	s.FileID = val
+}
+
+type APIFsDeletePostUnauthorized ErrorResponse
+
+func (*APIFsDeletePostUnauthorized) aPIFsDeletePostRes() {}
+
+type APIFsGetGetBadRequest ErrorResponse
+
+func (*APIFsGetGetBadRequest) aPIFsGetGetRes() {}
+
+type APIFsGetGetForbidden ErrorResponse
+
+func (*APIFsGetGetForbidden) aPIFsGetGetRes() {}
+
+type APIFsGetGetInternalServerError ErrorResponse
+
+func (*APIFsGetGetInternalServerError) aPIFsGetGetRes() {}
+
+type APIFsGetGetNotFound ErrorResponse
+
+func (*APIFsGetGetNotFound) aPIFsGetGetRes() {}
+
+type APIFsGetGetOK struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APIFsGetGetOK) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*APIFsGetGetOK) aPIFsGetGetRes() {}
+
+type APIFsGetGetUnauthorized ErrorResponse
+
+func (*APIFsGetGetUnauthorized) aPIFsGetGetRes() {}
+
+type APIFsIdsGetBadRequest ErrorResponse
+
+func (*APIFsIdsGetBadRequest) aPIFsIdsGetRes() {}
+
+type APIFsIdsGetForbidden ErrorResponse
+
+func (*APIFsIdsGetForbidden) aPIFsIdsGetRes() {}
+
+type APIFsIdsGetInternalServerError ErrorResponse
+
+func (*APIFsIdsGetInternalServerError) aPIFsIdsGetRes() {}
+
+type APIFsIdsGetOKApplicationJSON []uuid.UUID
+
+func (*APIFsIdsGetOKApplicationJSON) aPIFsIdsGetRes() {}
+
+type APIFsIdsGetUnauthorized ErrorResponse
+
+func (*APIFsIdsGetUnauthorized) aPIFsIdsGetRes() {}
 
 type APIParsingBookCheckPostBadRequest ErrorResponse
 

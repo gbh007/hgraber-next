@@ -15,14 +15,14 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error) 
 
 	f, err := os.Open(filepath)
 	if err != nil {
-		return nil, fmt.Errorf("open: %w", err)
+		return nil, fmt.Errorf("local fs: open: %w", err)
 	}
 
 	defer f.Close()
 
 	data, err := io.ReadAll(f)
 	if err != nil {
-		return nil, fmt.Errorf("read all: %w", err)
+		return nil, fmt.Errorf("local fs: read all: %w", err)
 	}
 
 	return bytes.NewReader(data), nil

@@ -9,6 +9,22 @@ type APIExportArchivePostRes interface {
 	aPIExportArchivePostRes()
 }
 
+type APIFsCreatePostRes interface {
+	aPIFsCreatePostRes()
+}
+
+type APIFsDeletePostRes interface {
+	aPIFsDeletePostRes()
+}
+
+type APIFsGetGetRes interface {
+	aPIFsGetGetRes()
+}
+
+type APIFsIdsGetRes interface {
+	aPIFsIdsGetRes()
+}
+
 type APIParsingBookCheckPostRes interface {
 	aPIParsingBookCheckPostRes()
 }

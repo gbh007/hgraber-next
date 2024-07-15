@@ -31,6 +31,42 @@ func (UnimplementedHandler) APIExportArchivePost(ctx context.Context, req APIExp
 	return r, ht.ErrNotImplemented
 }
 
+// APIFsCreatePost implements POST /api/fs/create operation.
+//
+// Создание нового файла.
+//
+// POST /api/fs/create
+func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req APIFsCreatePostReq, params APIFsCreatePostParams) (r APIFsCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIFsDeletePost implements POST /api/fs/delete operation.
+//
+// Удаление файла.
+//
+// POST /api/fs/delete
+func (UnimplementedHandler) APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) (r APIFsDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIFsGetGet implements GET /api/fs/get operation.
+//
+// Получение файла.
+//
+// GET /api/fs/get
+func (UnimplementedHandler) APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (r APIFsGetGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIFsIdsGet implements GET /api/fs/ids operation.
+//
+// Получение ID всех хранимых файлов.
+//
+// GET /api/fs/ids
+func (UnimplementedHandler) APIFsIdsGet(ctx context.Context) (r APIFsIdsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIParsingBookCheckPost implements POST /api/parsing/book/check operation.
 //
 // Предварительная проверка ссылок на новые книги.

@@ -17,5 +17,6 @@ var (
 	AgentAPIForbidden       = errors.New("agent: forbidden")
 	AgentAPIBadRequest      = errors.New("agent: bad request")
 	AgentAPIInternalError   = errors.New("agent: internal error")
+	AgentAPIConflict        = errors.New("agent: conflict")
 	AgentAPIUnknownResponse = errors.New("agent: unknown response")
 )

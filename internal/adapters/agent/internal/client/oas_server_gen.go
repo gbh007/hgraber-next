@@ -20,6 +20,30 @@ type Handler interface {
 	//
 	// POST /api/export/archive
 	APIExportArchivePost(ctx context.Context, req APIExportArchivePostReq, params APIExportArchivePostParams) (APIExportArchivePostRes, error)
+	// APIFsCreatePost implements POST /api/fs/create operation.
+	//
+	// Создание нового файла.
+	//
+	// POST /api/fs/create
+	APIFsCreatePost(ctx context.Context, req APIFsCreatePostReq, params APIFsCreatePostParams) (APIFsCreatePostRes, error)
+	// APIFsDeletePost implements POST /api/fs/delete operation.
+	//
+	// Удаление файла.
+	//
+	// POST /api/fs/delete
+	APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) (APIFsDeletePostRes, error)
+	// APIFsGetGet implements GET /api/fs/get operation.
+	//
+	// Получение файла.
+	//
+	// GET /api/fs/get
+	APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (APIFsGetGetRes, error)
+	// APIFsIdsGet implements GET /api/fs/ids operation.
+	//
+	// Получение ID всех хранимых файлов.
+	//
+	// GET /api/fs/ids
+	APIFsIdsGet(ctx context.Context) (APIFsIdsGetRes, error)
 	// APIParsingBookCheckPost implements POST /api/parsing/book/check operation.
 	//
 	// Предварительная проверка ссылок на новые книги.

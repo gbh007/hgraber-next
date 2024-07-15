@@ -12,7 +12,7 @@ import (
 func (s *Storage) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	entries, err := os.ReadDir(s.fsPath)
 	if err != nil {
-		return nil, fmt.Errorf("scan dir: %w", err)
+		return nil, fmt.Errorf("local fs: scan dir: %w", err)
 	}
 
 	res := make([]uuid.UUID, 0, len(entries))

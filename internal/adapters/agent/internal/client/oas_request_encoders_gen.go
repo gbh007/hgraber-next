@@ -21,6 +21,30 @@ func encodeAPIExportArchivePostRequest(
 	return nil
 }
 
+func encodeAPIFsCreatePostRequest(
+	req APIFsCreatePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/octet-stream"
+	body := req
+	ht.SetBody(r, body, contentType)
+	return nil
+}
+
+func encodeAPIFsDeletePostRequest(
+	req *APIFsDeletePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIParsingBookCheckPostRequest(
 	req *APIParsingBookCheckPostReq,
 	r *http.Request,
