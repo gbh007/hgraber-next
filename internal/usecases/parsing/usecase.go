@@ -5,6 +5,7 @@ import (
 	"io"
 	"log/slog"
 	"net/url"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -47,6 +48,8 @@ type UseCase struct {
 	storage     storage
 	agentSystem agentSystem
 	fileStorage fileStorage
+
+	parseBookTimeout time.Duration
 }
 
 func New(
@@ -54,11 +57,13 @@ func New(
 	storage storage,
 	agentSystem agentSystem,
 	fileStorage fileStorage,
+	parseBookTimeout time.Duration,
 ) *UseCase {
 	return &UseCase{
-		logger:      logger,
-		storage:     storage,
-		agentSystem: agentSystem,
-		fileStorage: fileStorage,
+		logger:           logger,
+		storage:          storage,
+		agentSystem:      agentSystem,
+		fileStorage:      fileStorage,
+		parseBookTimeout: parseBookTimeout,
 	}
 }

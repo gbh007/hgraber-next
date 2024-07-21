@@ -15,6 +15,11 @@ type Config struct {
 	APIToken              string        `envconfig:"API_TOKEN"`
 	Debug                 bool          `envconfig:"DEBUG"`
 	MetricTimeout         time.Duration `envconfig:"METRIC_TIMEOUT"`
+	Handle                HandleConfig  `envconfig:"HANDLE"`
+}
+
+type HandleConfig struct {
+	ParseBookTimeout time.Duration `envconfig:"PARSE_BOOK_TIMEOUT" default:"5m"`
 }
 
 func parseConfig() (Config, error) {

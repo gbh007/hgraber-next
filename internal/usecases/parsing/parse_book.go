@@ -13,7 +13,7 @@ import (
 )
 
 func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book entities.Book) error {
-	agentCtx, agentCancel := context.WithTimeout(ctx, ParseBookAgentTimeout)
+	agentCtx, agentCancel := context.WithTimeout(ctx, uc.parseBookTimeout)
 	defer agentCancel()
 
 	if book.OriginURL == nil {

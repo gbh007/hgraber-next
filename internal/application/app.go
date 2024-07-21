@@ -83,7 +83,7 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorage)
+	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorage, cfg.Handle.ParseBookTimeout)
 	fileUseCases := filelogic.New(logger, storage, fileStorage)
 	exportUseCases := export.New(logger, storage, fileStorage, agentSystem, tmpStorage)
 
