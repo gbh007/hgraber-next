@@ -18,5 +18,18 @@ run: create_build_dir
 	APP_WEB_STATIC_DIR=internal/controllers/apiserver/internal/static \
 	APP_API_TOKEN=local-next \
 	APP_METRIC_TIMEOUT=100ms \
-	TBA_APP_FS_AGENT_ID=01907823-ce23-762f-8d16-787d2be9dd7a \
+	./_build/server
+
+.PHONY: runafs
+runafs: create_build_dir
+	go build -trimpath -o ./_build/server  ./cmd/server
+
+	APP_POSTGRESQL_CONNECTION=postgres://hgrabernextuser:hgrabernextpass@localhost:5432/hgrabernext?sslmode=disable \
+	APP_WEB_SERVER_ADDR=127.0.0.1:8080 \
+	APP_EXTERNAL_WEB_SERVER_ADDR=http://localhost:8080 \
+	APP_DEBUG=true \
+	APP_WEB_STATIC_DIR=internal/controllers/apiserver/internal/static \
+	APP_API_TOKEN=local-next \
+	APP_METRIC_TIMEOUT=100ms \
+	APP_FS_AGENT_ID=019067fc-8d4f-769d-8c4f-e755597f9525 \
 	./_build/server
