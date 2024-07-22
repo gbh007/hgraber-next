@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log/slog"
 
 	"github.com/google/uuid"
 )
@@ -18,7 +19,20 @@ type agentController interface {
 type Storage struct {
 	agentID uuid.UUID
 
+	logger          *slog.Logger
 	agentController agentController
+}
+
+func New(
+	agentID uuid.UUID,
+	logger *slog.Logger,
+	agentController agentController,
+) *Storage {
+	return &Storage{
+		agentID:         agentID,
+		logger:          logger,
+		agentController: agentController,
+	}
 }
 
 func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error {

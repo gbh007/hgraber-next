@@ -3,6 +3,7 @@ package application
 import (
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -16,6 +17,7 @@ type Config struct {
 	Debug                 bool          `envconfig:"DEBUG"`
 	MetricTimeout         time.Duration `envconfig:"METRIC_TIMEOUT"`
 	Handle                HandleConfig  `envconfig:"HANDLE"`
+	FSAgentID             uuid.UUID     `envconfig:"FS_AGENT_ID"`
 }
 
 type HandleConfig struct {

@@ -2,12 +2,16 @@ package application
 
 import (
 	"context"
+	"io"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/google/uuid"
+
 	"hgnext/internal/adapters/agent"
+	"hgnext/internal/adapters/agentFS"
 	"hgnext/internal/adapters/files"
 	"hgnext/internal/adapters/postgresql"
 	"hgnext/internal/adapters/tmpdata"
@@ -53,16 +57,6 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	fileStorage, err := files.New(cfg.FilePath, logger)
-	if err != nil {
-		logger.ErrorContext(
-			ctx, "fail init file storage",
-			slog.Any("error", err),
-		)
-
-		os.Exit(1)
-	}
-
 	agents, err := storage.Agents(ctx, false, false)
 	if err != nil {
 		logger.ErrorContext(
@@ -78,6 +72,46 @@ func Serve() {
 		logger.ErrorContext(
 			ctx, "fail init agent system",
 			slog.Any("error", err),
+		)
+
+		os.Exit(1)
+	}
+
+	var fileStorage interface {
+		Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
+		Delete(ctx context.Context, fileID uuid.UUID) error
+		Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
+		IDs(ctx context.Context) ([]uuid.UUID, error)
+	}
+
+	switch {
+	case cfg.FSAgentID != uuid.Nil:
+		fileStorage = agentFS.New(cfg.FSAgentID, logger, agentSystem)
+
+		logger.DebugContext(
+			ctx, "use agent file storage",
+			slog.String("agent_id", cfg.FSAgentID.String()),
+		)
+
+	case cfg.FilePath != "":
+		fileStorage, err = files.New(cfg.FilePath, logger)
+		if err != nil {
+			logger.ErrorContext(
+				ctx, "fail init local file storage",
+				slog.Any("error", err),
+			)
+
+			os.Exit(1)
+		}
+
+		logger.DebugContext(
+			ctx, "use local file storage",
+			slog.String("path", cfg.FilePath),
+		)
+
+	default:
+		logger.ErrorContext(
+			ctx, "no configuration for file storage",
 		)
 
 		os.Exit(1)

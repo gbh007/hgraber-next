@@ -18,4 +18,5 @@ run: create_build_dir
 	APP_WEB_STATIC_DIR=internal/controllers/apiserver/internal/static \
 	APP_API_TOKEN=local-next \
 	APP_METRIC_TIMEOUT=100ms \
+	TBA_APP_FS_AGENT_ID=01907823-ce23-762f-8d16-787d2be9dd7a \
 	./_build/server
