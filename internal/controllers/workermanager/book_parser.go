@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/trace"
 
 	"hgnext/internal/controllers/internal/worker"
 	"hgnext/internal/entities"
@@ -16,7 +17,7 @@ type bookWorkerUnitUseCases interface {
 	BooksToParse(ctx context.Context) ([]entities.BookWithAgent, error)
 }
 
-func NewBookParser(useCases bookWorkerUnitUseCases, logger *slog.Logger) *worker.Worker[entities.BookWithAgent] {
+func NewBookParser(useCases bookWorkerUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.BookWithAgent] {
 	return worker.New[entities.BookWithAgent](
 		"book",
 		1000,
@@ -44,5 +45,6 @@ func NewBookParser(useCases bookWorkerUnitUseCases, logger *slog.Logger) *worker
 			return books
 		},
 		10,
+		tracer,
 	)
 }

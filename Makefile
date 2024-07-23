@@ -32,4 +32,5 @@ runafs: create_build_dir
 	APP_API_TOKEN=local-next \
 	APP_METRIC_TIMEOUT=100ms \
 	APP_FS_AGENT_ID=019067fc-8d4f-769d-8c4f-e755597f9525 \
+	OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318 \
 	./_build/server

@@ -4,8 +4,10 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"time"
 
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/trace"
 )
 
 type fileKey struct {
@@ -15,10 +17,17 @@ type fileKey struct {
 }
 
 func (uc *UseCase) DeduplicateFiles(ctx context.Context) (count int, size int64, err error) {
+	ctx, span := uc.tracer.Start(ctx, "DeduplicateFiles")
+	defer span.End()
+
+	span.AddEvent("get duplicates from storage", trace.WithTimestamp(time.Now()))
+
 	files, err := uc.storage.DuplicatedFiles(ctx)
 	if err != nil {
 		return 0, 0, fmt.Errorf("get duplicates from storage: %w", err)
 	}
+
+	span.AddEvent("transform data", trace.WithTimestamp(time.Now()))
 
 	fileMap := make(map[fileKey][]uuid.UUID)
 
@@ -31,6 +40,8 @@ func (uc *UseCase) DeduplicateFiles(ctx context.Context) (count int, size int64,
 
 		fileMap[k] = append(fileMap[k], file.ID)
 	}
+
+	span.AddEvent("handle duplicates", trace.WithTimestamp(time.Now()))
 
 	for k, ids := range fileMap {
 		if k.size == 0 {

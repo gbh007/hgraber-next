@@ -5,6 +5,7 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/trace"
 
 	"hgnext/internal/entities"
 )
@@ -16,6 +17,7 @@ type storage interface {
 
 type UseCase struct {
 	logger *slog.Logger
+	tracer trace.Tracer
 
 	storage storage
 }
@@ -23,9 +25,11 @@ type UseCase struct {
 func New(
 	logger *slog.Logger,
 	storage storage,
+	tracer trace.Tracer,
 ) *UseCase {
 	return &UseCase{
 		logger:  logger,
 		storage: storage,
+		tracer:  tracer,
 	}
 }

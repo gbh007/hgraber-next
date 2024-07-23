@@ -4,6 +4,9 @@ import (
 	"net/http"
 	"time"
 
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
+
 	"hgnext/internal/adapters/agent/internal/client"
 )
 
@@ -20,7 +23,7 @@ type FSAdapter struct {
 // TODO: возможно стоит вынести инициализацию HTTP клиента наружу
 func New(baseURL string, token string) (*Adapter, error) {
 	httpClient := http.Client{
-		Transport: http.DefaultTransport,
+		Transport: &otelPropagationRT{next: http.DefaultTransport},
 		Timeout:   agentTimeout,
 	}
 
@@ -45,4 +48,15 @@ func (a *Adapter) ToFS() *FSAdapter {
 	return &FSAdapter{
 		rawClient: a.rawClient,
 	}
+}
+
+type otelPropagationRT struct {
+	next http.RoundTripper
+}
+
+func (rt *otelPropagationRT) RoundTrip(req *http.Request) (*http.Response, error) {
+	req = req.Clone(req.Context())
+	otel.GetTextMapPropagator().Inject(req.Context(), propagation.HeaderCarrier(req.Header))
+
+	return rt.next.RoundTrip(req)
 }

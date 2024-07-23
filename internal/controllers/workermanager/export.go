@@ -5,6 +5,8 @@ import (
 	"log/slog"
 	"time"
 
+	"go.opentelemetry.io/otel/trace"
+
 	"hgnext/internal/controllers/internal/worker"
 	"hgnext/internal/entities"
 )
@@ -14,7 +16,7 @@ type exportUnitUseCases interface {
 	ExportArchive(ctx context.Context, book entities.BookFullWithAgent, retry bool) error
 }
 
-func NewExporter(useCases exportUnitUseCases, logger *slog.Logger) *worker.Worker[entities.BookFullWithAgent] {
+func NewExporter(useCases exportUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.BookFullWithAgent] {
 	return worker.New[entities.BookFullWithAgent](
 		"export",
 		1000,
@@ -35,5 +37,6 @@ func NewExporter(useCases exportUnitUseCases, logger *slog.Logger) *worker.Worke
 			return useCases.ExportList()
 		},
 		3,
+		tracer,
 	)
 }

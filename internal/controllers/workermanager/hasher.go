@@ -5,6 +5,8 @@ import (
 	"log/slog"
 	"time"
 
+	"go.opentelemetry.io/otel/trace"
+
 	"hgnext/internal/controllers/internal/worker"
 	"hgnext/internal/entities"
 )
@@ -14,7 +16,7 @@ type hasherUnitUseCases interface {
 	HandleFileHash(ctx context.Context, f entities.File) error
 }
 
-func NewHasher(useCases hasherUnitUseCases, logger *slog.Logger) *worker.Worker[entities.File] {
+func NewHasher(useCases hasherUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.File] {
 	return worker.New[entities.File](
 		"file_hash",
 		1000,
@@ -42,5 +44,6 @@ func NewHasher(useCases hasherUnitUseCases, logger *slog.Logger) *worker.Worker[
 			return files
 		},
 		10,
+		tracer,
 	)
 }

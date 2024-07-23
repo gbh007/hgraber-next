@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/trace"
 
 	"hgnext/internal/controllers/internal/worker"
 	"hgnext/internal/entities"
@@ -16,7 +17,7 @@ type pageWorkerUnitUseCases interface {
 	PagesToDownload(ctx context.Context) ([]entities.PageForDownloadWithAgent, error)
 }
 
-func NewPageDownloader(useCases pageWorkerUnitUseCases, logger *slog.Logger) *worker.Worker[entities.PageForDownloadWithAgent] {
+func NewPageDownloader(useCases pageWorkerUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.PageForDownloadWithAgent] {
 	return worker.New[entities.PageForDownloadWithAgent](
 		"page",
 		10000,
@@ -45,5 +46,6 @@ func NewPageDownloader(useCases pageWorkerUnitUseCases, logger *slog.Logger) *wo
 			return pages
 		},
 		10,
+		tracer,
 	)
 }

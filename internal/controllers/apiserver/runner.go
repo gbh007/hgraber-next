@@ -7,6 +7,8 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 
 	"hgnext/internal/controllers/apiserver/internal/static"
 )
@@ -29,7 +31,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 
 	mux.Handle("/metrics", promhttp.Handler())
 
-	mux.Handle("/api/", c.logIO(cors(c.ogenServer)))
+	mux.Handle("/api/", otelPropagation(c.logIO(cors(c.ogenServer))))
 
 	server := &http.Server{
 		Handler: mux,
@@ -78,6 +80,19 @@ func cors(next http.Handler) http.Handler {
 
 		if next != nil {
 			next.ServeHTTP(w, r)
+		}
+	})
+}
+
+func otelPropagation(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := otel.GetTextMapPropagator().Extract(
+			r.Context(),
+			propagation.HeaderCarrier(r.Header),
+		)
+
+		if next != nil {
+			next.ServeHTTP(w, r.WithContext(ctx))
 		}
 	})
 }

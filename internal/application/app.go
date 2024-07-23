@@ -9,6 +9,7 @@ import (
 	"syscall"
 
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel"
 
 	"hgnext/internal/adapters/agent"
 	"hgnext/internal/adapters/agentFS"
@@ -44,6 +45,21 @@ func Serve() {
 	}
 
 	logger := initLogger(cfg)
+
+	// TODO: использовать более подходящую проверку
+	if os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT") != "" {
+		err := initTrace(ctx)
+		if err != nil {
+			logger.ErrorContext(
+				ctx, "fail init otel",
+				slog.Any("error", err),
+			)
+
+			os.Exit(1)
+		}
+	}
+
+	tracer := otel.GetTracerProvider().Tracer("hgraber-next")
 
 	tmpStorage := tmpdata.New()
 
@@ -123,16 +139,16 @@ func Serve() {
 
 	workersController := workermanager.New(
 		logger,
-		workermanager.NewBookParser(parsingUseCases, logger),
-		workermanager.NewPageDownloader(parsingUseCases, logger),
-		workermanager.NewHasher(fileUseCases, logger),
-		workermanager.NewExporter(exportUseCases, logger),
+		workermanager.NewBookParser(parsingUseCases, logger, tracer),
+		workermanager.NewPageDownloader(parsingUseCases, logger, tracer),
+		workermanager.NewHasher(fileUseCases, logger, tracer),
+		workermanager.NewExporter(exportUseCases, logger, tracer),
 	)
 
 	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage)
 	agentUseCases := agentUC.New(logger, agentSystem, storage)
-	dededuplicateUseCases := deduplicator.New(logger, storage)
-	cleanupUseCases := cleanup.New(logger, storage, fileStorage)
+	dededuplicateUseCases := deduplicator.New(logger, storage, tracer)
+	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorage)
 
 	apiController, err := apiserver.New(
 		logger,

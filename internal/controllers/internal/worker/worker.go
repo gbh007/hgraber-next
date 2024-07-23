@@ -6,6 +6,8 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"go.opentelemetry.io/otel/trace"
 )
 
 type Worker[T any] struct {
@@ -21,6 +23,7 @@ type Worker[T any] struct {
 	getter  func(context.Context) []T
 
 	logger *slog.Logger
+	tracer trace.Tracer
 }
 
 func New[T any](
@@ -31,6 +34,7 @@ func New[T any](
 	handler func(context.Context, T),
 	getter func(context.Context) []T,
 	runnersCount int32,
+	tracer trace.Tracer,
 ) *Worker[T] {
 	w := &Worker[T]{
 		name:               name,
@@ -42,6 +46,7 @@ func New[T any](
 		getter:             getter,
 
 		logger: logger,
+		tracer: tracer,
 	}
 
 	w.runnersCount.Store(runnersCount)
@@ -75,6 +80,12 @@ func (w *Worker[T]) handleOne(ctx context.Context, value T) {
 			)
 		}
 	}()
+
+	ctx, span := w.tracer.Start(
+		ctx, "worker/"+w.name,
+		trace.WithSpanKind(trace.SpanKindServer),
+	)
+	defer span.End()
 
 	w.inWorkRunnersCount.Add(1)
 	defer w.inWorkRunnersCount.Add(-1)
