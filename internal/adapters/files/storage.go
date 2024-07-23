@@ -1,6 +1,7 @@
 package files
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log/slog"
@@ -10,13 +11,17 @@ import (
 	"github.com/google/uuid"
 )
 
+type logger interface {
+	Logger(ctx context.Context) *slog.Logger
+}
+
 type Storage struct {
 	fsPath string
 
-	logger *slog.Logger
+	logger logger
 }
 
-func New(path string, logger *slog.Logger) (*Storage, error) {
+func New(path string, logger logger) (*Storage, error) {
 	err := createDir(path)
 	if err != nil {
 		return nil, err

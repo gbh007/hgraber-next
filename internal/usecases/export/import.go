@@ -113,14 +113,14 @@ func (uc *UseCase) ImportArchive(ctx context.Context, body io.Reader) (returnedB
 			return
 		}
 
-		uc.logger.DebugContext(
+		uc.logger.Logger(ctx).DebugContext(
 			ctx, "try delete book after unsuccess import",
 			slog.String("book_id", bookID.String()),
 		)
 
 		deleteErr := uc.storage.DeleteBook(ctx, bookID)
 		if deleteErr != nil {
-			uc.logger.ErrorContext(
+			uc.logger.Logger(ctx).ErrorContext(
 				ctx, "delete book after unsuccess import",
 				slog.Any("error", deleteErr),
 				slog.String("book_id", bookID.String()),
@@ -161,7 +161,7 @@ func (uc *UseCase) ImportArchive(ctx context.Context, body io.Reader) (returnedB
 		}
 
 		if p.Downloaded != hasFile {
-			uc.logger.WarnContext(
+			uc.logger.Logger(ctx).WarnContext(
 				ctx, "mismatch page download status and archive body",
 				slog.String("book_id", bookID.String()),
 				slog.Int("page_number", p.PageNumber),

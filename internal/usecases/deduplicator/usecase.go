@@ -15,15 +15,19 @@ type storage interface {
 	ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UUID) error
 }
 
+type logger interface {
+	Logger(ctx context.Context) *slog.Logger
+}
+
 type UseCase struct {
-	logger *slog.Logger
+	logger logger
 	tracer trace.Tracer
 
 	storage storage
 }
 
 func New(
-	logger *slog.Logger,
+	logger logger,
 	storage storage,
 	tracer trace.Tracer,
 ) *UseCase {

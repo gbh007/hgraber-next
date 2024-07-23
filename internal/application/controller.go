@@ -6,19 +6,23 @@ import (
 	"log/slog"
 )
 
+type logger interface {
+	Logger(ctx context.Context) *slog.Logger
+}
+
 type Runner interface {
 	Start(context.Context) (chan struct{}, error)
 	Name() string
 }
 
-func New(logger *slog.Logger) *Controller {
+func New(logger logger) *Controller {
 	return &Controller{
 		logger: logger,
 	}
 }
 
 type Controller struct {
-	logger *slog.Logger
+	logger logger
 
 	runnerChannels []chan struct{}
 	runners        []Runner
@@ -42,7 +46,7 @@ func (c *Controller) Serve(parentCtx context.Context) error {
 		if err != nil {
 			err = fmt.Errorf("start %s: %w", r.Name(), err)
 
-			c.logger.ErrorContext(ctx, err.Error())
+			c.logger.Logger(ctx).ErrorContext(ctx, err.Error())
 
 			return err
 		}

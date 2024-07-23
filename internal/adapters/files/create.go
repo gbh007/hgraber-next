@@ -32,7 +32,7 @@ func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader) 
 	if err != nil {
 		fileCloseErr := f.Close()
 		if fileCloseErr != nil {
-			s.logger.ErrorContext(ctx, "close on write error", slog.Any("error", fileCloseErr))
+			s.logger.Logger(ctx).ErrorContext(ctx, "close on write error", slog.Any("error", fileCloseErr))
 		}
 
 		return fmt.Errorf("local fs: write file: %w", err)

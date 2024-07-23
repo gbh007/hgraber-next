@@ -63,7 +63,7 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []en
 	if err != nil {
 		rollbackErr := tx.Rollback()
 		if rollbackErr != nil {
-			d.logger.ErrorContext(ctx, rollbackErr.Error())
+			d.logger.Logger(ctx).ErrorContext(ctx, rollbackErr.Error())
 		}
 
 		return err
@@ -78,7 +78,7 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []en
 		if err != nil {
 			rollbackErr := tx.Rollback()
 			if rollbackErr != nil {
-				d.logger.ErrorContext(ctx, rollbackErr.Error())
+				d.logger.Logger(ctx).ErrorContext(ctx, rollbackErr.Error())
 			}
 
 			return err

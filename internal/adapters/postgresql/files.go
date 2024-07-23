@@ -99,7 +99,7 @@ func (d *Database) NewFile(ctx context.Context, file entities.File) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
+	d.logger.Logger(ctx).DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),
@@ -130,7 +130,7 @@ func (d *Database) ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UU
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
+	d.logger.Logger(ctx).DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),
@@ -181,7 +181,7 @@ func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
+	d.logger.Logger(ctx).DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),

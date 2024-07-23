@@ -10,6 +10,10 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
+type logger interface {
+	Logger(ctx context.Context) *slog.Logger
+}
+
 type Worker[T any] struct {
 	name  string
 	queue chan T
@@ -22,7 +26,7 @@ type Worker[T any] struct {
 	handler func(context.Context, T)
 	getter  func(context.Context) []T
 
-	logger *slog.Logger
+	logger logger
 	tracer trace.Tracer
 }
 
@@ -30,7 +34,7 @@ func New[T any](
 	name string,
 	queueSize int,
 	interval time.Duration,
-	logger *slog.Logger,
+	logger logger,
 	handler func(context.Context, T),
 	getter func(context.Context) []T,
 	runnersCount int32,
@@ -73,7 +77,7 @@ func (w *Worker[T]) Name() string {
 func (w *Worker[T]) handleOne(ctx context.Context, value T) {
 	defer func() {
 		if p := recover(); p != nil {
-			w.logger.WarnContext(
+			w.logger.Logger(ctx).WarnContext(
 				ctx, "panic in worker detected",
 				slog.Any("panic", p),
 				slog.String("worker_name", w.name),
@@ -94,8 +98,8 @@ func (w *Worker[T]) handleOne(ctx context.Context, value T) {
 }
 
 func (w *Worker[T]) runQueueHandler(ctx context.Context) {
-	w.logger.DebugContext(ctx, "worker handler start", slog.String("worker_name", w.name))
-	defer w.logger.DebugContext(ctx, "worker handler stop", slog.String("worker_name", w.name))
+	w.logger.Logger(ctx).DebugContext(ctx, "worker handler start", slog.String("worker_name", w.name))
+	defer w.logger.Logger(ctx).DebugContext(ctx, "worker handler stop", slog.String("worker_name", w.name))
 
 	for {
 		select {
@@ -121,8 +125,8 @@ func (w *Worker[T]) Serve(ctx context.Context) {
 		}()
 	}
 
-	w.logger.DebugContext(ctx, "worker start", slog.String("worker_name", w.name))
-	defer w.logger.DebugContext(ctx, "worker stop", slog.String("worker_name", w.name))
+	w.logger.Logger(ctx).DebugContext(ctx, "worker start", slog.String("worker_name", w.name))
+	defer w.logger.Logger(ctx).DebugContext(ctx, "worker stop", slog.String("worker_name", w.name))
 
 	timer := time.NewTicker(w.interval)
 

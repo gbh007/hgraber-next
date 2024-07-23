@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/trace"
 
 	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
@@ -47,8 +48,13 @@ type cleanupUseCases interface {
 	RemoveFilesInStoragesMismatch(ctx context.Context) (notInDBCount, notInFSCount int, err error)
 }
 
+type logger interface {
+	Logger(ctx context.Context) *slog.Logger
+}
+
 type Controller struct {
-	logger    *slog.Logger
+	logger    logger
+	tracer    trace.Tracer
 	debug     bool
 	staticDir string
 
@@ -69,7 +75,8 @@ type Controller struct {
 }
 
 func New(
-	logger *slog.Logger,
+	logger logger,
+	tracer trace.Tracer,
 	serverAddr string,
 	externalServerAddr string,
 	parseUseCases parseUseCases,
@@ -89,6 +96,7 @@ func New(
 
 	c := &Controller{
 		logger:                     logger,
+		tracer:                     tracer,
 		serverAddr:                 serverAddr,
 		externalServerScheme:       u.Scheme,
 		externalServerHostWithPort: u.Host,

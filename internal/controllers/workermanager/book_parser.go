@@ -17,7 +17,7 @@ type bookWorkerUnitUseCases interface {
 	BooksToParse(ctx context.Context) ([]entities.BookWithAgent, error)
 }
 
-func NewBookParser(useCases bookWorkerUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.BookWithAgent] {
+func NewBookParser(useCases bookWorkerUnitUseCases, logger logger, tracer trace.Tracer) *worker.Worker[entities.BookWithAgent] {
 	return worker.New[entities.BookWithAgent](
 		"book",
 		1000,
@@ -26,7 +26,7 @@ func NewBookParser(useCases bookWorkerUnitUseCases, logger *slog.Logger, tracer 
 		func(ctx context.Context, book entities.BookWithAgent) {
 			err := useCases.ParseBook(ctx, book.AgentID, book.Book)
 			if err != nil {
-				logger.ErrorContext(
+				logger.Logger(ctx).ErrorContext(
 					ctx, "fail parse book",
 					slog.String("book_id", book.ID.String()),
 					slog.Any("error", err),
@@ -36,7 +36,7 @@ func NewBookParser(useCases bookWorkerUnitUseCases, logger *slog.Logger, tracer 
 		func(ctx context.Context) []entities.BookWithAgent {
 			books, err := useCases.BooksToParse(ctx)
 			if err != nil {
-				logger.ErrorContext(
+				logger.Logger(ctx).ErrorContext(
 					ctx, "fail get books for parse",
 					slog.Any("error", err),
 				)

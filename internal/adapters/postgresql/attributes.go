@@ -29,7 +29,7 @@ func (d *Database) UpdateAttribute(ctx context.Context, id uuid.UUID, attrCode s
 	if err != nil {
 		rollbackErr := tx.Rollback()
 		if rollbackErr != nil {
-			d.logger.ErrorContext(ctx, rollbackErr.Error())
+			d.logger.Logger(ctx).ErrorContext(ctx, rollbackErr.Error())
 		}
 
 		return err
@@ -44,7 +44,7 @@ func (d *Database) UpdateAttribute(ctx context.Context, id uuid.UUID, attrCode s
 		if err != nil {
 			rollbackErr := tx.Rollback()
 			if rollbackErr != nil {
-				d.logger.ErrorContext(ctx, rollbackErr.Error())
+				d.logger.Logger(ctx).ErrorContext(ctx, rollbackErr.Error())
 			}
 
 			return err

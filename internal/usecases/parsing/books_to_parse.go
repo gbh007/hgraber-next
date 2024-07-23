@@ -28,7 +28,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]entities.BookWithAgent, 
 	books = pkg.SliceFilter(books, func(b entities.Book) bool {
 		hasUrl := b.OriginURL != nil
 		if !hasUrl {
-			uc.logger.WarnContext(
+			uc.logger.Logger(ctx).WarnContext(
 				ctx, "handle book without url",
 				slog.String("book_id", b.ID.String()),
 			)
@@ -52,7 +52,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]entities.BookWithAgent, 
 			return *b.OriginURL
 		}))
 		if err != nil {
-			uc.logger.ErrorContext(
+			uc.logger.Logger(ctx).ErrorContext(
 				ctx, "agent check book",
 				slog.String("agent_id", agent.ID.String()),
 				slog.String("error", err.Error()),
@@ -81,7 +81,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]entities.BookWithAgent, 
 	}
 
 	if len(toParse) != len(books) || len(urlMap) > 0 {
-		uc.logger.WarnContext(
+		uc.logger.Logger(ctx).WarnContext(
 			ctx, "handled count not equivalent books count",
 			slog.Int("to_parse_count", len(toParse)),
 			slog.Int("book_count", len(books)),

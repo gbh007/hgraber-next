@@ -37,7 +37,7 @@ func (d *Database) Agents(ctx context.Context, canParse, canExport bool) ([]enti
 		return nil, fmt.Errorf("storage: build query: %w", err)
 	}
 
-	d.logger.DebugContext(
+	d.logger.Logger(ctx).DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),
@@ -87,7 +87,7 @@ func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
+	d.logger.Logger(ctx).DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),
@@ -123,7 +123,7 @@ func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error 
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
+	d.logger.Logger(ctx).DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),
@@ -153,7 +153,7 @@ func (d *Database) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
+	d.logger.Logger(ctx).DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),

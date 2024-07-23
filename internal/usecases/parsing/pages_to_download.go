@@ -27,7 +27,7 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownl
 	pages = pkg.SliceFilter(pages, func(b entities.PageForDownload) bool {
 		hasUrl := b.BookURL != nil && b.ImageURL != nil
 		if !hasUrl {
-			uc.logger.WarnContext(
+			uc.logger.Logger(ctx).WarnContext(
 				ctx, "handle page without url",
 				slog.String("book_id", b.BookID.String()),
 				slog.Int("page_number", b.PageNumber),
@@ -58,7 +58,7 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownl
 			}),
 		)
 		if err != nil {
-			uc.logger.ErrorContext(
+			uc.logger.Logger(ctx).ErrorContext(
 				ctx, "agent check book",
 				slog.String("agent_id", agent.ID.String()),
 				slog.String("error", err.Error()),
@@ -92,7 +92,7 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownl
 	}
 
 	if len(toDownload) != len(pages) || len(urlMap) > 0 {
-		uc.logger.WarnContext(
+		uc.logger.Logger(ctx).WarnContext(
 			ctx, "handled count not equivalent pages count",
 			slog.Int("to_download_count", len(toDownload)),
 			slog.Int("page_count", len(pages)),

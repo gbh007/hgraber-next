@@ -11,14 +11,18 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+type logger interface {
+	Logger(ctx context.Context) *slog.Logger
+}
+
 type Database struct {
 	pool *pgxpool.Pool
 	db   *sqlx.DB
 
-	logger *slog.Logger
+	logger logger
 }
 
-func New(ctx context.Context, dataSourceName string, logger *slog.Logger) (*Database, error) {
+func New(ctx context.Context, dataSourceName string, logger logger) (*Database, error) {
 	dbpool, err := pgxpool.New(ctx, dataSourceName)
 	if err != nil {
 		return nil, fmt.Errorf("create pool: %w", err)
@@ -51,7 +55,7 @@ func (storage *Database) isApply(ctx context.Context, r sql.Result) bool {
 	apply, err := isApplyWithErr(r)
 
 	if err != nil {
-		storage.logger.ErrorContext(ctx, err.Error())
+		storage.logger.Logger(ctx).ErrorContext(ctx, err.Error())
 	}
 
 	return apply

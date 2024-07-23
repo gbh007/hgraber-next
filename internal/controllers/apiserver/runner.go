@@ -41,25 +41,25 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	go func() {
 		defer close(done)
 
-		c.logger.InfoContext(parentCtx, "api server start")
-		defer c.logger.InfoContext(parentCtx, "api server stop")
+		c.logger.Logger(parentCtx).InfoContext(parentCtx, "api server start")
+		defer c.logger.Logger(parentCtx).InfoContext(parentCtx, "api server stop")
 
 		err := server.ListenAndServe()
 		if err != nil && !errors.Is(err, http.ErrServerClosed) {
-			c.logger.ErrorContext(parentCtx, err.Error())
+			c.logger.Logger(parentCtx).ErrorContext(parentCtx, err.Error())
 		}
 	}()
 
 	go func() {
 		<-parentCtx.Done()
-		c.logger.InfoContext(parentCtx, "stopping api server")
+		c.logger.Logger(parentCtx).InfoContext(parentCtx, "stopping api server")
 
 		shutdownCtx, cancel := context.WithTimeout(context.WithoutCancel(parentCtx), time.Second*10)
 		defer cancel()
 
 		err := server.Shutdown(shutdownCtx)
 		if err != nil {
-			c.logger.ErrorContext(parentCtx, err.Error())
+			c.logger.Logger(parentCtx).ErrorContext(parentCtx, err.Error())
 		}
 	}()
 

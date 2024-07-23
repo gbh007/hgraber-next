@@ -53,7 +53,7 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.First
 
 		booksInfo, err := uc.agentSystem.BooksCheck(ctx, agent.ID, pkg.SetToSlice(urlSet))
 		if err != nil {
-			uc.logger.ErrorContext(
+			uc.logger.Logger(ctx).ErrorContext(
 				ctx, "agent check book",
 				slog.String("agent_id", agent.ID.String()),
 				slog.String("error", err.Error()),
@@ -112,7 +112,7 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.First
 	}
 
 	if len(result.Details) != len(urls) || result.TotalCount != len(urls) {
-		uc.logger.WarnContext(
+		uc.logger.Logger(ctx).WarnContext(
 			ctx, "handled count not equivalent urls count",
 			slog.Int("details_count", len(result.Details)),
 			slog.Int("urls_count", len(urls)),

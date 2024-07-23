@@ -14,7 +14,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			p := recover()
 			if p != nil {
 
-				c.logger.WarnContext(
+				c.logger.Logger(r.Context()).WarnContext(
 					r.Context(), "panic detected",
 					slog.Any("panic", p),
 				)
@@ -29,6 +29,12 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			return
 		}
 
+		// Сделано специально для того чтобы получать тут ид трассировки а также иметь информацию о оверхеде с логирования.
+		ctx, span := c.tracer.Start(r.Context(), "api server logging")
+		defer span.End()
+
+		r = r.WithContext(ctx)
+
 		var (
 			responseData = "ignoring"
 			requestData  = "ignoring"
@@ -37,7 +43,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 		if r.URL.Path != "/api/system/import/archive" { // FIXME: вынести в конфигурацию или проверять по типу контента.
 			requestDataRaw, err := io.ReadAll(r.Body)
 			if err != nil {
-				c.logger.ErrorContext(
+				c.logger.Logger(r.Context()).ErrorContext(
 					r.Context(), "read request to log",
 					slog.Any("error", err),
 				)
@@ -59,7 +65,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			responseData = rw.body.String()
 		}
 
-		c.logger.DebugContext(
+		c.logger.Logger(r.Context()).DebugContext(
 			r.Context(), "http request",
 			slog.String("path", r.URL.Path),
 			slog.String("method", r.Method),
