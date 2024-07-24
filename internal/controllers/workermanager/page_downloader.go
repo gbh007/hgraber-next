@@ -17,7 +17,7 @@ type pageWorkerUnitUseCases interface {
 	PagesToDownload(ctx context.Context) ([]entities.PageForDownloadWithAgent, error)
 }
 
-func NewPageDownloader(useCases pageWorkerUnitUseCases, logger logger, tracer trace.Tracer) *worker.Worker[entities.PageForDownloadWithAgent] {
+func NewPageDownloader(useCases pageWorkerUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.PageForDownloadWithAgent] {
 	return worker.New[entities.PageForDownloadWithAgent](
 		"page",
 		10000,
@@ -26,7 +26,7 @@ func NewPageDownloader(useCases pageWorkerUnitUseCases, logger logger, tracer tr
 		func(ctx context.Context, page entities.PageForDownloadWithAgent) {
 			err := useCases.DownloadPage(ctx, page.AgentID, page.PageForDownload)
 			if err != nil {
-				logger.Logger(ctx).ErrorContext(
+				logger.ErrorContext(
 					ctx, "fail download page",
 					slog.String("book_id", page.BookID.String()),
 					slog.Int("page_number", page.PageNumber),
@@ -37,7 +37,7 @@ func NewPageDownloader(useCases pageWorkerUnitUseCases, logger logger, tracer tr
 		func(ctx context.Context) []entities.PageForDownloadWithAgent {
 			pages, err := useCases.PagesToDownload(ctx)
 			if err != nil {
-				logger.Logger(ctx).ErrorContext(
+				logger.ErrorContext(
 					ctx, "fail get pages for download",
 					slog.Any("error", err),
 				)

@@ -39,19 +39,15 @@ var (
 
 var _ prometheus.Collector = (*SystemInfoCollector)(nil)
 
-type logger interface {
-	Logger(ctx context.Context) *slog.Logger
-}
-
 type SystemInfoCollector struct {
-	logger       logger
+	logger       *slog.Logger
 	infoProvider infoProvider
 
 	timeout time.Duration
 }
 
 func RegisterSystemInfoCollector(
-	logger logger,
+	logger *slog.Logger,
 	infoProvider infoProvider,
 	timeout time.Duration,
 ) error {
@@ -75,7 +71,7 @@ func (c *SystemInfoCollector) Collect(metr chan<- prometheus.Metric) {
 
 	res, err := c.infoProvider.SystemInfo(ctx)
 	if err != nil {
-		c.logger.Logger(ctx).ErrorContext(
+		c.logger.ErrorContext(
 			ctx, "failed scrap system info",
 			slog.Any("error", err),
 		)

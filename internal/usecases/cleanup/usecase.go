@@ -21,12 +21,8 @@ type fileStorage interface {
 	IDs(ctx context.Context) ([]uuid.UUID, error)
 }
 
-type logger interface {
-	Logger(ctx context.Context) *slog.Logger
-}
-
 type UseCase struct {
-	logger logger
+	logger *slog.Logger
 	tracer trace.Tracer
 
 	storage     storage
@@ -34,7 +30,7 @@ type UseCase struct {
 }
 
 func New(
-	logger logger,
+	logger *slog.Logger,
 	tracer trace.Tracer,
 	storage storage,
 	fileStorage fileStorage,

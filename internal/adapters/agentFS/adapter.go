@@ -16,20 +16,16 @@ type agentController interface {
 	FSIDs(ctx context.Context, agentID uuid.UUID) ([]uuid.UUID, error)
 }
 
-type logger interface {
-	Logger(ctx context.Context) *slog.Logger
-}
-
 type Storage struct {
 	agentID uuid.UUID
 
-	logger          logger
+	logger          *slog.Logger
 	agentController agentController
 }
 
 func New(
 	agentID uuid.UUID,
-	logger logger,
+	logger *slog.Logger,
 	agentController agentController,
 ) *Storage {
 	return &Storage{

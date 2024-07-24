@@ -42,12 +42,8 @@ type fileStorage interface {
 	Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
 }
 
-type logger interface {
-	Logger(ctx context.Context) *slog.Logger
-}
-
 type UseCase struct {
-	logger logger
+	logger *slog.Logger
 
 	storage     storage
 	agentSystem agentSystem
@@ -57,7 +53,7 @@ type UseCase struct {
 }
 
 func New(
-	logger logger,
+	logger *slog.Logger,
 	storage storage,
 	agentSystem agentSystem,
 	fileStorage fileStorage,

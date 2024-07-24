@@ -19,19 +19,15 @@ type storage interface {
 	UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha256Sum string, size int64) error
 }
 
-type logger interface {
-	Logger(ctx context.Context) *slog.Logger
-}
-
 type UseCase struct {
-	logger logger
+	logger *slog.Logger
 
 	storage     storage
 	fileStorage fileStorage
 }
 
 func New(
-	logger logger,
+	logger *slog.Logger,
 	storage storage,
 	fileStorage fileStorage,
 ) *UseCase {

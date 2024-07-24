@@ -36,7 +36,7 @@ func (d *Database) SetLabel(ctx context.Context, label entities.BookLabel) error
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.Logger(ctx).DebugContext(
+	d.logger.DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),
@@ -64,7 +64,7 @@ func (d *Database) Labels(ctx context.Context, bookID uuid.UUID) ([]entities.Boo
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.Logger(ctx).DebugContext(
+	d.logger.DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),

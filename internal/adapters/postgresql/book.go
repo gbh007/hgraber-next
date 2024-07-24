@@ -48,7 +48,7 @@ func (d *Database) UpdateBook(ctx context.Context, book entities.Book) error {
 		return fmt.Errorf("storage: build query: %w", err)
 	}
 
-	d.logger.Logger(ctx).DebugContext(
+	d.logger.DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),
@@ -125,7 +125,7 @@ func (d *Database) bookIDs(ctx context.Context, filter entities.BookFilter) ([]u
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.Logger(ctx).DebugContext(
+	d.logger.DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),
@@ -255,7 +255,7 @@ func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.Logger(ctx).DebugContext(
+	d.logger.DebugContext(
 		ctx, "squirrel build request",
 		slog.String("query", query),
 		slog.Any("args", args),

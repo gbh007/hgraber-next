@@ -17,16 +17,12 @@ type WorkerUnit interface {
 	RunnersCount() int
 }
 
-type logger interface {
-	Logger(ctx context.Context) *slog.Logger
-}
-
 type Controller struct {
 	workerUnits []WorkerUnit
-	logger      logger
+	logger      *slog.Logger
 }
 
-func New(logger logger, workerUnits ...WorkerUnit) *Controller {
+func New(logger *slog.Logger, workerUnits ...WorkerUnit) *Controller {
 	return &Controller{
 		logger:      logger,
 		workerUnits: workerUnits,
@@ -55,8 +51,8 @@ func (c *Controller) Start(ctx context.Context) (chan struct{}, error) {
 	go func() {
 		defer close(done)
 
-		c.logger.Logger(ctx).InfoContext(ctx, "worker manager start")
-		defer c.logger.Logger(ctx).InfoContext(ctx, "worker manager stop")
+		c.logger.InfoContext(ctx, "worker manager start")
+		defer c.logger.InfoContext(ctx, "worker manager stop")
 
 		wg.Wait()
 	}()

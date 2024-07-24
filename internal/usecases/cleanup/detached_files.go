@@ -24,7 +24,7 @@ func (uc *UseCase) RemoveDetachedFiles(ctx context.Context) (count int, size int
 
 	for _, file := range files {
 		if file.Size == 0 {
-			uc.logger.Logger(ctx).WarnContext(
+			uc.logger.WarnContext(
 				ctx, "empty file size",
 				slog.String("id", file.ID.String()),
 			)

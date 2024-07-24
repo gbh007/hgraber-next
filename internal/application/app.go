@@ -14,7 +14,6 @@ import (
 	"hgnext/internal/adapters/agent"
 	"hgnext/internal/adapters/agentFS"
 	"hgnext/internal/adapters/files"
-	"hgnext/internal/adapters/logAdapter"
 	"hgnext/internal/adapters/postgresql"
 	"hgnext/internal/adapters/tmpdata"
 	"hgnext/internal/controllers/apiserver"
@@ -46,7 +45,6 @@ func Serve() {
 	}
 
 	logger := initLogger(cfg)
-	logAdapter := logAdapter.New(logger)
 
 	// TODO: использовать более подходящую проверку
 	if os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT") != "" {
@@ -65,7 +63,7 @@ func Serve() {
 
 	tmpStorage := tmpdata.New()
 
-	storage, err := postgresql.New(ctx, cfg.PostgreSQLConnection, logAdapter)
+	storage, err := postgresql.New(ctx, cfg.PostgreSQLConnection, logger)
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail init postgres",
@@ -104,7 +102,7 @@ func Serve() {
 
 	switch {
 	case cfg.FSAgentID != uuid.Nil:
-		fileStorage = agentFS.New(cfg.FSAgentID, logAdapter, agentSystem)
+		fileStorage = agentFS.New(cfg.FSAgentID, logger, agentSystem)
 
 		logger.DebugContext(
 			ctx, "use agent file storage",
@@ -112,7 +110,7 @@ func Serve() {
 		)
 
 	case cfg.FilePath != "":
-		fileStorage, err = files.New(cfg.FilePath, logAdapter)
+		fileStorage, err = files.New(cfg.FilePath, logger)
 		if err != nil {
 			logger.ErrorContext(
 				ctx, "fail init local file storage",
@@ -135,25 +133,25 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	parsingUseCases := parsing.New(logAdapter, storage, agentSystem, fileStorage, cfg.Handle.ParseBookTimeout)
-	fileUseCases := filelogic.New(logAdapter, storage, fileStorage)
-	exportUseCases := export.New(logAdapter, storage, fileStorage, agentSystem, tmpStorage)
+	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorage, cfg.Handle.ParseBookTimeout)
+	fileUseCases := filelogic.New(logger, storage, fileStorage)
+	exportUseCases := export.New(logger, storage, fileStorage, agentSystem, tmpStorage)
 
 	workersController := workermanager.New(
-		logAdapter,
-		workermanager.NewBookParser(parsingUseCases, logAdapter, tracer),
-		workermanager.NewPageDownloader(parsingUseCases, logAdapter, tracer),
-		workermanager.NewHasher(fileUseCases, logAdapter, tracer),
-		workermanager.NewExporter(exportUseCases, logAdapter, tracer),
+		logger,
+		workermanager.NewBookParser(parsingUseCases, logger, tracer),
+		workermanager.NewPageDownloader(parsingUseCases, logger, tracer),
+		workermanager.NewHasher(fileUseCases, logger, tracer),
+		workermanager.NewExporter(exportUseCases, logger, tracer),
 	)
 
-	webAPIUseCases := webapi.New(logAdapter, workersController, storage, fileStorage)
-	agentUseCases := agentUC.New(logAdapter, agentSystem, storage)
-	dededuplicateUseCases := deduplicator.New(logAdapter, storage, tracer)
-	cleanupUseCases := cleanup.New(logAdapter, tracer, storage, fileStorage)
+	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage)
+	agentUseCases := agentUC.New(logger, agentSystem, storage)
+	dededuplicateUseCases := deduplicator.New(logger, storage, tracer)
+	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorage)
 
 	apiController, err := apiserver.New(
-		logAdapter,
+		logger,
 		tracer,
 		cfg.WebServerAddr,
 		cfg.ExternalWebServerAddr,
@@ -177,7 +175,7 @@ func Serve() {
 	}
 
 	if cfg.MetricTimeout > 0 {
-		err = metrics.RegisterSystemInfoCollector(logAdapter, webAPIUseCases, cfg.MetricTimeout)
+		err = metrics.RegisterSystemInfoCollector(logger, webAPIUseCases, cfg.MetricTimeout)
 		if err != nil {
 			logger.ErrorContext(
 				ctx, "fail to create system metric",
@@ -188,7 +186,7 @@ func Serve() {
 		}
 	}
 
-	asyncController := New(logAdapter)
+	asyncController := New(logger)
 	asyncController.RegisterRunner(workersController)
 	asyncController.RegisterRunner(apiController)
 

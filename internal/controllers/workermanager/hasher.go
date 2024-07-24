@@ -16,7 +16,7 @@ type hasherUnitUseCases interface {
 	HandleFileHash(ctx context.Context, f entities.File) error
 }
 
-func NewHasher(useCases hasherUnitUseCases, logger logger, tracer trace.Tracer) *worker.Worker[entities.File] {
+func NewHasher(useCases hasherUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.File] {
 	return worker.New[entities.File](
 		"file_hash",
 		1000,
@@ -25,7 +25,7 @@ func NewHasher(useCases hasherUnitUseCases, logger logger, tracer trace.Tracer) 
 		func(ctx context.Context, file entities.File) {
 			err := useCases.HandleFileHash(ctx, file)
 			if err != nil {
-				logger.Logger(ctx).ErrorContext(
+				logger.ErrorContext(
 					ctx, "fail hash file",
 					slog.String("file_id", file.ID.String()),
 					slog.Any("error", err),
@@ -35,7 +35,7 @@ func NewHasher(useCases hasherUnitUseCases, logger logger, tracer trace.Tracer) 
 		func(ctx context.Context) []entities.File {
 			files, err := useCases.UnHashedFiles(ctx)
 			if err != nil {
-				logger.Logger(ctx).ErrorContext(
+				logger.ErrorContext(
 					ctx, "fail get files for hashing",
 					slog.Any("error", err),
 				)

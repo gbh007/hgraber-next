@@ -24,7 +24,7 @@ func (s *Storage) IDs(ctx context.Context) ([]uuid.UUID, error) {
 
 		id, err := uuid.Parse(e.Name())
 		if err != nil {
-			s.logger.Logger(ctx).WarnContext(
+			s.logger.WarnContext(
 				ctx, "invalid file in file dir",
 				slog.String("filename", e.Name()),
 			)

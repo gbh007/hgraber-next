@@ -27,7 +27,7 @@ func (a slogGooseAdapter) Printf(format string, v ...interface{}) {
 //go:embed internal/migrations/*.sql
 var migrationsFS embed.FS
 
-func migrate(ctx context.Context, logger logger, db *sql.DB) error {
+func migrate(ctx context.Context, logger *slog.Logger, db *sql.DB) error {
 	goose.SetBaseFS(migrationsFS)
 
 	err := goose.SetDialect("postgres")
@@ -36,7 +36,7 @@ func migrate(ctx context.Context, logger logger, db *sql.DB) error {
 	}
 
 	goose.SetLogger(slogGooseAdapter{
-		logger: logger.Logger(ctx),
+		logger: logger,
 	})
 
 	err = goose.UpContext(

@@ -36,12 +36,8 @@ type tmpStorage interface {
 	ExportList() []entities.BookFullWithAgent
 }
 
-type logger interface {
-	Logger(ctx context.Context) *slog.Logger
-}
-
 type UseCase struct {
-	logger logger
+	logger *slog.Logger
 
 	storage     storage
 	fileStorage fileStorage
@@ -50,7 +46,7 @@ type UseCase struct {
 }
 
 func New(
-	logger logger,
+	logger *slog.Logger,
 	storage storage,
 	fileStorage fileStorage,
 	agentSystem agentSystem,

@@ -16,7 +16,7 @@ type exportUnitUseCases interface {
 	ExportArchive(ctx context.Context, book entities.BookFullWithAgent, retry bool) error
 }
 
-func NewExporter(useCases exportUnitUseCases, logger logger, tracer trace.Tracer) *worker.Worker[entities.BookFullWithAgent] {
+func NewExporter(useCases exportUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.BookFullWithAgent] {
 	return worker.New[entities.BookFullWithAgent](
 		"export",
 		1000,
@@ -25,7 +25,7 @@ func NewExporter(useCases exportUnitUseCases, logger logger, tracer trace.Tracer
 		func(ctx context.Context, book entities.BookFullWithAgent) {
 			err := useCases.ExportArchive(ctx, book, true)
 			if err != nil {
-				logger.Logger(ctx).ErrorContext(
+				logger.ErrorContext(
 					ctx, "fail export book",
 					slog.String("book_id", book.Book.ID.String()),
 					slog.String("agent_id", book.AgentID.String()),

@@ -45,7 +45,7 @@ func (uc *UseCase) DeduplicateFiles(ctx context.Context) (count int, size int64,
 
 	for k, ids := range fileMap {
 		if k.size == 0 {
-			uc.logger.Logger(ctx).WarnContext(
+			uc.logger.WarnContext(
 				ctx, "empty file size",
 				slog.Any("ids", ids),
 			)
@@ -54,7 +54,7 @@ func (uc *UseCase) DeduplicateFiles(ctx context.Context) (count int, size int64,
 		}
 
 		if len(ids) < 2 {
-			uc.logger.Logger(ctx).WarnContext(
+			uc.logger.WarnContext(
 				ctx, "invalid deduplicate ids len",
 				slog.Any("ids", ids),
 			)
@@ -71,7 +71,7 @@ func (uc *UseCase) DeduplicateFiles(ctx context.Context) (count int, size int64,
 				return 0, 0, fmt.Errorf("replace id in storage: %w", err)
 			}
 
-			uc.logger.Logger(ctx).InfoContext(
+			uc.logger.InfoContext(
 				ctx, "replaced file",
 				slog.String("old", id.String()),
 				slog.String("new", newID.String()),

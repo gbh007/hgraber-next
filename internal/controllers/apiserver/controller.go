@@ -48,12 +48,8 @@ type cleanupUseCases interface {
 	RemoveFilesInStoragesMismatch(ctx context.Context) (notInDBCount, notInFSCount int, err error)
 }
 
-type logger interface {
-	Logger(ctx context.Context) *slog.Logger
-}
-
 type Controller struct {
-	logger    logger
+	logger    *slog.Logger
 	tracer    trace.Tracer
 	debug     bool
 	staticDir string
@@ -75,7 +71,7 @@ type Controller struct {
 }
 
 func New(
-	logger logger,
+	logger *slog.Logger,
 	tracer trace.Tracer,
 	serverAddr string,
 	externalServerAddr string,

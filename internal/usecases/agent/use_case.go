@@ -22,19 +22,15 @@ type storage interface {
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
 }
 
-type logger interface {
-	Logger(ctx context.Context) *slog.Logger
-}
-
 type UseCase struct {
-	logger logger
+	logger *slog.Logger
 
 	agentSystemAdapter agentSystemAdapter
 	storage            storage
 }
 
 func New(
-	logger logger,
+	logger *slog.Logger,
 	agentSystemAdapter agentSystemAdapter,
 	storage storage,
 ) *UseCase {

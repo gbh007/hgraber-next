@@ -14,7 +14,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			p := recover()
 			if p != nil {
 
-				c.logger.Logger(r.Context()).WarnContext(
+				c.logger.WarnContext(
 					r.Context(), "panic detected",
 					slog.Any("panic", p),
 				)
@@ -43,7 +43,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 		if r.URL.Path != "/api/system/import/archive" { // FIXME: вынести в конфигурацию или проверять по типу контента.
 			requestDataRaw, err := io.ReadAll(r.Body)
 			if err != nil {
-				c.logger.Logger(r.Context()).ErrorContext(
+				c.logger.ErrorContext(
 					r.Context(), "read request to log",
 					slog.Any("error", err),
 				)
@@ -65,7 +65,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			responseData = rw.body.String()
 		}
 
-		c.logger.Logger(r.Context()).DebugContext(
+		c.logger.DebugContext(
 			r.Context(), "http request",
 			slog.String("path", r.URL.Path),
 			slog.String("method", r.Method),

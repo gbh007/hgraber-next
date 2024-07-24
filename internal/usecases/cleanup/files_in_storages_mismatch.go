@@ -49,7 +49,7 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(ctx context.Context) (notInDBCo
 
 	span.AddEvent("log ids", trace.WithTimestamp(time.Now()))
 
-	uc.logger.Logger(ctx).DebugContext(
+	uc.logger.DebugContext(
 		ctx, "RemoveFilesInStoragesMismatch",
 		slog.Int("file_not_in_fs_count", len(fileNotInFS)),
 		slog.Int("file_not_in_db_count", len(fileNotInDB)),
