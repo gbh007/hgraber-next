@@ -3,7 +3,6 @@ package workermanager
 import (
 	"context"
 	"log/slog"
-	"time"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
@@ -17,11 +16,16 @@ type bookWorkerUnitUseCases interface {
 	BooksToParse(ctx context.Context) ([]entities.BookWithAgent, error)
 }
 
-func NewBookParser(useCases bookWorkerUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.BookWithAgent] {
+func NewBookParser(
+	useCases bookWorkerUnitUseCases,
+	logger *slog.Logger,
+	tracer trace.Tracer,
+	cfg WorkerConfig,
+) *worker.Worker[entities.BookWithAgent] {
 	return worker.New[entities.BookWithAgent](
 		"book",
-		1000,
-		time.Second*15,
+		cfg.GetQueueSize(),
+		cfg.GetInterval(),
 		logger,
 		func(ctx context.Context, book entities.BookWithAgent) {
 			err := useCases.ParseBook(ctx, book.AgentID, book.Book)
@@ -44,7 +48,7 @@ func NewBookParser(useCases bookWorkerUnitUseCases, logger *slog.Logger, tracer 
 
 			return books
 		},
-		10,
+		cfg.GetCount(),
 		tracer,
 	)
 }

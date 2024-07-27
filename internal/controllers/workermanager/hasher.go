@@ -3,7 +3,6 @@ package workermanager
 import (
 	"context"
 	"log/slog"
-	"time"
 
 	"go.opentelemetry.io/otel/trace"
 
@@ -16,11 +15,16 @@ type hasherUnitUseCases interface {
 	HandleFileHash(ctx context.Context, f entities.File) error
 }
 
-func NewHasher(useCases hasherUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.File] {
+func NewHasher(
+	useCases hasherUnitUseCases,
+	logger *slog.Logger,
+	tracer trace.Tracer,
+	cfg WorkerConfig,
+) *worker.Worker[entities.File] {
 	return worker.New[entities.File](
 		"file_hash",
-		1000,
-		time.Second*15,
+		cfg.GetQueueSize(),
+		cfg.GetInterval(),
 		logger,
 		func(ctx context.Context, file entities.File) {
 			err := useCases.HandleFileHash(ctx, file)
@@ -43,7 +47,7 @@ func NewHasher(useCases hasherUnitUseCases, logger *slog.Logger, tracer trace.Tr
 
 			return files
 		},
-		10,
+		cfg.GetCount(),
 		tracer,
 	)
 }

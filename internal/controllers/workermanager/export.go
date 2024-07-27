@@ -3,7 +3,6 @@ package workermanager
 import (
 	"context"
 	"log/slog"
-	"time"
 
 	"go.opentelemetry.io/otel/trace"
 
@@ -16,11 +15,16 @@ type exportUnitUseCases interface {
 	ExportArchive(ctx context.Context, book entities.BookFullWithAgent, retry bool) error
 }
 
-func NewExporter(useCases exportUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.BookFullWithAgent] {
+func NewExporter(
+	useCases exportUnitUseCases,
+	logger *slog.Logger,
+	tracer trace.Tracer,
+	cfg WorkerConfig,
+) *worker.Worker[entities.BookFullWithAgent] {
 	return worker.New[entities.BookFullWithAgent](
 		"export",
-		1000,
-		time.Minute,
+		cfg.GetQueueSize(),
+		cfg.GetInterval(),
 		logger,
 		func(ctx context.Context, book entities.BookFullWithAgent) {
 			err := useCases.ExportArchive(ctx, book, true)
@@ -36,7 +40,7 @@ func NewExporter(useCases exportUnitUseCases, logger *slog.Logger, tracer trace.
 		func(_ context.Context) []entities.BookFullWithAgent {
 			return useCases.ExportList()
 		},
-		3,
+		cfg.GetCount(),
 		tracer,
 	)
 }

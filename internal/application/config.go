@@ -18,10 +18,36 @@ type Config struct {
 	MetricTimeout         time.Duration `envconfig:"METRIC_TIMEOUT"`
 	Handle                HandleConfig  `envconfig:"HANDLE"`
 	FSAgentID             uuid.UUID     `envconfig:"FS_AGENT_ID"`
+	Workers               Workers       `envconfig:"WORKERS"`
 }
 
 type HandleConfig struct {
 	ParseBookTimeout time.Duration `envconfig:"PARSE_BOOK_TIMEOUT" default:"5m"`
+}
+
+type Workers struct {
+	Page     Worker `envconfig:"PAGE"`
+	Book     Worker `envconfig:"BOOK"`
+	Hasher   Worker `envconfig:"HASHER"`
+	Exporter Worker `envconfig:"EXPORTER"`
+}
+
+type Worker struct {
+	Count     int32         `envconfig:"COUNT" default:"1"`
+	QueueSize int           `envconfig:"QUEUE_SIZE" default:"100"`
+	Interval  time.Duration `envconfig:"INTERVAL" default:"1m"`
+}
+
+func (w Worker) GetCount() int32 {
+	return w.Count
+}
+
+func (w Worker) GetQueueSize() int {
+	return w.QueueSize
+}
+
+func (w Worker) GetInterval() time.Duration {
+	return w.Interval
 }
 
 func parseConfig() (Config, error) {

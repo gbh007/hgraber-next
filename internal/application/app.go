@@ -139,10 +139,10 @@ func Serve() {
 
 	workersController := workermanager.New(
 		logger,
-		workermanager.NewBookParser(parsingUseCases, logger, tracer),
-		workermanager.NewPageDownloader(parsingUseCases, logger, tracer),
-		workermanager.NewHasher(fileUseCases, logger, tracer),
-		workermanager.NewExporter(exportUseCases, logger, tracer),
+		workermanager.NewBookParser(parsingUseCases, logger, tracer, cfg.Workers.Book),
+		workermanager.NewPageDownloader(parsingUseCases, logger, tracer, cfg.Workers.Page),
+		workermanager.NewHasher(fileUseCases, logger, tracer, cfg.Workers.Hasher),
+		workermanager.NewExporter(exportUseCases, logger, tracer, cfg.Workers.Exporter),
 	)
 
 	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage)

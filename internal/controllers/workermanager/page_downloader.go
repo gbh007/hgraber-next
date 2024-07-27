@@ -3,7 +3,6 @@ package workermanager
 import (
 	"context"
 	"log/slog"
-	"time"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
@@ -17,11 +16,16 @@ type pageWorkerUnitUseCases interface {
 	PagesToDownload(ctx context.Context) ([]entities.PageForDownloadWithAgent, error)
 }
 
-func NewPageDownloader(useCases pageWorkerUnitUseCases, logger *slog.Logger, tracer trace.Tracer) *worker.Worker[entities.PageForDownloadWithAgent] {
+func NewPageDownloader(
+	useCases pageWorkerUnitUseCases,
+	logger *slog.Logger,
+	tracer trace.Tracer,
+	cfg WorkerConfig,
+) *worker.Worker[entities.PageForDownloadWithAgent] {
 	return worker.New[entities.PageForDownloadWithAgent](
 		"page",
-		10000,
-		time.Second*15,
+		cfg.GetQueueSize(),
+		cfg.GetInterval(),
 		logger,
 		func(ctx context.Context, page entities.PageForDownloadWithAgent) {
 			err := useCases.DownloadPage(ctx, page.AgentID, page.PageForDownload)
@@ -45,7 +49,7 @@ func NewPageDownloader(useCases pageWorkerUnitUseCases, logger *slog.Logger, tra
 
 			return pages
 		},
-		10,
+		cfg.GetCount(),
 		tracer,
 	)
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"sync"
+	"time"
 
 	"hgnext/internal/entities"
 )
@@ -15,6 +16,12 @@ type WorkerUnit interface {
 	InQueueCount() int
 	InWorkCount() int
 	RunnersCount() int
+}
+
+type WorkerConfig interface {
+	GetCount() int32
+	GetQueueSize() int
+	GetInterval() time.Duration
 }
 
 type Controller struct {
