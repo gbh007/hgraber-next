@@ -2,6 +2,7 @@ package parsing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 
@@ -57,6 +58,17 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownl
 				return u
 			}),
 		)
+
+		if errors.Is(err, entities.AgentAPIOffline) {
+			uc.logger.DebugContext(
+				ctx, "agent api offline",
+				slog.String("agent_id", agent.ID.String()),
+				slog.String("error", err.Error()),
+			)
+
+			continue
+		}
+
 		if err != nil {
 			uc.logger.ErrorContext(
 				ctx, "agent check book",

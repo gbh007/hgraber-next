@@ -2,6 +2,7 @@ package parsing
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"net/url"
@@ -52,6 +53,17 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.First
 		}
 
 		booksInfo, err := uc.agentSystem.BooksCheck(ctx, agent.ID, pkg.SetToSlice(urlSet))
+
+		if errors.Is(err, entities.AgentAPIOffline) {
+			uc.logger.DebugContext(
+				ctx, "agent api offline",
+				slog.String("agent_id", agent.ID.String()),
+				slog.String("error", err.Error()),
+			)
+
+			continue
+		}
+
 		if err != nil {
 			uc.logger.ErrorContext(
 				ctx, "agent check book",

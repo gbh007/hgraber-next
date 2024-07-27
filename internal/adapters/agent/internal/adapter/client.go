@@ -1,13 +1,17 @@
 package adapter
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
+	"syscall"
 	"time"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 
 	"hgnext/internal/adapters/agent/internal/client"
+	"hgnext/internal/entities"
 )
 
 const agentTimeout = time.Minute * 10
@@ -23,7 +27,7 @@ type FSAdapter struct {
 // TODO: возможно стоит вынести инициализацию HTTP клиента наружу
 func New(baseURL string, token string) (*Adapter, error) {
 	httpClient := http.Client{
-		Transport: &otelPropagationRT{next: http.DefaultTransport},
+		Transport: agentOfflineRT{next: otelPropagationRT{next: http.DefaultTransport}},
 		Timeout:   agentTimeout,
 	}
 
@@ -54,9 +58,23 @@ type otelPropagationRT struct {
 	next http.RoundTripper
 }
 
-func (rt *otelPropagationRT) RoundTrip(req *http.Request) (*http.Response, error) {
+func (rt otelPropagationRT) RoundTrip(req *http.Request) (*http.Response, error) {
 	req = req.Clone(req.Context())
 	otel.GetTextMapPropagator().Inject(req.Context(), propagation.HeaderCarrier(req.Header))
 
 	return rt.next.RoundTrip(req)
+}
+
+type agentOfflineRT struct {
+	next http.RoundTripper
+}
+
+func (rt agentOfflineRT) RoundTrip(req *http.Request) (*http.Response, error) {
+	res, err := rt.next.RoundTrip(req)
+
+	if errors.Is(err, syscall.ECONNREFUSED) {
+		err = fmt.Errorf("%w: %w", entities.AgentAPIOffline, err)
+	}
+
+	return res, err
 }
