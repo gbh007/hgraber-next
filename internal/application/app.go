@@ -63,7 +63,7 @@ func Serve() {
 
 	tmpStorage := tmpdata.New()
 
-	storage, err := postgresql.New(ctx, cfg.PostgreSQLConnection, logger)
+	storage, err := postgresql.New(ctx, cfg.Storage.Connection, logger)
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail init postgres",
@@ -101,16 +101,16 @@ func Serve() {
 	}
 
 	switch {
-	case cfg.FSAgentID != uuid.Nil:
-		fileStorage = agentFS.New(cfg.FSAgentID, logger, agentSystem)
+	case cfg.Storage.FSAgentID != uuid.Nil:
+		fileStorage = agentFS.New(cfg.Storage.FSAgentID, logger, agentSystem)
 
 		logger.DebugContext(
 			ctx, "use agent file storage",
-			slog.String("agent_id", cfg.FSAgentID.String()),
+			slog.String("agent_id", cfg.Storage.FSAgentID.String()),
 		)
 
-	case cfg.FilePath != "":
-		fileStorage, err = files.New(cfg.FilePath, logger)
+	case cfg.Storage.FilePath != "":
+		fileStorage, err = files.New(cfg.Storage.FilePath, logger)
 		if err != nil {
 			logger.ErrorContext(
 				ctx, "fail init local file storage",
@@ -122,7 +122,7 @@ func Serve() {
 
 		logger.DebugContext(
 			ctx, "use local file storage",
-			slog.String("path", cfg.FilePath),
+			slog.String("path", cfg.Storage.FilePath),
 		)
 
 	default:
@@ -133,7 +133,7 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorage, cfg.Handle.ParseBookTimeout)
+	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorage, cfg.Parsing.ParseBookTimeout)
 	fileUseCases := filelogic.New(logger, storage, fileStorage)
 	exportUseCases := export.New(logger, storage, fileStorage, agentSystem, tmpStorage)
 
@@ -153,8 +153,7 @@ func Serve() {
 	apiController, err := apiserver.New(
 		logger,
 		tracer,
-		cfg.WebServerAddr,
-		cfg.ExternalWebServerAddr,
+		cfg.API,
 		parsingUseCases,
 		webAPIUseCases,
 		agentUseCases,
@@ -162,8 +161,6 @@ func Serve() {
 		dededuplicateUseCases,
 		cleanupUseCases,
 		cfg.Debug,
-		cfg.WebStaticDir,
-		cfg.APIToken,
 	)
 	if err != nil {
 		logger.ErrorContext(

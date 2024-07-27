@@ -1,0 +1,30 @@
+debug: true
+metric_timeout: 100ms
+parsing:
+  parse_book_timeout: 5m
+workers:
+  page:
+    count: 10
+    queue_size: 10000
+    interval: 15s
+  book:
+    count: 10
+    queue_size: 1000
+    interval: 15s
+  hasher:
+    count: 3
+    queue_size: 1000
+    interval: 15s
+  exporter:
+    count: 1
+    queue_size: 100
+    interval: 1m
+storage:
+  connection: postgres://hgrabernextuser:hgrabernextpass@localhost:5432/hgrabernext?sslmode=disable
+  file_path: ./.hidden/filedata
+  # fs_agent_id: 019067fc-8d4f-769d-8c4f-e755597f9525
+api:
+  addr: 127.0.0.1:8080
+  external_addr: http://localhost:8080
+  static_dir: internal/controllers/apiserver/internal/static
+  token: local-next

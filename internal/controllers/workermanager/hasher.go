@@ -19,7 +19,7 @@ func NewHasher(
 	useCases hasherUnitUseCases,
 	logger *slog.Logger,
 	tracer trace.Tracer,
-	cfg WorkerConfig,
+	cfg workerConfig,
 ) *worker.Worker[entities.File] {
 	return worker.New[entities.File](
 		"file_hash",

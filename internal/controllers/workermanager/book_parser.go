@@ -20,7 +20,7 @@ func NewBookParser(
 	useCases bookWorkerUnitUseCases,
 	logger *slog.Logger,
 	tracer trace.Tracer,
-	cfg WorkerConfig,
+	cfg workerConfig,
 ) *worker.Worker[entities.BookWithAgent] {
 	return worker.New[entities.BookWithAgent](
 		"book",

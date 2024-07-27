@@ -90,6 +90,8 @@ func (w *Worker[T]) handleOne(ctx context.Context, value T) {
 	w.inWorkRunnersCount.Add(1)
 	defer w.inWorkRunnersCount.Add(-1)
 
+	ctx = context.WithoutCancel(ctx)
+
 	w.handler(ctx, value)
 }
 

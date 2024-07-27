@@ -6,9 +6,11 @@ import (
 	"os"
 
 	"go.opentelemetry.io/otel/trace"
+
+	"hgnext/internal/config"
 )
 
-func initLogger(cfg Config) *slog.Logger {
+func initLogger(cfg config.Config) *slog.Logger {
 	slogOpt := &slog.HandlerOptions{
 		AddSource: cfg.Debug,
 		Level:     slog.LevelInfo,

@@ -18,7 +18,7 @@ type WorkerUnit interface {
 	RunnersCount() int
 }
 
-type WorkerConfig interface {
+type workerConfig interface {
 	GetCount() int32
 	GetQueueSize() int
 	GetInterval() time.Duration

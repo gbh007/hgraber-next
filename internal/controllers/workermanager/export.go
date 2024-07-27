@@ -19,7 +19,7 @@ func NewExporter(
 	useCases exportUnitUseCases,
 	logger *slog.Logger,
 	tracer trace.Tracer,
-	cfg WorkerConfig,
+	cfg workerConfig,
 ) *worker.Worker[entities.BookFullWithAgent] {
 	return worker.New[entities.BookFullWithAgent](
 		"export",

@@ -48,6 +48,13 @@ type cleanupUseCases interface {
 	RemoveFilesInStoragesMismatch(ctx context.Context) (notInDBCount, notInFSCount int, err error)
 }
 
+type config interface {
+	GetAddr() string
+	GetExternalAddr() string
+	GetStaticDir() string
+	GetToken() string
+}
+
 type Controller struct {
 	logger    *slog.Logger
 	tracer    trace.Tracer
@@ -73,8 +80,7 @@ type Controller struct {
 func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
-	serverAddr string,
-	externalServerAddr string,
+	config config,
 	parseUseCases parseUseCases,
 	webAPIUseCases webAPIUseCases,
 	agentUseCases agentUseCases,
@@ -82,10 +88,8 @@ func New(
 	deduplicateUseCases deduplicateUseCases,
 	cleanupUseCases cleanupUseCases,
 	debug bool,
-	staticDir string,
-	token string,
 ) (*Controller, error) {
-	u, err := url.Parse(externalServerAddr)
+	u, err := url.Parse(config.GetExternalAddr())
 	if err != nil {
 		return nil, fmt.Errorf("parse external server addr: %w", err)
 	}
@@ -93,7 +97,7 @@ func New(
 	c := &Controller{
 		logger:                     logger,
 		tracer:                     tracer,
-		serverAddr:                 serverAddr,
+		serverAddr:                 config.GetAddr(),
 		externalServerScheme:       u.Scheme,
 		externalServerHostWithPort: u.Host,
 		parseUseCases:              parseUseCases,
@@ -103,8 +107,8 @@ func New(
 		deduplicateUseCases:        deduplicateUseCases,
 		cleanupUseCases:            cleanupUseCases,
 		debug:                      debug,
-		staticDir:                  staticDir,
-		token:                      token,
+		staticDir:                  config.GetStaticDir(),
+		token:                      config.GetToken(),
 	}
 
 	ogenServer, err := server.NewServer(

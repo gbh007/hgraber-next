@@ -20,7 +20,7 @@ func NewPageDownloader(
 	useCases pageWorkerUnitUseCases,
 	logger *slog.Logger,
 	tracer trace.Tracer,
-	cfg WorkerConfig,
+	cfg workerConfig,
 ) *worker.Worker[entities.PageForDownloadWithAgent] {
 	return worker.New[entities.PageForDownloadWithAgent](
 		"page",
