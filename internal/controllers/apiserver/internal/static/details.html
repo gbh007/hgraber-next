@@ -16,12 +16,6 @@
       media="screen"
       href="/css/main.css"
     />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-      href="/css/rating.css"
-    />
 
     <style>
       .book-details {
@@ -60,6 +54,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        flex-grow: 1;
       }
 
       img.main-preview {
@@ -88,6 +83,7 @@
       div.book-info-panel {
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
       }
 
       div.bottom-buttons {
@@ -129,16 +125,7 @@
               {{appState.book.name}}
             </h1>
             <div class="book-info-panel">
-              <span>
-                #{{appState.book.id}}
-                <span
-                  class="rating"
-                  :book="appState.book.id"
-                  :rating="appState.book.rating"
-                  unprocessed
-                  >R{{appState.book.rating || 0}}</span
-                >
-              </span>
+              <span> #{{appState.book.id}} </span>
               <span :t="appState.book.parsed_page ? '' : 'red'"
                 >Страниц: {{appState.book.page_count}}</span
               >
@@ -178,14 +165,6 @@
             >
               <img class="preview" :src="page.preview_url" />
             </a>
-            <span
-              class="rating"
-              :book="appState.book.id"
-              :page="page.page_number"
-              :rating="page.rating"
-              unprocessed
-              >R{{page.rating||0}}</span
-            >
           </div>
           `;
         </div>

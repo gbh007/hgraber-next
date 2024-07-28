@@ -16,12 +16,6 @@
       media="screen"
       href="/css/main.css"
     />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-      href="/css/rating.css"
-    />
 
     <style>
       body {
@@ -51,7 +45,6 @@
         Страница
         <span id="page-number">{{appState.activePage.page_number}}</span> из
         <span id="page-count">{{(appState.book.pages||[]).length}}</span>
-        <span id="rating"> R{{appState.activePage.rating || 0}}</span>
       </div>
       <div class="view">
         <div class="app-error-container" v-if="appState.bookError">

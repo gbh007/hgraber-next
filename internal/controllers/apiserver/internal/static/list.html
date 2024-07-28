@@ -16,12 +16,6 @@
       media="screen"
       href="/css/main.css"
     />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-      href="/css/rating.css"
-    />
 
     <style>
       body {
@@ -30,19 +24,19 @@
 
       #book-list {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+        grid-template-columns: repeat(
+          auto-fill,
+          minmax(min(500px, 100vw - 20px), 1fr)
+        );
         gap: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
       }
 
       .book {
-        display: grid;
-        grid-template-areas:
-          "img name name name name"
-          "img id pgc pgp dt"
-          "img tag tag tag tag";
-        grid-template-rows: none;
-        grid-template-columns: 130px 1fr 1fr 1fr 1fr;
-        border-spacing: 0px;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
       }
 
       .book *[t="red"] {
@@ -51,6 +45,19 @@
 
       .book *[t="bred"] {
         background: pink;
+      }
+
+      div.info-area {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      img.preview {
+        max-width: 130px;
+        max-height: 200px;
       }
 
       span.page {
@@ -120,46 +127,44 @@
             :key="book.id"
           >
             <div class="book" :t="book.parsed_name ? '' : 'bred'">
-              <a :href="'/details.html?book='+book.id" style="grid-area: img">
+              <a :href="'/details.html?book='+book.id">
                 <img
-                  style="max-width: 100%; max-height: 100%"
+                  class="preview"
                   v-if="book.preview_url"
                   :src="book.preview_url"
                 />
               </a>
-              <span style="grid-area: name" :t="book.parsed_name ? '' : 'red'"
-                >{{book.name}}</span
-              >
-              <span style="grid-area: id">
-                #{{book.id}}
-                <span
-                  class="rating"
-                  :book="book.id"
-                  :rating="book.rating"
-                  unprocessed
-                  >R{{book.rating||0}}</span
-                >
-              </span>
-              <span style="grid-area: pgc" :t="book.parsed_page ? '' : 'red'"
-                >Страниц: {{book.page_count}}</span
-              >
-              <span
-                style="grid-area: pgp"
-                :t="book.page_loaded_percent != 100.0 ? 'red' : ''"
-                >Загружено: {{book.page_loaded_percent}}%</span
-              >
-              <span style="grid-area: dt"
-                >{{new Date( book.created ).toLocaleString()}}</span
-              >
-
-              <span style="grid-area: tag">
-                <span class="tag" v-for="tagname in (book.tags || [])"
-                  >{{tagname}}</span
-                >
-                <b v-if="book.has_more_tags">и больше!</b>
-              </span>
+              <div style="display: flex; flex-direction: column">
+                <span :t="book.parsed_name ? '' : 'red'">{{book.name}}</span>
+                <div class="info-area">
+                  <span :t="book.parsed_page ? '' : 'red'"
+                    >Страниц: {{book.page_count}}</span
+                  >
+                  <span :t="book.page_loaded_percent != 100.0 ? 'red' : ''"
+                    >Загружено: {{book.page_loaded_percent}}%</span
+                  >
+                  <span>{{new Date( book.created ).toLocaleString()}}</span>
+                </div>
+                <span>
+                  <span class="tag" v-for="tagname in (book.tags || [])"
+                    >{{tagname}}</span
+                  >
+                  <b v-if="book.has_more_tags">и больше!</b>
+                </span>
+              </div>
             </div>
           </div>
+        </div>
+        <div id="paginator">
+          <span
+            v-for="page in (appState.pages || [])"
+            class="page"
+            :current="page.is_current ? 'true' : 'false'"
+            :separator="page.is_separator ? 'true' : 'false'"
+            @click="renderPages(page.value)"
+          >
+            {{page.is_separator ? "..." : page.value}}
+          </span>
         </div>
       </template>
     </div>
