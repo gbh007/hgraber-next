@@ -4,12 +4,10 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
-	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
-	"strconv"
-	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -29,69 +27,32 @@ func (uc *UseCase) ImportArchive(ctx context.Context, body io.Reader) (returnedB
 		return uuid.Nil, fmt.Errorf("create zip reader: %w", err)
 	}
 
-	book := entities.BookFull{}
-	found := false
+	pageData := make(map[int]uuid.UUID, 50)
 
-	for _, f := range zipReader.File {
-		if f.Name != "info.json" {
-			continue
-		}
+	info, err := external.ReadArchive(
+		ctx,
+		zipReader,
+		func(ctx context.Context, pageNumber int, body io.Reader) error {
+			fileID := uuid.Must(uuid.NewV7())
 
-		found = true
+			err := uc.fileStorage.Create(ctx, fileID, body)
+			if err != nil {
+				return fmt.Errorf("page (%d) store file (%s): %w", pageNumber, fileID.String(), err)
+			}
 
-		r, err := f.Open()
-		if err != nil {
-			return uuid.Nil, fmt.Errorf("open info file: %w", err)
-		}
+			pageData[pageNumber] = fileID
 
-		info := external.Info{}
+			return nil
+		},
+	)
 
-		err = json.NewDecoder(r).Decode(&info)
-		if err != nil {
-			return uuid.Nil, fmt.Errorf("decode info file: %w", err)
-		}
-
-		err = r.Close()
-		if err != nil {
-			return uuid.Nil, fmt.Errorf("close info file: %w", err)
-		}
-
-		book, err = external.BookToEntity(info.Data)
-		if err != nil {
-			return uuid.Nil, fmt.Errorf("convert info: %w", err)
-		}
-	}
-
-	if !found {
+	if errors.Is(err, external.ErrBookInfoNotFound) {
 		return uuid.Nil, fmt.Errorf("missing book info: %w", entities.BookNotFoundError)
 	}
 
-	pageData := make(map[int]uuid.UUID, len(book.Pages))
-
-	for _, f := range zipReader.File {
-		number, _ := strconv.Atoi(strings.Split(f.Name, ".")[0])
-		if number < 1 {
-			continue
-		}
-
-		r, err := f.Open()
-		if err != nil {
-			return uuid.Nil, fmt.Errorf("open page (%d) file: %w", number, err)
-		}
-
-		fileID := uuid.Must(uuid.NewV7())
-
-		err = uc.fileStorage.Create(ctx, fileID, r)
-		if err != nil {
-			return uuid.Nil, fmt.Errorf("page (%d) store file (%s): %w", number, fileID.String(), err)
-		}
-
-		err = r.Close()
-		if err != nil {
-			return uuid.Nil, fmt.Errorf("close page (%d) file: %w", number, err)
-		}
-
-		pageData[number] = fileID
+	book, err := external.BookToEntity(info.Data)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("convert info: %w", err)
 	}
 
 	bookID := uuid.Must(uuid.NewV7())

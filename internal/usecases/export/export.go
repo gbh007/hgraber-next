@@ -4,7 +4,6 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"time"
@@ -67,45 +66,9 @@ func (uc *UseCase) newArchive(ctx context.Context, book entities.BookFull) (io.R
 	zipFile := &bytes.Buffer{}
 	zipWriter := zip.NewWriter(zipFile)
 
-	w, err := zipWriter.Create("info.json")
+	err := external.WriteArchiveAdapter(ctx, zipWriter, uc.fileStorage, book)
 	if err != nil {
-		return nil, fmt.Errorf("create info: %w", err)
-	}
-
-	enc := json.NewEncoder(w)
-	enc.SetIndent("", "  ")
-
-	err = enc.Encode(external.Convert(book))
-	if err != nil {
-		return nil, fmt.Errorf("encode info: %w", err)
-	}
-
-	for _, p := range book.Pages {
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		default:
-		}
-
-		// Нет файла, пропускаем
-		if p.FileID == uuid.Nil {
-			continue
-		}
-
-		pageBody, err := uc.fileStorage.Get(ctx, p.FileID)
-		if err != nil {
-			return nil, fmt.Errorf("get page body: %w", err)
-		}
-
-		w, err := zipWriter.Create(fmt.Sprintf("%d%s", p.PageNumber, p.Ext))
-		if err != nil {
-			return nil, fmt.Errorf("create page %d body: %w", p.PageNumber, err)
-		}
-
-		_, err = io.Copy(w, pageBody)
-		if err != nil {
-			return nil, fmt.Errorf("copy page %d body: %w", p.PageNumber, err)
-		}
+		return nil, fmt.Errorf("write archive: %w", err)
 	}
 
 	err = zipWriter.Close()
