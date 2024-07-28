@@ -17,6 +17,7 @@ type fileStorage interface {
 
 type storage interface {
 	GetBooks(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
+	GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 
 	NewBook(ctx context.Context, book entities.Book) error
 	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error

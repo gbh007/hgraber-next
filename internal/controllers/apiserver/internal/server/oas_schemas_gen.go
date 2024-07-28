@@ -556,6 +556,42 @@ type APIAgentTaskExportPostUnauthorized ErrorResponse
 
 func (*APIAgentTaskExportPostUnauthorized) aPIAgentTaskExportPostRes() {}
 
+type APIBookArchiveIDGetBadRequest ErrorResponse
+
+func (*APIBookArchiveIDGetBadRequest) aPIBookArchiveIDGetRes() {}
+
+type APIBookArchiveIDGetForbidden ErrorResponse
+
+func (*APIBookArchiveIDGetForbidden) aPIBookArchiveIDGetRes() {}
+
+type APIBookArchiveIDGetInternalServerError ErrorResponse
+
+func (*APIBookArchiveIDGetInternalServerError) aPIBookArchiveIDGetRes() {}
+
+type APIBookArchiveIDGetNotFound ErrorResponse
+
+func (*APIBookArchiveIDGetNotFound) aPIBookArchiveIDGetRes() {}
+
+type APIBookArchiveIDGetOK struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APIBookArchiveIDGetOK) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*APIBookArchiveIDGetOK) aPIBookArchiveIDGetRes() {}
+
+type APIBookArchiveIDGetUnauthorized ErrorResponse
+
+func (*APIBookArchiveIDGetUnauthorized) aPIBookArchiveIDGetRes() {}
+
 type APIBookDetailsPostBadRequest ErrorResponse
 
 func (*APIBookDetailsPostBadRequest) aPIBookDetailsPostRes() {}

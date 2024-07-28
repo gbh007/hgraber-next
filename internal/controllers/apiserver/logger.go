@@ -61,7 +61,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			next.ServeHTTP(rw, r)
 		}
 
-		if !strings.HasPrefix(r.URL.Path, "/api/file") { // FIXME: вынести в конфигурацию или проверять по типу контента.
+		if !strings.HasPrefix(r.URL.Path, "/api/file") && !strings.HasPrefix(r.URL.Path, "/api/book/archive") { // FIXME: вынести в конфигурацию или проверять по типу контента.
 			responseData = rw.body.String()
 		}
 

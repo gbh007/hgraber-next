@@ -17,6 +17,10 @@ type APIAgentTaskExportPostRes interface {
 	aPIAgentTaskExportPostRes()
 }
 
+type APIBookArchiveIDGetRes interface {
+	aPIBookArchiveIDGetRes()
+}
+
 type APIBookDetailsPostRes interface {
 	aPIBookDetailsPostRes()
 }

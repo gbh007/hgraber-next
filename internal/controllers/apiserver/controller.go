@@ -36,6 +36,7 @@ type agentUseCases interface {
 
 type exportUseCases interface {
 	Export(ctx context.Context, agentID uuid.UUID, from, to time.Time) error
+	ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, error)
 	ImportArchive(ctx context.Context, body io.Reader) (uuid.UUID, error)
 }
 

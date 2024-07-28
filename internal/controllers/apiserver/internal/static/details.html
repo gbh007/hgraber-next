@@ -154,7 +154,12 @@
               >
             </span>
             <div class="bottom-buttons">
-              <a class="app-button load" href="#">Скачать</a>
+              <a
+                class="app-button load"
+                :href="'/api/book/archive/'+appState.book.id"
+                target="_blank"
+                >Скачать</a
+              >
               <a
                 class="app-button read"
                 :href="'/read.html?book='+appState.book.id"

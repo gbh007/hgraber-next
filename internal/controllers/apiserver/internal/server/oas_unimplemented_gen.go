@@ -49,6 +49,15 @@ func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req *API
 	return r, ht.ErrNotImplemented
 }
 
+// APIBookArchiveIDGet implements GET /api/book/archive/{id} operation.
+//
+// Получение архива с книгой.
+//
+// GET /api/book/archive/{id}
+func (UnimplementedHandler) APIBookArchiveIDGet(ctx context.Context, params APIBookArchiveIDGetParams) (r APIBookArchiveIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIBookDetailsPost implements POST /api/book/details operation.
 //
 // Информация о книге.

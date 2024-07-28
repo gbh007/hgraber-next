@@ -32,6 +32,12 @@ type Handler interface {
 	//
 	// POST /api/agent/task/export
 	APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error)
+	// APIBookArchiveIDGet implements GET /api/book/archive/{id} operation.
+	//
+	// Получение архива с книгой.
+	//
+	// GET /api/book/archive/{id}
+	APIBookArchiveIDGet(ctx context.Context, params APIBookArchiveIDGetParams) (APIBookArchiveIDGetRes, error)
 	// APIBookDetailsPost implements POST /api/book/details operation.
 	//
 	// Информация о книге.
