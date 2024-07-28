@@ -12,9 +12,13 @@ import (
 
 type storage interface {
 	SystemSize(ctx context.Context) (entities.SystemSizeInfo, error)
-	GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
-	GetBooks(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
 	BookCount(ctx context.Context) (int, error)
+}
+
+type bookRequester interface {
+	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
+	Book(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
+	BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 }
 
 type workerManager interface {
@@ -31,6 +35,7 @@ type UseCase struct {
 	workerManager workerManager
 	storage       storage
 	fileStorage   fileStorage
+	bookRequester bookRequester
 }
 
 func New(
@@ -38,11 +43,13 @@ func New(
 	workerManager workerManager,
 	storage storage,
 	fileStorage fileStorage,
+	bookRequester bookRequester,
 ) *UseCase {
 	return &UseCase{
 		logger:        logger,
 		workerManager: workerManager,
 		storage:       storage,
 		fileStorage:   fileStorage,
+		bookRequester: bookRequester,
 	}
 }

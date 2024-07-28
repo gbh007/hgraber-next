@@ -2,13 +2,14 @@ package postgresql
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 
 	"hgnext/internal/adapters/postgresql/internal/model"
 )
 
-func (d *Database) getBookAttr(ctx context.Context, bookID uuid.UUID) ([]*model.BookAttribute, error) {
+func (d *Database) bookAttributes(ctx context.Context, bookID uuid.UUID) ([]*model.BookAttribute, error) {
 	raw := make([]*model.BookAttribute, 0)
 
 	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM book_attributes WHERE book_id = $1;`, bookID.String())
@@ -17,6 +18,21 @@ func (d *Database) getBookAttr(ctx context.Context, bookID uuid.UUID) ([]*model.
 	}
 
 	return raw, nil
+}
+
+func (d *Database) BookAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error) {
+	attributes, err := d.bookAttributes(ctx, bookID)
+	if err != nil {
+		return nil, fmt.Errorf("get attributes :%w", err)
+	}
+
+	out := make(map[string][]string, 7)
+
+	for _, attribute := range attributes {
+		out[attribute.Attr] = append(out[attribute.Attr], attribute.Value)
+	}
+
+	return out, nil
 }
 
 func (d *Database) UpdateAttribute(ctx context.Context, id uuid.UUID, attrCode string, values []string) error {

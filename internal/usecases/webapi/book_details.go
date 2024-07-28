@@ -10,9 +10,9 @@ import (
 )
 
 func (uc *UseCase) Book(ctx context.Context, bookID uuid.UUID) (entities.BookToWeb, error) {
-	bookFull, err := uc.storage.GetBookFull(ctx, bookID)
+	bookFull, err := uc.bookRequester.BookFull(ctx, bookID)
 	if err != nil {
-		return entities.BookToWeb{}, fmt.Errorf("storage: %w", err)
+		return entities.BookToWeb{}, fmt.Errorf("book requester: %w", err)
 	}
 
 	book := uc.bookConvert(bookFull)

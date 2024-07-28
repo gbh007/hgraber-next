@@ -16,9 +16,6 @@ type fileStorage interface {
 }
 
 type storage interface {
-	GetBooks(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
-	GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
-
 	NewBook(ctx context.Context, book entities.Book) error
 	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error
 	SetLabel(ctx context.Context, label entities.BookLabel) error
@@ -37,13 +34,20 @@ type tmpStorage interface {
 	ExportList() []entities.BookFullWithAgent
 }
 
+type bookRequester interface {
+	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
+	Book(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
+	BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+}
+
 type UseCase struct {
 	logger *slog.Logger
 
-	storage     storage
-	fileStorage fileStorage
-	agentSystem agentSystem
-	tmpStorage  tmpStorage
+	storage       storage
+	fileStorage   fileStorage
+	agentSystem   agentSystem
+	tmpStorage    tmpStorage
+	bookRequester bookRequester
 }
 
 func New(
@@ -52,12 +56,14 @@ func New(
 	fileStorage fileStorage,
 	agentSystem agentSystem,
 	tmpStorage tmpStorage,
+	bookRequester bookRequester,
 ) *UseCase {
 	return &UseCase{
-		logger:      logger,
-		storage:     storage,
-		fileStorage: fileStorage,
-		agentSystem: agentSystem,
-		tmpStorage:  tmpStorage,
+		logger:        logger,
+		storage:       storage,
+		fileStorage:   fileStorage,
+		agentSystem:   agentSystem,
+		tmpStorage:    tmpStorage,
+		bookRequester: bookRequester,
 	}
 }

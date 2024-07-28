@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -93,7 +94,7 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []en
 	return nil
 }
 
-func (d *Database) getBookPages(ctx context.Context, bookID uuid.UUID) ([]*model.Page, error) {
+func (d *Database) bookPages(ctx context.Context, bookID uuid.UUID) ([]*model.Page, error) {
 	raw := make([]*model.Page, 0)
 
 	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM pages WHERE book_id = $1 ORDER BY page_number;`, bookID.String())
@@ -102,4 +103,24 @@ func (d *Database) getBookPages(ctx context.Context, bookID uuid.UUID) ([]*model
 	}
 
 	return raw, nil
+}
+
+func (d *Database) BookPages(ctx context.Context, bookID uuid.UUID) ([]entities.Page, error) {
+	pages, err := d.bookPages(ctx, bookID)
+	if err != nil {
+		return nil, fmt.Errorf("get pages :%w", err)
+	}
+
+	out := make([]entities.Page, 0, len(pages))
+
+	for _, pageRaw := range pages {
+		page, err := pageRaw.ToEntity()
+		if err != nil {
+			return nil, fmt.Errorf("convert page :%w", err)
+		}
+
+		out = append(out, page)
+	}
+
+	return out, nil
 }

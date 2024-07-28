@@ -86,8 +86,7 @@ func (d *Database) GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUI
 	return ids, nil
 }
 
-// FIXME: отказаться от подобной функции
-func (d *Database) bookIDs(ctx context.Context, filter entities.BookFilter) ([]uuid.UUID, error) {
+func (d *Database) BookIDs(ctx context.Context, filter entities.BookFilter) ([]uuid.UUID, error) {
 	idsRaw := make([]string, 0)
 
 	builder := squirrel.Select("id").
@@ -166,81 +165,6 @@ func (d *Database) GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book
 	}
 
 	return b, nil
-}
-
-func (d *Database) GetBookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error) {
-	raw := new(model.Book)
-
-	err := d.db.GetContext(ctx, raw, `SELECT * FROM books WHERE id = $1 LIMIT 1;`, bookID)
-	if errors.Is(err, sql.ErrNoRows) {
-		return entities.BookFull{}, fmt.Errorf("%w - %d", entities.BookNotFoundError, bookID)
-	}
-
-	if err != nil {
-		return entities.BookFull{}, fmt.Errorf("get book :%w", err)
-	}
-
-	b, err := raw.ToEntity()
-	if err != nil {
-		return entities.BookFull{}, fmt.Errorf("convert book :%w", err)
-	}
-
-	// FIXME: переместить подобную логику в юзкейсы (сделать юзкес обогатитель, который должен иметь возможность управлять полнотой компонентов в сборке)
-
-	out := entities.BookFull{
-		Book:       b,
-		Attributes: make(map[string][]string, 7),
-	}
-
-	attributes, err := d.getBookAttr(ctx, bookID)
-	if err != nil {
-		return entities.BookFull{}, fmt.Errorf("get attributes :%w", err)
-	}
-
-	for _, attribute := range attributes {
-		out.Attributes[attribute.Attr] = append(out.Attributes[attribute.Attr], attribute.Value)
-	}
-
-	pages, err := d.getBookPages(ctx, bookID)
-	if err != nil {
-		return entities.BookFull{}, fmt.Errorf("get pages :%w", err)
-	}
-
-	for _, pageRaw := range pages {
-		page, err := pageRaw.ToEntity()
-		if err != nil {
-			return entities.BookFull{}, fmt.Errorf("convert page :%w", err)
-		}
-
-		out.Pages = append(out.Pages, page)
-	}
-
-	out.Labels, err = d.Labels(ctx, bookID)
-	if err != nil {
-		return entities.BookFull{}, fmt.Errorf("get labels :%w", err)
-	}
-
-	return out, nil
-}
-
-func (d *Database) GetBooks(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error) {
-	ids, err := d.bookIDs(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	out := make([]entities.BookFull, len(ids))
-
-	for i, id := range ids {
-		book, err := d.GetBookFull(ctx, id)
-		if err != nil {
-			return nil, err
-		}
-
-		out[i] = book
-	}
-
-	return out, nil
 }
 
 func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {

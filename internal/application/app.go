@@ -20,6 +20,7 @@ import (
 	"hgnext/internal/controllers/workermanager"
 	"hgnext/internal/metrics"
 	agentUC "hgnext/internal/usecases/agent"
+	"hgnext/internal/usecases/bookrequester"
 	"hgnext/internal/usecases/cleanup"
 	"hgnext/internal/usecases/deduplicator"
 	"hgnext/internal/usecases/export"
@@ -135,7 +136,8 @@ func Serve() {
 
 	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorage, cfg.Parsing.ParseBookTimeout)
 	fileUseCases := filelogic.New(logger, storage, fileStorage)
-	exportUseCases := export.New(logger, storage, fileStorage, agentSystem, tmpStorage)
+	bookRequestUseCases := bookrequester.New(logger, storage)
+	exportUseCases := export.New(logger, storage, fileStorage, agentSystem, tmpStorage, bookRequestUseCases)
 
 	workersController := workermanager.New(
 		logger,
@@ -145,7 +147,7 @@ func Serve() {
 		workermanager.NewExporter(exportUseCases, logger, tracer, cfg.Workers.Exporter),
 	)
 
-	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage)
+	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage, bookRequestUseCases)
 	agentUseCases := agentUC.New(logger, agentSystem, storage)
 	dededuplicateUseCases := deduplicator.New(logger, storage, tracer)
 	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorage)

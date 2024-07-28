@@ -14,9 +14,9 @@ func (uc *UseCase) BookList(ctx context.Context, filter entities.BookFilter) ([]
 		return nil, nil, fmt.Errorf("get book count from storage: %w", err)
 	}
 
-	books, err := uc.storage.GetBooks(ctx, filter)
+	books, err := uc.bookRequester.Books(ctx, filter)
 	if err != nil {
-		return nil, nil, fmt.Errorf("get books from storage: %w", err)
+		return nil, nil, fmt.Errorf("get books from requester: %w", err)
 	}
 
 	// FIXME: тут костыли, необходимо отказаться от расчета на сервере

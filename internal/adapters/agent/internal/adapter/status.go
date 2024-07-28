@@ -27,6 +27,7 @@ func (a *Adapter) Status(ctx context.Context) (entities.AgentStatus, error) {
 					IsInfo:    p.Type == client.APICoreStatusGetOKProblemsItemTypeInfo,
 					IsWarning: p.Type == client.APICoreStatusGetOKProblemsItemTypeWarning,
 					IsError:   p.Type == client.APICoreStatusGetOKProblemsItemTypeError,
+					Details:   p.Details,
 				}
 			}),
 		}, nil
