@@ -1,3 +1,11 @@
+TAG = $(shell git tag -l --points-at HEAD)
+COMMIT = $(shell git rev-parse --short HEAD)
+BRANCH = $(shell git rev-parse --abbrev-ref HEAD)
+BUILD_TIME = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+LDFLAGS = -ldflags "-X 'hgnext/internal/version.Version=$(TAG)' -X 'hgnext/internal/version.Commit=$(COMMIT)' -X 'hgnext/internal/version.BuildAt=$(BUILD_TIME)' -X 'hgnext/internal/version.Branch=$(BRANCH)'"
+
+
 .PHONY: generate
 generate:
 	go run github.com/ogen-go/ogen/cmd/ogen --target internal/adapters/agent/internal/client -package client --clean open_api_specs/agent.yaml
@@ -8,15 +16,14 @@ create_build_dir:
 
 .PHONY: run
 run: create_build_dir
-	go build -trimpath -o ./_build/server  ./cmd/server
+	go build $(LDFLAGS) -trimpath -o ./_build/server  ./cmd/server
 
 	./_build/server --config config-example.yaml
 
 .PHONY: runafs
 runafs: create_build_dir
-	go build -trimpath -o ./_build/server  ./cmd/server
+	go build $(LDFLAGS) -trimpath -o ./_build/server  ./cmd/server
 
 	APP_STORAGE_FS_AGENT_ID=019067fc-8d4f-769d-8c4f-e755597f9525 \
 	OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318 \
-	APP_WORKERS_PAGE_COUNT=1 \
 	./_build/server --config config-example.yaml
