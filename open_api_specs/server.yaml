@@ -194,6 +194,65 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/book/raw:
+    post:
+      description: Информация о книге (или по ИД или по адресу)
+      summary: Информация о книге
+      tags:
+        - book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                url:
+                  type: string
+                  format: uri
+                  description: Оригинальный URL книги
+      responses:
+        200:
+          description: Информация о книге
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookRaw"
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/book/list:
     post:
       description: Список книг
@@ -287,6 +346,69 @@ paths:
           schema:
             type: string
             format: uuid
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/page/body:
+    post:
+      description: Получение тела страницы (по оригинальному адресу или данным книги)
+      summary: Получение тела страницы
+      tags:
+        - book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                page_number:
+                  type: integer
+                  description: Номер страницы
+                url:
+                  type: string
+                  format: uri
+                  description: Оригинальный URL страницы
       responses:
         200:
           description: Успешный ответ с данными
@@ -443,7 +565,7 @@ paths:
               format: binary
         required: true
       tags:
-        - book
+        - system
       responses:
         200:
           description: Успешный импорт
@@ -1153,6 +1275,109 @@ components:
         - parsed_page
         - page_count
         - page_loaded_percent
+
+    BookRaw:
+      type: object
+      description: Данные книги
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID книги
+        create_at:
+          type: string
+          format: date-time
+          description: Время создания книги в системе
+        origin_url:
+          type: string
+          format: uri
+          description: Оригинальная ссылка на книгу
+        name:
+          type: string
+          description: Название книги
+        page_count:
+          type: integer
+          description: Количество страниц
+        attributes:
+          type: array
+          description: Данные атрибутов книги
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Код атрибута
+              values:
+                type: array
+                description: Значения атрибута
+                items:
+                  type: string
+            required:
+              - code
+              - values
+        pages:
+          type: array
+          description: данные страниц книги
+          items:
+            type: object
+            properties:
+              page_number:
+                type: integer
+                description: Номер страницы в книге
+                minimum: 1
+              origin_url:
+                type: string
+                format: uri
+                description: Ссылка на оригинальное изображение
+              ext:
+                type: string
+                description: Расширение файла
+              create_at:
+                type: string
+                format: date-time
+                description: Время создания страницы в системе
+              downloaded:
+                type: boolean
+                description: Загружено ли тело страницы
+              load_at:
+                type: string
+                format: date-time
+                description: Время загрузки тела страницы
+            required:
+              - page_number
+              - ext
+              - create_at
+              - downloaded
+        labels:
+          type: array
+          description: Данные атрибутов книги
+          items:
+            type: object
+            description: Метка в системе
+            properties:
+              page_number:
+                type: integer
+                description: Номер страницы к которой привязана метка (0 если привязана к книге)
+              name:
+                type: string
+                description: Код атрибута
+              value:
+                type: string
+                description: Значение
+              create_at:
+                type: string
+                format: date-time
+                description: Время создания отметки в системе
+            required:
+              - page_number
+              - name
+              - value
+              - create_at
+      required:
+        - id
+        - create_at
+        - name
+        - page_count
 
     ErrorResponse:
       type: object

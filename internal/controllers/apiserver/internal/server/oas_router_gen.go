@@ -242,6 +242,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				case 'r': // Prefix: "raw"
+					origElem := elem
+					if l := len("raw"); len(elem) >= l && elem[0:l] == "raw" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIBookRawPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -267,6 +288,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+
+				elem = origElem
+			case 'p': // Prefix: "page/body"
+				origElem := elem
+				if l := len("page/body"); len(elem) >= l && elem[0:l] == "page/body" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleAPIPageBodyPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
 					}
 
 					return
@@ -782,6 +824,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
+				case 'r': // Prefix: "raw"
+					origElem := elem
+					if l := len("raw"); len(elem) >= l && elem[0:l] == "raw" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "APIBookRawPost"
+							r.summary = "Информация о книге"
+							r.operationID = ""
+							r.pathPattern = "/api/book/raw"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -808,6 +875,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.pathPattern = "/api/file/{id}"
 						r.args = args
 						r.count = 1
+						return r, true
+					default:
+						return
+					}
+				}
+
+				elem = origElem
+			case 'p': // Prefix: "page/body"
+				origElem := elem
+				if l := len("page/body"); len(elem) >= l && elem[0:l] == "page/body" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = "APIPageBodyPost"
+						r.summary = "Получение тела страницы"
+						r.operationID = ""
+						r.pathPattern = "/api/page/body"
+						r.args = args
+						r.count = 0
 						return r, true
 					default:
 						return

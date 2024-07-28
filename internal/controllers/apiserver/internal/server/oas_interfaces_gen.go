@@ -29,8 +29,16 @@ type APIBookListPostRes interface {
 	aPIBookListPostRes()
 }
 
+type APIBookRawPostRes interface {
+	aPIBookRawPostRes()
+}
+
 type APIFileIDGetRes interface {
 	aPIFileIDGetRes()
+}
+
+type APIPageBodyPostRes interface {
+	aPIPageBodyPostRes()
 }
 
 type APISystemHandlePostRes interface {

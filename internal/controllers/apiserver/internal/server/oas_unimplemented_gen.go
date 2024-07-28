@@ -76,12 +76,31 @@ func (UnimplementedHandler) APIBookListPost(ctx context.Context, req *APIBookLis
 	return r, ht.ErrNotImplemented
 }
 
+// APIBookRawPost implements POST /api/book/raw operation.
+//
+// Информация о книге (или по ИД или по адресу).
+//
+// POST /api/book/raw
+func (UnimplementedHandler) APIBookRawPost(ctx context.Context, req *APIBookRawPostReq) (r APIBookRawPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIFileIDGet implements GET /api/file/{id} operation.
 //
 // Получение тела файла (изображения страницы).
 //
 // GET /api/file/{id}
 func (UnimplementedHandler) APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (r APIFileIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIPageBodyPost implements POST /api/page/body operation.
+//
+// Получение тела страницы (по оригинальному адресу или
+// данным книги).
+//
+// POST /api/page/body
+func (UnimplementedHandler) APIPageBodyPost(ctx context.Context, req *APIPageBodyPostReq) (r APIPageBodyPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

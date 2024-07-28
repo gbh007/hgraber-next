@@ -50,12 +50,25 @@ type Handler interface {
 	//
 	// POST /api/book/list
 	APIBookListPost(ctx context.Context, req *APIBookListPostReq) (APIBookListPostRes, error)
+	// APIBookRawPost implements POST /api/book/raw operation.
+	//
+	// Информация о книге (или по ИД или по адресу).
+	//
+	// POST /api/book/raw
+	APIBookRawPost(ctx context.Context, req *APIBookRawPostReq) (APIBookRawPostRes, error)
 	// APIFileIDGet implements GET /api/file/{id} operation.
 	//
 	// Получение тела файла (изображения страницы).
 	//
 	// GET /api/file/{id}
 	APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (APIFileIDGetRes, error)
+	// APIPageBodyPost implements POST /api/page/body operation.
+	//
+	// Получение тела страницы (по оригинальному адресу или
+	// данным книги).
+	//
+	// POST /api/page/body
+	APIPageBodyPost(ctx context.Context, req *APIPageBodyPostReq) (APIPageBodyPostRes, error)
 	// APISystemHandlePost implements POST /api/system/handle operation.
 	//
 	// Обработка ссылок на новые книги.

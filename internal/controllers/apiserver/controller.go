@@ -126,3 +126,17 @@ func New(
 
 	return c, nil
 }
+
+// FIXME: реализовать
+func (c *Controller) APIBookRawPost(ctx context.Context, req *server.APIBookRawPostReq) (server.APIBookRawPostRes, error) {
+	return &server.APIBookRawPostInternalServerError{
+		InnerCode: "unimplemented",
+	}, nil
+}
+
+// FIXME: реализовать
+func (c *Controller) APIPageBodyPost(ctx context.Context, req *server.APIPageBodyPostReq) (server.APIPageBodyPostRes, error) {
+	return &server.APIPageBodyPostInternalServerError{
+		InnerCode: "unimplemented",
+	}, nil
+}

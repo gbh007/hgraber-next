@@ -738,6 +738,53 @@ type APIBookListPostUnauthorized ErrorResponse
 
 func (*APIBookListPostUnauthorized) aPIBookListPostRes() {}
 
+type APIBookRawPostBadRequest ErrorResponse
+
+func (*APIBookRawPostBadRequest) aPIBookRawPostRes() {}
+
+type APIBookRawPostForbidden ErrorResponse
+
+func (*APIBookRawPostForbidden) aPIBookRawPostRes() {}
+
+type APIBookRawPostInternalServerError ErrorResponse
+
+func (*APIBookRawPostInternalServerError) aPIBookRawPostRes() {}
+
+type APIBookRawPostNotFound ErrorResponse
+
+func (*APIBookRawPostNotFound) aPIBookRawPostRes() {}
+
+type APIBookRawPostReq struct {
+	// ID книги.
+	ID OptUUID `json:"id"`
+	// Оригинальный URL книги.
+	URL OptURI `json:"url"`
+}
+
+// GetID returns the value of ID.
+func (s *APIBookRawPostReq) GetID() OptUUID {
+	return s.ID
+}
+
+// GetURL returns the value of URL.
+func (s *APIBookRawPostReq) GetURL() OptURI {
+	return s.URL
+}
+
+// SetID sets the value of ID.
+func (s *APIBookRawPostReq) SetID(val OptUUID) {
+	s.ID = val
+}
+
+// SetURL sets the value of URL.
+func (s *APIBookRawPostReq) SetURL(val OptURI) {
+	s.URL = val
+}
+
+type APIBookRawPostUnauthorized ErrorResponse
+
+func (*APIBookRawPostUnauthorized) aPIBookRawPostRes() {}
+
 type APIFileIDGetBadRequest ErrorResponse
 
 func (*APIFileIDGetBadRequest) aPIFileIDGetRes() {}
@@ -799,6 +846,81 @@ func (*APIFileIDGetOKHeaders) aPIFileIDGetRes() {}
 type APIFileIDGetUnauthorized ErrorResponse
 
 func (*APIFileIDGetUnauthorized) aPIFileIDGetRes() {}
+
+type APIPageBodyPostBadRequest ErrorResponse
+
+func (*APIPageBodyPostBadRequest) aPIPageBodyPostRes() {}
+
+type APIPageBodyPostForbidden ErrorResponse
+
+func (*APIPageBodyPostForbidden) aPIPageBodyPostRes() {}
+
+type APIPageBodyPostInternalServerError ErrorResponse
+
+func (*APIPageBodyPostInternalServerError) aPIPageBodyPostRes() {}
+
+type APIPageBodyPostNotFound ErrorResponse
+
+func (*APIPageBodyPostNotFound) aPIPageBodyPostRes() {}
+
+type APIPageBodyPostOK struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APIPageBodyPostOK) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*APIPageBodyPostOK) aPIPageBodyPostRes() {}
+
+type APIPageBodyPostReq struct {
+	// ID книги.
+	ID OptUUID `json:"id"`
+	// Номер страницы.
+	PageNumber OptInt `json:"page_number"`
+	// Оригинальный URL страницы.
+	URL OptURI `json:"url"`
+}
+
+// GetID returns the value of ID.
+func (s *APIPageBodyPostReq) GetID() OptUUID {
+	return s.ID
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIPageBodyPostReq) GetPageNumber() OptInt {
+	return s.PageNumber
+}
+
+// GetURL returns the value of URL.
+func (s *APIPageBodyPostReq) GetURL() OptURI {
+	return s.URL
+}
+
+// SetID sets the value of ID.
+func (s *APIPageBodyPostReq) SetID(val OptUUID) {
+	s.ID = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIPageBodyPostReq) SetPageNumber(val OptInt) {
+	s.PageNumber = val
+}
+
+// SetURL sets the value of URL.
+func (s *APIPageBodyPostReq) SetURL(val OptURI) {
+	s.URL = val
+}
+
+type APIPageBodyPostUnauthorized ErrorResponse
+
+func (*APIPageBodyPostUnauthorized) aPIPageBodyPostRes() {}
 
 type APISystemHandlePostBadRequest ErrorResponse
 
@@ -1410,6 +1532,264 @@ func (s *BookDetailsPagesItem) SetPageNumber(val int) {
 // SetPreviewURL sets the value of PreviewURL.
 func (s *BookDetailsPagesItem) SetPreviewURL(val OptURI) {
 	s.PreviewURL = val
+}
+
+// Данные книги.
+// Ref: #/components/schemas/BookRaw
+type BookRaw struct {
+	// ID книги.
+	ID uuid.UUID `json:"id"`
+	// Время создания книги в системе.
+	CreateAt time.Time `json:"create_at"`
+	// Оригинальная ссылка на книгу.
+	OriginURL OptURI `json:"origin_url"`
+	// Название книги.
+	Name string `json:"name"`
+	// Количество страниц.
+	PageCount int `json:"page_count"`
+	// Данные атрибутов книги.
+	Attributes []BookRawAttributesItem `json:"attributes"`
+	// Данные страниц книги.
+	Pages []BookRawPagesItem `json:"pages"`
+	// Данные атрибутов книги.
+	Labels []BookRawLabelsItem `json:"labels"`
+}
+
+// GetID returns the value of ID.
+func (s *BookRaw) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetCreateAt returns the value of CreateAt.
+func (s *BookRaw) GetCreateAt() time.Time {
+	return s.CreateAt
+}
+
+// GetOriginURL returns the value of OriginURL.
+func (s *BookRaw) GetOriginURL() OptURI {
+	return s.OriginURL
+}
+
+// GetName returns the value of Name.
+func (s *BookRaw) GetName() string {
+	return s.Name
+}
+
+// GetPageCount returns the value of PageCount.
+func (s *BookRaw) GetPageCount() int {
+	return s.PageCount
+}
+
+// GetAttributes returns the value of Attributes.
+func (s *BookRaw) GetAttributes() []BookRawAttributesItem {
+	return s.Attributes
+}
+
+// GetPages returns the value of Pages.
+func (s *BookRaw) GetPages() []BookRawPagesItem {
+	return s.Pages
+}
+
+// GetLabels returns the value of Labels.
+func (s *BookRaw) GetLabels() []BookRawLabelsItem {
+	return s.Labels
+}
+
+// SetID sets the value of ID.
+func (s *BookRaw) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetCreateAt sets the value of CreateAt.
+func (s *BookRaw) SetCreateAt(val time.Time) {
+	s.CreateAt = val
+}
+
+// SetOriginURL sets the value of OriginURL.
+func (s *BookRaw) SetOriginURL(val OptURI) {
+	s.OriginURL = val
+}
+
+// SetName sets the value of Name.
+func (s *BookRaw) SetName(val string) {
+	s.Name = val
+}
+
+// SetPageCount sets the value of PageCount.
+func (s *BookRaw) SetPageCount(val int) {
+	s.PageCount = val
+}
+
+// SetAttributes sets the value of Attributes.
+func (s *BookRaw) SetAttributes(val []BookRawAttributesItem) {
+	s.Attributes = val
+}
+
+// SetPages sets the value of Pages.
+func (s *BookRaw) SetPages(val []BookRawPagesItem) {
+	s.Pages = val
+}
+
+// SetLabels sets the value of Labels.
+func (s *BookRaw) SetLabels(val []BookRawLabelsItem) {
+	s.Labels = val
+}
+
+func (*BookRaw) aPIBookRawPostRes() {}
+
+type BookRawAttributesItem struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значения атрибута.
+	Values []string `json:"values"`
+}
+
+// GetCode returns the value of Code.
+func (s *BookRawAttributesItem) GetCode() string {
+	return s.Code
+}
+
+// GetValues returns the value of Values.
+func (s *BookRawAttributesItem) GetValues() []string {
+	return s.Values
+}
+
+// SetCode sets the value of Code.
+func (s *BookRawAttributesItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValues sets the value of Values.
+func (s *BookRawAttributesItem) SetValues(val []string) {
+	s.Values = val
+}
+
+// Метка в системе.
+type BookRawLabelsItem struct {
+	// Номер страницы к которой привязана метка (0 если
+	// привязана к книге).
+	PageNumber int `json:"page_number"`
+	// Код атрибута.
+	Name string `json:"name"`
+	// Значение.
+	Value string `json:"value"`
+	// Время создания отметки в системе.
+	CreateAt time.Time `json:"create_at"`
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *BookRawLabelsItem) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// GetName returns the value of Name.
+func (s *BookRawLabelsItem) GetName() string {
+	return s.Name
+}
+
+// GetValue returns the value of Value.
+func (s *BookRawLabelsItem) GetValue() string {
+	return s.Value
+}
+
+// GetCreateAt returns the value of CreateAt.
+func (s *BookRawLabelsItem) GetCreateAt() time.Time {
+	return s.CreateAt
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *BookRawLabelsItem) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+// SetName sets the value of Name.
+func (s *BookRawLabelsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetValue sets the value of Value.
+func (s *BookRawLabelsItem) SetValue(val string) {
+	s.Value = val
+}
+
+// SetCreateAt sets the value of CreateAt.
+func (s *BookRawLabelsItem) SetCreateAt(val time.Time) {
+	s.CreateAt = val
+}
+
+type BookRawPagesItem struct {
+	// Номер страницы в книге.
+	PageNumber int `json:"page_number"`
+	// Ссылка на оригинальное изображение.
+	OriginURL OptURI `json:"origin_url"`
+	// Расширение файла.
+	Ext string `json:"ext"`
+	// Время создания страницы в системе.
+	CreateAt time.Time `json:"create_at"`
+	// Загружено ли тело страницы.
+	Downloaded bool `json:"downloaded"`
+	// Время загрузки тела страницы.
+	LoadAt OptDateTime `json:"load_at"`
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *BookRawPagesItem) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// GetOriginURL returns the value of OriginURL.
+func (s *BookRawPagesItem) GetOriginURL() OptURI {
+	return s.OriginURL
+}
+
+// GetExt returns the value of Ext.
+func (s *BookRawPagesItem) GetExt() string {
+	return s.Ext
+}
+
+// GetCreateAt returns the value of CreateAt.
+func (s *BookRawPagesItem) GetCreateAt() time.Time {
+	return s.CreateAt
+}
+
+// GetDownloaded returns the value of Downloaded.
+func (s *BookRawPagesItem) GetDownloaded() bool {
+	return s.Downloaded
+}
+
+// GetLoadAt returns the value of LoadAt.
+func (s *BookRawPagesItem) GetLoadAt() OptDateTime {
+	return s.LoadAt
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *BookRawPagesItem) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+// SetOriginURL sets the value of OriginURL.
+func (s *BookRawPagesItem) SetOriginURL(val OptURI) {
+	s.OriginURL = val
+}
+
+// SetExt sets the value of Ext.
+func (s *BookRawPagesItem) SetExt(val string) {
+	s.Ext = val
+}
+
+// SetCreateAt sets the value of CreateAt.
+func (s *BookRawPagesItem) SetCreateAt(val time.Time) {
+	s.CreateAt = val
+}
+
+// SetDownloaded sets the value of Downloaded.
+func (s *BookRawPagesItem) SetDownloaded(val bool) {
+	s.Downloaded = val
+}
+
+// SetLoadAt sets the value of LoadAt.
+func (s *BookRawPagesItem) SetLoadAt(val OptDateTime) {
+	s.LoadAt = val
 }
 
 // Данные книги в упрощенном формате.
