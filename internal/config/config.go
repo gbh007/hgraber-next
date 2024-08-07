@@ -5,22 +5,20 @@ import (
 )
 
 type Config struct {
-	Debug         bool          `yaml:"debug" envconfig:"DEBUG"`
-	MetricTimeout time.Duration `yaml:"metric_timeout" envconfig:"METRIC_TIMEOUT"`
-	Parsing       Parsing       `yaml:"parsing" envconfig:"PARSING"`
-	Workers       Workers       `yaml:"workers" envconfig:"WORKERS"`
-	Storage       Storage       `yaml:"storage" envconfig:"STORAGE"`
-	API           API           `yaml:"api" envconfig:"API"`
+	Application Application `yaml:"application" envconfig:"APPLICATION"`
+	Parsing     Parsing     `yaml:"parsing" envconfig:"PARSING"`
+	Workers     Workers     `yaml:"workers" envconfig:"WORKERS"`
+	Storage     Storage     `yaml:"storage" envconfig:"STORAGE"`
+	API         API         `yaml:"api" envconfig:"API"`
 }
 
 func ConfigDefault() Config {
 	return Config{
-		Parsing:       ParsingDefault(),
-		Debug:         false,
-		MetricTimeout: 0,
-		API:           APIDefault(),
-		Workers:       WorkersDefault(),
-		Storage:       StorageDefault(),
+		Application: ApplicationDefault(),
+		Parsing:     ParsingDefault(),
+		API:         APIDefault(),
+		Workers:     WorkersDefault(),
+		Storage:     StorageDefault(),
 	}
 }
 

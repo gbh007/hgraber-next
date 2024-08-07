@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 )
 
 var ErrSkipPageBody = errors.New("skip page body")
@@ -48,7 +49,13 @@ func WriteArchive(
 			return fmt.Errorf("get page body: %w", err)
 		}
 
-		w, err := zipWriter.Create(fmt.Sprintf("%d%s", p.PageNumber, p.Ext))
+		filename := fmt.Sprintf("%d%s", p.PageNumber, p.Ext)
+
+		if !strings.HasPrefix(p.Ext, ".") {
+			filename = fmt.Sprintf("%d.%s", p.PageNumber, p.Ext)
+		}
+
+		w, err := zipWriter.Create(filename)
 		if err != nil {
 			return fmt.Errorf("create page %d body: %w", p.PageNumber, err)
 		}

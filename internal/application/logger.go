@@ -12,11 +12,11 @@ import (
 
 func initLogger(cfg config.Config) *slog.Logger {
 	slogOpt := &slog.HandlerOptions{
-		AddSource: cfg.Debug,
+		AddSource: cfg.Application.Debug,
 		Level:     slog.LevelInfo,
 	}
 
-	if cfg.Debug {
+	if cfg.Application.Debug {
 		slogOpt.Level = slog.LevelDebug
 	}
 

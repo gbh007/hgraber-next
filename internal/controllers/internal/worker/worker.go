@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"go.opentelemetry.io/otel/trace"
+
+	"hgnext/internal/metrics"
 )
 
 type Worker[T any] struct {
@@ -89,6 +91,11 @@ func (w *Worker[T]) handleOne(ctx context.Context, value T) {
 
 	w.inWorkRunnersCount.Add(1)
 	defer w.inWorkRunnersCount.Add(-1)
+
+	tStart := time.Now()
+	defer func() {
+		metrics.RegisterWorkerExecutionTaskTime(w.name, time.Since(tStart))
+	}()
 
 	ctx = context.WithoutCancel(ctx)
 

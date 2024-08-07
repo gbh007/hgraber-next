@@ -4,6 +4,16 @@ import (
 	"time"
 )
 
+const (
+	AttributeCodeAuthor    = "author"
+	AttributeCodeCategory  = "category"
+	AttributeCodeCharacter = "character"
+	AttributeCodeGroup     = "group"
+	AttributeCodeLanguage  = "language"
+	AttributeCodeParody    = "parody"
+	AttributeCodeTag       = "tag"
+)
+
 type Info struct {
 	Version string `json:"version"`
 	Meta    Meta   `json:"meta"`

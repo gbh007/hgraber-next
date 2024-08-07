@@ -47,9 +47,8 @@ func Serve() {
 
 	logger := initLogger(cfg)
 
-	// TODO: использовать более подходящую проверку
-	if os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT") != "" {
-		err := initTrace(ctx)
+	if cfg.Application.TraceEndpoint != "" {
+		err := initTrace(ctx, cfg.Application.TraceEndpoint, cfg.Application.ServiceName)
 		if err != nil {
 			logger.ErrorContext(
 				ctx, "fail init otel",
@@ -162,7 +161,7 @@ func Serve() {
 		exportUseCases,
 		dededuplicateUseCases,
 		cleanupUseCases,
-		cfg.Debug,
+		cfg.Application.Debug,
 	)
 	if err != nil {
 		logger.ErrorContext(
@@ -173,8 +172,8 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	if cfg.MetricTimeout > 0 {
-		err = metrics.RegisterSystemInfoCollector(logger, webAPIUseCases, cfg.MetricTimeout)
+	if cfg.Application.MetricTimeout > 0 {
+		err = metrics.RegisterSystemInfoCollector(logger, webAPIUseCases, cfg.Application.MetricTimeout)
 		if err != nil {
 			logger.ErrorContext(
 				ctx, "fail to create system metric",

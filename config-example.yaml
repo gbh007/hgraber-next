@@ -1,5 +1,7 @@
-debug: true
-metric_timeout: 100ms
+application:
+  debug: true
+  metric_timeout: 100ms
+  service_name: hgraber-next-local-test
 parsing:
   parse_book_timeout: 5m
 workers:
