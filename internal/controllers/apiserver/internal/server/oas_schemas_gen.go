@@ -922,6 +922,330 @@ type APIPageBodyPostUnauthorized ErrorResponse
 
 func (*APIPageBodyPostUnauthorized) aPIPageBodyPostRes() {}
 
+type APIParsingBookExistsPostBadRequest ErrorResponse
+
+func (*APIParsingBookExistsPostBadRequest) aPIParsingBookExistsPostRes() {}
+
+type APIParsingBookExistsPostForbidden ErrorResponse
+
+func (*APIParsingBookExistsPostForbidden) aPIParsingBookExistsPostRes() {}
+
+type APIParsingBookExistsPostInternalServerError ErrorResponse
+
+func (*APIParsingBookExistsPostInternalServerError) aPIParsingBookExistsPostRes() {}
+
+type APIParsingBookExistsPostOK struct {
+	// Результат обработки.
+	Result []APIParsingBookExistsPostOKResultItem `json:"result"`
+}
+
+// GetResult returns the value of Result.
+func (s *APIParsingBookExistsPostOK) GetResult() []APIParsingBookExistsPostOKResultItem {
+	return s.Result
+}
+
+// SetResult sets the value of Result.
+func (s *APIParsingBookExistsPostOK) SetResult(val []APIParsingBookExistsPostOKResultItem) {
+	s.Result = val
+}
+
+func (*APIParsingBookExistsPostOK) aPIParsingBookExistsPostRes() {}
+
+type APIParsingBookExistsPostOKResultItem struct {
+	// Ссылка на внешнюю систему.
+	URL url.URL `json:"url"`
+	// Результат проверки.
+	Result APIParsingBookExistsPostOKResultItemResult `json:"result"`
+	// Данные об ошибке во время обработки.
+	ErrorDetails OptString `json:"error_details"`
+	// Список возможных ссылок дубликатов (зеркала внешних
+	// систем и т.п.).
+	PossibleDuplicates []url.URL `json:"possible_duplicates"`
+}
+
+// GetURL returns the value of URL.
+func (s *APIParsingBookExistsPostOKResultItem) GetURL() url.URL {
+	return s.URL
+}
+
+// GetResult returns the value of Result.
+func (s *APIParsingBookExistsPostOKResultItem) GetResult() APIParsingBookExistsPostOKResultItemResult {
+	return s.Result
+}
+
+// GetErrorDetails returns the value of ErrorDetails.
+func (s *APIParsingBookExistsPostOKResultItem) GetErrorDetails() OptString {
+	return s.ErrorDetails
+}
+
+// GetPossibleDuplicates returns the value of PossibleDuplicates.
+func (s *APIParsingBookExistsPostOKResultItem) GetPossibleDuplicates() []url.URL {
+	return s.PossibleDuplicates
+}
+
+// SetURL sets the value of URL.
+func (s *APIParsingBookExistsPostOKResultItem) SetURL(val url.URL) {
+	s.URL = val
+}
+
+// SetResult sets the value of Result.
+func (s *APIParsingBookExistsPostOKResultItem) SetResult(val APIParsingBookExistsPostOKResultItemResult) {
+	s.Result = val
+}
+
+// SetErrorDetails sets the value of ErrorDetails.
+func (s *APIParsingBookExistsPostOKResultItem) SetErrorDetails(val OptString) {
+	s.ErrorDetails = val
+}
+
+// SetPossibleDuplicates sets the value of PossibleDuplicates.
+func (s *APIParsingBookExistsPostOKResultItem) SetPossibleDuplicates(val []url.URL) {
+	s.PossibleDuplicates = val
+}
+
+// Результат проверки.
+type APIParsingBookExistsPostOKResultItemResult string
+
+const (
+	APIParsingBookExistsPostOKResultItemResultOk          APIParsingBookExistsPostOKResultItemResult = "ok"
+	APIParsingBookExistsPostOKResultItemResultUnsupported APIParsingBookExistsPostOKResultItemResult = "unsupported"
+	APIParsingBookExistsPostOKResultItemResultError       APIParsingBookExistsPostOKResultItemResult = "error"
+)
+
+// AllValues returns all APIParsingBookExistsPostOKResultItemResult values.
+func (APIParsingBookExistsPostOKResultItemResult) AllValues() []APIParsingBookExistsPostOKResultItemResult {
+	return []APIParsingBookExistsPostOKResultItemResult{
+		APIParsingBookExistsPostOKResultItemResultOk,
+		APIParsingBookExistsPostOKResultItemResultUnsupported,
+		APIParsingBookExistsPostOKResultItemResultError,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIParsingBookExistsPostOKResultItemResult) MarshalText() ([]byte, error) {
+	switch s {
+	case APIParsingBookExistsPostOKResultItemResultOk:
+		return []byte(s), nil
+	case APIParsingBookExistsPostOKResultItemResultUnsupported:
+		return []byte(s), nil
+	case APIParsingBookExistsPostOKResultItemResultError:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIParsingBookExistsPostOKResultItemResult) UnmarshalText(data []byte) error {
+	switch APIParsingBookExistsPostOKResultItemResult(data) {
+	case APIParsingBookExistsPostOKResultItemResultOk:
+		*s = APIParsingBookExistsPostOKResultItemResultOk
+		return nil
+	case APIParsingBookExistsPostOKResultItemResultUnsupported:
+		*s = APIParsingBookExistsPostOKResultItemResultUnsupported
+		return nil
+	case APIParsingBookExistsPostOKResultItemResultError:
+		*s = APIParsingBookExistsPostOKResultItemResultError
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APIParsingBookExistsPostReq struct {
+	// Ссылки на внешние системы.
+	Urls []url.URL `json:"urls"`
+}
+
+// GetUrls returns the value of Urls.
+func (s *APIParsingBookExistsPostReq) GetUrls() []url.URL {
+	return s.Urls
+}
+
+// SetUrls sets the value of Urls.
+func (s *APIParsingBookExistsPostReq) SetUrls(val []url.URL) {
+	s.Urls = val
+}
+
+type APIParsingBookExistsPostUnauthorized ErrorResponse
+
+func (*APIParsingBookExistsPostUnauthorized) aPIParsingBookExistsPostRes() {}
+
+type APIParsingPageExistsPostBadRequest ErrorResponse
+
+func (*APIParsingPageExistsPostBadRequest) aPIParsingPageExistsPostRes() {}
+
+type APIParsingPageExistsPostForbidden ErrorResponse
+
+func (*APIParsingPageExistsPostForbidden) aPIParsingPageExistsPostRes() {}
+
+type APIParsingPageExistsPostInternalServerError ErrorResponse
+
+func (*APIParsingPageExistsPostInternalServerError) aPIParsingPageExistsPostRes() {}
+
+type APIParsingPageExistsPostOK struct {
+	// Результат обработки.
+	Result []APIParsingPageExistsPostOKResultItem `json:"result"`
+}
+
+// GetResult returns the value of Result.
+func (s *APIParsingPageExistsPostOK) GetResult() []APIParsingPageExistsPostOKResultItem {
+	return s.Result
+}
+
+// SetResult sets the value of Result.
+func (s *APIParsingPageExistsPostOK) SetResult(val []APIParsingPageExistsPostOKResultItem) {
+	s.Result = val
+}
+
+func (*APIParsingPageExistsPostOK) aPIParsingPageExistsPostRes() {}
+
+type APIParsingPageExistsPostOKResultItem struct {
+	// Ссылка на книгу во внешней системе.
+	BookURL url.URL `json:"book_url"`
+	// Ссылка на изображение во внешней системе.
+	ImageURL url.URL `json:"image_url"`
+	// Результат проверки.
+	Result APIParsingPageExistsPostOKResultItemResult `json:"result"`
+	// Данные об ошибке во время обработки.
+	ErrorDetails OptString `json:"error_details"`
+}
+
+// GetBookURL returns the value of BookURL.
+func (s *APIParsingPageExistsPostOKResultItem) GetBookURL() url.URL {
+	return s.BookURL
+}
+
+// GetImageURL returns the value of ImageURL.
+func (s *APIParsingPageExistsPostOKResultItem) GetImageURL() url.URL {
+	return s.ImageURL
+}
+
+// GetResult returns the value of Result.
+func (s *APIParsingPageExistsPostOKResultItem) GetResult() APIParsingPageExistsPostOKResultItemResult {
+	return s.Result
+}
+
+// GetErrorDetails returns the value of ErrorDetails.
+func (s *APIParsingPageExistsPostOKResultItem) GetErrorDetails() OptString {
+	return s.ErrorDetails
+}
+
+// SetBookURL sets the value of BookURL.
+func (s *APIParsingPageExistsPostOKResultItem) SetBookURL(val url.URL) {
+	s.BookURL = val
+}
+
+// SetImageURL sets the value of ImageURL.
+func (s *APIParsingPageExistsPostOKResultItem) SetImageURL(val url.URL) {
+	s.ImageURL = val
+}
+
+// SetResult sets the value of Result.
+func (s *APIParsingPageExistsPostOKResultItem) SetResult(val APIParsingPageExistsPostOKResultItemResult) {
+	s.Result = val
+}
+
+// SetErrorDetails sets the value of ErrorDetails.
+func (s *APIParsingPageExistsPostOKResultItem) SetErrorDetails(val OptString) {
+	s.ErrorDetails = val
+}
+
+// Результат проверки.
+type APIParsingPageExistsPostOKResultItemResult string
+
+const (
+	APIParsingPageExistsPostOKResultItemResultOk          APIParsingPageExistsPostOKResultItemResult = "ok"
+	APIParsingPageExistsPostOKResultItemResultUnsupported APIParsingPageExistsPostOKResultItemResult = "unsupported"
+	APIParsingPageExistsPostOKResultItemResultError       APIParsingPageExistsPostOKResultItemResult = "error"
+)
+
+// AllValues returns all APIParsingPageExistsPostOKResultItemResult values.
+func (APIParsingPageExistsPostOKResultItemResult) AllValues() []APIParsingPageExistsPostOKResultItemResult {
+	return []APIParsingPageExistsPostOKResultItemResult{
+		APIParsingPageExistsPostOKResultItemResultOk,
+		APIParsingPageExistsPostOKResultItemResultUnsupported,
+		APIParsingPageExistsPostOKResultItemResultError,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIParsingPageExistsPostOKResultItemResult) MarshalText() ([]byte, error) {
+	switch s {
+	case APIParsingPageExistsPostOKResultItemResultOk:
+		return []byte(s), nil
+	case APIParsingPageExistsPostOKResultItemResultUnsupported:
+		return []byte(s), nil
+	case APIParsingPageExistsPostOKResultItemResultError:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIParsingPageExistsPostOKResultItemResult) UnmarshalText(data []byte) error {
+	switch APIParsingPageExistsPostOKResultItemResult(data) {
+	case APIParsingPageExistsPostOKResultItemResultOk:
+		*s = APIParsingPageExistsPostOKResultItemResultOk
+		return nil
+	case APIParsingPageExistsPostOKResultItemResultUnsupported:
+		*s = APIParsingPageExistsPostOKResultItemResultUnsupported
+		return nil
+	case APIParsingPageExistsPostOKResultItemResultError:
+		*s = APIParsingPageExistsPostOKResultItemResultError
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APIParsingPageExistsPostReq struct {
+	// Ссылки на внешние системы.
+	Urls []APIParsingPageExistsPostReqUrlsItem `json:"urls"`
+}
+
+// GetUrls returns the value of Urls.
+func (s *APIParsingPageExistsPostReq) GetUrls() []APIParsingPageExistsPostReqUrlsItem {
+	return s.Urls
+}
+
+// SetUrls sets the value of Urls.
+func (s *APIParsingPageExistsPostReq) SetUrls(val []APIParsingPageExistsPostReqUrlsItem) {
+	s.Urls = val
+}
+
+type APIParsingPageExistsPostReqUrlsItem struct {
+	// Ссылка на книгу во внешней системе.
+	BookURL url.URL `json:"book_url"`
+	// Ссылка на изображение во внешней системе.
+	ImageURL url.URL `json:"image_url"`
+}
+
+// GetBookURL returns the value of BookURL.
+func (s *APIParsingPageExistsPostReqUrlsItem) GetBookURL() url.URL {
+	return s.BookURL
+}
+
+// GetImageURL returns the value of ImageURL.
+func (s *APIParsingPageExistsPostReqUrlsItem) GetImageURL() url.URL {
+	return s.ImageURL
+}
+
+// SetBookURL sets the value of BookURL.
+func (s *APIParsingPageExistsPostReqUrlsItem) SetBookURL(val url.URL) {
+	s.BookURL = val
+}
+
+// SetImageURL sets the value of ImageURL.
+func (s *APIParsingPageExistsPostReqUrlsItem) SetImageURL(val url.URL) {
+	s.ImageURL = val
+}
+
+type APIParsingPageExistsPostUnauthorized ErrorResponse
+
+func (*APIParsingPageExistsPostUnauthorized) aPIParsingPageExistsPostRes() {}
+
 type APISystemHandlePostBadRequest ErrorResponse
 
 func (*APISystemHandlePostBadRequest) aPISystemHandlePostRes() {}

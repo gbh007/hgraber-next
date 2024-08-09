@@ -294,24 +294,96 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'p': // Prefix: "page/body"
+			case 'p': // Prefix: "pa"
 				origElem := elem
-				if l := len("page/body"); len(elem) >= l && elem[0:l] == "page/body" {
+				if l := len("pa"); len(elem) >= l && elem[0:l] == "pa" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleAPIPageBodyPostRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
+					break
+				}
+				switch elem[0] {
+				case 'g': // Prefix: "ge/body"
+					origElem := elem
+					if l := len("ge/body"); len(elem) >= l && elem[0:l] == "ge/body" {
+						elem = elem[l:]
+					} else {
+						break
 					}
 
-					return
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIPageBodyPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "rsing/"
+					origElem := elem
+					if l := len("rsing/"); len(elem) >= l && elem[0:l] == "rsing/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'b': // Prefix: "book/exists"
+						origElem := elem
+						if l := len("book/exists"); len(elem) >= l && elem[0:l] == "book/exists" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIParsingBookExistsPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'p': // Prefix: "page/exists"
+						origElem := elem
+						if l := len("page/exists"); len(elem) >= l && elem[0:l] == "page/exists" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIParsingPageExistsPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -882,28 +954,108 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 'p': // Prefix: "page/body"
+			case 'p': // Prefix: "pa"
 				origElem := elem
-				if l := len("page/body"); len(elem) >= l && elem[0:l] == "page/body" {
+				if l := len("pa"); len(elem) >= l && elem[0:l] == "pa" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "POST":
-						r.name = "APIPageBodyPost"
-						r.summary = "Получение тела страницы"
-						r.operationID = ""
-						r.pathPattern = "/api/page/body"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
+					break
+				}
+				switch elem[0] {
+				case 'g': // Prefix: "ge/body"
+					origElem := elem
+					if l := len("ge/body"); len(elem) >= l && elem[0:l] == "ge/body" {
+						elem = elem[l:]
+					} else {
+						break
 					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "APIPageBodyPost"
+							r.summary = "Получение тела страницы"
+							r.operationID = ""
+							r.pathPattern = "/api/page/body"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "rsing/"
+					origElem := elem
+					if l := len("rsing/"); len(elem) >= l && elem[0:l] == "rsing/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'b': // Prefix: "book/exists"
+						origElem := elem
+						if l := len("book/exists"); len(elem) >= l && elem[0:l] == "book/exists" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "APIParsingBookExistsPost"
+								r.summary = "Проверка наличия ссылок на книги"
+								r.operationID = ""
+								r.pathPattern = "/api/parsing/book/exists"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'p': // Prefix: "page/exists"
+						origElem := elem
+						if l := len("page/exists"); len(elem) >= l && elem[0:l] == "page/exists" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "APIParsingPageExistsPost"
+								r.summary = "Проверка наличия ссылок для страниц"
+								r.operationID = ""
+								r.pathPattern = "/api/parsing/page/exists"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem

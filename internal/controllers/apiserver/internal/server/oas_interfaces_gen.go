@@ -41,6 +41,14 @@ type APIPageBodyPostRes interface {
 	aPIPageBodyPostRes()
 }
 
+type APIParsingBookExistsPostRes interface {
+	aPIParsingBookExistsPostRes()
+}
+
+type APIParsingPageExistsPostRes interface {
+	aPIParsingPageExistsPostRes()
+}
+
 type APISystemHandlePostRes interface {
 	aPISystemHandlePostRes()
 }

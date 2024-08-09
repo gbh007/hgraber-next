@@ -140,3 +140,17 @@ func (c *Controller) APIPageBodyPost(ctx context.Context, req *server.APIPageBod
 		InnerCode: "unimplemented",
 	}, nil
 }
+
+// FIXME: реализовать
+func (c *Controller) APIParsingBookExistsPost(ctx context.Context, req *server.APIParsingBookExistsPostReq) (server.APIParsingBookExistsPostRes, error) {
+	return &server.APIParsingBookExistsPostInternalServerError{
+		InnerCode: "unimplemented",
+	}, nil
+}
+
+// FIXME: реализовать
+func (c *Controller) APIParsingPageExistsPost(ctx context.Context, req *server.APIParsingPageExistsPostReq) (server.APIParsingPageExistsPostRes, error) {
+	return &server.APIParsingPageExistsPostInternalServerError{
+		InnerCode: "unimplemented",
+	}, nil
+}

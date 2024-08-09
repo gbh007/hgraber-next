@@ -553,6 +553,186 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/parsing/book/exists:
+    post:
+      description: Проверка наличия ссылок на книги
+      summary: Проверка наличия ссылок на книги
+      tags:
+        - parsing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                urls:
+                  type: array
+                  description: Ссылки на внешние системы
+                  items:
+                    type: string
+                    format: uri
+              required:
+                - urls
+      responses:
+        200:
+          description: Успешная проверка
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    description: Результат обработки
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          format: uri
+                          description: Ссылка на внешнюю систему
+                        result:
+                          type: string
+                          description: Результат проверки
+                          enum:
+                            - ok
+                            - unsupported
+                            - error
+                        error_details:
+                          type: string
+                          description: Данные об ошибке во время обработки
+                        possible_duplicates:
+                          type: array
+                          description: Список возможных ссылок дубликатов (зеркала внешних систем и т.п.)
+                          items:
+                            type: string
+                            format: uri
+                      required:
+                        - url
+                        - result
+                required:
+                  - result
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/page/exists:
+    post:
+      description: Проверка наличия ссылок для страниц
+      summary: Проверка наличия ссылок для страниц
+      tags:
+        - parsing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                urls:
+                  type: array
+                  description: Ссылки на внешние системы
+                  items:
+                    type: object
+                    properties:
+                      book_url:
+                        type: string
+                        format: uri
+                        description: Ссылка на книгу во внешней системе
+                      image_url:
+                        type: string
+                        format: uri
+                        description: Ссылка на изображение во внешней системе
+                    required:
+                      - book_url
+                      - image_url
+              required:
+                - urls
+      responses:
+        200:
+          description: Успешная проверка
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    description: Результат обработки
+                    items:
+                      type: object
+                      properties:
+                        book_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на книгу во внешней системе
+                        image_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на изображение во внешней системе
+                        result:
+                          type: string
+                          description: Результат проверки
+                          enum:
+                            - ok
+                            - unsupported
+                            - error
+                        error_details:
+                          type: string
+                          description: Данные об ошибке во время обработки
+                      required:
+                        - book_url
+                        - image_url
+                        - result
+                required:
+                  - result
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/system/import/archive:
     post:
       description: Импорт новой книги через архив
