@@ -26,6 +26,9 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.First
 	}
 
 	urlSet := pkg.SliceToSet(urls)
+	bookIDsByURL := pkg.SliceToMap(urls, func(u url.URL) (url.URL, uuid.UUID) {
+		return u, uuid.Must(uuid.NewV7())
+	})
 
 	// Предварительная обработка, для уменьшения трафика на агенты
 	for _, u := range urls {
@@ -100,9 +103,18 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.First
 					}
 				}
 
-				// TODO: потеря порядка, из-за множеств, возможно нет причины устранять
+				id, ok := bookIDsByURL[u]
+				if !ok {
+					uc.logger.WarnContext(
+						ctx, "missing pregenerated book id",
+						slog.String("book_url", u.String()),
+					)
+
+					continue
+				}
+
 				err = uc.storage.NewBook(ctx, entities.Book{
-					ID:        uuid.Must(uuid.NewV7()),
+					ID:        id,
 					OriginURL: &u,
 					CreateAt:  time.Now(),
 				})
