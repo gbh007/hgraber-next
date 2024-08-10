@@ -27,12 +27,12 @@ func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (e
 	}
 
 	if err != nil {
-		return entities.Page{}, err
+		return entities.Page{}, fmt.Errorf("get page from db: %w", err)
 	}
 
 	p, err := raw.ToEntity()
 	if err != nil {
-		return entities.Page{}, err
+		return entities.Page{}, fmt.Errorf("convert page: %w", err)
 	}
 
 	return p, nil

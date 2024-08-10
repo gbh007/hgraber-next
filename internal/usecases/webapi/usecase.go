@@ -13,6 +13,7 @@ import (
 type storage interface {
 	SystemSize(ctx context.Context) (entities.SystemSizeInfo, error)
 	BookCount(ctx context.Context) (int, error)
+	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (entities.Page, error)
 }
 
 type bookRequester interface {

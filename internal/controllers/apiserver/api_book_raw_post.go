@@ -10,52 +10,40 @@ import (
 )
 
 func (c *Controller) APIBookRawPost(ctx context.Context, req *server.APIBookRawPostReq) (server.APIBookRawPostRes, error) {
-	if !req.ID.IsSet() && !req.URL.IsSet() {
+	var (
+		book      entities.BookFull
+		err       error
+		innerCode string
+	)
+
+	switch {
+	case req.ID.IsSet():
+		innerCode = WebAPIUseCaseCode
+		book, err = c.webAPIUseCases.BookRaw(ctx, req.ID.Value)
+
+	case req.URL.IsSet():
+		innerCode = ParseUseCaseCode
+		book, err = c.parseUseCases.BookByURL(ctx, req.URL.Value)
+
+	default:
 		return &server.APIBookRawPostBadRequest{
 			InnerCode: ValidationCode,
 			Details:   server.NewOptString("id and url is empty"),
 		}, nil
 	}
 
-	var (
-		book entities.BookFull
-		err  error
-	)
+	if errors.Is(err, entities.BookNotFoundError) {
+		return &server.APIBookRawPostNotFound{
+			InnerCode: innerCode,
+			Details:   server.NewOptString(err.Error()),
+		}, nil
+	}
 
-	switch {
-	case req.ID.IsSet():
-		book, err = c.webAPIUseCases.BookRaw(ctx, req.ID.Value)
-
-		if errors.Is(err, entities.BookNotFoundError) {
-			return &server.APIBookRawPostNotFound{
-				InnerCode: WebAPIUseCaseCode,
-				Details:   server.NewOptString(err.Error()),
-			}, nil
-		}
-
-		if err != nil {
-			return &server.APIBookRawPostInternalServerError{
-				InnerCode: WebAPIUseCaseCode,
-				Details:   server.NewOptString(err.Error()),
-			}, nil
-		}
-
-	case req.URL.IsSet():
-		book, err = c.parseUseCases.BookByURL(ctx, req.URL.Value)
-
-		if errors.Is(err, entities.BookNotFoundError) {
-			return &server.APIBookRawPostNotFound{
-				InnerCode: ParseUseCaseCode,
-				Details:   server.NewOptString(err.Error()),
-			}, nil
-		}
-
-		if err != nil {
-			return &server.APIBookRawPostInternalServerError{
-				InnerCode: ParseUseCaseCode,
-				Details:   server.NewOptString(err.Error()),
-			}, nil
-		}
+	if err != nil {
+		return &server.APIBookRawPostInternalServerError{
+			InnerCode: innerCode,
+			Details:   server.NewOptString(err.Error()),
+		}, nil
 	}
 
 	return &server.BookRaw{
