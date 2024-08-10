@@ -18,8 +18,17 @@ type Database struct {
 	logger *slog.Logger
 }
 
-func New(ctx context.Context, dataSourceName string, logger *slog.Logger) (*Database, error) {
-	dbpool, err := pgxpool.New(ctx, dataSourceName)
+func New(ctx context.Context, dataSourceName string, maxConn int32, logger *slog.Logger) (*Database, error) {
+	pgxConfig, err := pgxpool.ParseConfig(dataSourceName)
+	if err != nil {
+		return nil, fmt.Errorf("parse config: %w", err)
+	}
+
+	if maxConn > 0 {
+		pgxConfig.MaxConns = maxConn
+	}
+
+	dbpool, err := pgxpool.NewWithConfig(ctx, pgxConfig)
 	if err != nil {
 		return nil, fmt.Errorf("create pool: %w", err)
 	}

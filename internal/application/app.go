@@ -63,7 +63,7 @@ func Serve() {
 
 	tmpStorage := tmpdata.New()
 
-	storage, err := postgresql.New(ctx, cfg.Storage.Connection, logger)
+	storage, err := postgresql.New(ctx, cfg.Storage.Connection, cfg.Storage.MaxConnections, logger)
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail init postgres",
