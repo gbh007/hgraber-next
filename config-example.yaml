@@ -6,15 +6,15 @@ parsing:
   parse_book_timeout: 5m
 workers:
   page:
-    count: 10
+    count: 1
     queue_size: 10000
     interval: 15s
   book:
-    count: 10
+    count: 1
     queue_size: 1000
     interval: 15s
   hasher:
-    count: 3
+    count: 1
     queue_size: 1000
     interval: 15s
   exporter:

@@ -121,9 +121,9 @@ func New(
 
 	ogenServer, err := serverAPI.NewServer(
 		c, c,
-		// server.WithErrorHandler(), // FIXME: реализовать
-		// server.WithMethodNotAllowed(), // FIXME: реализовать
-		// server.WithNotFound(), // FIXME: реализовать
+		// serverAPI.WithErrorHandler(), // FIXME: реализовать
+		// serverAPI.WithMethodNotAllowed(), // FIXME: реализовать
+		// serverAPI.WithNotFound(), // FIXME: реализовать
 	)
 	if err != nil {
 		return nil, fmt.Errorf("create ogen server: %w", err)

@@ -1,7 +1,7 @@
 package main
 
-import "hgnext/internal/application"
+import "hgnext/internal/application/server"
 
 func main() {
-	application.Serve()
+	server.Serve()
 }
