@@ -2,6 +2,8 @@ package entities
 
 import (
 	"net/url"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,6 +22,28 @@ type Page struct {
 
 func (p Page) IsLoaded() bool {
 	return p.Downloaded && p.FileID != uuid.Nil
+}
+
+func (p Page) Filename() string {
+	if strings.HasPrefix(p.Ext, ".") {
+		return strconv.Itoa(p.PageNumber) + p.Ext
+	}
+
+	return strconv.Itoa(p.PageNumber) + "." + p.Ext
+}
+
+func (p Page) ToAgentBookDetailsPagesItem() AgentBookDetailsPagesItem {
+	var u url.URL
+
+	if p.OriginURL != nil {
+		u = *p.OriginURL
+	}
+
+	return AgentBookDetailsPagesItem{
+		PageNumber: p.PageNumber,
+		URL:        u,
+		Filename:   p.Filename(),
+	}
 }
 
 type PageForDownload struct {

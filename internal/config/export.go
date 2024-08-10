@@ -9,7 +9,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func ExportToFile(cfg Config, filename string) error {
+func ExportToFile[T any](cfg *T, filename string) error {
 	f, err := os.Create(filename)
 	if err != nil {
 		return fmt.Errorf("create file: %w", err)
@@ -25,7 +25,7 @@ func ExportToFile(cfg Config, filename string) error {
 		return fmt.Errorf("encode yaml: %w", err)
 	}
 
-	err = envconfig.Usaget("APP", &cfg, f, template.Must(template.New("cfg").Parse(envTemplate)))
+	err = envconfig.Usaget("APP", cfg, f, template.Must(template.New("cfg").Parse(envTemplate)))
 	if err != nil {
 		return fmt.Errorf("encode env usage: %w", err)
 	}

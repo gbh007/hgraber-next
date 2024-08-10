@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -16,10 +17,12 @@ import (
 	"hgnext/internal/adapters/files"
 	"hgnext/internal/adapters/postgresql"
 	"hgnext/internal/adapters/tmpdata"
+	"hgnext/internal/controllers/apiagent"
 	"hgnext/internal/controllers/apiserver"
 	"hgnext/internal/controllers/workermanager"
 	"hgnext/internal/metrics"
 	agentUC "hgnext/internal/usecases/agent"
+	"hgnext/internal/usecases/agentcache"
 	"hgnext/internal/usecases/bookrequester"
 	"hgnext/internal/usecases/cleanup"
 	"hgnext/internal/usecases/deduplicator"
@@ -61,6 +64,7 @@ func Serve() {
 
 	tracer := otel.GetTracerProvider().Tracer("hgraber-next")
 
+	asyncController := New(logger)
 	tmpStorage := tmpdata.New()
 
 	storage, err := postgresql.New(ctx, cfg.Storage.Connection, cfg.Storage.MaxConnections, logger)
@@ -147,6 +151,7 @@ func Serve() {
 		workermanager.NewHasher(fileUseCases, logger, tracer, cfg.Workers.Hasher, metricProvider),
 		workermanager.NewExporter(exportUseCases, logger, tracer, cfg.Workers.Exporter, metricProvider),
 	)
+	asyncController.RegisterRunner(workersController)
 
 	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage, bookRequestUseCases)
 	agentUseCases := agentUC.New(logger, agentSystem, storage)
@@ -174,6 +179,31 @@ func Serve() {
 		os.Exit(1)
 	}
 
+	asyncController.RegisterRunner(apiController)
+
+	if cfg.CacheServer.Addr != "" {
+		agentCacheUseCase := agentcache.New(logger, parsingUseCases)
+
+		apiAgentCacheController, err := apiagent.New(
+			time.Now(),
+			logger,
+			agentCacheUseCase,
+			cfg.CacheServer.Addr,
+			cfg.Application.Debug,
+			cfg.CacheServer.Token,
+		)
+		if err != nil {
+			logger.ErrorContext(
+				ctx, "fail to create api agent cache",
+				slog.Any("error", err),
+			)
+
+			os.Exit(1)
+		}
+
+		asyncController.RegisterRunner(apiAgentCacheController)
+	}
+
 	if cfg.Application.MetricTimeout > 0 {
 		err = metrics.RegisterSystemInfoCollector(logger, webAPIUseCases, cfg.Application.MetricTimeout)
 		if err != nil {
@@ -185,10 +215,6 @@ func Serve() {
 			os.Exit(1)
 		}
 	}
-
-	asyncController := New(logger)
-	asyncController.RegisterRunner(workersController)
-	asyncController.RegisterRunner(apiController)
 
 	logger.InfoContext(ctx, "application start")
 	defer logger.InfoContext(ctx, "application stop")

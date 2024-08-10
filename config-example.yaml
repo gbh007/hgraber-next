@@ -31,3 +31,6 @@ api:
   external_addr: http://localhost:8080
   static_dir: internal/controllers/apiserver/internal/static
   token: local-next
+cache_server:
+  addr: 127.0.0.1:8085
+  token: local-cache

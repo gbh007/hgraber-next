@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+
+	"hgnext/internal/pkg"
 )
 
 type Book struct {
@@ -40,6 +42,29 @@ func (b BookFull) IsLoaded() bool {
 	}
 
 	return true
+}
+
+func (b BookFull) ToAgentBookDetails() AgentBookDetails {
+	var u url.URL
+
+	if b.Book.OriginURL != nil {
+		u = *b.Book.OriginURL
+	}
+
+	return AgentBookDetails{
+		URL:       u,
+		Name:      b.Book.Name,
+		PageCount: b.Book.PageCount,
+		Attributes: pkg.MapToSlice(b.Attributes, func(code string, values []string) AgentBookDetailsAttributesItem {
+			return AgentBookDetailsAttributesItem{
+				Code:   code,
+				Values: values,
+			}
+		}),
+		Pages: pkg.Map(b.Pages, func(p Page) AgentBookDetailsPagesItem {
+			return p.ToAgentBookDetailsPagesItem()
+		}),
+	}
 }
 
 type BookWithAgent struct {

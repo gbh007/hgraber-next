@@ -39,7 +39,6 @@ func New(
 	addr string,
 	debug bool,
 	token string,
-	parserCodes []string,
 ) (*Controller, error) {
 	c := &Controller{
 		startAt: startAt,

@@ -30,7 +30,7 @@ func initLogger(cfg config.Config) *slog.Logger {
 	)
 
 	if cfg.Application.ServiceName != "" {
-		logger.With(slog.String("service_name", cfg.Application.ServiceName))
+		logger = logger.With(slog.String("service_name", cfg.Application.ServiceName))
 	}
 
 	return logger
