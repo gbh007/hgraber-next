@@ -17,8 +17,10 @@ import (
 
 type parseUseCases interface {
 	NewBooks(ctx context.Context, urls []url.URL) (entities.FirstHandleMultipleResult, error)
+
 	BooksExists(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error)
 	PagesExists(ctx context.Context, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
+	BookByURL(ctx context.Context, u url.URL) (entities.BookFull, error)
 }
 
 type webAPIUseCases interface {
@@ -27,6 +29,7 @@ type webAPIUseCases interface {
 	File(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
 
 	Book(ctx context.Context, bookID uuid.UUID) (entities.BookToWeb, error)
+	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 	BookList(ctx context.Context, filter entities.BookFilter) ([]entities.BookToWeb, []int, error)
 }
 
@@ -127,13 +130,6 @@ func New(
 	c.ogenServer = ogenServer
 
 	return c, nil
-}
-
-// FIXME: реализовать
-func (c *Controller) APIBookRawPost(ctx context.Context, req *server.APIBookRawPostReq) (server.APIBookRawPostRes, error) {
-	return &server.APIBookRawPostInternalServerError{
-		InnerCode: "unimplemented",
-	}, nil
 }
 
 // FIXME: реализовать

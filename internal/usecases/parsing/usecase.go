@@ -74,5 +74,6 @@ func New(
 		agentSystem:      agentSystem,
 		fileStorage:      fileStorage,
 		parseBookTimeout: parseBookTimeout,
+		bookRequester:    bookRequester,
 	}
 }
