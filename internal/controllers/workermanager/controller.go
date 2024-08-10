@@ -24,6 +24,10 @@ type workerConfig interface {
 	GetInterval() time.Duration
 }
 
+type metricProvider interface {
+	RegisterWorkerExecutionTaskTime(name string, d time.Duration)
+}
+
 type Controller struct {
 	workerUnits []WorkerUnit
 	logger      *slog.Logger

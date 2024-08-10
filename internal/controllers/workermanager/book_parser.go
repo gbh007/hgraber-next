@@ -21,6 +21,7 @@ func NewBookParser(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	cfg workerConfig,
+	metricProvider metricProvider,
 ) *worker.Worker[entities.BookWithAgent] {
 	return worker.New[entities.BookWithAgent](
 		"book",
@@ -50,5 +51,6 @@ func NewBookParser(
 		},
 		cfg.GetCount(),
 		tracer,
+		metricProvider,
 	)
 }

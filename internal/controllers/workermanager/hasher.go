@@ -20,6 +20,7 @@ func NewHasher(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	cfg workerConfig,
+	metricProvider metricProvider,
 ) *worker.Worker[entities.File] {
 	return worker.New[entities.File](
 		"file_hash",
@@ -49,5 +50,6 @@ func NewHasher(
 		},
 		cfg.GetCount(),
 		tracer,
+		metricProvider,
 	)
 }

@@ -14,6 +14,6 @@ var workerExecutionTaskTime = promauto.NewSummaryVec(prometheus.SummaryOpts{
 	Help:      "Время выполнения задачи воркером",
 }, []string{"worker_name"})
 
-func RegisterWorkerExecutionTaskTime(name string, d time.Duration) {
+func (MetricProvider) RegisterWorkerExecutionTaskTime(name string, d time.Duration) {
 	workerExecutionTaskTime.WithLabelValues(name).Observe(d.Seconds())
 }

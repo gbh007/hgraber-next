@@ -8,9 +8,11 @@ import (
 	"time"
 
 	"go.opentelemetry.io/otel/trace"
-
-	"hgnext/internal/metrics"
 )
+
+type metricProvider interface {
+	RegisterWorkerExecutionTaskTime(name string, d time.Duration)
+}
 
 type Worker[T any] struct {
 	name  string
@@ -24,8 +26,9 @@ type Worker[T any] struct {
 	handler func(context.Context, T)
 	getter  func(context.Context) []T
 
-	logger *slog.Logger
-	tracer trace.Tracer
+	logger         *slog.Logger
+	tracer         trace.Tracer
+	metricProvider metricProvider
 }
 
 func New[T any](
@@ -37,6 +40,7 @@ func New[T any](
 	getter func(context.Context) []T,
 	runnersCount int32,
 	tracer trace.Tracer,
+	metricProvider metricProvider,
 ) *Worker[T] {
 	w := &Worker[T]{
 		name:               name,
@@ -47,8 +51,9 @@ func New[T any](
 		handler:            handler,
 		getter:             getter,
 
-		logger: logger,
-		tracer: tracer,
+		logger:         logger,
+		tracer:         tracer,
+		metricProvider: metricProvider,
 	}
 
 	w.runnersCount.Store(runnersCount)
@@ -94,7 +99,7 @@ func (w *Worker[T]) handleOne(ctx context.Context, value T) {
 
 	tStart := time.Now()
 	defer func() {
-		metrics.RegisterWorkerExecutionTaskTime(w.name, time.Since(tStart))
+		w.metricProvider.RegisterWorkerExecutionTaskTime(w.name, time.Since(tStart))
 	}()
 
 	ctx = context.WithoutCancel(ctx)

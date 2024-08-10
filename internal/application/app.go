@@ -138,12 +138,14 @@ func Serve() {
 	fileUseCases := filelogic.New(logger, storage, fileStorage)
 	exportUseCases := export.New(logger, storage, fileStorage, agentSystem, tmpStorage, bookRequestUseCases)
 
+	metricProvider := metrics.MetricProvider{}
+
 	workersController := workermanager.New(
 		logger,
-		workermanager.NewBookParser(parsingUseCases, logger, tracer, cfg.Workers.Book),
-		workermanager.NewPageDownloader(parsingUseCases, logger, tracer, cfg.Workers.Page),
-		workermanager.NewHasher(fileUseCases, logger, tracer, cfg.Workers.Hasher),
-		workermanager.NewExporter(exportUseCases, logger, tracer, cfg.Workers.Exporter),
+		workermanager.NewBookParser(parsingUseCases, logger, tracer, cfg.Workers.Book, metricProvider),
+		workermanager.NewPageDownloader(parsingUseCases, logger, tracer, cfg.Workers.Page, metricProvider),
+		workermanager.NewHasher(fileUseCases, logger, tracer, cfg.Workers.Hasher, metricProvider),
+		workermanager.NewExporter(exportUseCases, logger, tracer, cfg.Workers.Exporter, metricProvider),
 	)
 
 	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage, bookRequestUseCases)

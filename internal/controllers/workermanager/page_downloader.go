@@ -21,6 +21,7 @@ func NewPageDownloader(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	cfg workerConfig,
+	metricProvider metricProvider,
 ) *worker.Worker[entities.PageForDownloadWithAgent] {
 	return worker.New[entities.PageForDownloadWithAgent](
 		"page",
@@ -51,5 +52,6 @@ func NewPageDownloader(
 		},
 		cfg.GetCount(),
 		tracer,
+		metricProvider,
 	)
 }

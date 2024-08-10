@@ -20,6 +20,7 @@ func NewExporter(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	cfg workerConfig,
+	metricProvider metricProvider,
 ) *worker.Worker[entities.BookFullWithAgent] {
 	return worker.New[entities.BookFullWithAgent](
 		"export",
@@ -42,5 +43,6 @@ func NewExporter(
 		},
 		cfg.GetCount(),
 		tracer,
+		metricProvider,
 	)
 }
