@@ -18,6 +18,10 @@ type Page struct {
 	FileID     uuid.UUID
 }
 
+func (p Page) IsLoaded() bool {
+	return p.Downloaded && p.FileID != uuid.Nil
+}
+
 type PageForDownload struct {
 	BookID     uuid.UUID
 	PageNumber int

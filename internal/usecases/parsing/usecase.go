@@ -29,6 +29,8 @@ type storage interface {
 	UnprocessedBooks(ctx context.Context) ([]entities.Book, error)
 
 	Agents(ctx context.Context, canParse, canExport bool) ([]entities.Agent, error)
+
+	PagesByURL(ctx context.Context, u url.URL) ([]entities.Page, error)
 }
 
 type agentSystem interface {
@@ -40,14 +42,20 @@ type agentSystem interface {
 
 type fileStorage interface {
 	Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
+	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
+}
+
+type bookRequester interface {
+	BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 }
 
 type UseCase struct {
 	logger *slog.Logger
 
-	storage     storage
-	agentSystem agentSystem
-	fileStorage fileStorage
+	storage       storage
+	agentSystem   agentSystem
+	fileStorage   fileStorage
+	bookRequester bookRequester
 
 	parseBookTimeout time.Duration
 }
@@ -57,6 +65,7 @@ func New(
 	storage storage,
 	agentSystem agentSystem,
 	fileStorage fileStorage,
+	bookRequester bookRequester,
 	parseBookTimeout time.Duration,
 ) *UseCase {
 	return &UseCase{

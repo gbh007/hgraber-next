@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/google/uuid"
@@ -114,6 +115,28 @@ func (d *Database) BookPages(ctx context.Context, bookID uuid.UUID) ([]entities.
 	out := make([]entities.Page, 0, len(pages))
 
 	for _, pageRaw := range pages {
+		page, err := pageRaw.ToEntity()
+		if err != nil {
+			return nil, fmt.Errorf("convert page :%w", err)
+		}
+
+		out = append(out, page)
+	}
+
+	return out, nil
+}
+
+func (d *Database) PagesByURL(ctx context.Context, u url.URL) ([]entities.Page, error) {
+	raw := make([]*model.Page, 0)
+
+	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM pages WHERE origin_url = $1 ORDER BY book_id, page_number;`, u.String())
+	if err != nil {
+		return nil, fmt.Errorf("get pages :%w", err)
+	}
+
+	out := make([]entities.Page, 0, len(raw))
+
+	for _, pageRaw := range raw {
 		page, err := pageRaw.ToEntity()
 		if err != nil {
 			return nil, fmt.Errorf("convert page :%w", err)
