@@ -89,7 +89,7 @@ func (w *Worker[T]) handleOne(ctx context.Context, value T) {
 	}()
 
 	ctx, span := w.tracer.Start(
-		ctx, "worker/"+w.name,
+		ctx, "worker-job/"+w.name,
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -152,15 +152,22 @@ handler:
 				continue
 			}
 
-			for _, title := range w.getter(ctx) {
+			ctx, span := w.tracer.Start(
+				ctx, "worker-fetch/"+w.name,
+				trace.WithSpanKind(trace.SpanKindServer),
+			)
+
+			for _, data := range w.getter(ctx) {
 				select {
 				case <-ctx.Done():
+					span.End()
 					break handler
 
-				case w.queue <- title:
+				case w.queue <- data:
 				}
-
 			}
+
+			span.End()
 		}
 	}
 
