@@ -18,13 +18,28 @@
           "type": "dashboard"
         },
         "type": "dashboard"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "${logs}"
+        },
+        "enable": true,
+        "expr": "{service_name=~\"$container_name\"} |= `application start`",
+        "hide": false,
+        "iconColor": "super-light-blue",
+        "instant": false,
+        "name": "app started",
+        "tagKeys": "{{host}}",
+        "textFormat": "started",
+        "titleFormat": "{{service_name}}"
       }
     ]
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 0,
-  "id": 13,
+  "graphTooltip": 1,
+  "id": 9,
   "links": [
     {
       "asDropdown": false,
@@ -91,6 +106,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -104,6 +120,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -188,7 +205,7 @@
             "uid": "${metrics}"
           },
           "editorMode": "code",
-          "expr": "hgraber_next_server_book_total{type=\"all\"}",
+          "expr": "hgraber_next_server_book_total{type=\"all\",instance=\"$node\"}",
           "legendFormat": "Всего",
           "range": true,
           "refId": "A"
@@ -199,7 +216,7 @@
             "uid": "${metrics}"
           },
           "editorMode": "code",
-          "expr": "hgraber_next_server_book_total{type=\"unparsed\"}",
+          "expr": "hgraber_next_server_book_total{type=\"unparsed\",instance=\"$node\"}",
           "hide": false,
           "legendFormat": "Необработано",
           "range": true,
@@ -221,6 +238,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -234,6 +252,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -294,7 +313,7 @@
             "uid": "${metrics}"
           },
           "editorMode": "code",
-          "expr": "hgraber_next_server_file_bytes{type=\"fs\"}",
+          "expr": "hgraber_next_server_file_bytes{type=\"fs\",instance=\"$node\"}",
           "legendFormat": "На диске",
           "range": true,
           "refId": "A"
@@ -305,7 +324,7 @@
             "uid": "${metrics}"
           },
           "editorMode": "code",
-          "expr": "hgraber_next_server_file_bytes{type=\"page\"}",
+          "expr": "hgraber_next_server_file_bytes{type=\"page\",instance=\"$node\"}",
           "hide": false,
           "legendFormat": "В страницах",
           "range": true,
@@ -327,6 +346,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -340,6 +360,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -425,7 +446,7 @@
             "uid": "${metrics}"
           },
           "editorMode": "code",
-          "expr": "hgraber_next_server_page_total{type=\"all\"}",
+          "expr": "hgraber_next_server_page_total{type=\"all\",instance=\"$node\"}",
           "legendFormat": "Всего",
           "range": true,
           "refId": "A"
@@ -436,7 +457,7 @@
             "uid": "${metrics}"
           },
           "editorMode": "code",
-          "expr": "hgraber_next_server_page_total{type=\"unloaded\"}",
+          "expr": "hgraber_next_server_page_total{type=\"unloaded\",instance=\"$node\"}",
           "hide": false,
           "legendFormat": "Незагружено",
           "range": true,
@@ -448,7 +469,7 @@
             "uid": "${metrics}"
           },
           "editorMode": "code",
-          "expr": "hgraber_next_server_page_total{type=\"no_body\"}",
+          "expr": "hgraber_next_server_page_total{type=\"no_body\",instance=\"$node\"}",
           "hide": false,
           "legendFormat": "Без файла",
           "range": true,
@@ -470,6 +491,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -483,6 +505,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -542,7 +565,7 @@
             "uid": "${metrics}"
           },
           "editorMode": "code",
-          "expr": "hgraber_next_server_worker_total",
+          "expr": "hgraber_next_server_worker_total{instance=\"$node\"}",
           "legendFormat": "{{worker_name}}-{{counter}}",
           "range": true,
           "refId": "A"
@@ -550,12 +573,199 @@
       ],
       "title": "Workers",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${metrics}"
+      },
+      "description": "Количество задач обработанных воркерами",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${metrics}"
+          },
+          "editorMode": "code",
+          "expr": "rate(hgraber_next_server_worker_execution_task_seconds_count{instance=\"$node\"}[$__rate_interval])",
+          "legendFormat": "{{worker_name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Worker RPS",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${metrics}"
+      },
+      "description": "Среднее время выполнения задачи воркером",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${metrics}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(hgraber_next_server_worker_execution_task_seconds_sum{instance=\"$node\"}[$__rate_interval])) by (worker_name)/sum(rate(hgraber_next_server_worker_execution_task_seconds_count{instance=\"$node\"}[$__rate_interval])) by (worker_name)",
+          "legendFormat": "{{worker_name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Worker avg  task execution",
+      "type": "timeseries"
     }
   ],
-  "refresh": "1m",
+  "refresh": "30m",
   "revision": 1,
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
@@ -563,7 +773,7 @@
         "current": {
           "selected": false,
           "text": "Prometheus-Prod",
-          "value": "Prometheus-Prod"
+          "value": "cdsshi58iiigwe"
         },
         "hide": 0,
         "includeAll": false,
@@ -581,7 +791,7 @@
         "current": {
           "selected": false,
           "text": "LokiProd",
-          "value": "LokiProd"
+          "value": "fdsshnntdx05cd"
         },
         "hide": 0,
         "includeAll": false,
@@ -596,26 +806,14 @@
         "type": "datasource"
       },
       {
-        "allValue": "",
-        "current": {
-          "selected": true,
-          "text": [
-            "hgraber-next-agent-server-1",
-            "hgraber-next-server-1"
-          ],
-          "value": [
-            "hgraber-next-agent-server-1",
-            "hgraber-next-server-1"
-          ]
-        },
+        "allValue": ".+",
         "datasource": {
           "type": "loki",
           "uid": "${logs}"
         },
         "definition": "",
-        "error": {},
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "multi": true,
         "name": "container_name",
         "options": [],
@@ -630,17 +828,41 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${metrics}"
+        },
+        "definition": "label_values(hgraber_next_server_worker_total,instance)",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "node",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(hgraber_next_server_worker_total,instance)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-24h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "hidden": false
+  },
   "timezone": "",
   "title": "Hgraber next",
   "uid": "KpCSmwlIk",
-  "version": 7,
+  "version": 6,
   "weekStart": ""
 }
