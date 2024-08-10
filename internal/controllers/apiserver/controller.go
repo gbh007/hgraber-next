@@ -18,6 +18,7 @@ import (
 type parseUseCases interface {
 	NewBooks(ctx context.Context, urls []url.URL) (entities.FirstHandleMultipleResult, error)
 	BooksExists(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error)
+	PagesExists(ctx context.Context, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
 }
 
 type webAPIUseCases interface {
@@ -138,13 +139,6 @@ func (c *Controller) APIBookRawPost(ctx context.Context, req *server.APIBookRawP
 // FIXME: реализовать
 func (c *Controller) APIPageBodyPost(ctx context.Context, req *server.APIPageBodyPostReq) (server.APIPageBodyPostRes, error) {
 	return &server.APIPageBodyPostInternalServerError{
-		InnerCode: "unimplemented",
-	}, nil
-}
-
-// FIXME: реализовать
-func (c *Controller) APIParsingPageExistsPost(ctx context.Context, req *server.APIParsingPageExistsPostReq) (server.APIParsingPageExistsPostRes, error) {
-	return &server.APIParsingPageExistsPostInternalServerError{
 		InnerCode: "unimplemented",
 	}, nil
 }
