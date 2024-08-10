@@ -72,7 +72,9 @@ type agentOfflineRT struct {
 func (rt agentOfflineRT) RoundTrip(req *http.Request) (*http.Response, error) {
 	res, err := rt.next.RoundTrip(req)
 
-	if errors.Is(err, syscall.ECONNREFUSED) {
+	if errors.Is(err, syscall.ECONNREFUSED) ||
+		errors.Is(err, syscall.EHOSTDOWN) ||
+		errors.Is(err, syscall.EHOSTUNREACH) {
 		err = fmt.Errorf("%w: %w", entities.AgentAPIOffline, err)
 	}
 
