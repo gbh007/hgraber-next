@@ -3,19 +3,19 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APISystemRPCRemoveMismatchFilesPost(ctx context.Context) (server.APISystemRPCRemoveMismatchFilesPostRes, error) {
+func (c *Controller) APISystemRPCRemoveMismatchFilesPost(ctx context.Context) (serverAPI.APISystemRPCRemoveMismatchFilesPostRes, error) {
 	removeFromFS, removeFromDB, err := c.cleanupUseCases.RemoveFilesInStoragesMismatch(ctx)
 	if err != nil {
-		return &server.APISystemRPCRemoveMismatchFilesPostInternalServerError{
+		return &serverAPI.APISystemRPCRemoveMismatchFilesPostInternalServerError{
 			InnerCode: CleanupUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &server.APISystemRPCRemoveMismatchFilesPostOK{
+	return &serverAPI.APISystemRPCRemoveMismatchFilesPostOK{
 		RemoveFromDb: removeFromDB,
 		RemoveFromFs: removeFromFS,
 	}, nil

@@ -10,31 +10,31 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APIFileIDGet(ctx context.Context, params server.APIFileIDGetParams) (server.APIFileIDGetRes, error) {
+func (c *Controller) APIFileIDGet(ctx context.Context, params serverAPI.APIFileIDGetParams) (serverAPI.APIFileIDGetRes, error) {
 	fileID, err := uuid.Parse(strings.TrimSuffix(params.ID, path.Ext(params.ID)))
 	if err != nil {
-		return &server.APIFileIDGetBadRequest{
+		return &serverAPI.APIFileIDGetBadRequest{
 			InnerCode: ValidationCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	body, err := c.webAPIUseCases.File(ctx, fileID)
 	if errors.Is(err, entities.FileNotFoundError) {
-		return &server.APIFileIDGetNotFound{
+		return &serverAPI.APIFileIDGetNotFound{
 			InnerCode: WebAPIUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &server.APIFileIDGetInternalServerError{
+		return &serverAPI.APIFileIDGetInternalServerError{
 			InnerCode: WebAPIUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
@@ -45,9 +45,9 @@ func (c *Controller) APIFileIDGet(ctx context.Context, params server.APIFileIDGe
 		contentType = "application/octet-stream"
 	}
 
-	return &server.APIFileIDGetOKHeaders{
+	return &serverAPI.APIFileIDGetOKHeaders{
 		ContentType: contentType,
-		Response: server.APIFileIDGetOK{
+		Response: serverAPI.APIFileIDGetOK{
 			Data: body,
 		},
 	}, nil

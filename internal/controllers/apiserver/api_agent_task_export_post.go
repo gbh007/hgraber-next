@@ -3,17 +3,17 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APIAgentTaskExportPost(ctx context.Context, req *server.APIAgentTaskExportPostReq) (server.APIAgentTaskExportPostRes, error) {
+func (c *Controller) APIAgentTaskExportPost(ctx context.Context, req *serverAPI.APIAgentTaskExportPostReq) (serverAPI.APIAgentTaskExportPostRes, error) {
 	err := c.exportUseCases.Export(ctx, req.Exporter, req.From, req.To)
 	if err != nil {
-		return &server.APIAgentTaskExportPostInternalServerError{
+		return &serverAPI.APIAgentTaskExportPostInternalServerError{
 			InnerCode: ExportUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &server.APIAgentTaskExportPostNoContent{}, nil
+	return &serverAPI.APIAgentTaskExportPostNoContent{}, nil
 }

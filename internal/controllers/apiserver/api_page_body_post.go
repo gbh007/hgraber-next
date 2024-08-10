@@ -5,11 +5,11 @@ import (
 	"errors"
 	"io"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APIPageBodyPost(ctx context.Context, req *server.APIPageBodyPostReq) (server.APIPageBodyPostRes, error) {
+func (c *Controller) APIPageBodyPost(ctx context.Context, req *serverAPI.APIPageBodyPostReq) (serverAPI.APIPageBodyPostRes, error) {
 	var (
 		body      io.Reader
 		err       error
@@ -26,27 +26,27 @@ func (c *Controller) APIPageBodyPost(ctx context.Context, req *server.APIPageBod
 		body, err = c.parseUseCases.PageBodyByURL(ctx, req.URL.Value)
 
 	default:
-		return &server.APIPageBodyPostBadRequest{
+		return &serverAPI.APIPageBodyPostBadRequest{
 			InnerCode: ValidationCode,
-			Details:   server.NewOptString("id/page number and url is empty"),
+			Details:   serverAPI.NewOptString("id/page number and url is empty"),
 		}, nil
 	}
 
 	if errors.Is(err, entities.PageNotFoundError) || errors.Is(err, entities.FileNotFoundError) {
-		return &server.APIPageBodyPostNotFound{
+		return &serverAPI.APIPageBodyPostNotFound{
 			InnerCode: innerCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &server.APIPageBodyPostInternalServerError{
+		return &serverAPI.APIPageBodyPostInternalServerError{
 			InnerCode: innerCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &server.APIPageBodyPostOK{
+	return &serverAPI.APIPageBodyPostOK{
 		Data: body,
 	}, nil
 }

@@ -4,37 +4,37 @@ import (
 	"context"
 	"errors"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APIBookDetailsPost(ctx context.Context, req *server.APIBookDetailsPostReq) (server.APIBookDetailsPostRes, error) {
+func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIBookDetailsPostReq) (serverAPI.APIBookDetailsPostRes, error) {
 	book, err := c.webAPIUseCases.Book(ctx, req.ID)
 	if errors.Is(err, entities.BookNotFoundError) {
-		return &server.APIBookDetailsPostNotFound{
+		return &serverAPI.APIBookDetailsPostNotFound{
 			InnerCode: WebAPIUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &server.APIBookDetailsPostInternalServerError{
+		return &serverAPI.APIBookDetailsPostInternalServerError{
 			InnerCode: WebAPIUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	previewURL := server.OptURI{}
+	previewURL := serverAPI.OptURI{}
 
 	if book.PreviewPage.Downloaded {
-		previewURL = server.NewOptURI(c.getFileURL(
+		previewURL = serverAPI.NewOptURI(c.getFileURL(
 			book.PreviewPage.FileID,
 			book.PreviewPage.Ext,
 		))
 	}
 
-	return &server.BookDetails{
+	return &serverAPI.BookDetails{
 		ID:                book.Book.ID,
 		Created:           book.Book.CreateAt,
 		PreviewURL:        previewURL,
@@ -43,23 +43,23 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *server.APIBook
 		ParsedPage:        book.ParsedPages,
 		PageCount:         book.Book.PageCount,
 		PageLoadedPercent: book.PageDownloadPercent(),
-		Attributes: pkg.Map(book.Attributes, func(a entities.AttributeToWeb) server.BookDetailsAttributesItem {
-			return server.BookDetailsAttributesItem{
+		Attributes: pkg.Map(book.Attributes, func(a entities.AttributeToWeb) serverAPI.BookDetailsAttributesItem {
+			return serverAPI.BookDetailsAttributesItem{
 				Name:   a.Name,
 				Values: a.Values,
 			}
 		}),
-		Pages: pkg.Map(book.Pages, func(p entities.Page) server.BookDetailsPagesItem {
-			previewURL := server.OptURI{}
+		Pages: pkg.Map(book.Pages, func(p entities.Page) serverAPI.BookDetailsPagesItem {
+			previewURL := serverAPI.OptURI{}
 
 			if p.Downloaded {
-				previewURL = server.NewOptURI(c.getFileURL(
+				previewURL = serverAPI.NewOptURI(c.getFileURL(
 					p.FileID,
 					p.Ext,
 				))
 			}
 
-			return server.BookDetailsPagesItem{
+			return serverAPI.BookDetailsPagesItem{
 				PageNumber: p.PageNumber,
 				PreviewURL: previewURL,
 			}

@@ -8,8 +8,8 @@ LDFLAGS = -ldflags "-X 'hgnext/internal/version.Version=$(TAG)' -X 'hgnext/inter
 
 .PHONY: generate
 generate:
-	go run github.com/ogen-go/ogen/cmd/ogen --target internal/adapters/agent/internal/client -package client --clean open_api_specs/agent.yaml
-	go run github.com/ogen-go/ogen/cmd/ogen --target internal/controllers/apiserver/internal/server -package server --clean open_api_specs/server.yaml
+	go run github.com/ogen-go/ogen/cmd/ogen --target open_api/agentAPI -package agentAPI --clean open_api/agent.yaml
+	go run github.com/ogen-go/ogen/cmd/ogen --target open_api/serverAPI -package serverAPI --clean open_api/server.yaml
 
 create_build_dir:
 	mkdir -p ./_build

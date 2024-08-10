@@ -3,48 +3,48 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APIParsingBookExistsPost(ctx context.Context, req *server.APIParsingBookExistsPostReq) (server.APIParsingBookExistsPostRes, error) {
+func (c *Controller) APIParsingBookExistsPost(ctx context.Context, req *serverAPI.APIParsingBookExistsPostReq) (serverAPI.APIParsingBookExistsPostRes, error) {
 	result, err := c.parseUseCases.BooksExists(ctx, req.Urls)
 	if err != nil {
-		return &server.APIParsingBookExistsPostInternalServerError{
+		return &serverAPI.APIParsingBookExistsPostInternalServerError{
 			InnerCode: ParseUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &server.APIParsingBookExistsPostOK{
-		Result: pkg.Map(result, func(v entities.AgentBookCheckResult) server.APIParsingBookExistsPostOKResultItem {
+	return &serverAPI.APIParsingBookExistsPostOK{
+		Result: pkg.Map(result, func(v entities.AgentBookCheckResult) serverAPI.APIParsingBookExistsPostOKResultItem {
 			switch {
 			case v.IsPossible:
-				return server.APIParsingBookExistsPostOKResultItem{
+				return serverAPI.APIParsingBookExistsPostOKResultItem{
 					URL:                v.URL,
-					Result:             server.APIParsingBookExistsPostOKResultItemResultOk,
+					Result:             serverAPI.APIParsingBookExistsPostOKResultItemResultOk,
 					PossibleDuplicates: v.PossibleDuplicates,
 				}
 
 			case v.IsUnsupported:
-				return server.APIParsingBookExistsPostOKResultItem{
+				return serverAPI.APIParsingBookExistsPostOKResultItem{
 					URL:    v.URL,
-					Result: server.APIParsingBookExistsPostOKResultItemResultUnsupported,
+					Result: serverAPI.APIParsingBookExistsPostOKResultItemResultUnsupported,
 				}
 
 			case v.HasError:
-				return server.APIParsingBookExistsPostOKResultItem{
+				return serverAPI.APIParsingBookExistsPostOKResultItem{
 					URL:          v.URL,
-					Result:       server.APIParsingBookExistsPostOKResultItemResultError,
-					ErrorDetails: server.NewOptString(v.ErrorReason),
+					Result:       serverAPI.APIParsingBookExistsPostOKResultItemResultError,
+					ErrorDetails: serverAPI.NewOptString(v.ErrorReason),
 				}
 
 			default:
-				return server.APIParsingBookExistsPostOKResultItem{
+				return serverAPI.APIParsingBookExistsPostOKResultItem{
 					URL:          v.URL,
-					Result:       server.APIParsingBookExistsPostOKResultItemResultError,
-					ErrorDetails: server.NewOptString("unknown result state"),
+					Result:       serverAPI.APIParsingBookExistsPostOKResultItemResultError,
+					ErrorDetails: serverAPI.NewOptString("unknown result state"),
 				}
 			}
 		}),

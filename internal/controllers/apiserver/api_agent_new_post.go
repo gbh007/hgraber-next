@@ -3,11 +3,11 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APIAgentNewPost(ctx context.Context, req *server.APIAgentNewPostReq) (server.APIAgentNewPostRes, error) {
+func (c *Controller) APIAgentNewPost(ctx context.Context, req *serverAPI.APIAgentNewPostReq) (serverAPI.APIAgentNewPostRes, error) {
 	err := c.agentUseCases.NewAgent(ctx, entities.Agent{
 		Name:      req.Name,
 		Addr:      req.Addr,
@@ -17,11 +17,11 @@ func (c *Controller) APIAgentNewPost(ctx context.Context, req *server.APIAgentNe
 		Priority:  req.Priority.Value,
 	})
 	if err != nil {
-		return &server.APIAgentNewPostInternalServerError{
+		return &serverAPI.APIAgentNewPostInternalServerError{
 			InnerCode: AgentUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &server.APIAgentNewPostNoContent{}, nil
+	return &serverAPI.APIAgentNewPostNoContent{}, nil
 }

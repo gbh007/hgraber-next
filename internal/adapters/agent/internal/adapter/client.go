@@ -10,18 +10,18 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 
-	"hgnext/internal/adapters/agent/internal/client"
 	"hgnext/internal/entities"
+	"hgnext/open_api/agentAPI"
 )
 
 const agentTimeout = time.Minute * 10
 
 type Adapter struct {
-	rawClient *client.Client
+	rawClient *agentAPI.Client
 }
 
 type FSAdapter struct {
-	rawClient *client.Client
+	rawClient *agentAPI.Client
 }
 
 // TODO: возможно стоит вынести инициализацию HTTP клиента наружу
@@ -31,12 +31,12 @@ func New(baseURL string, token string) (*Adapter, error) {
 		Timeout:   agentTimeout,
 	}
 
-	rawClient, err := client.NewClient(
+	rawClient, err := agentAPI.NewClient(
 		baseURL,
 		securitySource{
 			token: token,
 		},
-		client.WithClient(&httpClient),
+		agentAPI.WithClient(&httpClient),
 	)
 	if err != nil {
 		return nil, err

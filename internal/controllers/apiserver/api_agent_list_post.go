@@ -3,60 +3,60 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APIAgentListPost(ctx context.Context, req *server.APIAgentListPostReq) (server.APIAgentListPostRes, error) {
+func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAgentListPostReq) (serverAPI.APIAgentListPostRes, error) {
 	agents, err := c.agentUseCases.Agents(ctx, req.CanParse.Value, req.CanExport.Value, req.IncludeStatus.Value)
 	if err != nil {
-		return &server.APIAgentListPostInternalServerError{
+		return &serverAPI.APIAgentListPostInternalServerError{
 			InnerCode: AgentUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	responseAgents := pkg.Map(agents, func(aws entities.AgentWithStatus) server.APIAgentListPostOKItem {
-		status := server.OptAPIAgentListPostOKItemStatus{}
+	responseAgents := pkg.Map(agents, func(aws entities.AgentWithStatus) serverAPI.APIAgentListPostOKItem {
+		status := serverAPI.OptAPIAgentListPostOKItemStatus{}
 
 		switch {
 		case aws.StatusError != "":
-			status = server.NewOptAPIAgentListPostOKItemStatus(server.APIAgentListPostOKItemStatus{
-				CheckStatusError: server.NewOptString(aws.StatusError),
-				Status:           server.APIAgentListPostOKItemStatusStatusUnknown,
+			status = serverAPI.NewOptAPIAgentListPostOKItemStatus(serverAPI.APIAgentListPostOKItemStatus{
+				CheckStatusError: serverAPI.NewOptString(aws.StatusError),
+				Status:           serverAPI.APIAgentListPostOKItemStatusStatusUnknown,
 			})
 
 		case aws.IsOffline:
-			status = server.NewOptAPIAgentListPostOKItemStatus(server.APIAgentListPostOKItemStatus{
-				Status: server.APIAgentListPostOKItemStatusStatusOffline,
+			status = serverAPI.NewOptAPIAgentListPostOKItemStatus(serverAPI.APIAgentListPostOKItemStatus{
+				Status: serverAPI.APIAgentListPostOKItemStatusStatusOffline,
 			})
 
 		case !aws.Status.StartAt.IsZero():
-			t := server.APIAgentListPostOKItemStatusStatusUnknown
+			t := serverAPI.APIAgentListPostOKItemStatusStatusUnknown
 
 			switch {
 			case aws.Status.IsOK:
-				t = server.APIAgentListPostOKItemStatusStatusOk
+				t = serverAPI.APIAgentListPostOKItemStatusStatusOk
 			case aws.Status.IsWarning:
-				t = server.APIAgentListPostOKItemStatusStatusWarning
+				t = serverAPI.APIAgentListPostOKItemStatusStatusWarning
 			case aws.Status.IsError:
-				t = server.APIAgentListPostOKItemStatusStatusError
+				t = serverAPI.APIAgentListPostOKItemStatusStatusError
 			}
 
-			status = server.NewOptAPIAgentListPostOKItemStatus(server.APIAgentListPostOKItemStatus{
-				StartAt: server.NewOptDateTime(aws.Status.StartAt),
-				Problems: pkg.Map(aws.Status.Problems, func(p entities.AgentStatusProblem) server.APIAgentListPostOKItemStatusProblemsItem {
-					t := server.APIAgentListPostOKItemStatusProblemsItemTypeError
+			status = serverAPI.NewOptAPIAgentListPostOKItemStatus(serverAPI.APIAgentListPostOKItemStatus{
+				StartAt: serverAPI.NewOptDateTime(aws.Status.StartAt),
+				Problems: pkg.Map(aws.Status.Problems, func(p entities.AgentStatusProblem) serverAPI.APIAgentListPostOKItemStatusProblemsItem {
+					t := serverAPI.APIAgentListPostOKItemStatusProblemsItemTypeError
 
 					switch {
 					case p.IsInfo:
-						t = server.APIAgentListPostOKItemStatusProblemsItemTypeInfo
+						t = serverAPI.APIAgentListPostOKItemStatusProblemsItemTypeInfo
 					case p.IsWarning:
-						t = server.APIAgentListPostOKItemStatusProblemsItemTypeWarning
+						t = serverAPI.APIAgentListPostOKItemStatusProblemsItemTypeWarning
 					}
 
-					return server.APIAgentListPostOKItemStatusProblemsItem{
+					return serverAPI.APIAgentListPostOKItemStatusProblemsItem{
 						Type:    t,
 						Details: p.Details,
 					}
@@ -65,7 +65,7 @@ func (c *Controller) APIAgentListPost(ctx context.Context, req *server.APIAgentL
 			})
 		}
 
-		return server.APIAgentListPostOKItem{
+		return serverAPI.APIAgentListPostOKItem{
 			Status:    status,
 			ID:        aws.Agent.ID,
 			Name:      aws.Agent.Name,
@@ -77,7 +77,7 @@ func (c *Controller) APIAgentListPost(ctx context.Context, req *server.APIAgentL
 		}
 	})
 
-	res := server.APIAgentListPostOKApplicationJSON(responseAgents)
+	res := serverAPI.APIAgentListPostOKApplicationJSON(responseAgents)
 
 	return &res, nil
 }

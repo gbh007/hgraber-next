@@ -4,27 +4,27 @@ import (
 	"context"
 	"errors"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APIBookArchiveIDGet(ctx context.Context, params server.APIBookArchiveIDGetParams) (server.APIBookArchiveIDGetRes, error) {
+func (c *Controller) APIBookArchiveIDGet(ctx context.Context, params serverAPI.APIBookArchiveIDGetParams) (serverAPI.APIBookArchiveIDGetRes, error) {
 	body, err := c.exportUseCases.ExportBook(ctx, params.ID)
 	if errors.Is(err, entities.BookNotFoundError) {
-		return &server.APIBookArchiveIDGetNotFound{
+		return &serverAPI.APIBookArchiveIDGetNotFound{
 			InnerCode: ExportUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &server.APIBookArchiveIDGetInternalServerError{
+		return &serverAPI.APIBookArchiveIDGetInternalServerError{
 			InnerCode: ExportUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &server.APIBookArchiveIDGetOK{
+	return &serverAPI.APIBookArchiveIDGetOK{
 		Data: body,
 	}, nil
 }

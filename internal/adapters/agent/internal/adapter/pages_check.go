@@ -4,15 +4,15 @@ import (
 	"context"
 	"fmt"
 
-	"hgnext/internal/adapters/agent/internal/client"
 	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
+	"hgnext/open_api/agentAPI"
 )
 
 func (a *Adapter) PagesCheck(ctx context.Context, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error) {
-	res, err := a.rawClient.APIParsingPageCheckPost(ctx, &client.APIParsingPageCheckPostReq{
-		Urls: pkg.Map(urls, func(u entities.AgentPageURL) client.APIParsingPageCheckPostReqUrlsItem {
-			return client.APIParsingPageCheckPostReqUrlsItem{
+	res, err := a.rawClient.APIParsingPageCheckPost(ctx, &agentAPI.APIParsingPageCheckPostReq{
+		Urls: pkg.Map(urls, func(u entities.AgentPageURL) agentAPI.APIParsingPageCheckPostReqUrlsItem {
+			return agentAPI.APIParsingPageCheckPostReqUrlsItem{
 				BookURL:  u.BookURL,
 				ImageURL: u.ImageURL,
 			}
@@ -25,28 +25,28 @@ func (a *Adapter) PagesCheck(ctx context.Context, urls []entities.AgentPageURL) 
 	var result []entities.AgentPageCheckResult
 
 	switch typedRes := res.(type) {
-	case *client.APIParsingPageCheckPostOK:
-		result = pkg.Map(typedRes.Result, func(v client.APIParsingPageCheckPostOKResultItem) entities.AgentPageCheckResult {
+	case *agentAPI.APIParsingPageCheckPostOK:
+		result = pkg.Map(typedRes.Result, func(v agentAPI.APIParsingPageCheckPostOKResultItem) entities.AgentPageCheckResult {
 			return entities.AgentPageCheckResult{
 				BookURL:       v.BookURL,
 				ImageURL:      v.ImageURL,
-				IsUnsupported: v.Result == client.APIParsingPageCheckPostOKResultItemResultUnsupported,
-				IsPossible:    v.Result == client.APIParsingPageCheckPostOKResultItemResultOk,
-				HasError:      v.Result == client.APIParsingPageCheckPostOKResultItemResultError,
+				IsUnsupported: v.Result == agentAPI.APIParsingPageCheckPostOKResultItemResultUnsupported,
+				IsPossible:    v.Result == agentAPI.APIParsingPageCheckPostOKResultItemResultOk,
+				HasError:      v.Result == agentAPI.APIParsingPageCheckPostOKResultItemResultError,
 				ErrorReason:   v.ErrorDetails.Value,
 			}
 		})
 
-	case *client.APIParsingPageCheckPostBadRequest:
+	case *agentAPI.APIParsingPageCheckPostBadRequest:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *client.APIParsingPageCheckPostUnauthorized:
+	case *agentAPI.APIParsingPageCheckPostUnauthorized:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *client.APIParsingPageCheckPostForbidden:
+	case *agentAPI.APIParsingPageCheckPostForbidden:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *client.APIParsingPageCheckPostInternalServerError:
+	case *agentAPI.APIParsingPageCheckPostInternalServerError:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:

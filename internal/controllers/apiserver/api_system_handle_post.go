@@ -3,33 +3,33 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APISystemHandlePost(ctx context.Context, req *server.APISystemHandlePostReq) (server.APISystemHandlePostRes, error) {
+func (c *Controller) APISystemHandlePost(ctx context.Context, req *serverAPI.APISystemHandlePostReq) (serverAPI.APISystemHandlePostRes, error) {
 	result, err := c.parseUseCases.NewBooks(ctx, req.Urls)
 	if err != nil {
-		return &server.APISystemHandlePostInternalServerError{
+		return &serverAPI.APISystemHandlePostInternalServerError{
 			InnerCode: ParseUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &server.APISystemHandlePostOK{
+	return &serverAPI.APISystemHandlePostOK{
 		TotalCount:     result.TotalCount,
 		LoadedCount:    result.LoadedCount,
 		DuplicateCount: result.DuplicateCount,
 		ErrorCount:     result.ErrorCount,
 		NotHandled:     result.NotHandled,
-		Details: pkg.Map(result.Details, func(b entities.BookHandleResult) server.APISystemHandlePostOKDetailsItem {
-			return server.APISystemHandlePostOKDetailsItem{
+		Details: pkg.Map(result.Details, func(b entities.BookHandleResult) serverAPI.APISystemHandlePostOKDetailsItem {
+			return serverAPI.APISystemHandlePostOKDetailsItem{
 				URL:         b.URL,
 				IsDuplicate: b.IsDuplicate,
 				// DuplicateID: , // FIXME: заполнять
 				IsHandled:   b.IsHandled,
-				ErrorReason: server.NewOptString(b.ErrorReason),
+				ErrorReason: serverAPI.NewOptString(b.ErrorReason),
 			}
 		}),
 	}, nil

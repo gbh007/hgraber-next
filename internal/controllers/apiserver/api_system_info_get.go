@@ -3,21 +3,21 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APISystemInfoGet(ctx context.Context) (server.APISystemInfoGetRes, error) {
+func (c *Controller) APISystemInfoGet(ctx context.Context) (serverAPI.APISystemInfoGetRes, error) {
 	info, err := c.webAPIUseCases.SystemInfo(ctx)
 	if err != nil {
-		return &server.APISystemInfoGetInternalServerError{
+		return &serverAPI.APISystemInfoGetInternalServerError{
 			InnerCode: WebAPIUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &server.SystemInfo{
+	return &serverAPI.SystemInfo{
 		Count:                info.BookCount,
 		NotLoadCount:         info.BookUnparsedCount,
 		PageCount:            info.PageCount,
@@ -27,9 +27,9 @@ func (c *Controller) APISystemInfoGet(ctx context.Context) (server.APISystemInfo
 		PagesSizeFormatted:   entities.PrettySize(info.PageFileSize),
 		FilesSize:            info.FileSize,
 		FilesSizeFormatted:   entities.PrettySize(info.FileSize),
-		Monitor: server.NewOptSystemInfoMonitor(server.SystemInfoMonitor{
-			Workers: pkg.Map(info.Workers, func(w entities.SystemWorkerStat) server.SystemInfoMonitorWorkersItem {
-				return server.SystemInfoMonitorWorkersItem{
+		Monitor: serverAPI.NewOptSystemInfoMonitor(serverAPI.SystemInfoMonitor{
+			Workers: pkg.Map(info.Workers, func(w entities.SystemWorkerStat) serverAPI.SystemInfoMonitorWorkersItem {
+				return serverAPI.SystemInfoMonitorWorkersItem{
 					Name:    w.Name,
 					InQueue: w.InQueueCount,
 					InWork:  w.InWorkCount,

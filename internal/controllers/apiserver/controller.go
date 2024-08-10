@@ -11,8 +11,8 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
+	"hgnext/open_api/serverAPI"
 )
 
 type parseUseCases interface {
@@ -76,7 +76,7 @@ type Controller struct {
 	deduplicateUseCases deduplicateUseCases
 	cleanupUseCases     cleanupUseCases
 
-	ogenServer *server.Server
+	ogenServer *serverAPI.Server
 
 	serverAddr string
 
@@ -119,7 +119,7 @@ func New(
 		token:                      config.GetToken(),
 	}
 
-	ogenServer, err := server.NewServer(
+	ogenServer, err := serverAPI.NewServer(
 		c, c,
 		// server.WithErrorHandler(), // FIXME: реализовать
 		// server.WithMethodNotAllowed(), // FIXME: реализовать

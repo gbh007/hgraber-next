@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"hgnext/internal/adapters/agent/internal/client"
 	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
+	"hgnext/open_api/agentAPI"
 )
 
 func (a *Adapter) Status(ctx context.Context) (entities.AgentStatus, error) {
@@ -16,32 +16,32 @@ func (a *Adapter) Status(ctx context.Context) (entities.AgentStatus, error) {
 	}
 
 	switch typedRes := res.(type) {
-	case *client.APICoreStatusGetOK:
+	case *agentAPI.APICoreStatusGetOK:
 		return entities.AgentStatus{
 			StartAt:   typedRes.StartAt,
-			IsOK:      typedRes.Status == client.APICoreStatusGetOKStatusOk,
-			IsWarning: typedRes.Status == client.APICoreStatusGetOKStatusWarning,
-			IsError:   typedRes.Status == client.APICoreStatusGetOKStatusError,
-			Problems: pkg.Map(typedRes.Problems, func(p client.APICoreStatusGetOKProblemsItem) entities.AgentStatusProblem {
+			IsOK:      typedRes.Status == agentAPI.APICoreStatusGetOKStatusOk,
+			IsWarning: typedRes.Status == agentAPI.APICoreStatusGetOKStatusWarning,
+			IsError:   typedRes.Status == agentAPI.APICoreStatusGetOKStatusError,
+			Problems: pkg.Map(typedRes.Problems, func(p agentAPI.APICoreStatusGetOKProblemsItem) entities.AgentStatusProblem {
 				return entities.AgentStatusProblem{
-					IsInfo:    p.Type == client.APICoreStatusGetOKProblemsItemTypeInfo,
-					IsWarning: p.Type == client.APICoreStatusGetOKProblemsItemTypeWarning,
-					IsError:   p.Type == client.APICoreStatusGetOKProblemsItemTypeError,
+					IsInfo:    p.Type == agentAPI.APICoreStatusGetOKProblemsItemTypeInfo,
+					IsWarning: p.Type == agentAPI.APICoreStatusGetOKProblemsItemTypeWarning,
+					IsError:   p.Type == agentAPI.APICoreStatusGetOKProblemsItemTypeError,
 					Details:   p.Details,
 				}
 			}),
 		}, nil
 
-	case *client.APICoreStatusGetBadRequest:
+	case *agentAPI.APICoreStatusGetBadRequest:
 		return entities.AgentStatus{}, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *client.APICoreStatusGetUnauthorized:
+	case *agentAPI.APICoreStatusGetUnauthorized:
 		return entities.AgentStatus{}, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *client.APICoreStatusGetForbidden:
+	case *agentAPI.APICoreStatusGetForbidden:
 		return entities.AgentStatus{}, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *client.APICoreStatusGetInternalServerError:
+	case *agentAPI.APICoreStatusGetInternalServerError:
 		return entities.AgentStatus{}, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:

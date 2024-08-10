@@ -7,17 +7,17 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/adapters/agent/internal/client"
 	"hgnext/internal/entities"
+	"hgnext/open_api/agentAPI"
 )
 
 func (a *Adapter) ExportArchive(ctx context.Context, bookID uuid.UUID, bookName string, body io.Reader) error {
 	res, err := a.rawClient.APIExportArchivePost(
 		ctx,
-		client.APIExportArchivePostReq{
+		agentAPI.APIExportArchivePostReq{
 			Data: body,
 		},
-		client.APIExportArchivePostParams{
+		agentAPI.APIExportArchivePostParams{
 			BookID:   bookID,
 			BookName: bookName,
 		},
@@ -27,19 +27,19 @@ func (a *Adapter) ExportArchive(ctx context.Context, bookID uuid.UUID, bookName 
 	}
 
 	switch typedRes := res.(type) {
-	case *client.APIExportArchivePostNoContent:
+	case *agentAPI.APIExportArchivePostNoContent:
 		return nil
 
-	case *client.APIExportArchivePostBadRequest:
+	case *agentAPI.APIExportArchivePostBadRequest:
 		return fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *client.APIExportArchivePostUnauthorized:
+	case *agentAPI.APIExportArchivePostUnauthorized:
 		return fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *client.APIExportArchivePostForbidden:
+	case *agentAPI.APIExportArchivePostForbidden:
 		return fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *client.APIExportArchivePostInternalServerError:
+	case *agentAPI.APIExportArchivePostInternalServerError:
 		return fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:

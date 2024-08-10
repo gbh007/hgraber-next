@@ -3,36 +3,36 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
 	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APIBookListPost(ctx context.Context, req *server.APIBookListPostReq) (server.APIBookListPostRes, error) {
+func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.APIBookListPostReq) (serverAPI.APIBookListPostRes, error) {
 	filter := entities.BookFilter{}
 	filter.FillNewest(req.Page.Value, req.Count)
 
 	books, pageListRaw, err := c.webAPIUseCases.BookList(ctx, filter)
 	if err != nil {
-		return &server.APIBookListPostInternalServerError{
+		return &serverAPI.APIBookListPostInternalServerError{
 			InnerCode: WebAPIUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &server.APIBookListPostOK{
-		Books: pkg.Map(books, func(b entities.BookToWeb) server.BookShortInfo {
+	return &serverAPI.APIBookListPostOK{
+		Books: pkg.Map(books, func(b entities.BookToWeb) serverAPI.BookShortInfo {
 
-			previewURL := server.OptURI{}
+			previewURL := serverAPI.OptURI{}
 
 			if b.PreviewPage.Downloaded {
-				previewURL = server.NewOptURI(c.getFileURL(
+				previewURL = serverAPI.NewOptURI(c.getFileURL(
 					b.PreviewPage.FileID,
 					b.PreviewPage.Ext,
 				))
 			}
 
-			return server.BookShortInfo{
+			return serverAPI.BookShortInfo{
 				ID:                b.Book.ID,
 				Created:           b.Book.CreateAt,
 				PreviewURL:        previewURL,
@@ -45,8 +45,8 @@ func (c *Controller) APIBookListPost(ctx context.Context, req *server.APIBookLis
 				HasMoreTags:       b.HasMoreTags,
 			}
 		}),
-		Pages: pkg.Map(pageListRaw, func(v int) server.APIBookListPostOKPagesItem {
-			return server.APIBookListPostOKPagesItem{
+		Pages: pkg.Map(pageListRaw, func(v int) serverAPI.APIBookListPostOKPagesItem {
+			return serverAPI.APIBookListPostOKPagesItem{
 				Value:       v,
 				IsCurrent:   v == req.Page.Value,
 				IsSeparator: v == -1,

@@ -5,12 +5,12 @@ import (
 	"errors"
 	"net/http"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
+	"hgnext/open_api/serverAPI"
 )
 
 var errorAccessForbidden = errors.New("access forbidden")
 
-func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string, t server.HeaderAuth) (context.Context, error) {
+func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string, t serverAPI.HeaderAuth) (context.Context, error) {
 	if c.token == "" {
 		return ctx, nil
 	}
@@ -22,7 +22,7 @@ func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string,
 	return ctx, nil
 }
 
-func (c *Controller) HandleCookies(ctx context.Context, operationName string, t server.Cookies) (context.Context, error) {
+func (c *Controller) HandleCookies(ctx context.Context, operationName string, t serverAPI.Cookies) (context.Context, error) {
 	if c.token == "" {
 		return ctx, nil
 	}
@@ -34,7 +34,7 @@ func (c *Controller) HandleCookies(ctx context.Context, operationName string, t 
 	return ctx, nil
 }
 
-func (c *Controller) APIUserLoginPost(ctx context.Context, req *server.APIUserLoginPostReq) (server.APIUserLoginPostRes, error) {
+func (c *Controller) APIUserLoginPost(ctx context.Context, req *serverAPI.APIUserLoginPostReq) (serverAPI.APIUserLoginPostRes, error) {
 	cookie := http.Cookie{
 		Name:     "X-HG-Token",
 		Value:    req.Token,
@@ -42,7 +42,7 @@ func (c *Controller) APIUserLoginPost(ctx context.Context, req *server.APIUserLo
 		HttpOnly: true,
 	}
 
-	return &server.APIUserLoginPostNoContent{
-		SetCookie: server.NewOptString(cookie.String()),
+	return &serverAPI.APIUserLoginPostNoContent{
+		SetCookie: serverAPI.NewOptString(cookie.String()),
 	}, nil
 }

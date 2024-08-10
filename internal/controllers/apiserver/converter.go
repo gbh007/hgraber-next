@@ -4,21 +4,21 @@ import (
 	"net/url"
 	"time"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
+	"hgnext/open_api/serverAPI"
 )
 
-func optURL(u *url.URL) server.OptURI {
+func optURL(u *url.URL) serverAPI.OptURI {
 	if u == nil {
-		return server.OptURI{}
+		return serverAPI.OptURI{}
 	}
 
-	return server.NewOptURI(*u)
+	return serverAPI.NewOptURI(*u)
 }
 
-func optTime(t time.Time) server.OptDateTime {
+func optTime(t time.Time) serverAPI.OptDateTime {
 	if t.IsZero() {
-		return server.OptDateTime{}
+		return serverAPI.OptDateTime{}
 	}
 
-	return server.NewOptDateTime(t)
+	return serverAPI.NewOptDateTime(t)
 }

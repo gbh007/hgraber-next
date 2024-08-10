@@ -7,37 +7,37 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/adapters/agent/internal/client"
 	"hgnext/internal/entities"
+	"hgnext/open_api/agentAPI"
 )
 
 func (a *FSAdapter) Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error {
 	res, err := a.rawClient.APIFsCreatePost(
 		ctx,
-		client.APIFsCreatePostReq{Data: body},
-		client.APIFsCreatePostParams{FileID: fileID},
+		agentAPI.APIFsCreatePostReq{Data: body},
+		agentAPI.APIFsCreatePostParams{FileID: fileID},
 	)
 	if err != nil {
 		return err
 	}
 
 	switch typedRes := res.(type) {
-	case *client.APIFsCreatePostNoContent:
+	case *agentAPI.APIFsCreatePostNoContent:
 		return nil
 
-	case *client.APIFsCreatePostConflict:
+	case *agentAPI.APIFsCreatePostConflict:
 		return fmt.Errorf("%w: %s", entities.AgentAPIConflict, typedRes.Details.Value)
 
-	case *client.APIFsCreatePostBadRequest:
+	case *agentAPI.APIFsCreatePostBadRequest:
 		return fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *client.APIFsCreatePostUnauthorized:
+	case *agentAPI.APIFsCreatePostUnauthorized:
 		return fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *client.APIFsCreatePostForbidden:
+	case *agentAPI.APIFsCreatePostForbidden:
 		return fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *client.APIFsCreatePostInternalServerError:
+	case *agentAPI.APIFsCreatePostInternalServerError:
 		return fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
@@ -46,28 +46,28 @@ func (a *FSAdapter) Create(ctx context.Context, fileID uuid.UUID, body io.Reader
 }
 
 func (a *FSAdapter) Delete(ctx context.Context, fileID uuid.UUID) error {
-	res, err := a.rawClient.APIFsDeletePost(ctx, &client.APIFsDeletePostReq{FileID: fileID})
+	res, err := a.rawClient.APIFsDeletePost(ctx, &agentAPI.APIFsDeletePostReq{FileID: fileID})
 	if err != nil {
 		return err
 	}
 
 	switch typedRes := res.(type) {
-	case *client.APIFsDeletePostNoContent:
+	case *agentAPI.APIFsDeletePostNoContent:
 		return nil
 
-	case *client.APIFsDeletePostNotFound:
+	case *agentAPI.APIFsDeletePostNotFound:
 		return fmt.Errorf("%w: %s", entities.FileNotFoundError, typedRes.Details.Value)
 
-	case *client.APIFsDeletePostBadRequest:
+	case *agentAPI.APIFsDeletePostBadRequest:
 		return fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *client.APIFsDeletePostUnauthorized:
+	case *agentAPI.APIFsDeletePostUnauthorized:
 		return fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *client.APIFsDeletePostForbidden:
+	case *agentAPI.APIFsDeletePostForbidden:
 		return fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *client.APIFsDeletePostInternalServerError:
+	case *agentAPI.APIFsDeletePostInternalServerError:
 		return fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
@@ -76,28 +76,28 @@ func (a *FSAdapter) Delete(ctx context.Context, fileID uuid.UUID) error {
 }
 
 func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error) {
-	res, err := a.rawClient.APIFsGetGet(ctx, client.APIFsGetGetParams{FileID: fileID})
+	res, err := a.rawClient.APIFsGetGet(ctx, agentAPI.APIFsGetGetParams{FileID: fileID})
 	if err != nil {
 		return nil, err
 	}
 
 	switch typedRes := res.(type) {
-	case *client.APIFsGetGetOK:
+	case *agentAPI.APIFsGetGetOK:
 		return typedRes.Data, nil
 
-	case *client.APIFsGetGetNotFound:
+	case *agentAPI.APIFsGetGetNotFound:
 		return nil, fmt.Errorf("%w: %s", entities.FileNotFoundError, typedRes.Details.Value)
 
-	case *client.APIFsGetGetBadRequest:
+	case *agentAPI.APIFsGetGetBadRequest:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *client.APIFsGetGetUnauthorized:
+	case *agentAPI.APIFsGetGetUnauthorized:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *client.APIFsGetGetForbidden:
+	case *agentAPI.APIFsGetGetForbidden:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *client.APIFsGetGetInternalServerError:
+	case *agentAPI.APIFsGetGetInternalServerError:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
@@ -112,19 +112,19 @@ func (a *FSAdapter) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	}
 
 	switch typedRes := res.(type) {
-	case *client.APIFsIdsGetOKApplicationJSON:
+	case *agentAPI.APIFsIdsGetOKApplicationJSON:
 		return *typedRes, nil
 
-	case *client.APIFsIdsGetBadRequest:
+	case *agentAPI.APIFsIdsGetBadRequest:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *client.APIFsIdsGetUnauthorized:
+	case *agentAPI.APIFsIdsGetUnauthorized:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *client.APIFsIdsGetForbidden:
+	case *agentAPI.APIFsIdsGetForbidden:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *client.APIFsIdsGetInternalServerError:
+	case *agentAPI.APIFsIdsGetInternalServerError:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:

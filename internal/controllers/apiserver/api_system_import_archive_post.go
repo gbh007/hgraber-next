@@ -3,19 +3,19 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/controllers/apiserver/internal/server"
+	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APISystemImportArchivePost(ctx context.Context, req server.APISystemImportArchivePostReq) (server.APISystemImportArchivePostRes, error) {
+func (c *Controller) APISystemImportArchivePost(ctx context.Context, req serverAPI.APISystemImportArchivePostReq) (serverAPI.APISystemImportArchivePostRes, error) {
 	id, err := c.exportUseCases.ImportArchive(ctx, req.Data)
 	if err != nil {
-		return &server.APISystemImportArchivePostInternalServerError{
+		return &serverAPI.APISystemImportArchivePostInternalServerError{
 			InnerCode: ExportUseCaseCode,
-			Details:   server.NewOptString(err.Error()),
+			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &server.APISystemImportArchivePostOK{
+	return &serverAPI.APISystemImportArchivePostOK{
 		ID: id,
 	}, nil
 }

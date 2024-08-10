@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"net/url"
 
-	"hgnext/internal/adapters/agent/internal/client"
 	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
+	"hgnext/open_api/agentAPI"
 )
 
 func (a *Adapter) BookParse(ctx context.Context, url url.URL) (entities.AgentBookDetails, error) {
-	res, err := a.rawClient.APIParsingBookPost(ctx, &client.APIParsingBookPostReq{
+	res, err := a.rawClient.APIParsingBookPost(ctx, &agentAPI.APIParsingBookPostReq{
 		URL: url,
 	})
 	if err != nil {
@@ -19,18 +19,18 @@ func (a *Adapter) BookParse(ctx context.Context, url url.URL) (entities.AgentBoo
 	}
 
 	switch typedRes := res.(type) {
-	case *client.BookDetails:
+	case *agentAPI.BookDetails:
 		result := entities.AgentBookDetails{
 			URL:       typedRes.URL,
 			Name:      typedRes.Name,
 			PageCount: typedRes.PageCount,
-			Attributes: pkg.Map(typedRes.Attributes, func(a client.BookDetailsAttributesItem) entities.AgentBookDetailsAttributesItem {
+			Attributes: pkg.Map(typedRes.Attributes, func(a agentAPI.BookDetailsAttributesItem) entities.AgentBookDetailsAttributesItem {
 				return entities.AgentBookDetailsAttributesItem{
 					Code:   string(a.Code),
 					Values: a.Values,
 				}
 			}),
-			Pages: pkg.Map(typedRes.Pages, func(p client.BookDetailsPagesItem) entities.AgentBookDetailsPagesItem {
+			Pages: pkg.Map(typedRes.Pages, func(p agentAPI.BookDetailsPagesItem) entities.AgentBookDetailsPagesItem {
 				return entities.AgentBookDetailsPagesItem{
 					PageNumber: p.PageNumber,
 					URL:        p.URL,
@@ -41,16 +41,16 @@ func (a *Adapter) BookParse(ctx context.Context, url url.URL) (entities.AgentBoo
 
 		return result, nil
 
-	case *client.APIParsingBookPostBadRequest:
+	case *agentAPI.APIParsingBookPostBadRequest:
 		return entities.AgentBookDetails{}, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *client.APIParsingBookPostUnauthorized:
+	case *agentAPI.APIParsingBookPostUnauthorized:
 		return entities.AgentBookDetails{}, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *client.APIParsingBookPostForbidden:
+	case *agentAPI.APIParsingBookPostForbidden:
 		return entities.AgentBookDetails{}, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *client.APIParsingBookPostInternalServerError:
+	case *agentAPI.APIParsingBookPostInternalServerError:
 		return entities.AgentBookDetails{}, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
