@@ -11,7 +11,9 @@ import (
 func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, error) {
 	systemSize := entities.SystemSizeInfo{}
 
-	err := d.db.GetContext(ctx, &systemSize.BookCount, `SELECT COUNT(*) FROM books;`)
+	// TODO: удалить старую версию если не будет проблем
+	// err := d.db.GetContext(ctx, &systemSize.BookCount, `SELECT COUNT(*) FROM books;`)
+	err := d.db.GetContext(ctx, &systemSize.BookCount, `SELECT reltuples FROM pg_class WHERE relname = 'books';`)
 	if err != nil {
 		return entities.SystemSizeInfo{}, fmt.Errorf("get book count : %w", err)
 	}
@@ -21,7 +23,9 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return entities.SystemSizeInfo{}, fmt.Errorf("get book unparsed count: %w", err)
 	}
 
-	err = d.db.GetContext(ctx, &systemSize.PageCount, `SELECT COUNT(*) FROM pages;`)
+	// TODO: удалить старую версию если не будет проблем
+	// err = d.db.GetContext(ctx, &systemSize.PageCount, `SELECT COUNT(*) FROM pages;`)
+	err = d.db.GetContext(ctx, &systemSize.PageCount, `SELECT reltuples FROM pg_class WHERE relname = 'pages';`)
 	if err != nil {
 		return entities.SystemSizeInfo{}, fmt.Errorf("get page count: %w", err)
 	}
@@ -36,23 +40,35 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return entities.SystemSizeInfo{}, fmt.Errorf("get page without body count: %w", err)
 	}
 
-	size := sql.NullInt64{}
+	systemSize.PageFileSize = d.cachePageFileSize.Load()
 
-	err = d.db.GetContext(ctx, &size, `SELECT SUM(f."size") FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL;`)
-	if err != nil {
-		return entities.SystemSizeInfo{}, fmt.Errorf("get page file size: %w", err)
+	// Оптимизация запросов в БД
+	if systemSize.PageFileSize == 0 {
+		size := sql.NullInt64{}
+
+		err = d.db.GetContext(ctx, &size, `SELECT SUM(f."size") FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL;`)
+		if err != nil {
+			return entities.SystemSizeInfo{}, fmt.Errorf("get page file size: %w", err)
+		}
+
+		systemSize.PageFileSize = size.Int64
+		d.cachePageFileSize.Store(size.Int64)
 	}
 
-	systemSize.PageFileSize = size.Int64
+	systemSize.FileSize = d.cacheFileSize.Load()
 
-	size = sql.NullInt64{}
+	// Оптимизация запросов в БД
+	if systemSize.FileSize == 0 {
+		size := sql.NullInt64{}
 
-	err = d.db.GetContext(ctx, &size, `SELECT SUM("size") FROM files WHERE "size" IS NOT NULL;`)
-	if err != nil {
-		return entities.SystemSizeInfo{}, fmt.Errorf("get file size: %w", err)
+		err = d.db.GetContext(ctx, &size, `SELECT SUM("size") FROM files WHERE "size" IS NOT NULL;`)
+		if err != nil {
+			return entities.SystemSizeInfo{}, fmt.Errorf("get file size: %w", err)
+		}
+
+		systemSize.FileSize = size.Int64
+		d.cacheFileSize.Store(size.Int64)
 	}
-
-	systemSize.FileSize = size.Int64
 
 	return systemSize, nil
 }
@@ -60,6 +76,7 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 func (d *Database) BookCount(ctx context.Context) (int, error) {
 	var c int
 
+	// TODO: заменить на более оптимальную, если с ней не будет проблем
 	err := d.db.GetContext(ctx, &c, `SELECT COUNT(*) FROM books;`)
 	if err != nil {
 		return 0, err

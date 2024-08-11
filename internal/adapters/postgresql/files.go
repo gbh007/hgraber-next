@@ -75,6 +75,10 @@ func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha
 		return entities.FileNotFoundError
 	}
 
+	// Состояние размера изменилось, сбрасываем кеши.
+	d.cachePageFileSize.Store(0)
+	d.cacheFileSize.Store(0)
+
 	return nil
 }
 
@@ -141,6 +145,10 @@ func (d *Database) ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UU
 		return fmt.Errorf("exec query: %w", err)
 	}
 
+	// Состояние размера изменилось, сбрасываем кеши.
+	d.cachePageFileSize.Store(0)
+	d.cacheFileSize.Store(0)
+
 	return nil
 }
 
@@ -195,6 +203,10 @@ func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
 	if !d.isApply(ctx, res) {
 		return entities.FileNotFoundError
 	}
+
+	// Состояние размера изменилось, сбрасываем кеши.
+	d.cachePageFileSize.Store(0)
+	d.cacheFileSize.Store(0)
 
 	return nil
 }

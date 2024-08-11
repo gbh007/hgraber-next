@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log/slog"
+	"sync/atomic"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
@@ -16,6 +17,9 @@ type Database struct {
 	db   *sqlx.DB
 
 	logger *slog.Logger
+
+	cachePageFileSize atomic.Int64
+	cacheFileSize     atomic.Int64
 }
 
 func New(ctx context.Context, dataSourceName string, maxConn int32, logger *slog.Logger) (*Database, error) {
