@@ -3,7 +3,6 @@ package postgresql
 import (
 	"context"
 	"fmt"
-	"log/slog"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
@@ -37,11 +36,7 @@ func (d *Database) Agents(ctx context.Context, canParse, canExport bool) ([]enti
 		return nil, fmt.Errorf("storage: build query: %w", err)
 	}
 
-	d.logger.DebugContext(
-		ctx, "squirrel build request",
-		slog.String("query", query),
-		slog.Any("args", args),
-	)
+	d.squirrelDebugLog(ctx, query, args)
 
 	err = d.db.SelectContext(ctx, &raw, query, args...)
 	if err != nil {
@@ -87,11 +82,7 @@ func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
-		ctx, "squirrel build request",
-		slog.String("query", query),
-		slog.Any("args", args),
-	)
+	d.squirrelDebugLog(ctx, query, args)
 
 	_, err = d.db.ExecContext(ctx, query, args...)
 	if err != nil {
@@ -123,11 +114,7 @@ func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error 
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
-		ctx, "squirrel build request",
-		slog.String("query", query),
-		slog.Any("args", args),
-	)
+	d.squirrelDebugLog(ctx, query, args)
 
 	res, err := d.db.ExecContext(ctx, query, args...)
 	if err != nil {
@@ -153,11 +140,7 @@ func (d *Database) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
-		ctx, "squirrel build request",
-		slog.String("query", query),
-		slog.Any("args", args),
-	)
+	d.squirrelDebugLog(ctx, query, args)
 
 	res, err := d.db.ExecContext(ctx, query, args...)
 	if err != nil {

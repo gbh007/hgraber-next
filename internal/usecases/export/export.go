@@ -17,8 +17,9 @@ import (
 
 func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, from, to time.Time) error {
 	books, err := uc.bookRequester.Books(ctx, entities.BookFilter{
-		From: from,
-		To:   to,
+		From:             from,
+		To:               to,
+		OriginAttributes: true,
 	})
 	if err != nil {
 		return fmt.Errorf("get books from requester: %w", err)
@@ -63,7 +64,7 @@ func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWith
 }
 
 func (uc *UseCase) ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, error) {
-	book, err := uc.bookRequester.BookFull(ctx, bookID)
+	book, err := uc.bookRequester.BookOriginFull(ctx, bookID)
 	if err != nil {
 		return nil, fmt.Errorf("get book: %w", err)
 	}

@@ -114,9 +114,11 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.First
 				}
 
 				err = uc.storage.NewBook(ctx, entities.Book{
-					ID:        id,
-					OriginURL: &u,
-					CreateAt:  time.Now(),
+					ID:         id,
+					OriginURL:  &u,
+					CreateAt:   time.Now(),
+					Verified:   true,
+					VerifiedAt: time.Now(),
 				})
 				if err != nil {
 					return entities.FirstHandleMultipleResult{}, fmt.Errorf(

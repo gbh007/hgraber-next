@@ -19,7 +19,8 @@ type storage interface {
 	NewBook(ctx context.Context, book entities.Book) error
 
 	UpdateBook(ctx context.Context, book entities.Book) error
-	UpdateAttribute(ctx context.Context, id uuid.UUID, attrCode string, values []string) error
+	UpdateAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
+	UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
 	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error
 
 	UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageNumber int, downloaded bool, fileID uuid.UUID) error
@@ -46,7 +47,7 @@ type fileStorage interface {
 }
 
 type bookRequester interface {
-	BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 }
 
 type UseCase struct {

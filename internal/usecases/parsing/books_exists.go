@@ -19,7 +19,7 @@ urlLoop:
 		}
 
 		for _, id := range ids {
-			book, err := uc.bookRequester.BookFull(ctx, id)
+			book, err := uc.bookRequester.BookOriginFull(ctx, id)
 			if err != nil {
 				return nil, fmt.Errorf("get book (%s) details by url (%s): %w", id.String(), u.String(), err)
 			}

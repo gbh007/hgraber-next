@@ -14,6 +14,8 @@ type BookFilter struct {
 
 	From time.Time
 	To   time.Time
+
+	OriginAttributes bool
 }
 
 func (f *BookFilter) FillNewest(page, count int) {

@@ -3,7 +3,6 @@ package postgresql
 import (
 	"context"
 	"fmt"
-	"log/slog"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
@@ -36,11 +35,7 @@ func (d *Database) SetLabel(ctx context.Context, label entities.BookLabel) error
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
-		ctx, "squirrel build request",
-		slog.String("query", query),
-		slog.Any("args", args),
-	)
+	d.squirrelDebugLog(ctx, query, args)
 
 	_, err = d.db.ExecContext(ctx, query, args...)
 	if err != nil {
@@ -64,11 +59,7 @@ func (d *Database) Labels(ctx context.Context, bookID uuid.UUID) ([]entities.Boo
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
-		ctx, "squirrel build request",
-		slog.String("query", query),
-		slog.Any("args", args),
-	)
+	d.squirrelDebugLog(ctx, query, args)
 
 	err = d.db.SelectContext(ctx, &raw, query, args...)
 	if err != nil {

@@ -32,7 +32,7 @@ func (d *Database) NotDownloadedPages(ctx context.Context) ([]entities.PageForDo
 func (d *Database) UnprocessedBooks(ctx context.Context) ([]entities.Book, error) {
 	raw := make([]*model.Book, 0)
 
-	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL;`)
+	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE;`)
 	if err != nil {
 		return nil, fmt.Errorf("select: %w", err)
 	}

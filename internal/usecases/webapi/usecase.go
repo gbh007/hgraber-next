@@ -20,6 +20,7 @@ type bookRequester interface {
 	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
 	Book(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
 	BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 }
 
 type workerManager interface {

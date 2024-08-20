@@ -21,7 +21,7 @@ func (uc *UseCase) BookByURL(ctx context.Context, u url.URL) (entities.BookFull,
 	firstBook := entities.BookFull{}
 
 	for i, id := range ids {
-		book, err := uc.bookRequester.BookFull(ctx, id)
+		book, err := uc.bookRequester.BookOriginFull(ctx, id)
 		if err != nil {
 			return entities.BookFull{}, fmt.Errorf("get book by id (%s): %w", id.String(), err)
 		}

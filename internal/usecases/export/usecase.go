@@ -19,7 +19,8 @@ type storage interface {
 	NewBook(ctx context.Context, book entities.Book) error
 	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error
 	SetLabel(ctx context.Context, label entities.BookLabel) error
-	UpdateAttribute(ctx context.Context, id uuid.UUID, attrCode string, values []string) error
+	UpdateAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
+	UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
 	NewFile(ctx context.Context, file entities.File) error
 
 	DeleteBook(ctx context.Context, id uuid.UUID) error
@@ -37,7 +38,7 @@ type tmpStorage interface {
 type bookRequester interface {
 	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
 	Book(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
-	BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 }
 
 type UseCase struct {

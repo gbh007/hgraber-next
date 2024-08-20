@@ -57,6 +57,8 @@ func (uc *UseCase) ImportArchive(ctx context.Context, body io.Reader) (returnedB
 
 	bookID := uuid.Must(uuid.NewV7())
 	book.Book.ID = bookID
+	book.Book.Verified = true
+	book.Book.VerifiedAt = book.Book.CreateAt
 
 	if book.Book.CreateAt.IsZero() {
 		book.Book.CreateAt = time.Now()
@@ -98,11 +100,14 @@ func (uc *UseCase) ImportArchive(ctx context.Context, body io.Reader) (returnedB
 		}
 	}
 
-	for code, values := range book.Attributes {
-		err = uc.storage.UpdateAttribute(ctx, bookID, code, values)
-		if err != nil {
-			return uuid.Nil, fmt.Errorf("set attribute (%s): %w", code, err)
-		}
+	err = uc.storage.UpdateOriginAttributes(ctx, bookID, book.Attributes)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("set original attributes: %w", err)
+	}
+
+	err = uc.storage.UpdateAttributes(ctx, bookID, book.Attributes)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("set attributes: %w", err)
 	}
 
 	for i, p := range book.Pages {

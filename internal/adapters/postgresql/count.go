@@ -18,7 +18,7 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return entities.SystemSizeInfo{}, fmt.Errorf("get book count : %w", err)
 	}
 
-	err = d.db.GetContext(ctx, &systemSize.BookUnparsedCount, `SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL;`)
+	err = d.db.GetContext(ctx, &systemSize.BookUnparsedCount, `SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE;`)
 	if err != nil {
 		return entities.SystemSizeInfo{}, fmt.Errorf("get book unparsed count: %w", err)
 	}
@@ -71,16 +71,4 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 	}
 
 	return systemSize, nil
-}
-
-func (d *Database) BookCount(ctx context.Context) (int, error) {
-	var c int
-
-	// TODO: заменить на более оптимальную, если с ней не будет проблем
-	err := d.db.GetContext(ctx, &c, `SELECT COUNT(*) FROM books;`)
-	if err != nil {
-		return 0, err
-	}
-
-	return c, nil
 }
