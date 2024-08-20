@@ -2,7 +2,8 @@
 CREATE TABLE book_origin_attributes (
     book_id UUID NOT NULL REFERENCES books (id) ON UPDATE CASCADE ON DELETE CASCADE,
     attr TEXT NOT NULL REFERENCES "attributes" (code) ON UPDATE CASCADE ON DELETE CASCADE,
-    "values" TEXT ARRAY NOT NULL
+    "values" TEXT ARRAY NOT NULL,
+    PRIMARY KEY (book_id, attr)
 );
 
 INSERT INTO
