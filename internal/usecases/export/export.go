@@ -20,6 +20,8 @@ func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, from, to time.
 		From:             from,
 		To:               to,
 		OriginAttributes: true,
+		ShowDeleted:      entities.BookFilterShowTypeExcept,
+		ShowVerified:     entities.BookFilterShowTypeOnly,
 	})
 	if err != nil {
 		return fmt.Errorf("get books from requester: %w", err)

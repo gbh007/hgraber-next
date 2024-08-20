@@ -67,6 +67,20 @@ func encodeAPIAgentTaskExportPostRequest(
 	return nil
 }
 
+func encodeAPIBookDeletePostRequest(
+	req *APIBookDeletePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIBookDetailsPostRequest(
 	req *APIBookDetailsPostReq,
 	r *http.Request,
@@ -97,6 +111,20 @@ func encodeAPIBookListPostRequest(
 
 func encodeAPIBookRawPostRequest(
 	req *APIBookRawPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIBookVerifyPostRequest(
+	req *APIBookVerifyPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

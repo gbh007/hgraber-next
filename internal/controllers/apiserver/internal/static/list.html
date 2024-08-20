@@ -91,6 +91,14 @@
         padding: 10px;
         display: flex;
       }
+
+      .filter {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+      }
     </style>
 
     <script src="/js/pages/list.js"></script>
@@ -109,6 +117,27 @@
         {{appState.booksError}}
       </div>
       <template v-else>
+        <details class="filter">
+          <summary>Фильтр</summary>
+          <div>
+            Показывать удаленные:
+            <select class="app" v-model="appState.showDeleted">
+              <option value="all">Все</option>
+              <option value="only">Только</option>
+              <option value="except">Кроме</option>
+            </select>
+          </div>
+          <div>
+            Показывать подтвержденные:
+            <select class="app" v-model="appState.showVerify">
+              <option value="all">Все</option>
+              <option value="only">Только</option>
+              <option value="except">Кроме</option>
+            </select>
+          </div>
+          <input type="text" v-model="appState.nameFilter" />
+          <button class="app" @click="renderPages(1)">Применить</button>
+        </details>
         <div id="paginator">
           <span
             v-for="page in (appState.pages || [])"

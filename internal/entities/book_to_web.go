@@ -7,6 +7,18 @@ import (
 	"hgnext/internal/pkg"
 )
 
+type BookFilterShowType byte
+
+const (
+	BookFilterShowTypeAll = iota
+	BookFilterShowTypeOnly
+	BookFilterShowTypeExcept
+)
+
+type BookFilterFields struct {
+	Name string
+}
+
 type BookFilter struct {
 	Limit    int
 	Offset   int
@@ -16,6 +28,11 @@ type BookFilter struct {
 	To   time.Time
 
 	OriginAttributes bool
+
+	ShowDeleted  BookFilterShowType
+	ShowVerified BookFilterShowType
+
+	Fields BookFilterFields
 }
 
 func (f *BookFilter) FillNewest(page, count int) {

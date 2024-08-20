@@ -236,10 +236,72 @@ func (s *APIBookListPostReq) Validate() error {
 			Error: err,
 		})
 	}
+	if err := func() error {
+		if value, ok := s.VerifyStatus.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "verify_status",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if value, ok := s.DeleteStatus.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "delete_status",
+			Error: err,
+		})
+	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
+}
+
+func (s APIBookListPostReqDeleteStatus) Validate() error {
+	switch s {
+	case "all":
+		return nil
+	case "only":
+		return nil
+	case "except":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
+func (s APIBookListPostReqVerifyStatus) Validate() error {
+	switch s {
+	case "all":
+		return nil
+	case "only":
+		return nil
+	case "except":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }
 
 func (s *APIParsingBookExistsPostOK) Validate() error {

@@ -133,3 +133,13 @@ func New(
 
 	return c, nil
 }
+
+// FIXME: реализовать
+func (c *Controller) APIBookDeletePost(ctx context.Context, req *serverAPI.APIBookDeletePostReq) (serverAPI.APIBookDeletePostRes, error) {
+	return &serverAPI.APIBookDeletePostNoContent{}, nil
+}
+
+// FIXME: реализовать
+func (c *Controller) APIBookVerifyPost(ctx context.Context, req *serverAPI.APIBookVerifyPostReq) (serverAPI.APIBookVerifyPostRes, error) {
+	return &serverAPI.APIBookVerifyPostNoContent{}, nil
+}

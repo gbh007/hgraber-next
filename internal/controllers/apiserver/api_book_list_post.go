@@ -9,8 +9,7 @@ import (
 )
 
 func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.APIBookListPostReq) (serverAPI.APIBookListPostRes, error) {
-	filter := entities.BookFilter{}
-	filter.FillNewest(req.Page.Value, req.Count)
+	filter := convertAPIBookListPostReqToFilter(req)
 
 	books, pageListRaw, err := c.webAPIUseCases.BookList(ctx, filter)
 	if err != nil {
@@ -53,4 +52,34 @@ func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.APIBook
 			}
 		}),
 	}, nil
+}
+
+func convertAPIBookListPostReqToFilter(req *serverAPI.APIBookListPostReq) entities.BookFilter {
+	filter := entities.BookFilter{}
+
+	filter.FillNewest(req.Page.Value, req.Count)
+
+	if req.DeleteStatus.IsSet() {
+		switch req.DeleteStatus.Value {
+		case serverAPI.APIBookListPostReqDeleteStatusAll:
+		case serverAPI.APIBookListPostReqDeleteStatusOnly:
+			filter.ShowDeleted = entities.BookFilterShowTypeOnly
+		case serverAPI.APIBookListPostReqDeleteStatusExcept:
+			filter.ShowDeleted = entities.BookFilterShowTypeExcept
+		}
+	}
+
+	if req.VerifyStatus.IsSet() {
+		switch req.VerifyStatus.Value {
+		case serverAPI.APIBookListPostReqVerifyStatusAll:
+		case serverAPI.APIBookListPostReqVerifyStatusOnly:
+			filter.ShowVerified = entities.BookFilterShowTypeOnly
+		case serverAPI.APIBookListPostReqVerifyStatusExcept:
+			filter.ShowVerified = entities.BookFilterShowTypeExcept
+		}
+	}
+
+	filter.Fields.Name = req.Filter.Value.Name.Value
+
+	return filter
 }

@@ -38,6 +38,12 @@ type Handler interface {
 	//
 	// GET /api/book/archive/{id}
 	APIBookArchiveIDGet(ctx context.Context, params APIBookArchiveIDGetParams) (APIBookArchiveIDGetRes, error)
+	// APIBookDeletePost implements POST /api/book/delete operation.
+	//
+	// Удаление книги (без удаления метаинформации).
+	//
+	// POST /api/book/delete
+	APIBookDeletePost(ctx context.Context, req *APIBookDeletePostReq) (APIBookDeletePostRes, error)
 	// APIBookDetailsPost implements POST /api/book/details operation.
 	//
 	// Информация о книге.
@@ -56,6 +62,13 @@ type Handler interface {
 	//
 	// POST /api/book/raw
 	APIBookRawPost(ctx context.Context, req *APIBookRawPostReq) (APIBookRawPostRes, error)
+	// APIBookVerifyPost implements POST /api/book/verify operation.
+	//
+	// Подтверждение (модерация) книги, нужна в случае
+	// массовой обработки.
+	//
+	// POST /api/book/verify
+	APIBookVerifyPost(ctx context.Context, req *APIBookVerifyPostReq) (APIBookVerifyPostRes, error)
 	// APIFileIDGet implements GET /api/file/{id} operation.
 	//
 	// Получение тела файла (изображения страницы).

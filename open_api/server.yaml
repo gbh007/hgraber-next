@@ -273,6 +273,27 @@ paths:
                   type: integer
                   description: Номер страницы
                   minimum: 1
+                verify_status:
+                  type: string
+                  description: Статус подтверждения книги
+                  enum:
+                    - all
+                    - only
+                    - except
+                delete_status:
+                  type: string
+                  description: Статус удаления книги
+                  enum:
+                    - all
+                    - only
+                    - except
+                filter:
+                  type: object
+                  description: Фильтр по полям
+                  properties:
+                    name:
+                      type: string
+                      description: Фильтр по названию, без учета регистра
               required:
                 - count
       responses:
@@ -417,6 +438,112 @@ paths:
               schema:
                 type: string
                 format: binary
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/book/delete:
+    post:
+      description: Удаление книги (без удаления метаинформации)
+      summary: Удаление книги
+      tags:
+        - book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+              required:
+                - id
+      responses:
+        204:
+          description: Успешное удаление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/book/verify:
+    post:
+      description: Подтверждение (модерация) книги, нужна в случае массовой обработки
+      summary: Подтверждение (модерация) книги
+      tags:
+        - book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+              required:
+                - id
+      responses:
+        204:
+          description: Успешное подтверждение
         400:
           description: Некорректный запрос данных
           content:
