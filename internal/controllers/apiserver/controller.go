@@ -33,6 +33,9 @@ type webAPIUseCases interface {
 	Book(ctx context.Context, bookID uuid.UUID) (entities.BookToWeb, error)
 	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 	BookList(ctx context.Context, filter entities.BookFilter) ([]entities.BookToWeb, []int, error)
+
+	VerifyBook(ctx context.Context, bookID uuid.UUID) error
+	DeleteBook(ctx context.Context, bookID uuid.UUID) error
 }
 
 type agentUseCases interface {
@@ -132,14 +135,4 @@ func New(
 	c.ogenServer = ogenServer
 
 	return c, nil
-}
-
-// FIXME: реализовать
-func (c *Controller) APIBookDeletePost(ctx context.Context, req *serverAPI.APIBookDeletePostReq) (serverAPI.APIBookDeletePostRes, error) {
-	return &serverAPI.APIBookDeletePostNoContent{}, nil
-}
-
-// FIXME: реализовать
-func (c *Controller) APIBookVerifyPost(ctx context.Context, req *serverAPI.APIBookVerifyPostReq) (serverAPI.APIBookVerifyPostRes, error) {
-	return &serverAPI.APIBookVerifyPostNoContent{}, nil
 }

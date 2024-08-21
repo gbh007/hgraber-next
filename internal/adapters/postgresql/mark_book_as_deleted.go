@@ -62,7 +62,7 @@ WHERE
 
 	res, err := tx.ExecContext(
 		ctx,
-		`UPDATE books SET deleted_at = $1, deleted = $2 WHERE id = $1;`,
+		`UPDATE books SET deleted_at = $2, deleted = $3 WHERE id = $1;`,
 		bookID.String(), time.Now().UTC(), true,
 	)
 	if err != nil {
