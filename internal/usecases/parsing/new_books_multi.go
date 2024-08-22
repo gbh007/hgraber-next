@@ -91,11 +91,9 @@ urlLoop:
 
 			for _, u := range newUrls {
 				err = uc.storage.NewBook(ctx, entities.Book{
-					ID:         uuid.Must(uuid.NewV7()),
-					OriginURL:  &u,
-					CreateAt:   time.Now(),
-					Verified:   true,
-					VerifiedAt: time.Now(),
+					ID:        uuid.Must(uuid.NewV7()),
+					OriginURL: &u,
+					CreateAt:  time.Now(),
 				})
 				if err != nil {
 					return entities.MultiHandleMultipleResult{}, fmt.Errorf(

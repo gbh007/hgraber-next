@@ -8,19 +8,19 @@ workers:
   page:
     count: 1
     queue_size: 10000
-    interval: 15s
+    interval: 3s
   book:
     count: 1
     queue_size: 1000
-    interval: 15s
+    interval: 3s
   hasher:
     count: 1
     queue_size: 1000
-    interval: 15s
+    interval: 3s
   exporter:
     count: 1
     queue_size: 100
-    interval: 1m
+    interval: 3s
 storage:
   connection: postgres://hgrabernextuser:hgrabernextpass@localhost:5432/hgrabernext?sslmode=disable
   file_path: ./.hidden/filedata
