@@ -78,6 +78,9 @@ type APIAgentListPostOKItem struct {
 	Addr url.URL `json:"addr"`
 	// Может ли агент обрабатывать ссылки внешних систем.
 	CanParse bool `json:"can_parse"`
+	// Может ли агент обрабатывать множественные ссылки
+	// внешних систем.
+	CanParseMulti bool `json:"can_parse_multi"`
 	// Может ли агент экспортировать данные из системы.
 	CanExport bool `json:"can_export"`
 	// Приоритет при выборе агентов.
@@ -109,6 +112,11 @@ func (s *APIAgentListPostOKItem) GetAddr() url.URL {
 // GetCanParse returns the value of CanParse.
 func (s *APIAgentListPostOKItem) GetCanParse() bool {
 	return s.CanParse
+}
+
+// GetCanParseMulti returns the value of CanParseMulti.
+func (s *APIAgentListPostOKItem) GetCanParseMulti() bool {
+	return s.CanParseMulti
 }
 
 // GetCanExport returns the value of CanExport.
@@ -149,6 +157,11 @@ func (s *APIAgentListPostOKItem) SetAddr(val url.URL) {
 // SetCanParse sets the value of CanParse.
 func (s *APIAgentListPostOKItem) SetCanParse(val bool) {
 	s.CanParse = val
+}
+
+// SetCanParseMulti sets the value of CanParseMulti.
+func (s *APIAgentListPostOKItem) SetCanParseMulti(val bool) {
+	s.CanParseMulti = val
 }
 
 // SetCanExport sets the value of CanExport.
@@ -362,6 +375,9 @@ type APIAgentListPostReq struct {
 	CanParse OptBool `json:"can_parse"`
 	// Может ли агент экспортировать данные из системы.
 	CanExport OptBool `json:"can_export"`
+	// Может ли агент обрабатывать множественные ссылки
+	// внешних систем.
+	CanParseMulti OptBool `json:"can_parse_multi"`
 	// Может ли агент экспортировать данные из системы.
 	IncludeStatus OptBool `json:"include_status"`
 }
@@ -374,6 +390,11 @@ func (s *APIAgentListPostReq) GetCanParse() OptBool {
 // GetCanExport returns the value of CanExport.
 func (s *APIAgentListPostReq) GetCanExport() OptBool {
 	return s.CanExport
+}
+
+// GetCanParseMulti returns the value of CanParseMulti.
+func (s *APIAgentListPostReq) GetCanParseMulti() OptBool {
+	return s.CanParseMulti
 }
 
 // GetIncludeStatus returns the value of IncludeStatus.
@@ -389,6 +410,11 @@ func (s *APIAgentListPostReq) SetCanParse(val OptBool) {
 // SetCanExport sets the value of CanExport.
 func (s *APIAgentListPostReq) SetCanExport(val OptBool) {
 	s.CanExport = val
+}
+
+// SetCanParseMulti sets the value of CanParseMulti.
+func (s *APIAgentListPostReq) SetCanParseMulti(val OptBool) {
+	s.CanParseMulti = val
 }
 
 // SetIncludeStatus sets the value of IncludeStatus.
@@ -426,6 +452,9 @@ type APIAgentNewPostReq struct {
 	Token string `json:"token"`
 	// Может ли агент обрабатывать ссылки внешних систем.
 	CanParse OptBool `json:"can_parse"`
+	// Может ли агент обрабатывать множественные ссылки
+	// внешних систем.
+	CanParseMulti OptBool `json:"can_parse_multi"`
 	// Может ли агент экспортировать данные из системы.
 	CanExport OptBool `json:"can_export"`
 	// Приоритет при выборе агентов.
@@ -450,6 +479,11 @@ func (s *APIAgentNewPostReq) GetToken() string {
 // GetCanParse returns the value of CanParse.
 func (s *APIAgentNewPostReq) GetCanParse() OptBool {
 	return s.CanParse
+}
+
+// GetCanParseMulti returns the value of CanParseMulti.
+func (s *APIAgentNewPostReq) GetCanParseMulti() OptBool {
+	return s.CanParseMulti
 }
 
 // GetCanExport returns the value of CanExport.
@@ -480,6 +514,11 @@ func (s *APIAgentNewPostReq) SetToken(val string) {
 // SetCanParse sets the value of CanParse.
 func (s *APIAgentNewPostReq) SetCanParse(val OptBool) {
 	s.CanParse = val
+}
+
+// SetCanParseMulti sets the value of CanParseMulti.
+func (s *APIAgentNewPostReq) SetCanParseMulti(val OptBool) {
+	s.CanParseMulti = val
 }
 
 // SetCanExport sets the value of CanExport.
@@ -1631,6 +1670,8 @@ func (s *APISystemHandlePostOKDetailsItem) SetErrorReason(val OptString) {
 type APISystemHandlePostReq struct {
 	// Ссылки на внешние системы.
 	Urls []url.URL `json:"urls"`
+	// Режим обработки мульти ссылок (на тома книг).
+	IsMulti OptBool `json:"is_multi"`
 }
 
 // GetUrls returns the value of Urls.
@@ -1638,9 +1679,19 @@ func (s *APISystemHandlePostReq) GetUrls() []url.URL {
 	return s.Urls
 }
 
+// GetIsMulti returns the value of IsMulti.
+func (s *APISystemHandlePostReq) GetIsMulti() OptBool {
+	return s.IsMulti
+}
+
 // SetUrls sets the value of Urls.
 func (s *APISystemHandlePostReq) SetUrls(val []url.URL) {
 	s.Urls = val
+}
+
+// SetIsMulti sets the value of IsMulti.
+func (s *APISystemHandlePostReq) SetIsMulti(val OptBool) {
+	s.IsMulti = val
 }
 
 type APISystemHandlePostUnauthorized ErrorResponse

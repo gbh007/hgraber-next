@@ -20,6 +20,7 @@ import (
 	"hgnext/internal/controllers/apiagent"
 	"hgnext/internal/controllers/apiserver"
 	"hgnext/internal/controllers/workermanager"
+	"hgnext/internal/entities"
 	"hgnext/internal/metrics"
 	agentUC "hgnext/internal/usecases/agent"
 	"hgnext/internal/usecases/agentcache"
@@ -77,7 +78,7 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	agents, err := storage.Agents(ctx, false, false)
+	agents, err := storage.Agents(ctx, entities.AgentFilter{})
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail load agents from storage",

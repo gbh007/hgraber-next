@@ -594,6 +594,9 @@ paths:
                   items:
                     type: string
                     format: uri
+                is_multi:
+                  type: boolean
+                  description: Режим обработки мульти ссылок (на тома книг)
               required:
                 - urls
       responses:
@@ -996,6 +999,9 @@ paths:
                 can_parse:
                   type: boolean
                   description: Может ли агент обрабатывать ссылки внешних систем
+                can_parse_multi:
+                  type: boolean
+                  description: Может ли агент обрабатывать множественные ссылки внешних систем
                 can_export:
                   type: boolean
                   description: Может ли агент экспортировать данные из системы
@@ -1053,6 +1059,9 @@ paths:
                 can_export:
                   type: boolean
                   description: Может ли агент экспортировать данные из системы
+                can_parse_multi:
+                  type: boolean
+                  description: Может ли агент обрабатывать множественные ссылки внешних систем
                 include_status:
                   type: boolean
                   description: Может ли агент экспортировать данные из системы
@@ -1122,6 +1131,9 @@ paths:
                     can_parse:
                       type: boolean
                       description: Может ли агент обрабатывать ссылки внешних систем
+                    can_parse_multi:
+                      type: boolean
+                      description: Может ли агент обрабатывать множественные ссылки внешних систем
                     can_export:
                       type: boolean
                       description: Может ли агент экспортировать данные из системы
@@ -1137,6 +1149,7 @@ paths:
                     - name
                     - addr
                     - can_parse
+                    - can_parse_multi
                     - can_export
                     - priority
                     - create_at

@@ -120,39 +120,58 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: array
-                    description: Результат обработки
-                    items:
-                      type: object
-                      properties:
-                        url:
-                          type: string
-                          format: uri
-                          description: Ссылка на внешнюю систему
-                        result:
-                          type: string
-                          description: Результат проверки
-                          enum:
-                            - ok
-                            - unsupported
-                            - error
-                        error_details:
-                          type: string
-                          description: Данные об ошибке во время обработки
-                        possible_duplicates:
-                          type: array
-                          description: Список возможных ссылок дубликатов (зеркала внешних систем и т.п.)
-                          items:
-                            type: string
-                            format: uri
-                      required:
-                        - url
-                        - result
-                required:
-                  - result
+                $ref: "#/components/schemas/BooksCheckResult"
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/book/multi:
+    post:
+      description: Обработка ссылки с набором книг (например всех глав манги)
+      summary: Обработка ссылки с набором книг
+      tags:
+        - parsing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: Ссылка на внешние систему
+              required:
+                - url
+      responses:
+        200:
+          description: Успешная проверка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BooksCheckResult"
         400:
           description: Некорректный запрос
           content:
@@ -721,6 +740,41 @@ components:
         - page_count
         - attributes
         - pages
+
+    BooksCheckResult:
+      type: object
+      properties:
+        result:
+          type: array
+          description: Результат обработки
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                format: uri
+                description: Ссылка на внешнюю систему
+              result:
+                type: string
+                description: Результат проверки
+                enum:
+                  - ok
+                  - unsupported
+                  - error
+              error_details:
+                type: string
+                description: Данные об ошибке во время обработки
+              possible_duplicates:
+                type: array
+                description: Список возможных ссылок дубликатов (зеркала внешних систем и т.п.)
+                items:
+                  type: string
+                  format: uri
+            required:
+              - url
+              - result
+      required:
+        - result
 
   securitySchemes:
     headerAuth:

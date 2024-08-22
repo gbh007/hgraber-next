@@ -12,20 +12,26 @@ import (
 	"hgnext/internal/pkg"
 )
 
-func (d *Database) Agents(ctx context.Context, canParse, canExport bool) ([]entities.Agent, error) {
+func (d *Database) Agents(ctx context.Context, filter entities.AgentFilter) ([]entities.Agent, error) {
 	raw := make([]model.Agent, 0)
 
 	builder := squirrel.Select("*").
 		PlaceholderFormat(squirrel.Dollar).
 		From("agents").OrderBy("priority DESC")
 
-	if canParse {
+	if filter.CanParse {
 		builder = builder.Where(squirrel.Eq{
 			"can_parse": true,
 		})
 	}
 
-	if canExport {
+	if filter.CanParseMulti {
+		builder = builder.Where(squirrel.Eq{
+			"can_parse_multi": true,
+		})
+	}
+
+	if filter.CanExport {
 		builder = builder.Where(squirrel.Eq{
 			"can_export": true,
 		})
@@ -56,26 +62,17 @@ func (d *Database) Agents(ctx context.Context, canParse, canExport bool) ([]enti
 func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 	builder := squirrel.Insert("agents").
 		PlaceholderFormat(squirrel.Dollar).
-		Columns(
-			"id",
-			"name",
-			"addr",
-			"token",
-			"can_parse",
-			"can_export",
-			"priority",
-			"create_at",
-		).
-		Values(
-			agent.ID.String(),
-			agent.Name,
-			agent.Addr.String(),
-			agent.Token,
-			agent.CanParse,
-			agent.CanExport,
-			agent.Priority,
-			agent.CreateAt,
-		)
+		SetMap(map[string]interface{}{
+			"id":              agent.ID.String(),
+			"name":            agent.Name,
+			"addr":            agent.Addr.String(),
+			"token":           agent.Token,
+			"can_parse":       agent.CanParse,
+			"can_parse_multi": agent.CanParseMulti,
+			"can_export":      agent.CanExport,
+			"priority":        agent.Priority,
+			"create_at":       agent.CreateAt,
+		})
 
 	query, args, err := builder.ToSql()
 	if err != nil {
@@ -95,16 +92,15 @@ func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error {
 	builder := squirrel.Update("agents").
 		PlaceholderFormat(squirrel.Dollar).
-		SetMap(
-			map[string]interface{}{
-				"name":       agent.Name,
-				"addr":       agent.Addr.String(),
-				"token":      agent.Token,
-				"can_parse":  agent.CanParse,
-				"can_export": agent.CanExport,
-				"priority":   agent.Priority,
-			},
-		).
+		SetMap(map[string]interface{}{
+			"name":            agent.Name,
+			"addr":            agent.Addr.String(),
+			"token":           agent.Token,
+			"can_parse":       agent.CanParse,
+			"can_parse_multi": agent.CanParseMulti,
+			"can_export":      agent.CanExport,
+			"priority":        agent.Priority,
+		}).
 		Where(squirrel.Eq{
 			"id": agent.ID.String(),
 		})

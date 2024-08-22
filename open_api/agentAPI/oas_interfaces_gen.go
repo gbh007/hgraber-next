@@ -29,6 +29,10 @@ type APIParsingBookCheckPostRes interface {
 	aPIParsingBookCheckPostRes()
 }
 
+type APIParsingBookMultiPostRes interface {
+	aPIParsingBookMultiPostRes()
+}
+
 type APIParsingBookPostRes interface {
 	aPIParsingBookPostRes()
 }

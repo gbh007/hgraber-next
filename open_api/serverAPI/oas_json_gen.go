@@ -497,6 +497,10 @@ func (s *APIAgentListPostOKItem) encodeFields(e *jx.Encoder) {
 		e.Bool(s.CanParse)
 	}
 	{
+		e.FieldStart("can_parse_multi")
+		e.Bool(s.CanParseMulti)
+	}
+	{
 		e.FieldStart("can_export")
 		e.Bool(s.CanExport)
 	}
@@ -510,15 +514,16 @@ func (s *APIAgentListPostOKItem) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIAgentListPostOKItem = [8]string{
+var jsonFieldsNameOfAPIAgentListPostOKItem = [9]string{
 	0: "status",
 	1: "id",
 	2: "name",
 	3: "addr",
 	4: "can_parse",
-	5: "can_export",
-	6: "priority",
-	7: "create_at",
+	5: "can_parse_multi",
+	6: "can_export",
+	7: "priority",
+	8: "create_at",
 }
 
 // Decode decodes APIAgentListPostOKItem from json.
@@ -526,7 +531,7 @@ func (s *APIAgentListPostOKItem) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode APIAgentListPostOKItem to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -588,8 +593,20 @@ func (s *APIAgentListPostOKItem) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"can_parse\"")
 			}
-		case "can_export":
+		case "can_parse_multi":
 			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Bool()
+				s.CanParseMulti = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"can_parse_multi\"")
+			}
+		case "can_export":
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := d.Bool()
 				s.CanExport = bool(v)
@@ -601,7 +618,7 @@ func (s *APIAgentListPostOKItem) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"can_export\"")
 			}
 		case "priority":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
 				v, err := d.Int()
 				s.Priority = int(v)
@@ -613,7 +630,7 @@ func (s *APIAgentListPostOKItem) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"priority\"")
 			}
 		case "create_at":
-			requiredBitSet[0] |= 1 << 7
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreateAt = v
@@ -633,8 +650,9 @@ func (s *APIAgentListPostOKItem) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
+	for i, mask := range [2]uint8{
 		0b11111110,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1057,6 +1075,12 @@ func (s *APIAgentListPostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.CanParseMulti.Set {
+			e.FieldStart("can_parse_multi")
+			s.CanParseMulti.Encode(e)
+		}
+	}
+	{
 		if s.IncludeStatus.Set {
 			e.FieldStart("include_status")
 			s.IncludeStatus.Encode(e)
@@ -1064,10 +1088,11 @@ func (s *APIAgentListPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIAgentListPostReq = [3]string{
+var jsonFieldsNameOfAPIAgentListPostReq = [4]string{
 	0: "can_parse",
 	1: "can_export",
-	2: "include_status",
+	2: "can_parse_multi",
+	3: "include_status",
 }
 
 // Decode decodes APIAgentListPostReq from json.
@@ -1097,6 +1122,16 @@ func (s *APIAgentListPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"can_export\"")
+			}
+		case "can_parse_multi":
+			if err := func() error {
+				s.CanParseMulti.Reset()
+				if err := s.CanParseMulti.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"can_parse_multi\"")
 			}
 		case "include_status":
 			if err := func() error {
@@ -1312,6 +1347,12 @@ func (s *APIAgentNewPostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.CanParseMulti.Set {
+			e.FieldStart("can_parse_multi")
+			s.CanParseMulti.Encode(e)
+		}
+	}
+	{
 		if s.CanExport.Set {
 			e.FieldStart("can_export")
 			s.CanExport.Encode(e)
@@ -1325,13 +1366,14 @@ func (s *APIAgentNewPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIAgentNewPostReq = [6]string{
+var jsonFieldsNameOfAPIAgentNewPostReq = [7]string{
 	0: "name",
 	1: "addr",
 	2: "token",
 	3: "can_parse",
-	4: "can_export",
-	5: "priority",
+	4: "can_parse_multi",
+	5: "can_export",
+	6: "priority",
 }
 
 // Decode decodes APIAgentNewPostReq from json.
@@ -1388,6 +1430,16 @@ func (s *APIAgentNewPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"can_parse\"")
+			}
+		case "can_parse_multi":
+			if err := func() error {
+				s.CanParseMulti.Reset()
+				if err := s.CanParseMulti.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"can_parse_multi\"")
 			}
 		case "can_export":
 			if err := func() error {
@@ -6004,10 +6056,17 @@ func (s *APISystemHandlePostReq) encodeFields(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	{
+		if s.IsMulti.Set {
+			e.FieldStart("is_multi")
+			s.IsMulti.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPISystemHandlePostReq = [1]string{
+var jsonFieldsNameOfAPISystemHandlePostReq = [2]string{
 	0: "urls",
+	1: "is_multi",
 }
 
 // Decode decodes APISystemHandlePostReq from json.
@@ -6038,6 +6097,16 @@ func (s *APISystemHandlePostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"urls\"")
+			}
+		case "is_multi":
+			if err := func() error {
+				s.IsMulti.Reset()
+				if err := s.IsMulti.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"is_multi\"")
 			}
 		default:
 			return d.Skip()

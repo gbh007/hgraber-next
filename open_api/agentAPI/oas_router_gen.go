@@ -232,24 +232,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/check"
+					case '/': // Prefix: "/"
 						origElem := elem
-						if l := len("/check"); len(elem) >= l && elem[0:l] == "/check" {
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIParsingBookCheckPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
+							break
+						}
+						switch elem[0] {
+						case 'c': // Prefix: "check"
+							origElem := elem
+							if l := len("check"); len(elem) >= l && elem[0:l] == "check" {
+								elem = elem[l:]
+							} else {
+								break
 							}
 
-							return
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIParsingBookCheckPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'm': // Prefix: "multi"
+							origElem := elem
+							if l := len("multi"); len(elem) >= l && elem[0:l] == "multi" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIParsingBookMultiPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -597,28 +633,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/check"
+					case '/': // Prefix: "/"
 						origElem := elem
-						if l := len("/check"); len(elem) >= l && elem[0:l] == "/check" {
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = "APIParsingBookCheckPost"
-								r.summary = "Предварительная проверка ссылок на новые книги"
-								r.operationID = ""
-								r.pathPattern = "/api/parsing/book/check"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
+							break
+						}
+						switch elem[0] {
+						case 'c': // Prefix: "check"
+							origElem := elem
+							if l := len("check"); len(elem) >= l && elem[0:l] == "check" {
+								elem = elem[l:]
+							} else {
+								break
 							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "APIParsingBookCheckPost"
+									r.summary = "Предварительная проверка ссылок на новые книги"
+									r.operationID = ""
+									r.pathPattern = "/api/parsing/book/check"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'm': // Prefix: "multi"
+							origElem := elem
+							if l := len("multi"); len(elem) >= l && elem[0:l] == "multi" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "APIParsingBookMultiPost"
+									r.summary = "Обработка ссылки с набором книг"
+									r.operationID = ""
+									r.pathPattern = "/api/parsing/book/multi"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem

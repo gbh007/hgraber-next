@@ -21,7 +21,9 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]entities.BookWithAgent, 
 		return []entities.BookWithAgent{}, nil
 	}
 
-	agents, err := uc.storage.Agents(ctx, true, false)
+	agents, err := uc.storage.Agents(ctx, entities.AgentFilter{
+		CanParse: true,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("get agents: %w", err)
 	}

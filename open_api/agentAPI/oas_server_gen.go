@@ -50,6 +50,13 @@ type Handler interface {
 	//
 	// POST /api/parsing/book/check
 	APIParsingBookCheckPost(ctx context.Context, req *APIParsingBookCheckPostReq) (APIParsingBookCheckPostRes, error)
+	// APIParsingBookMultiPost implements POST /api/parsing/book/multi operation.
+	//
+	// Обработка ссылки с набором книг (например всех глав
+	// манги).
+	//
+	// POST /api/parsing/book/multi
+	APIParsingBookMultiPost(ctx context.Context, req *APIParsingBookMultiPostReq) (APIParsingBookMultiPostRes, error)
 	// APIParsingBookPost implements POST /api/parsing/book operation.
 	//
 	// Обработка новой книги.

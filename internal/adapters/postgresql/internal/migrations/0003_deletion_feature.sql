@@ -50,6 +50,8 @@ WHERE (
 
 CREATE INDEX unverified_books ON books (id) WHERE verified = FALSE;
 
+ALTER TABLE agents
+ADD COLUMN can_parse_multi BOOL NOT NULL DEFAULT false;
 -- +goose Down
 
 DROP TABLE book_origin_attributes;
@@ -75,3 +77,5 @@ WHERE (
     AND origin_url IS NOT NULL;
 
 DROP INDEX unverified_books;
+
+ALTER TABLE agents DROP COLUMN can_parse_multi;

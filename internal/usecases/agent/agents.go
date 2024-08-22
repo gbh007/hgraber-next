@@ -9,8 +9,8 @@ import (
 	"hgnext/internal/pkg"
 )
 
-func (uc *UseCase) Agents(ctx context.Context, canParse, canExport, includeStatus bool) ([]entities.AgentWithStatus, error) {
-	agents, err := uc.storage.Agents(ctx, canParse, canExport)
+func (uc *UseCase) Agents(ctx context.Context, filter entities.AgentFilter, includeStatus bool) ([]entities.AgentWithStatus, error) {
+	agents, err := uc.storage.Agents(ctx, filter)
 	if err != nil {
 		return nil, fmt.Errorf("storage get agents: %w", err)
 	}

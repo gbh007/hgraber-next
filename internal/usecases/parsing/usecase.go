@@ -29,7 +29,7 @@ type storage interface {
 	NotDownloadedPages(ctx context.Context) ([]entities.PageForDownload, error)
 	UnprocessedBooks(ctx context.Context) ([]entities.Book, error)
 
-	Agents(ctx context.Context, canParse, canExport bool) ([]entities.Agent, error)
+	Agents(ctx context.Context, filter entities.AgentFilter) ([]entities.Agent, error)
 
 	PagesByURL(ctx context.Context, u url.URL) ([]entities.Page, error)
 }
@@ -39,6 +39,7 @@ type agentSystem interface {
 	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]entities.AgentBookCheckResult, error)
 	PageLoad(ctx context.Context, agentID uuid.UUID, url entities.AgentPageURL) (io.Reader, error)
 	PagesCheck(ctx context.Context, agentID uuid.UUID, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
+	BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]entities.AgentBookCheckResult, error)
 }
 
 type fileStorage interface {

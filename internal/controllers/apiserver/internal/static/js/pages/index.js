@@ -4,6 +4,7 @@ const app = Vue.createApp({
       state: {},
       stateError: "",
       urlsRaw: "",
+      isMulti: false,
       urlsResult: {},
       urlsError: "",
       stateIntervalID: null,

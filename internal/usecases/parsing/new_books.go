@@ -16,7 +16,9 @@ import (
 )
 
 func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.FirstHandleMultipleResult, error) {
-	agents, err := uc.storage.Agents(ctx, true, false)
+	agents, err := uc.storage.Agents(ctx, entities.AgentFilter{
+		CanParse: true,
+	})
 	if err != nil {
 		return entities.FirstHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
 	}
