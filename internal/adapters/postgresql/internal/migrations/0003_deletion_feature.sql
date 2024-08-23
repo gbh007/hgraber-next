@@ -52,11 +52,10 @@ CREATE INDEX unverified_books ON books (id) WHERE verified = FALSE;
 
 ALTER TABLE agents
 ADD COLUMN can_parse_multi BOOL NOT NULL DEFAULT false;
+
 -- +goose Down
 
 DROP TABLE book_origin_attributes;
-
-DROP INDEX book_attributes_value_pairs;
 
 DROP TABLE deleted_pages;
 
