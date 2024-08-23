@@ -10,10 +10,11 @@ import (
 )
 
 type bookRequest struct {
-	ID                uuid.UUID
-	IncludeAttributes bool
-	IncludePages      bool
-	IncludeLabels     bool
+	ID                      uuid.UUID
+	IncludeAttributes       bool
+	IncludeOriginAttributes bool
+	IncludePages            bool
+	IncludeLabels           bool
 }
 
 func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.BookFull, error) {
@@ -26,7 +27,16 @@ func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.B
 		Book: b,
 	}
 
-	if req.IncludeAttributes {
+	switch {
+	case req.IncludeOriginAttributes:
+		attributes, err := uc.storage.BookOriginAttributes(ctx, req.ID)
+		if err != nil {
+			return entities.BookFull{}, fmt.Errorf("get attributes :%w", err)
+		}
+
+		out.Attributes = attributes
+
+	case req.IncludeAttributes:
 		attributes, err := uc.storage.BookAttributes(ctx, req.ID)
 		if err != nil {
 			return entities.BookFull{}, fmt.Errorf("get attributes :%w", err)

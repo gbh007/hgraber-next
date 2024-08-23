@@ -20,7 +20,9 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownl
 		return []entities.PageForDownloadWithAgent{}, nil
 	}
 
-	agents, err := uc.storage.Agents(ctx, true, false)
+	agents, err := uc.storage.Agents(ctx, entities.AgentFilter{
+		CanParse: true,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("get agents: %w", err)
 	}

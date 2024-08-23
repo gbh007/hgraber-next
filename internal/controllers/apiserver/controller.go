@@ -22,6 +22,8 @@ type parseUseCases interface {
 	PagesExists(ctx context.Context, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
 	BookByURL(ctx context.Context, u url.URL) (entities.BookFull, error)
 	PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error)
+
+	NewBooksMulti(ctx context.Context, urls []url.URL) (entities.MultiHandleMultipleResult, error)
 }
 
 type webAPIUseCases interface {
@@ -33,12 +35,15 @@ type webAPIUseCases interface {
 	Book(ctx context.Context, bookID uuid.UUID) (entities.BookToWeb, error)
 	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 	BookList(ctx context.Context, filter entities.BookFilter) ([]entities.BookToWeb, []int, error)
+
+	VerifyBook(ctx context.Context, bookID uuid.UUID) error
+	DeleteBook(ctx context.Context, bookID uuid.UUID) error
 }
 
 type agentUseCases interface {
 	NewAgent(ctx context.Context, agent entities.Agent) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
-	Agents(ctx context.Context, canParse, canExport, includeStatus bool) ([]entities.AgentWithStatus, error)
+	Agents(ctx context.Context, filter entities.AgentFilter, includeStatus bool) ([]entities.AgentWithStatus, error)
 }
 
 type exportUseCases interface {

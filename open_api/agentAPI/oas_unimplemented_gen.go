@@ -76,6 +76,16 @@ func (UnimplementedHandler) APIParsingBookCheckPost(ctx context.Context, req *AP
 	return r, ht.ErrNotImplemented
 }
 
+// APIParsingBookMultiPost implements POST /api/parsing/book/multi operation.
+//
+// Обработка ссылки с набором книг (например всех глав
+// манги).
+//
+// POST /api/parsing/book/multi
+func (UnimplementedHandler) APIParsingBookMultiPost(ctx context.Context, req *APIParsingBookMultiPostReq) (r APIParsingBookMultiPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIParsingBookPost implements POST /api/parsing/book operation.
 //
 // Обработка новой книги.

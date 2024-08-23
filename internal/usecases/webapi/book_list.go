@@ -9,7 +9,7 @@ import (
 )
 
 func (uc *UseCase) BookList(ctx context.Context, filter entities.BookFilter) ([]entities.BookToWeb, []int, error) {
-	total, err := uc.storage.BookCount(ctx)
+	total, err := uc.storage.BookCount(ctx, filter)
 	if err != nil {
 		return nil, nil, fmt.Errorf("get book count from storage: %w", err)
 	}

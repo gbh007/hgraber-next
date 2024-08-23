@@ -60,12 +60,20 @@ func isApplyWithErr(r sql.Result) (bool, error) {
 	return c != 0, nil
 }
 
-func (storage *Database) isApply(ctx context.Context, r sql.Result) bool {
+func (d *Database) isApply(ctx context.Context, r sql.Result) bool {
 	apply, err := isApplyWithErr(r)
 
 	if err != nil {
-		storage.logger.ErrorContext(ctx, err.Error())
+		d.logger.ErrorContext(ctx, err.Error())
 	}
 
 	return apply
+}
+
+func (d *Database) squirrelDebugLog(ctx context.Context, query string, args []any) {
+	d.logger.DebugContext(
+		ctx, "squirrel build request",
+		slog.String("query", query),
+		slog.Any("args", args),
+	)
 }

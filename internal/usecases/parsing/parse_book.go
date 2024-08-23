@@ -25,11 +25,20 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book entiti
 		return fmt.Errorf("agent parse: %w", err)
 	}
 
+	attributes := make(map[string][]string, 7)
+
 	for _, attr := range info.Attributes {
-		err = uc.storage.UpdateAttribute(ctx, book.ID, attr.Code, attr.Values)
-		if err != nil {
-			return fmt.Errorf("update attribute (%s): %w", attr.Code, err)
-		}
+		attributes[attr.Code] = attr.Values
+	}
+
+	err = uc.storage.UpdateOriginAttributes(ctx, book.ID, attributes)
+	if err != nil {
+		return fmt.Errorf("update original attributes: %w", err)
+	}
+
+	err = uc.storage.UpdateAttributes(ctx, book.ID, attributes)
+	if err != nil {
+		return fmt.Errorf("update attributes: %w", err)
 	}
 
 	err = uc.storage.UpdateBookPages(ctx, book.ID, pkg.Map(info.Pages, func(p entities.AgentBookDetailsPagesItem) entities.Page {

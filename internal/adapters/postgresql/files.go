@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log/slog"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
@@ -103,11 +102,7 @@ func (d *Database) NewFile(ctx context.Context, file entities.File) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
-		ctx, "squirrel build request",
-		slog.String("query", query),
-		slog.Any("args", args),
-	)
+	d.squirrelDebugLog(ctx, query, args)
 
 	_, err = d.db.ExecContext(ctx, query, args...)
 	if err != nil {
@@ -134,11 +129,7 @@ func (d *Database) ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UU
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
-		ctx, "squirrel build request",
-		slog.String("query", query),
-		slog.Any("args", args),
-	)
+	d.squirrelDebugLog(ctx, query, args)
 
 	_, err = d.pool.Exec(ctx, query, args...)
 	if err != nil {
@@ -189,11 +180,7 @@ func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.logger.DebugContext(
-		ctx, "squirrel build request",
-		slog.String("query", query),
-		slog.Any("args", args),
-	)
+	d.squirrelDebugLog(ctx, query, args)
 
 	res, err := d.db.ExecContext(ctx, query, args...)
 	if err != nil {

@@ -58,6 +58,15 @@ func (UnimplementedHandler) APIBookArchiveIDGet(ctx context.Context, params APIB
 	return r, ht.ErrNotImplemented
 }
 
+// APIBookDeletePost implements POST /api/book/delete operation.
+//
+// Удаление книги (без удаления метаинформации).
+//
+// POST /api/book/delete
+func (UnimplementedHandler) APIBookDeletePost(ctx context.Context, req *APIBookDeletePostReq) (r APIBookDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIBookDetailsPost implements POST /api/book/details operation.
 //
 // Информация о книге.
@@ -82,6 +91,16 @@ func (UnimplementedHandler) APIBookListPost(ctx context.Context, req *APIBookLis
 //
 // POST /api/book/raw
 func (UnimplementedHandler) APIBookRawPost(ctx context.Context, req *APIBookRawPostReq) (r APIBookRawPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIBookVerifyPost implements POST /api/book/verify operation.
+//
+// Подтверждение (модерация) книги, нужна в случае
+// массовой обработки.
+//
+// POST /api/book/verify
+func (UnimplementedHandler) APIBookVerifyPost(ctx context.Context, req *APIBookVerifyPostReq) (r APIBookVerifyPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

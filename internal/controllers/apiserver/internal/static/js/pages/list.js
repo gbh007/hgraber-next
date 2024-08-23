@@ -11,6 +11,9 @@ const app = Vue.createApp({
       books: [],
       booksError: "",
       pages: [],
+      showDeleted: "except",
+      showVerify: "only",
+      nameFilter: "",
     });
 
     async function renderPages(pageNumber = 1) {
@@ -18,6 +21,11 @@ const app = Vue.createApp({
         .post("/api/book/list", {
           count: countOnPage,
           page: pageNumber,
+          verify_status: appState.showVerify,
+          delete_status: appState.showDeleted,
+          filter: {
+            name: appState.nameFilter,
+          },
         })
         .then(function (response) {
           let data = response.data;

@@ -108,6 +108,16 @@
             v-model="appState.urlsRaw"
             placeholder="Загрузить новые книги"
           ></textarea>
+          <label>
+            <span>Множественный парсинг</span>
+            <input
+              class="app"
+              v-model="appState.isMulti"
+              placeholder="Множественный парсинг"
+              type="checkbox"
+              autocomplete="off"
+            />
+          </label>
           <button class="app" @click="loadBooks();">Загрузить</button>
         </div>
         <div style="display: flex; flex-direction: column; margin-left: 10px">

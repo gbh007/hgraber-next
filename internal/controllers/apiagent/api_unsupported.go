@@ -40,3 +40,10 @@ func (c *Controller) APIFsIdsGet(ctx context.Context) (agentAPI.APIFsIdsGetRes, 
 		Details:   agentAPI.NewOptString("unsupported api"),
 	}, nil
 }
+
+func (c *Controller) APIParsingBookMultiPost(ctx context.Context, req *agentAPI.APIParsingBookMultiPostReq) (agentAPI.APIParsingBookMultiPostRes, error) {
+	return &agentAPI.APIParsingBookMultiPostBadRequest{
+		InnerCode: ValidationCode,
+		Details:   agentAPI.NewOptString("unsupported api"),
+	}, nil
+}

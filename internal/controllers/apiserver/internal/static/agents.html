@@ -109,6 +109,10 @@
             'Да':'Нет'}}</span
           >
           <span
+            ><b>Может обрабатывать новые массово:</b> {{agent.can_parse_multi?
+            'Да':'Нет'}}</span
+          >
+          <span
             ><b>Может экспортировать:</b> {{agent.can_export? 'Да':'Нет'}}</span
           >
           <span><b>Приоритет:</b> {{agent.priority}}</span>
@@ -170,6 +174,17 @@
             class="app"
             v-model="appState.canParse"
             placeholder="Поддерживает парсинг"
+            type="checkbox"
+            autocomplete="off"
+          />
+        </label>
+
+        <label>
+          <span>Поддерживает множественный парсинг</span>
+          <input
+            class="app"
+            v-model="appState.canParseMulti"
+            placeholder="Поддерживает множественный парсинг"
             type="checkbox"
             autocomplete="off"
           />

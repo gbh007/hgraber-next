@@ -497,6 +497,10 @@ func (s *APIAgentListPostOKItem) encodeFields(e *jx.Encoder) {
 		e.Bool(s.CanParse)
 	}
 	{
+		e.FieldStart("can_parse_multi")
+		e.Bool(s.CanParseMulti)
+	}
+	{
 		e.FieldStart("can_export")
 		e.Bool(s.CanExport)
 	}
@@ -510,15 +514,16 @@ func (s *APIAgentListPostOKItem) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIAgentListPostOKItem = [8]string{
+var jsonFieldsNameOfAPIAgentListPostOKItem = [9]string{
 	0: "status",
 	1: "id",
 	2: "name",
 	3: "addr",
 	4: "can_parse",
-	5: "can_export",
-	6: "priority",
-	7: "create_at",
+	5: "can_parse_multi",
+	6: "can_export",
+	7: "priority",
+	8: "create_at",
 }
 
 // Decode decodes APIAgentListPostOKItem from json.
@@ -526,7 +531,7 @@ func (s *APIAgentListPostOKItem) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode APIAgentListPostOKItem to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -588,8 +593,20 @@ func (s *APIAgentListPostOKItem) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"can_parse\"")
 			}
-		case "can_export":
+		case "can_parse_multi":
 			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Bool()
+				s.CanParseMulti = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"can_parse_multi\"")
+			}
+		case "can_export":
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := d.Bool()
 				s.CanExport = bool(v)
@@ -601,7 +618,7 @@ func (s *APIAgentListPostOKItem) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"can_export\"")
 			}
 		case "priority":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
 				v, err := d.Int()
 				s.Priority = int(v)
@@ -613,7 +630,7 @@ func (s *APIAgentListPostOKItem) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"priority\"")
 			}
 		case "create_at":
-			requiredBitSet[0] |= 1 << 7
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreateAt = v
@@ -633,8 +650,9 @@ func (s *APIAgentListPostOKItem) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
+	for i, mask := range [2]uint8{
 		0b11111110,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1057,6 +1075,12 @@ func (s *APIAgentListPostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.CanParseMulti.Set {
+			e.FieldStart("can_parse_multi")
+			s.CanParseMulti.Encode(e)
+		}
+	}
+	{
 		if s.IncludeStatus.Set {
 			e.FieldStart("include_status")
 			s.IncludeStatus.Encode(e)
@@ -1064,10 +1088,11 @@ func (s *APIAgentListPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIAgentListPostReq = [3]string{
+var jsonFieldsNameOfAPIAgentListPostReq = [4]string{
 	0: "can_parse",
 	1: "can_export",
-	2: "include_status",
+	2: "can_parse_multi",
+	3: "include_status",
 }
 
 // Decode decodes APIAgentListPostReq from json.
@@ -1097,6 +1122,16 @@ func (s *APIAgentListPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"can_export\"")
+			}
+		case "can_parse_multi":
+			if err := func() error {
+				s.CanParseMulti.Reset()
+				if err := s.CanParseMulti.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"can_parse_multi\"")
 			}
 		case "include_status":
 			if err := func() error {
@@ -1312,6 +1347,12 @@ func (s *APIAgentNewPostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.CanParseMulti.Set {
+			e.FieldStart("can_parse_multi")
+			s.CanParseMulti.Encode(e)
+		}
+	}
+	{
 		if s.CanExport.Set {
 			e.FieldStart("can_export")
 			s.CanExport.Encode(e)
@@ -1325,13 +1366,14 @@ func (s *APIAgentNewPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIAgentNewPostReq = [6]string{
+var jsonFieldsNameOfAPIAgentNewPostReq = [7]string{
 	0: "name",
 	1: "addr",
 	2: "token",
 	3: "can_parse",
-	4: "can_export",
-	5: "priority",
+	4: "can_parse_multi",
+	5: "can_export",
+	6: "priority",
 }
 
 // Decode decodes APIAgentNewPostReq from json.
@@ -1388,6 +1430,16 @@ func (s *APIAgentNewPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"can_parse\"")
+			}
+		case "can_parse_multi":
+			if err := func() error {
+				s.CanParseMulti.Reset()
+				if err := s.CanParseMulti.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"can_parse_multi\"")
 			}
 		case "can_export":
 			if err := func() error {
@@ -1971,6 +2023,292 @@ func (s *APIBookArchiveIDGetUnauthorized) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIBookArchiveIDGetUnauthorized) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookDeletePostBadRequest as json.
+func (s *APIBookDeletePostBadRequest) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIBookDeletePostBadRequest from json.
+func (s *APIBookDeletePostBadRequest) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookDeletePostBadRequest to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIBookDeletePostBadRequest(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookDeletePostBadRequest) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookDeletePostBadRequest) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookDeletePostForbidden as json.
+func (s *APIBookDeletePostForbidden) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIBookDeletePostForbidden from json.
+func (s *APIBookDeletePostForbidden) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookDeletePostForbidden to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIBookDeletePostForbidden(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookDeletePostForbidden) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookDeletePostForbidden) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookDeletePostInternalServerError as json.
+func (s *APIBookDeletePostInternalServerError) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIBookDeletePostInternalServerError from json.
+func (s *APIBookDeletePostInternalServerError) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookDeletePostInternalServerError to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIBookDeletePostInternalServerError(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookDeletePostInternalServerError) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookDeletePostInternalServerError) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookDeletePostNotFound as json.
+func (s *APIBookDeletePostNotFound) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIBookDeletePostNotFound from json.
+func (s *APIBookDeletePostNotFound) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookDeletePostNotFound to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIBookDeletePostNotFound(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookDeletePostNotFound) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookDeletePostNotFound) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIBookDeletePostReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIBookDeletePostReq) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("id")
+		json.EncodeUUID(e, s.ID)
+	}
+}
+
+var jsonFieldsNameOfAPIBookDeletePostReq = [1]string{
+	0: "id",
+}
+
+// Decode decodes APIBookDeletePostReq from json.
+func (s *APIBookDeletePostReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookDeletePostReq to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := json.DecodeUUID(d)
+				s.ID = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIBookDeletePostReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIBookDeletePostReq) {
+					name = jsonFieldsNameOfAPIBookDeletePostReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookDeletePostReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookDeletePostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookDeletePostUnauthorized as json.
+func (s *APIBookDeletePostUnauthorized) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIBookDeletePostUnauthorized from json.
+func (s *APIBookDeletePostUnauthorized) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookDeletePostUnauthorized to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIBookDeletePostUnauthorized(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookDeletePostUnauthorized) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookDeletePostUnauthorized) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -2626,11 +2964,32 @@ func (s *APIBookListPostReq) encodeFields(e *jx.Encoder) {
 			s.Page.Encode(e)
 		}
 	}
+	{
+		if s.VerifyStatus.Set {
+			e.FieldStart("verify_status")
+			s.VerifyStatus.Encode(e)
+		}
+	}
+	{
+		if s.DeleteStatus.Set {
+			e.FieldStart("delete_status")
+			s.DeleteStatus.Encode(e)
+		}
+	}
+	{
+		if s.Filter.Set {
+			e.FieldStart("filter")
+			s.Filter.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIBookListPostReq = [2]string{
+var jsonFieldsNameOfAPIBookListPostReq = [5]string{
 	0: "count",
 	1: "page",
+	2: "verify_status",
+	3: "delete_status",
+	4: "filter",
 }
 
 // Decode decodes APIBookListPostReq from json.
@@ -2663,6 +3022,36 @@ func (s *APIBookListPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"page\"")
+			}
+		case "verify_status":
+			if err := func() error {
+				s.VerifyStatus.Reset()
+				if err := s.VerifyStatus.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"verify_status\"")
+			}
+		case "delete_status":
+			if err := func() error {
+				s.DeleteStatus.Reset()
+				if err := s.DeleteStatus.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"delete_status\"")
+			}
+		case "filter":
+			if err := func() error {
+				s.Filter.Reset()
+				if err := s.Filter.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"filter\"")
 			}
 		default:
 			return d.Skip()
@@ -2716,6 +3105,153 @@ func (s *APIBookListPostReq) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIBookListPostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookListPostReqDeleteStatus as json.
+func (s APIBookListPostReqDeleteStatus) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes APIBookListPostReqDeleteStatus from json.
+func (s *APIBookListPostReqDeleteStatus) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookListPostReqDeleteStatus to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch APIBookListPostReqDeleteStatus(v) {
+	case APIBookListPostReqDeleteStatusAll:
+		*s = APIBookListPostReqDeleteStatusAll
+	case APIBookListPostReqDeleteStatusOnly:
+		*s = APIBookListPostReqDeleteStatusOnly
+	case APIBookListPostReqDeleteStatusExcept:
+		*s = APIBookListPostReqDeleteStatusExcept
+	default:
+		*s = APIBookListPostReqDeleteStatus(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s APIBookListPostReqDeleteStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookListPostReqDeleteStatus) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIBookListPostReqFilter) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIBookListPostReqFilter) encodeFields(e *jx.Encoder) {
+	{
+		if s.Name.Set {
+			e.FieldStart("name")
+			s.Name.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAPIBookListPostReqFilter = [1]string{
+	0: "name",
+}
+
+// Decode decodes APIBookListPostReqFilter from json.
+func (s *APIBookListPostReqFilter) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookListPostReqFilter to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			if err := func() error {
+				s.Name.Reset()
+				if err := s.Name.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIBookListPostReqFilter")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookListPostReqFilter) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookListPostReqFilter) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookListPostReqVerifyStatus as json.
+func (s APIBookListPostReqVerifyStatus) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes APIBookListPostReqVerifyStatus from json.
+func (s *APIBookListPostReqVerifyStatus) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookListPostReqVerifyStatus to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch APIBookListPostReqVerifyStatus(v) {
+	case APIBookListPostReqVerifyStatusAll:
+		*s = APIBookListPostReqVerifyStatusAll
+	case APIBookListPostReqVerifyStatusOnly:
+		*s = APIBookListPostReqVerifyStatusOnly
+	case APIBookListPostReqVerifyStatusExcept:
+		*s = APIBookListPostReqVerifyStatusExcept
+	default:
+		*s = APIBookListPostReqVerifyStatus(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s APIBookListPostReqVerifyStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookListPostReqVerifyStatus) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -3024,6 +3560,292 @@ func (s *APIBookRawPostUnauthorized) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIBookRawPostUnauthorized) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookVerifyPostBadRequest as json.
+func (s *APIBookVerifyPostBadRequest) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIBookVerifyPostBadRequest from json.
+func (s *APIBookVerifyPostBadRequest) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookVerifyPostBadRequest to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIBookVerifyPostBadRequest(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookVerifyPostBadRequest) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookVerifyPostBadRequest) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookVerifyPostForbidden as json.
+func (s *APIBookVerifyPostForbidden) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIBookVerifyPostForbidden from json.
+func (s *APIBookVerifyPostForbidden) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookVerifyPostForbidden to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIBookVerifyPostForbidden(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookVerifyPostForbidden) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookVerifyPostForbidden) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookVerifyPostInternalServerError as json.
+func (s *APIBookVerifyPostInternalServerError) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIBookVerifyPostInternalServerError from json.
+func (s *APIBookVerifyPostInternalServerError) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookVerifyPostInternalServerError to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIBookVerifyPostInternalServerError(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookVerifyPostInternalServerError) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookVerifyPostInternalServerError) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookVerifyPostNotFound as json.
+func (s *APIBookVerifyPostNotFound) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIBookVerifyPostNotFound from json.
+func (s *APIBookVerifyPostNotFound) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookVerifyPostNotFound to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIBookVerifyPostNotFound(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookVerifyPostNotFound) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookVerifyPostNotFound) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIBookVerifyPostReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIBookVerifyPostReq) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("id")
+		json.EncodeUUID(e, s.ID)
+	}
+}
+
+var jsonFieldsNameOfAPIBookVerifyPostReq = [1]string{
+	0: "id",
+}
+
+// Decode decodes APIBookVerifyPostReq from json.
+func (s *APIBookVerifyPostReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookVerifyPostReq to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := json.DecodeUUID(d)
+				s.ID = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIBookVerifyPostReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIBookVerifyPostReq) {
+					name = jsonFieldsNameOfAPIBookVerifyPostReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookVerifyPostReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookVerifyPostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookVerifyPostUnauthorized as json.
+func (s *APIBookVerifyPostUnauthorized) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIBookVerifyPostUnauthorized from json.
+func (s *APIBookVerifyPostUnauthorized) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookVerifyPostUnauthorized to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIBookVerifyPostUnauthorized(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookVerifyPostUnauthorized) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookVerifyPostUnauthorized) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -5234,10 +6056,17 @@ func (s *APISystemHandlePostReq) encodeFields(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	{
+		if s.IsMulti.Set {
+			e.FieldStart("is_multi")
+			s.IsMulti.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPISystemHandlePostReq = [1]string{
+var jsonFieldsNameOfAPISystemHandlePostReq = [2]string{
 	0: "urls",
+	1: "is_multi",
 }
 
 // Decode decodes APISystemHandlePostReq from json.
@@ -5268,6 +6097,16 @@ func (s *APISystemHandlePostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"urls\"")
+			}
+		case "is_multi":
+			if err := func() error {
+				s.IsMulti.Reset()
+				if err := s.IsMulti.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"is_multi\"")
 			}
 		default:
 			return d.Skip()
@@ -8342,6 +9181,105 @@ func (s OptAPIAgentListPostOKItemStatus) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptAPIAgentListPostOKItemStatus) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookListPostReqDeleteStatus as json.
+func (o OptAPIBookListPostReqDeleteStatus) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes APIBookListPostReqDeleteStatus from json.
+func (o *OptAPIBookListPostReqDeleteStatus) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptAPIBookListPostReqDeleteStatus to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptAPIBookListPostReqDeleteStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptAPIBookListPostReqDeleteStatus) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookListPostReqFilter as json.
+func (o OptAPIBookListPostReqFilter) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes APIBookListPostReqFilter from json.
+func (o *OptAPIBookListPostReqFilter) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptAPIBookListPostReqFilter to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptAPIBookListPostReqFilter) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptAPIBookListPostReqFilter) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookListPostReqVerifyStatus as json.
+func (o OptAPIBookListPostReqVerifyStatus) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes APIBookListPostReqVerifyStatus from json.
+func (o *OptAPIBookListPostReqVerifyStatus) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptAPIBookListPostReqVerifyStatus to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptAPIBookListPostReqVerifyStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptAPIBookListPostReqVerifyStatus) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

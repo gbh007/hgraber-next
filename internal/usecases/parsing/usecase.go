@@ -19,7 +19,8 @@ type storage interface {
 	NewBook(ctx context.Context, book entities.Book) error
 
 	UpdateBook(ctx context.Context, book entities.Book) error
-	UpdateAttribute(ctx context.Context, id uuid.UUID, attrCode string, values []string) error
+	UpdateAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
+	UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
 	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error
 
 	UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageNumber int, downloaded bool, fileID uuid.UUID) error
@@ -28,7 +29,7 @@ type storage interface {
 	NotDownloadedPages(ctx context.Context) ([]entities.PageForDownload, error)
 	UnprocessedBooks(ctx context.Context) ([]entities.Book, error)
 
-	Agents(ctx context.Context, canParse, canExport bool) ([]entities.Agent, error)
+	Agents(ctx context.Context, filter entities.AgentFilter) ([]entities.Agent, error)
 
 	PagesByURL(ctx context.Context, u url.URL) ([]entities.Page, error)
 }
@@ -38,6 +39,7 @@ type agentSystem interface {
 	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]entities.AgentBookCheckResult, error)
 	PageLoad(ctx context.Context, agentID uuid.UUID, url entities.AgentPageURL) (io.Reader, error)
 	PagesCheck(ctx context.Context, agentID uuid.UUID, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
+	BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]entities.AgentBookCheckResult, error)
 }
 
 type fileStorage interface {
@@ -46,7 +48,7 @@ type fileStorage interface {
 }
 
 type bookRequester interface {
-	BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 }
 
 type UseCase struct {

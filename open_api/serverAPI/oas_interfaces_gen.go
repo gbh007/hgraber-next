@@ -21,6 +21,10 @@ type APIBookArchiveIDGetRes interface {
 	aPIBookArchiveIDGetRes()
 }
 
+type APIBookDeletePostRes interface {
+	aPIBookDeletePostRes()
+}
+
 type APIBookDetailsPostRes interface {
 	aPIBookDetailsPostRes()
 }
@@ -31,6 +35,10 @@ type APIBookListPostRes interface {
 
 type APIBookRawPostRes interface {
 	aPIBookRawPostRes()
+}
+
+type APIBookVerifyPostRes interface {
+	aPIBookVerifyPostRes()
 }
 
 type APIFileIDGetRes interface {

@@ -5,6 +5,7 @@ const app = Vue.createApp({
       addr: "",
       token: "",
       canParse: false,
+      canParseMulti: false,
       canExport: false,
       priority: 0,
       agentError: "",
@@ -23,6 +24,7 @@ const app = Vue.createApp({
           addr: appState.addr,
           token: appState.token,
           can_parse: appState.canParse,
+          can_parse_multi: appState.canParseMulti,
           can_export: appState.canExport,
           priority: appState.priority,
         })
@@ -31,6 +33,7 @@ const app = Vue.createApp({
           appState.addr = "";
           appState.token = "";
           appState.canParse = false;
+          appState.canParseMulti = false;
           appState.canExport = false;
           appState.priority = 0;
           appState.agentError = "";

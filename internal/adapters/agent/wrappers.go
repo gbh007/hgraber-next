@@ -28,6 +28,15 @@ func (c *Client) BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.U
 	return adapter.BooksCheck(ctx, urls)
 }
 
+func (c *Client) BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]entities.AgentBookCheckResult, error) {
+	adapter, err := c.getAdapter(agentID)
+	if err != nil {
+		return nil, err
+	}
+
+	return adapter.BooksCheckMulti(ctx, u)
+}
+
 func (c *Client) ExportArchive(ctx context.Context, agentID uuid.UUID, bookID uuid.UUID, bookName string, body io.Reader) error {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {

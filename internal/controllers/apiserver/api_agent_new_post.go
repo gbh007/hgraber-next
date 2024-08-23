@@ -9,12 +9,13 @@ import (
 
 func (c *Controller) APIAgentNewPost(ctx context.Context, req *serverAPI.APIAgentNewPostReq) (serverAPI.APIAgentNewPostRes, error) {
 	err := c.agentUseCases.NewAgent(ctx, entities.Agent{
-		Name:      req.Name,
-		Addr:      req.Addr,
-		Token:     req.Token,
-		CanParse:  req.CanParse.Value,
-		CanExport: req.CanExport.Value,
-		Priority:  req.Priority.Value,
+		Name:          req.Name,
+		Addr:          req.Addr,
+		Token:         req.Token,
+		CanParse:      req.CanParse.Value,
+		CanParseMulti: req.CanParseMulti.Value,
+		CanExport:     req.CanExport.Value,
+		Priority:      req.Priority.Value,
 	})
 	if err != nil {
 		return &serverAPI.APIAgentNewPostInternalServerError{

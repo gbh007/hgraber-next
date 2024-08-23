@@ -16,10 +16,15 @@ type Book struct {
 	PageCount        int
 	AttributesParsed bool
 	CreateAt         time.Time
+
+	Deleted    bool
+	DeletedAt  time.Time
+	Verified   bool
+	VerifiedAt time.Time
 }
 
 func (b Book) IsLoaded() bool {
-	return b.AttributesParsed && b.PageCount > 0 && b.Name != ""
+	return !b.Deleted && b.AttributesParsed && b.PageCount > 0 && b.Name != ""
 }
 
 // FIXME: подумать что делать с такими моделями

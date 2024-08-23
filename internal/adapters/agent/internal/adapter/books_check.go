@@ -18,20 +18,9 @@ func (a *Adapter) BooksCheck(ctx context.Context, urls []url.URL) ([]entities.Ag
 		return nil, err
 	}
 
-	var result []entities.AgentBookCheckResult
-
 	switch typedRes := res.(type) {
-	case *agentAPI.APIParsingBookCheckPostOK:
-		result = pkg.Map(typedRes.Result, func(v agentAPI.APIParsingBookCheckPostOKResultItem) entities.AgentBookCheckResult {
-			return entities.AgentBookCheckResult{
-				URL:                v.URL,
-				IsUnsupported:      v.Result == agentAPI.APIParsingBookCheckPostOKResultItemResultUnsupported,
-				IsPossible:         v.Result == agentAPI.APIParsingBookCheckPostOKResultItemResultOk,
-				HasError:           v.Result == agentAPI.APIParsingBookCheckPostOKResultItemResultError,
-				PossibleDuplicates: v.PossibleDuplicates,
-				ErrorReason:        v.ErrorDetails.Value,
-			}
-		})
+	case *agentAPI.BooksCheckResult:
+		return convertBooksCheckResult(typedRes), nil
 
 	case *agentAPI.APIParsingBookCheckPostBadRequest:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
@@ -48,6 +37,17 @@ func (a *Adapter) BooksCheck(ctx context.Context, urls []url.URL) ([]entities.Ag
 	default:
 		return nil, entities.AgentAPIUnknownResponse
 	}
+}
 
-	return result, nil
+func convertBooksCheckResult(checkResult *agentAPI.BooksCheckResult) []entities.AgentBookCheckResult {
+	return pkg.Map(checkResult.Result, func(v agentAPI.BooksCheckResultResultItem) entities.AgentBookCheckResult {
+		return entities.AgentBookCheckResult{
+			URL:                v.URL,
+			IsUnsupported:      v.Result == agentAPI.BooksCheckResultResultItemResultUnsupported,
+			IsPossible:         v.Result == agentAPI.BooksCheckResultResultItemResultOk,
+			HasError:           v.Result == agentAPI.BooksCheckResultResultItemResultError,
+			PossibleDuplicates: v.PossibleDuplicates,
+			ErrorReason:        v.ErrorDetails.Value,
+		}
+	})
 }

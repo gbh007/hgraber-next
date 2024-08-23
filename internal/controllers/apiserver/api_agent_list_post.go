@@ -9,7 +9,11 @@ import (
 )
 
 func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAgentListPostReq) (serverAPI.APIAgentListPostRes, error) {
-	agents, err := c.agentUseCases.Agents(ctx, req.CanParse.Value, req.CanExport.Value, req.IncludeStatus.Value)
+	agents, err := c.agentUseCases.Agents(ctx, entities.AgentFilter{
+		CanParse:      req.CanParse.Value,
+		CanExport:     req.CanExport.Value,
+		CanParseMulti: req.CanParseMulti.Value,
+	}, req.IncludeStatus.Value)
 	if err != nil {
 		return &serverAPI.APIAgentListPostInternalServerError{
 			InnerCode: AgentUseCaseCode,
@@ -66,14 +70,15 @@ func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAge
 		}
 
 		return serverAPI.APIAgentListPostOKItem{
-			Status:    status,
-			ID:        aws.Agent.ID,
-			Name:      aws.Agent.Name,
-			Addr:      aws.Agent.Addr,
-			CanParse:  aws.Agent.CanParse,
-			CanExport: aws.Agent.CanExport,
-			Priority:  aws.Agent.Priority,
-			CreateAt:  aws.Agent.CreateAt,
+			Status:        status,
+			ID:            aws.Agent.ID,
+			Name:          aws.Agent.Name,
+			Addr:          aws.Agent.Addr,
+			CanParse:      aws.Agent.CanParse,
+			CanParseMulti: aws.Agent.CanParseMulti,
+			CanExport:     aws.Agent.CanExport,
+			Priority:      aws.Agent.Priority,
+			CreateAt:      aws.Agent.CreateAt,
 		}
 	})
 

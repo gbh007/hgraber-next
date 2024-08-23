@@ -375,124 +375,6 @@ type APIParsingBookCheckPostInternalServerError ErrorResponse
 
 func (*APIParsingBookCheckPostInternalServerError) aPIParsingBookCheckPostRes() {}
 
-type APIParsingBookCheckPostOK struct {
-	// Результат обработки.
-	Result []APIParsingBookCheckPostOKResultItem `json:"result"`
-}
-
-// GetResult returns the value of Result.
-func (s *APIParsingBookCheckPostOK) GetResult() []APIParsingBookCheckPostOKResultItem {
-	return s.Result
-}
-
-// SetResult sets the value of Result.
-func (s *APIParsingBookCheckPostOK) SetResult(val []APIParsingBookCheckPostOKResultItem) {
-	s.Result = val
-}
-
-func (*APIParsingBookCheckPostOK) aPIParsingBookCheckPostRes() {}
-
-type APIParsingBookCheckPostOKResultItem struct {
-	// Ссылка на внешнюю систему.
-	URL url.URL `json:"url"`
-	// Результат проверки.
-	Result APIParsingBookCheckPostOKResultItemResult `json:"result"`
-	// Данные об ошибке во время обработки.
-	ErrorDetails OptString `json:"error_details"`
-	// Список возможных ссылок дубликатов (зеркала внешних
-	// систем и т.п.).
-	PossibleDuplicates []url.URL `json:"possible_duplicates"`
-}
-
-// GetURL returns the value of URL.
-func (s *APIParsingBookCheckPostOKResultItem) GetURL() url.URL {
-	return s.URL
-}
-
-// GetResult returns the value of Result.
-func (s *APIParsingBookCheckPostOKResultItem) GetResult() APIParsingBookCheckPostOKResultItemResult {
-	return s.Result
-}
-
-// GetErrorDetails returns the value of ErrorDetails.
-func (s *APIParsingBookCheckPostOKResultItem) GetErrorDetails() OptString {
-	return s.ErrorDetails
-}
-
-// GetPossibleDuplicates returns the value of PossibleDuplicates.
-func (s *APIParsingBookCheckPostOKResultItem) GetPossibleDuplicates() []url.URL {
-	return s.PossibleDuplicates
-}
-
-// SetURL sets the value of URL.
-func (s *APIParsingBookCheckPostOKResultItem) SetURL(val url.URL) {
-	s.URL = val
-}
-
-// SetResult sets the value of Result.
-func (s *APIParsingBookCheckPostOKResultItem) SetResult(val APIParsingBookCheckPostOKResultItemResult) {
-	s.Result = val
-}
-
-// SetErrorDetails sets the value of ErrorDetails.
-func (s *APIParsingBookCheckPostOKResultItem) SetErrorDetails(val OptString) {
-	s.ErrorDetails = val
-}
-
-// SetPossibleDuplicates sets the value of PossibleDuplicates.
-func (s *APIParsingBookCheckPostOKResultItem) SetPossibleDuplicates(val []url.URL) {
-	s.PossibleDuplicates = val
-}
-
-// Результат проверки.
-type APIParsingBookCheckPostOKResultItemResult string
-
-const (
-	APIParsingBookCheckPostOKResultItemResultOk          APIParsingBookCheckPostOKResultItemResult = "ok"
-	APIParsingBookCheckPostOKResultItemResultUnsupported APIParsingBookCheckPostOKResultItemResult = "unsupported"
-	APIParsingBookCheckPostOKResultItemResultError       APIParsingBookCheckPostOKResultItemResult = "error"
-)
-
-// AllValues returns all APIParsingBookCheckPostOKResultItemResult values.
-func (APIParsingBookCheckPostOKResultItemResult) AllValues() []APIParsingBookCheckPostOKResultItemResult {
-	return []APIParsingBookCheckPostOKResultItemResult{
-		APIParsingBookCheckPostOKResultItemResultOk,
-		APIParsingBookCheckPostOKResultItemResultUnsupported,
-		APIParsingBookCheckPostOKResultItemResultError,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s APIParsingBookCheckPostOKResultItemResult) MarshalText() ([]byte, error) {
-	switch s {
-	case APIParsingBookCheckPostOKResultItemResultOk:
-		return []byte(s), nil
-	case APIParsingBookCheckPostOKResultItemResultUnsupported:
-		return []byte(s), nil
-	case APIParsingBookCheckPostOKResultItemResultError:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *APIParsingBookCheckPostOKResultItemResult) UnmarshalText(data []byte) error {
-	switch APIParsingBookCheckPostOKResultItemResult(data) {
-	case APIParsingBookCheckPostOKResultItemResultOk:
-		*s = APIParsingBookCheckPostOKResultItemResultOk
-		return nil
-	case APIParsingBookCheckPostOKResultItemResultUnsupported:
-		*s = APIParsingBookCheckPostOKResultItemResultUnsupported
-		return nil
-	case APIParsingBookCheckPostOKResultItemResultError:
-		*s = APIParsingBookCheckPostOKResultItemResultError
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
 type APIParsingBookCheckPostReq struct {
 	// Ссылки на внешние системы.
 	Urls []url.URL `json:"urls"`
@@ -511,6 +393,37 @@ func (s *APIParsingBookCheckPostReq) SetUrls(val []url.URL) {
 type APIParsingBookCheckPostUnauthorized ErrorResponse
 
 func (*APIParsingBookCheckPostUnauthorized) aPIParsingBookCheckPostRes() {}
+
+type APIParsingBookMultiPostBadRequest ErrorResponse
+
+func (*APIParsingBookMultiPostBadRequest) aPIParsingBookMultiPostRes() {}
+
+type APIParsingBookMultiPostForbidden ErrorResponse
+
+func (*APIParsingBookMultiPostForbidden) aPIParsingBookMultiPostRes() {}
+
+type APIParsingBookMultiPostInternalServerError ErrorResponse
+
+func (*APIParsingBookMultiPostInternalServerError) aPIParsingBookMultiPostRes() {}
+
+type APIParsingBookMultiPostReq struct {
+	// Ссылка на внешние систему.
+	URL url.URL `json:"url"`
+}
+
+// GetURL returns the value of URL.
+func (s *APIParsingBookMultiPostReq) GetURL() url.URL {
+	return s.URL
+}
+
+// SetURL sets the value of URL.
+func (s *APIParsingBookMultiPostReq) SetURL(val url.URL) {
+	s.URL = val
+}
+
+type APIParsingBookMultiPostUnauthorized ErrorResponse
+
+func (*APIParsingBookMultiPostUnauthorized) aPIParsingBookMultiPostRes() {}
 
 type APIParsingBookPostBadRequest ErrorResponse
 
@@ -985,6 +898,126 @@ func (s *BookDetailsPagesItem) SetURL(val url.URL) {
 // SetFilename sets the value of Filename.
 func (s *BookDetailsPagesItem) SetFilename(val string) {
 	s.Filename = val
+}
+
+// Ref: #/components/schemas/BooksCheckResult
+type BooksCheckResult struct {
+	// Результат обработки.
+	Result []BooksCheckResultResultItem `json:"result"`
+}
+
+// GetResult returns the value of Result.
+func (s *BooksCheckResult) GetResult() []BooksCheckResultResultItem {
+	return s.Result
+}
+
+// SetResult sets the value of Result.
+func (s *BooksCheckResult) SetResult(val []BooksCheckResultResultItem) {
+	s.Result = val
+}
+
+func (*BooksCheckResult) aPIParsingBookCheckPostRes() {}
+func (*BooksCheckResult) aPIParsingBookMultiPostRes() {}
+
+type BooksCheckResultResultItem struct {
+	// Ссылка на внешнюю систему.
+	URL url.URL `json:"url"`
+	// Результат проверки.
+	Result BooksCheckResultResultItemResult `json:"result"`
+	// Данные об ошибке во время обработки.
+	ErrorDetails OptString `json:"error_details"`
+	// Список возможных ссылок дубликатов (зеркала внешних
+	// систем и т.п.).
+	PossibleDuplicates []url.URL `json:"possible_duplicates"`
+}
+
+// GetURL returns the value of URL.
+func (s *BooksCheckResultResultItem) GetURL() url.URL {
+	return s.URL
+}
+
+// GetResult returns the value of Result.
+func (s *BooksCheckResultResultItem) GetResult() BooksCheckResultResultItemResult {
+	return s.Result
+}
+
+// GetErrorDetails returns the value of ErrorDetails.
+func (s *BooksCheckResultResultItem) GetErrorDetails() OptString {
+	return s.ErrorDetails
+}
+
+// GetPossibleDuplicates returns the value of PossibleDuplicates.
+func (s *BooksCheckResultResultItem) GetPossibleDuplicates() []url.URL {
+	return s.PossibleDuplicates
+}
+
+// SetURL sets the value of URL.
+func (s *BooksCheckResultResultItem) SetURL(val url.URL) {
+	s.URL = val
+}
+
+// SetResult sets the value of Result.
+func (s *BooksCheckResultResultItem) SetResult(val BooksCheckResultResultItemResult) {
+	s.Result = val
+}
+
+// SetErrorDetails sets the value of ErrorDetails.
+func (s *BooksCheckResultResultItem) SetErrorDetails(val OptString) {
+	s.ErrorDetails = val
+}
+
+// SetPossibleDuplicates sets the value of PossibleDuplicates.
+func (s *BooksCheckResultResultItem) SetPossibleDuplicates(val []url.URL) {
+	s.PossibleDuplicates = val
+}
+
+// Результат проверки.
+type BooksCheckResultResultItemResult string
+
+const (
+	BooksCheckResultResultItemResultOk          BooksCheckResultResultItemResult = "ok"
+	BooksCheckResultResultItemResultUnsupported BooksCheckResultResultItemResult = "unsupported"
+	BooksCheckResultResultItemResultError       BooksCheckResultResultItemResult = "error"
+)
+
+// AllValues returns all BooksCheckResultResultItemResult values.
+func (BooksCheckResultResultItemResult) AllValues() []BooksCheckResultResultItemResult {
+	return []BooksCheckResultResultItemResult{
+		BooksCheckResultResultItemResultOk,
+		BooksCheckResultResultItemResultUnsupported,
+		BooksCheckResultResultItemResultError,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s BooksCheckResultResultItemResult) MarshalText() ([]byte, error) {
+	switch s {
+	case BooksCheckResultResultItemResultOk:
+		return []byte(s), nil
+	case BooksCheckResultResultItemResultUnsupported:
+		return []byte(s), nil
+	case BooksCheckResultResultItemResultError:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *BooksCheckResultResultItemResult) UnmarshalText(data []byte) error {
+	switch BooksCheckResultResultItemResult(data) {
+	case BooksCheckResultResultItemResultOk:
+		*s = BooksCheckResultResultItemResultOk
+		return nil
+	case BooksCheckResultResultItemResultUnsupported:
+		*s = BooksCheckResultResultItemResultUnsupported
+		return nil
+	case BooksCheckResultResultItemResultError:
+		*s = BooksCheckResultResultItemResultError
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 // Данные ошибки.

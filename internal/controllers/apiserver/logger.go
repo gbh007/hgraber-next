@@ -13,7 +13,6 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 		defer func() { // TODO: перенести в отдельную мидлварь.
 			p := recover()
 			if p != nil {
-
 				c.logger.WarnContext(
 					r.Context(), "panic detected",
 					slog.Any("panic", p),

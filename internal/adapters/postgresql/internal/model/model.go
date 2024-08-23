@@ -17,3 +17,9 @@ type BookAttribute struct {
 	Attr   string `db:"attr"`
 	Value  string `db:"value"`
 }
+
+type BookOriginalAttribute struct {
+	BookID string   `db:"book_id"`
+	Attr   string   `db:"attr"`
+	Value  []string `db:"values"`
+}

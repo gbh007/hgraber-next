@@ -17,6 +17,10 @@ type Book struct {
 	PageCount        sql.NullInt32  `db:"page_count"`
 	AttributesParsed bool           `db:"attributes_parsed"`
 	CreateAt         time.Time      `db:"create_at"`
+	Deleted          bool           `db:"deleted"`
+	DeletedAt        sql.NullTime   `db:"deleted_at"`
+	Verified         bool           `db:"verified"`
+	VerifiedAt       sql.NullTime   `db:"verified_at"`
 }
 
 func (b Book) ToEntity() (entities.Book, error) {
@@ -41,5 +45,10 @@ func (b Book) ToEntity() (entities.Book, error) {
 		PageCount:        int(b.PageCount.Int32),
 		AttributesParsed: b.AttributesParsed,
 		CreateAt:         b.CreateAt,
+
+		Deleted:    b.Deleted,
+		DeletedAt:  b.DeletedAt.Time,
+		Verified:   b.Verified,
+		VerifiedAt: b.VerifiedAt.Time,
 	}, nil
 }

@@ -7,7 +7,6 @@ import (
 	"github.com/google/uuid"
 )
 
-
 func (c *Client) FSCreate(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID, body io.Reader) error {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {

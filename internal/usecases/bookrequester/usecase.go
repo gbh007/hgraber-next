@@ -14,6 +14,7 @@ type storage interface {
 	BookIDs(ctx context.Context, filter entities.BookFilter) ([]uuid.UUID, error)
 	GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
 	BookAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
+	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
 	BookPages(ctx context.Context, bookID uuid.UUID) ([]entities.Page, error)
 	Labels(ctx context.Context, bookID uuid.UUID) ([]entities.BookLabel, error)
 }
@@ -44,10 +45,11 @@ func (uc *UseCase) Books(ctx context.Context, filter entities.BookFilter) ([]ent
 
 	for i, id := range ids {
 		book, err := uc.requestBook(ctx, bookRequest{
-			ID:                id,
-			IncludeAttributes: true,
-			IncludePages:      true,
-			IncludeLabels:     true,
+			ID:                      id,
+			IncludeOriginAttributes: filter.OriginAttributes,
+			IncludeAttributes:       !filter.OriginAttributes,
+			IncludePages:            true,
+			IncludeLabels:           true,
 		})
 		if err != nil {
 			return nil, fmt.Errorf("book %s :%w", id.String(), err)
@@ -76,6 +78,20 @@ func (uc *UseCase) BookFull(ctx context.Context, bookID uuid.UUID) (entities.Boo
 		IncludeAttributes: true,
 		IncludePages:      true,
 		IncludeLabels:     true,
+	})
+	if err != nil {
+		return entities.BookFull{}, err
+	}
+
+	return book, nil
+}
+
+func (uc *UseCase) BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error) {
+	book, err := uc.requestBook(ctx, bookRequest{
+		ID:                      bookID,
+		IncludeOriginAttributes: true,
+		IncludePages:            true,
+		IncludeLabels:           true,
 	})
 	if err != nil {
 		return entities.BookFull{}, err

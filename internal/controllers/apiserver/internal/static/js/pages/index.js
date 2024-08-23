@@ -4,6 +4,7 @@ const app = Vue.createApp({
       state: {},
       stateError: "",
       urlsRaw: "",
+      isMulti: false,
       urlsResult: {},
       urlsError: "",
       stateIntervalID: null,
@@ -28,6 +29,7 @@ const app = Vue.createApp({
       axios
         .post("/api/system/handle", {
           urls: appState.urlsRaw.split("\n").map((s) => s.trim()),
+          is_multi: appState.isMulti,
         })
         .then(function (response) {
           let data = response.data;

@@ -11,14 +11,15 @@ import (
 )
 
 type Agent struct {
-	ID        string    `db:"id"`
-	Name      string    `db:"name"`
-	Addr      string    `db:"addr"`
-	Token     string    `db:"token"`
-	CanParse  bool      `db:"can_parse"`
-	CanExport bool      `db:"can_export"`
-	Priority  int       `db:"priority"`
-	CreateAt  time.Time `db:"create_at"`
+	ID            string    `db:"id"`
+	Name          string    `db:"name"`
+	Addr          string    `db:"addr"`
+	Token         string    `db:"token"`
+	CanParse      bool      `db:"can_parse"`
+	CanParseMulti bool      `db:"can_parse_multi"`
+	CanExport     bool      `db:"can_export"`
+	Priority      int       `db:"priority"`
+	CreateAt      time.Time `db:"create_at"`
 }
 
 func (a Agent) ToEntity() (entities.Agent, error) {
@@ -33,13 +34,14 @@ func (a Agent) ToEntity() (entities.Agent, error) {
 	}
 
 	return entities.Agent{
-		ID:        id,
-		Name:      a.Name,
-		Addr:      *addr,
-		Token:     a.Token,
-		CanParse:  a.CanParse,
-		CanExport: a.CanExport,
-		Priority:  a.Priority,
-		CreateAt:  a.CreateAt,
+		ID:            id,
+		Name:          a.Name,
+		Addr:          *addr,
+		Token:         a.Token,
+		CanParse:      a.CanParse,
+		CanParseMulti: a.CanParseMulti,
+		CanExport:     a.CanExport,
+		Priority:      a.Priority,
+		CreateAt:      a.CreateAt,
 	}, nil
 }

@@ -31,9 +31,17 @@
       }
 
       .book-details a.load,
-      .book-details a.read {
+      .book-details a.read,
+      .book-details button.delete,
+      .book-details button.verify {
         text-align: center;
         flex-grow: 1;
+      }
+      .book-details button.delete {
+        color: #ff0000;
+      }
+      .book-details button.verify {
+        color: #008b33;
       }
 
       span.tag {
@@ -89,6 +97,7 @@
       div.bottom-buttons {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
       }
     </style>
 
@@ -152,6 +161,10 @@
                 :href="'/read.html?book='+appState.book.id"
                 >Читать</a
               >
+              <button class="app delete" @click="deleteBook">Удалить</button>
+              <button class="app verify" @click="verifyBook">
+                Подтвердить
+              </button>
             </div>
           </div>
         </div>
@@ -166,7 +179,6 @@
               <img class="preview" :src="page.preview_url" />
             </a>
           </div>
-          `;
         </div>
       </div>
     </div>

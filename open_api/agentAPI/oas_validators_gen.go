@@ -116,82 +116,6 @@ func (s APIFsIdsGetOKApplicationJSON) Validate() error {
 	return nil
 }
 
-func (s *APIParsingBookCheckPostOK) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if s.Result == nil {
-			return errors.New("nil is invalid value")
-		}
-		var failures []validate.FieldError
-		for i, elem := range s.Result {
-			if err := func() error {
-				if err := elem.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				failures = append(failures, validate.FieldError{
-					Name:  fmt.Sprintf("[%d]", i),
-					Error: err,
-				})
-			}
-		}
-		if len(failures) > 0 {
-			return &validate.Error{Fields: failures}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "result",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s *APIParsingBookCheckPostOKResultItem) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.Result.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "result",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s APIParsingBookCheckPostOKResultItemResult) Validate() error {
-	switch s {
-	case "ok":
-		return nil
-	case "unsupported":
-		return nil
-	case "error":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
 func (s *APIParsingBookCheckPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -467,4 +391,80 @@ func (s *BookDetailsPagesItem) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
+}
+
+func (s *BooksCheckResult) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if s.Result == nil {
+			return errors.New("nil is invalid value")
+		}
+		var failures []validate.FieldError
+		for i, elem := range s.Result {
+			if err := func() error {
+				if err := elem.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				failures = append(failures, validate.FieldError{
+					Name:  fmt.Sprintf("[%d]", i),
+					Error: err,
+				})
+			}
+		}
+		if len(failures) > 0 {
+			return &validate.Error{Fields: failures}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "result",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *BooksCheckResultResultItem) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Result.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "result",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s BooksCheckResultResultItemResult) Validate() error {
+	switch s {
+	case "ok":
+		return nil
+	case "unsupported":
+		return nil
+	case "error":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }
