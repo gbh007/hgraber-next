@@ -81,6 +81,10 @@ type APISystemRPCRemoveMismatchFilesPostRes interface {
 	aPISystemRPCRemoveMismatchFilesPostRes()
 }
 
+type APISystemWorkerConfigPostRes interface {
+	aPISystemWorkerConfigPostRes()
+}
+
 type APIUserLoginPostRes interface {
 	aPIUserLoginPostRes()
 }

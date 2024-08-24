@@ -131,6 +131,13 @@ type Handler interface {
 	//
 	// POST /api/system/rpc/remove/mismatch-files
 	APISystemRPCRemoveMismatchFilesPost(ctx context.Context) (APISystemRPCRemoveMismatchFilesPostRes, error)
+	// APISystemWorkerConfigPost implements POST /api/system/worker/config operation.
+	//
+	// Динамическая конфигурация раннеров (воркеров),
+	// сбрасывается при перезапуске системы.
+	//
+	// POST /api/system/worker/config
+	APISystemWorkerConfigPost(ctx context.Context, req *APISystemWorkerConfigPostReq) (APISystemWorkerConfigPostRes, error)
 	// APIUserLoginPost implements POST /api/user/login operation.
 	//
 	// Проставление токена в куки.

@@ -1231,6 +1231,62 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/system/worker/config:
+    post:
+      description: Динамическая конфигурация раннеров (воркеров), сбрасывается при перезапуске системы
+      summary: Динамическая конфигурация раннеров (воркеров)
+      tags:
+        - system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runners_count:
+                  type: array
+                  description: Количество раннеров
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Название (код) раннера
+                      count:
+                        type: integer
+                        description: Новое количество раннеров
+                    required:
+                      - name
+                      - count
+      responses:
+        204:
+          description: Успешное изменение конфигурации
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/system/rpc/deduplicate/files:
     post:
       description: Дедупликация файлов

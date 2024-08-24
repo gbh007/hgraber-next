@@ -110,6 +110,32 @@
           Удалить рассинхронизированные файлы
         </button>
       </div>
+
+      <div class="app-container">
+        <h3>Изменение количества раннеров</h3>
+        <div class="app-error-container" v-if="appState.systemInfoError">
+          {{appState.systemInfoError}}
+        </div>
+        <table v-else>
+          <thead>
+            <tr>
+              <td>Название</td>
+              <td>Раннеров</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="worker in ((appState.systemInfoData.monitor||{}).workers || [])"
+            >
+              <td>{{worker.name}}</td>
+              <td><input type="number" v-model="worker.runners" /></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="app" @click="setRunnerCount()">
+          Установить количество раннеров
+        </button>
+      </div>
     </div>
   </body>
 </html>

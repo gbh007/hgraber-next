@@ -18,8 +18,9 @@ type Worker[T any] struct {
 	name  string
 	queue chan T
 
-	inWorkRunnersCount *atomic.Int32
-	runnersCount       *atomic.Int32
+	inWorkRunnersCount  atomic.Int32
+	runnersCount        atomic.Int32
+	defaultRunnersCount int
 
 	interval time.Duration
 
@@ -29,6 +30,11 @@ type Worker[T any] struct {
 	logger         *slog.Logger
 	tracer         trace.Tracer
 	metricProvider metricProvider
+
+	unitsMutex sync.Mutex
+	units      []*Unit[T]
+	unitsWG    sync.WaitGroup
+	unitCtx    context.Context
 }
 
 func New[T any](
@@ -43,20 +49,18 @@ func New[T any](
 	metricProvider metricProvider,
 ) *Worker[T] {
 	w := &Worker[T]{
-		name:               name,
-		queue:              make(chan T, queueSize),
-		inWorkRunnersCount: new(atomic.Int32),
-		runnersCount:       new(atomic.Int32),
-		interval:           interval,
-		handler:            handler,
-		getter:             getter,
+		name:     name,
+		queue:    make(chan T, queueSize),
+		interval: interval,
+		handler:  handler,
+		getter:   getter,
 
 		logger:         logger,
 		tracer:         tracer,
 		metricProvider: metricProvider,
-	}
 
-	w.runnersCount.Store(runnersCount)
+		defaultRunnersCount: int(runnersCount),
+	}
 
 	return w
 }
@@ -77,66 +81,64 @@ func (w *Worker[T]) Name() string {
 	return w.name
 }
 
-func (w *Worker[T]) handleOne(ctx context.Context, value T) {
-	defer func() {
-		if p := recover(); p != nil {
-			w.logger.WarnContext(
-				ctx, "panic in worker detected",
-				slog.Any("panic", p),
-				slog.String("worker_name", w.name),
-			)
+func (w *Worker[T]) SetRunnersCount(newUnitCount int) {
+	go func() {
+		w.unitsMutex.Lock()
+		defer w.unitsMutex.Unlock()
+
+		if newUnitCount < 0 {
+			newUnitCount = 0
+		}
+
+		oldUnitCount := len(w.units)
+
+		if oldUnitCount < newUnitCount {
+			for i := oldUnitCount; i < newUnitCount; i++ {
+				unit := NewUnit(
+					w.name,
+					int32(i),
+					w.logger,
+					w.handler,
+					w.tracer,
+					w.metricProvider,
+					w.queue,
+					UnitCallback{
+						StartHandleOne:  func() { w.inWorkRunnersCount.Add(1) },
+						FinishHandleOne: func() { w.inWorkRunnersCount.Add(-1) },
+						StartUnit: func() {
+							w.runnersCount.Add(1)
+							w.unitsWG.Add(1)
+						},
+						StopUnit: func() {
+							w.runnersCount.Add(-1)
+							w.unitsWG.Done()
+						},
+					},
+				)
+
+				w.units = append(w.units, unit)
+
+				go unit.Serve(w.unitCtx)
+			}
+		}
+
+		if oldUnitCount > newUnitCount {
+			for i := newUnitCount; i < oldUnitCount; i++ {
+				w.units[i].ShutDown(context.Background())
+			}
+
+			w.units = w.units[:newUnitCount]
 		}
 	}()
-
-	ctx, span := w.tracer.Start(
-		ctx, "worker-job/"+w.name,
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-	defer span.End()
-
-	w.inWorkRunnersCount.Add(1)
-	defer w.inWorkRunnersCount.Add(-1)
-
-	tStart := time.Now()
-	defer func() {
-		w.metricProvider.RegisterWorkerExecutionTaskTime(w.name, time.Since(tStart))
-	}()
-
-	ctx = context.WithoutCancel(ctx)
-
-	w.handler(ctx, value)
-}
-
-func (w *Worker[T]) runQueueHandler(ctx context.Context) {
-	w.logger.DebugContext(ctx, "worker handler start", slog.String("worker_name", w.name))
-	defer w.logger.DebugContext(ctx, "worker handler stop", slog.String("worker_name", w.name))
-
-	for {
-		select {
-		case value := <-w.queue:
-			w.handleOne(ctx, value)
-		case <-ctx.Done():
-			return
-		}
-	}
 }
 
 func (w *Worker[T]) Serve(ctx context.Context) {
-	wg := new(sync.WaitGroup)
-
-	handlersCount := int(w.runnersCount.Load())
-
-	for i := 0; i < handlersCount; i++ {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			w.runQueueHandler(ctx)
-		}()
-	}
-
 	w.logger.DebugContext(ctx, "worker start", slog.String("worker_name", w.name))
 	defer w.logger.DebugContext(ctx, "worker stop", slog.String("worker_name", w.name))
+
+	w.unitCtx = ctx
+
+	w.SetRunnersCount(w.defaultRunnersCount)
 
 	timer := time.NewTicker(w.interval)
 
@@ -172,5 +174,5 @@ handler:
 	}
 
 	// Дожидаемся завершения всех подпроцессов
-	wg.Wait()
+	w.unitsWG.Wait()
 }

@@ -1918,6 +1918,69 @@ type APISystemRPCRemoveMismatchFilesPostUnauthorized ErrorResponse
 
 func (*APISystemRPCRemoveMismatchFilesPostUnauthorized) aPISystemRPCRemoveMismatchFilesPostRes() {}
 
+type APISystemWorkerConfigPostBadRequest ErrorResponse
+
+func (*APISystemWorkerConfigPostBadRequest) aPISystemWorkerConfigPostRes() {}
+
+type APISystemWorkerConfigPostForbidden ErrorResponse
+
+func (*APISystemWorkerConfigPostForbidden) aPISystemWorkerConfigPostRes() {}
+
+type APISystemWorkerConfigPostInternalServerError ErrorResponse
+
+func (*APISystemWorkerConfigPostInternalServerError) aPISystemWorkerConfigPostRes() {}
+
+// APISystemWorkerConfigPostNoContent is response for APISystemWorkerConfigPost operation.
+type APISystemWorkerConfigPostNoContent struct{}
+
+func (*APISystemWorkerConfigPostNoContent) aPISystemWorkerConfigPostRes() {}
+
+type APISystemWorkerConfigPostReq struct {
+	// Количество раннеров.
+	RunnersCount []APISystemWorkerConfigPostReqRunnersCountItem `json:"runners_count"`
+}
+
+// GetRunnersCount returns the value of RunnersCount.
+func (s *APISystemWorkerConfigPostReq) GetRunnersCount() []APISystemWorkerConfigPostReqRunnersCountItem {
+	return s.RunnersCount
+}
+
+// SetRunnersCount sets the value of RunnersCount.
+func (s *APISystemWorkerConfigPostReq) SetRunnersCount(val []APISystemWorkerConfigPostReqRunnersCountItem) {
+	s.RunnersCount = val
+}
+
+type APISystemWorkerConfigPostReqRunnersCountItem struct {
+	// Название (код) раннера.
+	Name string `json:"name"`
+	// Новое количество раннеров.
+	Count int `json:"count"`
+}
+
+// GetName returns the value of Name.
+func (s *APISystemWorkerConfigPostReqRunnersCountItem) GetName() string {
+	return s.Name
+}
+
+// GetCount returns the value of Count.
+func (s *APISystemWorkerConfigPostReqRunnersCountItem) GetCount() int {
+	return s.Count
+}
+
+// SetName sets the value of Name.
+func (s *APISystemWorkerConfigPostReqRunnersCountItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetCount sets the value of Count.
+func (s *APISystemWorkerConfigPostReqRunnersCountItem) SetCount(val int) {
+	s.Count = val
+}
+
+type APISystemWorkerConfigPostUnauthorized ErrorResponse
+
+func (*APISystemWorkerConfigPostUnauthorized) aPISystemWorkerConfigPostRes() {}
+
 type APIUserLoginPostBadRequest ErrorResponse
 
 func (*APIUserLoginPostBadRequest) aPIUserLoginPostRes() {}

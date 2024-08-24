@@ -38,6 +38,8 @@ type webAPIUseCases interface {
 
 	VerifyBook(ctx context.Context, bookID uuid.UUID) error
 	DeleteBook(ctx context.Context, bookID uuid.UUID) error
+
+	SetWorkerConfig(ctx context.Context, counts map[string]int)
 }
 
 type agentUseCases interface {

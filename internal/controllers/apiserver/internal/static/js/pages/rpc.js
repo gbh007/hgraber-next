@@ -7,6 +7,9 @@ const app = Vue.createApp({
       removeDetachedFilesError: "",
       removeMismatchFiles: null,
       removeMismatchFilesError: "",
+
+      systemInfoData: null,
+      systemInfoError: "",
     });
 
     function deduplicateFiles() {
@@ -48,11 +51,50 @@ const app = Vue.createApp({
         });
     }
 
+    async function systemInfo() {
+      axios
+        .get("/api/system/info")
+        .then(function (response) {
+          let data = response.data;
+
+          appState.systemInfoData = data;
+          appState.systemInfoError = "";
+        })
+        .catch(function (error) {
+          console.log(error);
+          appState.systemInfoError = error.toString();
+        });
+    }
+
+    async function setRunnerCount() {
+      console.log(appState.systemInfoData.monitor.workers);
+
+      axios
+        .post("/api/system/worker/config", {
+          runners_count: appState.systemInfoData.monitor.workers.map((e) => ({
+            name: e.name,
+            count: e.runners,
+          })),
+        })
+        .then(function (response) {
+          appState.systemInfoError = "";
+        })
+        .catch(function (error) {
+          console.log(error);
+          appState.systemInfoError = error.toString();
+        });
+    }
+    Vue.onBeforeMount(() => {
+      systemInfo();
+    });
+
     return {
       appState,
       deduplicateFiles,
       removeDetachedFiles,
       removeMismatchFiles,
+      systemInfo,
+      setRunnerCount,
     };
   },
 });

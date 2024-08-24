@@ -16,6 +16,8 @@ type WorkerUnit interface {
 	InQueueCount() int
 	InWorkCount() int
 	RunnersCount() int
+
+	SetRunnersCount(newUnitCount int)
 }
 
 type workerConfig interface {
@@ -84,4 +86,13 @@ func (c *Controller) Info() []entities.SystemWorkerStat {
 	}
 
 	return res
+}
+
+func (c *Controller) SetRunnerCount(_ context.Context, counts map[string]int) {
+	for _, worker := range c.workerUnits {
+		count, ok := counts[worker.Name()]
+		if ok {
+			worker.SetRunnersCount(count)
+		}
+	}
 }

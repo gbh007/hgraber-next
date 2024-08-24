@@ -196,6 +196,16 @@ func (UnimplementedHandler) APISystemRPCRemoveMismatchFilesPost(ctx context.Cont
 	return r, ht.ErrNotImplemented
 }
 
+// APISystemWorkerConfigPost implements POST /api/system/worker/config operation.
+//
+// Динамическая конфигурация раннеров (воркеров),
+// сбрасывается при перезапуске системы.
+//
+// POST /api/system/worker/config
+func (UnimplementedHandler) APISystemWorkerConfigPost(ctx context.Context, req *APISystemWorkerConfigPostReq) (r APISystemWorkerConfigPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIUserLoginPost implements POST /api/user/login operation.
 //
 // Проставление токена в куки.

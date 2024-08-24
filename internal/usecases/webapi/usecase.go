@@ -28,6 +28,8 @@ type bookRequester interface {
 
 type workerManager interface {
 	Info() []entities.SystemWorkerStat
+
+	SetRunnerCount(ctx context.Context, counts map[string]int)
 }
 
 type fileStorage interface {

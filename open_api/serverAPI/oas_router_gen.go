@@ -627,6 +627,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				case 'w': // Prefix: "worker/config"
+					origElem := elem
+					if l := len("worker/config"); len(elem) >= l && elem[0:l] == "worker/config" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPISystemWorkerConfigPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -1385,6 +1406,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
+					}
+
+					elem = origElem
+				case 'w': // Prefix: "worker/config"
+					origElem := elem
+					if l := len("worker/config"); len(elem) >= l && elem[0:l] == "worker/config" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "APISystemWorkerConfigPost"
+							r.summary = "Динамическая конфигурация раннеров (воркеров)"
+							r.operationID = ""
+							r.pathPattern = "/api/system/worker/config"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
 					}
 
 					elem = origElem
