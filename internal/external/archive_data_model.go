@@ -14,6 +14,8 @@ const (
 	AttributeCodeTag       = "tag"
 )
 
+const CurrentVersion = "1.0.0"
+
 type Info struct {
 	Version string `json:"version"`
 	Meta    Meta   `json:"meta"`

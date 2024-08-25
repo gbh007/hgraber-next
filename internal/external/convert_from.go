@@ -63,10 +63,11 @@ func BookFromEntity(raw entities.BookFull) Book {
 
 func Convert(raw entities.BookFull) Info {
 	return Info{
-		Version: "1.0.0",
+		Version: CurrentVersion,
 		Meta: Meta{
-			Exported:    time.Now().UTC(),
-			ServiceName: "hgraber next",
+			Exported:       time.Now().UTC(),
+			ServiceName:    "hgraber next",
+			ServiceVersion: "v0.0.0",
 		},
 		Data: BookFromEntity(raw),
 	}
