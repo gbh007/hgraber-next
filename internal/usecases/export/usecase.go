@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log/slog"
+	"net/url"
 
 	"github.com/google/uuid"
 
@@ -24,6 +25,8 @@ type storage interface {
 	NewFile(ctx context.Context, file entities.File) error
 
 	DeleteBook(ctx context.Context, id uuid.UUID) error
+
+	GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error)
 }
 
 type agentSystem interface {

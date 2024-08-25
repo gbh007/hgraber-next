@@ -10,7 +10,7 @@ type Config struct {
 	Workers     Workers     `yaml:"workers" envconfig:"WORKERS"`
 	Storage     Storage     `yaml:"storage" envconfig:"STORAGE"`
 	API         API         `yaml:"api" envconfig:"API"`
-	CacheServer CacheServer `yaml:"cache_server" envconfig:"CACHE_SERVER"`
+	AgentServer AgentServer `yaml:"agent_server" envconfig:"AGENT_SERVER"`
 }
 
 func ConfigDefault() Config {
@@ -20,6 +20,7 @@ func ConfigDefault() Config {
 		API:         APIDefault(),
 		Workers:     WorkersDefault(),
 		Storage:     StorageDefault(),
+		AgentServer: AgentServerDefault(),
 	}
 }
 

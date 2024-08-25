@@ -6,13 +6,6 @@ import (
 	"hgnext/open_api/agentAPI"
 )
 
-func (c *Controller) APIExportArchivePost(ctx context.Context, req agentAPI.APIExportArchivePostReq, params agentAPI.APIExportArchivePostParams) (agentAPI.APIExportArchivePostRes, error) {
-	return &agentAPI.APIExportArchivePostBadRequest{
-		InnerCode: ValidationCode,
-		Details:   agentAPI.NewOptString("unsupported api"),
-	}, nil
-}
-
 func (c *Controller) APIFsCreatePost(ctx context.Context, req agentAPI.APIFsCreatePostReq, params agentAPI.APIFsCreatePostParams) (agentAPI.APIFsCreatePostRes, error) {
 	return &agentAPI.APIFsCreatePostBadRequest{
 		InnerCode: ValidationCode,

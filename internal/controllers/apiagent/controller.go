@@ -8,6 +8,8 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/google/uuid"
+
 	"hgnext/internal/entities"
 	"hgnext/open_api/agentAPI"
 )
@@ -19,6 +21,10 @@ type parsingUseCases interface {
 	CheckPages(ctx context.Context, pages []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
 }
 
+type exportUseCases interface {
+	ImportArchive(ctx context.Context, body io.Reader, deduplicate bool, autoVerify bool) (uuid.UUID, error)
+}
+
 type Controller struct {
 	startAt time.Time
 	logger  *slog.Logger
@@ -28,6 +34,7 @@ type Controller struct {
 	ogenServer *agentAPI.Server
 
 	parsingUseCases parsingUseCases
+	exportUseCases  exportUseCases
 
 	token string
 }
@@ -36,6 +43,7 @@ func New(
 	startAt time.Time,
 	logger *slog.Logger,
 	parsingUseCases parsingUseCases,
+	exportUseCases exportUseCases,
 	addr string,
 	debug bool,
 	token string,
@@ -48,6 +56,7 @@ func New(
 		token:   token,
 
 		parsingUseCases: parsingUseCases,
+		exportUseCases:  exportUseCases,
 	}
 
 	ogenServer, err := agentAPI.NewServer(

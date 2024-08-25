@@ -16,7 +16,12 @@ import (
 	"hgnext/internal/external"
 )
 
-func (uc *UseCase) ImportArchive(ctx context.Context, body io.Reader) (returnedBookID uuid.UUID, returnedErr error) {
+func (uc *UseCase) ImportArchive(
+	ctx context.Context,
+	body io.Reader,
+	deduplicate bool,
+	autoVerify bool,
+) (returnedBookID uuid.UUID, returnedErr error) {
 	bodyRaw, err := io.ReadAll(body)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("read archive body: %w", err)
@@ -55,10 +60,25 @@ func (uc *UseCase) ImportArchive(ctx context.Context, body io.Reader) (returnedB
 		return uuid.Nil, fmt.Errorf("convert info: %w", err)
 	}
 
+	if deduplicate && book.Book.OriginURL != nil {
+		ids, err := uc.storage.GetBookIDsByURL(ctx, *book.Book.OriginURL)
+		if err != nil {
+			return uuid.Nil, fmt.Errorf("check existing in storage: %w", err)
+		}
+
+		// Если есть совпадение, возвращаем первое.
+		if len(ids) > 0 {
+			return ids[0], nil
+		}
+	}
+
 	bookID := uuid.Must(uuid.NewV7())
 	book.Book.ID = bookID
-	book.Book.Verified = true
-	book.Book.VerifiedAt = book.Book.CreateAt
+
+	if autoVerify {
+		book.Book.Verified = true
+		book.Book.VerifiedAt = book.Book.CreateAt
+	}
 
 	if book.Book.CreateAt.IsZero() {
 		book.Book.CreateAt = time.Now()

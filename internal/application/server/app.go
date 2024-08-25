@@ -182,27 +182,28 @@ func Serve() {
 
 	asyncController.RegisterRunner(apiController)
 
-	if cfg.CacheServer.Addr != "" {
+	if cfg.AgentServer.Addr != "" {
 		agentCacheUseCase := agentcache.New(logger, parsingUseCases)
 
-		apiAgentCacheController, err := apiagent.New(
+		apiAgentController, err := apiagent.New(
 			time.Now(),
 			logger,
 			agentCacheUseCase,
-			cfg.CacheServer.Addr,
+			exportUseCases,
+			cfg.AgentServer.Addr,
 			cfg.Application.Debug,
-			cfg.CacheServer.Token,
+			cfg.AgentServer.Token,
 		)
 		if err != nil {
 			logger.ErrorContext(
-				ctx, "fail to create api agent cache",
+				ctx, "fail to create api agent",
 				slog.Any("error", err),
 			)
 
 			os.Exit(1)
 		}
 
-		asyncController.RegisterRunner(apiAgentCacheController)
+		asyncController.RegisterRunner(apiAgentController)
 	}
 
 	if cfg.Application.MetricTimeout > 0 {
