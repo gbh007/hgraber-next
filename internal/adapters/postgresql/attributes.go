@@ -115,7 +115,7 @@ func (d *Database) UpdateAttributes(ctx context.Context, bookID uuid.UUID, attri
 
 	defer func() {
 		err := tx.Rollback()
-		if err != nil && !errors.Is(err, sql.ErrTxDone) {
+		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
 			d.logger.ErrorContext(
 				ctx, "rollback UpdateAttributes tx",
 				slog.Any("err", err),
@@ -170,9 +170,9 @@ func (d *Database) UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID,
 
 	defer func() {
 		err := tx.Rollback(ctx)
-		if err != nil && !errors.Is(err, sql.ErrTxDone) {
+		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
 			d.logger.ErrorContext(
-				ctx, "rollback UpdateAttributes tx",
+				ctx, "rollback UpdateOriginAttributes tx",
 				slog.Any("err", err),
 			)
 		}
