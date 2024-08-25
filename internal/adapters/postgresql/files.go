@@ -147,11 +147,12 @@ func (d *Database) DetachedFiles(ctx context.Context) ([]entities.File, error) {
 	raw := make([]*model.File, 0)
 
 	err := d.db.SelectContext(ctx, &raw, `SELECT *
-FROM files
+FROM files AS f
 WHERE
-    id NOT IN (
+    NOT EXISTS (
         SELECT file_id
         FROM pages
+        WHERE file_id = f.id
     );`)
 	if err != nil {
 		return nil, fmt.Errorf("exec: %w", err)
