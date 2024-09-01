@@ -1515,6 +1515,91 @@ type APIParsingPageExistsPostUnauthorized ErrorResponse
 
 func (*APIParsingPageExistsPostUnauthorized) aPIParsingPageExistsPostRes() {}
 
+type APISystemDeduplicateArchivePostBadRequest ErrorResponse
+
+func (*APISystemDeduplicateArchivePostBadRequest) aPISystemDeduplicateArchivePostRes() {}
+
+type APISystemDeduplicateArchivePostForbidden ErrorResponse
+
+func (*APISystemDeduplicateArchivePostForbidden) aPISystemDeduplicateArchivePostRes() {}
+
+type APISystemDeduplicateArchivePostInternalServerError ErrorResponse
+
+func (*APISystemDeduplicateArchivePostInternalServerError) aPISystemDeduplicateArchivePostRes() {}
+
+type APISystemDeduplicateArchivePostOKApplicationJSON []APISystemDeduplicateArchivePostOKItem
+
+func (*APISystemDeduplicateArchivePostOKApplicationJSON) aPISystemDeduplicateArchivePostRes() {}
+
+type APISystemDeduplicateArchivePostOKItem struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Оригинальный адрес книги.
+	BookOriginURL OptURI `json:"book_origin_url"`
+	// Процент (0-1) вхождения архива в книгу.
+	EntryPercentage float64 `json:"entry_percentage"`
+	// Процент (0-1) вхождения книги в архив.
+	ReverseEntryPercentage float64 `json:"reverse_entry_percentage"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APISystemDeduplicateArchivePostOKItem) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetBookOriginURL returns the value of BookOriginURL.
+func (s *APISystemDeduplicateArchivePostOKItem) GetBookOriginURL() OptURI {
+	return s.BookOriginURL
+}
+
+// GetEntryPercentage returns the value of EntryPercentage.
+func (s *APISystemDeduplicateArchivePostOKItem) GetEntryPercentage() float64 {
+	return s.EntryPercentage
+}
+
+// GetReverseEntryPercentage returns the value of ReverseEntryPercentage.
+func (s *APISystemDeduplicateArchivePostOKItem) GetReverseEntryPercentage() float64 {
+	return s.ReverseEntryPercentage
+}
+
+// SetBookID sets the value of BookID.
+func (s *APISystemDeduplicateArchivePostOKItem) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetBookOriginURL sets the value of BookOriginURL.
+func (s *APISystemDeduplicateArchivePostOKItem) SetBookOriginURL(val OptURI) {
+	s.BookOriginURL = val
+}
+
+// SetEntryPercentage sets the value of EntryPercentage.
+func (s *APISystemDeduplicateArchivePostOKItem) SetEntryPercentage(val float64) {
+	s.EntryPercentage = val
+}
+
+// SetReverseEntryPercentage sets the value of ReverseEntryPercentage.
+func (s *APISystemDeduplicateArchivePostOKItem) SetReverseEntryPercentage(val float64) {
+	s.ReverseEntryPercentage = val
+}
+
+type APISystemDeduplicateArchivePostReq struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APISystemDeduplicateArchivePostReq) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+type APISystemDeduplicateArchivePostUnauthorized ErrorResponse
+
+func (*APISystemDeduplicateArchivePostUnauthorized) aPISystemDeduplicateArchivePostRes() {}
+
 type APISystemHandlePostBadRequest ErrorResponse
 
 func (*APISystemHandlePostBadRequest) aPISystemHandlePostRes() {}

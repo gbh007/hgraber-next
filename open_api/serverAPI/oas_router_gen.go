@@ -456,6 +456,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
+				case 'd': // Prefix: "deduplicate/archive"
+					origElem := elem
+					if l := len("deduplicate/archive"); len(elem) >= l && elem[0:l] == "deduplicate/archive" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPISystemDeduplicateArchivePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				case 'h': // Prefix: "handle"
 					origElem := elem
 					if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
@@ -1214,6 +1235,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
+				case 'd': // Prefix: "deduplicate/archive"
+					origElem := elem
+					if l := len("deduplicate/archive"); len(elem) >= l && elem[0:l] == "deduplicate/archive" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "APISystemDeduplicateArchivePost"
+							r.summary = "Проверка наличия данных в системе из архива"
+							r.operationID = ""
+							r.pathPattern = "/api/system/deduplicate/archive"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				case 'h': // Prefix: "handle"
 					origElem := elem
 					if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {

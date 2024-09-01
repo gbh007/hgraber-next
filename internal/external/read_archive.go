@@ -17,6 +17,7 @@ type ReadArchiveOptions struct {
 	HandlePageBody func(ctx context.Context, pageNumber int, filename string, body io.Reader) error
 	ReadInfoTXT    bool
 	ReadDataJSON   bool
+	SkipInfo       bool
 }
 
 func ReadArchive(
@@ -36,7 +37,12 @@ func ReadArchive(
 		default:
 		}
 
-		if f.Name == "info.json" {
+		switch f.Name {
+		case "info.json":
+			if opt.SkipInfo {
+				continue
+			}
+
 			foundInfoJSON = true
 
 			r, err := f.Open()
@@ -54,10 +60,11 @@ func ReadArchive(
 				return Info{}, fmt.Errorf("close info.json file: %w", err)
 			}
 
-			continue
-		}
+		case "data.json":
+			if opt.SkipInfo || !opt.ReadDataJSON {
+				continue
+			}
 
-		if opt.ReadDataJSON && f.Name == "data.json" {
 			r, err := f.Open()
 			if err != nil {
 				return Info{}, fmt.Errorf("open data.json file: %w", err)
@@ -73,10 +80,11 @@ func ReadArchive(
 				return Info{}, fmt.Errorf("close data.json file: %w", err)
 			}
 
-			continue
-		}
+		case "info.txt":
+			if opt.SkipInfo || !opt.ReadInfoTXT {
+				continue
+			}
 
-		if opt.ReadInfoTXT && f.Name == "info.txt" {
 			r, err := f.Open()
 			if err != nil {
 				return Info{}, fmt.Errorf("open info.txt file: %w", err)
@@ -92,10 +100,11 @@ func ReadArchive(
 				return Info{}, fmt.Errorf("close info.txt file: %w", err)
 			}
 
-			continue
-		}
+		default:
+			if opt.HandlePageBody == nil {
+				continue
+			}
 
-		if opt.HandlePageBody != nil {
 			number, _ := strconv.Atoi(strings.Split(f.Name, ".")[0])
 			if number < 1 {
 				continue
@@ -127,6 +136,9 @@ func ReadArchive(
 
 	case foundInfoTXT:
 		return infoTXT, nil
+
+	case opt.SkipInfo:
+		return Info{}, nil
 
 	default:
 		return Info{}, ErrBookInfoNotFound

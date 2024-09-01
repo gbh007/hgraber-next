@@ -57,6 +57,10 @@ type APIParsingPageExistsPostRes interface {
 	aPIParsingPageExistsPostRes()
 }
 
+type APISystemDeduplicateArchivePostRes interface {
+	aPISystemDeduplicateArchivePostRes()
+}
+
 type APISystemHandlePostRes interface {
 	aPISystemHandlePostRes()
 }

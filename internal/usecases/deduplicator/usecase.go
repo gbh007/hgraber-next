@@ -13,6 +13,10 @@ import (
 type storage interface {
 	DuplicatedFiles(ctx context.Context) ([]entities.File, error)
 	ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UUID) error
+
+	BookIDsByMD5(ctx context.Context, md5sums []string) ([]uuid.UUID, error)
+	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
+	GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
 }
 
 type UseCase struct {
