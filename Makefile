@@ -14,16 +14,14 @@ generate:
 create_build_dir:
 	mkdir -p ./_build
 
+.PHONY: run-example
+run-example: create_build_dir
+	go build $(LDFLAGS) -trimpath -o ./_build/server  ./cmd/server
+
+	./_build/server --config config-example.yaml
+ 
 .PHONY: run
 run: create_build_dir
 	go build $(LDFLAGS) -trimpath -o ./_build/server  ./cmd/server
 
-	./_build/server --config config-example.yaml
-
-.PHONY: runafs
-runafs: create_build_dir
-	go build $(LDFLAGS) -trimpath -o ./_build/server  ./cmd/server
-
-	APP_STORAGE_FS_AGENT_ID=019067fc-8d4f-769d-8c4f-e755597f9525 \
-	APP_APPLICATION_TRACE_ENDPOINT=http://localhost:4318/v1/traces \
-	./_build/server --config config-example.yaml
+	./_build/server

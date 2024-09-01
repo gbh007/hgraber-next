@@ -2,37 +2,26 @@ package server
 
 import (
 	"flag"
-	"fmt"
 	"os"
-
-	"github.com/kelseyhightower/envconfig"
-	"gopkg.in/yaml.v3"
 
 	"hgnext/internal/config"
 )
 
 func parseConfig() (config.Config, error) {
 	configPath := flag.String("config", "config.yaml", "path to config")
+	generateConfig := flag.String("generate-config", "", "generate example config")
 	flag.Parse()
 
-	c := config.ConfigDefault()
+	if *generateConfig != "" {
+		c := config.ConfigDefault()
 
-	f, err := os.Open(*configPath)
-	if err != nil {
-		return config.Config{}, fmt.Errorf("open config file: %w", err)
+		err := config.ExportToFile(&c, *generateConfig)
+		if err != nil {
+			panic(err)
+		}
+
+		os.Exit(0)
 	}
 
-	defer f.Close()
-
-	err = yaml.NewDecoder(f).Decode(&c)
-	if err != nil {
-		return config.Config{}, fmt.Errorf("decode yaml: %w", err)
-	}
-
-	err = envconfig.Process("APP", &c)
-	if err != nil {
-		return config.Config{}, fmt.Errorf("decode env: %w", err)
-	}
-
-	return c, nil
+	return config.ImportConfig(*configPath, true)
 }
