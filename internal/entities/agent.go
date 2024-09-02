@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"io"
 	"net/url"
 	"time"
 
@@ -65,4 +66,11 @@ type AgentPageCheckResult struct {
 	IsPossible    bool
 	HasError      bool
 	ErrorReason   string
+}
+
+type AgentExportData struct {
+	BookID   uuid.UUID
+	BookName string
+	BookURL  *url.URL
+	Body     io.Reader
 }

@@ -30,7 +30,7 @@ type storage interface {
 }
 
 type agentSystem interface {
-	ExportArchive(ctx context.Context, agentID uuid.UUID, bookID uuid.UUID, bookName string, body io.Reader) error
+	ExportArchive(ctx context.Context, agentID uuid.UUID, data entities.AgentExportData) error
 }
 
 type tmpStorage interface {

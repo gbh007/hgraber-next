@@ -3,23 +3,22 @@ package adapter
 import (
 	"context"
 	"fmt"
-	"io"
-
-	"github.com/google/uuid"
+	"net/url"
 
 	"hgnext/internal/entities"
 	"hgnext/open_api/agentAPI"
 )
 
-func (a *Adapter) ExportArchive(ctx context.Context, bookID uuid.UUID, bookName string, body io.Reader) error {
+func (a *Adapter) ExportArchive(ctx context.Context, data entities.AgentExportData) error {
 	res, err := a.rawClient.APIExportArchivePost(
 		ctx,
 		agentAPI.APIExportArchivePostReq{
-			Data: body,
+			Data: data.Body,
 		},
 		agentAPI.APIExportArchivePostParams{
-			BookID:   bookID,
-			BookName: bookName,
+			BookID:   data.BookID,
+			BookName: data.BookName,
+			BookURL:  optURL(data.BookURL),
 		},
 	)
 	if err != nil {
@@ -45,4 +44,12 @@ func (a *Adapter) ExportArchive(ctx context.Context, bookID uuid.UUID, bookName 
 	default:
 		return entities.AgentAPIUnknownResponse
 	}
+}
+
+func optURL(u *url.URL) agentAPI.OptURI {
+	if u == nil {
+		return agentAPI.OptURI{}
+	}
+
+	return agentAPI.NewOptURI(*u)
 }

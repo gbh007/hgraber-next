@@ -4,6 +4,7 @@ package agentAPI
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/google/uuid"
 
@@ -18,6 +19,8 @@ import (
 type APIExportArchivePostParams struct {
 	// ID книги в системе.
 	BookID uuid.UUID
+	// URL книги в системе.
+	BookURL OptURI
 	// Название книги.
 	BookName string
 }
@@ -29,6 +32,15 @@ func unpackAPIExportArchivePostParams(packed middleware.Parameters) (params APIE
 			In:   "header",
 		}
 		params.BookID = packed[key].(uuid.UUID)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "book-url",
+			In:   "header",
+		}
+		if v, ok := packed[key]; ok {
+			params.BookURL = v.(OptURI)
+		}
 	}
 	{
 		key := middleware.ParameterKey{
@@ -72,6 +84,45 @@ func decodeAPIExportArchivePostParams(args [0]string, argsEscaped bool, r *http.
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "book-id",
+			In:   "header",
+			Err:  err,
+		}
+	}
+	// Decode header: book-url.
+	if err := func() error {
+		cfg := uri.HeaderParameterDecodingConfig{
+			Name:    "book-url",
+			Explode: false,
+		}
+		if err := h.HasParam(cfg); err == nil {
+			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotBookURLVal url.URL
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToURL(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotBookURLVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.BookURL.SetTo(paramsDotBookURLVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "book-url",
 			In:   "header",
 			Err:  err,
 		}

@@ -414,6 +414,13 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: book-url
+          description: URL книги в системе
+          in: header
+          required: false
+          schema:
+            type: string
+            format: uri
         - name: book-name
           description: Название книги
           in: header

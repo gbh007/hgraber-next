@@ -37,13 +37,13 @@ func (c *Client) BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u ur
 	return adapter.BooksCheckMulti(ctx, u)
 }
 
-func (c *Client) ExportArchive(ctx context.Context, agentID uuid.UUID, bookID uuid.UUID, bookName string, body io.Reader) error {
+func (c *Client) ExportArchive(ctx context.Context, agentID uuid.UUID, data entities.AgentExportData) error {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return err
 	}
 
-	return adapter.ExportArchive(ctx, bookID, bookName, body)
+	return adapter.ExportArchive(ctx, data)
 }
 
 func (c *Client) PageLoad(ctx context.Context, agentID uuid.UUID, url entities.AgentPageURL) (io.Reader, error) {
