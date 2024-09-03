@@ -141,6 +141,15 @@ func (UnimplementedHandler) APIParsingPageExistsPost(ctx context.Context, req *A
 	return r, ht.ErrNotImplemented
 }
 
+// APISystemDeduplicateArchivePost implements POST /api/system/deduplicate/archive operation.
+//
+// Проверка наличия данных в системе из архива.
+//
+// POST /api/system/deduplicate/archive
+func (UnimplementedHandler) APISystemDeduplicateArchivePost(ctx context.Context, req APISystemDeduplicateArchivePostReq) (r APISystemDeduplicateArchivePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APISystemHandlePost implements POST /api/system/handle operation.
 //
 // Обработка ссылок на новые книги.

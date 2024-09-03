@@ -39,7 +39,8 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			requestData  = "ignoring"
 		)
 
-		if r.URL.Path != "/api/system/import/archive" { // FIXME: вынести в конфигурацию или проверять по типу контента.
+		if strings.Contains(strings.ToLower(r.Header.Get("Content-Type")), "application/json") ||
+			strings.Contains(strings.ToLower(r.Header.Get("Content-Type")), "text/") {
 			requestDataRaw, err := io.ReadAll(r.Body)
 			if err != nil {
 				c.logger.ErrorContext(
@@ -60,9 +61,8 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			next.ServeHTTP(rw, r)
 		}
 
-		if !strings.HasPrefix(r.URL.Path, "/api/file") &&
-			!strings.HasPrefix(r.URL.Path, "/api/book/archive") &&
-			r.URL.Path != "/api/page/body" { // FIXME: вынести в конфигурацию или проверять по типу контента.
+		if strings.Contains(strings.ToLower(rw.Header().Get("Content-Type")), "application/json") ||
+			strings.Contains(strings.ToLower(rw.Header().Get("Content-Type")), "text/") {
 			responseData = rw.body.String()
 		}
 

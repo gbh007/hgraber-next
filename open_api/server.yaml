@@ -915,6 +915,74 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/system/deduplicate/archive:
+    post:
+      description: Проверка наличия данных в системе из архива
+      summary: Проверка наличия данных в системе из архива
+      tags:
+        - system
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        200:
+          description: Успешное получение результата
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    book_id:
+                      type: string
+                      format: uuid
+                      description: ID книги
+                    book_origin_url:
+                      type: string
+                      format: uri
+                      description: Оригинальный адрес книги
+                    entry_percentage:
+                      type: number
+                      format: float64
+                      description: Процент (0-1) вхождения архива в книгу
+                    reverse_entry_percentage:
+                      type: number
+                      format: float64
+                      description: Процент (0-1) вхождения книги в архив
+                  required:
+                    - book_id
+                    - entry_percentage
+                    - reverse_entry_percentage
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/agent/task/export:
     post:
       description: Экспорт книг в другую систему

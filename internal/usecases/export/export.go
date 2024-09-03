@@ -53,7 +53,12 @@ func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWith
 		return fmt.Errorf("make archive %s: %w", book.Book.ID.String(), err)
 	}
 
-	err = uc.agentSystem.ExportArchive(ctx, book.AgentID, book.Book.ID, book.Book.Name, body)
+	err = uc.agentSystem.ExportArchive(ctx, book.AgentID, entities.AgentExportData{
+		BookID:   book.Book.ID,
+		BookName: book.Book.Name,
+		BookURL:  book.Book.OriginURL,
+		Body:     body,
+	})
 	if err != nil {
 		if retry {
 			uc.tmpStorage.AddToExport([]entities.BookFullWithAgent{book})

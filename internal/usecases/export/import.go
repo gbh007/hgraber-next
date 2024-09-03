@@ -37,17 +37,19 @@ func (uc *UseCase) ImportArchive(
 	info, err := external.ReadArchive(
 		ctx,
 		zipReader,
-		func(ctx context.Context, pageNumber int, body io.Reader) error {
-			fileID := uuid.Must(uuid.NewV7())
+		external.ReadArchiveOptions{
+			HandlePageBody: func(ctx context.Context, pageNumber int, _ string, body io.Reader) error {
+				fileID := uuid.Must(uuid.NewV7())
 
-			err := uc.fileStorage.Create(ctx, fileID, body)
-			if err != nil {
-				return fmt.Errorf("page (%d) store file (%s): %w", pageNumber, fileID.String(), err)
-			}
+				err := uc.fileStorage.Create(ctx, fileID, body)
+				if err != nil {
+					return fmt.Errorf("page (%d) store file (%s): %w", pageNumber, fileID.String(), err)
+				}
 
-			pageData[pageNumber] = fileID
+				pageData[pageNumber] = fileID
 
-			return nil
+				return nil
+			},
 		},
 	)
 

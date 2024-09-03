@@ -319,6 +319,20 @@ func (c *Client) sendAPIExportArchivePost(ctx context.Context, request APIExport
 	}
 	{
 		cfg := uri.HeaderParameterEncodingConfig{
+			Name:    "book-url",
+			Explode: false,
+		}
+		if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.BookURL.Get(); ok {
+				return e.EncodeValue(conv.URLToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode header")
+		}
+	}
+	{
+		cfg := uri.HeaderParameterEncodingConfig{
 			Name:    "book-name",
 			Explode: false,
 		}

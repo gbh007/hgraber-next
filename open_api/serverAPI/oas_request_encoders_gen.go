@@ -179,6 +179,16 @@ func encodeAPIParsingPageExistsPostRequest(
 	return nil
 }
 
+func encodeAPISystemDeduplicateArchivePostRequest(
+	req APISystemDeduplicateArchivePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/octet-stream"
+	body := req
+	ht.SetBody(r, body, contentType)
+	return nil
+}
+
 func encodeAPISystemHandlePostRequest(
 	req *APISystemHandlePostReq,
 	r *http.Request,

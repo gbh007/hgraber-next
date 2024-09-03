@@ -290,6 +290,10 @@ func (s *Server) handleAPIExportArchivePostRequest(args [0]string, argsEscaped b
 					In:   "header",
 				}: params.BookID,
 				{
+					Name: "book-url",
+					In:   "header",
+				}: params.BookURL,
+				{
 					Name: "book-name",
 					In:   "header",
 				}: params.BookName,

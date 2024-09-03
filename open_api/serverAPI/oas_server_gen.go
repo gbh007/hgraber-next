@@ -94,6 +94,12 @@ type Handler interface {
 	//
 	// POST /api/parsing/page/exists
 	APIParsingPageExistsPost(ctx context.Context, req *APIParsingPageExistsPostReq) (APIParsingPageExistsPostRes, error)
+	// APISystemDeduplicateArchivePost implements POST /api/system/deduplicate/archive operation.
+	//
+	// Проверка наличия данных в системе из архива.
+	//
+	// POST /api/system/deduplicate/archive
+	APISystemDeduplicateArchivePost(ctx context.Context, req APISystemDeduplicateArchivePostReq) (APISystemDeduplicateArchivePostRes, error)
 	// APISystemHandlePost implements POST /api/system/handle operation.
 	//
 	// Обработка ссылок на новые книги.

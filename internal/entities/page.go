@@ -58,3 +58,22 @@ type PageForDownloadWithAgent struct {
 	PageForDownload
 	AgentID uuid.UUID
 }
+
+type PageWithHash struct {
+	BookID     uuid.UUID
+	PageNumber int
+	Ext        string
+	OriginURL  *url.URL
+	Downloaded bool
+	Md5Sum     string
+	Sha256Sum  string
+	Size       int64
+}
+
+func (p PageWithHash) Hash() FileHash {
+	return FileHash{
+		Md5Sum:    p.Md5Sum,
+		Sha256Sum: p.Sha256Sum,
+		Size:      p.Size,
+	}
+}

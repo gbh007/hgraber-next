@@ -1,3 +1,4 @@
 .hidden
 _build
 .env
+config.yaml
