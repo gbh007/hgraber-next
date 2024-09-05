@@ -96,7 +96,7 @@ func encodeAPIBookDetailsPostRequest(
 }
 
 func encodeAPIBookListPostRequest(
-	req *APIBookListPostReq,
+	req *BookFilter,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

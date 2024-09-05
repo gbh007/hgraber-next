@@ -6,7 +6,6 @@ import (
 	"io"
 	"log/slog"
 	"net/url"
-	"time"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
@@ -49,7 +48,7 @@ type agentUseCases interface {
 }
 
 type exportUseCases interface {
-	Export(ctx context.Context, agentID uuid.UUID, from, to time.Time) error
+	Export(ctx context.Context, agentID uuid.UUID, filter entities.BookFilter) error
 	ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, error)
 	ImportArchive(ctx context.Context, body io.Reader, deduplicate bool, autoVerify bool) (uuid.UUID, error)
 }

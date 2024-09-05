@@ -70,7 +70,7 @@ type Invoker interface {
 	// Список книг.
 	//
 	// POST /api/book/list
-	APIBookListPost(ctx context.Context, request *APIBookListPostReq) (APIBookListPostRes, error)
+	APIBookListPost(ctx context.Context, request *BookFilter) (APIBookListPostRes, error)
 	// APIBookRawPost invokes POST /api/book/raw operation.
 	//
 	// Информация о книге (или по ИД или по адресу).
@@ -1070,12 +1070,12 @@ func (c *Client) sendAPIBookDetailsPost(ctx context.Context, request *APIBookDet
 // Список книг.
 //
 // POST /api/book/list
-func (c *Client) APIBookListPost(ctx context.Context, request *APIBookListPostReq) (APIBookListPostRes, error) {
+func (c *Client) APIBookListPost(ctx context.Context, request *BookFilter) (APIBookListPostRes, error) {
 	res, err := c.sendAPIBookListPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIBookListPost(ctx context.Context, request *APIBookListPostReq) (res APIBookListPostRes, err error) {
+func (c *Client) sendAPIBookListPost(ctx context.Context, request *BookFilter) (res APIBookListPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/book/list"),

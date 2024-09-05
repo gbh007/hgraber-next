@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Controller) APIAgentTaskExportPost(ctx context.Context, req *serverAPI.APIAgentTaskExportPostReq) (serverAPI.APIAgentTaskExportPostRes, error) {
-	err := c.exportUseCases.Export(ctx, req.Exporter, req.From, req.To)
+	err := c.exportUseCases.Export(ctx, req.Exporter, convertAPIBookFilter(req.BookFilter))
 	if err != nil {
 		return &serverAPI.APIAgentTaskExportPostInternalServerError{
 			InnerCode: ExportUseCaseCode,

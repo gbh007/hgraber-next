@@ -14,19 +14,34 @@ const app = Vue.createApp({
       showDeleted: "except",
       showVerify: "only",
       nameFilter: "",
+      agents: [],
+      agentStatusError: "",
+      exportAgentID: "",
+      from: "",
+      to: "",
     });
 
     async function renderPages(pageNumber = 1) {
+      let filter = {
+        count: countOnPage,
+        page: pageNumber,
+        verify_status: appState.showVerify,
+        delete_status: appState.showDeleted,
+        filter: {
+          name: appState.nameFilter,
+        },
+      };
+
+      if (appState.from) {
+        filter.from = new Date(appState.from).toJSON();
+      }
+
+      if (appState.to) {
+        filter.to = new Date(appState.to).toJSON();
+      }
+
       axios
-        .post("/api/book/list", {
-          count: countOnPage,
-          page: pageNumber,
-          verify_status: appState.showVerify,
-          delete_status: appState.showDeleted,
-          filter: {
-            name: appState.nameFilter,
-          },
-        })
+        .post("/api/book/list", filter)
         .then(function (response) {
           let data = response.data;
           appState.books = data.books;
@@ -39,13 +54,60 @@ const app = Vue.createApp({
         });
     }
 
+    function agents() {
+      axios
+        .post("/api/agent/list", {
+          can_export: true,
+        })
+        .then(function (response) {
+          appState.agents = response.data;
+          appState.agentStatusError = "";
+        })
+        .catch(function (error) {
+          console.log(error);
+          appState.agentStatusError = error.toString();
+        });
+    }
+
+    function exportBooks() {
+      let filter = {
+        verify_status: appState.showVerify,
+        delete_status: appState.showDeleted,
+        filter: {
+          name: appState.nameFilter,
+        },
+      };
+
+      if (appState.from) {
+        filter.from = new Date(appState.from).toJSON();
+      }
+
+      if (appState.to) {
+        filter.to = new Date(appState.to).toJSON();
+      }
+
+      axios
+        .post("/api/agent/task/export", {
+          book_filter: filter,
+          exporter: appState.exportAgentID,
+        })
+        .then(function () {})
+        .catch(function (error) {
+          console.log(error);
+          alert(error.toString());
+        });
+    }
+
     Vue.onBeforeMount(() => {
+      agents();
       renderPages();
     });
 
     return {
       appState,
       renderPages,
+      agents,
+      exportBooks,
     };
   },
 });

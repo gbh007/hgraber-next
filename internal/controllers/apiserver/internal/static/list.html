@@ -135,8 +135,29 @@
               <option value="except">Кроме</option>
             </select>
           </div>
+          <span
+            >С <input class="app" type="datetime-local" v-model="appState.from"
+          /></span>
+          <span
+            >По <input class="app" type="datetime-local" v-model="appState.to"
+          /></span>
           <input type="text" v-model="appState.nameFilter" />
           <button class="app" @click="renderPages(1)">Применить</button>
+
+          <details>
+            <summary>Параметры экспорта</summary>
+
+            <select class="app" v-model="appState.exportAgentID">
+              <option value="">Не выбран</option>
+              <option
+                v-for="agent in (appState.agents || []).filter(a=>a.can_export)"
+                :value="agent.id"
+              >
+                {{agent.name}}
+              </option>
+            </select>
+            <button class="app" @click="exportBooks()">Выгрузить</button>
+          </details>
         </details>
         <div id="paginator">
           <span

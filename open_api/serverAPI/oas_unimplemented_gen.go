@@ -81,7 +81,7 @@ func (UnimplementedHandler) APIBookDetailsPost(ctx context.Context, req *APIBook
 // Список книг.
 //
 // POST /api/book/list
-func (UnimplementedHandler) APIBookListPost(ctx context.Context, req *APIBookListPostReq) (r APIBookListPostRes, _ error) {
+func (UnimplementedHandler) APIBookListPost(ctx context.Context, req *BookFilter) (r APIBookListPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

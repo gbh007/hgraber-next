@@ -1368,7 +1368,7 @@ func (s *Server) handleAPIBookListPostRequest(args [0]string, argsEscaped bool, 
 		}
 
 		type (
-			Request  = *APIBookListPostReq
+			Request  = *BookFilter
 			Params   = struct{}
 			Response = APIBookListPostRes
 		)

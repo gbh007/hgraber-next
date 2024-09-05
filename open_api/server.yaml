@@ -264,38 +264,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                count:
-                  type: integer
-                  description: Количество книг на странице
-                page:
-                  type: integer
-                  description: Номер страницы
-                  minimum: 1
-                verify_status:
-                  type: string
-                  description: Статус подтверждения книги
-                  enum:
-                    - all
-                    - only
-                    - except
-                delete_status:
-                  type: string
-                  description: Статус удаления книги
-                  enum:
-                    - all
-                    - only
-                    - except
-                filter:
-                  type: object
-                  description: Фильтр по полям
-                  properties:
-                    name:
-                      type: string
-                      description: Фильтр по названию, без учета регистра
-              required:
-                - count
+              $ref: "#/components/schemas/BookFilter"
       responses:
         200:
           description: Данные книг
@@ -996,21 +965,14 @@ paths:
             schema:
               type: object
               properties:
-                from:
-                  type: string
-                  format: date-time
-                  description: Время создание книги от
-                to:
-                  type: string
-                  format: date-time
-                  description: Время создание книги до
+                book_filter:
+                  $ref: "#/components/schemas/BookFilter"
                 exporter:
                   type: string
                   format: uuid
                   description: ID агента
               required:
-                - from
-                - to
+                - book_filter
                 - exporter
       responses:
         204:
@@ -1132,7 +1094,7 @@ paths:
                   description: Может ли агент обрабатывать множественные ссылки внешних систем
                 include_status:
                   type: boolean
-                  description: Может ли агент экспортировать данные из системы
+                  description: Проверить состояние агента (запрос статуса у самого агента)
       responses:
         200:
           description: Успешное получение информации
@@ -1822,6 +1784,46 @@ components:
         - create_at
         - name
         - page_count
+
+    BookFilter:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Количество книг на странице
+        page:
+          type: integer
+          description: Номер страницы
+          minimum: 1
+        from:
+          type: string
+          format: date-time
+          description: Время создание книги от
+        to:
+          type: string
+          format: date-time
+          description: Время создание книги до
+        verify_status:
+          type: string
+          description: Статус подтверждения книги
+          enum:
+            - all
+            - only
+            - except
+        delete_status:
+          type: string
+          description: Статус удаления книги
+          enum:
+            - all
+            - only
+            - except
+        filter:
+          type: object
+          description: Фильтр по полям
+          properties:
+            name:
+              type: string
+              description: Фильтр по названию, без учета регистра
 
     ErrorResponse:
       type: object

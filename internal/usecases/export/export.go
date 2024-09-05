@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"time"
 
 	"github.com/google/uuid"
 
@@ -15,14 +14,10 @@ import (
 	"hgnext/internal/pkg"
 )
 
-func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, from, to time.Time) error {
-	books, err := uc.bookRequester.Books(ctx, entities.BookFilter{
-		From:             from,
-		To:               to,
-		OriginAttributes: true,
-		ShowDeleted:      entities.BookFilterShowTypeExcept,
-		ShowVerified:     entities.BookFilterShowTypeOnly,
-	})
+func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter entities.BookFilter) error {
+	filter.OriginAttributes = true // FIXME: перенести это управление в запрос
+
+	books, err := uc.bookRequester.Books(ctx, filter)
 	if err != nil {
 		return fmt.Errorf("get books from requester: %w", err)
 	}

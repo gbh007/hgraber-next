@@ -553,22 +553,14 @@ type APIAgentTaskExportPostNoContent struct{}
 func (*APIAgentTaskExportPostNoContent) aPIAgentTaskExportPostRes() {}
 
 type APIAgentTaskExportPostReq struct {
-	// Время создание книги от.
-	From time.Time `json:"from"`
-	// Время создание книги до.
-	To time.Time `json:"to"`
+	BookFilter BookFilter `json:"book_filter"`
 	// ID агента.
 	Exporter uuid.UUID `json:"exporter"`
 }
 
-// GetFrom returns the value of From.
-func (s *APIAgentTaskExportPostReq) GetFrom() time.Time {
-	return s.From
-}
-
-// GetTo returns the value of To.
-func (s *APIAgentTaskExportPostReq) GetTo() time.Time {
-	return s.To
+// GetBookFilter returns the value of BookFilter.
+func (s *APIAgentTaskExportPostReq) GetBookFilter() BookFilter {
+	return s.BookFilter
 }
 
 // GetExporter returns the value of Exporter.
@@ -576,14 +568,9 @@ func (s *APIAgentTaskExportPostReq) GetExporter() uuid.UUID {
 	return s.Exporter
 }
 
-// SetFrom sets the value of From.
-func (s *APIAgentTaskExportPostReq) SetFrom(val time.Time) {
-	s.From = val
-}
-
-// SetTo sets the value of To.
-func (s *APIAgentTaskExportPostReq) SetTo(val time.Time) {
-	s.To = val
+// SetBookFilter sets the value of BookFilter.
+func (s *APIAgentTaskExportPostReq) SetBookFilter(val BookFilter) {
+	s.BookFilter = val
 }
 
 // SetExporter sets the value of Exporter.
@@ -784,183 +771,6 @@ func (s *APIBookListPostOKPagesItem) SetIsCurrent(val bool) {
 // SetIsSeparator sets the value of IsSeparator.
 func (s *APIBookListPostOKPagesItem) SetIsSeparator(val bool) {
 	s.IsSeparator = val
-}
-
-type APIBookListPostReq struct {
-	// Количество книг на странице.
-	Count int `json:"count"`
-	// Номер страницы.
-	Page OptInt `json:"page"`
-	// Статус подтверждения книги.
-	VerifyStatus OptAPIBookListPostReqVerifyStatus `json:"verify_status"`
-	// Статус удаления книги.
-	DeleteStatus OptAPIBookListPostReqDeleteStatus `json:"delete_status"`
-	// Фильтр по полям.
-	Filter OptAPIBookListPostReqFilter `json:"filter"`
-}
-
-// GetCount returns the value of Count.
-func (s *APIBookListPostReq) GetCount() int {
-	return s.Count
-}
-
-// GetPage returns the value of Page.
-func (s *APIBookListPostReq) GetPage() OptInt {
-	return s.Page
-}
-
-// GetVerifyStatus returns the value of VerifyStatus.
-func (s *APIBookListPostReq) GetVerifyStatus() OptAPIBookListPostReqVerifyStatus {
-	return s.VerifyStatus
-}
-
-// GetDeleteStatus returns the value of DeleteStatus.
-func (s *APIBookListPostReq) GetDeleteStatus() OptAPIBookListPostReqDeleteStatus {
-	return s.DeleteStatus
-}
-
-// GetFilter returns the value of Filter.
-func (s *APIBookListPostReq) GetFilter() OptAPIBookListPostReqFilter {
-	return s.Filter
-}
-
-// SetCount sets the value of Count.
-func (s *APIBookListPostReq) SetCount(val int) {
-	s.Count = val
-}
-
-// SetPage sets the value of Page.
-func (s *APIBookListPostReq) SetPage(val OptInt) {
-	s.Page = val
-}
-
-// SetVerifyStatus sets the value of VerifyStatus.
-func (s *APIBookListPostReq) SetVerifyStatus(val OptAPIBookListPostReqVerifyStatus) {
-	s.VerifyStatus = val
-}
-
-// SetDeleteStatus sets the value of DeleteStatus.
-func (s *APIBookListPostReq) SetDeleteStatus(val OptAPIBookListPostReqDeleteStatus) {
-	s.DeleteStatus = val
-}
-
-// SetFilter sets the value of Filter.
-func (s *APIBookListPostReq) SetFilter(val OptAPIBookListPostReqFilter) {
-	s.Filter = val
-}
-
-// Статус удаления книги.
-type APIBookListPostReqDeleteStatus string
-
-const (
-	APIBookListPostReqDeleteStatusAll    APIBookListPostReqDeleteStatus = "all"
-	APIBookListPostReqDeleteStatusOnly   APIBookListPostReqDeleteStatus = "only"
-	APIBookListPostReqDeleteStatusExcept APIBookListPostReqDeleteStatus = "except"
-)
-
-// AllValues returns all APIBookListPostReqDeleteStatus values.
-func (APIBookListPostReqDeleteStatus) AllValues() []APIBookListPostReqDeleteStatus {
-	return []APIBookListPostReqDeleteStatus{
-		APIBookListPostReqDeleteStatusAll,
-		APIBookListPostReqDeleteStatusOnly,
-		APIBookListPostReqDeleteStatusExcept,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s APIBookListPostReqDeleteStatus) MarshalText() ([]byte, error) {
-	switch s {
-	case APIBookListPostReqDeleteStatusAll:
-		return []byte(s), nil
-	case APIBookListPostReqDeleteStatusOnly:
-		return []byte(s), nil
-	case APIBookListPostReqDeleteStatusExcept:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *APIBookListPostReqDeleteStatus) UnmarshalText(data []byte) error {
-	switch APIBookListPostReqDeleteStatus(data) {
-	case APIBookListPostReqDeleteStatusAll:
-		*s = APIBookListPostReqDeleteStatusAll
-		return nil
-	case APIBookListPostReqDeleteStatusOnly:
-		*s = APIBookListPostReqDeleteStatusOnly
-		return nil
-	case APIBookListPostReqDeleteStatusExcept:
-		*s = APIBookListPostReqDeleteStatusExcept
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-// Фильтр по полям.
-type APIBookListPostReqFilter struct {
-	// Фильтр по названию, без учета регистра.
-	Name OptString `json:"name"`
-}
-
-// GetName returns the value of Name.
-func (s *APIBookListPostReqFilter) GetName() OptString {
-	return s.Name
-}
-
-// SetName sets the value of Name.
-func (s *APIBookListPostReqFilter) SetName(val OptString) {
-	s.Name = val
-}
-
-// Статус подтверждения книги.
-type APIBookListPostReqVerifyStatus string
-
-const (
-	APIBookListPostReqVerifyStatusAll    APIBookListPostReqVerifyStatus = "all"
-	APIBookListPostReqVerifyStatusOnly   APIBookListPostReqVerifyStatus = "only"
-	APIBookListPostReqVerifyStatusExcept APIBookListPostReqVerifyStatus = "except"
-)
-
-// AllValues returns all APIBookListPostReqVerifyStatus values.
-func (APIBookListPostReqVerifyStatus) AllValues() []APIBookListPostReqVerifyStatus {
-	return []APIBookListPostReqVerifyStatus{
-		APIBookListPostReqVerifyStatusAll,
-		APIBookListPostReqVerifyStatusOnly,
-		APIBookListPostReqVerifyStatusExcept,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s APIBookListPostReqVerifyStatus) MarshalText() ([]byte, error) {
-	switch s {
-	case APIBookListPostReqVerifyStatusAll:
-		return []byte(s), nil
-	case APIBookListPostReqVerifyStatusOnly:
-		return []byte(s), nil
-	case APIBookListPostReqVerifyStatusExcept:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *APIBookListPostReqVerifyStatus) UnmarshalText(data []byte) error {
-	switch APIBookListPostReqVerifyStatus(data) {
-	case APIBookListPostReqVerifyStatusAll:
-		*s = APIBookListPostReqVerifyStatusAll
-		return nil
-	case APIBookListPostReqVerifyStatusOnly:
-		*s = APIBookListPostReqVerifyStatusOnly
-		return nil
-	case APIBookListPostReqVerifyStatusExcept:
-		*s = APIBookListPostReqVerifyStatusExcept
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
 }
 
 type APIBookListPostUnauthorized ErrorResponse
@@ -2287,6 +2097,208 @@ func (s *BookDetailsPagesItem) SetPreviewURL(val OptURI) {
 	s.PreviewURL = val
 }
 
+// Ref: #/components/schemas/BookFilter
+type BookFilter struct {
+	// Количество книг на странице.
+	Count OptInt `json:"count"`
+	// Номер страницы.
+	Page OptInt `json:"page"`
+	// Время создание книги от.
+	From OptDateTime `json:"from"`
+	// Время создание книги до.
+	To OptDateTime `json:"to"`
+	// Статус подтверждения книги.
+	VerifyStatus OptBookFilterVerifyStatus `json:"verify_status"`
+	// Статус удаления книги.
+	DeleteStatus OptBookFilterDeleteStatus `json:"delete_status"`
+	// Фильтр по полям.
+	Filter OptBookFilterFilter `json:"filter"`
+}
+
+// GetCount returns the value of Count.
+func (s *BookFilter) GetCount() OptInt {
+	return s.Count
+}
+
+// GetPage returns the value of Page.
+func (s *BookFilter) GetPage() OptInt {
+	return s.Page
+}
+
+// GetFrom returns the value of From.
+func (s *BookFilter) GetFrom() OptDateTime {
+	return s.From
+}
+
+// GetTo returns the value of To.
+func (s *BookFilter) GetTo() OptDateTime {
+	return s.To
+}
+
+// GetVerifyStatus returns the value of VerifyStatus.
+func (s *BookFilter) GetVerifyStatus() OptBookFilterVerifyStatus {
+	return s.VerifyStatus
+}
+
+// GetDeleteStatus returns the value of DeleteStatus.
+func (s *BookFilter) GetDeleteStatus() OptBookFilterDeleteStatus {
+	return s.DeleteStatus
+}
+
+// GetFilter returns the value of Filter.
+func (s *BookFilter) GetFilter() OptBookFilterFilter {
+	return s.Filter
+}
+
+// SetCount sets the value of Count.
+func (s *BookFilter) SetCount(val OptInt) {
+	s.Count = val
+}
+
+// SetPage sets the value of Page.
+func (s *BookFilter) SetPage(val OptInt) {
+	s.Page = val
+}
+
+// SetFrom sets the value of From.
+func (s *BookFilter) SetFrom(val OptDateTime) {
+	s.From = val
+}
+
+// SetTo sets the value of To.
+func (s *BookFilter) SetTo(val OptDateTime) {
+	s.To = val
+}
+
+// SetVerifyStatus sets the value of VerifyStatus.
+func (s *BookFilter) SetVerifyStatus(val OptBookFilterVerifyStatus) {
+	s.VerifyStatus = val
+}
+
+// SetDeleteStatus sets the value of DeleteStatus.
+func (s *BookFilter) SetDeleteStatus(val OptBookFilterDeleteStatus) {
+	s.DeleteStatus = val
+}
+
+// SetFilter sets the value of Filter.
+func (s *BookFilter) SetFilter(val OptBookFilterFilter) {
+	s.Filter = val
+}
+
+// Статус удаления книги.
+type BookFilterDeleteStatus string
+
+const (
+	BookFilterDeleteStatusAll    BookFilterDeleteStatus = "all"
+	BookFilterDeleteStatusOnly   BookFilterDeleteStatus = "only"
+	BookFilterDeleteStatusExcept BookFilterDeleteStatus = "except"
+)
+
+// AllValues returns all BookFilterDeleteStatus values.
+func (BookFilterDeleteStatus) AllValues() []BookFilterDeleteStatus {
+	return []BookFilterDeleteStatus{
+		BookFilterDeleteStatusAll,
+		BookFilterDeleteStatusOnly,
+		BookFilterDeleteStatusExcept,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s BookFilterDeleteStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case BookFilterDeleteStatusAll:
+		return []byte(s), nil
+	case BookFilterDeleteStatusOnly:
+		return []byte(s), nil
+	case BookFilterDeleteStatusExcept:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *BookFilterDeleteStatus) UnmarshalText(data []byte) error {
+	switch BookFilterDeleteStatus(data) {
+	case BookFilterDeleteStatusAll:
+		*s = BookFilterDeleteStatusAll
+		return nil
+	case BookFilterDeleteStatusOnly:
+		*s = BookFilterDeleteStatusOnly
+		return nil
+	case BookFilterDeleteStatusExcept:
+		*s = BookFilterDeleteStatusExcept
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Фильтр по полям.
+type BookFilterFilter struct {
+	// Фильтр по названию, без учета регистра.
+	Name OptString `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *BookFilterFilter) GetName() OptString {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *BookFilterFilter) SetName(val OptString) {
+	s.Name = val
+}
+
+// Статус подтверждения книги.
+type BookFilterVerifyStatus string
+
+const (
+	BookFilterVerifyStatusAll    BookFilterVerifyStatus = "all"
+	BookFilterVerifyStatusOnly   BookFilterVerifyStatus = "only"
+	BookFilterVerifyStatusExcept BookFilterVerifyStatus = "except"
+)
+
+// AllValues returns all BookFilterVerifyStatus values.
+func (BookFilterVerifyStatus) AllValues() []BookFilterVerifyStatus {
+	return []BookFilterVerifyStatus{
+		BookFilterVerifyStatusAll,
+		BookFilterVerifyStatusOnly,
+		BookFilterVerifyStatusExcept,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s BookFilterVerifyStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case BookFilterVerifyStatusAll:
+		return []byte(s), nil
+	case BookFilterVerifyStatusOnly:
+		return []byte(s), nil
+	case BookFilterVerifyStatusExcept:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *BookFilterVerifyStatus) UnmarshalText(data []byte) error {
+	switch BookFilterVerifyStatus(data) {
+	case BookFilterVerifyStatusAll:
+		*s = BookFilterVerifyStatusAll
+		return nil
+	case BookFilterVerifyStatusOnly:
+		*s = BookFilterVerifyStatusOnly
+		return nil
+	case BookFilterVerifyStatusExcept:
+		*s = BookFilterVerifyStatusExcept
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Данные книги.
 // Ref: #/components/schemas/BookRaw
 type BookRaw struct {
@@ -2773,38 +2785,38 @@ func (o OptAPIAgentListPostOKItemStatus) Or(d APIAgentListPostOKItemStatus) APIA
 	return d
 }
 
-// NewOptAPIBookListPostReqDeleteStatus returns new OptAPIBookListPostReqDeleteStatus with value set to v.
-func NewOptAPIBookListPostReqDeleteStatus(v APIBookListPostReqDeleteStatus) OptAPIBookListPostReqDeleteStatus {
-	return OptAPIBookListPostReqDeleteStatus{
+// NewOptBookFilterDeleteStatus returns new OptBookFilterDeleteStatus with value set to v.
+func NewOptBookFilterDeleteStatus(v BookFilterDeleteStatus) OptBookFilterDeleteStatus {
+	return OptBookFilterDeleteStatus{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptAPIBookListPostReqDeleteStatus is optional APIBookListPostReqDeleteStatus.
-type OptAPIBookListPostReqDeleteStatus struct {
-	Value APIBookListPostReqDeleteStatus
+// OptBookFilterDeleteStatus is optional BookFilterDeleteStatus.
+type OptBookFilterDeleteStatus struct {
+	Value BookFilterDeleteStatus
 	Set   bool
 }
 
-// IsSet returns true if OptAPIBookListPostReqDeleteStatus was set.
-func (o OptAPIBookListPostReqDeleteStatus) IsSet() bool { return o.Set }
+// IsSet returns true if OptBookFilterDeleteStatus was set.
+func (o OptBookFilterDeleteStatus) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptAPIBookListPostReqDeleteStatus) Reset() {
-	var v APIBookListPostReqDeleteStatus
+func (o *OptBookFilterDeleteStatus) Reset() {
+	var v BookFilterDeleteStatus
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptAPIBookListPostReqDeleteStatus) SetTo(v APIBookListPostReqDeleteStatus) {
+func (o *OptBookFilterDeleteStatus) SetTo(v BookFilterDeleteStatus) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptAPIBookListPostReqDeleteStatus) Get() (v APIBookListPostReqDeleteStatus, ok bool) {
+func (o OptBookFilterDeleteStatus) Get() (v BookFilterDeleteStatus, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -2812,45 +2824,45 @@ func (o OptAPIBookListPostReqDeleteStatus) Get() (v APIBookListPostReqDeleteStat
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptAPIBookListPostReqDeleteStatus) Or(d APIBookListPostReqDeleteStatus) APIBookListPostReqDeleteStatus {
+func (o OptBookFilterDeleteStatus) Or(d BookFilterDeleteStatus) BookFilterDeleteStatus {
 	if v, ok := o.Get(); ok {
 		return v
 	}
 	return d
 }
 
-// NewOptAPIBookListPostReqFilter returns new OptAPIBookListPostReqFilter with value set to v.
-func NewOptAPIBookListPostReqFilter(v APIBookListPostReqFilter) OptAPIBookListPostReqFilter {
-	return OptAPIBookListPostReqFilter{
+// NewOptBookFilterFilter returns new OptBookFilterFilter with value set to v.
+func NewOptBookFilterFilter(v BookFilterFilter) OptBookFilterFilter {
+	return OptBookFilterFilter{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptAPIBookListPostReqFilter is optional APIBookListPostReqFilter.
-type OptAPIBookListPostReqFilter struct {
-	Value APIBookListPostReqFilter
+// OptBookFilterFilter is optional BookFilterFilter.
+type OptBookFilterFilter struct {
+	Value BookFilterFilter
 	Set   bool
 }
 
-// IsSet returns true if OptAPIBookListPostReqFilter was set.
-func (o OptAPIBookListPostReqFilter) IsSet() bool { return o.Set }
+// IsSet returns true if OptBookFilterFilter was set.
+func (o OptBookFilterFilter) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptAPIBookListPostReqFilter) Reset() {
-	var v APIBookListPostReqFilter
+func (o *OptBookFilterFilter) Reset() {
+	var v BookFilterFilter
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptAPIBookListPostReqFilter) SetTo(v APIBookListPostReqFilter) {
+func (o *OptBookFilterFilter) SetTo(v BookFilterFilter) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptAPIBookListPostReqFilter) Get() (v APIBookListPostReqFilter, ok bool) {
+func (o OptBookFilterFilter) Get() (v BookFilterFilter, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -2858,45 +2870,45 @@ func (o OptAPIBookListPostReqFilter) Get() (v APIBookListPostReqFilter, ok bool)
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptAPIBookListPostReqFilter) Or(d APIBookListPostReqFilter) APIBookListPostReqFilter {
+func (o OptBookFilterFilter) Or(d BookFilterFilter) BookFilterFilter {
 	if v, ok := o.Get(); ok {
 		return v
 	}
 	return d
 }
 
-// NewOptAPIBookListPostReqVerifyStatus returns new OptAPIBookListPostReqVerifyStatus with value set to v.
-func NewOptAPIBookListPostReqVerifyStatus(v APIBookListPostReqVerifyStatus) OptAPIBookListPostReqVerifyStatus {
-	return OptAPIBookListPostReqVerifyStatus{
+// NewOptBookFilterVerifyStatus returns new OptBookFilterVerifyStatus with value set to v.
+func NewOptBookFilterVerifyStatus(v BookFilterVerifyStatus) OptBookFilterVerifyStatus {
+	return OptBookFilterVerifyStatus{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptAPIBookListPostReqVerifyStatus is optional APIBookListPostReqVerifyStatus.
-type OptAPIBookListPostReqVerifyStatus struct {
-	Value APIBookListPostReqVerifyStatus
+// OptBookFilterVerifyStatus is optional BookFilterVerifyStatus.
+type OptBookFilterVerifyStatus struct {
+	Value BookFilterVerifyStatus
 	Set   bool
 }
 
-// IsSet returns true if OptAPIBookListPostReqVerifyStatus was set.
-func (o OptAPIBookListPostReqVerifyStatus) IsSet() bool { return o.Set }
+// IsSet returns true if OptBookFilterVerifyStatus was set.
+func (o OptBookFilterVerifyStatus) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptAPIBookListPostReqVerifyStatus) Reset() {
-	var v APIBookListPostReqVerifyStatus
+func (o *OptBookFilterVerifyStatus) Reset() {
+	var v BookFilterVerifyStatus
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptAPIBookListPostReqVerifyStatus) SetTo(v APIBookListPostReqVerifyStatus) {
+func (o *OptBookFilterVerifyStatus) SetTo(v BookFilterVerifyStatus) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptAPIBookListPostReqVerifyStatus) Get() (v APIBookListPostReqVerifyStatus, ok bool) {
+func (o OptBookFilterVerifyStatus) Get() (v BookFilterVerifyStatus, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -2904,7 +2916,7 @@ func (o OptAPIBookListPostReqVerifyStatus) Get() (v APIBookListPostReqVerifyStat
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptAPIBookListPostReqVerifyStatus) Or(d APIBookListPostReqVerifyStatus) APIBookListPostReqVerifyStatus {
+func (o OptBookFilterVerifyStatus) Or(d BookFilterVerifyStatus) BookFilterVerifyStatus {
 	if v, ok := o.Get(); ok {
 		return v
 	}

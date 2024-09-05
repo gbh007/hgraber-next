@@ -55,7 +55,7 @@ type Handler interface {
 	// Список книг.
 	//
 	// POST /api/book/list
-	APIBookListPost(ctx context.Context, req *APIBookListPostReq) (APIBookListPostRes, error)
+	APIBookListPost(ctx context.Context, req *BookFilter) (APIBookListPostRes, error)
 	// APIBookRawPost implements POST /api/book/raw operation.
 	//
 	// Информация о книге (или по ИД или по адресу).
