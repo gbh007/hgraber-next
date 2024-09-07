@@ -14,7 +14,7 @@ import (
 	"hgnext/internal/pkg"
 )
 
-func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter entities.BookFilter) error {
+func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter entities.BookFilter, deleteAfter bool) error {
 	filter.OriginAttributes = true // FIXME: перенести это управление в запрос
 
 	books, err := uc.bookRequester.Books(ctx, filter)
@@ -25,8 +25,9 @@ func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter entitie
 	uc.tmpStorage.AddToExport(
 		pkg.Map(books, func(b entities.BookFull) entities.BookFullWithAgent {
 			return entities.BookFullWithAgent{
-				BookFull: b,
-				AgentID:  agentID,
+				BookFull:          b,
+				AgentID:           agentID,
+				DeleteAfterExport: deleteAfter,
 			}
 		}),
 	)
@@ -60,6 +61,17 @@ func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWith
 		}
 
 		return fmt.Errorf("export archive %s to agent: %w", book.Book.ID.String(), err)
+	}
+
+	if book.DeleteAfterExport {
+		err = uc.storage.MarkBookAsDeleted(ctx, book.Book.ID)
+		if err != nil {
+			if retry {
+				uc.tmpStorage.AddToExport([]entities.BookFullWithAgent{book})
+			}
+
+			return fmt.Errorf("delete book after export %s: %w", book.Book.ID.String(), err)
+		}
 	}
 
 	return nil

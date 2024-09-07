@@ -27,6 +27,8 @@ type storage interface {
 	DeleteBook(ctx context.Context, id uuid.UUID) error
 
 	GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error)
+
+	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
 }
 
 type agentSystem interface {

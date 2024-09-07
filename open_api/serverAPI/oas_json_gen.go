@@ -1686,11 +1686,18 @@ func (s *APIAgentTaskExportPostReq) encodeFields(e *jx.Encoder) {
 		e.FieldStart("exporter")
 		json.EncodeUUID(e, s.Exporter)
 	}
+	{
+		if s.DeleteAfter.Set {
+			e.FieldStart("delete_after")
+			s.DeleteAfter.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIAgentTaskExportPostReq = [2]string{
+var jsonFieldsNameOfAPIAgentTaskExportPostReq = [3]string{
 	0: "book_filter",
 	1: "exporter",
+	2: "delete_after",
 }
 
 // Decode decodes APIAgentTaskExportPostReq from json.
@@ -1723,6 +1730,16 @@ func (s *APIAgentTaskExportPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"exporter\"")
+			}
+		case "delete_after":
+			if err := func() error {
+				s.DeleteAfter.Reset()
+				if err := s.DeleteAfter.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"delete_after\"")
 			}
 		default:
 			return d.Skip()
@@ -8443,6 +8460,18 @@ func (s *BookFilter) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *BookFilter) encodeFields(e *jx.Encoder) {
 	{
+		if s.SortDesc.Set {
+			e.FieldStart("sort_desc")
+			s.SortDesc.Encode(e)
+		}
+	}
+	{
+		if s.SortField.Set {
+			e.FieldStart("sort_field")
+			s.SortField.Encode(e)
+		}
+	}
+	{
 		if s.Count.Set {
 			e.FieldStart("count")
 			s.Count.Encode(e)
@@ -8479,6 +8508,12 @@ func (s *BookFilter) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.DownloadStatus.Set {
+			e.FieldStart("download_status")
+			s.DownloadStatus.Encode(e)
+		}
+	}
+	{
 		if s.Filter.Set {
 			e.FieldStart("filter")
 			s.Filter.Encode(e)
@@ -8486,14 +8521,17 @@ func (s *BookFilter) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfBookFilter = [7]string{
-	0: "count",
-	1: "page",
-	2: "from",
-	3: "to",
-	4: "verify_status",
-	5: "delete_status",
-	6: "filter",
+var jsonFieldsNameOfBookFilter = [10]string{
+	0: "sort_desc",
+	1: "sort_field",
+	2: "count",
+	3: "page",
+	4: "from",
+	5: "to",
+	6: "verify_status",
+	7: "delete_status",
+	8: "download_status",
+	9: "filter",
 }
 
 // Decode decodes BookFilter from json.
@@ -8504,6 +8542,26 @@ func (s *BookFilter) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
+		case "sort_desc":
+			if err := func() error {
+				s.SortDesc.Reset()
+				if err := s.SortDesc.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sort_desc\"")
+			}
+		case "sort_field":
+			if err := func() error {
+				s.SortField.Reset()
+				if err := s.SortField.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sort_field\"")
+			}
 		case "count":
 			if err := func() error {
 				s.Count.Reset()
@@ -8563,6 +8621,16 @@ func (s *BookFilter) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"delete_status\"")
+			}
+		case "download_status":
+			if err := func() error {
+				s.DownloadStatus.Reset()
+				if err := s.DownloadStatus.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"download_status\"")
 			}
 		case "filter":
 			if err := func() error {
@@ -8640,6 +8708,48 @@ func (s *BookFilterDeleteStatus) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes BookFilterDownloadStatus as json.
+func (s BookFilterDownloadStatus) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes BookFilterDownloadStatus from json.
+func (s *BookFilterDownloadStatus) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BookFilterDownloadStatus to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch BookFilterDownloadStatus(v) {
+	case BookFilterDownloadStatusAll:
+		*s = BookFilterDownloadStatusAll
+	case BookFilterDownloadStatusOnly:
+		*s = BookFilterDownloadStatusOnly
+	case BookFilterDownloadStatusExcept:
+		*s = BookFilterDownloadStatusExcept
+	default:
+		*s = BookFilterDownloadStatus(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s BookFilterDownloadStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BookFilterDownloadStatus) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
 func (s *BookFilterFilter) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -8699,6 +8809,50 @@ func (s *BookFilterFilter) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *BookFilterFilter) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes BookFilterSortField as json.
+func (s BookFilterSortField) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes BookFilterSortField from json.
+func (s *BookFilterSortField) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BookFilterSortField to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch BookFilterSortField(v) {
+	case BookFilterSortFieldCreatedAt:
+		*s = BookFilterSortFieldCreatedAt
+	case BookFilterSortFieldName:
+		*s = BookFilterSortFieldName
+	case BookFilterSortFieldID:
+		*s = BookFilterSortFieldID
+	case BookFilterSortFieldPageCount:
+		*s = BookFilterSortFieldPageCount
+	default:
+		*s = BookFilterSortField(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s BookFilterSortField) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BookFilterSortField) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -9888,6 +10042,39 @@ func (s *OptBookFilterDeleteStatus) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes BookFilterDownloadStatus as json.
+func (o OptBookFilterDownloadStatus) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes BookFilterDownloadStatus from json.
+func (o *OptBookFilterDownloadStatus) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptBookFilterDownloadStatus to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptBookFilterDownloadStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptBookFilterDownloadStatus) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes BookFilterFilter as json.
 func (o OptBookFilterFilter) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -9917,6 +10104,39 @@ func (s OptBookFilterFilter) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptBookFilterFilter) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes BookFilterSortField as json.
+func (o OptBookFilterSortField) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes BookFilterSortField from json.
+func (o *OptBookFilterSortField) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptBookFilterSortField to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptBookFilterSortField) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptBookFilterSortField) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

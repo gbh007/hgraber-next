@@ -971,6 +971,9 @@ paths:
                   type: string
                   format: uuid
                   description: ID агента
+                delete_after:
+                  type: boolean
+                  description: Удалять ли файлы после экспорта
               required:
                 - book_filter
                 - exporter
@@ -1788,6 +1791,17 @@ components:
     BookFilter:
       type: object
       properties:
+        sort_desc:
+          type: boolean
+          description: Сортировать в обратном порядке
+        sort_field:
+          type: string
+          description: Поле для сортировки
+          enum:
+            - created_at
+            - name
+            - id
+            - page_count
         count:
           type: integer
           description: Количество книг на странице
@@ -1813,6 +1827,13 @@ components:
         delete_status:
           type: string
           description: Статус удаления книги
+          enum:
+            - all
+            - only
+            - except
+        download_status:
+          type: string
+          description: Статус загрузки книги
           enum:
             - all
             - only

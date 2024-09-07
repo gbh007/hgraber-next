@@ -58,7 +58,24 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 	filter := entities.BookFilter{}
 
 	if req.Count.IsSet() {
-		filter.FillNewest(req.Page.Value, req.Count.Value)
+		filter.FillLimits(req.Page.Value, req.Count.Value)
+	}
+
+	filter.Desc = req.SortDesc.Value
+
+	if req.SortField.IsSet() {
+		switch req.SortField.Value {
+		case serverAPI.BookFilterSortFieldCreatedAt:
+			filter.OrderBy = entities.BookFilterOrderByCreated
+		case serverAPI.BookFilterSortFieldID:
+			filter.OrderBy = entities.BookFilterOrderByID
+		case serverAPI.BookFilterSortFieldName:
+			filter.OrderBy = entities.BookFilterOrderByName
+		case serverAPI.BookFilterSortFieldPageCount:
+			filter.OrderBy = entities.BookFilterOrderByPageCount
+		default:
+			filter.OrderBy = entities.BookFilterOrderByCreated
+		}
 	}
 
 	if req.DeleteStatus.IsSet() {
@@ -78,6 +95,16 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 			filter.ShowVerified = entities.BookFilterShowTypeOnly
 		case serverAPI.BookFilterVerifyStatusExcept:
 			filter.ShowVerified = entities.BookFilterShowTypeExcept
+		}
+	}
+
+	if req.DownloadStatus.IsSet() {
+		switch req.DownloadStatus.Value {
+		case serverAPI.BookFilterDownloadStatusAll:
+		case serverAPI.BookFilterDownloadStatusOnly:
+			filter.ShowDownloaded = entities.BookFilterShowTypeOnly
+		case serverAPI.BookFilterDownloadStatusExcept:
+			filter.ShowDownloaded = entities.BookFilterShowTypeExcept
 		}
 	}
 

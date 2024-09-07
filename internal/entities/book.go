@@ -80,4 +80,6 @@ type BookWithAgent struct {
 type BookFullWithAgent struct {
 	BookFull
 	AgentID uuid.UUID
+
+	DeleteAfterExport bool
 }

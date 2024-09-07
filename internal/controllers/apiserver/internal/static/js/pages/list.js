@@ -13,12 +13,16 @@ const app = Vue.createApp({
       pages: [],
       showDeleted: "except",
       showVerify: "only",
+      showDownloaded: "only",
       nameFilter: "",
       agents: [],
       agentStatusError: "",
       exportAgentID: "",
+      deleteAfterExport: false,
       from: "",
       to: "",
+      sortDesc: true,
+      sortField: "created_at",
     });
 
     async function renderPages(pageNumber = 1) {
@@ -27,6 +31,9 @@ const app = Vue.createApp({
         page: pageNumber,
         verify_status: appState.showVerify,
         delete_status: appState.showDeleted,
+        download_status: appState.showDownloaded,
+        sort_desc: appState.sortDesc,
+        sort_field: appState.sortField,
         filter: {
           name: appState.nameFilter,
         },
@@ -73,6 +80,9 @@ const app = Vue.createApp({
       let filter = {
         verify_status: appState.showVerify,
         delete_status: appState.showDeleted,
+        download_status: appState.showDownloaded,
+        sort_desc: appState.sortDesc,
+        sort_field: appState.sortField,
         filter: {
           name: appState.nameFilter,
         },
@@ -90,6 +100,7 @@ const app = Vue.createApp({
         .post("/api/agent/task/export", {
           book_filter: filter,
           exporter: appState.exportAgentID,
+          delete_after: appState.deleteAfterExport,
         })
         .then(function () {})
         .catch(function (error) {

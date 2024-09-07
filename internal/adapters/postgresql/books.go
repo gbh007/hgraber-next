@@ -72,10 +72,23 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			builder = builder.Offset(uint64(filter.Offset))
 		}
 
-		if filter.NewFirst {
-			builder = builder.OrderBy("create_at DESC")
+		orderBy := "create_at"
+
+		switch filter.OrderBy {
+		case entities.BookFilterOrderByCreated:
+			orderBy = "create_at"
+		case entities.BookFilterOrderByName:
+			orderBy = "name"
+		case entities.BookFilterOrderByID:
+			orderBy = "id"
+		case entities.BookFilterOrderByPageCount:
+			orderBy = "page_count"
+		}
+
+		if filter.Desc {
+			builder = builder.OrderBy(orderBy + " DESC")
 		} else {
-			builder = builder.OrderBy("create_at ASC")
+			builder = builder.OrderBy(orderBy + " ASC")
 		}
 	}
 
@@ -103,6 +116,23 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 		builder = builder.Where(squirrel.Eq{"verified": true})
 	case entities.BookFilterShowTypeExcept:
 		builder = builder.Where(squirrel.Eq{"verified": false})
+	}
+
+	switch filter.ShowDownloaded {
+	case entities.BookFilterShowTypeOnly:
+		builder = builder.Where(squirrel.And{
+			squirrel.Eq{"attributes_parsed": true},
+			squirrel.NotEq{"name": nil},
+			squirrel.NotEq{"page_count": nil},
+			squirrel.Expr(`NOT EXISTS (SELECT book_id FROM pages WHERE downloaded = FALSE AND books.id = pages.book_id)`),
+		})
+	case entities.BookFilterShowTypeExcept:
+		builder = builder.Where(squirrel.Or{
+			squirrel.Eq{"attributes_parsed": false},
+			squirrel.Eq{"name": nil},
+			squirrel.Eq{"page_count": nil},
+			squirrel.Expr(`EXISTS (SELECT book_id FROM pages WHERE downloaded = FALSE AND books.id = pages.book_id)`),
+		})
 	}
 
 	if filter.Fields.Name != "" {

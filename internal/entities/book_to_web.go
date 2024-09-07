@@ -15,34 +15,45 @@ const (
 	BookFilterShowTypeExcept
 )
 
+type BookFilterOrderBy byte
+
+const (
+	BookFilterOrderByCreated = iota
+	BookFilterOrderByName
+	BookFilterOrderByID
+	BookFilterOrderByPageCount
+)
+
 type BookFilterFields struct {
 	Name string
 }
 
 type BookFilter struct {
-	Limit    int
-	Offset   int
-	NewFirst bool
+	Limit  int
+	Offset int
+
+	OrderBy BookFilterOrderBy
+	Desc    bool
 
 	From time.Time
 	To   time.Time
 
 	OriginAttributes bool
 
-	ShowDeleted  BookFilterShowType
-	ShowVerified BookFilterShowType
+	ShowDeleted    BookFilterShowType
+	ShowVerified   BookFilterShowType
+	ShowDownloaded BookFilterShowType
 
 	Fields BookFilterFields
 }
 
-func (f *BookFilter) FillNewest(page, count int) {
+func (f *BookFilter) FillLimits(page, count int) {
 	if page < 1 {
 		page = 1
 	}
 
 	f.Offset = (page - 1) * count
 	f.Limit = count
-	f.NewFirst = true
 }
 
 type AttributeToWeb struct {

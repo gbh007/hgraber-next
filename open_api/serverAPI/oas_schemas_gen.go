@@ -378,7 +378,8 @@ type APIAgentListPostReq struct {
 	// Может ли агент обрабатывать множественные ссылки
 	// внешних систем.
 	CanParseMulti OptBool `json:"can_parse_multi"`
-	// Может ли агент экспортировать данные из системы.
+	// Проверить состояние агента (запрос статуса у самого
+	// агента).
 	IncludeStatus OptBool `json:"include_status"`
 }
 
@@ -556,6 +557,8 @@ type APIAgentTaskExportPostReq struct {
 	BookFilter BookFilter `json:"book_filter"`
 	// ID агента.
 	Exporter uuid.UUID `json:"exporter"`
+	// Удалять ли файлы после экспорта.
+	DeleteAfter OptBool `json:"delete_after"`
 }
 
 // GetBookFilter returns the value of BookFilter.
@@ -568,6 +571,11 @@ func (s *APIAgentTaskExportPostReq) GetExporter() uuid.UUID {
 	return s.Exporter
 }
 
+// GetDeleteAfter returns the value of DeleteAfter.
+func (s *APIAgentTaskExportPostReq) GetDeleteAfter() OptBool {
+	return s.DeleteAfter
+}
+
 // SetBookFilter sets the value of BookFilter.
 func (s *APIAgentTaskExportPostReq) SetBookFilter(val BookFilter) {
 	s.BookFilter = val
@@ -576,6 +584,11 @@ func (s *APIAgentTaskExportPostReq) SetBookFilter(val BookFilter) {
 // SetExporter sets the value of Exporter.
 func (s *APIAgentTaskExportPostReq) SetExporter(val uuid.UUID) {
 	s.Exporter = val
+}
+
+// SetDeleteAfter sets the value of DeleteAfter.
+func (s *APIAgentTaskExportPostReq) SetDeleteAfter(val OptBool) {
+	s.DeleteAfter = val
 }
 
 type APIAgentTaskExportPostUnauthorized ErrorResponse
@@ -2099,6 +2112,10 @@ func (s *BookDetailsPagesItem) SetPreviewURL(val OptURI) {
 
 // Ref: #/components/schemas/BookFilter
 type BookFilter struct {
+	// Сортировать в обратном порядке.
+	SortDesc OptBool `json:"sort_desc"`
+	// Поле для сортировки.
+	SortField OptBookFilterSortField `json:"sort_field"`
 	// Количество книг на странице.
 	Count OptInt `json:"count"`
 	// Номер страницы.
@@ -2111,8 +2128,20 @@ type BookFilter struct {
 	VerifyStatus OptBookFilterVerifyStatus `json:"verify_status"`
 	// Статус удаления книги.
 	DeleteStatus OptBookFilterDeleteStatus `json:"delete_status"`
+	// Статус загрузки книги.
+	DownloadStatus OptBookFilterDownloadStatus `json:"download_status"`
 	// Фильтр по полям.
 	Filter OptBookFilterFilter `json:"filter"`
+}
+
+// GetSortDesc returns the value of SortDesc.
+func (s *BookFilter) GetSortDesc() OptBool {
+	return s.SortDesc
+}
+
+// GetSortField returns the value of SortField.
+func (s *BookFilter) GetSortField() OptBookFilterSortField {
+	return s.SortField
 }
 
 // GetCount returns the value of Count.
@@ -2145,9 +2174,24 @@ func (s *BookFilter) GetDeleteStatus() OptBookFilterDeleteStatus {
 	return s.DeleteStatus
 }
 
+// GetDownloadStatus returns the value of DownloadStatus.
+func (s *BookFilter) GetDownloadStatus() OptBookFilterDownloadStatus {
+	return s.DownloadStatus
+}
+
 // GetFilter returns the value of Filter.
 func (s *BookFilter) GetFilter() OptBookFilterFilter {
 	return s.Filter
+}
+
+// SetSortDesc sets the value of SortDesc.
+func (s *BookFilter) SetSortDesc(val OptBool) {
+	s.SortDesc = val
+}
+
+// SetSortField sets the value of SortField.
+func (s *BookFilter) SetSortField(val OptBookFilterSortField) {
+	s.SortField = val
 }
 
 // SetCount sets the value of Count.
@@ -2178,6 +2222,11 @@ func (s *BookFilter) SetVerifyStatus(val OptBookFilterVerifyStatus) {
 // SetDeleteStatus sets the value of DeleteStatus.
 func (s *BookFilter) SetDeleteStatus(val OptBookFilterDeleteStatus) {
 	s.DeleteStatus = val
+}
+
+// SetDownloadStatus sets the value of DownloadStatus.
+func (s *BookFilter) SetDownloadStatus(val OptBookFilterDownloadStatus) {
+	s.DownloadStatus = val
 }
 
 // SetFilter sets the value of Filter.
@@ -2234,6 +2283,55 @@ func (s *BookFilterDeleteStatus) UnmarshalText(data []byte) error {
 	}
 }
 
+// Статус загрузки книги.
+type BookFilterDownloadStatus string
+
+const (
+	BookFilterDownloadStatusAll    BookFilterDownloadStatus = "all"
+	BookFilterDownloadStatusOnly   BookFilterDownloadStatus = "only"
+	BookFilterDownloadStatusExcept BookFilterDownloadStatus = "except"
+)
+
+// AllValues returns all BookFilterDownloadStatus values.
+func (BookFilterDownloadStatus) AllValues() []BookFilterDownloadStatus {
+	return []BookFilterDownloadStatus{
+		BookFilterDownloadStatusAll,
+		BookFilterDownloadStatusOnly,
+		BookFilterDownloadStatusExcept,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s BookFilterDownloadStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case BookFilterDownloadStatusAll:
+		return []byte(s), nil
+	case BookFilterDownloadStatusOnly:
+		return []byte(s), nil
+	case BookFilterDownloadStatusExcept:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *BookFilterDownloadStatus) UnmarshalText(data []byte) error {
+	switch BookFilterDownloadStatus(data) {
+	case BookFilterDownloadStatusAll:
+		*s = BookFilterDownloadStatusAll
+		return nil
+	case BookFilterDownloadStatusOnly:
+		*s = BookFilterDownloadStatusOnly
+		return nil
+	case BookFilterDownloadStatusExcept:
+		*s = BookFilterDownloadStatusExcept
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Фильтр по полям.
 type BookFilterFilter struct {
 	// Фильтр по названию, без учета регистра.
@@ -2248,6 +2346,62 @@ func (s *BookFilterFilter) GetName() OptString {
 // SetName sets the value of Name.
 func (s *BookFilterFilter) SetName(val OptString) {
 	s.Name = val
+}
+
+// Поле для сортировки.
+type BookFilterSortField string
+
+const (
+	BookFilterSortFieldCreatedAt BookFilterSortField = "created_at"
+	BookFilterSortFieldName      BookFilterSortField = "name"
+	BookFilterSortFieldID        BookFilterSortField = "id"
+	BookFilterSortFieldPageCount BookFilterSortField = "page_count"
+)
+
+// AllValues returns all BookFilterSortField values.
+func (BookFilterSortField) AllValues() []BookFilterSortField {
+	return []BookFilterSortField{
+		BookFilterSortFieldCreatedAt,
+		BookFilterSortFieldName,
+		BookFilterSortFieldID,
+		BookFilterSortFieldPageCount,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s BookFilterSortField) MarshalText() ([]byte, error) {
+	switch s {
+	case BookFilterSortFieldCreatedAt:
+		return []byte(s), nil
+	case BookFilterSortFieldName:
+		return []byte(s), nil
+	case BookFilterSortFieldID:
+		return []byte(s), nil
+	case BookFilterSortFieldPageCount:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *BookFilterSortField) UnmarshalText(data []byte) error {
+	switch BookFilterSortField(data) {
+	case BookFilterSortFieldCreatedAt:
+		*s = BookFilterSortFieldCreatedAt
+		return nil
+	case BookFilterSortFieldName:
+		*s = BookFilterSortFieldName
+		return nil
+	case BookFilterSortFieldID:
+		*s = BookFilterSortFieldID
+		return nil
+	case BookFilterSortFieldPageCount:
+		*s = BookFilterSortFieldPageCount
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 // Статус подтверждения книги.
@@ -2831,6 +2985,52 @@ func (o OptBookFilterDeleteStatus) Or(d BookFilterDeleteStatus) BookFilterDelete
 	return d
 }
 
+// NewOptBookFilterDownloadStatus returns new OptBookFilterDownloadStatus with value set to v.
+func NewOptBookFilterDownloadStatus(v BookFilterDownloadStatus) OptBookFilterDownloadStatus {
+	return OptBookFilterDownloadStatus{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookFilterDownloadStatus is optional BookFilterDownloadStatus.
+type OptBookFilterDownloadStatus struct {
+	Value BookFilterDownloadStatus
+	Set   bool
+}
+
+// IsSet returns true if OptBookFilterDownloadStatus was set.
+func (o OptBookFilterDownloadStatus) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookFilterDownloadStatus) Reset() {
+	var v BookFilterDownloadStatus
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookFilterDownloadStatus) SetTo(v BookFilterDownloadStatus) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookFilterDownloadStatus) Get() (v BookFilterDownloadStatus, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookFilterDownloadStatus) Or(d BookFilterDownloadStatus) BookFilterDownloadStatus {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptBookFilterFilter returns new OptBookFilterFilter with value set to v.
 func NewOptBookFilterFilter(v BookFilterFilter) OptBookFilterFilter {
 	return OptBookFilterFilter{
@@ -2871,6 +3071,52 @@ func (o OptBookFilterFilter) Get() (v BookFilterFilter, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptBookFilterFilter) Or(d BookFilterFilter) BookFilterFilter {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptBookFilterSortField returns new OptBookFilterSortField with value set to v.
+func NewOptBookFilterSortField(v BookFilterSortField) OptBookFilterSortField {
+	return OptBookFilterSortField{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookFilterSortField is optional BookFilterSortField.
+type OptBookFilterSortField struct {
+	Value BookFilterSortField
+	Set   bool
+}
+
+// IsSet returns true if OptBookFilterSortField was set.
+func (o OptBookFilterSortField) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookFilterSortField) Reset() {
+	var v BookFilterSortField
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookFilterSortField) SetTo(v BookFilterSortField) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookFilterSortField) Get() (v BookFilterSortField, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookFilterSortField) Or(d BookFilterSortField) BookFilterSortField {
 	if v, ok := o.Get(); ok {
 		return v
 	}

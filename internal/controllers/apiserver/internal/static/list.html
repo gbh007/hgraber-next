@@ -135,6 +135,34 @@
               <option value="except">Кроме</option>
             </select>
           </div>
+          <div>
+            Показывать загруженные:
+            <select class="app" v-model="appState.showDownloaded">
+              <option value="all">Все</option>
+              <option value="only">Только</option>
+              <option value="except">Кроме</option>
+            </select>
+          </div>
+          <div>
+            Сортировать по:
+            <select class="app" v-model="appState.sortField">
+              <option value="created_at">Дате создания</option>
+              <option value="name">Названию</option>
+              <option value="id">ИД</option>
+              <option value="page_count">Количеству страниц</option>
+            </select>
+          </div>
+          <label>
+            <span>Сортировать по убыванию</span>
+            <input
+              class="app"
+              v-model="appState.sortDesc"
+              placeholder="Сортировать по убыванию"
+              type="checkbox"
+              autocomplete="off"
+            />
+          </label>
+
           <span
             >С <input class="app" type="datetime-local" v-model="appState.from"
           /></span>
@@ -156,6 +184,16 @@
                 {{agent.name}}
               </option>
             </select>
+            <label>
+              <span>Удалить после экспорта</span>
+              <input
+                class="app"
+                v-model="appState.deleteAfterExport"
+                placeholder="Удалить после экспорта"
+                type="checkbox"
+                autocomplete="off"
+              />
+            </label>
             <button class="app" @click="exportBooks()">Выгрузить</button>
           </details>
         </details>
