@@ -14,8 +14,6 @@ import (
 	"hgnext/open_api/agentAPI"
 )
 
-const agentTimeout = time.Minute * 10
-
 type Adapter struct {
 	rawClient *agentAPI.Client
 }
@@ -25,7 +23,7 @@ type FSAdapter struct {
 }
 
 // TODO: возможно стоит вынести инициализацию HTTP клиента наружу
-func New(baseURL string, token string) (*Adapter, error) {
+func New(baseURL string, token string, agentTimeout time.Duration) (*Adapter, error) {
 	httpClient := http.Client{
 		Transport: agentOfflineRT{next: otelPropagationRT{next: http.DefaultTransport}},
 		Timeout:   agentTimeout,

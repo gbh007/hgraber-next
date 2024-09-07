@@ -26,10 +26,12 @@ func ConfigDefault() Config {
 
 type Parsing struct {
 	ParseBookTimeout time.Duration `yaml:"parse_book_timeout" envconfig:"PARSE_BOOK_TIMEOUT"`
+	AgentTimeout     time.Duration `yaml:"agent_timeout" envconfig:"AGENT_TIMEOUT"`
 }
 
 func ParsingDefault() Parsing {
 	return Parsing{
 		ParseBookTimeout: time.Minute * 5,
+		AgentTimeout:     time.Minute * 10,
 	}
 }

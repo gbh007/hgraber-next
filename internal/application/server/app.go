@@ -88,7 +88,7 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	agentSystem, err := agent.New(agents)
+	agentSystem, err := agent.New(agents, cfg.Parsing.AgentTimeout)
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail init agent system",

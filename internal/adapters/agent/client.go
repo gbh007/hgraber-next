@@ -3,6 +3,7 @@ package agent
 import (
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -11,14 +12,16 @@ import (
 )
 
 type Client struct {
-	agents     map[uuid.UUID]*adapter.Adapter
-	agentMutex *sync.RWMutex
+	agents       map[uuid.UUID]*adapter.Adapter
+	agentMutex   *sync.RWMutex
+	agentTimeout time.Duration
 }
 
-func New(agents []entities.Agent) (*Client, error) {
+func New(agents []entities.Agent, agentTimeout time.Duration) (*Client, error) {
 	client := &Client{
-		agents:     make(map[uuid.UUID]*adapter.Adapter, len(agents)),
-		agentMutex: &sync.RWMutex{},
+		agents:       make(map[uuid.UUID]*adapter.Adapter, len(agents)),
+		agentMutex:   &sync.RWMutex{},
+		agentTimeout: agentTimeout,
 	}
 
 	for _, agent := range agents {
@@ -35,7 +38,7 @@ func (c *Client) SetAgent(agent entities.Agent) error {
 	c.agentMutex.Lock()
 	defer c.agentMutex.Unlock()
 
-	a, err := adapter.New(agent.Addr.String(), agent.Token)
+	a, err := adapter.New(agent.Addr.String(), agent.Token, c.agentTimeout)
 	if err != nil {
 		return err
 	}

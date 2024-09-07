@@ -4,6 +4,7 @@ application:
   service_name: hgraber-next-local-test
 parsing:
   parse_book_timeout: 5m
+  agent_timeout: 10m
 workers:
   page:
     count: 1
