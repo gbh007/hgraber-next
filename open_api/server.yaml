@@ -278,6 +278,9 @@ paths:
                     description: Список книг
                     items:
                       $ref: "#/components/schemas/BookShortInfo"
+                  count:
+                    type: integer
+                    description: Общее количество книг по фильтру
                   pages:
                     type: array
                     description: Форматированный список страниц
@@ -297,6 +300,8 @@ paths:
                         - value
                         - is_current
                         - is_separator
+                required:
+                  - count
         400:
           description: Некорректный запрос данных
           content:

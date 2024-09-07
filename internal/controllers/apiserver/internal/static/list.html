@@ -118,7 +118,7 @@
       </div>
       <template v-else>
         <details class="filter">
-          <summary>Фильтр</summary>
+          <summary>Фильтр, всего {{appState.bookCount}}</summary>
           <div>
             Показывать удаленные:
             <select class="app" v-model="appState.showDeleted">

@@ -721,6 +721,8 @@ func (*APIBookListPostInternalServerError) aPIBookListPostRes() {}
 type APIBookListPostOK struct {
 	// Список книг.
 	Books []BookShortInfo `json:"books"`
+	// Общее количество книг по фильтру.
+	Count int `json:"count"`
 	// Форматированный список страниц.
 	Pages []APIBookListPostOKPagesItem `json:"pages"`
 }
@@ -728,6 +730,11 @@ type APIBookListPostOK struct {
 // GetBooks returns the value of Books.
 func (s *APIBookListPostOK) GetBooks() []BookShortInfo {
 	return s.Books
+}
+
+// GetCount returns the value of Count.
+func (s *APIBookListPostOK) GetCount() int {
+	return s.Count
 }
 
 // GetPages returns the value of Pages.
@@ -738,6 +745,11 @@ func (s *APIBookListPostOK) GetPages() []APIBookListPostOKPagesItem {
 // SetBooks sets the value of Books.
 func (s *APIBookListPostOK) SetBooks(val []BookShortInfo) {
 	s.Books = val
+}
+
+// SetCount sets the value of Count.
+func (s *APIBookListPostOK) SetCount(val int) {
+	s.Count = val
 }
 
 // SetPages sets the value of Pages.

@@ -9,6 +9,7 @@ const app = Vue.createApp({
 
     const appState = Vue.reactive({
       books: [],
+      bookCount: 0,
       booksError: "",
       pages: [],
       showDeleted: "except",
@@ -53,6 +54,7 @@ const app = Vue.createApp({
           let data = response.data;
           appState.books = data.books;
           appState.pages = data.pages;
+          appState.bookCount = data.count || 0;
           appState.booksError = "";
         })
         .catch(function (error) {

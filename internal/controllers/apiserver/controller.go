@@ -33,7 +33,7 @@ type webAPIUseCases interface {
 
 	Book(ctx context.Context, bookID uuid.UUID) (entities.BookToWeb, error)
 	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
-	BookList(ctx context.Context, filter entities.BookFilter) ([]entities.BookToWeb, []int, error)
+	BookList(ctx context.Context, filter entities.BookFilter) (entities.BookListToWeb, error)
 
 	VerifyBook(ctx context.Context, bookID uuid.UUID) error
 	DeleteBook(ctx context.Context, bookID uuid.UUID) error
