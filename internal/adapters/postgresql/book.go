@@ -41,6 +41,8 @@ func (d *Database) NewBook(ctx context.Context, book entities.Book) error {
 		return fmt.Errorf("storage: exec query: %w", err)
 	}
 
+	d.cacheBookCount.Store(0)
+
 	return nil
 }
 
@@ -142,6 +144,8 @@ func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {
 	if !d.isApply(ctx, res) {
 		return entities.BookNotFoundError
 	}
+
+	d.cacheBookCount.Store(0)
 
 	return nil
 }

@@ -18,6 +18,8 @@ type Database struct {
 
 	logger *slog.Logger
 
+	cacheBookCount    atomic.Int64
+	cachePageCount    atomic.Int64
 	cachePageFileSize atomic.Int64
 	cacheFileSize     atomic.Int64
 }

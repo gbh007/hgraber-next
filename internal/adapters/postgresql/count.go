@@ -11,11 +11,18 @@ import (
 func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, error) {
 	systemSize := entities.SystemSizeInfo{}
 
-	// TODO: удалить старую версию если не будет проблем
-	// err := d.db.GetContext(ctx, &systemSize.BookCount, `SELECT COUNT(*) FROM books;`)
-	err := d.db.GetContext(ctx, &systemSize.BookCount, `SELECT reltuples FROM pg_class WHERE relname = 'books';`)
-	if err != nil {
-		return entities.SystemSizeInfo{}, fmt.Errorf("get book count : %w", err)
+	var err error
+
+	systemSize.BookCount = int(d.cacheBookCount.Load())
+
+	// Оптимизация запросов в БД
+	if systemSize.BookCount == 0 {
+		err = d.db.GetContext(ctx, &systemSize.BookCount, `SELECT COUNT(*) FROM books;`)
+		if err != nil {
+			return entities.SystemSizeInfo{}, fmt.Errorf("get book count : %w", err)
+		}
+
+		d.cacheBookCount.Store(int64(systemSize.BookCount))
 	}
 
 	err = d.db.GetContext(ctx, &systemSize.BookUnparsedCount, `SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE;`)
@@ -23,11 +30,16 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return entities.SystemSizeInfo{}, fmt.Errorf("get book unparsed count: %w", err)
 	}
 
-	// TODO: удалить старую версию если не будет проблем
-	// err = d.db.GetContext(ctx, &systemSize.PageCount, `SELECT COUNT(*) FROM pages;`)
-	err = d.db.GetContext(ctx, &systemSize.PageCount, `SELECT reltuples FROM pg_class WHERE relname = 'pages';`)
-	if err != nil {
-		return entities.SystemSizeInfo{}, fmt.Errorf("get page count: %w", err)
+	systemSize.PageCount = int(d.cachePageCount.Load())
+
+	// Оптимизация запросов в БД
+	if systemSize.PageCount == 0 {
+		err = d.db.GetContext(ctx, &systemSize.PageCount, `SELECT COUNT(*) FROM pages;`)
+		if err != nil {
+			return entities.SystemSizeInfo{}, fmt.Errorf("get page count: %w", err)
+		}
+
+		d.cachePageCount.Store(int64(systemSize.PageCount))
 	}
 
 	err = d.db.GetContext(ctx, &systemSize.PageUnloadedCount, `SELECT COUNT(*) FROM pages WHERE downloaded = FALSE;`)
