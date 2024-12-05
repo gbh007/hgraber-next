@@ -344,8 +344,12 @@ paths:
       responses:
         200:
           description: Успешный ответ с данными
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
           content:
-            application/octet-stream:
+            application/*:
               schema:
                 type: string
                 format: binary

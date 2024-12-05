@@ -625,7 +625,44 @@ func (s APIBookArchiveIDGetOK) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*APIBookArchiveIDGetOK) aPIBookArchiveIDGetRes() {}
+// APIBookArchiveIDGetOKHeaders wraps APIBookArchiveIDGetOK with response headers.
+type APIBookArchiveIDGetOKHeaders struct {
+	ContentDisposition OptString
+	ContentType        string
+	Response           APIBookArchiveIDGetOK
+}
+
+// GetContentDisposition returns the value of ContentDisposition.
+func (s *APIBookArchiveIDGetOKHeaders) GetContentDisposition() OptString {
+	return s.ContentDisposition
+}
+
+// GetContentType returns the value of ContentType.
+func (s *APIBookArchiveIDGetOKHeaders) GetContentType() string {
+	return s.ContentType
+}
+
+// GetResponse returns the value of Response.
+func (s *APIBookArchiveIDGetOKHeaders) GetResponse() APIBookArchiveIDGetOK {
+	return s.Response
+}
+
+// SetContentDisposition sets the value of ContentDisposition.
+func (s *APIBookArchiveIDGetOKHeaders) SetContentDisposition(val OptString) {
+	s.ContentDisposition = val
+}
+
+// SetContentType sets the value of ContentType.
+func (s *APIBookArchiveIDGetOKHeaders) SetContentType(val string) {
+	s.ContentType = val
+}
+
+// SetResponse sets the value of Response.
+func (s *APIBookArchiveIDGetOKHeaders) SetResponse(val APIBookArchiveIDGetOK) {
+	s.Response = val
+}
+
+func (*APIBookArchiveIDGetOKHeaders) aPIBookArchiveIDGetRes() {}
 
 type APIBookArchiveIDGetUnauthorized ErrorResponse
 

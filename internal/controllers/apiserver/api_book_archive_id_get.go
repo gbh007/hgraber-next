@@ -9,7 +9,7 @@ import (
 )
 
 func (c *Controller) APIBookArchiveIDGet(ctx context.Context, params serverAPI.APIBookArchiveIDGetParams) (serverAPI.APIBookArchiveIDGetRes, error) {
-	body, err := c.exportUseCases.ExportBook(ctx, params.ID)
+	body, book, err := c.exportUseCases.ExportBook(ctx, params.ID)
 	if errors.Is(err, entities.BookNotFoundError) {
 		return &serverAPI.APIBookArchiveIDGetNotFound{
 			InnerCode: ExportUseCaseCode,
@@ -24,7 +24,11 @@ func (c *Controller) APIBookArchiveIDGet(ctx context.Context, params serverAPI.A
 		}, nil
 	}
 
-	return &serverAPI.APIBookArchiveIDGetOK{
-		Data: body,
+	return &serverAPI.APIBookArchiveIDGetOKHeaders{
+		ContentDisposition: serverAPI.NewOptString("attachment; filename=\"" + book.Filename() + "\""),
+		ContentType:        "application/zip",
+		Response: serverAPI.APIBookArchiveIDGetOK{
+			Data: body,
+		},
 	}, nil
 }

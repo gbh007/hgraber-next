@@ -699,7 +699,7 @@ func decodeAPIBookArchiveIDGetResponse(resp *http.Response) (res APIBookArchiveI
 			return res, errors.Wrap(err, "parse media type")
 		}
 		switch {
-		case ct == "application/octet-stream":
+		case ht.MatchContentType("application/*", ct):
 			reader := resp.Body
 			b, err := io.ReadAll(reader)
 			if err != nil {
@@ -707,7 +707,79 @@ func decodeAPIBookArchiveIDGetResponse(resp *http.Response) (res APIBookArchiveI
 			}
 
 			response := APIBookArchiveIDGetOK{Data: bytes.NewReader(b)}
-			return &response, nil
+			var wrapper APIBookArchiveIDGetOKHeaders
+			wrapper.Response = response
+			h := uri.NewHeaderDecoder(resp.Header)
+			// Parse "Content-Disposition" header.
+			{
+				cfg := uri.HeaderParameterDecodingConfig{
+					Name:    "Content-Disposition",
+					Explode: false,
+				}
+				if err := func() error {
+					if err := h.HasParam(cfg); err == nil {
+						if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+							var wrapperDotContentDispositionVal string
+							if err := func() error {
+								val, err := d.DecodeValue()
+								if err != nil {
+									return err
+								}
+
+								c, err := conv.ToString(val)
+								if err != nil {
+									return err
+								}
+
+								wrapperDotContentDispositionVal = c
+								return nil
+							}(); err != nil {
+								return err
+							}
+							wrapper.ContentDisposition.SetTo(wrapperDotContentDispositionVal)
+							return nil
+						}); err != nil {
+							return err
+						}
+					}
+					return nil
+				}(); err != nil {
+					return res, errors.Wrap(err, "parse Content-Disposition header")
+				}
+			}
+			// Parse "Content-Type" header.
+			{
+				cfg := uri.HeaderParameterDecodingConfig{
+					Name:    "Content-Type",
+					Explode: false,
+				}
+				if err := func() error {
+					if err := h.HasParam(cfg); err == nil {
+						if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+							val, err := d.DecodeValue()
+							if err != nil {
+								return err
+							}
+
+							c, err := conv.ToString(val)
+							if err != nil {
+								return err
+							}
+
+							wrapper.ContentType = c
+							return nil
+						}); err != nil {
+							return err
+						}
+					} else {
+						return validate.ErrFieldRequired
+					}
+					return nil
+				}(); err != nil {
+					return res, errors.Wrap(err, "parse Content-Type header")
+				}
+			}
+			return &wrapper, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}

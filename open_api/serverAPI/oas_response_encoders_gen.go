@@ -297,13 +297,43 @@ func encodeAPIAgentTaskExportPostResponse(response APIAgentTaskExportPostRes, w 
 
 func encodeAPIBookArchiveIDGetResponse(response APIBookArchiveIDGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *APIBookArchiveIDGetOK:
-		w.Header().Set("Content-Type", "application/octet-stream")
+	case *APIBookArchiveIDGetOKHeaders:
+		// Encoding response headers.
+		{
+			h := uri.NewHeaderEncoder(w.Header())
+			// Encode "Content-Disposition" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Content-Disposition",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.ContentDisposition.Get(); ok {
+						return e.EncodeValue(conv.StringToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Content-Disposition header")
+				}
+			}
+			// Encode "Content-Type" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Content-Type",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					return e.EncodeValue(conv.StringToString(response.ContentType))
+				}); err != nil {
+					return errors.Wrap(err, "encode Content-Type header")
+				}
+			}
+		}
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
 
 		writer := w
-		if _, err := io.Copy(writer, response); err != nil {
+		if _, err := io.Copy(writer, response.Response); err != nil {
 			return errors.Wrap(err, "write")
 		}
 

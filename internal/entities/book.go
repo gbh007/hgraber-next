@@ -72,6 +72,10 @@ func (b BookFull) ToAgentBookDetails() AgentBookDetails {
 	}
 }
 
+func (b BookFull) Filename() string {
+	return b.Book.ID.String() + " " + EscapeBookFileName(b.Book.Name) + ".zip"
+}
+
 type BookWithAgent struct {
 	Book
 	AgentID uuid.UUID

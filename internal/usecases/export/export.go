@@ -77,13 +77,18 @@ func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWith
 	return nil
 }
 
-func (uc *UseCase) ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, error) {
+func (uc *UseCase) ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, entities.BookFull, error) {
 	book, err := uc.bookRequester.BookOriginFull(ctx, bookID)
 	if err != nil {
-		return nil, fmt.Errorf("get book: %w", err)
+		return nil, entities.BookFull{}, fmt.Errorf("get book: %w", err)
 	}
 
-	return uc.newArchive(ctx, book)
+	body, err := uc.newArchive(ctx, book)
+	if err != nil {
+		return nil, entities.BookFull{}, fmt.Errorf("archive book: %w", err)
+	}
+
+	return body, book, nil
 }
 
 func (uc *UseCase) newArchive(ctx context.Context, book entities.BookFull) (io.Reader, error) {
