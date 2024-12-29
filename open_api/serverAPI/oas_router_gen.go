@@ -812,7 +812,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIAgentDeletePost"
+							r.name = APIAgentDeletePostOperation
 							r.summary = "Удаление агента"
 							r.operationID = ""
 							r.pathPattern = "/api/agent/delete"
@@ -837,7 +837,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIAgentListPost"
+							r.name = APIAgentListPostOperation
 							r.summary = "Список агентов"
 							r.operationID = ""
 							r.pathPattern = "/api/agent/list"
@@ -862,7 +862,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIAgentNewPost"
+							r.name = APIAgentNewPostOperation
 							r.summary = "Создание нового агента"
 							r.operationID = ""
 							r.pathPattern = "/api/agent/new"
@@ -887,7 +887,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIAgentTaskExportPost"
+							r.name = APIAgentTaskExportPostOperation
 							r.summary = "Экспорт книг в другую систему"
 							r.operationID = ""
 							r.pathPattern = "/api/agent/task/export"
@@ -932,7 +932,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = "APIBookArchiveIDGet"
+							r.name = APIBookArchiveIDGetOperation
 							r.summary = "Получение архива с книгой"
 							r.operationID = ""
 							r.pathPattern = "/api/book/archive/{id}"
@@ -969,7 +969,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APIBookDeletePost"
+								r.name = APIBookDeletePostOperation
 								r.summary = "Удаление книги"
 								r.operationID = ""
 								r.pathPattern = "/api/book/delete"
@@ -994,7 +994,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APIBookDetailsPost"
+								r.name = APIBookDetailsPostOperation
 								r.summary = "Информация о книге"
 								r.operationID = ""
 								r.pathPattern = "/api/book/details"
@@ -1022,7 +1022,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIBookListPost"
+							r.name = APIBookListPostOperation
 							r.summary = "Список книг"
 							r.operationID = ""
 							r.pathPattern = "/api/book/list"
@@ -1047,7 +1047,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIBookRawPost"
+							r.name = APIBookRawPostOperation
 							r.summary = "Информация о книге"
 							r.operationID = ""
 							r.pathPattern = "/api/book/raw"
@@ -1072,7 +1072,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIBookVerifyPost"
+							r.name = APIBookVerifyPostOperation
 							r.summary = "Подтверждение (модерация) книги"
 							r.operationID = ""
 							r.pathPattern = "/api/book/verify"
@@ -1105,7 +1105,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "GET":
-						r.name = "APIFileIDGet"
+						r.name = APIFileIDGetOperation
 						r.summary = "Получение тела файла"
 						r.operationID = ""
 						r.pathPattern = "/api/file/{id}"
@@ -1142,7 +1142,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIPageBodyPost"
+							r.name = APIPageBodyPostOperation
 							r.summary = "Получение тела страницы"
 							r.operationID = ""
 							r.pathPattern = "/api/page/body"
@@ -1179,7 +1179,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APIParsingBookExistsPost"
+								r.name = APIParsingBookExistsPostOperation
 								r.summary = "Проверка наличия ссылок на книги"
 								r.operationID = ""
 								r.pathPattern = "/api/parsing/book/exists"
@@ -1204,7 +1204,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APIParsingPageExistsPost"
+								r.name = APIParsingPageExistsPostOperation
 								r.summary = "Проверка наличия ссылок для страниц"
 								r.operationID = ""
 								r.pathPattern = "/api/parsing/page/exists"
@@ -1247,7 +1247,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APISystemDeduplicateArchivePost"
+							r.name = APISystemDeduplicateArchivePostOperation
 							r.summary = "Проверка наличия данных в системе из архива"
 							r.operationID = ""
 							r.pathPattern = "/api/system/deduplicate/archive"
@@ -1272,7 +1272,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APISystemHandlePost"
+							r.name = APISystemHandlePostOperation
 							r.summary = "Обработка ссылок на новые книги"
 							r.operationID = ""
 							r.pathPattern = "/api/system/handle"
@@ -1309,7 +1309,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APISystemImportArchivePost"
+								r.name = APISystemImportArchivePostOperation
 								r.summary = "Импорт новой книги"
 								r.operationID = ""
 								r.pathPattern = "/api/system/import/archive"
@@ -1334,7 +1334,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "GET":
-								r.name = "APISystemInfoGet"
+								r.name = APISystemInfoGetOperation
 								r.summary = "Текущее состояние системы"
 								r.operationID = ""
 								r.pathPattern = "/api/system/info"
@@ -1374,7 +1374,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APISystemRPCDeduplicateFilesPost"
+								r.name = APISystemRPCDeduplicateFilesPostOperation
 								r.summary = "Дедупликация файлов"
 								r.operationID = ""
 								r.pathPattern = "/api/system/rpc/deduplicate/files"
@@ -1411,7 +1411,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "POST":
-									r.name = "APISystemRPCRemoveDetachedFilesPost"
+									r.name = APISystemRPCRemoveDetachedFilesPostOperation
 									r.summary = "Удаление несвязанных файлов"
 									r.operationID = ""
 									r.pathPattern = "/api/system/rpc/remove/detached-files"
@@ -1436,7 +1436,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "POST":
-									r.name = "APISystemRPCRemoveMismatchFilesPost"
+									r.name = APISystemRPCRemoveMismatchFilesPostOperation
 									r.summary = "Удаление рассинхронизированных файлов"
 									r.operationID = ""
 									r.pathPattern = "/api/system/rpc/remove/mismatch-files"
@@ -1467,7 +1467,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APISystemWorkerConfigPost"
+							r.name = APISystemWorkerConfigPostOperation
 							r.summary = "Динамическая конфигурация раннеров (воркеров)"
 							r.operationID = ""
 							r.pathPattern = "/api/system/worker/config"
@@ -1495,7 +1495,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "POST":
-						r.name = "APIUserLoginPost"
+						r.name = APIUserLoginPostOperation
 						r.summary = "Проставление токена в куки"
 						r.operationID = ""
 						r.pathPattern = "/api/user/login"

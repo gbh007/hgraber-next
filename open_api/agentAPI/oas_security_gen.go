@@ -16,7 +16,7 @@ import (
 type SecurityHandler interface {
 	// HandleHeaderAuth handles headerAuth security.
 	// Авторизация через заголовок.
-	HandleHeaderAuth(ctx context.Context, operationName string, t HeaderAuth) (context.Context, error)
+	HandleHeaderAuth(ctx context.Context, operationName OperationName, t HeaderAuth) (context.Context, error)
 }
 
 func findAuthorization(h http.Header, prefix string) (string, bool) {
@@ -34,7 +34,7 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 	return "", false
 }
 
-func (s *Server) securityHeaderAuth(ctx context.Context, operationName string, req *http.Request) (context.Context, bool, error) {
+func (s *Server) securityHeaderAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
 	var t HeaderAuth
 	const parameterName = "X-HG-Agent-Token"
 	value := req.Header.Get(parameterName)
@@ -55,10 +55,10 @@ func (s *Server) securityHeaderAuth(ctx context.Context, operationName string, r
 type SecuritySource interface {
 	// HeaderAuth provides headerAuth security value.
 	// Авторизация через заголовок.
-	HeaderAuth(ctx context.Context, operationName string) (HeaderAuth, error)
+	HeaderAuth(ctx context.Context, operationName OperationName) (HeaderAuth, error)
 }
 
-func (s *Client) securityHeaderAuth(ctx context.Context, operationName string, req *http.Request) error {
+func (s *Client) securityHeaderAuth(ctx context.Context, operationName OperationName, req *http.Request) error {
 	t, err := s.sec.HeaderAuth(ctx, operationName)
 	if err != nil {
 		return errors.Wrap(err, "security source \"HeaderAuth\"")
