@@ -139,6 +139,64 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 		builder = builder.Where(squirrel.ILike{"name": "%" + filter.Fields.Name + "%"})
 	}
 
+	for _, attrFilter := range filter.Fields.Attributes {
+		subBuilder := squirrel.Select("1").
+			PlaceholderFormat(squirrel.Question). // Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			From("book_attributes").
+			Where(squirrel.Eq{
+				"attr": attrFilter.Code,
+			}).
+			Where(squirrel.Expr(`book_id = books.id`))
+
+		switch attrFilter.Type {
+		case entities.BookFilterAttributeTypeLike:
+			if len(attrFilter.Values) == 0 {
+				continue
+			}
+
+			subBuilder = subBuilder.Where(squirrel.ILike{
+				"value": "%" + attrFilter.Values[0] + "%",
+			})
+
+		case entities.BookFilterAttributeTypeIn:
+			if len(attrFilter.Values) == 0 {
+				continue
+			}
+
+			subBuilder = subBuilder.Where(squirrel.Eq{
+				"value": attrFilter.Values,
+			})
+
+		case entities.BookFilterAttributeTypeCountEq:
+			subBuilder = subBuilder.Having(squirrel.Eq{
+				"COUNT(value)": attrFilter.Count,
+			}).
+				GroupBy("attr")
+
+		case entities.BookFilterAttributeTypeCountGt:
+			subBuilder = subBuilder.Having(squirrel.Gt{
+				"COUNT(value)": attrFilter.Count,
+			}).
+				GroupBy("attr")
+
+		case entities.BookFilterAttributeTypeCountLt:
+			subBuilder = subBuilder.Having(squirrel.Lt{
+				"COUNT(value)": attrFilter.Count,
+			}).
+				GroupBy("attr")
+
+		default:
+			continue
+		}
+
+		subQuery, subArgs, err := subBuilder.ToSql()
+		if err != nil {
+			return "", nil, fmt.Errorf("build attribute sub query: %w", err)
+		}
+
+		builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
+	}
+
 	query, args, err := builder.ToSql()
 	if err != nil {
 		return "", nil, fmt.Errorf("build query: %w", err)

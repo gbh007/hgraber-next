@@ -8815,10 +8815,21 @@ func (s *BookFilterFilter) encodeFields(e *jx.Encoder) {
 			s.Name.Encode(e)
 		}
 	}
+	{
+		if s.Attributes != nil {
+			e.FieldStart("attributes")
+			e.ArrStart()
+			for _, elem := range s.Attributes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
 }
 
-var jsonFieldsNameOfBookFilterFilter = [1]string{
+var jsonFieldsNameOfBookFilterFilter = [2]string{
 	0: "name",
+	1: "attributes",
 }
 
 // Decode decodes BookFilterFilter from json.
@@ -8838,6 +8849,23 @@ func (s *BookFilterFilter) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "attributes":
+			if err := func() error {
+				s.Attributes = make([]BookFilterFilterAttributesItem, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem BookFilterFilterAttributesItem
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Attributes = append(s.Attributes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"attributes\"")
 			}
 		default:
 			return d.Skip()
@@ -8859,6 +8887,210 @@ func (s *BookFilterFilter) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *BookFilterFilter) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *BookFilterFilterAttributesItem) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *BookFilterFilterAttributesItem) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("code")
+		e.Str(s.Code)
+	}
+	{
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+	{
+		if s.Values != nil {
+			e.FieldStart("values")
+			e.ArrStart()
+			for _, elem := range s.Values {
+				e.Str(elem)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.Count.Set {
+			e.FieldStart("count")
+			s.Count.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfBookFilterFilterAttributesItem = [4]string{
+	0: "code",
+	1: "type",
+	2: "values",
+	3: "count",
+}
+
+// Decode decodes BookFilterFilterAttributesItem from json.
+func (s *BookFilterFilterAttributesItem) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BookFilterFilterAttributesItem to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "code":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Code = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"code\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		case "values":
+			if err := func() error {
+				s.Values = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Values = append(s.Values, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"values\"")
+			}
+		case "count":
+			if err := func() error {
+				s.Count.Reset()
+				if err := s.Count.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"count\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode BookFilterFilterAttributesItem")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfBookFilterFilterAttributesItem) {
+					name = jsonFieldsNameOfBookFilterFilterAttributesItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *BookFilterFilterAttributesItem) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BookFilterFilterAttributesItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes BookFilterFilterAttributesItemType as json.
+func (s BookFilterFilterAttributesItemType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes BookFilterFilterAttributesItemType from json.
+func (s *BookFilterFilterAttributesItemType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BookFilterFilterAttributesItemType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch BookFilterFilterAttributesItemType(v) {
+	case BookFilterFilterAttributesItemTypeLike:
+		*s = BookFilterFilterAttributesItemTypeLike
+	case BookFilterFilterAttributesItemTypeIn:
+		*s = BookFilterFilterAttributesItemTypeIn
+	case BookFilterFilterAttributesItemTypeCountEq:
+		*s = BookFilterFilterAttributesItemTypeCountEq
+	case BookFilterFilterAttributesItemTypeCountGt:
+		*s = BookFilterFilterAttributesItemTypeCountGt
+	case BookFilterFilterAttributesItemTypeCountLt:
+		*s = BookFilterFilterAttributesItemTypeCountLt
+	default:
+		*s = BookFilterFilterAttributesItemType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s BookFilterFilterAttributesItemType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BookFilterFilterAttributesItemType) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

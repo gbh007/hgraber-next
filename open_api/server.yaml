@@ -1854,6 +1854,34 @@ components:
             name:
               type: string
               description: Фильтр по названию, без учета регистра
+            attributes:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: Код атрибута
+                  type:
+                    type: string
+                    description: Тип фильтра
+                    enum:
+                      - like
+                      - in
+                      - count_eq
+                      - count_gt
+                      - count_lt
+                  values:
+                    type: array
+                    description: Значения для фильтрации (для операции like берется только 1-е значение)
+                    items:
+                      type: string
+                  count:
+                    type: integer
+                    description: Количество значений атрибута у книги
+                required:
+                  - code
+                  - type
 
     ErrorResponse:
       type: object
