@@ -32,6 +32,13 @@ type Handler interface {
 	//
 	// POST /api/agent/task/export
 	APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error)
+	// APIAttributeCountGet implements GET /api/attribute/count operation.
+	//
+	// Получение информации о количестве вариантов
+	// атрибутов.
+	//
+	// GET /api/attribute/count
+	APIAttributeCountGet(ctx context.Context) (APIAttributeCountGetRes, error)
 	// APIBookArchiveIDGet implements GET /api/book/archive/{id} operation.
 	//
 	// Получение архива с книгой.

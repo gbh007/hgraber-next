@@ -595,6 +595,74 @@ type APIAgentTaskExportPostUnauthorized ErrorResponse
 
 func (*APIAgentTaskExportPostUnauthorized) aPIAgentTaskExportPostRes() {}
 
+type APIAttributeCountGetForbidden ErrorResponse
+
+func (*APIAttributeCountGetForbidden) aPIAttributeCountGetRes() {}
+
+type APIAttributeCountGetInternalServerError ErrorResponse
+
+func (*APIAttributeCountGetInternalServerError) aPIAttributeCountGetRes() {}
+
+type APIAttributeCountGetOK struct {
+	// Список аттрибутов.
+	Attributes []APIAttributeCountGetOKAttributesItem `json:"attributes"`
+}
+
+// GetAttributes returns the value of Attributes.
+func (s *APIAttributeCountGetOK) GetAttributes() []APIAttributeCountGetOKAttributesItem {
+	return s.Attributes
+}
+
+// SetAttributes sets the value of Attributes.
+func (s *APIAttributeCountGetOK) SetAttributes(val []APIAttributeCountGetOKAttributesItem) {
+	s.Attributes = val
+}
+
+func (*APIAttributeCountGetOK) aPIAttributeCountGetRes() {}
+
+type APIAttributeCountGetOKAttributesItem struct {
+	// Код аттрибута.
+	Code string `json:"code"`
+	// Значение аттрибута.
+	Value string `json:"value"`
+	// Количество книг с таким аттрибутом.
+	Count int `json:"count"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeCountGetOKAttributesItem) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeCountGetOKAttributesItem) GetValue() string {
+	return s.Value
+}
+
+// GetCount returns the value of Count.
+func (s *APIAttributeCountGetOKAttributesItem) GetCount() int {
+	return s.Count
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeCountGetOKAttributesItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeCountGetOKAttributesItem) SetValue(val string) {
+	s.Value = val
+}
+
+// SetCount sets the value of Count.
+func (s *APIAttributeCountGetOKAttributesItem) SetCount(val int) {
+	s.Count = val
+}
+
+type APIAttributeCountGetUnauthorized ErrorResponse
+
+func (*APIAttributeCountGetUnauthorized) aPIAttributeCountGetRes() {}
+
 type APIBookArchiveIDGetBadRequest ErrorResponse
 
 func (*APIBookArchiveIDGetBadRequest) aPIBookArchiveIDGetRes() {}

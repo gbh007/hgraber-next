@@ -10,6 +10,7 @@ const (
 	APIAgentListPostOperation                    OperationName = "APIAgentListPost"
 	APIAgentNewPostOperation                     OperationName = "APIAgentNewPost"
 	APIAgentTaskExportPostOperation              OperationName = "APIAgentTaskExportPost"
+	APIAttributeCountGetOperation                OperationName = "APIAttributeCountGet"
 	APIBookArchiveIDGetOperation                 OperationName = "APIBookArchiveIDGet"
 	APIBookDeletePostOperation                   OperationName = "APIBookDeletePost"
 	APIBookDetailsPostOperation                  OperationName = "APIBookDetailsPost"
