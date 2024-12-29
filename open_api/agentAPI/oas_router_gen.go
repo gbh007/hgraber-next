@@ -445,7 +445,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "GET":
-						r.name = "APICoreStatusGet"
+						r.name = APICoreStatusGetOperation
 						r.summary = "Получение данных о состоянии агента"
 						r.operationID = ""
 						r.pathPattern = "/api/core/status"
@@ -470,7 +470,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "POST":
-						r.name = "APIExportArchivePost"
+						r.name = APIExportArchivePostOperation
 						r.summary = "Загрузка архива"
 						r.operationID = ""
 						r.pathPattern = "/api/export/archive"
@@ -507,7 +507,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIFsCreatePost"
+							r.name = APIFsCreatePostOperation
 							r.summary = "Создание нового файла"
 							r.operationID = ""
 							r.pathPattern = "/api/fs/create"
@@ -532,7 +532,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIFsDeletePost"
+							r.name = APIFsDeletePostOperation
 							r.summary = "Удаление файла"
 							r.operationID = ""
 							r.pathPattern = "/api/fs/delete"
@@ -557,7 +557,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = "APIFsGetGet"
+							r.name = APIFsGetGetOperation
 							r.summary = "Получение файла"
 							r.operationID = ""
 							r.pathPattern = "/api/fs/get"
@@ -582,7 +582,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = "APIFsIdsGet"
+							r.name = APIFsIdsGetOperation
 							r.summary = "Получение ID всех хранимых файлов"
 							r.operationID = ""
 							r.pathPattern = "/api/fs/ids"
@@ -621,7 +621,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "POST":
-							r.name = "APIParsingBookPost"
+							r.name = APIParsingBookPostOperation
 							r.summary = "Обработка новой книги"
 							r.operationID = ""
 							r.pathPattern = "/api/parsing/book"
@@ -657,7 +657,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "POST":
-									r.name = "APIParsingBookCheckPost"
+									r.name = APIParsingBookCheckPostOperation
 									r.summary = "Предварительная проверка ссылок на новые книги"
 									r.operationID = ""
 									r.pathPattern = "/api/parsing/book/check"
@@ -682,7 +682,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "POST":
-									r.name = "APIParsingBookMultiPost"
+									r.name = APIParsingBookMultiPostOperation
 									r.summary = "Обработка ссылки с набором книг"
 									r.operationID = ""
 									r.pathPattern = "/api/parsing/book/multi"
@@ -712,7 +712,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "POST":
-							r.name = "APIParsingPagePost"
+							r.name = APIParsingPagePostOperation
 							r.summary = "Загрузка изображения страницы"
 							r.operationID = ""
 							r.pathPattern = "/api/parsing/page"
@@ -736,7 +736,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APIParsingPageCheckPost"
+								r.name = APIParsingPageCheckPostOperation
 								r.summary = "Предварительная проверка ссылок для загрузки страниц"
 								r.operationID = ""
 								r.pathPattern = "/api/parsing/page/check"

@@ -61,9 +61,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "agent/"
+			case 'a': // Prefix: "a"
 				origElem := elem
-				if l := len("agent/"); len(elem) >= l && elem[0:l] == "agent/" {
+				if l := len("a"); len(elem) >= l && elem[0:l] == "a" {
 					elem = elem[l:]
 				} else {
 					break
@@ -73,30 +73,108 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'd': // Prefix: "delete"
+				case 'g': // Prefix: "gent/"
 					origElem := elem
-					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+					if l := len("gent/"); len(elem) >= l && elem[0:l] == "gent/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIAgentDeletePostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
+						break
+					}
+					switch elem[0] {
+					case 'd': // Prefix: "delete"
+						origElem := elem
+						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIAgentDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'l': // Prefix: "list"
+						origElem := elem
+						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIAgentListPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'n': // Prefix: "new"
+						origElem := elem
+						if l := len("new"); len(elem) >= l && elem[0:l] == "new" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIAgentNewPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 't': // Prefix: "task/export"
+						origElem := elem
+						if l := len("task/export"); len(elem) >= l && elem[0:l] == "task/export" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIAgentTaskExportPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
-				case 'l': // Prefix: "list"
+				case 't': // Prefix: "ttribute/count"
 					origElem := elem
-					if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+					if l := len("ttribute/count"); len(elem) >= l && elem[0:l] == "ttribute/count" {
 						elem = elem[l:]
 					} else {
 						break
@@ -105,52 +183,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						// Leaf node.
 						switch r.Method {
-						case "POST":
-							s.handleAPIAgentListPostRequest([0]string{}, elemIsEscaped, w, r)
+						case "GET":
+							s.handleAPIAttributeCountGetRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				case 'n': // Prefix: "new"
-					origElem := elem
-					if l := len("new"); len(elem) >= l && elem[0:l] == "new" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIAgentNewPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				case 't': // Prefix: "task/export"
-					origElem := elem
-					if l := len("task/export"); len(elem) >= l && elem[0:l] == "task/export" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIAgentTaskExportPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, "GET")
 						}
 
 						return
@@ -788,9 +824,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "agent/"
+			case 'a': // Prefix: "a"
 				origElem := elem
-				if l := len("agent/"); len(elem) >= l && elem[0:l] == "agent/" {
+				if l := len("a"); len(elem) >= l && elem[0:l] == "a" {
 					elem = elem[l:]
 				} else {
 					break
@@ -800,34 +836,124 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'd': // Prefix: "delete"
+				case 'g': // Prefix: "gent/"
 					origElem := elem
-					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+					if l := len("gent/"); len(elem) >= l && elem[0:l] == "gent/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = "APIAgentDeletePost"
-							r.summary = "Удаление агента"
-							r.operationID = ""
-							r.pathPattern = "/api/agent/delete"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'd': // Prefix: "delete"
+						origElem := elem
+						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIAgentDeletePostOperation
+								r.summary = "Удаление агента"
+								r.operationID = ""
+								r.pathPattern = "/api/agent/delete"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'l': // Prefix: "list"
+						origElem := elem
+						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIAgentListPostOperation
+								r.summary = "Список агентов"
+								r.operationID = ""
+								r.pathPattern = "/api/agent/list"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'n': // Prefix: "new"
+						origElem := elem
+						if l := len("new"); len(elem) >= l && elem[0:l] == "new" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIAgentNewPostOperation
+								r.summary = "Создание нового агента"
+								r.operationID = ""
+								r.pathPattern = "/api/agent/new"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 't': // Prefix: "task/export"
+						origElem := elem
+						if l := len("task/export"); len(elem) >= l && elem[0:l] == "task/export" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIAgentTaskExportPostOperation
+								r.summary = "Экспорт книг в другую систему"
+								r.operationID = ""
+								r.pathPattern = "/api/agent/task/export"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
-				case 'l': // Prefix: "list"
+				case 't': // Prefix: "ttribute/count"
 					origElem := elem
-					if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+					if l := len("ttribute/count"); len(elem) >= l && elem[0:l] == "ttribute/count" {
 						elem = elem[l:]
 					} else {
 						break
@@ -836,61 +962,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						// Leaf node.
 						switch method {
-						case "POST":
-							r.name = "APIAgentListPost"
-							r.summary = "Список агентов"
+						case "GET":
+							r.name = APIAttributeCountGetOperation
+							r.summary = "Количество вариантов атрибутов"
 							r.operationID = ""
-							r.pathPattern = "/api/agent/list"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				case 'n': // Prefix: "new"
-					origElem := elem
-					if l := len("new"); len(elem) >= l && elem[0:l] == "new" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = "APIAgentNewPost"
-							r.summary = "Создание нового агента"
-							r.operationID = ""
-							r.pathPattern = "/api/agent/new"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				case 't': // Prefix: "task/export"
-					origElem := elem
-					if l := len("task/export"); len(elem) >= l && elem[0:l] == "task/export" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = "APIAgentTaskExportPost"
-							r.summary = "Экспорт книг в другую систему"
-							r.operationID = ""
-							r.pathPattern = "/api/agent/task/export"
+							r.pathPattern = "/api/attribute/count"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -932,7 +1008,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = "APIBookArchiveIDGet"
+							r.name = APIBookArchiveIDGetOperation
 							r.summary = "Получение архива с книгой"
 							r.operationID = ""
 							r.pathPattern = "/api/book/archive/{id}"
@@ -969,7 +1045,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APIBookDeletePost"
+								r.name = APIBookDeletePostOperation
 								r.summary = "Удаление книги"
 								r.operationID = ""
 								r.pathPattern = "/api/book/delete"
@@ -994,7 +1070,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APIBookDetailsPost"
+								r.name = APIBookDetailsPostOperation
 								r.summary = "Информация о книге"
 								r.operationID = ""
 								r.pathPattern = "/api/book/details"
@@ -1022,7 +1098,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIBookListPost"
+							r.name = APIBookListPostOperation
 							r.summary = "Список книг"
 							r.operationID = ""
 							r.pathPattern = "/api/book/list"
@@ -1047,7 +1123,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIBookRawPost"
+							r.name = APIBookRawPostOperation
 							r.summary = "Информация о книге"
 							r.operationID = ""
 							r.pathPattern = "/api/book/raw"
@@ -1072,7 +1148,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIBookVerifyPost"
+							r.name = APIBookVerifyPostOperation
 							r.summary = "Подтверждение (модерация) книги"
 							r.operationID = ""
 							r.pathPattern = "/api/book/verify"
@@ -1105,7 +1181,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "GET":
-						r.name = "APIFileIDGet"
+						r.name = APIFileIDGetOperation
 						r.summary = "Получение тела файла"
 						r.operationID = ""
 						r.pathPattern = "/api/file/{id}"
@@ -1142,7 +1218,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APIPageBodyPost"
+							r.name = APIPageBodyPostOperation
 							r.summary = "Получение тела страницы"
 							r.operationID = ""
 							r.pathPattern = "/api/page/body"
@@ -1179,7 +1255,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APIParsingBookExistsPost"
+								r.name = APIParsingBookExistsPostOperation
 								r.summary = "Проверка наличия ссылок на книги"
 								r.operationID = ""
 								r.pathPattern = "/api/parsing/book/exists"
@@ -1204,7 +1280,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APIParsingPageExistsPost"
+								r.name = APIParsingPageExistsPostOperation
 								r.summary = "Проверка наличия ссылок для страниц"
 								r.operationID = ""
 								r.pathPattern = "/api/parsing/page/exists"
@@ -1247,7 +1323,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APISystemDeduplicateArchivePost"
+							r.name = APISystemDeduplicateArchivePostOperation
 							r.summary = "Проверка наличия данных в системе из архива"
 							r.operationID = ""
 							r.pathPattern = "/api/system/deduplicate/archive"
@@ -1272,7 +1348,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APISystemHandlePost"
+							r.name = APISystemHandlePostOperation
 							r.summary = "Обработка ссылок на новые книги"
 							r.operationID = ""
 							r.pathPattern = "/api/system/handle"
@@ -1309,7 +1385,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APISystemImportArchivePost"
+								r.name = APISystemImportArchivePostOperation
 								r.summary = "Импорт новой книги"
 								r.operationID = ""
 								r.pathPattern = "/api/system/import/archive"
@@ -1334,7 +1410,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "GET":
-								r.name = "APISystemInfoGet"
+								r.name = APISystemInfoGetOperation
 								r.summary = "Текущее состояние системы"
 								r.operationID = ""
 								r.pathPattern = "/api/system/info"
@@ -1374,7 +1450,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = "APISystemRPCDeduplicateFilesPost"
+								r.name = APISystemRPCDeduplicateFilesPostOperation
 								r.summary = "Дедупликация файлов"
 								r.operationID = ""
 								r.pathPattern = "/api/system/rpc/deduplicate/files"
@@ -1411,7 +1487,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "POST":
-									r.name = "APISystemRPCRemoveDetachedFilesPost"
+									r.name = APISystemRPCRemoveDetachedFilesPostOperation
 									r.summary = "Удаление несвязанных файлов"
 									r.operationID = ""
 									r.pathPattern = "/api/system/rpc/remove/detached-files"
@@ -1436,7 +1512,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "POST":
-									r.name = "APISystemRPCRemoveMismatchFilesPost"
+									r.name = APISystemRPCRemoveMismatchFilesPostOperation
 									r.summary = "Удаление рассинхронизированных файлов"
 									r.operationID = ""
 									r.pathPattern = "/api/system/rpc/remove/mismatch-files"
@@ -1467,7 +1543,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = "APISystemWorkerConfigPost"
+							r.name = APISystemWorkerConfigPostOperation
 							r.summary = "Динамическая конфигурация раннеров (воркеров)"
 							r.operationID = ""
 							r.pathPattern = "/api/system/worker/config"
@@ -1495,7 +1571,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "POST":
-						r.name = "APIUserLoginPost"
+						r.name = APIUserLoginPostOperation
 						r.summary = "Проставление токена в куки"
 						r.operationID = ""
 						r.pathPattern = "/api/user/login"

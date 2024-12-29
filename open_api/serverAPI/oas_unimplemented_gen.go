@@ -49,6 +49,16 @@ func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req *API
 	return r, ht.ErrNotImplemented
 }
 
+// APIAttributeCountGet implements GET /api/attribute/count operation.
+//
+// Получение информации о количестве вариантов
+// атрибутов.
+//
+// GET /api/attribute/count
+func (UnimplementedHandler) APIAttributeCountGet(ctx context.Context) (r APIAttributeCountGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIBookArchiveIDGet implements GET /api/book/archive/{id} operation.
 //
 // Получение архива с книгой.

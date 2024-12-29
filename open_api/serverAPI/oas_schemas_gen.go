@@ -595,6 +595,74 @@ type APIAgentTaskExportPostUnauthorized ErrorResponse
 
 func (*APIAgentTaskExportPostUnauthorized) aPIAgentTaskExportPostRes() {}
 
+type APIAttributeCountGetForbidden ErrorResponse
+
+func (*APIAttributeCountGetForbidden) aPIAttributeCountGetRes() {}
+
+type APIAttributeCountGetInternalServerError ErrorResponse
+
+func (*APIAttributeCountGetInternalServerError) aPIAttributeCountGetRes() {}
+
+type APIAttributeCountGetOK struct {
+	// Список аттрибутов.
+	Attributes []APIAttributeCountGetOKAttributesItem `json:"attributes"`
+}
+
+// GetAttributes returns the value of Attributes.
+func (s *APIAttributeCountGetOK) GetAttributes() []APIAttributeCountGetOKAttributesItem {
+	return s.Attributes
+}
+
+// SetAttributes sets the value of Attributes.
+func (s *APIAttributeCountGetOK) SetAttributes(val []APIAttributeCountGetOKAttributesItem) {
+	s.Attributes = val
+}
+
+func (*APIAttributeCountGetOK) aPIAttributeCountGetRes() {}
+
+type APIAttributeCountGetOKAttributesItem struct {
+	// Код аттрибута.
+	Code string `json:"code"`
+	// Значение аттрибута.
+	Value string `json:"value"`
+	// Количество книг с таким аттрибутом.
+	Count int `json:"count"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeCountGetOKAttributesItem) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeCountGetOKAttributesItem) GetValue() string {
+	return s.Value
+}
+
+// GetCount returns the value of Count.
+func (s *APIAttributeCountGetOKAttributesItem) GetCount() int {
+	return s.Count
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeCountGetOKAttributesItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeCountGetOKAttributesItem) SetValue(val string) {
+	s.Value = val
+}
+
+// SetCount sets the value of Count.
+func (s *APIAttributeCountGetOKAttributesItem) SetCount(val int) {
+	s.Count = val
+}
+
+type APIAttributeCountGetUnauthorized ErrorResponse
+
+func (*APIAttributeCountGetUnauthorized) aPIAttributeCountGetRes() {}
+
 type APIBookArchiveIDGetBadRequest ErrorResponse
 
 func (*APIBookArchiveIDGetBadRequest) aPIBookArchiveIDGetRes() {}
@@ -2384,7 +2452,8 @@ func (s *BookFilterDownloadStatus) UnmarshalText(data []byte) error {
 // Фильтр по полям.
 type BookFilterFilter struct {
 	// Фильтр по названию, без учета регистра.
-	Name OptString `json:"name"`
+	Name       OptString                        `json:"name"`
+	Attributes []BookFilterFilterAttributesItem `json:"attributes"`
 }
 
 // GetName returns the value of Name.
@@ -2392,9 +2461,134 @@ func (s *BookFilterFilter) GetName() OptString {
 	return s.Name
 }
 
+// GetAttributes returns the value of Attributes.
+func (s *BookFilterFilter) GetAttributes() []BookFilterFilterAttributesItem {
+	return s.Attributes
+}
+
 // SetName sets the value of Name.
 func (s *BookFilterFilter) SetName(val OptString) {
 	s.Name = val
+}
+
+// SetAttributes sets the value of Attributes.
+func (s *BookFilterFilter) SetAttributes(val []BookFilterFilterAttributesItem) {
+	s.Attributes = val
+}
+
+type BookFilterFilterAttributesItem struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Тип фильтра.
+	Type BookFilterFilterAttributesItemType `json:"type"`
+	// Значения для фильтрации (для операции like берется
+	// только 1-е значение).
+	Values []string `json:"values"`
+	// Количество значений атрибута у книги.
+	Count OptInt `json:"count"`
+}
+
+// GetCode returns the value of Code.
+func (s *BookFilterFilterAttributesItem) GetCode() string {
+	return s.Code
+}
+
+// GetType returns the value of Type.
+func (s *BookFilterFilterAttributesItem) GetType() BookFilterFilterAttributesItemType {
+	return s.Type
+}
+
+// GetValues returns the value of Values.
+func (s *BookFilterFilterAttributesItem) GetValues() []string {
+	return s.Values
+}
+
+// GetCount returns the value of Count.
+func (s *BookFilterFilterAttributesItem) GetCount() OptInt {
+	return s.Count
+}
+
+// SetCode sets the value of Code.
+func (s *BookFilterFilterAttributesItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetType sets the value of Type.
+func (s *BookFilterFilterAttributesItem) SetType(val BookFilterFilterAttributesItemType) {
+	s.Type = val
+}
+
+// SetValues sets the value of Values.
+func (s *BookFilterFilterAttributesItem) SetValues(val []string) {
+	s.Values = val
+}
+
+// SetCount sets the value of Count.
+func (s *BookFilterFilterAttributesItem) SetCount(val OptInt) {
+	s.Count = val
+}
+
+// Тип фильтра.
+type BookFilterFilterAttributesItemType string
+
+const (
+	BookFilterFilterAttributesItemTypeLike    BookFilterFilterAttributesItemType = "like"
+	BookFilterFilterAttributesItemTypeIn      BookFilterFilterAttributesItemType = "in"
+	BookFilterFilterAttributesItemTypeCountEq BookFilterFilterAttributesItemType = "count_eq"
+	BookFilterFilterAttributesItemTypeCountGt BookFilterFilterAttributesItemType = "count_gt"
+	BookFilterFilterAttributesItemTypeCountLt BookFilterFilterAttributesItemType = "count_lt"
+)
+
+// AllValues returns all BookFilterFilterAttributesItemType values.
+func (BookFilterFilterAttributesItemType) AllValues() []BookFilterFilterAttributesItemType {
+	return []BookFilterFilterAttributesItemType{
+		BookFilterFilterAttributesItemTypeLike,
+		BookFilterFilterAttributesItemTypeIn,
+		BookFilterFilterAttributesItemTypeCountEq,
+		BookFilterFilterAttributesItemTypeCountGt,
+		BookFilterFilterAttributesItemTypeCountLt,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s BookFilterFilterAttributesItemType) MarshalText() ([]byte, error) {
+	switch s {
+	case BookFilterFilterAttributesItemTypeLike:
+		return []byte(s), nil
+	case BookFilterFilterAttributesItemTypeIn:
+		return []byte(s), nil
+	case BookFilterFilterAttributesItemTypeCountEq:
+		return []byte(s), nil
+	case BookFilterFilterAttributesItemTypeCountGt:
+		return []byte(s), nil
+	case BookFilterFilterAttributesItemTypeCountLt:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *BookFilterFilterAttributesItemType) UnmarshalText(data []byte) error {
+	switch BookFilterFilterAttributesItemType(data) {
+	case BookFilterFilterAttributesItemTypeLike:
+		*s = BookFilterFilterAttributesItemTypeLike
+		return nil
+	case BookFilterFilterAttributesItemTypeIn:
+		*s = BookFilterFilterAttributesItemTypeIn
+		return nil
+	case BookFilterFilterAttributesItemTypeCountEq:
+		*s = BookFilterFilterAttributesItemTypeCountEq
+		return nil
+	case BookFilterFilterAttributesItemTypeCountGt:
+		*s = BookFilterFilterAttributesItemTypeCountGt
+		return nil
+	case BookFilterFilterAttributesItemTypeCountLt:
+		*s = BookFilterFilterAttributesItemTypeCountLt
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 // Поле для сортировки.

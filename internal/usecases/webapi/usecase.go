@@ -17,6 +17,8 @@ type storage interface {
 
 	VerifyBook(ctx context.Context, bookID uuid.UUID) error
 	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
+
+	AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error)
 }
 
 type bookRequester interface {

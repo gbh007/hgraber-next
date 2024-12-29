@@ -39,6 +39,8 @@ type webAPIUseCases interface {
 	DeleteBook(ctx context.Context, bookID uuid.UUID) error
 
 	SetWorkerConfig(ctx context.Context, counts map[string]int)
+
+	AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error)
 }
 
 type agentUseCases interface {

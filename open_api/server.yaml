@@ -137,6 +137,58 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/attribute/count:
+    get:
+      description: Получение информации о количестве вариантов атрибутов
+      summary: Количество вариантов атрибутов
+      tags:
+        - attribute
+      responses:
+        200:
+          description: Информация о системе
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attributes:
+                    description: Список аттрибутов
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: Код аттрибута
+                        value:
+                          type: string
+                          description: Значение аттрибута
+                        count:
+                          type: integer
+                          description: Количество книг с таким аттрибутом
+                      required:
+                        - code
+                        - value
+                        - count
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/book/details:
     post:
       description: Информация о книге
@@ -1486,6 +1538,8 @@ paths:
 tags:
   - name: user
     description: Взаимодействие с данными пользователя
+  - name: attribute
+    description: Взаимодействие с данными атрибутов
   - name: book
     description: Взаимодействие с данными книги
   - name: parsing
@@ -1854,6 +1908,34 @@ components:
             name:
               type: string
               description: Фильтр по названию, без учета регистра
+            attributes:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: Код атрибута
+                  type:
+                    type: string
+                    description: Тип фильтра
+                    enum:
+                      - like
+                      - in
+                      - count_eq
+                      - count_gt
+                      - count_lt
+                  values:
+                    type: array
+                    description: Значения для фильтрации (для операции like берется только 1-е значение)
+                    items:
+                      type: string
+                  count:
+                    type: integer
+                    description: Количество значений атрибута у книги
+                required:
+                  - code
+                  - type
 
     ErrorResponse:
       type: object

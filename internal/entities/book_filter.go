@@ -1,0 +1,70 @@
+package entities
+
+import "time"
+
+type BookFilterShowType byte
+
+const (
+	BookFilterShowTypeAll = iota
+	BookFilterShowTypeOnly
+	BookFilterShowTypeExcept
+)
+
+type BookFilterOrderBy byte
+
+const (
+	BookFilterOrderByCreated = iota
+	BookFilterOrderByName
+	BookFilterOrderByID
+	BookFilterOrderByPageCount
+)
+
+type BookFilterAttributeType byte
+
+const (
+	BookFilterAttributeTypeLike = iota
+	BookFilterAttributeTypeIn
+	BookFilterAttributeTypeCountEq
+	BookFilterAttributeTypeCountGt
+	BookFilterAttributeTypeCountLt
+)
+
+type BookFilterFields struct {
+	Name       string
+	Attributes []BookFilterAttribute
+}
+
+type BookFilterAttribute struct {
+	Code   string
+	Type   BookFilterAttributeType
+	Values []string
+	Count  int
+}
+
+type BookFilter struct {
+	Limit  int
+	Offset int
+
+	OrderBy BookFilterOrderBy
+	Desc    bool
+
+	From time.Time
+	To   time.Time
+
+	OriginAttributes bool
+
+	ShowDeleted    BookFilterShowType
+	ShowVerified   BookFilterShowType
+	ShowDownloaded BookFilterShowType
+
+	Fields BookFilterFields
+}
+
+func (f *BookFilter) FillLimits(page, count int) {
+	if page < 1 {
+		page = 1
+	}
+
+	f.Offset = (page - 1) * count
+	f.Limit = count
+}

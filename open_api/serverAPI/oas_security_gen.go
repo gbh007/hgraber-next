@@ -16,10 +16,10 @@ import (
 type SecurityHandler interface {
 	// HandleCookies handles cookies security.
 	// Авторизация через печеньки.
-	HandleCookies(ctx context.Context, operationName string, t Cookies) (context.Context, error)
+	HandleCookies(ctx context.Context, operationName OperationName, t Cookies) (context.Context, error)
 	// HandleHeaderAuth handles headerAuth security.
 	// Авторизация через заголовок.
-	HandleHeaderAuth(ctx context.Context, operationName string, t HeaderAuth) (context.Context, error)
+	HandleHeaderAuth(ctx context.Context, operationName OperationName, t HeaderAuth) (context.Context, error)
 }
 
 func findAuthorization(h http.Header, prefix string) (string, bool) {
@@ -37,7 +37,7 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 	return "", false
 }
 
-func (s *Server) securityCookies(ctx context.Context, operationName string, req *http.Request) (context.Context, bool, error) {
+func (s *Server) securityCookies(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
 	var t Cookies
 	const parameterName = "X-HG-Token"
 	var value string
@@ -58,7 +58,7 @@ func (s *Server) securityCookies(ctx context.Context, operationName string, req 
 	}
 	return rctx, true, err
 }
-func (s *Server) securityHeaderAuth(ctx context.Context, operationName string, req *http.Request) (context.Context, bool, error) {
+func (s *Server) securityHeaderAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
 	var t HeaderAuth
 	const parameterName = "X-HG-Token"
 	value := req.Header.Get(parameterName)
@@ -79,13 +79,13 @@ func (s *Server) securityHeaderAuth(ctx context.Context, operationName string, r
 type SecuritySource interface {
 	// Cookies provides cookies security value.
 	// Авторизация через печеньки.
-	Cookies(ctx context.Context, operationName string) (Cookies, error)
+	Cookies(ctx context.Context, operationName OperationName) (Cookies, error)
 	// HeaderAuth provides headerAuth security value.
 	// Авторизация через заголовок.
-	HeaderAuth(ctx context.Context, operationName string) (HeaderAuth, error)
+	HeaderAuth(ctx context.Context, operationName OperationName) (HeaderAuth, error)
 }
 
-func (s *Client) securityCookies(ctx context.Context, operationName string, req *http.Request) error {
+func (s *Client) securityCookies(ctx context.Context, operationName OperationName, req *http.Request) error {
 	t, err := s.sec.Cookies(ctx, operationName)
 	if err != nil {
 		return errors.Wrap(err, "security source \"Cookies\"")
@@ -96,7 +96,7 @@ func (s *Client) securityCookies(ctx context.Context, operationName string, req 
 	})
 	return nil
 }
-func (s *Client) securityHeaderAuth(ctx context.Context, operationName string, req *http.Request) error {
+func (s *Client) securityHeaderAuth(ctx context.Context, operationName OperationName, req *http.Request) error {
 	t, err := s.sec.HeaderAuth(ctx, operationName)
 	if err != nil {
 		return errors.Wrap(err, "security source \"HeaderAuth\"")

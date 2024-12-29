@@ -12,6 +12,7 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"hgnext/internal/adapters/postgresql/internal/model"
+	"hgnext/internal/entities"
 )
 
 func (d *Database) bookAttributes(ctx context.Context, bookID uuid.UUID) ([]*model.BookAttribute, error) {
@@ -28,7 +29,7 @@ func (d *Database) bookAttributes(ctx context.Context, bookID uuid.UUID) ([]*mod
 func (d *Database) BookAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error) {
 	attributes, err := d.bookAttributes(ctx, bookID)
 	if err != nil {
-		return nil, fmt.Errorf("get attributes :%w", err)
+		return nil, fmt.Errorf("get attributes: %w", err)
 	}
 
 	out := make(map[string][]string, 7)
@@ -213,4 +214,35 @@ func (d *Database) UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID,
 	}
 
 	return nil
+}
+func (d *Database) AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error) {
+	rows, err := d.pool.Query(ctx, `SELECT COUNT(*), attr, value FROM book_attributes GROUP BY attr, value;`)
+	if err != nil {
+		return nil, fmt.Errorf("get attributes count: %w", err)
+	}
+
+	defer rows.Close()
+
+	result := make([]entities.AttributeVariant, 0, 100) // Берем изначальный запас емкости побольше
+
+	for rows.Next() {
+		var (
+			count int
+			code  string
+			value string
+		)
+
+		err := rows.Scan(&count, &code, &value)
+		if err != nil {
+			return nil, fmt.Errorf("get attributes count: scan row: %w", err)
+		}
+
+		result = append(result, entities.AttributeVariant{
+			Code:  code,
+			Value: value,
+			Count: count,
+		})
+	}
+
+	return result, nil
 }

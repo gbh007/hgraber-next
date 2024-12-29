@@ -17,6 +17,10 @@ type APIAgentTaskExportPostRes interface {
 	aPIAgentTaskExportPostRes()
 }
 
+type APIAttributeCountGetRes interface {
+	aPIAttributeCountGetRes()
+}
+
 type APIBookArchiveIDGetRes interface {
 	aPIBookArchiveIDGetRes()
 }

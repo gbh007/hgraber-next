@@ -12,7 +12,7 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
-	semconv "go.opentelemetry.io/otel/semconv/v1.19.0"
+	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/ogen-go/ogen/conv"
@@ -154,7 +154,7 @@ func (c *Client) APICoreStatusGet(ctx context.Context) (APICoreStatusGetRes, err
 
 func (c *Client) sendAPICoreStatusGet(ctx context.Context) (res APICoreStatusGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/core/status"),
 	}
 
@@ -163,14 +163,14 @@ func (c *Client) sendAPICoreStatusGet(ctx context.Context) (res APICoreStatusGet
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APICoreStatusGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, APICoreStatusGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -202,7 +202,7 @@ func (c *Client) sendAPICoreStatusGet(ctx context.Context) (res APICoreStatusGet
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APICoreStatusGet", r); {
+			switch err := c.securityHeaderAuth(ctx, APICoreStatusGetOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -258,7 +258,7 @@ func (c *Client) APIExportArchivePost(ctx context.Context, request APIExportArch
 
 func (c *Client) sendAPIExportArchivePost(ctx context.Context, request APIExportArchivePostReq, params APIExportArchivePostParams) (res APIExportArchivePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/export/archive"),
 	}
 
@@ -267,14 +267,14 @@ func (c *Client) sendAPIExportArchivePost(ctx context.Context, request APIExport
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIExportArchivePost",
+	ctx, span := c.cfg.Tracer.Start(ctx, APIExportArchivePostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -348,7 +348,7 @@ func (c *Client) sendAPIExportArchivePost(ctx context.Context, request APIExport
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APIExportArchivePost", r); {
+			switch err := c.securityHeaderAuth(ctx, APIExportArchivePostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -404,7 +404,7 @@ func (c *Client) APIFsCreatePost(ctx context.Context, request APIFsCreatePostReq
 
 func (c *Client) sendAPIFsCreatePost(ctx context.Context, request APIFsCreatePostReq, params APIFsCreatePostParams) (res APIFsCreatePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/fs/create"),
 	}
 
@@ -413,14 +413,14 @@ func (c *Client) sendAPIFsCreatePost(ctx context.Context, request APIFsCreatePos
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIFsCreatePost",
+	ctx, span := c.cfg.Tracer.Start(ctx, APIFsCreatePostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -469,7 +469,7 @@ func (c *Client) sendAPIFsCreatePost(ctx context.Context, request APIFsCreatePos
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APIFsCreatePost", r); {
+			switch err := c.securityHeaderAuth(ctx, APIFsCreatePostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -525,7 +525,7 @@ func (c *Client) APIFsDeletePost(ctx context.Context, request *APIFsDeletePostRe
 
 func (c *Client) sendAPIFsDeletePost(ctx context.Context, request *APIFsDeletePostReq) (res APIFsDeletePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/fs/delete"),
 	}
 
@@ -534,14 +534,14 @@ func (c *Client) sendAPIFsDeletePost(ctx context.Context, request *APIFsDeletePo
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIFsDeletePost",
+	ctx, span := c.cfg.Tracer.Start(ctx, APIFsDeletePostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -576,7 +576,7 @@ func (c *Client) sendAPIFsDeletePost(ctx context.Context, request *APIFsDeletePo
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APIFsDeletePost", r); {
+			switch err := c.securityHeaderAuth(ctx, APIFsDeletePostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -632,7 +632,7 @@ func (c *Client) APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (API
 
 func (c *Client) sendAPIFsGetGet(ctx context.Context, params APIFsGetGetParams) (res APIFsGetGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/fs/get"),
 	}
 
@@ -641,14 +641,14 @@ func (c *Client) sendAPIFsGetGet(ctx context.Context, params APIFsGetGetParams) 
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIFsGetGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, APIFsGetGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -698,7 +698,7 @@ func (c *Client) sendAPIFsGetGet(ctx context.Context, params APIFsGetGetParams) 
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APIFsGetGet", r); {
+			switch err := c.securityHeaderAuth(ctx, APIFsGetGetOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -754,7 +754,7 @@ func (c *Client) APIFsIdsGet(ctx context.Context) (APIFsIdsGetRes, error) {
 
 func (c *Client) sendAPIFsIdsGet(ctx context.Context) (res APIFsIdsGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/fs/ids"),
 	}
 
@@ -763,14 +763,14 @@ func (c *Client) sendAPIFsIdsGet(ctx context.Context) (res APIFsIdsGetRes, err e
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIFsIdsGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, APIFsIdsGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -802,7 +802,7 @@ func (c *Client) sendAPIFsIdsGet(ctx context.Context) (res APIFsIdsGetRes, err e
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APIFsIdsGet", r); {
+			switch err := c.securityHeaderAuth(ctx, APIFsIdsGetOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -858,7 +858,7 @@ func (c *Client) APIParsingBookCheckPost(ctx context.Context, request *APIParsin
 
 func (c *Client) sendAPIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (res APIParsingBookCheckPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book/check"),
 	}
 
@@ -867,14 +867,14 @@ func (c *Client) sendAPIParsingBookCheckPost(ctx context.Context, request *APIPa
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIParsingBookCheckPost",
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingBookCheckPostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -909,7 +909,7 @@ func (c *Client) sendAPIParsingBookCheckPost(ctx context.Context, request *APIPa
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APIParsingBookCheckPost", r); {
+			switch err := c.securityHeaderAuth(ctx, APIParsingBookCheckPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -966,7 +966,7 @@ func (c *Client) APIParsingBookMultiPost(ctx context.Context, request *APIParsin
 
 func (c *Client) sendAPIParsingBookMultiPost(ctx context.Context, request *APIParsingBookMultiPostReq) (res APIParsingBookMultiPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book/multi"),
 	}
 
@@ -975,14 +975,14 @@ func (c *Client) sendAPIParsingBookMultiPost(ctx context.Context, request *APIPa
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIParsingBookMultiPost",
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingBookMultiPostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1017,7 +1017,7 @@ func (c *Client) sendAPIParsingBookMultiPost(ctx context.Context, request *APIPa
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APIParsingBookMultiPost", r); {
+			switch err := c.securityHeaderAuth(ctx, APIParsingBookMultiPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -1073,7 +1073,7 @@ func (c *Client) APIParsingBookPost(ctx context.Context, request *APIParsingBook
 
 func (c *Client) sendAPIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (res APIParsingBookPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book"),
 	}
 
@@ -1082,14 +1082,14 @@ func (c *Client) sendAPIParsingBookPost(ctx context.Context, request *APIParsing
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIParsingBookPost",
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingBookPostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1124,7 +1124,7 @@ func (c *Client) sendAPIParsingBookPost(ctx context.Context, request *APIParsing
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APIParsingBookPost", r); {
+			switch err := c.securityHeaderAuth(ctx, APIParsingBookPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -1180,7 +1180,7 @@ func (c *Client) APIParsingPageCheckPost(ctx context.Context, request *APIParsin
 
 func (c *Client) sendAPIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (res APIParsingPageCheckPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/page/check"),
 	}
 
@@ -1189,14 +1189,14 @@ func (c *Client) sendAPIParsingPageCheckPost(ctx context.Context, request *APIPa
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIParsingPageCheckPost",
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingPageCheckPostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1231,7 +1231,7 @@ func (c *Client) sendAPIParsingPageCheckPost(ctx context.Context, request *APIPa
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APIParsingPageCheckPost", r); {
+			switch err := c.securityHeaderAuth(ctx, APIParsingPageCheckPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -1287,7 +1287,7 @@ func (c *Client) APIParsingPagePost(ctx context.Context, request *APIParsingPage
 
 func (c *Client) sendAPIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (res APIParsingPagePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/page"),
 	}
 
@@ -1296,14 +1296,14 @@ func (c *Client) sendAPIParsingPagePost(ctx context.Context, request *APIParsing
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIParsingPagePost",
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingPagePostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1338,7 +1338,7 @@ func (c *Client) sendAPIParsingPagePost(ctx context.Context, request *APIParsing
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, "APIParsingPagePost", r); {
+			switch err := c.securityHeaderAuth(ctx, APIParsingPagePostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
