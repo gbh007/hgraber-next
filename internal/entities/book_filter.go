@@ -5,7 +5,7 @@ import "time"
 type BookFilterShowType byte
 
 const (
-	BookFilterShowTypeAll = iota
+	BookFilterShowTypeAll BookFilterShowType = iota
 	BookFilterShowTypeOnly
 	BookFilterShowTypeExcept
 )
@@ -13,7 +13,7 @@ const (
 type BookFilterOrderBy byte
 
 const (
-	BookFilterOrderByCreated = iota
+	BookFilterOrderByCreated BookFilterOrderBy = iota
 	BookFilterOrderByName
 	BookFilterOrderByID
 	BookFilterOrderByPageCount
@@ -22,21 +22,41 @@ const (
 type BookFilterAttributeType byte
 
 const (
-	BookFilterAttributeTypeLike = iota
+	BookFilterAttributeTypeNone BookFilterAttributeType = iota
+	BookFilterAttributeTypeLike
 	BookFilterAttributeTypeIn
 	BookFilterAttributeTypeCountEq
 	BookFilterAttributeTypeCountGt
 	BookFilterAttributeTypeCountLt
 )
 
+type BookFilterLabelType byte
+
+const (
+	BookFilterLabelTypeNone BookFilterLabelType = iota
+	BookFilterLabelTypeLike
+	BookFilterLabelTypeIn
+	BookFilterLabelTypeCountEq
+	BookFilterLabelTypeCountGt
+	BookFilterLabelTypeCountLt
+)
+
 type BookFilterFields struct {
 	Name       string
 	Attributes []BookFilterAttribute
+	Labels     []BookFilterLabel
 }
 
 type BookFilterAttribute struct {
 	Code   string
 	Type   BookFilterAttributeType
+	Values []string
+	Count  int
+}
+
+type BookFilterLabel struct {
+	Name   string
+	Type   BookFilterLabelType
 	Values []string
 	Count  int
 }

@@ -2943,8 +2943,12 @@ func (s *BookFilterDownloadStatus) UnmarshalText(data []byte) error {
 // Фильтр по полям.
 type BookFilterFilter struct {
 	// Фильтр по названию, без учета регистра.
-	Name       OptString                        `json:"name"`
+	Name OptString `json:"name"`
+	// Фильтр по атрибутам.
 	Attributes []BookFilterFilterAttributesItem `json:"attributes"`
+	// Фильтр по меткам (без разделения на метки страниц и
+	// книг).
+	Labels []BookFilterFilterLabelsItem `json:"labels"`
 }
 
 // GetName returns the value of Name.
@@ -2957,6 +2961,11 @@ func (s *BookFilterFilter) GetAttributes() []BookFilterFilterAttributesItem {
 	return s.Attributes
 }
 
+// GetLabels returns the value of Labels.
+func (s *BookFilterFilter) GetLabels() []BookFilterFilterLabelsItem {
+	return s.Labels
+}
+
 // SetName sets the value of Name.
 func (s *BookFilterFilter) SetName(val OptString) {
 	s.Name = val
@@ -2965,6 +2974,11 @@ func (s *BookFilterFilter) SetName(val OptString) {
 // SetAttributes sets the value of Attributes.
 func (s *BookFilterFilter) SetAttributes(val []BookFilterFilterAttributesItem) {
 	s.Attributes = val
+}
+
+// SetLabels sets the value of Labels.
+func (s *BookFilterFilter) SetLabels(val []BookFilterFilterLabelsItem) {
+	s.Labels = val
 }
 
 type BookFilterFilterAttributesItem struct {
@@ -3076,6 +3090,121 @@ func (s *BookFilterFilterAttributesItemType) UnmarshalText(data []byte) error {
 		return nil
 	case BookFilterFilterAttributesItemTypeCountLt:
 		*s = BookFilterFilterAttributesItemTypeCountLt
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type BookFilterFilterLabelsItem struct {
+	// Название метки.
+	Name string `json:"name"`
+	// Тип фильтра.
+	Type BookFilterFilterLabelsItemType `json:"type"`
+	// Значения для фильтрации (для операции like берется
+	// только 1-е значение).
+	Values []string `json:"values"`
+	// Количество значений метки у книги.
+	Count OptInt `json:"count"`
+}
+
+// GetName returns the value of Name.
+func (s *BookFilterFilterLabelsItem) GetName() string {
+	return s.Name
+}
+
+// GetType returns the value of Type.
+func (s *BookFilterFilterLabelsItem) GetType() BookFilterFilterLabelsItemType {
+	return s.Type
+}
+
+// GetValues returns the value of Values.
+func (s *BookFilterFilterLabelsItem) GetValues() []string {
+	return s.Values
+}
+
+// GetCount returns the value of Count.
+func (s *BookFilterFilterLabelsItem) GetCount() OptInt {
+	return s.Count
+}
+
+// SetName sets the value of Name.
+func (s *BookFilterFilterLabelsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetType sets the value of Type.
+func (s *BookFilterFilterLabelsItem) SetType(val BookFilterFilterLabelsItemType) {
+	s.Type = val
+}
+
+// SetValues sets the value of Values.
+func (s *BookFilterFilterLabelsItem) SetValues(val []string) {
+	s.Values = val
+}
+
+// SetCount sets the value of Count.
+func (s *BookFilterFilterLabelsItem) SetCount(val OptInt) {
+	s.Count = val
+}
+
+// Тип фильтра.
+type BookFilterFilterLabelsItemType string
+
+const (
+	BookFilterFilterLabelsItemTypeLike    BookFilterFilterLabelsItemType = "like"
+	BookFilterFilterLabelsItemTypeIn      BookFilterFilterLabelsItemType = "in"
+	BookFilterFilterLabelsItemTypeCountEq BookFilterFilterLabelsItemType = "count_eq"
+	BookFilterFilterLabelsItemTypeCountGt BookFilterFilterLabelsItemType = "count_gt"
+	BookFilterFilterLabelsItemTypeCountLt BookFilterFilterLabelsItemType = "count_lt"
+)
+
+// AllValues returns all BookFilterFilterLabelsItemType values.
+func (BookFilterFilterLabelsItemType) AllValues() []BookFilterFilterLabelsItemType {
+	return []BookFilterFilterLabelsItemType{
+		BookFilterFilterLabelsItemTypeLike,
+		BookFilterFilterLabelsItemTypeIn,
+		BookFilterFilterLabelsItemTypeCountEq,
+		BookFilterFilterLabelsItemTypeCountGt,
+		BookFilterFilterLabelsItemTypeCountLt,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s BookFilterFilterLabelsItemType) MarshalText() ([]byte, error) {
+	switch s {
+	case BookFilterFilterLabelsItemTypeLike:
+		return []byte(s), nil
+	case BookFilterFilterLabelsItemTypeIn:
+		return []byte(s), nil
+	case BookFilterFilterLabelsItemTypeCountEq:
+		return []byte(s), nil
+	case BookFilterFilterLabelsItemTypeCountGt:
+		return []byte(s), nil
+	case BookFilterFilterLabelsItemTypeCountLt:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *BookFilterFilterLabelsItemType) UnmarshalText(data []byte) error {
+	switch BookFilterFilterLabelsItemType(data) {
+	case BookFilterFilterLabelsItemTypeLike:
+		*s = BookFilterFilterLabelsItemTypeLike
+		return nil
+	case BookFilterFilterLabelsItemTypeIn:
+		*s = BookFilterFilterLabelsItemTypeIn
+		return nil
+	case BookFilterFilterLabelsItemTypeCountEq:
+		*s = BookFilterFilterLabelsItemTypeCountEq
+		return nil
+	case BookFilterFilterLabelsItemTypeCountGt:
+		*s = BookFilterFilterLabelsItemTypeCountGt
+		return nil
+	case BookFilterFilterLabelsItemTypeCountLt:
+		*s = BookFilterFilterLabelsItemTypeCountLt
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)

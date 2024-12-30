@@ -2323,6 +2323,7 @@ components:
               description: Фильтр по названию, без учета регистра
             attributes:
               type: array
+              description: Фильтр по атрибутам
               items:
                 type: object
                 properties:
@@ -2348,6 +2349,35 @@ components:
                     description: Количество значений атрибута у книги
                 required:
                   - code
+                  - type
+            labels:
+              type: array
+              description: Фильтр по меткам (без разделения на метки страниц и книг)
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Название метки
+                  type:
+                    type: string
+                    description: Тип фильтра
+                    enum:
+                      - like
+                      - in
+                      - count_eq
+                      - count_gt
+                      - count_lt
+                  values:
+                    type: array
+                    description: Значения для фильтрации (для операции like берется только 1-е значение)
+                    items:
+                      type: string
+                  count:
+                    type: integer
+                    description: Количество значений метки у книги
+                required:
+                  - name
                   - type
 
     ErrorResponse:
