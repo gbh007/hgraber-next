@@ -387,6 +387,183 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
+			case 'l': // Prefix: "label/"
+				origElem := elem
+				if l := len("label/"); len(elem) >= l && elem[0:l] == "label/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'd': // Prefix: "delete"
+					origElem := elem
+					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPILabelDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'g': // Prefix: "get"
+					origElem := elem
+					if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPILabelGetPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'p': // Prefix: "preset/"
+					origElem := elem
+					if l := len("preset/"); len(elem) >= l && elem[0:l] == "preset/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'c': // Prefix: "create"
+						origElem := elem
+						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPILabelPresetCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'd': // Prefix: "delete"
+						origElem := elem
+						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPILabelPresetDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'l': // Prefix: "list"
+						origElem := elem
+						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleAPILabelPresetListGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'u': // Prefix: "update"
+						origElem := elem
+						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPILabelPresetUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				case 's': // Prefix: "set"
+					origElem := elem
+					if l := len("set"); len(elem) >= l && elem[0:l] == "set" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPILabelSetPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
 			case 'p': // Prefix: "pa"
 				origElem := elem
 				if l := len("pa"); len(elem) >= l && elem[0:l] == "pa" {
@@ -1191,6 +1368,211 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					default:
 						return
 					}
+				}
+
+				elem = origElem
+			case 'l': // Prefix: "label/"
+				origElem := elem
+				if l := len("label/"); len(elem) >= l && elem[0:l] == "label/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'd': // Prefix: "delete"
+					origElem := elem
+					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APILabelDeletePostOperation
+							r.summary = "Удаление метки"
+							r.operationID = ""
+							r.pathPattern = "/api/label/delete"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'g': // Prefix: "get"
+					origElem := elem
+					if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APILabelGetPostOperation
+							r.summary = "Получение меток книги"
+							r.operationID = ""
+							r.pathPattern = "/api/label/get"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'p': // Prefix: "preset/"
+					origElem := elem
+					if l := len("preset/"); len(elem) >= l && elem[0:l] == "preset/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'c': // Prefix: "create"
+						origElem := elem
+						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APILabelPresetCreatePostOperation
+								r.summary = "Создание пресета меток"
+								r.operationID = ""
+								r.pathPattern = "/api/label/preset/create"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'd': // Prefix: "delete"
+						origElem := elem
+						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APILabelPresetDeletePostOperation
+								r.summary = "Удаление пресета меток"
+								r.operationID = ""
+								r.pathPattern = "/api/label/preset/delete"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'l': // Prefix: "list"
+						origElem := elem
+						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = APILabelPresetListGetOperation
+								r.summary = "Пресеты меток"
+								r.operationID = ""
+								r.pathPattern = "/api/label/preset/list"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'u': // Prefix: "update"
+						origElem := elem
+						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APILabelPresetUpdatePostOperation
+								r.summary = "Обновления пресета меток"
+								r.operationID = ""
+								r.pathPattern = "/api/label/preset/update"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				case 's': // Prefix: "set"
+					origElem := elem
+					if l := len("set"); len(elem) >= l && elem[0:l] == "set" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APILabelSetPostOperation
+							r.summary = "Установка метки"
+							r.operationID = ""
+							r.pathPattern = "/api/label/set"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem

@@ -82,6 +82,48 @@ type Handler interface {
 	//
 	// GET /api/file/{id}
 	APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (APIFileIDGetRes, error)
+	// APILabelDeletePost implements POST /api/label/delete operation.
+	//
+	// Удаление метки на книгу или страницу.
+	//
+	// POST /api/label/delete
+	APILabelDeletePost(ctx context.Context, req *APILabelDeletePostReq) (APILabelDeletePostRes, error)
+	// APILabelGetPost implements POST /api/label/get operation.
+	//
+	// Получение меток книги.
+	//
+	// POST /api/label/get
+	APILabelGetPost(ctx context.Context, req *APILabelGetPostReq) (APILabelGetPostRes, error)
+	// APILabelPresetCreatePost implements POST /api/label/preset/create operation.
+	//
+	// Создание пресета меток.
+	//
+	// POST /api/label/preset/create
+	APILabelPresetCreatePost(ctx context.Context, req *APILabelPresetCreatePostReq) (APILabelPresetCreatePostRes, error)
+	// APILabelPresetDeletePost implements POST /api/label/preset/delete operation.
+	//
+	// Удаление пресета меток.
+	//
+	// POST /api/label/preset/delete
+	APILabelPresetDeletePost(ctx context.Context, req *APILabelPresetDeletePostReq) (APILabelPresetDeletePostRes, error)
+	// APILabelPresetListGet implements GET /api/label/preset/list operation.
+	//
+	// Пресеты меток.
+	//
+	// GET /api/label/preset/list
+	APILabelPresetListGet(ctx context.Context) (APILabelPresetListGetRes, error)
+	// APILabelPresetUpdatePost implements POST /api/label/preset/update operation.
+	//
+	// Обновления пресета меток.
+	//
+	// POST /api/label/preset/update
+	APILabelPresetUpdatePost(ctx context.Context, req *APILabelPresetUpdatePostReq) (APILabelPresetUpdatePostRes, error)
+	// APILabelSetPost implements POST /api/label/set operation.
+	//
+	// Установка метки на книгу или страницу.
+	//
+	// POST /api/label/set
+	APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) (APILabelSetPostRes, error)
 	// APIPageBodyPost implements POST /api/page/body operation.
 	//
 	// Получение тела страницы (по оригинальному адресу или

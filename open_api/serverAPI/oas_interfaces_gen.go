@@ -49,6 +49,34 @@ type APIFileIDGetRes interface {
 	aPIFileIDGetRes()
 }
 
+type APILabelDeletePostRes interface {
+	aPILabelDeletePostRes()
+}
+
+type APILabelGetPostRes interface {
+	aPILabelGetPostRes()
+}
+
+type APILabelPresetCreatePostRes interface {
+	aPILabelPresetCreatePostRes()
+}
+
+type APILabelPresetDeletePostRes interface {
+	aPILabelPresetDeletePostRes()
+}
+
+type APILabelPresetListGetRes interface {
+	aPILabelPresetListGetRes()
+}
+
+type APILabelPresetUpdatePostRes interface {
+	aPILabelPresetUpdatePostRes()
+}
+
+type APILabelSetPostRes interface {
+	aPILabelSetPostRes()
+}
+
 type APIPageBodyPostRes interface {
 	aPIPageBodyPostRes()
 }

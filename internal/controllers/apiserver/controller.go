@@ -41,6 +41,14 @@ type webAPIUseCases interface {
 	SetWorkerConfig(ctx context.Context, counts map[string]int)
 
 	AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error)
+
+	SetLabel(ctx context.Context, label entities.BookLabel) error
+	DeleteLabel(ctx context.Context, label entities.BookLabel) error
+	Labels(ctx context.Context, bookID uuid.UUID) ([]entities.BookLabel, error)
+	CreateLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error
+	UpdateLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error
+	DeleteLabelPreset(ctx context.Context, name string) error
+	LabelPresets(ctx context.Context) ([]entities.BookLabelPreset, error)
 }
 
 type agentUseCases interface {

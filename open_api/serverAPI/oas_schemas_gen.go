@@ -1056,6 +1056,497 @@ type APIFileIDGetUnauthorized ErrorResponse
 
 func (*APIFileIDGetUnauthorized) aPIFileIDGetRes() {}
 
+type APILabelDeletePostBadRequest ErrorResponse
+
+func (*APILabelDeletePostBadRequest) aPILabelDeletePostRes() {}
+
+type APILabelDeletePostForbidden ErrorResponse
+
+func (*APILabelDeletePostForbidden) aPILabelDeletePostRes() {}
+
+type APILabelDeletePostInternalServerError ErrorResponse
+
+func (*APILabelDeletePostInternalServerError) aPILabelDeletePostRes() {}
+
+// APILabelDeletePostNoContent is response for APILabelDeletePost operation.
+type APILabelDeletePostNoContent struct{}
+
+func (*APILabelDeletePostNoContent) aPILabelDeletePostRes() {}
+
+type APILabelDeletePostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Номер страницы, если нет метка удаляется у книги.
+	PageNumber OptInt `json:"page_number"`
+	// Название метки (ее код).
+	Name string `json:"name"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APILabelDeletePostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APILabelDeletePostReq) GetPageNumber() OptInt {
+	return s.PageNumber
+}
+
+// GetName returns the value of Name.
+func (s *APILabelDeletePostReq) GetName() string {
+	return s.Name
+}
+
+// SetBookID sets the value of BookID.
+func (s *APILabelDeletePostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APILabelDeletePostReq) SetPageNumber(val OptInt) {
+	s.PageNumber = val
+}
+
+// SetName sets the value of Name.
+func (s *APILabelDeletePostReq) SetName(val string) {
+	s.Name = val
+}
+
+type APILabelDeletePostUnauthorized ErrorResponse
+
+func (*APILabelDeletePostUnauthorized) aPILabelDeletePostRes() {}
+
+type APILabelGetPostBadRequest ErrorResponse
+
+func (*APILabelGetPostBadRequest) aPILabelGetPostRes() {}
+
+type APILabelGetPostForbidden ErrorResponse
+
+func (*APILabelGetPostForbidden) aPILabelGetPostRes() {}
+
+type APILabelGetPostInternalServerError ErrorResponse
+
+func (*APILabelGetPostInternalServerError) aPILabelGetPostRes() {}
+
+type APILabelGetPostOK struct {
+	// Метки книги.
+	Labels []APILabelGetPostOKLabelsItem `json:"labels"`
+}
+
+// GetLabels returns the value of Labels.
+func (s *APILabelGetPostOK) GetLabels() []APILabelGetPostOKLabelsItem {
+	return s.Labels
+}
+
+// SetLabels sets the value of Labels.
+func (s *APILabelGetPostOK) SetLabels(val []APILabelGetPostOKLabelsItem) {
+	s.Labels = val
+}
+
+func (*APILabelGetPostOK) aPILabelGetPostRes() {}
+
+type APILabelGetPostOKLabelsItem struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Номер страницы, если нет метка на всю книгу.
+	PageNumber int `json:"page_number"`
+	// Название метки (ее код).
+	Name string `json:"name"`
+	// Значение метки.
+	Value string `json:"value"`
+	// Время создания метки в системе.
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APILabelGetPostOKLabelsItem) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APILabelGetPostOKLabelsItem) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// GetName returns the value of Name.
+func (s *APILabelGetPostOKLabelsItem) GetName() string {
+	return s.Name
+}
+
+// GetValue returns the value of Value.
+func (s *APILabelGetPostOKLabelsItem) GetValue() string {
+	return s.Value
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *APILabelGetPostOKLabelsItem) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetBookID sets the value of BookID.
+func (s *APILabelGetPostOKLabelsItem) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APILabelGetPostOKLabelsItem) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+// SetName sets the value of Name.
+func (s *APILabelGetPostOKLabelsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetValue sets the value of Value.
+func (s *APILabelGetPostOKLabelsItem) SetValue(val string) {
+	s.Value = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *APILabelGetPostOKLabelsItem) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+type APILabelGetPostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APILabelGetPostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// SetBookID sets the value of BookID.
+func (s *APILabelGetPostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+type APILabelGetPostUnauthorized ErrorResponse
+
+func (*APILabelGetPostUnauthorized) aPILabelGetPostRes() {}
+
+type APILabelPresetCreatePostBadRequest ErrorResponse
+
+func (*APILabelPresetCreatePostBadRequest) aPILabelPresetCreatePostRes() {}
+
+type APILabelPresetCreatePostForbidden ErrorResponse
+
+func (*APILabelPresetCreatePostForbidden) aPILabelPresetCreatePostRes() {}
+
+type APILabelPresetCreatePostInternalServerError ErrorResponse
+
+func (*APILabelPresetCreatePostInternalServerError) aPILabelPresetCreatePostRes() {}
+
+// APILabelPresetCreatePostNoContent is response for APILabelPresetCreatePost operation.
+type APILabelPresetCreatePostNoContent struct{}
+
+func (*APILabelPresetCreatePostNoContent) aPILabelPresetCreatePostRes() {}
+
+type APILabelPresetCreatePostReq struct {
+	// Название метки (ее код).
+	Name string `json:"name"`
+	// Описание метки.
+	Description OptString `json:"description"`
+	// Значения метки.
+	Values []string `json:"values"`
+}
+
+// GetName returns the value of Name.
+func (s *APILabelPresetCreatePostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APILabelPresetCreatePostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetValues returns the value of Values.
+func (s *APILabelPresetCreatePostReq) GetValues() []string {
+	return s.Values
+}
+
+// SetName sets the value of Name.
+func (s *APILabelPresetCreatePostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APILabelPresetCreatePostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetValues sets the value of Values.
+func (s *APILabelPresetCreatePostReq) SetValues(val []string) {
+	s.Values = val
+}
+
+type APILabelPresetCreatePostUnauthorized ErrorResponse
+
+func (*APILabelPresetCreatePostUnauthorized) aPILabelPresetCreatePostRes() {}
+
+type APILabelPresetDeletePostBadRequest ErrorResponse
+
+func (*APILabelPresetDeletePostBadRequest) aPILabelPresetDeletePostRes() {}
+
+type APILabelPresetDeletePostForbidden ErrorResponse
+
+func (*APILabelPresetDeletePostForbidden) aPILabelPresetDeletePostRes() {}
+
+type APILabelPresetDeletePostInternalServerError ErrorResponse
+
+func (*APILabelPresetDeletePostInternalServerError) aPILabelPresetDeletePostRes() {}
+
+// APILabelPresetDeletePostNoContent is response for APILabelPresetDeletePost operation.
+type APILabelPresetDeletePostNoContent struct{}
+
+func (*APILabelPresetDeletePostNoContent) aPILabelPresetDeletePostRes() {}
+
+type APILabelPresetDeletePostReq struct {
+	// Название метки (ее код).
+	Name string `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *APILabelPresetDeletePostReq) GetName() string {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *APILabelPresetDeletePostReq) SetName(val string) {
+	s.Name = val
+}
+
+type APILabelPresetDeletePostUnauthorized ErrorResponse
+
+func (*APILabelPresetDeletePostUnauthorized) aPILabelPresetDeletePostRes() {}
+
+type APILabelPresetListGetForbidden ErrorResponse
+
+func (*APILabelPresetListGetForbidden) aPILabelPresetListGetRes() {}
+
+type APILabelPresetListGetInternalServerError ErrorResponse
+
+func (*APILabelPresetListGetInternalServerError) aPILabelPresetListGetRes() {}
+
+type APILabelPresetListGetOK struct {
+	// Список пресетов.
+	Presets []APILabelPresetListGetOKPresetsItem `json:"presets"`
+}
+
+// GetPresets returns the value of Presets.
+func (s *APILabelPresetListGetOK) GetPresets() []APILabelPresetListGetOKPresetsItem {
+	return s.Presets
+}
+
+// SetPresets sets the value of Presets.
+func (s *APILabelPresetListGetOK) SetPresets(val []APILabelPresetListGetOKPresetsItem) {
+	s.Presets = val
+}
+
+func (*APILabelPresetListGetOK) aPILabelPresetListGetRes() {}
+
+type APILabelPresetListGetOKPresetsItem struct {
+	// Название метки (ее код).
+	Name string `json:"name"`
+	// Описание метки.
+	Description OptString `json:"description"`
+	// Значения метки.
+	Values []string `json:"values"`
+	// Время создания в системе.
+	CreatedAt time.Time `json:"created_at"`
+	// Время обновления в системе.
+	UpdatedAt OptDateTime `json:"updated_at"`
+}
+
+// GetName returns the value of Name.
+func (s *APILabelPresetListGetOKPresetsItem) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APILabelPresetListGetOKPresetsItem) GetDescription() OptString {
+	return s.Description
+}
+
+// GetValues returns the value of Values.
+func (s *APILabelPresetListGetOKPresetsItem) GetValues() []string {
+	return s.Values
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *APILabelPresetListGetOKPresetsItem) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *APILabelPresetListGetOKPresetsItem) GetUpdatedAt() OptDateTime {
+	return s.UpdatedAt
+}
+
+// SetName sets the value of Name.
+func (s *APILabelPresetListGetOKPresetsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APILabelPresetListGetOKPresetsItem) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetValues sets the value of Values.
+func (s *APILabelPresetListGetOKPresetsItem) SetValues(val []string) {
+	s.Values = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *APILabelPresetListGetOKPresetsItem) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *APILabelPresetListGetOKPresetsItem) SetUpdatedAt(val OptDateTime) {
+	s.UpdatedAt = val
+}
+
+type APILabelPresetListGetUnauthorized ErrorResponse
+
+func (*APILabelPresetListGetUnauthorized) aPILabelPresetListGetRes() {}
+
+type APILabelPresetUpdatePostBadRequest ErrorResponse
+
+func (*APILabelPresetUpdatePostBadRequest) aPILabelPresetUpdatePostRes() {}
+
+type APILabelPresetUpdatePostForbidden ErrorResponse
+
+func (*APILabelPresetUpdatePostForbidden) aPILabelPresetUpdatePostRes() {}
+
+type APILabelPresetUpdatePostInternalServerError ErrorResponse
+
+func (*APILabelPresetUpdatePostInternalServerError) aPILabelPresetUpdatePostRes() {}
+
+// APILabelPresetUpdatePostNoContent is response for APILabelPresetUpdatePost operation.
+type APILabelPresetUpdatePostNoContent struct{}
+
+func (*APILabelPresetUpdatePostNoContent) aPILabelPresetUpdatePostRes() {}
+
+type APILabelPresetUpdatePostReq struct {
+	// Название метки (ее код).
+	Name string `json:"name"`
+	// Описание метки.
+	Description OptString `json:"description"`
+	// Значения метки.
+	Values []string `json:"values"`
+}
+
+// GetName returns the value of Name.
+func (s *APILabelPresetUpdatePostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APILabelPresetUpdatePostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetValues returns the value of Values.
+func (s *APILabelPresetUpdatePostReq) GetValues() []string {
+	return s.Values
+}
+
+// SetName sets the value of Name.
+func (s *APILabelPresetUpdatePostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APILabelPresetUpdatePostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetValues sets the value of Values.
+func (s *APILabelPresetUpdatePostReq) SetValues(val []string) {
+	s.Values = val
+}
+
+type APILabelPresetUpdatePostUnauthorized ErrorResponse
+
+func (*APILabelPresetUpdatePostUnauthorized) aPILabelPresetUpdatePostRes() {}
+
+type APILabelSetPostBadRequest ErrorResponse
+
+func (*APILabelSetPostBadRequest) aPILabelSetPostRes() {}
+
+type APILabelSetPostForbidden ErrorResponse
+
+func (*APILabelSetPostForbidden) aPILabelSetPostRes() {}
+
+type APILabelSetPostInternalServerError ErrorResponse
+
+func (*APILabelSetPostInternalServerError) aPILabelSetPostRes() {}
+
+// APILabelSetPostNoContent is response for APILabelSetPost operation.
+type APILabelSetPostNoContent struct{}
+
+func (*APILabelSetPostNoContent) aPILabelSetPostRes() {}
+
+type APILabelSetPostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Номер страницы, если нет метка ставится на всю книгу.
+	PageNumber OptInt `json:"page_number"`
+	// Название метки (ее код).
+	Name string `json:"name"`
+	// Значение метки.
+	Value string `json:"value"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APILabelSetPostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APILabelSetPostReq) GetPageNumber() OptInt {
+	return s.PageNumber
+}
+
+// GetName returns the value of Name.
+func (s *APILabelSetPostReq) GetName() string {
+	return s.Name
+}
+
+// GetValue returns the value of Value.
+func (s *APILabelSetPostReq) GetValue() string {
+	return s.Value
+}
+
+// SetBookID sets the value of BookID.
+func (s *APILabelSetPostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APILabelSetPostReq) SetPageNumber(val OptInt) {
+	s.PageNumber = val
+}
+
+// SetName sets the value of Name.
+func (s *APILabelSetPostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetValue sets the value of Value.
+func (s *APILabelSetPostReq) SetValue(val string) {
+	s.Value = val
+}
+
+type APILabelSetPostUnauthorized ErrorResponse
+
+func (*APILabelSetPostUnauthorized) aPILabelSetPostRes() {}
+
 type APIPageBodyPostBadRequest ErrorResponse
 
 func (*APIPageBodyPostBadRequest) aPIPageBodyPostRes() {}
