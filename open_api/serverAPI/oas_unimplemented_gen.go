@@ -123,6 +123,78 @@ func (UnimplementedHandler) APIFileIDGet(ctx context.Context, params APIFileIDGe
 	return r, ht.ErrNotImplemented
 }
 
+// APILabelDeletePost implements POST /api/label/delete operation.
+//
+// Удаление метки на книгу или страницу.
+//
+// POST /api/label/delete
+func (UnimplementedHandler) APILabelDeletePost(ctx context.Context, req *APILabelDeletePostReq) (r APILabelDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APILabelGetPost implements POST /api/label/get operation.
+//
+// Получение меток книги.
+//
+// POST /api/label/get
+func (UnimplementedHandler) APILabelGetPost(ctx context.Context, req *APILabelGetPostReq) (r APILabelGetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APILabelPresetCreatePost implements POST /api/label/preset/create operation.
+//
+// Создание пресета меток.
+//
+// POST /api/label/preset/create
+func (UnimplementedHandler) APILabelPresetCreatePost(ctx context.Context, req *APILabelPresetCreatePostReq) (r APILabelPresetCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APILabelPresetDeletePost implements POST /api/label/preset/delete operation.
+//
+// Удаление пресета меток.
+//
+// POST /api/label/preset/delete
+func (UnimplementedHandler) APILabelPresetDeletePost(ctx context.Context, req *APILabelPresetDeletePostReq) (r APILabelPresetDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APILabelPresetGetPost implements POST /api/label/preset/get operation.
+//
+// Пресеты меток.
+//
+// POST /api/label/preset/get
+func (UnimplementedHandler) APILabelPresetGetPost(ctx context.Context, req *APILabelPresetGetPostReq) (r APILabelPresetGetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APILabelPresetListGet implements GET /api/label/preset/list operation.
+//
+// Пресеты меток.
+//
+// GET /api/label/preset/list
+func (UnimplementedHandler) APILabelPresetListGet(ctx context.Context) (r APILabelPresetListGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APILabelPresetUpdatePost implements POST /api/label/preset/update operation.
+//
+// Обновления пресета меток.
+//
+// POST /api/label/preset/update
+func (UnimplementedHandler) APILabelPresetUpdatePost(ctx context.Context, req *APILabelPresetUpdatePostReq) (r APILabelPresetUpdatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APILabelSetPost implements POST /api/label/set operation.
+//
+// Установка метки на книгу или страницу.
+//
+// POST /api/label/set
+func (UnimplementedHandler) APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) (r APILabelSetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIPageBodyPost implements POST /api/page/body operation.
 //
 // Получение тела страницы (по оригинальному адресу или

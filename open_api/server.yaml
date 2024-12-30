@@ -11,6 +11,22 @@ security:
   - headerAuth: []
   - cookies: []
 
+tags:
+  - name: user
+    description: Взаимодействие с данными пользователя
+  - name: book
+    description: Взаимодействие с данными книги
+  - name: parsing
+    description: Взаимодействие с системами парсинга и обработки первичных данных
+  - name: attribute
+    description: Взаимодействие с данными атрибутов
+  - name: label
+    description: Взаимодействие с данными меток
+  - name: agent
+    description: Взаимодействие с системами агентов
+  - name: system
+    description: Взаимодействие с системой граббера
+
 paths:
   /api/user/login:
     post:
@@ -145,7 +161,7 @@ paths:
         - attribute
       responses:
         200:
-          description: Информация о системе
+          description: Информация об атрибутах
           content:
             application/json:
               schema:
@@ -170,6 +186,503 @@ paths:
                         - code
                         - value
                         - count
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/label/set:
+    post:
+      description: Установка метки на книгу или страницу
+      summary: Установка метки
+      tags:
+        - label
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                page_number:
+                  type: integer
+                  description: Номер страницы, если нет метка ставится на всю книгу
+                name:
+                  type: string
+                  description: Название метки (ее код)
+                value:
+                  type: string
+                  description: Значение метки
+              required:
+                - book_id
+                - name
+                - value
+      responses:
+        204:
+          description: Успешное установка
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/label/delete:
+    post:
+      description: Удаление метки на книгу или страницу
+      summary: Удаление метки
+      tags:
+        - label
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                page_number:
+                  type: integer
+                  description: Номер страницы, если нет метка удаляется у книги
+                name:
+                  type: string
+                  description: Название метки (ее код)
+              required:
+                - book_id
+                - name
+      responses:
+        204:
+          description: Успешное удаление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/label/get:
+    post:
+      description: Получение меток книги
+      summary: Получение меток книги
+      tags:
+        - label
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+              required:
+                - book_id
+      responses:
+        200:
+          description: Информация о метке
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  labels:
+                    type: array
+                    description: Метки книги
+                    items:
+                      type: object
+                      properties:
+                        book_id:
+                          type: string
+                          format: uuid
+                          description: ID книги
+                        page_number:
+                          type: integer
+                          description: Номер страницы, если нет метка на всю книгу
+                        name:
+                          type: string
+                          description: Название метки (ее код)
+                        value:
+                          type: string
+                          description: Значение метки
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Время создания метки в системе
+                      required:
+                        - book_id
+                        - page_number
+                        - name
+                        - value
+                        - created_at
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/label/preset/create:
+    post:
+      description: Создание пресета меток
+      summary: Создание пресета меток
+      tags:
+        - label
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Название метки (ее код)
+                description:
+                  type: string
+                  description: Описание метки
+                values:
+                  type: array
+                  description: Значения метки
+                  items:
+                    type: string
+              required:
+                - name
+                - values
+      responses:
+        204:
+          description: Успешное создание пересета
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/label/preset/update:
+    post:
+      description: Обновления пресета меток
+      summary: Обновления пресета меток
+      tags:
+        - label
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Название метки (ее код)
+                description:
+                  type: string
+                  description: Описание метки
+                values:
+                  type: array
+                  description: Значения метки
+                  items:
+                    type: string
+              required:
+                - name
+                - values
+      responses:
+        204:
+          description: Успешное создание пересета
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/label/preset/delete:
+    post:
+      description: Удаление пресета меток
+      summary: Удаление пресета меток
+      tags:
+        - label
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Название метки (ее код)
+              required:
+                - name
+      responses:
+        204:
+          description: Успешное создание пересета
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/label/preset/get:
+    post:
+      description: Пресеты меток
+      summary: Пресеты меток
+      tags:
+        - label
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Название метки (ее код)
+              required:
+                - name
+      responses:
+        200:
+          description: Информация о метке
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Название метки (ее код)
+                  description:
+                    type: string
+                    description: Описание метки
+                  values:
+                    type: array
+                    description: Значения метки
+                    items:
+                      type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: Время создания в системе
+                  updated_at:
+                    type: string
+                    format: date-time
+                    description: Время обновления в системе
+                required:
+                  - name
+                  - values
+                  - created_at
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/label/preset/list:
+    get:
+      description: Пресеты меток
+      summary: Пресеты меток
+      tags:
+        - label
+      responses:
+        200:
+          description: Информация о метках
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  presets:
+                    description: Список пресетов
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Название метки (ее код)
+                        description:
+                          type: string
+                          description: Описание метки
+                        values:
+                          type: array
+                          description: Значения метки
+                          items:
+                            type: string
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Время создания в системе
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: Время обновления в системе
+                      required:
+                        - name
+                        - values
+                        - created_at
         401:
           description: Пользователь не авторизован
           content:
@@ -1535,20 +2048,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-tags:
-  - name: user
-    description: Взаимодействие с данными пользователя
-  - name: attribute
-    description: Взаимодействие с данными атрибутов
-  - name: book
-    description: Взаимодействие с данными книги
-  - name: parsing
-    description: Взаимодействие с системами парсинга и обработки первичных данных
-  - name: agent
-    description: Взаимодействие с системами агентов
-  - name: system
-    description: Взаимодействие с системой граббера
-
 components:
   schemas:
     SystemInfo:
@@ -1910,6 +2409,7 @@ components:
               description: Фильтр по названию, без учета регистра
             attributes:
               type: array
+              description: Фильтр по атрибутам
               items:
                 type: object
                 properties:
@@ -1935,6 +2435,35 @@ components:
                     description: Количество значений атрибута у книги
                 required:
                   - code
+                  - type
+            labels:
+              type: array
+              description: Фильтр по меткам (без разделения на метки страниц и книг)
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Название метки
+                  type:
+                    type: string
+                    description: Тип фильтра
+                    enum:
+                      - like
+                      - in
+                      - count_eq
+                      - count_gt
+                      - count_lt
+                  values:
+                    type: array
+                    description: Значения для фильтрации (для операции like берется только 1-е значение)
+                    items:
+                      type: string
+                  count:
+                    type: integer
+                    description: Количество значений метки у книги
+                required:
+                  - name
                   - type
 
     ErrorResponse:

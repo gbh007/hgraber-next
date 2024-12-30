@@ -147,5 +147,39 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 		filter.Fields.Attributes = append(filter.Fields.Attributes, attrFilter)
 	}
 
+	filter.Fields.Labels = make([]entities.BookFilterLabel, 0, len(req.Filter.Value.Labels))
+
+	for _, label := range req.Filter.Value.Labels {
+		labelFilter := entities.BookFilterLabel{
+			Name:   label.Name,
+			Values: label.Values,
+			Count:  label.Count.Value,
+		}
+
+		// TODO: добавить больше скипов из-за некорректных сочетаний значений.
+
+		switch label.Type {
+		case serverAPI.BookFilterFilterLabelsItemTypeLike:
+			labelFilter.Type = entities.BookFilterLabelTypeLike
+
+		case serverAPI.BookFilterFilterLabelsItemTypeIn:
+			labelFilter.Type = entities.BookFilterLabelTypeIn
+
+		case serverAPI.BookFilterFilterLabelsItemTypeCountEq:
+			labelFilter.Type = entities.BookFilterLabelTypeCountEq
+
+		case serverAPI.BookFilterFilterLabelsItemTypeCountGt:
+			labelFilter.Type = entities.BookFilterLabelTypeCountGt
+
+		case serverAPI.BookFilterFilterLabelsItemTypeCountLt:
+			labelFilter.Type = entities.BookFilterLabelTypeCountLt
+
+		default:
+			continue // Скипаем неизвестный тип если появится.
+		}
+
+		filter.Fields.Labels = append(filter.Fields.Labels, labelFilter)
+	}
+
 	return filter
 }

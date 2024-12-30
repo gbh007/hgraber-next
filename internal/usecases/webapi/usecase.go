@@ -19,6 +19,15 @@ type storage interface {
 	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
 
 	AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error)
+
+	SetLabel(ctx context.Context, label entities.BookLabel) error
+	DeleteLabel(ctx context.Context, label entities.BookLabel) error
+	Labels(ctx context.Context, bookID uuid.UUID) ([]entities.BookLabel, error)
+	InsertLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error
+	UpdateLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error
+	DeleteLabelPreset(ctx context.Context, name string) error
+	LabelPresets(ctx context.Context) ([]entities.BookLabelPreset, error)
+	LabelPreset(ctx context.Context, name string) (entities.BookLabelPreset, error)
 }
 
 type bookRequester interface {

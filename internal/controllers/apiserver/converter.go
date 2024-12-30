@@ -22,3 +22,11 @@ func optTime(t time.Time) serverAPI.OptDateTime {
 
 	return serverAPI.NewOptDateTime(t)
 }
+
+func optString(s string) serverAPI.OptString {
+	if s == "" {
+		return serverAPI.OptString{}
+	}
+
+	return serverAPI.NewOptString(s)
+}
