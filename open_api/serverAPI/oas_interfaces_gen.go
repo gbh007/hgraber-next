@@ -45,6 +45,10 @@ type APIBookVerifyPostRes interface {
 	aPIBookVerifyPostRes()
 }
 
+type APIDeduplicateBookByPageBodyPostRes interface {
+	aPIDeduplicateBookByPageBodyPostRes()
+}
+
 type APIFileIDGetRes interface {
 	aPIFileIDGetRes()
 }

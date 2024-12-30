@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"mime"
-	"net/url"
 	"path"
 	"strings"
 
@@ -51,12 +50,4 @@ func (c *Controller) APIFileIDGet(ctx context.Context, params serverAPI.APIFileI
 			Data: body,
 		},
 	}, nil
-}
-
-func (c *Controller) getFileURL(fileID uuid.UUID, ext string) url.URL {
-	return url.URL{
-		Scheme: c.externalServerScheme,
-		Host:   c.externalServerHostWithPort,
-		Path:   "/api/file/" + fileID.String() + ext,
-	}
 }

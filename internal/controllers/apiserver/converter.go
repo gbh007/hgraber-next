@@ -4,6 +4,9 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/google/uuid"
+
+	"hgnext/internal/entities"
 	"hgnext/open_api/serverAPI"
 )
 
@@ -29,4 +32,25 @@ func optString(s string) serverAPI.OptString {
 	}
 
 	return serverAPI.NewOptString(s)
+}
+
+func (c *Controller) getFileURL(fileID uuid.UUID, ext string) url.URL {
+	return url.URL{
+		Scheme: c.externalServerScheme,
+		Host:   c.externalServerHostWithPort,
+		Path:   "/api/file/" + fileID.String() + ext,
+	}
+}
+
+func (c *Controller) getPagePreview(p entities.Page) serverAPI.OptURI {
+	previewURL := serverAPI.OptURI{}
+
+	if p.Downloaded {
+		previewURL = serverAPI.NewOptURI(c.getFileURL(
+			p.FileID,
+			p.Ext,
+		))
+	}
+
+	return previewURL
 }

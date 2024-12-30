@@ -33,3 +33,12 @@ func EntryPercentageForPages(current, target []PageWithHash) float64 {
 
 	return float64(hits) / float64(len(target))
 }
+
+type DeduplicateBookResult struct {
+	TargetBook  Book
+	PreviewPage Page
+	// Процент (0-1) вхождения книги в целевую книгу
+	EntryPercentage float64
+	// Процент (0-1) вхождения целевой книги в книгу
+	ReverseEntryPercentage float64
+}

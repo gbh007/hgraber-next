@@ -21,20 +21,10 @@ func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.BookFil
 
 	return &serverAPI.APIBookListPostOK{
 		Books: pkg.Map(bookList.Books, func(b entities.BookToWeb) serverAPI.BookShortInfo {
-
-			previewURL := serverAPI.OptURI{}
-
-			if b.PreviewPage.Downloaded {
-				previewURL = serverAPI.NewOptURI(c.getFileURL(
-					b.PreviewPage.FileID,
-					b.PreviewPage.Ext,
-				))
-			}
-
 			return serverAPI.BookShortInfo{
 				ID:                b.Book.ID,
 				Created:           b.Book.CreateAt,
-				PreviewURL:        previewURL,
+				PreviewURL:        c.getPagePreview(b.PreviewPage),
 				ParsedName:        b.ParsedName(),
 				Name:              b.Book.Name,
 				ParsedPage:        b.ParsedPages,

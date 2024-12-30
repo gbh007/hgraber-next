@@ -359,6 +359,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
+			case 'd': // Prefix: "deduplicate/book-by-page-body"
+				origElem := elem
+				if l := len("deduplicate/book-by-page-body"); len(elem) >= l && elem[0:l] == "deduplicate/book-by-page-body" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleAPIDeduplicateBookByPageBodyPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
+					}
+
+					return
+				}
+
+				elem = origElem
 			case 'f': // Prefix: "file/"
 				origElem := elem
 				if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
@@ -1359,6 +1380,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
+				}
+
+				elem = origElem
+			case 'd': // Prefix: "deduplicate/book-by-page-body"
+				origElem := elem
+				if l := len("deduplicate/book-by-page-body"); len(elem) >= l && elem[0:l] == "deduplicate/book-by-page-body" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = APIDeduplicateBookByPageBodyPostOperation
+						r.summary = "Поиск дубликатов книги по телу страницы"
+						r.operationID = ""
+						r.pathPattern = "/api/deduplicate/book-by-page-body"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 
 				elem = origElem

@@ -25,19 +25,10 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 		}, nil
 	}
 
-	previewURL := serverAPI.OptURI{}
-
-	if book.PreviewPage.Downloaded {
-		previewURL = serverAPI.NewOptURI(c.getFileURL(
-			book.PreviewPage.FileID,
-			book.PreviewPage.Ext,
-		))
-	}
-
 	return &serverAPI.BookDetails{
 		ID:                book.Book.ID,
 		Created:           book.Book.CreateAt,
-		PreviewURL:        previewURL,
+		PreviewURL:        c.getPagePreview(book.PreviewPage),
 		ParsedName:        book.ParsedName(),
 		Name:              book.Book.Name,
 		ParsedPage:        book.ParsedPages,
@@ -50,18 +41,9 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 			}
 		}),
 		Pages: pkg.Map(book.Pages, func(p entities.Page) serverAPI.BookDetailsPagesItem {
-			previewURL := serverAPI.OptURI{}
-
-			if p.Downloaded {
-				previewURL = serverAPI.NewOptURI(c.getFileURL(
-					p.FileID,
-					p.Ext,
-				))
-			}
-
 			return serverAPI.BookDetailsPagesItem{
 				PageNumber: p.PageNumber,
-				PreviewURL: previewURL,
+				PreviewURL: c.getPagePreview(p),
 			}
 		}),
 	}, nil

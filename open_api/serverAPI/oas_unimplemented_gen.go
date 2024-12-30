@@ -114,6 +114,15 @@ func (UnimplementedHandler) APIBookVerifyPost(ctx context.Context, req *APIBookV
 	return r, ht.ErrNotImplemented
 }
 
+// APIDeduplicateBookByPageBodyPost implements POST /api/deduplicate/book-by-page-body operation.
+//
+// Поиск дубликатов книги по телу страницы.
+//
+// POST /api/deduplicate/book-by-page-body
+func (UnimplementedHandler) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *APIDeduplicateBookByPageBodyPostReq) (r APIDeduplicateBookByPageBodyPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIFileIDGet implements GET /api/file/{id} operation.
 //
 // Получение тела файла (изображения страницы).

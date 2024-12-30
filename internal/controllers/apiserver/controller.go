@@ -67,6 +67,7 @@ type exportUseCases interface {
 type deduplicateUseCases interface {
 	DeduplicateFiles(ctx context.Context) (count int, size int64, err error)
 	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]entities.DeduplicateArchiveResult, error)
+	BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]entities.DeduplicateBookResult, error)
 }
 
 type cleanupUseCases interface {

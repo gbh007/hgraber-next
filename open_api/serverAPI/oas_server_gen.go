@@ -76,6 +76,12 @@ type Handler interface {
 	//
 	// POST /api/book/verify
 	APIBookVerifyPost(ctx context.Context, req *APIBookVerifyPostReq) (APIBookVerifyPostRes, error)
+	// APIDeduplicateBookByPageBodyPost implements POST /api/deduplicate/book-by-page-body operation.
+	//
+	// Поиск дубликатов книги по телу страницы.
+	//
+	// POST /api/deduplicate/book-by-page-body
+	APIDeduplicateBookByPageBodyPost(ctx context.Context, req *APIDeduplicateBookByPageBodyPostReq) (APIDeduplicateBookByPageBodyPostRes, error)
 	// APIFileIDGet implements GET /api/file/{id} operation.
 	//
 	// Получение тела файла (изображения страницы).

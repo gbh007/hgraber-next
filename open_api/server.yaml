@@ -24,6 +24,8 @@ tags:
     description: Взаимодействие с данными меток
   - name: agent
     description: Взаимодействие с системами агентов
+  - name: deduplicate
+    description: Дедупликация данных
   - name: system
     description: Взаимодействие с системой граббера
 
@@ -1464,6 +1466,7 @@ paths:
       summary: Проверка наличия данных в системе из архива
       tags:
         - system
+        - deduplicate
       requestBody:
         content:
           application/octet-stream:
@@ -1501,6 +1504,100 @@ paths:
                     - book_id
                     - entry_percentage
                     - reverse_entry_percentage
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/deduplicate/book-by-page-body:
+    post:
+      description: Поиск дубликатов книги по телу страницы
+      summary: Поиск дубликатов книги по телу страницы
+      tags:
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID исходной книги
+              required:
+                - book_id
+      responses:
+        200:
+          description: Успешное получение результата
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        book_id:
+                          type: string
+                          format: uuid
+                          description: ID целевой книги
+                        create_at:
+                          type: string
+                          format: date-time
+                          description: Время создания книги в системе
+                        origin_url:
+                          type: string
+                          format: uri
+                          description: Оригинальная ссылка на книгу (во внешней системе)
+                        name:
+                          type: string
+                          description: Название книги
+                        page_count:
+                          type: integer
+                          description: Количество страниц
+                        preview_url:
+                          type: string
+                          format: uri
+                          description: Ссылка для предпросмотра изображения книги
+                        origin_covered_target:
+                          type: number
+                          format: float64
+                          description: Процент (0-1) покрытия оригинала в книге
+                        target_covered_origin:
+                          type: number
+                          format: float64
+                          description: Процент (0-1) покрытия книги в оригинале
+                      required:
+                        - book_id
+                        - create_at
+                        - name
+                        - page_count
+                        - origin_covered_target
+                        - target_covered_origin
         400:
           description: Некорректный запрос
           content:

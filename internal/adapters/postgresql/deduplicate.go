@@ -28,7 +28,7 @@ GROUP BY b.id;`, md5sums)
 func (d *Database) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error) {
 	pages := make([]model.PageWithHash, 0)
 
-	err := d.db.SelectContext(ctx, &pages, `SELECT p.book_id, p.page_number, p.ext, p.origin_url, p.downloaded, f.md5_sum, f.sha256_sum, f."size"
+	err := d.db.SelectContext(ctx, &pages, `SELECT p.book_id, p.page_number, p.ext, p.origin_url, p.downloaded, p.file_id, f.md5_sum, f.sha256_sum, f."size"
 FROM pages p left join files f on p.file_id = f.id
 WHERE p.book_id = $1 ORDER BY page_number;`, bookID)
 	if err != nil {

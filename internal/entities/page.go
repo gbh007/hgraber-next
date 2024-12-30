@@ -65,6 +65,7 @@ type PageWithHash struct {
 	Ext        string
 	OriginURL  *url.URL
 	Downloaded bool
+	FileID     uuid.UUID
 	Md5Sum     string
 	Sha256Sum  string
 	Size       int64
@@ -75,5 +76,16 @@ func (p PageWithHash) Hash() FileHash {
 		Md5Sum:    p.Md5Sum,
 		Sha256Sum: p.Sha256Sum,
 		Size:      p.Size,
+	}
+}
+
+func (p PageWithHash) Page() Page {
+	return Page{
+		BookID:     p.BookID,
+		PageNumber: p.PageNumber,
+		Ext:        p.Ext,
+		OriginURL:  p.OriginURL,
+		Downloaded: p.Downloaded,
+		FileID:     p.FileID,
 	}
 }

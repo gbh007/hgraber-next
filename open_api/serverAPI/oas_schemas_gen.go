@@ -994,6 +994,152 @@ type APIBookVerifyPostUnauthorized ErrorResponse
 
 func (*APIBookVerifyPostUnauthorized) aPIBookVerifyPostRes() {}
 
+type APIDeduplicateBookByPageBodyPostBadRequest ErrorResponse
+
+func (*APIDeduplicateBookByPageBodyPostBadRequest) aPIDeduplicateBookByPageBodyPostRes() {}
+
+type APIDeduplicateBookByPageBodyPostForbidden ErrorResponse
+
+func (*APIDeduplicateBookByPageBodyPostForbidden) aPIDeduplicateBookByPageBodyPostRes() {}
+
+type APIDeduplicateBookByPageBodyPostInternalServerError ErrorResponse
+
+func (*APIDeduplicateBookByPageBodyPostInternalServerError) aPIDeduplicateBookByPageBodyPostRes() {}
+
+type APIDeduplicateBookByPageBodyPostOK struct {
+	Result []APIDeduplicateBookByPageBodyPostOKResultItem `json:"result"`
+}
+
+// GetResult returns the value of Result.
+func (s *APIDeduplicateBookByPageBodyPostOK) GetResult() []APIDeduplicateBookByPageBodyPostOKResultItem {
+	return s.Result
+}
+
+// SetResult sets the value of Result.
+func (s *APIDeduplicateBookByPageBodyPostOK) SetResult(val []APIDeduplicateBookByPageBodyPostOKResultItem) {
+	s.Result = val
+}
+
+func (*APIDeduplicateBookByPageBodyPostOK) aPIDeduplicateBookByPageBodyPostRes() {}
+
+type APIDeduplicateBookByPageBodyPostOKResultItem struct {
+	// ID целевой книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Время создания книги в системе.
+	CreateAt time.Time `json:"create_at"`
+	// Оригинальная ссылка на книгу (во внешней системе).
+	OriginURL OptURI `json:"origin_url"`
+	// Название книги.
+	Name string `json:"name"`
+	// Количество страниц.
+	PageCount int `json:"page_count"`
+	// Ссылка для предпросмотра изображения книги.
+	PreviewURL OptURI `json:"preview_url"`
+	// Процент (0-1) покрытия оригинала в книге.
+	OriginCoveredTarget float64 `json:"origin_covered_target"`
+	// Процент (0-1) покрытия книги в оригинале.
+	TargetCoveredOrigin float64 `json:"target_covered_origin"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetCreateAt returns the value of CreateAt.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetCreateAt() time.Time {
+	return s.CreateAt
+}
+
+// GetOriginURL returns the value of OriginURL.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetOriginURL() OptURI {
+	return s.OriginURL
+}
+
+// GetName returns the value of Name.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetName() string {
+	return s.Name
+}
+
+// GetPageCount returns the value of PageCount.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetPageCount() int {
+	return s.PageCount
+}
+
+// GetPreviewURL returns the value of PreviewURL.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetPreviewURL() OptURI {
+	return s.PreviewURL
+}
+
+// GetOriginCoveredTarget returns the value of OriginCoveredTarget.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetOriginCoveredTarget() float64 {
+	return s.OriginCoveredTarget
+}
+
+// GetTargetCoveredOrigin returns the value of TargetCoveredOrigin.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetCoveredOrigin() float64 {
+	return s.TargetCoveredOrigin
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetCreateAt sets the value of CreateAt.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetCreateAt(val time.Time) {
+	s.CreateAt = val
+}
+
+// SetOriginURL sets the value of OriginURL.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetOriginURL(val OptURI) {
+	s.OriginURL = val
+}
+
+// SetName sets the value of Name.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetPageCount sets the value of PageCount.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetPageCount(val int) {
+	s.PageCount = val
+}
+
+// SetPreviewURL sets the value of PreviewURL.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetPreviewURL(val OptURI) {
+	s.PreviewURL = val
+}
+
+// SetOriginCoveredTarget sets the value of OriginCoveredTarget.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetOriginCoveredTarget(val float64) {
+	s.OriginCoveredTarget = val
+}
+
+// SetTargetCoveredOrigin sets the value of TargetCoveredOrigin.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetCoveredOrigin(val float64) {
+	s.TargetCoveredOrigin = val
+}
+
+type APIDeduplicateBookByPageBodyPostReq struct {
+	// ID исходной книги.
+	BookID uuid.UUID `json:"book_id"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateBookByPageBodyPostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateBookByPageBodyPostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+type APIDeduplicateBookByPageBodyPostUnauthorized ErrorResponse
+
+func (*APIDeduplicateBookByPageBodyPostUnauthorized) aPIDeduplicateBookByPageBodyPostRes() {}
+
 type APIFileIDGetBadRequest ErrorResponse
 
 func (*APIFileIDGetBadRequest) aPIFileIDGetRes() {}
