@@ -501,6 +501,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         500:
           description: Серверная ошибка
           content:
@@ -543,6 +549,86 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         403:
           description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/label/preset/get:
+    post:
+      description: Пресеты меток
+      summary: Пресеты меток
+      tags:
+        - label
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Название метки (ее код)
+              required:
+                - name
+      responses:
+        200:
+          description: Информация о метке
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Название метки (ее код)
+                  description:
+                    type: string
+                    description: Описание метки
+                  values:
+                    type: array
+                    description: Значения метки
+                    items:
+                      type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: Время создания в системе
+                  updated_at:
+                    type: string
+                    format: date-time
+                    description: Время обновления в системе
+                required:
+                  - name
+                  - values
+                  - created_at
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
           content:
             application/json:
               schema:

@@ -49,6 +49,7 @@ type webAPIUseCases interface {
 	UpdateLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error
 	DeleteLabelPreset(ctx context.Context, name string) error
 	LabelPresets(ctx context.Context) ([]entities.BookLabelPreset, error)
+	LabelPreset(ctx context.Context, name string) (entities.BookLabelPreset, error)
 }
 
 type agentUseCases interface {

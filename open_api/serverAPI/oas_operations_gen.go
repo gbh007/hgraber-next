@@ -22,6 +22,7 @@ const (
 	APILabelGetPostOperation                     OperationName = "APILabelGetPost"
 	APILabelPresetCreatePostOperation            OperationName = "APILabelPresetCreatePost"
 	APILabelPresetDeletePostOperation            OperationName = "APILabelPresetDeletePost"
+	APILabelPresetGetPostOperation               OperationName = "APILabelPresetGetPost"
 	APILabelPresetListGetOperation               OperationName = "APILabelPresetListGet"
 	APILabelPresetUpdatePostOperation            OperationName = "APILabelPresetUpdatePost"
 	APILabelSetPostOperation                     OperationName = "APILabelSetPost"

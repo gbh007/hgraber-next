@@ -106,6 +106,12 @@ type Handler interface {
 	//
 	// POST /api/label/preset/delete
 	APILabelPresetDeletePost(ctx context.Context, req *APILabelPresetDeletePostReq) (APILabelPresetDeletePostRes, error)
+	// APILabelPresetGetPost implements POST /api/label/preset/get operation.
+	//
+	// Пресеты меток.
+	//
+	// POST /api/label/preset/get
+	APILabelPresetGetPost(ctx context.Context, req *APILabelPresetGetPostReq) (APILabelPresetGetPostRes, error)
 	// APILabelPresetListGet implements GET /api/label/preset/list operation.
 	//
 	// Пресеты меток.

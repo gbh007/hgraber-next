@@ -495,6 +495,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
+					case 'g': // Prefix: "get"
+						origElem := elem
+						if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPILabelPresetGetPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					case 'l': // Prefix: "list"
 						origElem := elem
 						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
@@ -1486,6 +1507,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.summary = "Удаление пресета меток"
 								r.operationID = ""
 								r.pathPattern = "/api/label/preset/delete"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'g': // Prefix: "get"
+						origElem := elem
+						if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APILabelPresetGetPostOperation
+								r.summary = "Пресеты меток"
+								r.operationID = ""
+								r.pathPattern = "/api/label/preset/get"
 								r.args = args
 								r.count = 0
 								return r, true

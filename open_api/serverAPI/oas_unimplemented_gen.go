@@ -159,6 +159,15 @@ func (UnimplementedHandler) APILabelPresetDeletePost(ctx context.Context, req *A
 	return r, ht.ErrNotImplemented
 }
 
+// APILabelPresetGetPost implements POST /api/label/preset/get operation.
+//
+// Пресеты меток.
+//
+// POST /api/label/preset/get
+func (UnimplementedHandler) APILabelPresetGetPost(ctx context.Context, req *APILabelPresetGetPostReq) (r APILabelPresetGetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APILabelPresetListGet implements GET /api/label/preset/list operation.
 //
 // Пресеты меток.

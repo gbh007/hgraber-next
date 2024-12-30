@@ -1304,6 +1304,10 @@ type APILabelPresetDeletePostNoContent struct{}
 
 func (*APILabelPresetDeletePostNoContent) aPILabelPresetDeletePostRes() {}
 
+type APILabelPresetDeletePostNotFound ErrorResponse
+
+func (*APILabelPresetDeletePostNotFound) aPILabelPresetDeletePostRes() {}
+
 type APILabelPresetDeletePostReq struct {
 	// Название метки (ее код).
 	Name string `json:"name"`
@@ -1322,6 +1326,102 @@ func (s *APILabelPresetDeletePostReq) SetName(val string) {
 type APILabelPresetDeletePostUnauthorized ErrorResponse
 
 func (*APILabelPresetDeletePostUnauthorized) aPILabelPresetDeletePostRes() {}
+
+type APILabelPresetGetPostForbidden ErrorResponse
+
+func (*APILabelPresetGetPostForbidden) aPILabelPresetGetPostRes() {}
+
+type APILabelPresetGetPostInternalServerError ErrorResponse
+
+func (*APILabelPresetGetPostInternalServerError) aPILabelPresetGetPostRes() {}
+
+type APILabelPresetGetPostNotFound ErrorResponse
+
+func (*APILabelPresetGetPostNotFound) aPILabelPresetGetPostRes() {}
+
+type APILabelPresetGetPostOK struct {
+	// Название метки (ее код).
+	Name string `json:"name"`
+	// Описание метки.
+	Description OptString `json:"description"`
+	// Значения метки.
+	Values []string `json:"values"`
+	// Время создания в системе.
+	CreatedAt time.Time `json:"created_at"`
+	// Время обновления в системе.
+	UpdatedAt OptDateTime `json:"updated_at"`
+}
+
+// GetName returns the value of Name.
+func (s *APILabelPresetGetPostOK) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APILabelPresetGetPostOK) GetDescription() OptString {
+	return s.Description
+}
+
+// GetValues returns the value of Values.
+func (s *APILabelPresetGetPostOK) GetValues() []string {
+	return s.Values
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *APILabelPresetGetPostOK) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *APILabelPresetGetPostOK) GetUpdatedAt() OptDateTime {
+	return s.UpdatedAt
+}
+
+// SetName sets the value of Name.
+func (s *APILabelPresetGetPostOK) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APILabelPresetGetPostOK) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetValues sets the value of Values.
+func (s *APILabelPresetGetPostOK) SetValues(val []string) {
+	s.Values = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *APILabelPresetGetPostOK) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *APILabelPresetGetPostOK) SetUpdatedAt(val OptDateTime) {
+	s.UpdatedAt = val
+}
+
+func (*APILabelPresetGetPostOK) aPILabelPresetGetPostRes() {}
+
+type APILabelPresetGetPostReq struct {
+	// Название метки (ее код).
+	Name string `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *APILabelPresetGetPostReq) GetName() string {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *APILabelPresetGetPostReq) SetName(val string) {
+	s.Name = val
+}
+
+type APILabelPresetGetPostUnauthorized ErrorResponse
+
+func (*APILabelPresetGetPostUnauthorized) aPILabelPresetGetPostRes() {}
 
 type APILabelPresetListGetForbidden ErrorResponse
 
@@ -1431,6 +1531,10 @@ func (*APILabelPresetUpdatePostInternalServerError) aPILabelPresetUpdatePostRes(
 type APILabelPresetUpdatePostNoContent struct{}
 
 func (*APILabelPresetUpdatePostNoContent) aPILabelPresetUpdatePostRes() {}
+
+type APILabelPresetUpdatePostNotFound ErrorResponse
+
+func (*APILabelPresetUpdatePostNotFound) aPILabelPresetUpdatePostRes() {}
 
 type APILabelPresetUpdatePostReq struct {
 	// Название метки (ее код).

@@ -65,6 +65,10 @@ type APILabelPresetDeletePostRes interface {
 	aPILabelPresetDeletePostRes()
 }
 
+type APILabelPresetGetPostRes interface {
+	aPILabelPresetGetPostRes()
+}
+
 type APILabelPresetListGetRes interface {
 	aPILabelPresetListGetRes()
 }

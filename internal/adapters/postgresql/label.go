@@ -223,3 +223,50 @@ func (d *Database) LabelPresets(ctx context.Context) ([]entities.BookLabelPreset
 
 	return result, nil
 }
+
+func (d *Database) LabelPreset(ctx context.Context, name string) (entities.BookLabelPreset, error) {
+	builder := squirrel.Select(
+		"name",
+		"description",
+		"values",
+		"created_at",
+		"updated_at",
+	).
+		PlaceholderFormat(squirrel.Dollar).
+		From("label_presets").
+		Where(squirrel.Eq{
+			"name": name,
+		}).
+		Limit(1)
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return entities.BookLabelPreset{}, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	row := d.pool.QueryRow(ctx, query, args...)
+
+	var (
+		preset      entities.BookLabelPreset
+		updatedAt   sql.NullTime
+		description sql.NullString
+	)
+
+	err = row.Scan(
+		&preset.Name,
+		&description,
+		&preset.Values,
+		&preset.CreatedAt,
+		&updatedAt,
+	)
+	if err != nil { // TODO: err no rows
+		return entities.BookLabelPreset{}, fmt.Errorf("scan row: %w", err)
+	}
+
+	preset.Description = description.String
+	preset.UpdatedAt = updatedAt.Time
+
+	return preset, nil
+}

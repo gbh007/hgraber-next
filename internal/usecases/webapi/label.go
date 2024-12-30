@@ -42,3 +42,7 @@ func (uc *UseCase) DeleteLabelPreset(ctx context.Context, name string) error {
 func (uc *UseCase) LabelPresets(ctx context.Context) ([]entities.BookLabelPreset, error) {
 	return uc.storage.LabelPresets(ctx)
 }
+
+func (uc *UseCase) LabelPreset(ctx context.Context, name string) (entities.BookLabelPreset, error) {
+	return uc.storage.LabelPreset(ctx, name)
+}
