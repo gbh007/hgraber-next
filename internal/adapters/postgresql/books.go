@@ -168,10 +168,12 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			})
 
 		case entities.BookFilterAttributeTypeCountEq:
-			subBuilder = subBuilder.Having(squirrel.Eq{
-				"COUNT(value)": attrFilter.Count,
-			}).
-				GroupBy("attr")
+			if attrFilter.Count != 0 { // Случай когда нужно чтобы не было данных
+				subBuilder = subBuilder.Having(squirrel.Eq{
+					"COUNT(value)": attrFilter.Count,
+				}).
+					GroupBy("attr")
+			}
 
 		case entities.BookFilterAttributeTypeCountGt:
 			subBuilder = subBuilder.Having(squirrel.Gt{
@@ -180,10 +182,12 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 				GroupBy("attr")
 
 		case entities.BookFilterAttributeTypeCountLt:
-			subBuilder = subBuilder.Having(squirrel.Lt{
-				"COUNT(value)": attrFilter.Count,
-			}).
-				GroupBy("attr")
+			if attrFilter.Count != 1 { // Случай когда нужно чтобы не было данных
+				subBuilder = subBuilder.Having(squirrel.Lt{
+					"COUNT(value)": attrFilter.Count,
+				}).
+					GroupBy("attr")
+			}
 
 		default:
 			continue
@@ -194,7 +198,12 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			return "", nil, fmt.Errorf("build attribute sub query: %w", err)
 		}
 
-		builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
+		if (attrFilter.Count == 0 && attrFilter.Type == entities.BookFilterAttributeTypeCountEq) ||
+			(attrFilter.Count == 1 && attrFilter.Type == entities.BookFilterAttributeTypeCountLt) { // Случай когда нужно чтобы не было данных
+			builder = builder.Where(squirrel.Expr(`NOT EXISTS (`+subQuery+`)`, subArgs...))
+		} else {
+			builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
+		}
 	}
 
 	for _, labelFilter := range filter.Fields.Labels {
@@ -226,10 +235,12 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			})
 
 		case entities.BookFilterLabelTypeCountEq:
-			subBuilder = subBuilder.Having(squirrel.Eq{
-				"COUNT(value)": labelFilter.Count,
-			}).
-				GroupBy("name")
+			if labelFilter.Count != 0 { // Случай когда нужно чтобы не было данных
+				subBuilder = subBuilder.Having(squirrel.Eq{
+					"COUNT(value)": labelFilter.Count,
+				}).
+					GroupBy("name")
+			}
 
 		case entities.BookFilterLabelTypeCountGt:
 			subBuilder = subBuilder.Having(squirrel.Gt{
@@ -238,10 +249,12 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 				GroupBy("name")
 
 		case entities.BookFilterLabelTypeCountLt:
-			subBuilder = subBuilder.Having(squirrel.Lt{
-				"COUNT(value)": labelFilter.Count,
-			}).
-				GroupBy("name")
+			if labelFilter.Count != 1 { // Случай когда нужно чтобы не было данных
+				subBuilder = subBuilder.Having(squirrel.Lt{
+					"COUNT(value)": labelFilter.Count,
+				}).
+					GroupBy("name")
+			}
 
 		default:
 			continue
@@ -252,7 +265,12 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			return "", nil, fmt.Errorf("build label sub query: %w", err)
 		}
 
-		builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
+		if (labelFilter.Count == 0 && labelFilter.Type == entities.BookFilterLabelTypeCountEq) ||
+			(labelFilter.Count == 1 && labelFilter.Type == entities.BookFilterLabelTypeCountLt) { // Случай когда нужно чтобы не было данных
+			builder = builder.Where(squirrel.Expr(`NOT EXISTS (`+subQuery+`)`, subArgs...))
+		} else {
+			builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
+		}
 	}
 
 	query, args, err := builder.ToSql()
