@@ -4748,6 +4748,10 @@ func (o OptUUID) Or(d uuid.UUID) uuid.UUID {
 type SystemInfo struct {
 	// Количество книг.
 	Count int `json:"count"`
+	// Количество загруженных книг.
+	DownloadedCount int `json:"downloaded_count"`
+	// Количество верифицированных книг.
+	VerifiedCount int `json:"verified_count"`
 	// Количество не обработанных книг.
 	NotLoadCount int `json:"not_load_count"`
 	// Количество страниц.
@@ -4772,6 +4776,16 @@ type SystemInfo struct {
 // GetCount returns the value of Count.
 func (s *SystemInfo) GetCount() int {
 	return s.Count
+}
+
+// GetDownloadedCount returns the value of DownloadedCount.
+func (s *SystemInfo) GetDownloadedCount() int {
+	return s.DownloadedCount
+}
+
+// GetVerifiedCount returns the value of VerifiedCount.
+func (s *SystemInfo) GetVerifiedCount() int {
+	return s.VerifiedCount
 }
 
 // GetNotLoadCount returns the value of NotLoadCount.
@@ -4822,6 +4836,16 @@ func (s *SystemInfo) GetMonitor() OptSystemInfoMonitor {
 // SetCount sets the value of Count.
 func (s *SystemInfo) SetCount(val int) {
 	s.Count = val
+}
+
+// SetDownloadedCount sets the value of DownloadedCount.
+func (s *SystemInfo) SetDownloadedCount(val int) {
+	s.DownloadedCount = val
+}
+
+// SetVerifiedCount sets the value of VerifiedCount.
+func (s *SystemInfo) SetVerifiedCount(val int) {
+	s.VerifiedCount = val
 }
 
 // SetNotLoadCount sets the value of NotLoadCount.

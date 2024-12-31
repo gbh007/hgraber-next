@@ -2157,6 +2157,12 @@ components:
         count:
           type: integer
           description: Количество книг
+        downloaded_count:
+          type: integer
+          description: Количество загруженных книг
+        verified_count:
+          type: integer
+          description: Количество верифицированных книг
         not_load_count:
           type: integer
           description: Количество не обработанных книг
@@ -2212,6 +2218,8 @@ components:
                   - runners
       required:
         - count
+        - downloaded_count
+        - verified_count
         - not_load_count
         - page_count
         - not_load_page_count

@@ -24,5 +24,7 @@ func (d *Database) VerifyBook(ctx context.Context, bookID uuid.UUID) error {
 		return entities.BookNotFoundError
 	}
 
+	d.cacheVerifiedBookCount.Store(0)
+
 	return nil
 }

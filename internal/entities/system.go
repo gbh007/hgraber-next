@@ -2,6 +2,8 @@ package entities
 
 type SystemSizeInfo struct {
 	BookCount            int
+	DownloadedBookCount  int
+	VerifiedBookCount    int
 	BookUnparsedCount    int
 	PageCount            int
 	PageUnloadedCount    int

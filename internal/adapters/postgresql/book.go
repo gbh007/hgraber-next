@@ -42,6 +42,8 @@ func (d *Database) NewBook(ctx context.Context, book entities.Book) error {
 	}
 
 	d.cacheBookCount.Store(0)
+	d.cacheDownloadedBookCount.Store(0)
+	d.cacheVerifiedBookCount.Store(0)
 
 	return nil
 }
@@ -78,6 +80,9 @@ func (d *Database) UpdateBook(ctx context.Context, book entities.Book) error {
 	if !d.isApply(ctx, res) {
 		return entities.BookNotFoundError
 	}
+
+	d.cacheDownloadedBookCount.Store(0)
+	d.cacheVerifiedBookCount.Store(0)
 
 	return nil
 }
@@ -146,6 +151,8 @@ func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {
 	}
 
 	d.cacheBookCount.Store(0)
+	d.cacheDownloadedBookCount.Store(0)
+	d.cacheVerifiedBookCount.Store(0)
 
 	return nil
 }

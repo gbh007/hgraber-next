@@ -25,6 +25,30 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		d.cacheBookCount.Store(int64(systemSize.BookCount))
 	}
 
+	systemSize.DownloadedBookCount = int(d.cacheDownloadedBookCount.Load())
+
+	// Оптимизация запросов в БД
+	if systemSize.DownloadedBookCount == 0 {
+		err = d.db.GetContext(ctx, &systemSize.DownloadedBookCount, `SELECT COUNT(*) FROM books WHERE deleted = FALSE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`)
+		if err != nil {
+			return entities.SystemSizeInfo{}, fmt.Errorf("get downloaded book count : %w", err)
+		}
+
+		d.cacheDownloadedBookCount.Store(int64(systemSize.DownloadedBookCount))
+	}
+
+	systemSize.VerifiedBookCount = int(d.cacheVerifiedBookCount.Load())
+
+	// Оптимизация запросов в БД
+	if systemSize.VerifiedBookCount == 0 {
+		err = d.db.GetContext(ctx, &systemSize.VerifiedBookCount, `SELECT COUNT(*) FROM books WHERE deleted = FALSE AND verified = TRUE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`)
+		if err != nil {
+			return entities.SystemSizeInfo{}, fmt.Errorf("get book verified count : %w", err)
+		}
+
+		d.cacheVerifiedBookCount.Store(int64(systemSize.VerifiedBookCount))
+	}
+
 	err = d.db.GetContext(ctx, &systemSize.BookUnparsedCount, `SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE;`)
 	if err != nil {
 		return entities.SystemSizeInfo{}, fmt.Errorf("get book unparsed count: %w", err)

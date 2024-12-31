@@ -19,6 +19,8 @@ func (c *Controller) APISystemInfoGet(ctx context.Context) (serverAPI.APISystemI
 
 	return &serverAPI.SystemInfo{
 		Count:                info.BookCount,
+		DownloadedCount:      info.DownloadedBookCount,
+		VerifiedCount:        info.VerifiedBookCount,
 		NotLoadCount:         info.BookUnparsedCount,
 		PageCount:            info.PageCount,
 		NotLoadPageCount:     info.PageUnloadedCount,

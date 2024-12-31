@@ -55,6 +55,8 @@ func (d *Database) UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageN
 	// Состояние размера изменилось, сбрасываем кеши.
 	d.cachePageFileSize.Store(0)
 	d.cacheFileSize.Store(0)
+	d.cacheDownloadedBookCount.Store(0)
+	d.cacheVerifiedBookCount.Store(0)
 
 	return nil
 }
@@ -100,6 +102,8 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []en
 	d.cachePageFileSize.Store(0)
 	d.cacheFileSize.Store(0)
 	d.cachePageCount.Store(0)
+	d.cacheDownloadedBookCount.Store(0)
+	d.cacheVerifiedBookCount.Store(0)
 
 	return nil
 }
