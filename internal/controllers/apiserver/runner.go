@@ -9,8 +9,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
-
-	"hgnext/internal/controllers/apiserver/internal/static"
 )
 
 func (c *Controller) Name() string {
@@ -22,15 +20,11 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 
 	mux := http.NewServeMux()
 
-	// обработчик статики
 	if c.staticDir != "" {
 		mux.Handle("/", http.FileServer(http.Dir(c.staticDir)))
-	} else {
-		mux.Handle("/", http.FileServer(http.FS(static.StaticDir)))
 	}
 
 	mux.Handle("/metrics", promhttp.Handler())
-
 	mux.Handle("/api/", otelPropagation(c.logIO(cors(c.ogenServer))))
 
 	server := &http.Server{
