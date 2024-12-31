@@ -40,12 +40,7 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 				Values: a.Values,
 			}
 		}),
-		Pages: pkg.Map(book.Pages, func(p entities.Page) serverAPI.BookDetailsPagesItem {
-			return serverAPI.BookDetailsPagesItem{
-				PageNumber: p.PageNumber,
-				PreviewURL: c.getPagePreview(p),
-			}
-		}),
+		Pages: pkg.Map(book.Pages, c.convertSimplePage),
 		Size: serverAPI.OptBookDetailsSize{
 			Value: serverAPI.BookDetailsSize{
 				Unique:          book.Size.Unique,

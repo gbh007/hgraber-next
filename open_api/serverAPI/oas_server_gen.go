@@ -82,6 +82,12 @@ type Handler interface {
 	//
 	// POST /api/deduplicate/book-by-page-body
 	APIDeduplicateBookByPageBodyPost(ctx context.Context, req *APIDeduplicateBookByPageBodyPostReq) (APIDeduplicateBookByPageBodyPostRes, error)
+	// APIDeduplicateComparePost implements POST /api/deduplicate/compare operation.
+	//
+	// Сравнение двух книг на дублируемые страницы.
+	//
+	// POST /api/deduplicate/compare
+	APIDeduplicateComparePost(ctx context.Context, req *APIDeduplicateComparePostReq) (APIDeduplicateComparePostRes, error)
 	// APIFileIDGet implements GET /api/file/{id} operation.
 	//
 	// Получение тела файла (изображения страницы).

@@ -49,6 +49,10 @@ type APIDeduplicateBookByPageBodyPostRes interface {
 	aPIDeduplicateBookByPageBodyPostRes()
 }
 
+type APIDeduplicateComparePostRes interface {
+	aPIDeduplicateComparePostRes()
+}
+
 type APIFileIDGetRes interface {
 	aPIFileIDGetRes()
 }

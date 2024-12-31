@@ -4103,32 +4103,8 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *APIDeduplicateBookByPageBodyPostOKResultItem) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("book_id")
-		json.EncodeUUID(e, s.BookID)
-	}
-	{
-		e.FieldStart("create_at")
-		json.EncodeDateTime(e, s.CreateAt)
-	}
-	{
-		if s.OriginURL.Set {
-			e.FieldStart("origin_url")
-			s.OriginURL.Encode(e)
-		}
-	}
-	{
-		e.FieldStart("name")
-		e.Str(s.Name)
-	}
-	{
-		e.FieldStart("page_count")
-		e.Int(s.PageCount)
-	}
-	{
-		if s.PreviewURL.Set {
-			e.FieldStart("preview_url")
-			s.PreviewURL.Encode(e)
-		}
+		e.FieldStart("book")
+		s.Book.Encode(e)
 	}
 	{
 		e.FieldStart("origin_covered_target")
@@ -4140,15 +4116,10 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) encodeFields(e *jx.Encode
 	}
 }
 
-var jsonFieldsNameOfAPIDeduplicateBookByPageBodyPostOKResultItem = [8]string{
-	0: "book_id",
-	1: "create_at",
-	2: "origin_url",
-	3: "name",
-	4: "page_count",
-	5: "preview_url",
-	6: "origin_covered_target",
-	7: "target_covered_origin",
+var jsonFieldsNameOfAPIDeduplicateBookByPageBodyPostOKResultItem = [3]string{
+	0: "book",
+	1: "origin_covered_target",
+	2: "target_covered_origin",
 }
 
 // Decode decodes APIDeduplicateBookByPageBodyPostOKResultItem from json.
@@ -4160,76 +4131,18 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) Decode(d *jx.Decoder) err
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "book_id":
+		case "book":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := json.DecodeUUID(d)
-				s.BookID = v
-				if err != nil {
+				if err := s.Book.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"book_id\"")
-			}
-		case "create_at":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := json.DecodeDateTime(d)
-				s.CreateAt = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"create_at\"")
-			}
-		case "origin_url":
-			if err := func() error {
-				s.OriginURL.Reset()
-				if err := s.OriginURL.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"origin_url\"")
-			}
-		case "name":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				v, err := d.Str()
-				s.Name = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
-		case "page_count":
-			requiredBitSet[0] |= 1 << 4
-			if err := func() error {
-				v, err := d.Int()
-				s.PageCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page_count\"")
-			}
-		case "preview_url":
-			if err := func() error {
-				s.PreviewURL.Reset()
-				if err := s.PreviewURL.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"preview_url\"")
+				return errors.Wrap(err, "decode field \"book\"")
 			}
 		case "origin_covered_target":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				v, err := d.Float64()
 				s.OriginCoveredTarget = float64(v)
@@ -4241,7 +4154,7 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) Decode(d *jx.Decoder) err
 				return errors.Wrap(err, "decode field \"origin_covered_target\"")
 			}
 		case "target_covered_origin":
-			requiredBitSet[0] |= 1 << 7
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				v, err := d.Float64()
 				s.TargetCoveredOrigin = float64(v)
@@ -4262,7 +4175,7 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) Decode(d *jx.Decoder) err
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b11011011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -4438,6 +4351,464 @@ func (s *APIDeduplicateBookByPageBodyPostUnauthorized) MarshalJSON() ([]byte, er
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIDeduplicateBookByPageBodyPostUnauthorized) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIDeduplicateComparePostBadRequest as json.
+func (s *APIDeduplicateComparePostBadRequest) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIDeduplicateComparePostBadRequest from json.
+func (s *APIDeduplicateComparePostBadRequest) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIDeduplicateComparePostBadRequest to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIDeduplicateComparePostBadRequest(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIDeduplicateComparePostBadRequest) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIDeduplicateComparePostBadRequest) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIDeduplicateComparePostForbidden as json.
+func (s *APIDeduplicateComparePostForbidden) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIDeduplicateComparePostForbidden from json.
+func (s *APIDeduplicateComparePostForbidden) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIDeduplicateComparePostForbidden to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIDeduplicateComparePostForbidden(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIDeduplicateComparePostForbidden) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIDeduplicateComparePostForbidden) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIDeduplicateComparePostInternalServerError as json.
+func (s *APIDeduplicateComparePostInternalServerError) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIDeduplicateComparePostInternalServerError from json.
+func (s *APIDeduplicateComparePostInternalServerError) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIDeduplicateComparePostInternalServerError to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIDeduplicateComparePostInternalServerError(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIDeduplicateComparePostInternalServerError) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIDeduplicateComparePostInternalServerError) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIDeduplicateComparePostOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIDeduplicateComparePostOK) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("origin")
+		s.Origin.Encode(e)
+	}
+	{
+		e.FieldStart("target")
+		s.Target.Encode(e)
+	}
+	{
+		if s.OriginPages != nil {
+			e.FieldStart("origin_pages")
+			e.ArrStart()
+			for _, elem := range s.OriginPages {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.BothPages != nil {
+			e.FieldStart("both_pages")
+			e.ArrStart()
+			for _, elem := range s.BothPages {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.TargetPages != nil {
+			e.FieldStart("target_pages")
+			e.ArrStart()
+			for _, elem := range s.TargetPages {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfAPIDeduplicateComparePostOK = [5]string{
+	0: "origin",
+	1: "target",
+	2: "origin_pages",
+	3: "both_pages",
+	4: "target_pages",
+}
+
+// Decode decodes APIDeduplicateComparePostOK from json.
+func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIDeduplicateComparePostOK to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "origin":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.Origin.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin\"")
+			}
+		case "target":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.Target.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target\"")
+			}
+		case "origin_pages":
+			if err := func() error {
+				s.OriginPages = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.OriginPages = append(s.OriginPages, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_pages\"")
+			}
+		case "both_pages":
+			if err := func() error {
+				s.BothPages = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.BothPages = append(s.BothPages, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"both_pages\"")
+			}
+		case "target_pages":
+			if err := func() error {
+				s.TargetPages = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.TargetPages = append(s.TargetPages, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_pages\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIDeduplicateComparePostOK")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIDeduplicateComparePostOK) {
+					name = jsonFieldsNameOfAPIDeduplicateComparePostOK[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIDeduplicateComparePostOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIDeduplicateComparePostOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIDeduplicateComparePostReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIDeduplicateComparePostReq) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("origin_book_id")
+		json.EncodeUUID(e, s.OriginBookID)
+	}
+	{
+		e.FieldStart("target_book_id")
+		json.EncodeUUID(e, s.TargetBookID)
+	}
+}
+
+var jsonFieldsNameOfAPIDeduplicateComparePostReq = [2]string{
+	0: "origin_book_id",
+	1: "target_book_id",
+}
+
+// Decode decodes APIDeduplicateComparePostReq from json.
+func (s *APIDeduplicateComparePostReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIDeduplicateComparePostReq to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "origin_book_id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := json.DecodeUUID(d)
+				s.OriginBookID = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_book_id\"")
+			}
+		case "target_book_id":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := json.DecodeUUID(d)
+				s.TargetBookID = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_book_id\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIDeduplicateComparePostReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIDeduplicateComparePostReq) {
+					name = jsonFieldsNameOfAPIDeduplicateComparePostReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIDeduplicateComparePostReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIDeduplicateComparePostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIDeduplicateComparePostUnauthorized as json.
+func (s *APIDeduplicateComparePostUnauthorized) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIDeduplicateComparePostUnauthorized from json.
+func (s *APIDeduplicateComparePostUnauthorized) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIDeduplicateComparePostUnauthorized to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIDeduplicateComparePostUnauthorized(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIDeduplicateComparePostUnauthorized) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIDeduplicateComparePostUnauthorized) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -11907,9 +12278,9 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 			}
 		case "pages":
 			if err := func() error {
-				s.Pages = make([]BookDetailsPagesItem, 0)
+				s.Pages = make([]PageSimple, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem BookDetailsPagesItem
+					var elem PageSimple
 					if err := elem.Decode(d); err != nil {
 						return err
 					}
@@ -12110,119 +12481,6 @@ func (s *BookDetailsAttributesItem) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *BookDetailsAttributesItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *BookDetailsPagesItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *BookDetailsPagesItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("page_number")
-		e.Int(s.PageNumber)
-	}
-	{
-		if s.PreviewURL.Set {
-			e.FieldStart("preview_url")
-			s.PreviewURL.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfBookDetailsPagesItem = [2]string{
-	0: "page_number",
-	1: "preview_url",
-}
-
-// Decode decodes BookDetailsPagesItem from json.
-func (s *BookDetailsPagesItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode BookDetailsPagesItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "page_number":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Int()
-				s.PageNumber = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page_number\"")
-			}
-		case "preview_url":
-			if err := func() error {
-				s.PreviewURL.Reset()
-				if err := s.PreviewURL.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"preview_url\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode BookDetailsPagesItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfBookDetailsPagesItem) {
-					name = jsonFieldsNameOfBookDetailsPagesItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *BookDetailsPagesItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *BookDetailsPagesItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -14286,6 +14544,187 @@ func (s *BookShortInfo) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *BookSimple) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *BookSimple) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("book_id")
+		json.EncodeUUID(e, s.BookID)
+	}
+	{
+		e.FieldStart("create_at")
+		json.EncodeDateTime(e, s.CreateAt)
+	}
+	{
+		if s.OriginURL.Set {
+			e.FieldStart("origin_url")
+			s.OriginURL.Encode(e)
+		}
+	}
+	{
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+		e.FieldStart("page_count")
+		e.Int(s.PageCount)
+	}
+	{
+		if s.PreviewURL.Set {
+			e.FieldStart("preview_url")
+			s.PreviewURL.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfBookSimple = [6]string{
+	0: "book_id",
+	1: "create_at",
+	2: "origin_url",
+	3: "name",
+	4: "page_count",
+	5: "preview_url",
+}
+
+// Decode decodes BookSimple from json.
+func (s *BookSimple) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BookSimple to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "book_id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := json.DecodeUUID(d)
+				s.BookID = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"book_id\"")
+			}
+		case "create_at":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := json.DecodeDateTime(d)
+				s.CreateAt = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"create_at\"")
+			}
+		case "origin_url":
+			if err := func() error {
+				s.OriginURL.Reset()
+				if err := s.OriginURL.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_url\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "page_count":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int()
+				s.PageCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_count\"")
+			}
+		case "preview_url":
+			if err := func() error {
+				s.PreviewURL.Reset()
+				if err := s.PreviewURL.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"preview_url\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode BookSimple")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00011011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfBookSimple) {
+					name = jsonFieldsNameOfBookSimple[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *BookSimple) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BookSimple) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *ErrorResponse) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -14868,6 +15307,119 @@ func (s OptUUID) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptUUID) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PageSimple) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PageSimple) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("page_number")
+		e.Int(s.PageNumber)
+	}
+	{
+		if s.PreviewURL.Set {
+			e.FieldStart("preview_url")
+			s.PreviewURL.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfPageSimple = [2]string{
+	0: "page_number",
+	1: "preview_url",
+}
+
+// Decode decodes PageSimple from json.
+func (s *PageSimple) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PageSimple to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "page_number":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.PageNumber = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_number\"")
+			}
+		case "preview_url":
+			if err := func() error {
+				s.PreviewURL.Reset()
+				if err := s.PreviewURL.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"preview_url\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode PageSimple")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfPageSimple) {
+					name = jsonFieldsNameOfPageSimple[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PageSimple) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PageSimple) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

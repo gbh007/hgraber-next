@@ -1721,28 +1721,8 @@ paths:
                     items:
                       type: object
                       properties:
-                        book_id:
-                          type: string
-                          format: uuid
-                          description: ID целевой книги
-                        create_at:
-                          type: string
-                          format: date-time
-                          description: Время создания книги в системе
-                        origin_url:
-                          type: string
-                          format: uri
-                          description: Оригинальная ссылка на книгу (во внешней системе)
-                        name:
-                          type: string
-                          description: Название книги
-                        page_count:
-                          type: integer
-                          description: Количество страниц
-                        preview_url:
-                          type: string
-                          format: uri
-                          description: Ссылка для предпросмотра изображения книги
+                        book:
+                          $ref: "#/components/schemas/BookSimple"
                         origin_covered_target:
                           type: number
                           format: float64
@@ -1752,12 +1732,90 @@ paths:
                           format: float64
                           description: Процент (0-1) покрытия книги в оригинале
                       required:
-                        - book_id
-                        - create_at
-                        - name
-                        - page_count
+                        - book
                         - origin_covered_target
                         - target_covered_origin
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/deduplicate/compare:
+    post:
+      description: Сравнение двух книг на дублируемые страницы
+      summary: Сравнение двух книг на дублируемые страницы
+      tags:
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                origin_book_id:
+                  type: string
+                  format: uuid
+                  description: ID исходной книги
+                target_book_id:
+                  type: string
+                  format: uuid
+                  description: ID целевой книги
+              required:
+                - origin_book_id
+                - target_book_id
+      responses:
+        200:
+          description: Успешное получение результата
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  origin:
+                    description: ID исходной книги
+                    $ref: "#/components/schemas/BookSimple"
+                  target:
+                    description: ID целевой книги
+                    $ref: "#/components/schemas/BookSimple"
+                  origin_pages:
+                    type: array
+                    description: Страницы что есть только в оригинальной книге
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+                  both_pages:
+                    type: array
+                    description: Страницы что есть в обоих книгах
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+                  target_pages:
+                    type: array
+                    description: Страницы что есть только в целевой книге
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+                required:
+                  - origin
+                  - target
         400:
           description: Некорректный запрос
           content:
@@ -2283,6 +2341,52 @@ components:
         - page_loaded_percent
         - has_more_tags
 
+    BookSimple:
+      type: object
+      description: Крайне упрощенная модель книги
+      properties:
+        book_id:
+          type: string
+          format: uuid
+          description: ID целевой книги
+        create_at:
+          type: string
+          format: date-time
+          description: Время создания книги в системе
+        origin_url:
+          type: string
+          format: uri
+          description: Оригинальная ссылка на книгу (во внешней системе)
+        name:
+          type: string
+          description: Название книги
+        page_count:
+          type: integer
+          description: Количество страниц
+        preview_url:
+          type: string
+          format: uri
+          description: Ссылка для предпросмотра изображения книги
+      required:
+        - book_id
+        - create_at
+        - name
+        - page_count
+
+    PageSimple:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          description: Номер страницы в книге
+          minimum: 1
+        preview_url:
+          type: string
+          format: uri
+          description: Ссылка на изображение для предпросмотра
+      required:
+        - page_number
+
     BookDetails:
       type: object
       description: Данные книги
@@ -2337,18 +2441,7 @@ components:
           type: array
           description: данные страниц книги
           items:
-            type: object
-            properties:
-              page_number:
-                type: integer
-                description: номер страницы в книге
-                minimum: 1
-              preview_url:
-                type: string
-                format: uri
-                description: ссылка на изображение для предпросмотра
-            required:
-              - page_number
+            $ref: "#/components/schemas/PageSimple"
         size:
           type: object
           description: Данные о размере книги

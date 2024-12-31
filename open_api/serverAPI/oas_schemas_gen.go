@@ -1023,52 +1023,16 @@ func (s *APIDeduplicateBookByPageBodyPostOK) SetResult(val []APIDeduplicateBookB
 func (*APIDeduplicateBookByPageBodyPostOK) aPIDeduplicateBookByPageBodyPostRes() {}
 
 type APIDeduplicateBookByPageBodyPostOKResultItem struct {
-	// ID целевой книги.
-	BookID uuid.UUID `json:"book_id"`
-	// Время создания книги в системе.
-	CreateAt time.Time `json:"create_at"`
-	// Оригинальная ссылка на книгу (во внешней системе).
-	OriginURL OptURI `json:"origin_url"`
-	// Название книги.
-	Name string `json:"name"`
-	// Количество страниц.
-	PageCount int `json:"page_count"`
-	// Ссылка для предпросмотра изображения книги.
-	PreviewURL OptURI `json:"preview_url"`
+	Book BookSimple `json:"book"`
 	// Процент (0-1) покрытия оригинала в книге.
 	OriginCoveredTarget float64 `json:"origin_covered_target"`
 	// Процент (0-1) покрытия книги в оригинале.
 	TargetCoveredOrigin float64 `json:"target_covered_origin"`
 }
 
-// GetBookID returns the value of BookID.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetBookID() uuid.UUID {
-	return s.BookID
-}
-
-// GetCreateAt returns the value of CreateAt.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetCreateAt() time.Time {
-	return s.CreateAt
-}
-
-// GetOriginURL returns the value of OriginURL.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetOriginURL() OptURI {
-	return s.OriginURL
-}
-
-// GetName returns the value of Name.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetName() string {
-	return s.Name
-}
-
-// GetPageCount returns the value of PageCount.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetPageCount() int {
-	return s.PageCount
-}
-
-// GetPreviewURL returns the value of PreviewURL.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetPreviewURL() OptURI {
-	return s.PreviewURL
+// GetBook returns the value of Book.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetBook() BookSimple {
+	return s.Book
 }
 
 // GetOriginCoveredTarget returns the value of OriginCoveredTarget.
@@ -1081,34 +1045,9 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetCoveredOrigin() 
 	return s.TargetCoveredOrigin
 }
 
-// SetBookID sets the value of BookID.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetBookID(val uuid.UUID) {
-	s.BookID = val
-}
-
-// SetCreateAt sets the value of CreateAt.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetCreateAt(val time.Time) {
-	s.CreateAt = val
-}
-
-// SetOriginURL sets the value of OriginURL.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetOriginURL(val OptURI) {
-	s.OriginURL = val
-}
-
-// SetName sets the value of Name.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetName(val string) {
-	s.Name = val
-}
-
-// SetPageCount sets the value of PageCount.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetPageCount(val int) {
-	s.PageCount = val
-}
-
-// SetPreviewURL sets the value of PreviewURL.
-func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetPreviewURL(val OptURI) {
-	s.PreviewURL = val
+// SetBook sets the value of Book.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetBook(val BookSimple) {
+	s.Book = val
 }
 
 // SetOriginCoveredTarget sets the value of OriginCoveredTarget.
@@ -1139,6 +1078,114 @@ func (s *APIDeduplicateBookByPageBodyPostReq) SetBookID(val uuid.UUID) {
 type APIDeduplicateBookByPageBodyPostUnauthorized ErrorResponse
 
 func (*APIDeduplicateBookByPageBodyPostUnauthorized) aPIDeduplicateBookByPageBodyPostRes() {}
+
+type APIDeduplicateComparePostBadRequest ErrorResponse
+
+func (*APIDeduplicateComparePostBadRequest) aPIDeduplicateComparePostRes() {}
+
+type APIDeduplicateComparePostForbidden ErrorResponse
+
+func (*APIDeduplicateComparePostForbidden) aPIDeduplicateComparePostRes() {}
+
+type APIDeduplicateComparePostInternalServerError ErrorResponse
+
+func (*APIDeduplicateComparePostInternalServerError) aPIDeduplicateComparePostRes() {}
+
+type APIDeduplicateComparePostOK struct {
+	// ID исходной книги.
+	Origin BookSimple `json:"origin"`
+	// ID целевой книги.
+	Target BookSimple `json:"target"`
+	// Страницы что есть только в оригинальной книге.
+	OriginPages []PageSimple `json:"origin_pages"`
+	// Страницы что есть в обоих книгах.
+	BothPages []PageSimple `json:"both_pages"`
+	// Страницы что есть только в целевой книге.
+	TargetPages []PageSimple `json:"target_pages"`
+}
+
+// GetOrigin returns the value of Origin.
+func (s *APIDeduplicateComparePostOK) GetOrigin() BookSimple {
+	return s.Origin
+}
+
+// GetTarget returns the value of Target.
+func (s *APIDeduplicateComparePostOK) GetTarget() BookSimple {
+	return s.Target
+}
+
+// GetOriginPages returns the value of OriginPages.
+func (s *APIDeduplicateComparePostOK) GetOriginPages() []PageSimple {
+	return s.OriginPages
+}
+
+// GetBothPages returns the value of BothPages.
+func (s *APIDeduplicateComparePostOK) GetBothPages() []PageSimple {
+	return s.BothPages
+}
+
+// GetTargetPages returns the value of TargetPages.
+func (s *APIDeduplicateComparePostOK) GetTargetPages() []PageSimple {
+	return s.TargetPages
+}
+
+// SetOrigin sets the value of Origin.
+func (s *APIDeduplicateComparePostOK) SetOrigin(val BookSimple) {
+	s.Origin = val
+}
+
+// SetTarget sets the value of Target.
+func (s *APIDeduplicateComparePostOK) SetTarget(val BookSimple) {
+	s.Target = val
+}
+
+// SetOriginPages sets the value of OriginPages.
+func (s *APIDeduplicateComparePostOK) SetOriginPages(val []PageSimple) {
+	s.OriginPages = val
+}
+
+// SetBothPages sets the value of BothPages.
+func (s *APIDeduplicateComparePostOK) SetBothPages(val []PageSimple) {
+	s.BothPages = val
+}
+
+// SetTargetPages sets the value of TargetPages.
+func (s *APIDeduplicateComparePostOK) SetTargetPages(val []PageSimple) {
+	s.TargetPages = val
+}
+
+func (*APIDeduplicateComparePostOK) aPIDeduplicateComparePostRes() {}
+
+type APIDeduplicateComparePostReq struct {
+	// ID исходной книги.
+	OriginBookID uuid.UUID `json:"origin_book_id"`
+	// ID целевой книги.
+	TargetBookID uuid.UUID `json:"target_book_id"`
+}
+
+// GetOriginBookID returns the value of OriginBookID.
+func (s *APIDeduplicateComparePostReq) GetOriginBookID() uuid.UUID {
+	return s.OriginBookID
+}
+
+// GetTargetBookID returns the value of TargetBookID.
+func (s *APIDeduplicateComparePostReq) GetTargetBookID() uuid.UUID {
+	return s.TargetBookID
+}
+
+// SetOriginBookID sets the value of OriginBookID.
+func (s *APIDeduplicateComparePostReq) SetOriginBookID(val uuid.UUID) {
+	s.OriginBookID = val
+}
+
+// SetTargetBookID sets the value of TargetBookID.
+func (s *APIDeduplicateComparePostReq) SetTargetBookID(val uuid.UUID) {
+	s.TargetBookID = val
+}
+
+type APIDeduplicateComparePostUnauthorized ErrorResponse
+
+func (*APIDeduplicateComparePostUnauthorized) aPIDeduplicateComparePostRes() {}
 
 type APIFileIDGetBadRequest ErrorResponse
 
@@ -2960,7 +3007,7 @@ type BookDetails struct {
 	// Данные атрибутов книги.
 	Attributes []BookDetailsAttributesItem `json:"attributes"`
 	// Данные страниц книги.
-	Pages []BookDetailsPagesItem `json:"pages"`
+	Pages []PageSimple `json:"pages"`
 	// Данные о размере книги.
 	Size OptBookDetailsSize `json:"size"`
 }
@@ -3011,7 +3058,7 @@ func (s *BookDetails) GetAttributes() []BookDetailsAttributesItem {
 }
 
 // GetPages returns the value of Pages.
-func (s *BookDetails) GetPages() []BookDetailsPagesItem {
+func (s *BookDetails) GetPages() []PageSimple {
 	return s.Pages
 }
 
@@ -3066,7 +3113,7 @@ func (s *BookDetails) SetAttributes(val []BookDetailsAttributesItem) {
 }
 
 // SetPages sets the value of Pages.
-func (s *BookDetails) SetPages(val []BookDetailsPagesItem) {
+func (s *BookDetails) SetPages(val []PageSimple) {
 	s.Pages = val
 }
 
@@ -3102,33 +3149,6 @@ func (s *BookDetailsAttributesItem) SetName(val string) {
 // SetValues sets the value of Values.
 func (s *BookDetailsAttributesItem) SetValues(val []string) {
 	s.Values = val
-}
-
-type BookDetailsPagesItem struct {
-	// Номер страницы в книге.
-	PageNumber int `json:"page_number"`
-	// Ссылка на изображение для предпросмотра.
-	PreviewURL OptURI `json:"preview_url"`
-}
-
-// GetPageNumber returns the value of PageNumber.
-func (s *BookDetailsPagesItem) GetPageNumber() int {
-	return s.PageNumber
-}
-
-// GetPreviewURL returns the value of PreviewURL.
-func (s *BookDetailsPagesItem) GetPreviewURL() OptURI {
-	return s.PreviewURL
-}
-
-// SetPageNumber sets the value of PageNumber.
-func (s *BookDetailsPagesItem) SetPageNumber(val int) {
-	s.PageNumber = val
-}
-
-// SetPreviewURL sets the value of PreviewURL.
-func (s *BookDetailsPagesItem) SetPreviewURL(val OptURI) {
-	s.PreviewURL = val
 }
 
 // Данные о размере книги.
@@ -4191,6 +4211,83 @@ func (s *BookShortInfo) SetHasMoreTags(val bool) {
 	s.HasMoreTags = val
 }
 
+// Крайне упрощенная модель книги.
+// Ref: #/components/schemas/BookSimple
+type BookSimple struct {
+	// ID целевой книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Время создания книги в системе.
+	CreateAt time.Time `json:"create_at"`
+	// Оригинальная ссылка на книгу (во внешней системе).
+	OriginURL OptURI `json:"origin_url"`
+	// Название книги.
+	Name string `json:"name"`
+	// Количество страниц.
+	PageCount int `json:"page_count"`
+	// Ссылка для предпросмотра изображения книги.
+	PreviewURL OptURI `json:"preview_url"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *BookSimple) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetCreateAt returns the value of CreateAt.
+func (s *BookSimple) GetCreateAt() time.Time {
+	return s.CreateAt
+}
+
+// GetOriginURL returns the value of OriginURL.
+func (s *BookSimple) GetOriginURL() OptURI {
+	return s.OriginURL
+}
+
+// GetName returns the value of Name.
+func (s *BookSimple) GetName() string {
+	return s.Name
+}
+
+// GetPageCount returns the value of PageCount.
+func (s *BookSimple) GetPageCount() int {
+	return s.PageCount
+}
+
+// GetPreviewURL returns the value of PreviewURL.
+func (s *BookSimple) GetPreviewURL() OptURI {
+	return s.PreviewURL
+}
+
+// SetBookID sets the value of BookID.
+func (s *BookSimple) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetCreateAt sets the value of CreateAt.
+func (s *BookSimple) SetCreateAt(val time.Time) {
+	s.CreateAt = val
+}
+
+// SetOriginURL sets the value of OriginURL.
+func (s *BookSimple) SetOriginURL(val OptURI) {
+	s.OriginURL = val
+}
+
+// SetName sets the value of Name.
+func (s *BookSimple) SetName(val string) {
+	s.Name = val
+}
+
+// SetPageCount sets the value of PageCount.
+func (s *BookSimple) SetPageCount(val int) {
+	s.PageCount = val
+}
+
+// SetPreviewURL sets the value of PreviewURL.
+func (s *BookSimple) SetPreviewURL(val OptURI) {
+	s.PreviewURL = val
+}
+
 type Cookies struct {
 	APIKey string
 }
@@ -4890,6 +4987,34 @@ func (o OptUUID) Or(d uuid.UUID) uuid.UUID {
 		return v
 	}
 	return d
+}
+
+// Ref: #/components/schemas/PageSimple
+type PageSimple struct {
+	// Номер страницы в книге.
+	PageNumber int `json:"page_number"`
+	// Ссылка на изображение для предпросмотра.
+	PreviewURL OptURI `json:"preview_url"`
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *PageSimple) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// GetPreviewURL returns the value of PreviewURL.
+func (s *PageSimple) GetPreviewURL() OptURI {
+	return s.PreviewURL
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *PageSimple) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+// SetPreviewURL sets the value of PreviewURL.
+func (s *PageSimple) SetPreviewURL(val OptURI) {
+	s.PreviewURL = val
 }
 
 // Информация о системе.

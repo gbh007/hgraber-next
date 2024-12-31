@@ -54,3 +54,21 @@ func (c *Controller) getPagePreview(p entities.Page) serverAPI.OptURI {
 
 	return previewURL
 }
+
+func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.Page) serverAPI.BookSimple {
+	return serverAPI.BookSimple{
+		BookID:     book.ID,
+		CreateAt:   book.CreateAt,
+		OriginURL:  optURL(book.OriginURL),
+		Name:       book.Name,
+		PageCount:  book.PageCount,
+		PreviewURL: c.getPagePreview(previewPage),
+	}
+}
+
+func (c *Controller) convertSimplePage(page entities.Page) serverAPI.PageSimple {
+	return serverAPI.PageSimple{
+		PageNumber: page.PageNumber,
+		PreviewURL: c.getPagePreview(page),
+	}
+}

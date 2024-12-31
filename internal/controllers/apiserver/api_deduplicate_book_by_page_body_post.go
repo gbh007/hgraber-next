@@ -20,12 +20,7 @@ func (c *Controller) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *
 	return &serverAPI.APIDeduplicateBookByPageBodyPostOK{
 		Result: pkg.Map(data, func(raw entities.DeduplicateBookResult) serverAPI.APIDeduplicateBookByPageBodyPostOKResultItem {
 			return serverAPI.APIDeduplicateBookByPageBodyPostOKResultItem{
-				BookID:              raw.TargetBook.ID,
-				CreateAt:            raw.TargetBook.CreateAt,
-				OriginURL:           optURL(raw.TargetBook.OriginURL),
-				Name:                raw.TargetBook.Name,
-				PageCount:           raw.TargetBook.PageCount,
-				PreviewURL:          c.getPagePreview(raw.PreviewPage),
+				Book:                c.convertSimpleBook(raw.TargetBook, raw.PreviewPage),
 				OriginCoveredTarget: raw.EntryPercentage,
 				TargetCoveredOrigin: raw.ReverseEntryPercentage,
 			}

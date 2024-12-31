@@ -359,24 +359,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'd': // Prefix: "deduplicate/book-by-page-body"
+			case 'd': // Prefix: "deduplicate/"
 				origElem := elem
-				if l := len("deduplicate/book-by-page-body"); len(elem) >= l && elem[0:l] == "deduplicate/book-by-page-body" {
+				if l := len("deduplicate/"); len(elem) >= l && elem[0:l] == "deduplicate/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleAPIDeduplicateBookByPageBodyPostRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
+					break
+				}
+				switch elem[0] {
+				case 'b': // Prefix: "book-by-page-body"
+					origElem := elem
+					if l := len("book-by-page-body"); len(elem) >= l && elem[0:l] == "book-by-page-body" {
+						elem = elem[l:]
+					} else {
+						break
 					}
 
-					return
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIDeduplicateBookByPageBodyPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'c': // Prefix: "compare"
+					origElem := elem
+					if l := len("compare"); len(elem) >= l && elem[0:l] == "compare" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIDeduplicateComparePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -1347,28 +1383,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 'd': // Prefix: "deduplicate/book-by-page-body"
+			case 'd': // Prefix: "deduplicate/"
 				origElem := elem
-				if l := len("deduplicate/book-by-page-body"); len(elem) >= l && elem[0:l] == "deduplicate/book-by-page-body" {
+				if l := len("deduplicate/"); len(elem) >= l && elem[0:l] == "deduplicate/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "POST":
-						r.name = APIDeduplicateBookByPageBodyPostOperation
-						r.summary = "Поиск дубликатов книги по телу страницы"
-						r.operationID = ""
-						r.pathPattern = "/api/deduplicate/book-by-page-body"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
+					break
+				}
+				switch elem[0] {
+				case 'b': // Prefix: "book-by-page-body"
+					origElem := elem
+					if l := len("book-by-page-body"); len(elem) >= l && elem[0:l] == "book-by-page-body" {
+						elem = elem[l:]
+					} else {
+						break
 					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIDeduplicateBookByPageBodyPostOperation
+							r.summary = "Поиск дубликатов книги по телу страницы"
+							r.operationID = ""
+							r.pathPattern = "/api/deduplicate/book-by-page-body"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'c': // Prefix: "compare"
+					origElem := elem
+					if l := len("compare"); len(elem) >= l && elem[0:l] == "compare" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIDeduplicateComparePostOperation
+							r.summary = "Сравнение двух книг на дублируемые страницы"
+							r.operationID = ""
+							r.pathPattern = "/api/deduplicate/compare"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
