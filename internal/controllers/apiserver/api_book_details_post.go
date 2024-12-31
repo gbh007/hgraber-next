@@ -46,5 +46,16 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 				PreviewURL: c.getPagePreview(p),
 			}
 		}),
+		Size: serverAPI.OptBookDetailsSize{
+			Value: serverAPI.BookDetailsSize{
+				Unique:          book.Size.Unique,
+				Shared:          book.Size.Shared,
+				Total:           book.Size.Total,
+				UniqueFormatted: entities.PrettySize(book.Size.Unique),
+				SharedFormatted: entities.PrettySize(book.Size.Shared),
+				TotalFormatted:  entities.PrettySize(book.Size.Total),
+			},
+			Set: book.Size.Total > 0,
+		},
 	}, nil
 }

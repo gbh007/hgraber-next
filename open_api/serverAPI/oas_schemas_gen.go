@@ -2961,6 +2961,8 @@ type BookDetails struct {
 	Attributes []BookDetailsAttributesItem `json:"attributes"`
 	// Данные страниц книги.
 	Pages []BookDetailsPagesItem `json:"pages"`
+	// Данные о размере книги.
+	Size OptBookDetailsSize `json:"size"`
 }
 
 // GetID returns the value of ID.
@@ -3013,6 +3015,11 @@ func (s *BookDetails) GetPages() []BookDetailsPagesItem {
 	return s.Pages
 }
 
+// GetSize returns the value of Size.
+func (s *BookDetails) GetSize() OptBookDetailsSize {
+	return s.Size
+}
+
 // SetID sets the value of ID.
 func (s *BookDetails) SetID(val uuid.UUID) {
 	s.ID = val
@@ -3061,6 +3068,11 @@ func (s *BookDetails) SetAttributes(val []BookDetailsAttributesItem) {
 // SetPages sets the value of Pages.
 func (s *BookDetails) SetPages(val []BookDetailsPagesItem) {
 	s.Pages = val
+}
+
+// SetSize sets the value of Size.
+func (s *BookDetails) SetSize(val OptBookDetailsSize) {
+	s.Size = val
 }
 
 func (*BookDetails) aPIBookDetailsPostRes() {}
@@ -3117,6 +3129,85 @@ func (s *BookDetailsPagesItem) SetPageNumber(val int) {
 // SetPreviewURL sets the value of PreviewURL.
 func (s *BookDetailsPagesItem) SetPreviewURL(val OptURI) {
 	s.PreviewURL = val
+}
+
+// Данные о размере книги.
+type BookDetailsSize struct {
+	// Размер уникальных файлов книги.
+	Unique int64 `json:"unique"`
+	// Размер файлов в книге что пересекаются с другими
+	// книгами.
+	Shared int64 `json:"shared"`
+	// Общий размер файлов книги.
+	Total int64 `json:"total"`
+	// Размер уникальных файлов книги в человекочитаемом
+	// виде.
+	UniqueFormatted string `json:"unique_formatted"`
+	// Размер файлов в книге что пересекаются с другими
+	// книгами в человекочитаемом виде.
+	SharedFormatted string `json:"shared_formatted"`
+	// Общий размер файлов книги в человекочитаемом виде.
+	TotalFormatted string `json:"total_formatted"`
+}
+
+// GetUnique returns the value of Unique.
+func (s *BookDetailsSize) GetUnique() int64 {
+	return s.Unique
+}
+
+// GetShared returns the value of Shared.
+func (s *BookDetailsSize) GetShared() int64 {
+	return s.Shared
+}
+
+// GetTotal returns the value of Total.
+func (s *BookDetailsSize) GetTotal() int64 {
+	return s.Total
+}
+
+// GetUniqueFormatted returns the value of UniqueFormatted.
+func (s *BookDetailsSize) GetUniqueFormatted() string {
+	return s.UniqueFormatted
+}
+
+// GetSharedFormatted returns the value of SharedFormatted.
+func (s *BookDetailsSize) GetSharedFormatted() string {
+	return s.SharedFormatted
+}
+
+// GetTotalFormatted returns the value of TotalFormatted.
+func (s *BookDetailsSize) GetTotalFormatted() string {
+	return s.TotalFormatted
+}
+
+// SetUnique sets the value of Unique.
+func (s *BookDetailsSize) SetUnique(val int64) {
+	s.Unique = val
+}
+
+// SetShared sets the value of Shared.
+func (s *BookDetailsSize) SetShared(val int64) {
+	s.Shared = val
+}
+
+// SetTotal sets the value of Total.
+func (s *BookDetailsSize) SetTotal(val int64) {
+	s.Total = val
+}
+
+// SetUniqueFormatted sets the value of UniqueFormatted.
+func (s *BookDetailsSize) SetUniqueFormatted(val string) {
+	s.UniqueFormatted = val
+}
+
+// SetSharedFormatted sets the value of SharedFormatted.
+func (s *BookDetailsSize) SetSharedFormatted(val string) {
+	s.SharedFormatted = val
+}
+
+// SetTotalFormatted sets the value of TotalFormatted.
+func (s *BookDetailsSize) SetTotalFormatted(val string) {
+	s.TotalFormatted = val
 }
 
 // Ref: #/components/schemas/BookFilter
@@ -4197,6 +4288,52 @@ func (o OptAPIAgentListPostOKItemStatus) Get() (v APIAgentListPostOKItemStatus, 
 
 // Or returns value if set, or given parameter if does not.
 func (o OptAPIAgentListPostOKItemStatus) Or(d APIAgentListPostOKItemStatus) APIAgentListPostOKItemStatus {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptBookDetailsSize returns new OptBookDetailsSize with value set to v.
+func NewOptBookDetailsSize(v BookDetailsSize) OptBookDetailsSize {
+	return OptBookDetailsSize{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookDetailsSize is optional BookDetailsSize.
+type OptBookDetailsSize struct {
+	Value BookDetailsSize
+	Set   bool
+}
+
+// IsSet returns true if OptBookDetailsSize was set.
+func (o OptBookDetailsSize) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookDetailsSize) Reset() {
+	var v BookDetailsSize
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookDetailsSize) SetTo(v BookDetailsSize) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookDetailsSize) Get() (v BookDetailsSize, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookDetailsSize) Or(d BookDetailsSize) BookDetailsSize {
 	if v, ok := o.Get(); ok {
 		return v
 	}

@@ -17,6 +17,9 @@ type storage interface {
 	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
 	BookPages(ctx context.Context, bookID uuid.UUID) ([]entities.Page, error)
 	Labels(ctx context.Context, bookID uuid.UUID) ([]entities.BookLabel, error)
+
+	BookIDsByMD5(ctx context.Context, md5sums []string) ([]uuid.UUID, error)
+	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
 }
 
 type UseCase struct {
@@ -78,6 +81,7 @@ func (uc *UseCase) BookFull(ctx context.Context, bookID uuid.UUID) (entities.Boo
 		IncludeAttributes: true,
 		IncludePages:      true,
 		IncludeLabels:     true,
+		IncludeSize:       true,
 	})
 	if err != nil {
 		return entities.BookFull{}, err

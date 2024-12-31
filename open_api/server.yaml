@@ -2349,6 +2349,38 @@ components:
                 description: ссылка на изображение для предпросмотра
             required:
               - page_number
+        size:
+          type: object
+          description: Данные о размере книги
+          properties:
+            unique:
+              type: integer
+              format: int64
+              description: Размер уникальных файлов книги
+            shared:
+              type: integer
+              format: int64
+              description: Размер файлов в книге что пересекаются с другими книгами
+            total:
+              type: integer
+              format: int64
+              description: Общий размер файлов книги
+            unique_formatted:
+              type: string
+              description: Размер уникальных файлов книги в человекочитаемом виде
+            shared_formatted:
+              type: string
+              description: Размер файлов в книге что пересекаются с другими книгами в человекочитаемом виде
+            total_formatted:
+              type: string
+              description: Общий размер файлов книги в человекочитаемом виде
+          required:
+            - unique
+            - shared
+            - total
+            - unique_formatted
+            - shared_formatted
+            - total_formatted
       required:
         - id
         - created

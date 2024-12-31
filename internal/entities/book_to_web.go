@@ -21,6 +21,8 @@ type BookToWeb struct {
 	ParsedPages bool
 	Tags        []string
 	HasMoreTags bool
+
+	Size BookSize
 }
 
 func (book BookToWeb) PageDownloadPercent() float64 {

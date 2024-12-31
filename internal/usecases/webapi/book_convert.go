@@ -18,6 +18,7 @@ func (uc *UseCase) bookConvert(bookFull entities.BookFull) entities.BookToWeb {
 				Values: values,
 			}
 		}),
+		Size: bookFull.Size,
 	}
 
 	if len(book.Pages) > 0 {

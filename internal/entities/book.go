@@ -33,6 +33,7 @@ type BookFull struct {
 	Pages      []Page
 	Attributes map[string][]string
 	Labels     []BookLabel
+	Size       BookSize
 }
 
 func (b BookFull) IsLoaded() bool {
@@ -86,4 +87,10 @@ type BookFullWithAgent struct {
 	AgentID uuid.UUID
 
 	DeleteAfterExport bool
+}
+
+type BookSize struct {
+	Unique int64
+	Shared int64
+	Total  int64
 }
