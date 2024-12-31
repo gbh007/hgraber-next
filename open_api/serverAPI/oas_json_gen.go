@@ -9770,11 +9770,18 @@ func (s *APISystemHandlePostReq) encodeFields(e *jx.Encoder) {
 			s.IsMulti.Encode(e)
 		}
 	}
+	{
+		if s.AutoVerify.Set {
+			e.FieldStart("auto_verify")
+			s.AutoVerify.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPISystemHandlePostReq = [2]string{
+var jsonFieldsNameOfAPISystemHandlePostReq = [3]string{
 	0: "urls",
 	1: "is_multi",
+	2: "auto_verify",
 }
 
 // Decode decodes APISystemHandlePostReq from json.
@@ -9815,6 +9822,16 @@ func (s *APISystemHandlePostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"is_multi\"")
+			}
+		case "auto_verify":
+			if err := func() error {
+				s.AutoVerify.Reset()
+				if err := s.AutoVerify.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"auto_verify\"")
 			}
 		default:
 			return d.Skip()

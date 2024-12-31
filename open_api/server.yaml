@@ -1299,6 +1299,9 @@ paths:
                 is_multi:
                   type: boolean
                   description: Режим обработки мульти ссылок (на тома книг)
+                auto_verify:
+                  type: boolean
+                  description: Пометить книги подтвержденными
               required:
                 - urls
       responses:

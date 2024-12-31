@@ -15,14 +15,14 @@ import (
 )
 
 type parseUseCases interface {
-	NewBooks(ctx context.Context, urls []url.URL) (entities.FirstHandleMultipleResult, error)
+	NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (entities.FirstHandleMultipleResult, error)
 
 	BooksExists(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error)
 	PagesExists(ctx context.Context, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
 	BookByURL(ctx context.Context, u url.URL) (entities.BookFull, error)
 	PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error)
 
-	NewBooksMulti(ctx context.Context, urls []url.URL) (entities.MultiHandleMultipleResult, error)
+	NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (entities.MultiHandleMultipleResult, error)
 }
 
 type webAPIUseCases interface {

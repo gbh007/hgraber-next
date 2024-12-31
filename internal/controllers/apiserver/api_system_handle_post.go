@@ -10,7 +10,7 @@ import (
 
 func (c *Controller) APISystemHandlePost(ctx context.Context, req *serverAPI.APISystemHandlePostReq) (serverAPI.APISystemHandlePostRes, error) {
 	if req.IsMulti.Value {
-		result, err := c.parseUseCases.NewBooksMulti(ctx, req.Urls)
+		result, err := c.parseUseCases.NewBooksMulti(ctx, req.Urls, req.AutoVerify.Value)
 		if err != nil {
 			return &serverAPI.APISystemHandlePostInternalServerError{
 				InnerCode: ParseUseCaseCode,
@@ -28,7 +28,7 @@ func (c *Controller) APISystemHandlePost(ctx context.Context, req *serverAPI.API
 		}, nil
 	}
 
-	result, err := c.parseUseCases.NewBooks(ctx, req.Urls)
+	result, err := c.parseUseCases.NewBooks(ctx, req.Urls, req.AutoVerify.Value)
 	if err != nil {
 		return &serverAPI.APISystemHandlePostInternalServerError{
 			InnerCode: ParseUseCaseCode,

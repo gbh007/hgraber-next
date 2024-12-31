@@ -15,7 +15,7 @@ import (
 	"hgnext/internal/pkg"
 )
 
-func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.FirstHandleMultipleResult, error) {
+func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (entities.FirstHandleMultipleResult, error) {
 	agents, err := uc.storage.Agents(ctx, entities.AgentFilter{
 		CanParse: true,
 	})
@@ -115,13 +115,18 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL) (entities.First
 					continue
 				}
 
-				err = uc.storage.NewBook(ctx, entities.Book{
-					ID:         id,
-					OriginURL:  &u,
-					CreateAt:   time.Now(),
-					Verified:   true,
-					VerifiedAt: time.Now(),
-				})
+				book := entities.Book{
+					ID:        id,
+					OriginURL: &u,
+					CreateAt:  time.Now().UTC(),
+				}
+
+				if autoVerify {
+					book.Verified = true
+					book.VerifiedAt = time.Now().UTC()
+				}
+
+				err = uc.storage.NewBook(ctx, book)
 				if err != nil {
 					return entities.FirstHandleMultipleResult{}, fmt.Errorf(
 						"agent (%s) create (%s): %w", agent.ID.String(), u.String(), err,

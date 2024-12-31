@@ -13,7 +13,7 @@ import (
 	"hgnext/internal/entities"
 )
 
-func (uc *UseCase) NewBooksMulti(ctx context.Context, urls []url.URL) (entities.MultiHandleMultipleResult, error) {
+func (uc *UseCase) NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (entities.MultiHandleMultipleResult, error) {
 	agents, err := uc.storage.Agents(ctx, entities.AgentFilter{
 		CanParseMulti: true,
 	})
@@ -90,11 +90,18 @@ urlLoop:
 			}
 
 			for _, u := range newUrls {
-				err = uc.storage.NewBook(ctx, entities.Book{
+				book := entities.Book{
 					ID:        uuid.Must(uuid.NewV7()),
 					OriginURL: &u,
 					CreateAt:  time.Now(),
-				})
+				}
+
+				if autoVerify {
+					book.Verified = true
+					book.VerifiedAt = time.Now().UTC()
+				}
+
+				err = uc.storage.NewBook(ctx, book)
 				if err != nil {
 					return entities.MultiHandleMultipleResult{}, fmt.Errorf(
 						"agent (%s) create (%s): %w", agent.ID.String(), u.String(), err,

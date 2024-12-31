@@ -2438,6 +2438,8 @@ type APISystemHandlePostReq struct {
 	Urls []url.URL `json:"urls"`
 	// Режим обработки мульти ссылок (на тома книг).
 	IsMulti OptBool `json:"is_multi"`
+	// Пометить книги подтвержденными.
+	AutoVerify OptBool `json:"auto_verify"`
 }
 
 // GetUrls returns the value of Urls.
@@ -2450,6 +2452,11 @@ func (s *APISystemHandlePostReq) GetIsMulti() OptBool {
 	return s.IsMulti
 }
 
+// GetAutoVerify returns the value of AutoVerify.
+func (s *APISystemHandlePostReq) GetAutoVerify() OptBool {
+	return s.AutoVerify
+}
+
 // SetUrls sets the value of Urls.
 func (s *APISystemHandlePostReq) SetUrls(val []url.URL) {
 	s.Urls = val
@@ -2458,6 +2465,11 @@ func (s *APISystemHandlePostReq) SetUrls(val []url.URL) {
 // SetIsMulti sets the value of IsMulti.
 func (s *APISystemHandlePostReq) SetIsMulti(val OptBool) {
 	s.IsMulti = val
+}
+
+// SetAutoVerify sets the value of AutoVerify.
+func (s *APISystemHandlePostReq) SetAutoVerify(val OptBool) {
+	s.AutoVerify = val
 }
 
 type APISystemHandlePostUnauthorized ErrorResponse
