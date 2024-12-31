@@ -2345,10 +2345,10 @@ components:
       type: object
       description: Крайне упрощенная модель книги
       properties:
-        book_id:
+        id:
           type: string
           format: uuid
-          description: ID целевой книги
+          description: ID книги
         create_at:
           type: string
           format: date-time
@@ -2368,7 +2368,7 @@ components:
           format: uri
           description: Ссылка для предпросмотра изображения книги
       required:
-        - book_id
+        - id
         - create_at
         - name
         - page_count

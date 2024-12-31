@@ -4214,8 +4214,8 @@ func (s *BookShortInfo) SetHasMoreTags(val bool) {
 // Крайне упрощенная модель книги.
 // Ref: #/components/schemas/BookSimple
 type BookSimple struct {
-	// ID целевой книги.
-	BookID uuid.UUID `json:"book_id"`
+	// ID книги.
+	ID uuid.UUID `json:"id"`
 	// Время создания книги в системе.
 	CreateAt time.Time `json:"create_at"`
 	// Оригинальная ссылка на книгу (во внешней системе).
@@ -4228,9 +4228,9 @@ type BookSimple struct {
 	PreviewURL OptURI `json:"preview_url"`
 }
 
-// GetBookID returns the value of BookID.
-func (s *BookSimple) GetBookID() uuid.UUID {
-	return s.BookID
+// GetID returns the value of ID.
+func (s *BookSimple) GetID() uuid.UUID {
+	return s.ID
 }
 
 // GetCreateAt returns the value of CreateAt.
@@ -4258,9 +4258,9 @@ func (s *BookSimple) GetPreviewURL() OptURI {
 	return s.PreviewURL
 }
 
-// SetBookID sets the value of BookID.
-func (s *BookSimple) SetBookID(val uuid.UUID) {
-	s.BookID = val
+// SetID sets the value of ID.
+func (s *BookSimple) SetID(val uuid.UUID) {
+	s.ID = val
 }
 
 // SetCreateAt sets the value of CreateAt.

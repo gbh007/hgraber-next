@@ -68,7 +68,7 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 	}
 
 	for _, page := range targetPages {
-		if hashes[page.Hash()] == 1 {
+		if hashes[page.Hash()] == 0 {
 			result.TargetPages = append(result.TargetPages, page.Page())
 		}
 	}

@@ -14553,8 +14553,8 @@ func (s *BookSimple) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *BookSimple) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("book_id")
-		json.EncodeUUID(e, s.BookID)
+		e.FieldStart("id")
+		json.EncodeUUID(e, s.ID)
 	}
 	{
 		e.FieldStart("create_at")
@@ -14583,7 +14583,7 @@ func (s *BookSimple) encodeFields(e *jx.Encoder) {
 }
 
 var jsonFieldsNameOfBookSimple = [6]string{
-	0: "book_id",
+	0: "id",
 	1: "create_at",
 	2: "origin_url",
 	3: "name",
@@ -14600,17 +14600,17 @@ func (s *BookSimple) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "book_id":
+		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
 				v, err := json.DecodeUUID(d)
-				s.BookID = v
+				s.ID = v
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"book_id\"")
+				return errors.Wrap(err, "decode field \"id\"")
 			}
 		case "create_at":
 			requiredBitSet[0] |= 1 << 1

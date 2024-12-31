@@ -18,7 +18,7 @@ type DeduplicateArchiveResult struct {
 // FIXME: надо проверить и покрыть тестами,
 // сейчас есть странная аналомалия что обе функции расчета выдают не 100%,
 // при этом функция поиска страниц не находит разницу.
-func EntryPercentageForPagesNew(current, target []PageWithHash) float64 {
+func EntryPercentageForPages(current, target []PageWithHash) float64 {
 	targetHashes := make(map[FileHash]struct{}, len(target))
 
 	for _, p := range target {
@@ -35,15 +35,15 @@ func EntryPercentageForPagesNew(current, target []PageWithHash) float64 {
 		if ok {
 			// hits += targetHashes[p.Hash()] // Альтернативный вариант
 			hits++
-		}
 
-		delete(targetHashes, p.Hash())
+			delete(targetHashes, p.Hash())
+		}
 	}
 
 	return float64(hits) / float64(count)
 }
 
-func EntryPercentageForPages(current, target []PageWithHash) float64 {
+func EntryPercentageForPagesOld(current, target []PageWithHash) float64 {
 	targetHashes := make(map[FileHash]struct{}, len(target))
 
 	for _, p := range target {
