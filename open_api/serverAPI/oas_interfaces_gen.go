@@ -113,20 +113,16 @@ type APISystemInfoGetRes interface {
 	aPISystemInfoGetRes()
 }
 
-type APISystemRPCDeduplicateFilesPostRes interface {
-	aPISystemRPCDeduplicateFilesPostRes()
-}
-
-type APISystemRPCRemoveDetachedFilesPostRes interface {
-	aPISystemRPCRemoveDetachedFilesPostRes()
-}
-
-type APISystemRPCRemoveMismatchFilesPostRes interface {
-	aPISystemRPCRemoveMismatchFilesPostRes()
-}
-
 type APISystemWorkerConfigPostRes interface {
 	aPISystemWorkerConfigPostRes()
+}
+
+type APITaskCreatePostRes interface {
+	aPITaskCreatePostRes()
+}
+
+type APITaskResultsGetRes interface {
+	aPITaskResultsGetRes()
 }
 
 type APIUserLoginPostRes interface {

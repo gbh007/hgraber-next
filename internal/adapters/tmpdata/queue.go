@@ -23,6 +23,13 @@ func (dq *dataQueue[T]) Push(s []T) {
 	dq.queue = append(dq.queue, s...)
 }
 
+func (dq *dataQueue[T]) PushOne(s T) {
+	dq.mutex.Lock()
+	defer dq.mutex.Unlock()
+
+	dq.queue = append(dq.queue, s)
+}
+
 func (dq *dataQueue[T]) Pop() []T {
 	dq.mutex.Lock()
 	defer dq.mutex.Unlock()
@@ -31,4 +38,20 @@ func (dq *dataQueue[T]) Pop() []T {
 	dq.queue = make([]T, 0, dq.bufferSize)
 
 	return s
+}
+
+func (dq *dataQueue[T]) PopOne() T {
+	dq.mutex.Lock()
+	defer dq.mutex.Unlock()
+
+	if len(dq.queue) == 0 {
+		var empty T
+		return empty
+	}
+
+	e := dq.queue[0]
+
+	dq.queue = dq.queue[1:]
+
+	return e
 }

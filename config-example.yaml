@@ -22,6 +22,10 @@ workers:
     count: 1
     queue_size: 100
     interval: 3s
+  tasker:
+    count: 1
+    queue_size: 100
+    interval: 10s
 storage:
   connection: postgres://hgrabernextuser:hgrabernextpass@localhost:5432/hgrabernext?sslmode=disable
   file_path: ./.hidden/filedata

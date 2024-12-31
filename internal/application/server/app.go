@@ -30,6 +30,7 @@ import (
 	"hgnext/internal/usecases/export"
 	"hgnext/internal/usecases/filelogic"
 	"hgnext/internal/usecases/parsing"
+	"hgnext/internal/usecases/taskhandler"
 	"hgnext/internal/usecases/webapi"
 )
 
@@ -142,6 +143,9 @@ func Serve() {
 	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorage, bookRequestUseCases, cfg.Parsing.ParseBookTimeout)
 	fileUseCases := filelogic.New(logger, storage, fileStorage)
 	exportUseCases := export.New(logger, storage, fileStorage, agentSystem, tmpStorage, bookRequestUseCases)
+	deduplicateUseCases := deduplicator.New(logger, storage, tracer)
+	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorage)
+	taskUseCases := taskhandler.New(logger, tmpStorage, deduplicateUseCases, cleanupUseCases)
 
 	metricProvider := metrics.MetricProvider{}
 
@@ -151,13 +155,12 @@ func Serve() {
 		workermanager.NewPageDownloader(parsingUseCases, logger, tracer, cfg.Workers.Page, metricProvider),
 		workermanager.NewHasher(fileUseCases, logger, tracer, cfg.Workers.Hasher, metricProvider),
 		workermanager.NewExporter(exportUseCases, logger, tracer, cfg.Workers.Exporter, metricProvider),
+		workermanager.NewTasker(tmpStorage, logger, tracer, cfg.Workers.Tasker, metricProvider),
 	)
 	asyncController.RegisterRunner(workersController)
 
 	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage, bookRequestUseCases)
 	agentUseCases := agentUC.New(logger, agentSystem, storage)
-	dededuplicateUseCases := deduplicator.New(logger, storage, tracer)
-	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorage)
 
 	apiController, err := apiserver.New(
 		logger,
@@ -167,8 +170,8 @@ func Serve() {
 		webAPIUseCases,
 		agentUseCases,
 		exportUseCases,
-		dededuplicateUseCases,
-		cleanupUseCases,
+		deduplicateUseCases,
+		taskUseCases,
 		cfg.Application.Debug,
 	)
 	if err != nil {

@@ -268,34 +268,6 @@ func (UnimplementedHandler) APISystemInfoGet(ctx context.Context) (r APISystemIn
 	return r, ht.ErrNotImplemented
 }
 
-// APISystemRPCDeduplicateFilesPost implements POST /api/system/rpc/deduplicate/files operation.
-//
-// Дедупликация файлов.
-//
-// POST /api/system/rpc/deduplicate/files
-func (UnimplementedHandler) APISystemRPCDeduplicateFilesPost(ctx context.Context) (r APISystemRPCDeduplicateFilesPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APISystemRPCRemoveDetachedFilesPost implements POST /api/system/rpc/remove/detached-files operation.
-//
-// Удаление несвязанных файлов.
-//
-// POST /api/system/rpc/remove/detached-files
-func (UnimplementedHandler) APISystemRPCRemoveDetachedFilesPost(ctx context.Context) (r APISystemRPCRemoveDetachedFilesPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APISystemRPCRemoveMismatchFilesPost implements POST /api/system/rpc/remove/mismatch-files operation.
-//
-// Удаление рассинхронизированных файлов
-// (несоответствие файловой системы и БД).
-//
-// POST /api/system/rpc/remove/mismatch-files
-func (UnimplementedHandler) APISystemRPCRemoveMismatchFilesPost(ctx context.Context) (r APISystemRPCRemoveMismatchFilesPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // APISystemWorkerConfigPost implements POST /api/system/worker/config operation.
 //
 // Динамическая конфигурация раннеров (воркеров),
@@ -303,6 +275,24 @@ func (UnimplementedHandler) APISystemRPCRemoveMismatchFilesPost(ctx context.Cont
 //
 // POST /api/system/worker/config
 func (UnimplementedHandler) APISystemWorkerConfigPost(ctx context.Context, req *APISystemWorkerConfigPostReq) (r APISystemWorkerConfigPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APITaskCreatePost implements POST /api/task/create operation.
+//
+// Создание и фоновый запуск задачи.
+//
+// POST /api/task/create
+func (UnimplementedHandler) APITaskCreatePost(ctx context.Context, req *APITaskCreatePostReq) (r APITaskCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APITaskResultsGet implements GET /api/task/results operation.
+//
+// Получение результатов задач.
+//
+// GET /api/task/results
+func (UnimplementedHandler) APITaskResultsGet(ctx context.Context) (r APITaskResultsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

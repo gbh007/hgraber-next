@@ -7,6 +7,7 @@ type Workers struct {
 	Book     Worker `yaml:"book" envconfig:"BOOK"`
 	Hasher   Worker `yaml:"hasher" envconfig:"HASHER"`
 	Exporter Worker `yaml:"exporter" envconfig:"EXPORTER"`
+	Tasker   Worker `yaml:"tasker" envconfig:"TASKER"`
 }
 
 func WorkersDefault() Workers {
@@ -15,6 +16,7 @@ func WorkersDefault() Workers {
 		Book:     WorkerDefault(),
 		Hasher:   WorkerDefault(),
 		Exporter: WorkerDefault(),
+		Tasker:   WorkerDefault(),
 	}
 }
 

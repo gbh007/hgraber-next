@@ -26,6 +26,8 @@ tags:
     description: Взаимодействие с системами агентов
   - name: deduplicate
     description: Дедупликация данных
+  - name: task
+    description: Взаимодействие с асинхронными задачами
   - name: system
     description: Взаимодействие с системой граббера
 
@@ -136,6 +138,161 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SystemInfo"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/task/create:
+    post:
+      description: Создание и фоновый запуск задачи
+      summary: Создание и запуск задачи
+      tags:
+        - task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  enum:
+                    - deduplicate_files
+                    - remove_detached_files
+                    - remove_mismatch_files
+                  description: Код задачи
+              required:
+                - code
+      responses:
+        204:
+          description: Успешное создание и запуск
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/task/results:
+    get:
+      description: Получение результатов задач
+      summary: Получение результатов задач
+      tags:
+        - task
+      responses:
+        200:
+          description: Информация о результатах
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    description: Результаты
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Название задачи
+                        error:
+                          type: string
+                          description: Данные об ошибке
+                        result:
+                          type: string
+                          description: Данные результата
+                        duration_formatted:
+                          type: string
+                          description: Продолжительность выполнения задачи
+                        started_at:
+                          type: string
+                          format: date-time
+                          description: Время запуска задачи
+                        ended_at:
+                          type: string
+                          format: date-time
+                          description: Время завершения задачи
+                        stages:
+                          type: array
+                          description: Этапы выполнения задачи
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: Название этапа
+                              error:
+                                type: string
+                                description: Данные об ошибке
+                              result:
+                                type: string
+                                description: Данные результата
+                              duration_formatted:
+                                type: string
+                                description: Продолжительность выполнения этапа
+                              started_at:
+                                type: string
+                                format: date-time
+                                description: Время запуска этапа
+                              ended_at:
+                                type: string
+                                format: date-time
+                                description: Время завершения этапа
+                              progress:
+                                type: number
+                                format: int64
+                                description: Количество выполненных шагов
+                              total:
+                                type: number
+                                format: int64
+                                description: Общеее число шагов которое нужно для завершения этапа
+                            required:
+                              - name
+                              - duration_formatted
+                              - started_at
+                              - ended_at
+                              - progress
+                              - total
+                      required:
+                        - name
+                        - duration_formatted
+                        - started_at
+                        - ended_at
         401:
           description: Пользователь не авторизован
           content:
@@ -1966,160 +2123,6 @@ paths:
       responses:
         204:
           description: Успешное изменение конфигурации
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /api/system/rpc/deduplicate/files:
-    post:
-      description: Дедупликация файлов
-      summary: Дедупликация файлов
-      tags:
-        - system
-      responses:
-        200:
-          description: Успешное выполнение
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    description: Количество файлов дублей
-                  size:
-                    type: integer
-                    format: int64
-                    description: Размер файлов дублей
-                  pretty_size:
-                    type: string
-                    description: Размер файлов дублей в человеко-читаемом формате
-                required:
-                  - count
-                  - size
-                  - pretty_size
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /api/system/rpc/remove/detached-files:
-    post:
-      description: Удаление несвязанных файлов
-      summary: Удаление несвязанных файлов
-      tags:
-        - system
-      responses:
-        200:
-          description: Успешное выполнение
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    description: Количество удаленных файлов
-                  size:
-                    type: integer
-                    format: int64
-                    description: Размер удаленных файлов
-                  pretty_size:
-                    type: string
-                    description: Размер удаленных файлов в человеко-читаемом формате
-                required:
-                  - count
-                  - size
-                  - pretty_size
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /api/system/rpc/remove/mismatch-files:
-    post:
-      description: Удаление рассинхронизированных файлов (несоответствие файловой системы и БД)
-      summary: Удаление рассинхронизированных файлов
-      tags:
-        - system
-      responses:
-        200:
-          description: Успешное выполнение
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  remove_from_db:
-                    type: integer
-                    description: Количество удаленных файлов из БД
-                  remove_from_fs:
-                    type: integer
-                    description: Количество удаленных файлов из файловой системы
-                required:
-                  - remove_from_db
-                  - remove_from_fs
         400:
           description: Некорректный запрос
           content:

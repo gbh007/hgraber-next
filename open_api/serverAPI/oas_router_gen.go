@@ -810,99 +810,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 'r': // Prefix: "rpc/"
-					origElem := elem
-					if l := len("rpc/"); len(elem) >= l && elem[0:l] == "rpc/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'd': // Prefix: "deduplicate/files"
-						origElem := elem
-						if l := len("deduplicate/files"); len(elem) >= l && elem[0:l] == "deduplicate/files" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPISystemRPCDeduplicateFilesPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-						elem = origElem
-					case 'r': // Prefix: "remove/"
-						origElem := elem
-						if l := len("remove/"); len(elem) >= l && elem[0:l] == "remove/" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'd': // Prefix: "detached-files"
-							origElem := elem
-							if l := len("detached-files"); len(elem) >= l && elem[0:l] == "detached-files" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPISystemRPCRemoveDetachedFilesPostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						case 'm': // Prefix: "mismatch-files"
-							origElem := elem
-							if l := len("mismatch-files"); len(elem) >= l && elem[0:l] == "mismatch-files" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPISystemRPCRemoveMismatchFilesPostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					}
-
-					elem = origElem
 				case 'w': // Prefix: "worker/config"
 					origElem := elem
 					if l := len("worker/config"); len(elem) >= l && elem[0:l] == "worker/config" {
@@ -918,6 +825,63 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							s.handleAPISystemWorkerConfigPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
+			case 't': // Prefix: "task/"
+				origElem := elem
+				if l := len("task/"); len(elem) >= l && elem[0:l] == "task/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "create"
+					origElem := elem
+					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPITaskCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "results"
+					origElem := elem
+					if l := len("results"); len(elem) >= l && elem[0:l] == "results" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleAPITaskResultsGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
 						}
 
 						return
@@ -1900,111 +1864,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				case 'r': // Prefix: "rpc/"
-					origElem := elem
-					if l := len("rpc/"); len(elem) >= l && elem[0:l] == "rpc/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'd': // Prefix: "deduplicate/files"
-						origElem := elem
-						if l := len("deduplicate/files"); len(elem) >= l && elem[0:l] == "deduplicate/files" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APISystemRPCDeduplicateFilesPostOperation
-								r.summary = "Дедупликация файлов"
-								r.operationID = ""
-								r.pathPattern = "/api/system/rpc/deduplicate/files"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					case 'r': // Prefix: "remove/"
-						origElem := elem
-						if l := len("remove/"); len(elem) >= l && elem[0:l] == "remove/" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'd': // Prefix: "detached-files"
-							origElem := elem
-							if l := len("detached-files"); len(elem) >= l && elem[0:l] == "detached-files" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = APISystemRPCRemoveDetachedFilesPostOperation
-									r.summary = "Удаление несвязанных файлов"
-									r.operationID = ""
-									r.pathPattern = "/api/system/rpc/remove/detached-files"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						case 'm': // Prefix: "mismatch-files"
-							origElem := elem
-							if l := len("mismatch-files"); len(elem) >= l && elem[0:l] == "mismatch-files" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = APISystemRPCRemoveMismatchFilesPostOperation
-									r.summary = "Удаление рассинхронизированных файлов"
-									r.operationID = ""
-									r.pathPattern = "/api/system/rpc/remove/mismatch-files"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					}
-
-					elem = origElem
 				case 'w': // Prefix: "worker/config"
 					origElem := elem
 					if l := len("worker/config"); len(elem) >= l && elem[0:l] == "worker/config" {
@@ -2021,6 +1880,71 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.summary = "Динамическая конфигурация раннеров (воркеров)"
 							r.operationID = ""
 							r.pathPattern = "/api/system/worker/config"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
+			case 't': // Prefix: "task/"
+				origElem := elem
+				if l := len("task/"); len(elem) >= l && elem[0:l] == "task/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "create"
+					origElem := elem
+					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APITaskCreatePostOperation
+							r.summary = "Создание и запуск задачи"
+							r.operationID = ""
+							r.pathPattern = "/api/task/create"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "results"
+					origElem := elem
+					if l := len("results"); len(elem) >= l && elem[0:l] == "results" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = APITaskResultsGetOperation
+							r.summary = "Получение результатов задач"
+							r.operationID = ""
+							r.pathPattern = "/api/task/results"
 							r.args = args
 							r.count = 0
 							return r, true

@@ -7,5 +7,6 @@ const (
 	ExportUseCaseCode      = "export_uc"
 	DeduplicateUseCaseCode = "deduplicate_uc"
 	CleanupUseCaseCode     = "cleanup_uc"
+	TaskerUseCaseCode      = "tasker_uc"
 	ValidationCode         = "validation"
 )

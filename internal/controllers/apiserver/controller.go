@@ -65,14 +65,13 @@ type exportUseCases interface {
 }
 
 type deduplicateUseCases interface {
-	DeduplicateFiles(ctx context.Context) (count int, size int64, err error)
 	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]entities.DeduplicateArchiveResult, error)
 	BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]entities.DeduplicateBookResult, error)
 }
 
-type cleanupUseCases interface {
-	RemoveDetachedFiles(ctx context.Context) (count int, size int64, err error)
-	RemoveFilesInStoragesMismatch(ctx context.Context) (notInDBCount, notInFSCount int, err error)
+type taskUseCases interface {
+	RunTask(ctx context.Context, code entities.TaskCode) error
+	TaskResults(ctx context.Context) ([]*entities.TaskResult, error)
 }
 
 type config interface {
@@ -93,7 +92,7 @@ type Controller struct {
 	agentUseCases       agentUseCases
 	exportUseCases      exportUseCases
 	deduplicateUseCases deduplicateUseCases
-	cleanupUseCases     cleanupUseCases
+	taskUseCases        taskUseCases
 
 	ogenServer *serverAPI.Server
 
@@ -113,7 +112,7 @@ func New(
 	agentUseCases agentUseCases,
 	exportUseCases exportUseCases,
 	deduplicateUseCases deduplicateUseCases,
-	cleanupUseCases cleanupUseCases,
+	taskUseCases taskUseCases,
 	debug bool,
 ) (*Controller, error) {
 	u, err := url.Parse(config.GetExternalAddr())
@@ -132,7 +131,7 @@ func New(
 		agentUseCases:              agentUseCases,
 		exportUseCases:             exportUseCases,
 		deduplicateUseCases:        deduplicateUseCases,
-		cleanupUseCases:            cleanupUseCases,
+		taskUseCases:               taskUseCases,
 		debug:                      debug,
 		staticDir:                  config.GetStaticDir(),
 		token:                      config.GetToken(),

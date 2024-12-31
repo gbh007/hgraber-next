@@ -9,71 +9,121 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
+	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
 )
 
-func (uc *UseCase) RemoveFilesInStoragesMismatch(ctx context.Context) (notInDBCount, notInFSCount int, err error) {
-	ctx, span := uc.tracer.Start(ctx, "RemoveFilesInStoragesMismatch")
-	defer span.End()
+func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context) (entities.RunnableTask, error) {
+	return entities.RunnableTaskFunction(func(ctx context.Context, taskResult entities.TaskResultWriter) {
+		defer taskResult.Finish()
 
-	span.AddEvent("search file ids in fs", trace.WithTimestamp(time.Now()))
+		taskResult.SetName("RemoveFilesInStoragesMismatch")
 
-	fileIDs, err := uc.fileStorage.IDs(ctx)
-	if err != nil {
-		return 0, 0, fmt.Errorf("file storage get ids: %w", err)
-	}
+		ctx, span := uc.tracer.Start(ctx, "RemoveFilesInStoragesMismatch")
+		defer span.End()
 
-	span.AddEvent("search file ids in storage", trace.WithTimestamp(time.Now()))
+		taskResult.StartStage("search file ids in fs")
+		span.AddEvent("search file ids in fs", trace.WithTimestamp(time.Now()))
 
-	storageIDs, err := uc.storage.FileIDs(ctx)
-	if err != nil {
-		return 0, 0, fmt.Errorf("storage get ids: %w", err)
-	}
-
-	span.AddEvent("transform ids", trace.WithTimestamp(time.Now()))
-
-	fileNotInDB := pkg.SliceToMap(fileIDs, func(id uuid.UUID) (uuid.UUID, struct{}) {
-		return id, struct{}{}
-	})
-	fileNotInFS := pkg.SliceToMap(storageIDs, func(id uuid.UUID) (uuid.UUID, struct{}) {
-		return id, struct{}{}
-	})
-
-	for _, id := range fileIDs {
-		delete(fileNotInFS, id)
-	}
-
-	for _, id := range storageIDs {
-		delete(fileNotInDB, id)
-	}
-
-	span.AddEvent("log ids", trace.WithTimestamp(time.Now()))
-
-	uc.logger.DebugContext(
-		ctx, "RemoveFilesInStoragesMismatch",
-		slog.Int("file_not_in_fs_count", len(fileNotInFS)),
-		slog.Int("file_not_in_db_count", len(fileNotInDB)),
-		slog.Any("file_not_in_fs", fileNotInFS),
-		slog.Any("file_not_in_db", fileNotInDB),
-	)
-
-	span.AddEvent("remove files from fs", trace.WithTimestamp(time.Now()))
-
-	for id := range fileNotInDB {
-		err = uc.fileStorage.Delete(ctx, id)
+		fileIDs, err := uc.fileStorage.IDs(ctx)
 		if err != nil {
-			return 0, 0, fmt.Errorf("file storage remove (%s): %w", id.String(), err)
+			taskResult.SetError(err)
+
+			return
 		}
-	}
 
-	span.AddEvent("remove files from storage", trace.WithTimestamp(time.Now()))
+		taskResult.SetTotal(int64(len(fileIDs)))
+		taskResult.SetProgress(int64(len(fileIDs)))
+		taskResult.EndStage()
 
-	for id := range fileNotInFS {
-		err = uc.storage.DeleteFile(ctx, id)
+		taskResult.StartStage("search file ids in storage")
+		span.AddEvent("search file ids in storage", trace.WithTimestamp(time.Now()))
+
+		storageIDs, err := uc.storage.FileIDs(ctx)
 		if err != nil {
-			return 0, 0, fmt.Errorf("storage remove (%s): %w", id.String(), err)
-		}
-	}
+			taskResult.SetError(err)
 
-	return len(fileNotInDB), len(fileNotInFS), nil
+			return
+		}
+
+		taskResult.SetTotal(int64(len(storageIDs)))
+		taskResult.SetProgress(int64(len(storageIDs)))
+		taskResult.EndStage()
+
+		taskResult.StartStage("transform ids")
+		taskResult.SetTotal(int64(len(storageIDs)*2 + len(fileIDs)*2))
+		span.AddEvent("transform ids", trace.WithTimestamp(time.Now()))
+
+		fileNotInDB := pkg.SliceToMap(fileIDs, func(id uuid.UUID) (uuid.UUID, struct{}) {
+			taskResult.IncProgress()
+
+			return id, struct{}{}
+		})
+		fileNotInFS := pkg.SliceToMap(storageIDs, func(id uuid.UUID) (uuid.UUID, struct{}) {
+			taskResult.IncProgress()
+
+			return id, struct{}{}
+		})
+
+		for _, id := range fileIDs {
+			taskResult.IncProgress()
+			delete(fileNotInFS, id)
+		}
+
+		for _, id := range storageIDs {
+			taskResult.IncProgress()
+			delete(fileNotInDB, id)
+		}
+
+		taskResult.EndStage()
+
+		span.AddEvent("log ids", trace.WithTimestamp(time.Now()))
+
+		uc.logger.DebugContext(
+			ctx, "RemoveFilesInStoragesMismatch",
+			slog.Int("file_not_in_fs_count", len(fileNotInFS)),
+			slog.Int("file_not_in_db_count", len(fileNotInDB)),
+			slog.Any("file_not_in_fs", fileNotInFS),
+			slog.Any("file_not_in_db", fileNotInDB),
+		)
+
+		taskResult.StartStage("remove files from fs")
+		taskResult.SetTotal(int64(len(fileNotInDB)))
+		span.AddEvent("remove files from fs", trace.WithTimestamp(time.Now()))
+
+		for id := range fileNotInDB {
+			taskResult.IncProgress()
+
+			err = uc.fileStorage.Delete(ctx, id)
+			if err != nil {
+				taskResult.SetError(err)
+
+				return
+			}
+		}
+
+		taskResult.EndStage()
+
+		taskResult.StartStage("remove files from storage")
+		taskResult.SetTotal(int64(len(fileNotInFS)))
+		span.AddEvent("remove files from storage", trace.WithTimestamp(time.Now()))
+
+		for id := range fileNotInFS {
+			taskResult.IncProgress()
+
+			err = uc.storage.DeleteFile(ctx, id)
+			if err != nil {
+				taskResult.SetError(err)
+
+				return
+			}
+		}
+
+		taskResult.EndStage()
+
+		taskResult.SetResult(fmt.Sprintf(
+			"remove from fs: %d remove from db: %d",
+			len(fileNotInDB), len(fileNotInFS),
+		))
+	}), nil
 }

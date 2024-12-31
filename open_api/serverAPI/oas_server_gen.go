@@ -179,25 +179,6 @@ type Handler interface {
 	//
 	// GET /api/system/info
 	APISystemInfoGet(ctx context.Context) (APISystemInfoGetRes, error)
-	// APISystemRPCDeduplicateFilesPost implements POST /api/system/rpc/deduplicate/files operation.
-	//
-	// Дедупликация файлов.
-	//
-	// POST /api/system/rpc/deduplicate/files
-	APISystemRPCDeduplicateFilesPost(ctx context.Context) (APISystemRPCDeduplicateFilesPostRes, error)
-	// APISystemRPCRemoveDetachedFilesPost implements POST /api/system/rpc/remove/detached-files operation.
-	//
-	// Удаление несвязанных файлов.
-	//
-	// POST /api/system/rpc/remove/detached-files
-	APISystemRPCRemoveDetachedFilesPost(ctx context.Context) (APISystemRPCRemoveDetachedFilesPostRes, error)
-	// APISystemRPCRemoveMismatchFilesPost implements POST /api/system/rpc/remove/mismatch-files operation.
-	//
-	// Удаление рассинхронизированных файлов
-	// (несоответствие файловой системы и БД).
-	//
-	// POST /api/system/rpc/remove/mismatch-files
-	APISystemRPCRemoveMismatchFilesPost(ctx context.Context) (APISystemRPCRemoveMismatchFilesPostRes, error)
 	// APISystemWorkerConfigPost implements POST /api/system/worker/config operation.
 	//
 	// Динамическая конфигурация раннеров (воркеров),
@@ -205,6 +186,18 @@ type Handler interface {
 	//
 	// POST /api/system/worker/config
 	APISystemWorkerConfigPost(ctx context.Context, req *APISystemWorkerConfigPostReq) (APISystemWorkerConfigPostRes, error)
+	// APITaskCreatePost implements POST /api/task/create operation.
+	//
+	// Создание и фоновый запуск задачи.
+	//
+	// POST /api/task/create
+	APITaskCreatePost(ctx context.Context, req *APITaskCreatePostReq) (APITaskCreatePostRes, error)
+	// APITaskResultsGet implements GET /api/task/results operation.
+	//
+	// Получение результатов задач.
+	//
+	// GET /api/task/results
+	APITaskResultsGet(ctx context.Context) (APITaskResultsGetRes, error)
 	// APIUserLoginPost implements POST /api/user/login operation.
 	//
 	// Проставление токена в куки.

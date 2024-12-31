@@ -2523,167 +2523,6 @@ type APISystemInfoGetUnauthorized ErrorResponse
 
 func (*APISystemInfoGetUnauthorized) aPISystemInfoGetRes() {}
 
-type APISystemRPCDeduplicateFilesPostBadRequest ErrorResponse
-
-func (*APISystemRPCDeduplicateFilesPostBadRequest) aPISystemRPCDeduplicateFilesPostRes() {}
-
-type APISystemRPCDeduplicateFilesPostForbidden ErrorResponse
-
-func (*APISystemRPCDeduplicateFilesPostForbidden) aPISystemRPCDeduplicateFilesPostRes() {}
-
-type APISystemRPCDeduplicateFilesPostInternalServerError ErrorResponse
-
-func (*APISystemRPCDeduplicateFilesPostInternalServerError) aPISystemRPCDeduplicateFilesPostRes() {}
-
-type APISystemRPCDeduplicateFilesPostOK struct {
-	// Количество файлов дублей.
-	Count int `json:"count"`
-	// Размер файлов дублей.
-	Size int64 `json:"size"`
-	// Размер файлов дублей в человеко-читаемом формате.
-	PrettySize string `json:"pretty_size"`
-}
-
-// GetCount returns the value of Count.
-func (s *APISystemRPCDeduplicateFilesPostOK) GetCount() int {
-	return s.Count
-}
-
-// GetSize returns the value of Size.
-func (s *APISystemRPCDeduplicateFilesPostOK) GetSize() int64 {
-	return s.Size
-}
-
-// GetPrettySize returns the value of PrettySize.
-func (s *APISystemRPCDeduplicateFilesPostOK) GetPrettySize() string {
-	return s.PrettySize
-}
-
-// SetCount sets the value of Count.
-func (s *APISystemRPCDeduplicateFilesPostOK) SetCount(val int) {
-	s.Count = val
-}
-
-// SetSize sets the value of Size.
-func (s *APISystemRPCDeduplicateFilesPostOK) SetSize(val int64) {
-	s.Size = val
-}
-
-// SetPrettySize sets the value of PrettySize.
-func (s *APISystemRPCDeduplicateFilesPostOK) SetPrettySize(val string) {
-	s.PrettySize = val
-}
-
-func (*APISystemRPCDeduplicateFilesPostOK) aPISystemRPCDeduplicateFilesPostRes() {}
-
-type APISystemRPCDeduplicateFilesPostUnauthorized ErrorResponse
-
-func (*APISystemRPCDeduplicateFilesPostUnauthorized) aPISystemRPCDeduplicateFilesPostRes() {}
-
-type APISystemRPCRemoveDetachedFilesPostBadRequest ErrorResponse
-
-func (*APISystemRPCRemoveDetachedFilesPostBadRequest) aPISystemRPCRemoveDetachedFilesPostRes() {}
-
-type APISystemRPCRemoveDetachedFilesPostForbidden ErrorResponse
-
-func (*APISystemRPCRemoveDetachedFilesPostForbidden) aPISystemRPCRemoveDetachedFilesPostRes() {}
-
-type APISystemRPCRemoveDetachedFilesPostInternalServerError ErrorResponse
-
-func (*APISystemRPCRemoveDetachedFilesPostInternalServerError) aPISystemRPCRemoveDetachedFilesPostRes() {
-}
-
-type APISystemRPCRemoveDetachedFilesPostOK struct {
-	// Количество удаленных файлов.
-	Count int `json:"count"`
-	// Размер удаленных файлов.
-	Size int64 `json:"size"`
-	// Размер удаленных файлов в человеко-читаемом формате.
-	PrettySize string `json:"pretty_size"`
-}
-
-// GetCount returns the value of Count.
-func (s *APISystemRPCRemoveDetachedFilesPostOK) GetCount() int {
-	return s.Count
-}
-
-// GetSize returns the value of Size.
-func (s *APISystemRPCRemoveDetachedFilesPostOK) GetSize() int64 {
-	return s.Size
-}
-
-// GetPrettySize returns the value of PrettySize.
-func (s *APISystemRPCRemoveDetachedFilesPostOK) GetPrettySize() string {
-	return s.PrettySize
-}
-
-// SetCount sets the value of Count.
-func (s *APISystemRPCRemoveDetachedFilesPostOK) SetCount(val int) {
-	s.Count = val
-}
-
-// SetSize sets the value of Size.
-func (s *APISystemRPCRemoveDetachedFilesPostOK) SetSize(val int64) {
-	s.Size = val
-}
-
-// SetPrettySize sets the value of PrettySize.
-func (s *APISystemRPCRemoveDetachedFilesPostOK) SetPrettySize(val string) {
-	s.PrettySize = val
-}
-
-func (*APISystemRPCRemoveDetachedFilesPostOK) aPISystemRPCRemoveDetachedFilesPostRes() {}
-
-type APISystemRPCRemoveDetachedFilesPostUnauthorized ErrorResponse
-
-func (*APISystemRPCRemoveDetachedFilesPostUnauthorized) aPISystemRPCRemoveDetachedFilesPostRes() {}
-
-type APISystemRPCRemoveMismatchFilesPostBadRequest ErrorResponse
-
-func (*APISystemRPCRemoveMismatchFilesPostBadRequest) aPISystemRPCRemoveMismatchFilesPostRes() {}
-
-type APISystemRPCRemoveMismatchFilesPostForbidden ErrorResponse
-
-func (*APISystemRPCRemoveMismatchFilesPostForbidden) aPISystemRPCRemoveMismatchFilesPostRes() {}
-
-type APISystemRPCRemoveMismatchFilesPostInternalServerError ErrorResponse
-
-func (*APISystemRPCRemoveMismatchFilesPostInternalServerError) aPISystemRPCRemoveMismatchFilesPostRes() {
-}
-
-type APISystemRPCRemoveMismatchFilesPostOK struct {
-	// Количество удаленных файлов из БД.
-	RemoveFromDb int `json:"remove_from_db"`
-	// Количество удаленных файлов из файловой системы.
-	RemoveFromFs int `json:"remove_from_fs"`
-}
-
-// GetRemoveFromDb returns the value of RemoveFromDb.
-func (s *APISystemRPCRemoveMismatchFilesPostOK) GetRemoveFromDb() int {
-	return s.RemoveFromDb
-}
-
-// GetRemoveFromFs returns the value of RemoveFromFs.
-func (s *APISystemRPCRemoveMismatchFilesPostOK) GetRemoveFromFs() int {
-	return s.RemoveFromFs
-}
-
-// SetRemoveFromDb sets the value of RemoveFromDb.
-func (s *APISystemRPCRemoveMismatchFilesPostOK) SetRemoveFromDb(val int) {
-	s.RemoveFromDb = val
-}
-
-// SetRemoveFromFs sets the value of RemoveFromFs.
-func (s *APISystemRPCRemoveMismatchFilesPostOK) SetRemoveFromFs(val int) {
-	s.RemoveFromFs = val
-}
-
-func (*APISystemRPCRemoveMismatchFilesPostOK) aPISystemRPCRemoveMismatchFilesPostRes() {}
-
-type APISystemRPCRemoveMismatchFilesPostUnauthorized ErrorResponse
-
-func (*APISystemRPCRemoveMismatchFilesPostUnauthorized) aPISystemRPCRemoveMismatchFilesPostRes() {}
-
 type APISystemWorkerConfigPostBadRequest ErrorResponse
 
 func (*APISystemWorkerConfigPostBadRequest) aPISystemWorkerConfigPostRes() {}
@@ -2746,6 +2585,306 @@ func (s *APISystemWorkerConfigPostReqRunnersCountItem) SetCount(val int) {
 type APISystemWorkerConfigPostUnauthorized ErrorResponse
 
 func (*APISystemWorkerConfigPostUnauthorized) aPISystemWorkerConfigPostRes() {}
+
+type APITaskCreatePostBadRequest ErrorResponse
+
+func (*APITaskCreatePostBadRequest) aPITaskCreatePostRes() {}
+
+type APITaskCreatePostForbidden ErrorResponse
+
+func (*APITaskCreatePostForbidden) aPITaskCreatePostRes() {}
+
+type APITaskCreatePostInternalServerError ErrorResponse
+
+func (*APITaskCreatePostInternalServerError) aPITaskCreatePostRes() {}
+
+// APITaskCreatePostNoContent is response for APITaskCreatePost operation.
+type APITaskCreatePostNoContent struct{}
+
+func (*APITaskCreatePostNoContent) aPITaskCreatePostRes() {}
+
+type APITaskCreatePostReq struct {
+	// Код задачи.
+	Code APITaskCreatePostReqCode `json:"code"`
+}
+
+// GetCode returns the value of Code.
+func (s *APITaskCreatePostReq) GetCode() APITaskCreatePostReqCode {
+	return s.Code
+}
+
+// SetCode sets the value of Code.
+func (s *APITaskCreatePostReq) SetCode(val APITaskCreatePostReqCode) {
+	s.Code = val
+}
+
+// Код задачи.
+type APITaskCreatePostReqCode string
+
+const (
+	APITaskCreatePostReqCodeDeduplicateFiles    APITaskCreatePostReqCode = "deduplicate_files"
+	APITaskCreatePostReqCodeRemoveDetachedFiles APITaskCreatePostReqCode = "remove_detached_files"
+	APITaskCreatePostReqCodeRemoveMismatchFiles APITaskCreatePostReqCode = "remove_mismatch_files"
+)
+
+// AllValues returns all APITaskCreatePostReqCode values.
+func (APITaskCreatePostReqCode) AllValues() []APITaskCreatePostReqCode {
+	return []APITaskCreatePostReqCode{
+		APITaskCreatePostReqCodeDeduplicateFiles,
+		APITaskCreatePostReqCodeRemoveDetachedFiles,
+		APITaskCreatePostReqCodeRemoveMismatchFiles,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APITaskCreatePostReqCode) MarshalText() ([]byte, error) {
+	switch s {
+	case APITaskCreatePostReqCodeDeduplicateFiles:
+		return []byte(s), nil
+	case APITaskCreatePostReqCodeRemoveDetachedFiles:
+		return []byte(s), nil
+	case APITaskCreatePostReqCodeRemoveMismatchFiles:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APITaskCreatePostReqCode) UnmarshalText(data []byte) error {
+	switch APITaskCreatePostReqCode(data) {
+	case APITaskCreatePostReqCodeDeduplicateFiles:
+		*s = APITaskCreatePostReqCodeDeduplicateFiles
+		return nil
+	case APITaskCreatePostReqCodeRemoveDetachedFiles:
+		*s = APITaskCreatePostReqCodeRemoveDetachedFiles
+		return nil
+	case APITaskCreatePostReqCodeRemoveMismatchFiles:
+		*s = APITaskCreatePostReqCodeRemoveMismatchFiles
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APITaskCreatePostUnauthorized ErrorResponse
+
+func (*APITaskCreatePostUnauthorized) aPITaskCreatePostRes() {}
+
+type APITaskResultsGetForbidden ErrorResponse
+
+func (*APITaskResultsGetForbidden) aPITaskResultsGetRes() {}
+
+type APITaskResultsGetInternalServerError ErrorResponse
+
+func (*APITaskResultsGetInternalServerError) aPITaskResultsGetRes() {}
+
+type APITaskResultsGetOK struct {
+	// Результаты.
+	Results []APITaskResultsGetOKResultsItem `json:"results"`
+}
+
+// GetResults returns the value of Results.
+func (s *APITaskResultsGetOK) GetResults() []APITaskResultsGetOKResultsItem {
+	return s.Results
+}
+
+// SetResults sets the value of Results.
+func (s *APITaskResultsGetOK) SetResults(val []APITaskResultsGetOKResultsItem) {
+	s.Results = val
+}
+
+func (*APITaskResultsGetOK) aPITaskResultsGetRes() {}
+
+type APITaskResultsGetOKResultsItem struct {
+	// Название задачи.
+	Name string `json:"name"`
+	// Данные об ошибке.
+	Error OptString `json:"error"`
+	// Данные результата.
+	Result OptString `json:"result"`
+	// Продолжительность выполнения задачи.
+	DurationFormatted string `json:"duration_formatted"`
+	// Время запуска задачи.
+	StartedAt time.Time `json:"started_at"`
+	// Время завершения задачи.
+	EndedAt time.Time `json:"ended_at"`
+	// Этапы выполнения задачи.
+	Stages []APITaskResultsGetOKResultsItemStagesItem `json:"stages"`
+}
+
+// GetName returns the value of Name.
+func (s *APITaskResultsGetOKResultsItem) GetName() string {
+	return s.Name
+}
+
+// GetError returns the value of Error.
+func (s *APITaskResultsGetOKResultsItem) GetError() OptString {
+	return s.Error
+}
+
+// GetResult returns the value of Result.
+func (s *APITaskResultsGetOKResultsItem) GetResult() OptString {
+	return s.Result
+}
+
+// GetDurationFormatted returns the value of DurationFormatted.
+func (s *APITaskResultsGetOKResultsItem) GetDurationFormatted() string {
+	return s.DurationFormatted
+}
+
+// GetStartedAt returns the value of StartedAt.
+func (s *APITaskResultsGetOKResultsItem) GetStartedAt() time.Time {
+	return s.StartedAt
+}
+
+// GetEndedAt returns the value of EndedAt.
+func (s *APITaskResultsGetOKResultsItem) GetEndedAt() time.Time {
+	return s.EndedAt
+}
+
+// GetStages returns the value of Stages.
+func (s *APITaskResultsGetOKResultsItem) GetStages() []APITaskResultsGetOKResultsItemStagesItem {
+	return s.Stages
+}
+
+// SetName sets the value of Name.
+func (s *APITaskResultsGetOKResultsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetError sets the value of Error.
+func (s *APITaskResultsGetOKResultsItem) SetError(val OptString) {
+	s.Error = val
+}
+
+// SetResult sets the value of Result.
+func (s *APITaskResultsGetOKResultsItem) SetResult(val OptString) {
+	s.Result = val
+}
+
+// SetDurationFormatted sets the value of DurationFormatted.
+func (s *APITaskResultsGetOKResultsItem) SetDurationFormatted(val string) {
+	s.DurationFormatted = val
+}
+
+// SetStartedAt sets the value of StartedAt.
+func (s *APITaskResultsGetOKResultsItem) SetStartedAt(val time.Time) {
+	s.StartedAt = val
+}
+
+// SetEndedAt sets the value of EndedAt.
+func (s *APITaskResultsGetOKResultsItem) SetEndedAt(val time.Time) {
+	s.EndedAt = val
+}
+
+// SetStages sets the value of Stages.
+func (s *APITaskResultsGetOKResultsItem) SetStages(val []APITaskResultsGetOKResultsItemStagesItem) {
+	s.Stages = val
+}
+
+type APITaskResultsGetOKResultsItemStagesItem struct {
+	// Название этапа.
+	Name string `json:"name"`
+	// Данные об ошибке.
+	Error OptString `json:"error"`
+	// Данные результата.
+	Result OptString `json:"result"`
+	// Продолжительность выполнения этапа.
+	DurationFormatted string `json:"duration_formatted"`
+	// Время запуска этапа.
+	StartedAt time.Time `json:"started_at"`
+	// Время завершения этапа.
+	EndedAt time.Time `json:"ended_at"`
+	// Количество выполненных шагов.
+	Progress int64 `json:"progress"`
+	// Общеее число шагов которое нужно для завершения этапа.
+	Total int64 `json:"total"`
+}
+
+// GetName returns the value of Name.
+func (s *APITaskResultsGetOKResultsItemStagesItem) GetName() string {
+	return s.Name
+}
+
+// GetError returns the value of Error.
+func (s *APITaskResultsGetOKResultsItemStagesItem) GetError() OptString {
+	return s.Error
+}
+
+// GetResult returns the value of Result.
+func (s *APITaskResultsGetOKResultsItemStagesItem) GetResult() OptString {
+	return s.Result
+}
+
+// GetDurationFormatted returns the value of DurationFormatted.
+func (s *APITaskResultsGetOKResultsItemStagesItem) GetDurationFormatted() string {
+	return s.DurationFormatted
+}
+
+// GetStartedAt returns the value of StartedAt.
+func (s *APITaskResultsGetOKResultsItemStagesItem) GetStartedAt() time.Time {
+	return s.StartedAt
+}
+
+// GetEndedAt returns the value of EndedAt.
+func (s *APITaskResultsGetOKResultsItemStagesItem) GetEndedAt() time.Time {
+	return s.EndedAt
+}
+
+// GetProgress returns the value of Progress.
+func (s *APITaskResultsGetOKResultsItemStagesItem) GetProgress() int64 {
+	return s.Progress
+}
+
+// GetTotal returns the value of Total.
+func (s *APITaskResultsGetOKResultsItemStagesItem) GetTotal() int64 {
+	return s.Total
+}
+
+// SetName sets the value of Name.
+func (s *APITaskResultsGetOKResultsItemStagesItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetError sets the value of Error.
+func (s *APITaskResultsGetOKResultsItemStagesItem) SetError(val OptString) {
+	s.Error = val
+}
+
+// SetResult sets the value of Result.
+func (s *APITaskResultsGetOKResultsItemStagesItem) SetResult(val OptString) {
+	s.Result = val
+}
+
+// SetDurationFormatted sets the value of DurationFormatted.
+func (s *APITaskResultsGetOKResultsItemStagesItem) SetDurationFormatted(val string) {
+	s.DurationFormatted = val
+}
+
+// SetStartedAt sets the value of StartedAt.
+func (s *APITaskResultsGetOKResultsItemStagesItem) SetStartedAt(val time.Time) {
+	s.StartedAt = val
+}
+
+// SetEndedAt sets the value of EndedAt.
+func (s *APITaskResultsGetOKResultsItemStagesItem) SetEndedAt(val time.Time) {
+	s.EndedAt = val
+}
+
+// SetProgress sets the value of Progress.
+func (s *APITaskResultsGetOKResultsItemStagesItem) SetProgress(val int64) {
+	s.Progress = val
+}
+
+// SetTotal sets the value of Total.
+func (s *APITaskResultsGetOKResultsItemStagesItem) SetTotal(val int64) {
+	s.Total = val
+}
+
+type APITaskResultsGetUnauthorized ErrorResponse
+
+func (*APITaskResultsGetUnauthorized) aPITaskResultsGetRes() {}
 
 type APIUserLoginPostBadRequest ErrorResponse
 
