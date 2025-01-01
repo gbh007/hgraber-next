@@ -2520,15 +2520,29 @@ components:
           type: string
           format: uri
           description: Ссылка для предпросмотра изображения книги
-        parsed_name:
-          type: boolean
-          description: Было ли обработано название книги
+        flags:
+          type: object
+          properties:
+            parsed_name:
+              type: boolean
+              description: Было ли обработано название книги
+            parsed_page:
+              type: boolean
+              description: Были ли обработаны страницы
+            is_verified:
+              type: boolean
+              description: Была ли подтверждена книга
+            is_deleted:
+              type: boolean
+              description: Была ли удалена книга
+          required:
+            - parsed_name
+            - parsed_page
+            - is_verified
+            - is_deleted
         name:
           type: string
           description: Название книги
-        parsed_page:
-          type: boolean
-          description: Были ли обработаны страницы
         page_count:
           type: integer
           description: Количество страниц
@@ -2594,9 +2608,8 @@ components:
       required:
         - id
         - created
-        - parsed_name
         - name
-        - parsed_page
+        - flags
         - page_count
         - page_loaded_percent
 

@@ -26,12 +26,16 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 	}
 
 	return &serverAPI.BookDetails{
-		ID:                book.Book.ID,
-		Created:           book.Book.CreateAt,
-		PreviewURL:        c.getPagePreview(book.PreviewPage),
-		ParsedName:        book.ParsedName(),
+		ID:         book.Book.ID,
+		Created:    book.Book.CreateAt,
+		PreviewURL: c.getPagePreview(book.PreviewPage),
+		Flags: serverAPI.BookDetailsFlags{
+			ParsedName: book.ParsedName(),
+			ParsedPage: book.ParsedPages,
+			IsVerified: book.Book.Verified,
+			IsDeleted:  book.Book.Deleted,
+		},
 		Name:              book.Book.Name,
-		ParsedPage:        book.ParsedPages,
 		PageCount:         book.Book.PageCount,
 		PageLoadedPercent: book.PageDownloadPercent(),
 		Attributes: pkg.Map(book.Attributes, func(a entities.AttributeToWeb) serverAPI.BookDetailsAttributesItem {

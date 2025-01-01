@@ -3099,13 +3099,10 @@ type BookDetails struct {
 	// Время создания книги в системе.
 	Created time.Time `json:"created"`
 	// Ссылка для предпросмотра изображения книги.
-	PreviewURL OptURI `json:"preview_url"`
-	// Было ли обработано название книги.
-	ParsedName bool `json:"parsed_name"`
+	PreviewURL OptURI           `json:"preview_url"`
+	Flags      BookDetailsFlags `json:"flags"`
 	// Название книги.
 	Name string `json:"name"`
-	// Были ли обработаны страницы.
-	ParsedPage bool `json:"parsed_page"`
 	// Количество страниц.
 	PageCount int `json:"page_count"`
 	// Процент загруженных страниц.
@@ -3133,19 +3130,14 @@ func (s *BookDetails) GetPreviewURL() OptURI {
 	return s.PreviewURL
 }
 
-// GetParsedName returns the value of ParsedName.
-func (s *BookDetails) GetParsedName() bool {
-	return s.ParsedName
+// GetFlags returns the value of Flags.
+func (s *BookDetails) GetFlags() BookDetailsFlags {
+	return s.Flags
 }
 
 // GetName returns the value of Name.
 func (s *BookDetails) GetName() string {
 	return s.Name
-}
-
-// GetParsedPage returns the value of ParsedPage.
-func (s *BookDetails) GetParsedPage() bool {
-	return s.ParsedPage
 }
 
 // GetPageCount returns the value of PageCount.
@@ -3188,19 +3180,14 @@ func (s *BookDetails) SetPreviewURL(val OptURI) {
 	s.PreviewURL = val
 }
 
-// SetParsedName sets the value of ParsedName.
-func (s *BookDetails) SetParsedName(val bool) {
-	s.ParsedName = val
+// SetFlags sets the value of Flags.
+func (s *BookDetails) SetFlags(val BookDetailsFlags) {
+	s.Flags = val
 }
 
 // SetName sets the value of Name.
 func (s *BookDetails) SetName(val string) {
 	s.Name = val
-}
-
-// SetParsedPage sets the value of ParsedPage.
-func (s *BookDetails) SetParsedPage(val bool) {
-	s.ParsedPage = val
 }
 
 // SetPageCount sets the value of PageCount.
@@ -3255,6 +3242,57 @@ func (s *BookDetailsAttributesItem) SetName(val string) {
 // SetValues sets the value of Values.
 func (s *BookDetailsAttributesItem) SetValues(val []string) {
 	s.Values = val
+}
+
+type BookDetailsFlags struct {
+	// Было ли обработано название книги.
+	ParsedName bool `json:"parsed_name"`
+	// Были ли обработаны страницы.
+	ParsedPage bool `json:"parsed_page"`
+	// Была ли подтверждена книга.
+	IsVerified bool `json:"is_verified"`
+	// Была ли удалена книга.
+	IsDeleted bool `json:"is_deleted"`
+}
+
+// GetParsedName returns the value of ParsedName.
+func (s *BookDetailsFlags) GetParsedName() bool {
+	return s.ParsedName
+}
+
+// GetParsedPage returns the value of ParsedPage.
+func (s *BookDetailsFlags) GetParsedPage() bool {
+	return s.ParsedPage
+}
+
+// GetIsVerified returns the value of IsVerified.
+func (s *BookDetailsFlags) GetIsVerified() bool {
+	return s.IsVerified
+}
+
+// GetIsDeleted returns the value of IsDeleted.
+func (s *BookDetailsFlags) GetIsDeleted() bool {
+	return s.IsDeleted
+}
+
+// SetParsedName sets the value of ParsedName.
+func (s *BookDetailsFlags) SetParsedName(val bool) {
+	s.ParsedName = val
+}
+
+// SetParsedPage sets the value of ParsedPage.
+func (s *BookDetailsFlags) SetParsedPage(val bool) {
+	s.ParsedPage = val
+}
+
+// SetIsVerified sets the value of IsVerified.
+func (s *BookDetailsFlags) SetIsVerified(val bool) {
+	s.IsVerified = val
+}
+
+// SetIsDeleted sets the value of IsDeleted.
+func (s *BookDetailsFlags) SetIsDeleted(val bool) {
+	s.IsDeleted = val
 }
 
 // Данные о размере книги.

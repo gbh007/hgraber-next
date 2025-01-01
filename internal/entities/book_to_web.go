@@ -12,6 +12,7 @@ type AttributeToWeb struct {
 	Values []string
 }
 
+// TODO: подумать что делать с такими моделями
 type BookToWeb struct {
 	Book       Book
 	Pages      []Page

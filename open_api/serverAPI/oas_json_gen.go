@@ -12756,16 +12756,12 @@ func (s *BookDetails) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		e.FieldStart("parsed_name")
-		e.Bool(s.ParsedName)
+		e.FieldStart("flags")
+		s.Flags.Encode(e)
 	}
 	{
 		e.FieldStart("name")
 		e.Str(s.Name)
-	}
-	{
-		e.FieldStart("parsed_page")
-		e.Bool(s.ParsedPage)
 	}
 	{
 		e.FieldStart("page_count")
@@ -12803,18 +12799,17 @@ func (s *BookDetails) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfBookDetails = [11]string{
-	0:  "id",
-	1:  "created",
-	2:  "preview_url",
-	3:  "parsed_name",
-	4:  "name",
-	5:  "parsed_page",
-	6:  "page_count",
-	7:  "page_loaded_percent",
-	8:  "attributes",
-	9:  "pages",
-	10: "size",
+var jsonFieldsNameOfBookDetails = [10]string{
+	0: "id",
+	1: "created",
+	2: "preview_url",
+	3: "flags",
+	4: "name",
+	5: "page_count",
+	6: "page_loaded_percent",
+	7: "attributes",
+	8: "pages",
+	9: "size",
 }
 
 // Decode decodes BookDetails from json.
@@ -12860,17 +12855,15 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"preview_url\"")
 			}
-		case "parsed_name":
+		case "flags":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				v, err := d.Bool()
-				s.ParsedName = bool(v)
-				if err != nil {
+				if err := s.Flags.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"parsed_name\"")
+				return errors.Wrap(err, "decode field \"flags\"")
 			}
 		case "name":
 			requiredBitSet[0] |= 1 << 4
@@ -12884,20 +12877,8 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
-		case "parsed_page":
-			requiredBitSet[0] |= 1 << 5
-			if err := func() error {
-				v, err := d.Bool()
-				s.ParsedPage = bool(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"parsed_page\"")
-			}
 		case "page_count":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := d.Int()
 				s.PageCount = int(v)
@@ -12909,7 +12890,7 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"page_count\"")
 			}
 		case "page_loaded_percent":
-			requiredBitSet[0] |= 1 << 7
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := d.Float64()
 				s.PageLoadedPercent = float64(v)
@@ -12974,7 +12955,7 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
-		0b11111011,
+		0b01111011,
 		0b00000000,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
@@ -13142,6 +13123,153 @@ func (s *BookDetailsAttributesItem) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *BookDetailsAttributesItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *BookDetailsFlags) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *BookDetailsFlags) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("parsed_name")
+		e.Bool(s.ParsedName)
+	}
+	{
+		e.FieldStart("parsed_page")
+		e.Bool(s.ParsedPage)
+	}
+	{
+		e.FieldStart("is_verified")
+		e.Bool(s.IsVerified)
+	}
+	{
+		e.FieldStart("is_deleted")
+		e.Bool(s.IsDeleted)
+	}
+}
+
+var jsonFieldsNameOfBookDetailsFlags = [4]string{
+	0: "parsed_name",
+	1: "parsed_page",
+	2: "is_verified",
+	3: "is_deleted",
+}
+
+// Decode decodes BookDetailsFlags from json.
+func (s *BookDetailsFlags) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BookDetailsFlags to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "parsed_name":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Bool()
+				s.ParsedName = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"parsed_name\"")
+			}
+		case "parsed_page":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Bool()
+				s.ParsedPage = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"parsed_page\"")
+			}
+		case "is_verified":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Bool()
+				s.IsVerified = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"is_verified\"")
+			}
+		case "is_deleted":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Bool()
+				s.IsDeleted = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"is_deleted\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode BookDetailsFlags")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00001111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfBookDetailsFlags) {
+					name = jsonFieldsNameOfBookDetailsFlags[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *BookDetailsFlags) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BookDetailsFlags) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
