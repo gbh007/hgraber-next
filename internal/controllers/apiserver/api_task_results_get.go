@@ -23,7 +23,7 @@ func (c *Controller) APITaskResultsGet(ctx context.Context) (serverAPI.APITaskRe
 				Name:              raw.Name,
 				Error:             optString(raw.Error),
 				Result:            optString(raw.Result),
-				DurationFormatted: raw.Duration().String(),
+				DurationFormatted: max(raw.Duration(), 0).String(),
 				StartedAt:         raw.StartedAt,
 				EndedAt:           raw.EndedAt,
 				Stages: pkg.Map(raw.Stages, func(rawStage *entities.TaskResultStage) serverAPI.APITaskResultsGetOKResultsItemStagesItem {
@@ -31,7 +31,7 @@ func (c *Controller) APITaskResultsGet(ctx context.Context) (serverAPI.APITaskRe
 						Name:              rawStage.Name,
 						Error:             optString(rawStage.Error),
 						Result:            optString(rawStage.Error),
-						DurationFormatted: rawStage.Duration().String(),
+						DurationFormatted: max(rawStage.Duration(), 0).String(),
 						StartedAt:         rawStage.StartedAt,
 						EndedAt:           rawStage.EndedAt,
 						Progress:          rawStage.Progress,

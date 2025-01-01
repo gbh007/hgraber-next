@@ -191,6 +191,7 @@ func Serve() {
 		apiAgentController, err := apiagent.New(
 			time.Now(),
 			logger,
+			tracer,
 			agentCacheUseCase,
 			exportUseCases,
 			cfg.AgentServer.Addr,

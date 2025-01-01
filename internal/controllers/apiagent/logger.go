@@ -5,10 +5,21 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"strings"
 )
 
 func (c *Controller) logIO(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() { // TODO: перенести в отдельную мидлварь.
+			p := recover()
+			if p != nil {
+				c.logger.WarnContext(
+					r.Context(), "panic detected",
+					slog.Any("panic", p),
+				)
+			}
+		}()
+
 		if !c.debug {
 			if next != nil {
 				next.ServeHTTP(w, r)
@@ -17,12 +28,19 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			return
 		}
 
+		// Сделано специально для того чтобы получать тут ид трассировки а также иметь информацию о оверхеде с логирования.
+		ctx, span := c.tracer.Start(r.Context(), "api agent server logging")
+		defer span.End()
+
+		r = r.WithContext(ctx)
+
 		var (
 			responseData = "ignoring"
 			requestData  = "ignoring"
 		)
 
-		if r.URL.Path != "/api/export/archive" {
+		if strings.Contains(strings.ToLower(r.Header.Get("Content-Type")), "application/json") ||
+			strings.Contains(strings.ToLower(r.Header.Get("Content-Type")), "text/") {
 			requestDataRaw, err := io.ReadAll(r.Body)
 			if err != nil {
 				c.logger.ErrorContext(
@@ -43,7 +61,8 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			next.ServeHTTP(rw, r)
 		}
 
-		if r.URL.Path != "/api/parsing/page" {
+		if strings.Contains(strings.ToLower(rw.Header().Get("Content-Type")), "application/json") ||
+			strings.Contains(strings.ToLower(rw.Header().Get("Content-Type")), "text/") {
 			responseData = rw.body.String()
 		}
 

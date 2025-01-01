@@ -2,12 +2,16 @@ package apiserver
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
+	"net/http"
 	"net/url"
 
 	"github.com/google/uuid"
+	"github.com/ogen-go/ogen/ogenerrors"
 	"go.opentelemetry.io/otel/trace"
 
 	"hgnext/internal/entities"
@@ -142,9 +146,9 @@ func New(
 
 	ogenServer, err := serverAPI.NewServer(
 		c, c,
-		// serverAPI.WithErrorHandler(), // FIXME: реализовать
-		// serverAPI.WithMethodNotAllowed(), // FIXME: реализовать
-		// serverAPI.WithNotFound(), // FIXME: реализовать
+		serverAPI.WithErrorHandler(methodErrorHandler),
+		serverAPI.WithMethodNotAllowed(methodNotAllowed),
+		serverAPI.WithNotFound(methodNotFound),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("create ogen server: %w", err)
@@ -153,4 +157,71 @@ func New(
 	c.ogenServer = ogenServer
 
 	return c, nil
+}
+
+func methodNotAllowed(w http.ResponseWriter, r *http.Request, allowed string) {
+	if r.Method == http.MethodOptions {
+		w.Header().Set("Access-Control-Allow-Methods", allowed)
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.WriteHeader(http.StatusNoContent)
+
+		return
+	}
+
+	w.Header().Set("Allow", allowed)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusMethodNotAllowed)
+
+	// TODO: не игнорировать ошибку
+	_ = json.NewEncoder(w).Encode(serverAPI.ErrorResponse{
+		InnerCode: "method not allowed",
+		Details:   serverAPI.NewOptString("method not allowed, allowed methods " + allowed),
+	})
+}
+
+func methodNotFound(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusInternalServerError) // Специально не делаем 404, т.к. на нее может быть завязано особое поведение метода
+
+	if r.Method != http.MethodOptions {
+		// TODO: не игнорировать ошибку
+		_ = json.NewEncoder(w).Encode(serverAPI.ErrorResponse{
+			InnerCode: "method not found",
+			Details:   serverAPI.NewOptString("method not found"),
+		})
+	}
+}
+
+func methodErrorHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, err error) {
+	var (
+		httpCode         int    = http.StatusInternalServerError
+		errorCode        string = "internal error"
+		errorDescription string = "missing error"
+	)
+
+	if err != nil {
+		errorDescription = err.Error()
+	}
+
+	switch {
+	case errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied):
+		httpCode = http.StatusUnauthorized
+		errorCode = "unauthorized"
+	case errors.Is(err, errorAccessForbidden):
+		httpCode = http.StatusForbidden
+		errorCode = "forbidden"
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(httpCode)
+
+	if r.Method == http.MethodOptions {
+		return
+	}
+
+	// TODO: не игнорировать ошибку
+	_ = json.NewEncoder(w).Encode(serverAPI.ErrorResponse{
+		InnerCode: errorCode,
+		Details:   serverAPI.NewOptString(errorDescription),
+	})
 }
