@@ -1760,6 +1760,62 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/deduplicate/unique-pages:
+    post:
+      description: Поиск уникальных страниц в книге
+      summary: Поиск уникальных страниц в книге
+      tags:
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID исходной книги
+              required:
+                - book_id
+      responses:
+        200:
+          description: Успешное получение результата
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pages:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/deduplicate/compare:
     post:
       description: Сравнение двух книг на дублируемые страницы

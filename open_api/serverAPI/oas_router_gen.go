@@ -413,6 +413,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				case 'u': // Prefix: "unique-pages"
+					origElem := elem
+					if l := len("unique-pages"); len(elem) >= l && elem[0:l] == "unique-pages" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIDeduplicateUniquePagesPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -1436,6 +1457,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.summary = "Сравнение двух книг на дублируемые страницы"
 							r.operationID = ""
 							r.pathPattern = "/api/deduplicate/compare"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'u': // Prefix: "unique-pages"
+					origElem := elem
+					if l := len("unique-pages"); len(elem) >= l && elem[0:l] == "unique-pages" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIDeduplicateUniquePagesPostOperation
+							r.summary = "Поиск уникальных страниц в книге"
+							r.operationID = ""
+							r.pathPattern = "/api/deduplicate/unique-pages"
 							r.args = args
 							r.count = 0
 							return r, true

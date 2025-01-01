@@ -53,6 +53,10 @@ type APIDeduplicateComparePostRes interface {
 	aPIDeduplicateComparePostRes()
 }
 
+type APIDeduplicateUniquePagesPostRes interface {
+	aPIDeduplicateUniquePagesPostRes()
+}
+
 type APIFileIDGetRes interface {
 	aPIFileIDGetRes()
 }

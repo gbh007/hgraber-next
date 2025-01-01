@@ -68,6 +68,7 @@ type deduplicateUseCases interface {
 	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]entities.DeduplicateArchiveResult, error)
 	BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]entities.DeduplicateBookResult, error)
 	BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (entities.BookPagesCompareResult, error)
+	UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.Page, error)
 }
 
 type taskUseCases interface {

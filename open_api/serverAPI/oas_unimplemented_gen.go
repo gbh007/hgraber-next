@@ -132,6 +132,15 @@ func (UnimplementedHandler) APIDeduplicateComparePost(ctx context.Context, req *
 	return r, ht.ErrNotImplemented
 }
 
+// APIDeduplicateUniquePagesPost implements POST /api/deduplicate/unique-pages operation.
+//
+// Поиск уникальных страниц в книге.
+//
+// POST /api/deduplicate/unique-pages
+func (UnimplementedHandler) APIDeduplicateUniquePagesPost(ctx context.Context, req *APIDeduplicateUniquePagesPostReq) (r APIDeduplicateUniquePagesPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIFileIDGet implements GET /api/file/{id} operation.
 //
 // Получение тела файла (изображения страницы).

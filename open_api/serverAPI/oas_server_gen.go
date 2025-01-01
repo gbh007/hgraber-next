@@ -88,6 +88,12 @@ type Handler interface {
 	//
 	// POST /api/deduplicate/compare
 	APIDeduplicateComparePost(ctx context.Context, req *APIDeduplicateComparePostReq) (APIDeduplicateComparePostRes, error)
+	// APIDeduplicateUniquePagesPost implements POST /api/deduplicate/unique-pages operation.
+	//
+	// Поиск уникальных страниц в книге.
+	//
+	// POST /api/deduplicate/unique-pages
+	APIDeduplicateUniquePagesPost(ctx context.Context, req *APIDeduplicateUniquePagesPostReq) (APIDeduplicateUniquePagesPostRes, error)
 	// APIFileIDGet implements GET /api/file/{id} operation.
 	//
 	// Получение тела файла (изображения страницы).

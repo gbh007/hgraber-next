@@ -1187,6 +1187,53 @@ type APIDeduplicateComparePostUnauthorized ErrorResponse
 
 func (*APIDeduplicateComparePostUnauthorized) aPIDeduplicateComparePostRes() {}
 
+type APIDeduplicateUniquePagesPostBadRequest ErrorResponse
+
+func (*APIDeduplicateUniquePagesPostBadRequest) aPIDeduplicateUniquePagesPostRes() {}
+
+type APIDeduplicateUniquePagesPostForbidden ErrorResponse
+
+func (*APIDeduplicateUniquePagesPostForbidden) aPIDeduplicateUniquePagesPostRes() {}
+
+type APIDeduplicateUniquePagesPostInternalServerError ErrorResponse
+
+func (*APIDeduplicateUniquePagesPostInternalServerError) aPIDeduplicateUniquePagesPostRes() {}
+
+type APIDeduplicateUniquePagesPostOK struct {
+	Pages []PageSimple `json:"pages"`
+}
+
+// GetPages returns the value of Pages.
+func (s *APIDeduplicateUniquePagesPostOK) GetPages() []PageSimple {
+	return s.Pages
+}
+
+// SetPages sets the value of Pages.
+func (s *APIDeduplicateUniquePagesPostOK) SetPages(val []PageSimple) {
+	s.Pages = val
+}
+
+func (*APIDeduplicateUniquePagesPostOK) aPIDeduplicateUniquePagesPostRes() {}
+
+type APIDeduplicateUniquePagesPostReq struct {
+	// ID исходной книги.
+	BookID uuid.UUID `json:"book_id"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateUniquePagesPostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateUniquePagesPostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+type APIDeduplicateUniquePagesPostUnauthorized ErrorResponse
+
+func (*APIDeduplicateUniquePagesPostUnauthorized) aPIDeduplicateUniquePagesPostRes() {}
+
 type APIFileIDGetBadRequest ErrorResponse
 
 func (*APIFileIDGetBadRequest) aPIFileIDGetRes() {}
