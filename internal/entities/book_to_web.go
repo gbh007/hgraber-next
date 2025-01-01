@@ -6,6 +6,8 @@ import (
 	"hgnext/internal/pkg"
 )
 
+const PageNumberForPreview int = 1
+
 type AttributeToWeb struct {
 	Code   string
 	Name   string

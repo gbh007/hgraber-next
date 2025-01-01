@@ -42,7 +42,7 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 	hashes := make(map[entities.FileHash]int, len(originPages))
 
 	for _, page := range originPages {
-		if page.PageNumber == 1 && page.Downloaded {
+		if page.PageNumber == entities.PageNumberForPreview {
 			result.OriginPreviewPage = page.Page()
 		}
 
@@ -50,7 +50,7 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 	}
 
 	for _, page := range targetPages {
-		if page.PageNumber == 1 && page.Downloaded {
+		if page.PageNumber == entities.PageNumberForPreview {
 			result.TargetPreviewPage = page.Page()
 		}
 

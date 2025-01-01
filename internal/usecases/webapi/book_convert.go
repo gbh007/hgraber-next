@@ -23,7 +23,14 @@ func (uc *UseCase) bookConvert(bookFull entities.BookFull) entities.BookToWeb {
 
 	if len(book.Pages) > 0 {
 		book.ParsedPages = true
-		book.PreviewPage = book.Pages[0]
+
+		for _, page := range book.Pages {
+			if page.PageNumber == entities.PageNumberForPreview {
+				book.PreviewPage = page
+
+				break
+			}
+		}
 	}
 
 	for _, attr := range book.Attributes {
