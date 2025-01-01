@@ -97,6 +97,12 @@ type Invoker interface {
 	//
 	// POST /api/deduplicate/book-by-page-body
 	APIDeduplicateBookByPageBodyPost(ctx context.Context, request *APIDeduplicateBookByPageBodyPostReq) (APIDeduplicateBookByPageBodyPostRes, error)
+	// APIDeduplicateBooksByPagePost invokes POST /api/deduplicate/books-by-page operation.
+	//
+	// Поиск книг содержащих такую же страницу (тело).
+	//
+	// POST /api/deduplicate/books-by-page
+	APIDeduplicateBooksByPagePost(ctx context.Context, request *APIDeduplicateBooksByPagePostReq) (APIDeduplicateBooksByPagePostRes, error)
 	// APIDeduplicateComparePost invokes POST /api/deduplicate/compare operation.
 	//
 	// Сравнение двух книг на дублируемые страницы.
@@ -1718,6 +1724,125 @@ func (c *Client) sendAPIDeduplicateBookByPageBodyPost(ctx context.Context, reque
 
 	stage = "DecodeResponse"
 	result, err := decodeAPIDeduplicateBookByPageBodyPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIDeduplicateBooksByPagePost invokes POST /api/deduplicate/books-by-page operation.
+//
+// Поиск книг содержащих такую же страницу (тело).
+//
+// POST /api/deduplicate/books-by-page
+func (c *Client) APIDeduplicateBooksByPagePost(ctx context.Context, request *APIDeduplicateBooksByPagePostReq) (APIDeduplicateBooksByPagePostRes, error) {
+	res, err := c.sendAPIDeduplicateBooksByPagePost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIDeduplicateBooksByPagePost(ctx context.Context, request *APIDeduplicateBooksByPagePostReq) (res APIDeduplicateBooksByPagePostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/deduplicate/books-by-page"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIDeduplicateBooksByPagePostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/deduplicate/books-by-page"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIDeduplicateBooksByPagePostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIDeduplicateBooksByPagePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, APIDeduplicateBooksByPagePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIDeduplicateBooksByPagePostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

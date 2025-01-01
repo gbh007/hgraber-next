@@ -1079,6 +1079,65 @@ type APIDeduplicateBookByPageBodyPostUnauthorized ErrorResponse
 
 func (*APIDeduplicateBookByPageBodyPostUnauthorized) aPIDeduplicateBookByPageBodyPostRes() {}
 
+type APIDeduplicateBooksByPagePostBadRequest ErrorResponse
+
+func (*APIDeduplicateBooksByPagePostBadRequest) aPIDeduplicateBooksByPagePostRes() {}
+
+type APIDeduplicateBooksByPagePostForbidden ErrorResponse
+
+func (*APIDeduplicateBooksByPagePostForbidden) aPIDeduplicateBooksByPagePostRes() {}
+
+type APIDeduplicateBooksByPagePostInternalServerError ErrorResponse
+
+func (*APIDeduplicateBooksByPagePostInternalServerError) aPIDeduplicateBooksByPagePostRes() {}
+
+type APIDeduplicateBooksByPagePostOK struct {
+	Books []BookSimple `json:"books"`
+}
+
+// GetBooks returns the value of Books.
+func (s *APIDeduplicateBooksByPagePostOK) GetBooks() []BookSimple {
+	return s.Books
+}
+
+// SetBooks sets the value of Books.
+func (s *APIDeduplicateBooksByPagePostOK) SetBooks(val []BookSimple) {
+	s.Books = val
+}
+
+func (*APIDeduplicateBooksByPagePostOK) aPIDeduplicateBooksByPagePostRes() {}
+
+type APIDeduplicateBooksByPagePostReq struct {
+	// ID исходной книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Номер страницы в исходной книге.
+	PageNumber int `json:"page_number"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateBooksByPagePostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIDeduplicateBooksByPagePostReq) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateBooksByPagePostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIDeduplicateBooksByPagePostReq) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+type APIDeduplicateBooksByPagePostUnauthorized ErrorResponse
+
+func (*APIDeduplicateBooksByPagePostUnauthorized) aPIDeduplicateBooksByPagePostRes() {}
+
 type APIDeduplicateComparePostBadRequest ErrorResponse
 
 func (*APIDeduplicateComparePostBadRequest) aPIDeduplicateComparePostRes() {}

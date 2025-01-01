@@ -69,6 +69,7 @@ type deduplicateUseCases interface {
 	BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]entities.DeduplicateBookResult, error)
 	BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (entities.BookPagesCompareResult, error)
 	UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.Page, error)
+	BooksByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) ([]entities.BookWithPreviewPage, error)
 }
 
 type taskUseCases interface {

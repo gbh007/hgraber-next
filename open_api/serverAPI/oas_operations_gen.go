@@ -18,6 +18,7 @@ const (
 	APIBookRawPostOperation                   OperationName = "APIBookRawPost"
 	APIBookVerifyPostOperation                OperationName = "APIBookVerifyPost"
 	APIDeduplicateBookByPageBodyPostOperation OperationName = "APIDeduplicateBookByPageBodyPost"
+	APIDeduplicateBooksByPagePostOperation    OperationName = "APIDeduplicateBooksByPagePost"
 	APIDeduplicateComparePostOperation        OperationName = "APIDeduplicateComparePost"
 	APIDeduplicateUniquePagesPostOperation    OperationName = "APIDeduplicateUniquePagesPost"
 	APIFileIDGetOperation                     OperationName = "APIFileIDGet"

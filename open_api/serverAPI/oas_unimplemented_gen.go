@@ -123,6 +123,15 @@ func (UnimplementedHandler) APIDeduplicateBookByPageBodyPost(ctx context.Context
 	return r, ht.ErrNotImplemented
 }
 
+// APIDeduplicateBooksByPagePost implements POST /api/deduplicate/books-by-page operation.
+//
+// Поиск книг содержащих такую же страницу (тело).
+//
+// POST /api/deduplicate/books-by-page
+func (UnimplementedHandler) APIDeduplicateBooksByPagePost(ctx context.Context, req *APIDeduplicateBooksByPagePostReq) (r APIDeduplicateBooksByPagePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIDeduplicateComparePost implements POST /api/deduplicate/compare operation.
 //
 // Сравнение двух книг на дублируемые страницы.

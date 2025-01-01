@@ -82,6 +82,12 @@ type Handler interface {
 	//
 	// POST /api/deduplicate/book-by-page-body
 	APIDeduplicateBookByPageBodyPost(ctx context.Context, req *APIDeduplicateBookByPageBodyPostReq) (APIDeduplicateBookByPageBodyPostRes, error)
+	// APIDeduplicateBooksByPagePost implements POST /api/deduplicate/books-by-page operation.
+	//
+	// Поиск книг содержащих такую же страницу (тело).
+	//
+	// POST /api/deduplicate/books-by-page
+	APIDeduplicateBooksByPagePost(ctx context.Context, req *APIDeduplicateBooksByPagePostReq) (APIDeduplicateBooksByPagePostRes, error)
 	// APIDeduplicateComparePost implements POST /api/deduplicate/compare operation.
 	//
 	// Сравнение двух книг на дублируемые страницы.

@@ -14,9 +14,13 @@ type storage interface {
 	DuplicatedFiles(ctx context.Context) ([]entities.File, error)
 	ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UUID) error
 
-	BookIDsByMD5(ctx context.Context, md5sums []string) ([]uuid.UUID, error)
-	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
 	GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
+	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (entities.Page, error)
+
+	BookIDsByMD5(ctx context.Context, md5sums []string) ([]uuid.UUID, error)
+	BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageNumber int) (entities.PageWithHash, error)
+	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
+	BookPagesWithHashByHash(ctx context.Context, hash entities.FileHash) ([]entities.PageWithHash, error)
 }
 
 type UseCase struct {
