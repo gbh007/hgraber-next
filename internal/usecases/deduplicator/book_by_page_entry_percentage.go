@@ -65,6 +65,25 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 	}
 
 	slices.SortFunc(result, func(a, b entities.DeduplicateBookResult) int {
+		aPercent := max(a.EntryPercentage, a.ReverseEntryPercentage)
+		bPercent := max(b.EntryPercentage, b.ReverseEntryPercentage)
+
+		if aPercent > bPercent {
+			return -1
+		}
+
+		if aPercent < bPercent {
+			return 1
+		}
+
+		if a.TargetBook.PageCount > b.TargetBook.PageCount {
+			return -1
+		}
+
+		if a.TargetBook.PageCount < b.TargetBook.PageCount {
+			return 1
+		}
+
 		if a.EntryPercentage > b.EntryPercentage {
 			return -1
 		}
