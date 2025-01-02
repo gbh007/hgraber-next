@@ -29,6 +29,10 @@ func (b Book) IsLoaded() bool {
 	return !b.Deleted && b.AttributesParsed && b.PageCount > 0 && b.Name != ""
 }
 
+func (b Book) ParsedName() bool {
+	return b.Name != ""
+}
+
 // FIXME: подумать что делать с такими моделями
 type BookFull struct {
 	Book       Book

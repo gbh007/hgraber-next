@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	errForbiddenMerge      = errors.New("merge with not rebuilded book forbidden")
+	errForbiddenMerge      = errors.New("merge with book forbidden")
 	errEmptyPagesOnRebuild = errors.New("empty pages on rebuild")
 	errMissingSourcePage   = errors.New("missing source page")
 )
@@ -42,7 +42,11 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 		}
 
 		if !bookToMerge.IsRebuild {
-			return uuid.Nil, errForbiddenMerge
+			return uuid.Nil, fmt.Errorf("%w: not rebuilded book", errForbiddenMerge)
+		}
+
+		if bookToMerge.Deleted {
+			return uuid.Nil, fmt.Errorf("%w: deleted book", errForbiddenMerge)
 		}
 
 		attributeToMerge, err = uc.storage.BookOriginAttributes(ctx, request.MergeWithBook)

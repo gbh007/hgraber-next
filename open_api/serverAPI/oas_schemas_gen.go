@@ -3211,8 +3211,8 @@ type BookDetails struct {
 	// Время создания книги в системе.
 	Created time.Time `json:"created"`
 	// Ссылка для предпросмотра изображения книги.
-	PreviewURL OptURI           `json:"preview_url"`
-	Flags      BookDetailsFlags `json:"flags"`
+	PreviewURL OptURI    `json:"preview_url"`
+	Flags      BookFlags `json:"flags"`
 	// Название книги.
 	Name string `json:"name"`
 	// Количество страниц.
@@ -3243,7 +3243,7 @@ func (s *BookDetails) GetPreviewURL() OptURI {
 }
 
 // GetFlags returns the value of Flags.
-func (s *BookDetails) GetFlags() BookDetailsFlags {
+func (s *BookDetails) GetFlags() BookFlags {
 	return s.Flags
 }
 
@@ -3293,7 +3293,7 @@ func (s *BookDetails) SetPreviewURL(val OptURI) {
 }
 
 // SetFlags sets the value of Flags.
-func (s *BookDetails) SetFlags(val BookDetailsFlags) {
+func (s *BookDetails) SetFlags(val BookFlags) {
 	s.Flags = val
 }
 
@@ -3354,57 +3354,6 @@ func (s *BookDetailsAttributesItem) SetName(val string) {
 // SetValues sets the value of Values.
 func (s *BookDetailsAttributesItem) SetValues(val []string) {
 	s.Values = val
-}
-
-type BookDetailsFlags struct {
-	// Было ли обработано название книги.
-	ParsedName bool `json:"parsed_name"`
-	// Были ли обработаны страницы.
-	ParsedPage bool `json:"parsed_page"`
-	// Была ли подтверждена книга.
-	IsVerified bool `json:"is_verified"`
-	// Была ли удалена книга.
-	IsDeleted bool `json:"is_deleted"`
-}
-
-// GetParsedName returns the value of ParsedName.
-func (s *BookDetailsFlags) GetParsedName() bool {
-	return s.ParsedName
-}
-
-// GetParsedPage returns the value of ParsedPage.
-func (s *BookDetailsFlags) GetParsedPage() bool {
-	return s.ParsedPage
-}
-
-// GetIsVerified returns the value of IsVerified.
-func (s *BookDetailsFlags) GetIsVerified() bool {
-	return s.IsVerified
-}
-
-// GetIsDeleted returns the value of IsDeleted.
-func (s *BookDetailsFlags) GetIsDeleted() bool {
-	return s.IsDeleted
-}
-
-// SetParsedName sets the value of ParsedName.
-func (s *BookDetailsFlags) SetParsedName(val bool) {
-	s.ParsedName = val
-}
-
-// SetParsedPage sets the value of ParsedPage.
-func (s *BookDetailsFlags) SetParsedPage(val bool) {
-	s.ParsedPage = val
-}
-
-// SetIsVerified sets the value of IsVerified.
-func (s *BookDetailsFlags) SetIsVerified(val bool) {
-	s.IsVerified = val
-}
-
-// SetIsDeleted sets the value of IsDeleted.
-func (s *BookDetailsFlags) SetIsDeleted(val bool) {
-	s.IsDeleted = val
 }
 
 // Данные о размере книги.
@@ -3501,11 +3450,13 @@ type BookFilter struct {
 	// Время создание книги до.
 	To OptDateTime `json:"to"`
 	// Статус подтверждения книги.
-	VerifyStatus OptBookFilterVerifyStatus `json:"verify_status"`
+	VerifyStatus OptBookFilterFlagSelector `json:"verify_status"`
 	// Статус удаления книги.
-	DeleteStatus OptBookFilterDeleteStatus `json:"delete_status"`
+	DeleteStatus OptBookFilterFlagSelector `json:"delete_status"`
 	// Статус загрузки книги.
-	DownloadStatus OptBookFilterDownloadStatus `json:"download_status"`
+	DownloadStatus OptBookFilterFlagSelector `json:"download_status"`
+	// Показывать пересобранные книги.
+	ShowRebuilded OptBookFilterFlagSelector `json:"show_rebuilded"`
 	// Фильтр по полям.
 	Filter OptBookFilterFilter `json:"filter"`
 }
@@ -3541,18 +3492,23 @@ func (s *BookFilter) GetTo() OptDateTime {
 }
 
 // GetVerifyStatus returns the value of VerifyStatus.
-func (s *BookFilter) GetVerifyStatus() OptBookFilterVerifyStatus {
+func (s *BookFilter) GetVerifyStatus() OptBookFilterFlagSelector {
 	return s.VerifyStatus
 }
 
 // GetDeleteStatus returns the value of DeleteStatus.
-func (s *BookFilter) GetDeleteStatus() OptBookFilterDeleteStatus {
+func (s *BookFilter) GetDeleteStatus() OptBookFilterFlagSelector {
 	return s.DeleteStatus
 }
 
 // GetDownloadStatus returns the value of DownloadStatus.
-func (s *BookFilter) GetDownloadStatus() OptBookFilterDownloadStatus {
+func (s *BookFilter) GetDownloadStatus() OptBookFilterFlagSelector {
 	return s.DownloadStatus
+}
+
+// GetShowRebuilded returns the value of ShowRebuilded.
+func (s *BookFilter) GetShowRebuilded() OptBookFilterFlagSelector {
+	return s.ShowRebuilded
 }
 
 // GetFilter returns the value of Filter.
@@ -3591,121 +3547,28 @@ func (s *BookFilter) SetTo(val OptDateTime) {
 }
 
 // SetVerifyStatus sets the value of VerifyStatus.
-func (s *BookFilter) SetVerifyStatus(val OptBookFilterVerifyStatus) {
+func (s *BookFilter) SetVerifyStatus(val OptBookFilterFlagSelector) {
 	s.VerifyStatus = val
 }
 
 // SetDeleteStatus sets the value of DeleteStatus.
-func (s *BookFilter) SetDeleteStatus(val OptBookFilterDeleteStatus) {
+func (s *BookFilter) SetDeleteStatus(val OptBookFilterFlagSelector) {
 	s.DeleteStatus = val
 }
 
 // SetDownloadStatus sets the value of DownloadStatus.
-func (s *BookFilter) SetDownloadStatus(val OptBookFilterDownloadStatus) {
+func (s *BookFilter) SetDownloadStatus(val OptBookFilterFlagSelector) {
 	s.DownloadStatus = val
+}
+
+// SetShowRebuilded sets the value of ShowRebuilded.
+func (s *BookFilter) SetShowRebuilded(val OptBookFilterFlagSelector) {
+	s.ShowRebuilded = val
 }
 
 // SetFilter sets the value of Filter.
 func (s *BookFilter) SetFilter(val OptBookFilterFilter) {
 	s.Filter = val
-}
-
-// Статус удаления книги.
-type BookFilterDeleteStatus string
-
-const (
-	BookFilterDeleteStatusAll    BookFilterDeleteStatus = "all"
-	BookFilterDeleteStatusOnly   BookFilterDeleteStatus = "only"
-	BookFilterDeleteStatusExcept BookFilterDeleteStatus = "except"
-)
-
-// AllValues returns all BookFilterDeleteStatus values.
-func (BookFilterDeleteStatus) AllValues() []BookFilterDeleteStatus {
-	return []BookFilterDeleteStatus{
-		BookFilterDeleteStatusAll,
-		BookFilterDeleteStatusOnly,
-		BookFilterDeleteStatusExcept,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s BookFilterDeleteStatus) MarshalText() ([]byte, error) {
-	switch s {
-	case BookFilterDeleteStatusAll:
-		return []byte(s), nil
-	case BookFilterDeleteStatusOnly:
-		return []byte(s), nil
-	case BookFilterDeleteStatusExcept:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *BookFilterDeleteStatus) UnmarshalText(data []byte) error {
-	switch BookFilterDeleteStatus(data) {
-	case BookFilterDeleteStatusAll:
-		*s = BookFilterDeleteStatusAll
-		return nil
-	case BookFilterDeleteStatusOnly:
-		*s = BookFilterDeleteStatusOnly
-		return nil
-	case BookFilterDeleteStatusExcept:
-		*s = BookFilterDeleteStatusExcept
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-// Статус загрузки книги.
-type BookFilterDownloadStatus string
-
-const (
-	BookFilterDownloadStatusAll    BookFilterDownloadStatus = "all"
-	BookFilterDownloadStatusOnly   BookFilterDownloadStatus = "only"
-	BookFilterDownloadStatusExcept BookFilterDownloadStatus = "except"
-)
-
-// AllValues returns all BookFilterDownloadStatus values.
-func (BookFilterDownloadStatus) AllValues() []BookFilterDownloadStatus {
-	return []BookFilterDownloadStatus{
-		BookFilterDownloadStatusAll,
-		BookFilterDownloadStatusOnly,
-		BookFilterDownloadStatusExcept,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s BookFilterDownloadStatus) MarshalText() ([]byte, error) {
-	switch s {
-	case BookFilterDownloadStatusAll:
-		return []byte(s), nil
-	case BookFilterDownloadStatusOnly:
-		return []byte(s), nil
-	case BookFilterDownloadStatusExcept:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *BookFilterDownloadStatus) UnmarshalText(data []byte) error {
-	switch BookFilterDownloadStatus(data) {
-	case BookFilterDownloadStatusAll:
-		*s = BookFilterDownloadStatusAll
-		return nil
-	case BookFilterDownloadStatusOnly:
-		*s = BookFilterDownloadStatusOnly
-		return nil
-	case BookFilterDownloadStatusExcept:
-		*s = BookFilterDownloadStatusExcept
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
 }
 
 // Фильтр по полям.
@@ -3979,6 +3842,56 @@ func (s *BookFilterFilterLabelsItemType) UnmarshalText(data []byte) error {
 	}
 }
 
+// Выбор для значений флага книги.
+// Ref: #/components/schemas/BookFilterFlagSelector
+type BookFilterFlagSelector string
+
+const (
+	BookFilterFlagSelectorAll    BookFilterFlagSelector = "all"
+	BookFilterFlagSelectorOnly   BookFilterFlagSelector = "only"
+	BookFilterFlagSelectorExcept BookFilterFlagSelector = "except"
+)
+
+// AllValues returns all BookFilterFlagSelector values.
+func (BookFilterFlagSelector) AllValues() []BookFilterFlagSelector {
+	return []BookFilterFlagSelector{
+		BookFilterFlagSelectorAll,
+		BookFilterFlagSelectorOnly,
+		BookFilterFlagSelectorExcept,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s BookFilterFlagSelector) MarshalText() ([]byte, error) {
+	switch s {
+	case BookFilterFlagSelectorAll:
+		return []byte(s), nil
+	case BookFilterFlagSelectorOnly:
+		return []byte(s), nil
+	case BookFilterFlagSelectorExcept:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *BookFilterFlagSelector) UnmarshalText(data []byte) error {
+	switch BookFilterFlagSelector(data) {
+	case BookFilterFlagSelectorAll:
+		*s = BookFilterFlagSelectorAll
+		return nil
+	case BookFilterFlagSelectorOnly:
+		*s = BookFilterFlagSelectorOnly
+		return nil
+	case BookFilterFlagSelectorExcept:
+		*s = BookFilterFlagSelectorExcept
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Поле для сортировки.
 type BookFilterSortField string
 
@@ -4035,53 +3948,69 @@ func (s *BookFilterSortField) UnmarshalText(data []byte) error {
 	}
 }
 
-// Статус подтверждения книги.
-type BookFilterVerifyStatus string
-
-const (
-	BookFilterVerifyStatusAll    BookFilterVerifyStatus = "all"
-	BookFilterVerifyStatusOnly   BookFilterVerifyStatus = "only"
-	BookFilterVerifyStatusExcept BookFilterVerifyStatus = "except"
-)
-
-// AllValues returns all BookFilterVerifyStatus values.
-func (BookFilterVerifyStatus) AllValues() []BookFilterVerifyStatus {
-	return []BookFilterVerifyStatus{
-		BookFilterVerifyStatusAll,
-		BookFilterVerifyStatusOnly,
-		BookFilterVerifyStatusExcept,
-	}
+// Флаги книги.
+// Ref: #/components/schemas/BookFlags
+type BookFlags struct {
+	// Было ли обработано название книги.
+	ParsedName bool `json:"parsed_name"`
+	// Были ли обработаны страницы.
+	ParsedPage bool `json:"parsed_page"`
+	// Была ли подтверждена книга.
+	IsVerified bool `json:"is_verified"`
+	// Была ли удалена книга.
+	IsDeleted bool `json:"is_deleted"`
+	// Пресобранная ли это книга.
+	IsRebuild bool `json:"is_rebuild"`
 }
 
-// MarshalText implements encoding.TextMarshaler.
-func (s BookFilterVerifyStatus) MarshalText() ([]byte, error) {
-	switch s {
-	case BookFilterVerifyStatusAll:
-		return []byte(s), nil
-	case BookFilterVerifyStatusOnly:
-		return []byte(s), nil
-	case BookFilterVerifyStatusExcept:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
+// GetParsedName returns the value of ParsedName.
+func (s *BookFlags) GetParsedName() bool {
+	return s.ParsedName
 }
 
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *BookFilterVerifyStatus) UnmarshalText(data []byte) error {
-	switch BookFilterVerifyStatus(data) {
-	case BookFilterVerifyStatusAll:
-		*s = BookFilterVerifyStatusAll
-		return nil
-	case BookFilterVerifyStatusOnly:
-		*s = BookFilterVerifyStatusOnly
-		return nil
-	case BookFilterVerifyStatusExcept:
-		*s = BookFilterVerifyStatusExcept
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
+// GetParsedPage returns the value of ParsedPage.
+func (s *BookFlags) GetParsedPage() bool {
+	return s.ParsedPage
+}
+
+// GetIsVerified returns the value of IsVerified.
+func (s *BookFlags) GetIsVerified() bool {
+	return s.IsVerified
+}
+
+// GetIsDeleted returns the value of IsDeleted.
+func (s *BookFlags) GetIsDeleted() bool {
+	return s.IsDeleted
+}
+
+// GetIsRebuild returns the value of IsRebuild.
+func (s *BookFlags) GetIsRebuild() bool {
+	return s.IsRebuild
+}
+
+// SetParsedName sets the value of ParsedName.
+func (s *BookFlags) SetParsedName(val bool) {
+	s.ParsedName = val
+}
+
+// SetParsedPage sets the value of ParsedPage.
+func (s *BookFlags) SetParsedPage(val bool) {
+	s.ParsedPage = val
+}
+
+// SetIsVerified sets the value of IsVerified.
+func (s *BookFlags) SetIsVerified(val bool) {
+	s.IsVerified = val
+}
+
+// SetIsDeleted sets the value of IsDeleted.
+func (s *BookFlags) SetIsDeleted(val bool) {
+	s.IsDeleted = val
+}
+
+// SetIsRebuild sets the value of IsRebuild.
+func (s *BookFlags) SetIsRebuild(val bool) {
+	s.IsRebuild = val
 }
 
 // Данные книги.
@@ -4351,12 +4280,8 @@ type BookShortInfo struct {
 	Created time.Time `json:"created"`
 	// Ссылка для предпросмотра изображения книги.
 	PreviewURL OptURI `json:"preview_url"`
-	// Было ли обработано название книги.
-	ParsedName bool `json:"parsed_name"`
 	// Название книги.
 	Name string `json:"name"`
-	// Были ли обработаны страницы.
-	ParsedPage bool `json:"parsed_page"`
 	// Количество страниц.
 	PageCount int `json:"page_count"`
 	// Процент загруженных страниц.
@@ -4364,7 +4289,8 @@ type BookShortInfo struct {
 	// Список тегов (одноименный атрибут) книги.
 	Tags []string `json:"tags"`
 	// Есть теги которые не были включены в список.
-	HasMoreTags bool `json:"has_more_tags"`
+	HasMoreTags bool      `json:"has_more_tags"`
+	Flags       BookFlags `json:"flags"`
 }
 
 // GetID returns the value of ID.
@@ -4382,19 +4308,9 @@ func (s *BookShortInfo) GetPreviewURL() OptURI {
 	return s.PreviewURL
 }
 
-// GetParsedName returns the value of ParsedName.
-func (s *BookShortInfo) GetParsedName() bool {
-	return s.ParsedName
-}
-
 // GetName returns the value of Name.
 func (s *BookShortInfo) GetName() string {
 	return s.Name
-}
-
-// GetParsedPage returns the value of ParsedPage.
-func (s *BookShortInfo) GetParsedPage() bool {
-	return s.ParsedPage
 }
 
 // GetPageCount returns the value of PageCount.
@@ -4417,6 +4333,11 @@ func (s *BookShortInfo) GetHasMoreTags() bool {
 	return s.HasMoreTags
 }
 
+// GetFlags returns the value of Flags.
+func (s *BookShortInfo) GetFlags() BookFlags {
+	return s.Flags
+}
+
 // SetID sets the value of ID.
 func (s *BookShortInfo) SetID(val uuid.UUID) {
 	s.ID = val
@@ -4432,19 +4353,9 @@ func (s *BookShortInfo) SetPreviewURL(val OptURI) {
 	s.PreviewURL = val
 }
 
-// SetParsedName sets the value of ParsedName.
-func (s *BookShortInfo) SetParsedName(val bool) {
-	s.ParsedName = val
-}
-
 // SetName sets the value of Name.
 func (s *BookShortInfo) SetName(val string) {
 	s.Name = val
-}
-
-// SetParsedPage sets the value of ParsedPage.
-func (s *BookShortInfo) SetParsedPage(val bool) {
-	s.ParsedPage = val
 }
 
 // SetPageCount sets the value of PageCount.
@@ -4467,6 +4378,11 @@ func (s *BookShortInfo) SetHasMoreTags(val bool) {
 	s.HasMoreTags = val
 }
 
+// SetFlags sets the value of Flags.
+func (s *BookShortInfo) SetFlags(val BookFlags) {
+	s.Flags = val
+}
+
 // Крайне упрощенная модель книги.
 // Ref: #/components/schemas/BookSimple
 type BookSimple struct {
@@ -4481,7 +4397,8 @@ type BookSimple struct {
 	// Количество страниц.
 	PageCount int `json:"page_count"`
 	// Ссылка для предпросмотра изображения книги.
-	PreviewURL OptURI `json:"preview_url"`
+	PreviewURL OptURI    `json:"preview_url"`
+	Flags      BookFlags `json:"flags"`
 }
 
 // GetID returns the value of ID.
@@ -4514,6 +4431,11 @@ func (s *BookSimple) GetPreviewURL() OptURI {
 	return s.PreviewURL
 }
 
+// GetFlags returns the value of Flags.
+func (s *BookSimple) GetFlags() BookFlags {
+	return s.Flags
+}
+
 // SetID sets the value of ID.
 func (s *BookSimple) SetID(val uuid.UUID) {
 	s.ID = val
@@ -4542,6 +4464,11 @@ func (s *BookSimple) SetPageCount(val int) {
 // SetPreviewURL sets the value of PreviewURL.
 func (s *BookSimple) SetPreviewURL(val OptURI) {
 	s.PreviewURL = val
+}
+
+// SetFlags sets the value of Flags.
+func (s *BookSimple) SetFlags(val BookFlags) {
+	s.Flags = val
 }
 
 type Cookies struct {
@@ -4693,98 +4620,6 @@ func (o OptBookDetailsSize) Or(d BookDetailsSize) BookDetailsSize {
 	return d
 }
 
-// NewOptBookFilterDeleteStatus returns new OptBookFilterDeleteStatus with value set to v.
-func NewOptBookFilterDeleteStatus(v BookFilterDeleteStatus) OptBookFilterDeleteStatus {
-	return OptBookFilterDeleteStatus{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptBookFilterDeleteStatus is optional BookFilterDeleteStatus.
-type OptBookFilterDeleteStatus struct {
-	Value BookFilterDeleteStatus
-	Set   bool
-}
-
-// IsSet returns true if OptBookFilterDeleteStatus was set.
-func (o OptBookFilterDeleteStatus) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptBookFilterDeleteStatus) Reset() {
-	var v BookFilterDeleteStatus
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptBookFilterDeleteStatus) SetTo(v BookFilterDeleteStatus) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptBookFilterDeleteStatus) Get() (v BookFilterDeleteStatus, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptBookFilterDeleteStatus) Or(d BookFilterDeleteStatus) BookFilterDeleteStatus {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptBookFilterDownloadStatus returns new OptBookFilterDownloadStatus with value set to v.
-func NewOptBookFilterDownloadStatus(v BookFilterDownloadStatus) OptBookFilterDownloadStatus {
-	return OptBookFilterDownloadStatus{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptBookFilterDownloadStatus is optional BookFilterDownloadStatus.
-type OptBookFilterDownloadStatus struct {
-	Value BookFilterDownloadStatus
-	Set   bool
-}
-
-// IsSet returns true if OptBookFilterDownloadStatus was set.
-func (o OptBookFilterDownloadStatus) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptBookFilterDownloadStatus) Reset() {
-	var v BookFilterDownloadStatus
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptBookFilterDownloadStatus) SetTo(v BookFilterDownloadStatus) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptBookFilterDownloadStatus) Get() (v BookFilterDownloadStatus, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptBookFilterDownloadStatus) Or(d BookFilterDownloadStatus) BookFilterDownloadStatus {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptBookFilterFilter returns new OptBookFilterFilter with value set to v.
 func NewOptBookFilterFilter(v BookFilterFilter) OptBookFilterFilter {
 	return OptBookFilterFilter{
@@ -4831,6 +4666,52 @@ func (o OptBookFilterFilter) Or(d BookFilterFilter) BookFilterFilter {
 	return d
 }
 
+// NewOptBookFilterFlagSelector returns new OptBookFilterFlagSelector with value set to v.
+func NewOptBookFilterFlagSelector(v BookFilterFlagSelector) OptBookFilterFlagSelector {
+	return OptBookFilterFlagSelector{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookFilterFlagSelector is optional BookFilterFlagSelector.
+type OptBookFilterFlagSelector struct {
+	Value BookFilterFlagSelector
+	Set   bool
+}
+
+// IsSet returns true if OptBookFilterFlagSelector was set.
+func (o OptBookFilterFlagSelector) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookFilterFlagSelector) Reset() {
+	var v BookFilterFlagSelector
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookFilterFlagSelector) SetTo(v BookFilterFlagSelector) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookFilterFlagSelector) Get() (v BookFilterFlagSelector, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookFilterFlagSelector) Or(d BookFilterFlagSelector) BookFilterFlagSelector {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptBookFilterSortField returns new OptBookFilterSortField with value set to v.
 func NewOptBookFilterSortField(v BookFilterSortField) OptBookFilterSortField {
 	return OptBookFilterSortField{
@@ -4871,52 +4752,6 @@ func (o OptBookFilterSortField) Get() (v BookFilterSortField, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptBookFilterSortField) Or(d BookFilterSortField) BookFilterSortField {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptBookFilterVerifyStatus returns new OptBookFilterVerifyStatus with value set to v.
-func NewOptBookFilterVerifyStatus(v BookFilterVerifyStatus) OptBookFilterVerifyStatus {
-	return OptBookFilterVerifyStatus{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptBookFilterVerifyStatus is optional BookFilterVerifyStatus.
-type OptBookFilterVerifyStatus struct {
-	Value BookFilterVerifyStatus
-	Set   bool
-}
-
-// IsSet returns true if OptBookFilterVerifyStatus was set.
-func (o OptBookFilterVerifyStatus) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptBookFilterVerifyStatus) Reset() {
-	var v BookFilterVerifyStatus
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptBookFilterVerifyStatus) SetTo(v BookFilterVerifyStatus) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptBookFilterVerifyStatus) Get() (v BookFilterVerifyStatus, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptBookFilterVerifyStatus) Or(d BookFilterVerifyStatus) BookFilterVerifyStatus {
 	if v, ok := o.Get(); ok {
 		return v
 	}

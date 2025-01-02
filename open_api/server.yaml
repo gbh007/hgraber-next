@@ -2550,15 +2550,9 @@ components:
           type: string
           format: uri
           description: Ссылка для предпросмотра изображения книги
-        parsed_name:
-          type: boolean
-          description: Было ли обработано название книги
         name:
           type: string
           description: Название книги
-        parsed_page:
-          type: boolean
-          description: Были ли обработаны страницы
         page_count:
           type: integer
           description: Количество страниц
@@ -2575,15 +2569,42 @@ components:
         has_more_tags:
           type: boolean
           description: Есть теги которые не были включены в список
+        flags:
+          $ref: "#/components/schemas/BookFlags"
       required:
         - id
         - created
-        - parsed_name
         - name
-        - parsed_page
         - page_count
         - page_loaded_percent
         - has_more_tags
+        - flags
+
+    BookFlags:
+      type: object
+      description: Флаги книги
+      properties:
+        parsed_name:
+          type: boolean
+          description: Было ли обработано название книги
+        parsed_page:
+          type: boolean
+          description: Были ли обработаны страницы
+        is_verified:
+          type: boolean
+          description: Была ли подтверждена книга
+        is_deleted:
+          type: boolean
+          description: Была ли удалена книга
+        is_rebuild:
+          type: boolean
+          description: Пресобранная ли это книга
+      required:
+        - parsed_name
+        - parsed_page
+        - is_verified
+        - is_deleted
+        - is_rebuild
 
     BookSimple:
       type: object
@@ -2611,11 +2632,14 @@ components:
           type: string
           format: uri
           description: Ссылка для предпросмотра изображения книги
+        flags:
+          $ref: "#/components/schemas/BookFlags"
       required:
         - id
         - create_at
         - name
         - page_count
+        - flags
 
     PageSimple:
       type: object
@@ -2648,25 +2672,7 @@ components:
           format: uri
           description: Ссылка для предпросмотра изображения книги
         flags:
-          type: object
-          properties:
-            parsed_name:
-              type: boolean
-              description: Было ли обработано название книги
-            parsed_page:
-              type: boolean
-              description: Были ли обработаны страницы
-            is_verified:
-              type: boolean
-              description: Была ли подтверждена книга
-            is_deleted:
-              type: boolean
-              description: Была ли удалена книга
-          required:
-            - parsed_name
-            - parsed_page
-            - is_verified
-            - is_deleted
+          $ref: "#/components/schemas/BookFlags"
         name:
           type: string
           description: Название книги
@@ -2843,6 +2849,14 @@ components:
         - name
         - page_count
 
+    BookFilterFlagSelector:
+      type: string
+      description: Выбор для значений флага книги
+      enum:
+        - all
+        - only
+        - except
+
     BookFilter:
       type: object
       properties:
@@ -2873,26 +2887,17 @@ components:
           format: date-time
           description: Время создание книги до
         verify_status:
-          type: string
           description: Статус подтверждения книги
-          enum:
-            - all
-            - only
-            - except
+          $ref: "#/components/schemas/BookFilterFlagSelector"
         delete_status:
-          type: string
           description: Статус удаления книги
-          enum:
-            - all
-            - only
-            - except
+          $ref: "#/components/schemas/BookFilterFlagSelector"
         download_status:
-          type: string
           description: Статус загрузки книги
-          enum:
-            - all
-            - only
-            - except
+          $ref: "#/components/schemas/BookFilterFlagSelector"
+        show_rebuilded:
+          description: Показывать пересобранные книги
+          $ref: "#/components/schemas/BookFilterFlagSelector"
         filter:
           type: object
           description: Фильтр по полям

@@ -72,6 +72,13 @@ func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.
 		Name:       book.Name,
 		PageCount:  book.PageCount,
 		PreviewURL: c.getPagePreview(previewPage),
+		Flags: serverAPI.BookFlags{
+			ParsedName: book.ParsedName(),
+			ParsedPage: book.PageCount > 0, // FIXME: не самый надежный метод, мб стоит придумать что-то другое
+			IsVerified: book.Verified,
+			IsDeleted:  book.Deleted,
+			IsRebuild:  book.IsRebuild,
+		},
 	}
 }
 

@@ -1192,6 +1192,24 @@ func (s *BookFilter) Validate() error {
 		})
 	}
 	if err := func() error {
+		if value, ok := s.ShowRebuilded.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "show_rebuilded",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if value, ok := s.Filter.Get(); ok {
 			if err := func() error {
 				if err := value.Validate(); err != nil {
@@ -1213,32 +1231,6 @@ func (s *BookFilter) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s BookFilterDeleteStatus) Validate() error {
-	switch s {
-	case "all":
-		return nil
-	case "only":
-		return nil
-	case "except":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
-func (s BookFilterDownloadStatus) Validate() error {
-	switch s {
-	case "all":
-		return nil
-	case "only":
-		return nil
-	case "except":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *BookFilterFilter) Validate() error {
@@ -1383,6 +1375,19 @@ func (s BookFilterFilterLabelsItemType) Validate() error {
 	}
 }
 
+func (s BookFilterFlagSelector) Validate() error {
+	switch s {
+	case "all":
+		return nil
+	case "only":
+		return nil
+	case "except":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s BookFilterSortField) Validate() error {
 	switch s {
 	case "created_at":
@@ -1392,19 +1397,6 @@ func (s BookFilterSortField) Validate() error {
 	case "id":
 		return nil
 	case "page_count":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
-func (s BookFilterVerifyStatus) Validate() error {
-	switch s {
-	case "all":
-		return nil
-	case "only":
-		return nil
-	case "except":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)

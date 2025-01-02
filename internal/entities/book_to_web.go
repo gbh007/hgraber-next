@@ -40,10 +40,6 @@ func (book BookToWeb) PageDownloadPercent() float64 {
 	return math.Round(float64(downloadedPageCount)*10000/float64(len(book.Pages))) / 100
 }
 
-func (book BookToWeb) ParsedName() bool {
-	return book.Book.Name != ""
-}
-
 type BookListToWeb struct {
 	Books []BookToWeb
 	Pages []int
