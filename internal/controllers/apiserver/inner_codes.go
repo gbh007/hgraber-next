@@ -8,5 +8,6 @@ const (
 	DeduplicateUseCaseCode = "deduplicate_uc"
 	CleanupUseCaseCode     = "cleanup_uc"
 	TaskerUseCaseCode      = "tasker_uc"
+	RebuilderUseCaseCode   = "rebuilder_uc"
 	ValidationCode         = "validation"
 )

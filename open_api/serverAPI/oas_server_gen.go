@@ -69,6 +69,13 @@ type Handler interface {
 	//
 	// POST /api/book/raw
 	APIBookRawPost(ctx context.Context, req *APIBookRawPostReq) (APIBookRawPostRes, error)
+	// APIBookUpdatePost implements POST /api/book/update operation.
+	//
+	// Изменяет часть данных книги, ряд полей не изменяется
+	// (верификация, число страниц и т.д.).
+	//
+	// POST /api/book/update
+	APIBookUpdatePost(ctx context.Context, req *BookRaw) (APIBookUpdatePostRes, error)
 	// APIBookVerifyPost implements POST /api/book/verify operation.
 	//
 	// Подтверждение (модерация) книги, нужна в случае

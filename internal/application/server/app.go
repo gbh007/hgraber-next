@@ -30,6 +30,7 @@ import (
 	"hgnext/internal/usecases/export"
 	"hgnext/internal/usecases/filelogic"
 	"hgnext/internal/usecases/parsing"
+	"hgnext/internal/usecases/rebuilder"
 	"hgnext/internal/usecases/taskhandler"
 	"hgnext/internal/usecases/webapi"
 )
@@ -146,6 +147,7 @@ func Serve() {
 	deduplicateUseCases := deduplicator.New(logger, storage, tracer)
 	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorage)
 	taskUseCases := taskhandler.New(logger, tmpStorage, deduplicateUseCases, cleanupUseCases)
+	rebuilderUseCases := rebuilder.New(logger, tracer, storage)
 
 	metricProvider := metrics.MetricProvider{}
 
@@ -172,6 +174,7 @@ func Serve() {
 		exportUseCases,
 		deduplicateUseCases,
 		taskUseCases,
+		rebuilderUseCases,
 		cfg.Application.Debug,
 	)
 	if err != nil {

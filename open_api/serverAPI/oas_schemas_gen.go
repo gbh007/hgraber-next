@@ -954,6 +954,31 @@ type APIBookRawPostUnauthorized ErrorResponse
 
 func (*APIBookRawPostUnauthorized) aPIBookRawPostRes() {}
 
+type APIBookUpdatePostBadRequest ErrorResponse
+
+func (*APIBookUpdatePostBadRequest) aPIBookUpdatePostRes() {}
+
+type APIBookUpdatePostForbidden ErrorResponse
+
+func (*APIBookUpdatePostForbidden) aPIBookUpdatePostRes() {}
+
+type APIBookUpdatePostInternalServerError ErrorResponse
+
+func (*APIBookUpdatePostInternalServerError) aPIBookUpdatePostRes() {}
+
+// APIBookUpdatePostNoContent is response for APIBookUpdatePost operation.
+type APIBookUpdatePostNoContent struct{}
+
+func (*APIBookUpdatePostNoContent) aPIBookUpdatePostRes() {}
+
+type APIBookUpdatePostNotFound ErrorResponse
+
+func (*APIBookUpdatePostNotFound) aPIBookUpdatePostRes() {}
+
+type APIBookUpdatePostUnauthorized ErrorResponse
+
+func (*APIBookUpdatePostUnauthorized) aPIBookUpdatePostRes() {}
+
 type APIBookVerifyPostBadRequest ErrorResponse
 
 func (*APIBookVerifyPostBadRequest) aPIBookVerifyPostRes() {}

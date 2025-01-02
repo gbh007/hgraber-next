@@ -24,6 +24,8 @@ tags:
     description: Взаимодействие с данными меток
   - name: agent
     description: Взаимодействие с системами агентов
+  - name: rebuild
+    description: Перестроение и изменение книг
   - name: deduplicate
     description: Дедупликация данных
   - name: task
@@ -924,6 +926,7 @@ paths:
       summary: Информация о книге
       tags:
         - book
+        - rebuild
       requestBody:
         required: true
         content:
@@ -946,6 +949,53 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BookRaw"
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/book/update:
+    post:
+      description: Изменяет часть данных книги, ряд полей не изменяется (верификация, число страниц и т.д.)
+      summary: Изменение данных книги
+      tags:
+        - book
+        - rebuild
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookRaw"
+      responses:
+        204:
+          description: Успешное изменение данных
         400:
           description: Некорректный запрос данных
           content:
