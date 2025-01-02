@@ -21,6 +21,7 @@ type Book struct {
 	DeletedAt        sql.NullTime   `db:"deleted_at"`
 	Verified         bool           `db:"verified"`
 	VerifiedAt       sql.NullTime   `db:"verified_at"`
+	IsRebuild        bool           `db:"is_rebuild"`
 }
 
 func (b Book) ToEntity() (entities.Book, error) {
@@ -50,5 +51,7 @@ func (b Book) ToEntity() (entities.Book, error) {
 		DeletedAt:  b.DeletedAt.Time,
 		Verified:   b.Verified,
 		VerifiedAt: b.VerifiedAt.Time,
+
+		IsRebuild: b.IsRebuild,
 	}, nil
 }

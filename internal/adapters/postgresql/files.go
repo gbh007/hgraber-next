@@ -34,6 +34,7 @@ func (d *Database) GetUnHashedFiles(ctx context.Context) ([]entities.File, error
 func (d *Database) DuplicatedFiles(ctx context.Context) ([]entities.File, error) {
 	raw := make([]*model.File, 0)
 
+	// FIXME: условие дедупликации не учитывает размер
 	err := d.db.SelectContext(ctx, &raw, `SELECT f.*
 FROM (
         SELECT COUNT(*) AS c, md5_sum, sha256_sum

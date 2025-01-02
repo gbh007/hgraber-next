@@ -1,6 +1,8 @@
 package pkg
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func Map[A, B any](a []A, c func(A) B) []B {
 	b := make([]B, len(a))
@@ -45,4 +47,22 @@ func SliceReduce[T, V any](s []T, f func(sum V, e T) V) V {
 	}
 
 	return v
+}
+
+func Unique[V comparable](s ...[]V) []V {
+	tmp := make(map[V]struct{}, len(s))
+
+	for _, arr := range s {
+		for _, e := range arr {
+			tmp[e] = struct{}{}
+		}
+	}
+
+	result := make([]V, 0, len(tmp))
+
+	for k := range tmp {
+		result = append(result, k)
+	}
+
+	return result
 }

@@ -41,6 +41,10 @@ type APIBookRawPostRes interface {
 	aPIBookRawPostRes()
 }
 
+type APIBookRebuildPostRes interface {
+	aPIBookRebuildPostRes()
+}
+
 type APIBookUpdatePostRes interface {
 	aPIBookUpdatePostRes()
 }

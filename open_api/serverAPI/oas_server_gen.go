@@ -69,6 +69,13 @@ type Handler interface {
 	//
 	// POST /api/book/raw
 	APIBookRawPost(ctx context.Context, req *APIBookRawPostReq) (APIBookRawPostRes, error)
+	// APIBookRebuildPost implements POST /api/book/rebuild operation.
+	//
+	// Может как создать новую книгу, так и добавить данные в
+	// другую пересобранную.
+	//
+	// POST /api/book/rebuild
+	APIBookRebuildPost(ctx context.Context, req *APIBookRebuildPostReq) (APIBookRebuildPostRes, error)
 	// APIBookUpdatePost implements POST /api/book/update operation.
 	//
 	// Изменяет часть данных книги, ряд полей не изменяется

@@ -954,6 +954,93 @@ type APIBookRawPostUnauthorized ErrorResponse
 
 func (*APIBookRawPostUnauthorized) aPIBookRawPostRes() {}
 
+type APIBookRebuildPostBadRequest ErrorResponse
+
+func (*APIBookRebuildPostBadRequest) aPIBookRebuildPostRes() {}
+
+type APIBookRebuildPostForbidden ErrorResponse
+
+func (*APIBookRebuildPostForbidden) aPIBookRebuildPostRes() {}
+
+type APIBookRebuildPostInternalServerError ErrorResponse
+
+func (*APIBookRebuildPostInternalServerError) aPIBookRebuildPostRes() {}
+
+type APIBookRebuildPostNotFound ErrorResponse
+
+func (*APIBookRebuildPostNotFound) aPIBookRebuildPostRes() {}
+
+type APIBookRebuildPostOK struct {
+	// ID книги в которую были добавлены страницы.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIBookRebuildPostOK) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIBookRebuildPostOK) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+func (*APIBookRebuildPostOK) aPIBookRebuildPostRes() {}
+
+type APIBookRebuildPostReq struct {
+	OldBook BookRaw `json:"old_book"`
+	// Список страниц из старой книги.
+	SelectedPages []int `json:"selected_pages"`
+	// ID книги в которую надо добавить страницы.
+	MergeWithBook OptUUID `json:"merge_with_book"`
+	// Включать только уникальные страницы.
+	OnlyUnique OptBool `json:"only_unique"`
+}
+
+// GetOldBook returns the value of OldBook.
+func (s *APIBookRebuildPostReq) GetOldBook() BookRaw {
+	return s.OldBook
+}
+
+// GetSelectedPages returns the value of SelectedPages.
+func (s *APIBookRebuildPostReq) GetSelectedPages() []int {
+	return s.SelectedPages
+}
+
+// GetMergeWithBook returns the value of MergeWithBook.
+func (s *APIBookRebuildPostReq) GetMergeWithBook() OptUUID {
+	return s.MergeWithBook
+}
+
+// GetOnlyUnique returns the value of OnlyUnique.
+func (s *APIBookRebuildPostReq) GetOnlyUnique() OptBool {
+	return s.OnlyUnique
+}
+
+// SetOldBook sets the value of OldBook.
+func (s *APIBookRebuildPostReq) SetOldBook(val BookRaw) {
+	s.OldBook = val
+}
+
+// SetSelectedPages sets the value of SelectedPages.
+func (s *APIBookRebuildPostReq) SetSelectedPages(val []int) {
+	s.SelectedPages = val
+}
+
+// SetMergeWithBook sets the value of MergeWithBook.
+func (s *APIBookRebuildPostReq) SetMergeWithBook(val OptUUID) {
+	s.MergeWithBook = val
+}
+
+// SetOnlyUnique sets the value of OnlyUnique.
+func (s *APIBookRebuildPostReq) SetOnlyUnique(val OptBool) {
+	s.OnlyUnique = val
+}
+
+type APIBookRebuildPostUnauthorized ErrorResponse
+
+func (*APIBookRebuildPostUnauthorized) aPIBookRebuildPostRes() {}
+
 type APIBookUpdatePostBadRequest ErrorResponse
 
 func (*APIBookUpdatePostBadRequest) aPIBookUpdatePostRes() {}

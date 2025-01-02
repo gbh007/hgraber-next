@@ -20,6 +20,14 @@ type File struct {
 	CreateAt  time.Time
 }
 
+func (f File) Hash() FileHash {
+	return FileHash{
+		Md5Sum:    f.Md5Sum,
+		Sha256Sum: f.Sha256Sum,
+		Size:      f.Size,
+	}
+}
+
 type FileHash struct {
 	Md5Sum    string
 	Sha256Sum string

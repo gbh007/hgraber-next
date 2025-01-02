@@ -61,6 +61,7 @@ func (d *Database) UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageN
 	return nil
 }
 
+// FIXME: отрефакторить на squirel
 func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error {
 	tx, err := d.db.BeginTxx(ctx, nil)
 	if err != nil {
@@ -82,6 +83,44 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []en
 			ctx,
 			`INSERT INTO pages (book_id, page_number, ext, origin_url, create_at, downloaded, load_at, file_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
 			id.String(), v.PageNumber, v.Ext, model.URLToDB(v.OriginURL), v.CreateAt.UTC(), v.Downloaded, model.TimeToDB(v.LoadAt), model.UUIDToDB(v.FileID),
+		)
+		if err != nil {
+			rollbackErr := tx.Rollback()
+			if rollbackErr != nil {
+				d.logger.ErrorContext(ctx, rollbackErr.Error())
+			}
+
+			return err
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
+
+	// Состояние размера изменилось, сбрасываем кеши.
+	d.cachePageFileSize.Store(0)
+	d.cacheFileSize.Store(0)
+	d.cachePageCount.Store(0)
+	d.cacheDownloadedBookCount.Store(0)
+	d.cacheVerifiedBookCount.Store(0)
+
+	return nil
+}
+
+// FIXME: отрефакторить на squirel
+func (d *Database) NewBookPages(ctx context.Context, pages []entities.Page) error {
+	tx, err := d.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return err
+	}
+
+	for _, v := range pages {
+		_, err = tx.ExecContext(
+			ctx,
+			`INSERT INTO pages (book_id, page_number, ext, origin_url, create_at, downloaded, load_at, file_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
+			v.BookID.String(), v.PageNumber, v.Ext, model.URLToDB(v.OriginURL), v.CreateAt.UTC(), v.Downloaded, model.TimeToDB(v.LoadAt), model.UUIDToDB(v.FileID),
 		)
 		if err != nil {
 			rollbackErr := tx.Rollback()

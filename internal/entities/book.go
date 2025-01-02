@@ -21,6 +21,8 @@ type Book struct {
 	DeletedAt  time.Time
 	Verified   bool
 	VerifiedAt time.Time
+
+	IsRebuild bool
 }
 
 func (b Book) IsLoaded() bool {

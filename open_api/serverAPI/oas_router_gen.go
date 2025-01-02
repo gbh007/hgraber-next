@@ -314,24 +314,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 'r': // Prefix: "raw"
+				case 'r': // Prefix: "r"
 					origElem := elem
-					if l := len("raw"); len(elem) >= l && elem[0:l] == "raw" {
+					if l := len("r"); len(elem) >= l && elem[0:l] == "r" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIBookRawPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
+						break
+					}
+					switch elem[0] {
+					case 'a': // Prefix: "aw"
+						origElem := elem
+						if l := len("aw"); len(elem) >= l && elem[0:l] == "aw" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIBookRawPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'e': // Prefix: "ebuild"
+						origElem := elem
+						if l := len("ebuild"); len(elem) >= l && elem[0:l] == "ebuild" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIBookRebuildPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -1408,28 +1444,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				case 'r': // Prefix: "raw"
+				case 'r': // Prefix: "r"
 					origElem := elem
-					if l := len("raw"); len(elem) >= l && elem[0:l] == "raw" {
+					if l := len("r"); len(elem) >= l && elem[0:l] == "r" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIBookRawPostOperation
-							r.summary = "Информация о книге"
-							r.operationID = ""
-							r.pathPattern = "/api/book/raw"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'a': // Prefix: "aw"
+						origElem := elem
+						if l := len("aw"); len(elem) >= l && elem[0:l] == "aw" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIBookRawPostOperation
+								r.summary = "Информация о книге"
+								r.operationID = ""
+								r.pathPattern = "/api/book/raw"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'e': // Prefix: "ebuild"
+						origElem := elem
+						if l := len("ebuild"); len(elem) >= l && elem[0:l] == "ebuild" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIBookRebuildPostOperation
+								r.summary = "Создает новую книгу из старой"
+								r.operationID = ""
+								r.pathPattern = "/api/book/rebuild"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
