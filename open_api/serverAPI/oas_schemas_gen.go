@@ -1307,10 +1307,27 @@ type APIDeduplicateComparePostOK struct {
 	Target BookSimple `json:"target"`
 	// Страницы что есть только в оригинальной книге.
 	OriginPages []PageSimple `json:"origin_pages"`
+	// Страницы что есть только в оригинальной книге  (без
+	// мертвых хешей).
+	OriginPagesWithoutDeadHashes []PageSimple `json:"origin_pages_without_dead_hashes"`
+	// Страницы что есть только в оригинальной книге (только
+	// с мертвыми хешами).
+	OriginPagesOnlyDeadHashes []PageSimple `json:"origin_pages_only_dead_hashes"`
 	// Страницы что есть в обоих книгах.
 	BothPages []PageSimple `json:"both_pages"`
+	// Страницы что есть в обоих книгах  (без мертвых хешей).
+	BothPagesWithoutDeadHashes []PageSimple `json:"both_pages_without_dead_hashes"`
+	// Страницы что есть в обоих книгах (только с мертвыми
+	// хешами).
+	BothPagesOnlyDeadHashes []PageSimple `json:"both_pages_only_dead_hashes"`
 	// Страницы что есть только в целевой книге.
 	TargetPages []PageSimple `json:"target_pages"`
+	// Страницы что есть только в целевой книге  (без мертвых
+	// хешей).
+	TargetPagesWithoutDeadHashes []PageSimple `json:"target_pages_without_dead_hashes"`
+	// Страницы что есть только в целевой книге (только с
+	// мертвыми хешами).
+	TargetPagesOnlyDeadHashes []PageSimple `json:"target_pages_only_dead_hashes"`
 }
 
 // GetOrigin returns the value of Origin.
@@ -1328,14 +1345,44 @@ func (s *APIDeduplicateComparePostOK) GetOriginPages() []PageSimple {
 	return s.OriginPages
 }
 
+// GetOriginPagesWithoutDeadHashes returns the value of OriginPagesWithoutDeadHashes.
+func (s *APIDeduplicateComparePostOK) GetOriginPagesWithoutDeadHashes() []PageSimple {
+	return s.OriginPagesWithoutDeadHashes
+}
+
+// GetOriginPagesOnlyDeadHashes returns the value of OriginPagesOnlyDeadHashes.
+func (s *APIDeduplicateComparePostOK) GetOriginPagesOnlyDeadHashes() []PageSimple {
+	return s.OriginPagesOnlyDeadHashes
+}
+
 // GetBothPages returns the value of BothPages.
 func (s *APIDeduplicateComparePostOK) GetBothPages() []PageSimple {
 	return s.BothPages
 }
 
+// GetBothPagesWithoutDeadHashes returns the value of BothPagesWithoutDeadHashes.
+func (s *APIDeduplicateComparePostOK) GetBothPagesWithoutDeadHashes() []PageSimple {
+	return s.BothPagesWithoutDeadHashes
+}
+
+// GetBothPagesOnlyDeadHashes returns the value of BothPagesOnlyDeadHashes.
+func (s *APIDeduplicateComparePostOK) GetBothPagesOnlyDeadHashes() []PageSimple {
+	return s.BothPagesOnlyDeadHashes
+}
+
 // GetTargetPages returns the value of TargetPages.
 func (s *APIDeduplicateComparePostOK) GetTargetPages() []PageSimple {
 	return s.TargetPages
+}
+
+// GetTargetPagesWithoutDeadHashes returns the value of TargetPagesWithoutDeadHashes.
+func (s *APIDeduplicateComparePostOK) GetTargetPagesWithoutDeadHashes() []PageSimple {
+	return s.TargetPagesWithoutDeadHashes
+}
+
+// GetTargetPagesOnlyDeadHashes returns the value of TargetPagesOnlyDeadHashes.
+func (s *APIDeduplicateComparePostOK) GetTargetPagesOnlyDeadHashes() []PageSimple {
+	return s.TargetPagesOnlyDeadHashes
 }
 
 // SetOrigin sets the value of Origin.
@@ -1353,14 +1400,44 @@ func (s *APIDeduplicateComparePostOK) SetOriginPages(val []PageSimple) {
 	s.OriginPages = val
 }
 
+// SetOriginPagesWithoutDeadHashes sets the value of OriginPagesWithoutDeadHashes.
+func (s *APIDeduplicateComparePostOK) SetOriginPagesWithoutDeadHashes(val []PageSimple) {
+	s.OriginPagesWithoutDeadHashes = val
+}
+
+// SetOriginPagesOnlyDeadHashes sets the value of OriginPagesOnlyDeadHashes.
+func (s *APIDeduplicateComparePostOK) SetOriginPagesOnlyDeadHashes(val []PageSimple) {
+	s.OriginPagesOnlyDeadHashes = val
+}
+
 // SetBothPages sets the value of BothPages.
 func (s *APIDeduplicateComparePostOK) SetBothPages(val []PageSimple) {
 	s.BothPages = val
 }
 
+// SetBothPagesWithoutDeadHashes sets the value of BothPagesWithoutDeadHashes.
+func (s *APIDeduplicateComparePostOK) SetBothPagesWithoutDeadHashes(val []PageSimple) {
+	s.BothPagesWithoutDeadHashes = val
+}
+
+// SetBothPagesOnlyDeadHashes sets the value of BothPagesOnlyDeadHashes.
+func (s *APIDeduplicateComparePostOK) SetBothPagesOnlyDeadHashes(val []PageSimple) {
+	s.BothPagesOnlyDeadHashes = val
+}
+
 // SetTargetPages sets the value of TargetPages.
 func (s *APIDeduplicateComparePostOK) SetTargetPages(val []PageSimple) {
 	s.TargetPages = val
+}
+
+// SetTargetPagesWithoutDeadHashes sets the value of TargetPagesWithoutDeadHashes.
+func (s *APIDeduplicateComparePostOK) SetTargetPagesWithoutDeadHashes(val []PageSimple) {
+	s.TargetPagesWithoutDeadHashes = val
+}
+
+// SetTargetPagesOnlyDeadHashes sets the value of TargetPagesOnlyDeadHashes.
+func (s *APIDeduplicateComparePostOK) SetTargetPagesOnlyDeadHashes(val []PageSimple) {
+	s.TargetPagesOnlyDeadHashes = val
 }
 
 func (*APIDeduplicateComparePostOK) aPIDeduplicateComparePostRes() {}

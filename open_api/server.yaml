@@ -2062,14 +2062,44 @@ paths:
                     description: Страницы что есть только в оригинальной книге
                     items:
                       $ref: "#/components/schemas/PageSimple"
+                  origin_pages_without_dead_hashes:
+                    type: array
+                    description: Страницы что есть только в оригинальной книге  (без мертвых хешей)
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+                  origin_pages_only_dead_hashes:
+                    type: array
+                    description: Страницы что есть только в оригинальной книге (только с мертвыми хешами)
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
                   both_pages:
                     type: array
                     description: Страницы что есть в обоих книгах
                     items:
                       $ref: "#/components/schemas/PageSimple"
+                  both_pages_without_dead_hashes:
+                    type: array
+                    description: Страницы что есть в обоих книгах  (без мертвых хешей)
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+                  both_pages_only_dead_hashes:
+                    type: array
+                    description: Страницы что есть в обоих книгах (только с мертвыми хешами)
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
                   target_pages:
                     type: array
                     description: Страницы что есть только в целевой книге
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+                  target_pages_without_dead_hashes:
+                    type: array
+                    description: Страницы что есть только в целевой книге  (без мертвых хешей)
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+                  target_pages_only_dead_hashes:
+                    type: array
+                    description: Страницы что есть только в целевой книге (только с мертвыми хешами)
                     items:
                       $ref: "#/components/schemas/PageSimple"
                 required:

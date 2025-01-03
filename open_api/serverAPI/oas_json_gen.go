@@ -5520,10 +5520,50 @@ func (s *APIDeduplicateComparePostOK) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.OriginPagesWithoutDeadHashes != nil {
+			e.FieldStart("origin_pages_without_dead_hashes")
+			e.ArrStart()
+			for _, elem := range s.OriginPagesWithoutDeadHashes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.OriginPagesOnlyDeadHashes != nil {
+			e.FieldStart("origin_pages_only_dead_hashes")
+			e.ArrStart()
+			for _, elem := range s.OriginPagesOnlyDeadHashes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
 		if s.BothPages != nil {
 			e.FieldStart("both_pages")
 			e.ArrStart()
 			for _, elem := range s.BothPages {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.BothPagesWithoutDeadHashes != nil {
+			e.FieldStart("both_pages_without_dead_hashes")
+			e.ArrStart()
+			for _, elem := range s.BothPagesWithoutDeadHashes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.BothPagesOnlyDeadHashes != nil {
+			e.FieldStart("both_pages_only_dead_hashes")
+			e.ArrStart()
+			for _, elem := range s.BothPagesOnlyDeadHashes {
 				elem.Encode(e)
 			}
 			e.ArrEnd()
@@ -5539,14 +5579,40 @@ func (s *APIDeduplicateComparePostOK) encodeFields(e *jx.Encoder) {
 			e.ArrEnd()
 		}
 	}
+	{
+		if s.TargetPagesWithoutDeadHashes != nil {
+			e.FieldStart("target_pages_without_dead_hashes")
+			e.ArrStart()
+			for _, elem := range s.TargetPagesWithoutDeadHashes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.TargetPagesOnlyDeadHashes != nil {
+			e.FieldStart("target_pages_only_dead_hashes")
+			e.ArrStart()
+			for _, elem := range s.TargetPagesOnlyDeadHashes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIDeduplicateComparePostOK = [5]string{
-	0: "origin",
-	1: "target",
-	2: "origin_pages",
-	3: "both_pages",
-	4: "target_pages",
+var jsonFieldsNameOfAPIDeduplicateComparePostOK = [11]string{
+	0:  "origin",
+	1:  "target",
+	2:  "origin_pages",
+	3:  "origin_pages_without_dead_hashes",
+	4:  "origin_pages_only_dead_hashes",
+	5:  "both_pages",
+	6:  "both_pages_without_dead_hashes",
+	7:  "both_pages_only_dead_hashes",
+	8:  "target_pages",
+	9:  "target_pages_without_dead_hashes",
+	10: "target_pages_only_dead_hashes",
 }
 
 // Decode decodes APIDeduplicateComparePostOK from json.
@@ -5554,7 +5620,7 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode APIDeduplicateComparePostOK to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -5595,6 +5661,40 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"origin_pages\"")
 			}
+		case "origin_pages_without_dead_hashes":
+			if err := func() error {
+				s.OriginPagesWithoutDeadHashes = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.OriginPagesWithoutDeadHashes = append(s.OriginPagesWithoutDeadHashes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_pages_without_dead_hashes\"")
+			}
+		case "origin_pages_only_dead_hashes":
+			if err := func() error {
+				s.OriginPagesOnlyDeadHashes = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.OriginPagesOnlyDeadHashes = append(s.OriginPagesOnlyDeadHashes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_pages_only_dead_hashes\"")
+			}
 		case "both_pages":
 			if err := func() error {
 				s.BothPages = make([]PageSimple, 0)
@@ -5611,6 +5711,40 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"both_pages\"")
+			}
+		case "both_pages_without_dead_hashes":
+			if err := func() error {
+				s.BothPagesWithoutDeadHashes = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.BothPagesWithoutDeadHashes = append(s.BothPagesWithoutDeadHashes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"both_pages_without_dead_hashes\"")
+			}
+		case "both_pages_only_dead_hashes":
+			if err := func() error {
+				s.BothPagesOnlyDeadHashes = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.BothPagesOnlyDeadHashes = append(s.BothPagesOnlyDeadHashes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"both_pages_only_dead_hashes\"")
 			}
 		case "target_pages":
 			if err := func() error {
@@ -5629,6 +5763,40 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"target_pages\"")
 			}
+		case "target_pages_without_dead_hashes":
+			if err := func() error {
+				s.TargetPagesWithoutDeadHashes = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.TargetPagesWithoutDeadHashes = append(s.TargetPagesWithoutDeadHashes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_pages_without_dead_hashes\"")
+			}
+		case "target_pages_only_dead_hashes":
+			if err := func() error {
+				s.TargetPagesOnlyDeadHashes = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.TargetPagesOnlyDeadHashes = append(s.TargetPagesOnlyDeadHashes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_pages_only_dead_hashes\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -5638,8 +5806,9 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
+	for i, mask := range [2]uint8{
 		0b00000011,
+		0b00000000,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
