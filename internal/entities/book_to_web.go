@@ -17,7 +17,7 @@ type AttributeToWeb struct {
 // TODO: подумать что делать с такими моделями
 type BookToWeb struct {
 	Book       Book
-	Pages      []Page
+	Pages      []PageWithDeadHash
 	Attributes []AttributeToWeb
 
 	PreviewPage Page
@@ -29,7 +29,7 @@ type BookToWeb struct {
 }
 
 func (book BookToWeb) PageDownloadPercent() float64 {
-	downloadedPageCount := pkg.SliceReduce(book.Pages, func(v int, p Page) int {
+	downloadedPageCount := pkg.SliceReduce(book.Pages, func(v int, p PageWithDeadHash) int {
 		if p.Downloaded {
 			v++
 		}

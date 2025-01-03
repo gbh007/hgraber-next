@@ -995,6 +995,8 @@ type APIBookRebuildPostReq struct {
 	MergeWithBook OptUUID `json:"merge_with_book"`
 	// Включать только уникальные страницы.
 	OnlyUnique OptBool `json:"only_unique"`
+	// Исключить страницы с мертвыми хешами.
+	ExcludeDeadHashPages OptBool `json:"exclude_dead_hash_pages"`
 }
 
 // GetOldBook returns the value of OldBook.
@@ -1017,6 +1019,11 @@ func (s *APIBookRebuildPostReq) GetOnlyUnique() OptBool {
 	return s.OnlyUnique
 }
 
+// GetExcludeDeadHashPages returns the value of ExcludeDeadHashPages.
+func (s *APIBookRebuildPostReq) GetExcludeDeadHashPages() OptBool {
+	return s.ExcludeDeadHashPages
+}
+
 // SetOldBook sets the value of OldBook.
 func (s *APIBookRebuildPostReq) SetOldBook(val BookRaw) {
 	s.OldBook = val
@@ -1035,6 +1042,11 @@ func (s *APIBookRebuildPostReq) SetMergeWithBook(val OptUUID) {
 // SetOnlyUnique sets the value of OnlyUnique.
 func (s *APIBookRebuildPostReq) SetOnlyUnique(val OptBool) {
 	s.OnlyUnique = val
+}
+
+// SetExcludeDeadHashPages sets the value of ExcludeDeadHashPages.
+func (s *APIBookRebuildPostReq) SetExcludeDeadHashPages(val OptBool) {
+	s.ExcludeDeadHashPages = val
 }
 
 type APIBookRebuildPostUnauthorized ErrorResponse
@@ -1140,6 +1152,12 @@ type APIDeduplicateBookByPageBodyPostOKResultItem struct {
 	OriginCoveredTarget float64 `json:"origin_covered_target"`
 	// Процент (0-1) покрытия книги в оригинале.
 	TargetCoveredOrigin float64 `json:"target_covered_origin"`
+	// Процент (0-1) покрытия оригинала в книге без учета
+	// мертвых хешей.
+	OriginCoveredTargetWithoutDeadHashes float64 `json:"origin_covered_target_without_dead_hashes"`
+	// Процент (0-1) покрытия книги в оригинале без учета
+	// мертвых хешей.
+	TargetCoveredOriginWithoutDeadHashes float64 `json:"target_covered_origin_without_dead_hashes"`
 }
 
 // GetBook returns the value of Book.
@@ -1157,6 +1175,16 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetCoveredOrigin() 
 	return s.TargetCoveredOrigin
 }
 
+// GetOriginCoveredTargetWithoutDeadHashes returns the value of OriginCoveredTargetWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetOriginCoveredTargetWithoutDeadHashes() float64 {
+	return s.OriginCoveredTargetWithoutDeadHashes
+}
+
+// GetTargetCoveredOriginWithoutDeadHashes returns the value of TargetCoveredOriginWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetCoveredOriginWithoutDeadHashes() float64 {
+	return s.TargetCoveredOriginWithoutDeadHashes
+}
+
 // SetBook sets the value of Book.
 func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetBook(val BookSimple) {
 	s.Book = val
@@ -1170,6 +1198,16 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetOriginCoveredTarget(va
 // SetTargetCoveredOrigin sets the value of TargetCoveredOrigin.
 func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetCoveredOrigin(val float64) {
 	s.TargetCoveredOrigin = val
+}
+
+// SetOriginCoveredTargetWithoutDeadHashes sets the value of OriginCoveredTargetWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetOriginCoveredTargetWithoutDeadHashes(val float64) {
+	s.OriginCoveredTargetWithoutDeadHashes = val
+}
+
+// SetTargetCoveredOriginWithoutDeadHashes sets the value of TargetCoveredOriginWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetCoveredOriginWithoutDeadHashes(val float64) {
+	s.TargetCoveredOriginWithoutDeadHashes = val
 }
 
 type APIDeduplicateBookByPageBodyPostReq struct {
@@ -1358,6 +1396,171 @@ type APIDeduplicateComparePostUnauthorized ErrorResponse
 
 func (*APIDeduplicateComparePostUnauthorized) aPIDeduplicateComparePostRes() {}
 
+type APIDeduplicateDeadHashByPageCreatePostBadRequest ErrorResponse
+
+func (*APIDeduplicateDeadHashByPageCreatePostBadRequest) aPIDeduplicateDeadHashByPageCreatePostRes() {
+}
+
+type APIDeduplicateDeadHashByPageCreatePostForbidden ErrorResponse
+
+func (*APIDeduplicateDeadHashByPageCreatePostForbidden) aPIDeduplicateDeadHashByPageCreatePostRes() {}
+
+type APIDeduplicateDeadHashByPageCreatePostInternalServerError ErrorResponse
+
+func (*APIDeduplicateDeadHashByPageCreatePostInternalServerError) aPIDeduplicateDeadHashByPageCreatePostRes() {
+}
+
+// APIDeduplicateDeadHashByPageCreatePostNoContent is response for APIDeduplicateDeadHashByPageCreatePost operation.
+type APIDeduplicateDeadHashByPageCreatePostNoContent struct{}
+
+func (*APIDeduplicateDeadHashByPageCreatePostNoContent) aPIDeduplicateDeadHashByPageCreatePostRes() {}
+
+type APIDeduplicateDeadHashByPageCreatePostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Номер страницы в книге.
+	PageNumber int `json:"page_number"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateDeadHashByPageCreatePostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIDeduplicateDeadHashByPageCreatePostReq) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateDeadHashByPageCreatePostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIDeduplicateDeadHashByPageCreatePostReq) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+type APIDeduplicateDeadHashByPageCreatePostUnauthorized ErrorResponse
+
+func (*APIDeduplicateDeadHashByPageCreatePostUnauthorized) aPIDeduplicateDeadHashByPageCreatePostRes() {
+}
+
+type APIDeduplicateDeadHashByPageDeletePostBadRequest ErrorResponse
+
+func (*APIDeduplicateDeadHashByPageDeletePostBadRequest) aPIDeduplicateDeadHashByPageDeletePostRes() {
+}
+
+type APIDeduplicateDeadHashByPageDeletePostForbidden ErrorResponse
+
+func (*APIDeduplicateDeadHashByPageDeletePostForbidden) aPIDeduplicateDeadHashByPageDeletePostRes() {}
+
+type APIDeduplicateDeadHashByPageDeletePostInternalServerError ErrorResponse
+
+func (*APIDeduplicateDeadHashByPageDeletePostInternalServerError) aPIDeduplicateDeadHashByPageDeletePostRes() {
+}
+
+// APIDeduplicateDeadHashByPageDeletePostNoContent is response for APIDeduplicateDeadHashByPageDeletePost operation.
+type APIDeduplicateDeadHashByPageDeletePostNoContent struct{}
+
+func (*APIDeduplicateDeadHashByPageDeletePostNoContent) aPIDeduplicateDeadHashByPageDeletePostRes() {}
+
+type APIDeduplicateDeadHashByPageDeletePostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Номер страницы в книге.
+	PageNumber int `json:"page_number"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateDeadHashByPageDeletePostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIDeduplicateDeadHashByPageDeletePostReq) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateDeadHashByPageDeletePostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIDeduplicateDeadHashByPageDeletePostReq) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+type APIDeduplicateDeadHashByPageDeletePostUnauthorized ErrorResponse
+
+func (*APIDeduplicateDeadHashByPageDeletePostUnauthorized) aPIDeduplicateDeadHashByPageDeletePostRes() {
+}
+
+type APIDeduplicateDeleteAllPagesByHashPostBadRequest ErrorResponse
+
+func (*APIDeduplicateDeleteAllPagesByHashPostBadRequest) aPIDeduplicateDeleteAllPagesByHashPostRes() {
+}
+
+type APIDeduplicateDeleteAllPagesByHashPostForbidden ErrorResponse
+
+func (*APIDeduplicateDeleteAllPagesByHashPostForbidden) aPIDeduplicateDeleteAllPagesByHashPostRes() {}
+
+type APIDeduplicateDeleteAllPagesByHashPostInternalServerError ErrorResponse
+
+func (*APIDeduplicateDeleteAllPagesByHashPostInternalServerError) aPIDeduplicateDeleteAllPagesByHashPostRes() {
+}
+
+// APIDeduplicateDeleteAllPagesByHashPostNoContent is response for APIDeduplicateDeleteAllPagesByHashPost operation.
+type APIDeduplicateDeleteAllPagesByHashPostNoContent struct{}
+
+func (*APIDeduplicateDeleteAllPagesByHashPostNoContent) aPIDeduplicateDeleteAllPagesByHashPostRes() {}
+
+type APIDeduplicateDeleteAllPagesByHashPostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Номер страницы в книге.
+	PageNumber int `json:"page_number"`
+	// Проставить мертвый хеш по той же странице.
+	SetDeadHash OptBool `json:"set_dead_hash"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateDeleteAllPagesByHashPostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIDeduplicateDeleteAllPagesByHashPostReq) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// GetSetDeadHash returns the value of SetDeadHash.
+func (s *APIDeduplicateDeleteAllPagesByHashPostReq) GetSetDeadHash() OptBool {
+	return s.SetDeadHash
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateDeleteAllPagesByHashPostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIDeduplicateDeleteAllPagesByHashPostReq) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+// SetSetDeadHash sets the value of SetDeadHash.
+func (s *APIDeduplicateDeleteAllPagesByHashPostReq) SetSetDeadHash(val OptBool) {
+	s.SetDeadHash = val
+}
+
+type APIDeduplicateDeleteAllPagesByHashPostUnauthorized ErrorResponse
+
+func (*APIDeduplicateDeleteAllPagesByHashPostUnauthorized) aPIDeduplicateDeleteAllPagesByHashPostRes() {
+}
+
 type APIDeduplicateUniquePagesPostBadRequest ErrorResponse
 
 func (*APIDeduplicateUniquePagesPostBadRequest) aPIDeduplicateUniquePagesPostRes() {}
@@ -1371,6 +1574,7 @@ type APIDeduplicateUniquePagesPostInternalServerError ErrorResponse
 func (*APIDeduplicateUniquePagesPostInternalServerError) aPIDeduplicateUniquePagesPostRes() {}
 
 type APIDeduplicateUniquePagesPostOK struct {
+	// Уникальные страницы в книге.
 	Pages []PageSimple `json:"pages"`
 }
 
@@ -2902,6 +3106,8 @@ const (
 	APITaskCreatePostReqCodeDeduplicateFiles    APITaskCreatePostReqCode = "deduplicate_files"
 	APITaskCreatePostReqCodeRemoveDetachedFiles APITaskCreatePostReqCode = "remove_detached_files"
 	APITaskCreatePostReqCodeRemoveMismatchFiles APITaskCreatePostReqCode = "remove_mismatch_files"
+	APITaskCreatePostReqCodeFillDeadHashes      APITaskCreatePostReqCode = "fill_dead_hashes"
+	APITaskCreatePostReqCodeCleanDeletedPages   APITaskCreatePostReqCode = "clean_deleted_pages"
 )
 
 // AllValues returns all APITaskCreatePostReqCode values.
@@ -2910,6 +3116,8 @@ func (APITaskCreatePostReqCode) AllValues() []APITaskCreatePostReqCode {
 		APITaskCreatePostReqCodeDeduplicateFiles,
 		APITaskCreatePostReqCodeRemoveDetachedFiles,
 		APITaskCreatePostReqCodeRemoveMismatchFiles,
+		APITaskCreatePostReqCodeFillDeadHashes,
+		APITaskCreatePostReqCodeCleanDeletedPages,
 	}
 }
 
@@ -2921,6 +3129,10 @@ func (s APITaskCreatePostReqCode) MarshalText() ([]byte, error) {
 	case APITaskCreatePostReqCodeRemoveDetachedFiles:
 		return []byte(s), nil
 	case APITaskCreatePostReqCodeRemoveMismatchFiles:
+		return []byte(s), nil
+	case APITaskCreatePostReqCodeFillDeadHashes:
+		return []byte(s), nil
+	case APITaskCreatePostReqCodeCleanDeletedPages:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -2938,6 +3150,12 @@ func (s *APITaskCreatePostReqCode) UnmarshalText(data []byte) error {
 		return nil
 	case APITaskCreatePostReqCodeRemoveMismatchFiles:
 		*s = APITaskCreatePostReqCodeRemoveMismatchFiles
+		return nil
+	case APITaskCreatePostReqCodeFillDeadHashes:
+		*s = APITaskCreatePostReqCodeFillDeadHashes
+		return nil
+	case APITaskCreatePostReqCodeCleanDeletedPages:
+		*s = APITaskCreatePostReqCodeCleanDeletedPages
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -3360,17 +3578,27 @@ func (s *BookDetailsAttributesItem) SetValues(val []string) {
 type BookDetailsSize struct {
 	// Размер уникальных файлов книги.
 	Unique int64 `json:"unique"`
+	// Размер уникальных файлов книги без учета мертвых
+	// хешей.
+	UniqueWithoutDeadHashes int64 `json:"unique_without_dead_hashes"`
 	// Размер файлов в книге что пересекаются с другими
 	// книгами.
 	Shared int64 `json:"shared"`
+	// Размер мертвых хешей в книге.
+	DeadHashes int64 `json:"dead_hashes"`
 	// Общий размер файлов книги.
 	Total int64 `json:"total"`
 	// Размер уникальных файлов книги в человекочитаемом
 	// виде.
 	UniqueFormatted string `json:"unique_formatted"`
+	// Размер уникальных файлов книги без учета мертвых
+	// хешей  в человекочитаемом виде.
+	UniqueWithoutDeadHashesFormatted string `json:"unique_without_dead_hashes_formatted"`
 	// Размер файлов в книге что пересекаются с другими
 	// книгами в человекочитаемом виде.
 	SharedFormatted string `json:"shared_formatted"`
+	// Размер мертвых хешей в книге  в человекочитаемом виде.
+	DeadHashesFormatted string `json:"dead_hashes_formatted"`
 	// Общий размер файлов книги в человекочитаемом виде.
 	TotalFormatted string `json:"total_formatted"`
 }
@@ -3380,9 +3608,19 @@ func (s *BookDetailsSize) GetUnique() int64 {
 	return s.Unique
 }
 
+// GetUniqueWithoutDeadHashes returns the value of UniqueWithoutDeadHashes.
+func (s *BookDetailsSize) GetUniqueWithoutDeadHashes() int64 {
+	return s.UniqueWithoutDeadHashes
+}
+
 // GetShared returns the value of Shared.
 func (s *BookDetailsSize) GetShared() int64 {
 	return s.Shared
+}
+
+// GetDeadHashes returns the value of DeadHashes.
+func (s *BookDetailsSize) GetDeadHashes() int64 {
+	return s.DeadHashes
 }
 
 // GetTotal returns the value of Total.
@@ -3395,9 +3633,19 @@ func (s *BookDetailsSize) GetUniqueFormatted() string {
 	return s.UniqueFormatted
 }
 
+// GetUniqueWithoutDeadHashesFormatted returns the value of UniqueWithoutDeadHashesFormatted.
+func (s *BookDetailsSize) GetUniqueWithoutDeadHashesFormatted() string {
+	return s.UniqueWithoutDeadHashesFormatted
+}
+
 // GetSharedFormatted returns the value of SharedFormatted.
 func (s *BookDetailsSize) GetSharedFormatted() string {
 	return s.SharedFormatted
+}
+
+// GetDeadHashesFormatted returns the value of DeadHashesFormatted.
+func (s *BookDetailsSize) GetDeadHashesFormatted() string {
+	return s.DeadHashesFormatted
 }
 
 // GetTotalFormatted returns the value of TotalFormatted.
@@ -3410,9 +3658,19 @@ func (s *BookDetailsSize) SetUnique(val int64) {
 	s.Unique = val
 }
 
+// SetUniqueWithoutDeadHashes sets the value of UniqueWithoutDeadHashes.
+func (s *BookDetailsSize) SetUniqueWithoutDeadHashes(val int64) {
+	s.UniqueWithoutDeadHashes = val
+}
+
 // SetShared sets the value of Shared.
 func (s *BookDetailsSize) SetShared(val int64) {
 	s.Shared = val
+}
+
+// SetDeadHashes sets the value of DeadHashes.
+func (s *BookDetailsSize) SetDeadHashes(val int64) {
+	s.DeadHashes = val
 }
 
 // SetTotal sets the value of Total.
@@ -3425,9 +3683,19 @@ func (s *BookDetailsSize) SetUniqueFormatted(val string) {
 	s.UniqueFormatted = val
 }
 
+// SetUniqueWithoutDeadHashesFormatted sets the value of UniqueWithoutDeadHashesFormatted.
+func (s *BookDetailsSize) SetUniqueWithoutDeadHashesFormatted(val string) {
+	s.UniqueWithoutDeadHashesFormatted = val
+}
+
 // SetSharedFormatted sets the value of SharedFormatted.
 func (s *BookDetailsSize) SetSharedFormatted(val string) {
 	s.SharedFormatted = val
+}
+
+// SetDeadHashesFormatted sets the value of DeadHashesFormatted.
+func (s *BookDetailsSize) SetDeadHashesFormatted(val string) {
+	s.DeadHashesFormatted = val
 }
 
 // SetTotalFormatted sets the value of TotalFormatted.
@@ -5086,6 +5354,9 @@ type PageSimple struct {
 	PageNumber int `json:"page_number"`
 	// Ссылка на изображение для предпросмотра.
 	PreviewURL OptURI `json:"preview_url"`
+	// Есть ли у страницы мертвый хеш (важно, если данных нет,
+	// то этот факт не известен).
+	HasDeadHash OptBool `json:"has_dead_hash"`
 }
 
 // GetPageNumber returns the value of PageNumber.
@@ -5098,6 +5369,11 @@ func (s *PageSimple) GetPreviewURL() OptURI {
 	return s.PreviewURL
 }
 
+// GetHasDeadHash returns the value of HasDeadHash.
+func (s *PageSimple) GetHasDeadHash() OptBool {
+	return s.HasDeadHash
+}
+
 // SetPageNumber sets the value of PageNumber.
 func (s *PageSimple) SetPageNumber(val int) {
 	s.PageNumber = val
@@ -5106,6 +5382,11 @@ func (s *PageSimple) SetPageNumber(val int) {
 // SetPreviewURL sets the value of PreviewURL.
 func (s *PageSimple) SetPreviewURL(val OptURI) {
 	s.PreviewURL = val
+}
+
+// SetHasDeadHash sets the value of HasDeadHash.
+func (s *PageSimple) SetHasDeadHash(val OptBool) {
+	s.HasDeadHash = val
 }
 
 // Информация о системе.

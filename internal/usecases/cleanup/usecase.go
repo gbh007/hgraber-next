@@ -14,6 +14,8 @@ type storage interface {
 	DetachedFiles(ctx context.Context) ([]entities.File, error)
 	DeleteFile(ctx context.Context, id uuid.UUID) error
 	FileIDs(ctx context.Context) ([]uuid.UUID, error)
+
+	TruncateDeletedPages(ctx context.Context) error
 }
 
 type fileStorage interface {

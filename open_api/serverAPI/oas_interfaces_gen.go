@@ -65,6 +65,18 @@ type APIDeduplicateComparePostRes interface {
 	aPIDeduplicateComparePostRes()
 }
 
+type APIDeduplicateDeadHashByPageCreatePostRes interface {
+	aPIDeduplicateDeadHashByPageCreatePostRes()
+}
+
+type APIDeduplicateDeadHashByPageDeletePostRes interface {
+	aPIDeduplicateDeadHashByPageDeletePostRes()
+}
+
+type APIDeduplicateDeleteAllPagesByHashPostRes interface {
+	aPIDeduplicateDeleteAllPagesByHashPostRes()
+}
+
 type APIDeduplicateUniquePagesPostRes interface {
 	aPIDeduplicateUniquePagesPostRes()
 }

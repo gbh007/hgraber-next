@@ -35,11 +35,12 @@ func (b Book) ParsedName() bool {
 
 // FIXME: подумать что делать с такими моделями
 type BookFull struct {
-	Book       Book
-	Pages      []Page
-	Attributes map[string][]string
-	Labels     []BookLabel
-	Size       BookSize
+	Book           Book
+	Pages          []Page
+	Attributes     map[string][]string
+	Labels         []BookLabel
+	Size           BookSize
+	DeadHashOnPage map[int]struct{}
 }
 
 func (b BookFull) IsLoaded() bool {
@@ -96,9 +97,11 @@ type BookFullWithAgent struct {
 }
 
 type BookSize struct {
-	Unique int64
-	Shared int64
-	Total  int64
+	Unique                  int64
+	UniqueWithoutDeadHashes int64
+	Shared                  int64
+	DeadHashes              int64
+	Total                   int64
 }
 
 // TODO: подумать что делать с такими моделями

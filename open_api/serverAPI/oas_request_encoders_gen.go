@@ -207,6 +207,48 @@ func encodeAPIDeduplicateComparePostRequest(
 	return nil
 }
 
+func encodeAPIDeduplicateDeadHashByPageCreatePostRequest(
+	req *APIDeduplicateDeadHashByPageCreatePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIDeduplicateDeadHashByPageDeletePostRequest(
+	req *APIDeduplicateDeadHashByPageDeletePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIDeduplicateDeleteAllPagesByHashPostRequest(
+	req *APIDeduplicateDeleteAllPagesByHashPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIDeduplicateUniquePagesPostRequest(
 	req *APIDeduplicateUniquePagesPostReq,
 	r *http.Request,

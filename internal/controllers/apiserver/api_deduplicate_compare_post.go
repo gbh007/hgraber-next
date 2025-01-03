@@ -17,10 +17,11 @@ func (c *Controller) APIDeduplicateComparePost(ctx context.Context, req *serverA
 	}
 
 	return &serverAPI.APIDeduplicateComparePostOK{
-		Origin:      c.convertSimpleBook(data.OriginBook, data.OriginPreviewPage),
-		Target:      c.convertSimpleBook(data.TargetBook, data.TargetPreviewPage),
-		OriginPages: pkg.Map(data.OriginPages, c.convertSimplePage),
-		BothPages:   pkg.Map(data.BothPages, c.convertSimplePage),
-		TargetPages: pkg.Map(data.TargetPages, c.convertSimplePage),
+		Origin: c.convertSimpleBook(data.OriginBook, data.OriginPreviewPage),
+		Target: c.convertSimpleBook(data.TargetBook, data.TargetPreviewPage),
+
+		OriginPages: pkg.Map(data.OriginPages, c.convertSimplePageWithDeadHash),
+		BothPages:   pkg.Map(data.BothPages, c.convertSimplePageWithDeadHash),
+		TargetPages: pkg.Map(data.TargetPages, c.convertSimplePageWithDeadHash),
 	}, nil
 }

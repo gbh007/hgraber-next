@@ -17,6 +17,6 @@ func (c *Controller) APIDeduplicateUniquePagesPost(ctx context.Context, req *ser
 	}
 
 	return &serverAPI.APIDeduplicateUniquePagesPostOK{
-		Pages: pkg.Map(data, c.convertSimplePage),
+		Pages: pkg.Map(data, c.convertSimplePageWithDeadHash),
 	}, nil
 }

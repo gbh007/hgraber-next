@@ -178,6 +178,8 @@ paths:
                     - deduplicate_files
                     - remove_detached_files
                     - remove_mismatch_files
+                    - fill_dead_hashes
+                    - clean_deleted_pages
                   description: Код задачи
               required:
                 - code
@@ -1056,6 +1058,9 @@ paths:
                 only_unique:
                   type: boolean
                   description: Включать только уникальные страницы
+                exclude_dead_hash_pages:
+                  type: boolean
+                  description: Исключить страницы с мертвыми хешами
               required:
                 - old_book
                 - selected_pages
@@ -1858,10 +1863,20 @@ paths:
                           type: number
                           format: float64
                           description: Процент (0-1) покрытия книги в оригинале
+                        origin_covered_target_without_dead_hashes:
+                          type: number
+                          format: float64
+                          description: Процент (0-1) покрытия оригинала в книге без учета мертвых хешей
+                        target_covered_origin_without_dead_hashes:
+                          type: number
+                          format: float64
+                          description: Процент (0-1) покрытия книги в оригинале без учета мертвых хешей
                       required:
                         - book
                         - origin_covered_target
                         - target_covered_origin
+                        - origin_covered_target_without_dead_hashes
+                        - target_covered_origin_without_dead_hashes
         400:
           description: Некорректный запрос
           content:
@@ -1916,6 +1931,7 @@ paths:
                 properties:
                   pages:
                     type: array
+                    description: Уникальные страницы в книге
                     items:
                       $ref: "#/components/schemas/PageSimple"
         400:
@@ -2060,6 +2076,165 @@ paths:
                 required:
                   - origin
                   - target
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/deduplicate/dead-hash-by-page/create:
+    post:
+      description: Создает запись о мертвом хеше по странице
+      summary: Создает запись о мертвом хеше по странице
+      tags:
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                page_number:
+                  type: integer
+                  description: Номер страницы в книге
+                  minimum: 1
+              required:
+                - book_id
+                - page_number
+      responses:
+        204:
+          description: Успешное выполнение
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/deduplicate/dead-hash-by-page/delete:
+    post:
+      description: Удаляет запись о мертвом хеше по странице
+      summary: Удаляет запись о мертвом хеше по странице
+      tags:
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                page_number:
+                  type: integer
+                  description: Номер страницы в книге
+                  minimum: 1
+              required:
+                - book_id
+                - page_number
+      responses:
+        204:
+          description: Успешное выполнение
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/deduplicate/delete-all-pages-by-hash:
+    post:
+      description: Удаляет страницы с таким же хешом как у указанной
+      summary: Удаляет страницы из книг
+      tags:
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                page_number:
+                  type: integer
+                  description: Номер страницы в книге
+                  minimum: 1
+                set_dead_hash:
+                  type: boolean
+                  description: Проставить мертвый хеш по той же странице
+              required:
+                - book_id
+                - page_number
+      responses:
+        204:
+          description: Успешное выполнение
         400:
           description: Некорректный запрос
           content:
@@ -2652,6 +2827,9 @@ components:
           type: string
           format: uri
           description: Ссылка на изображение для предпросмотра
+        has_dead_hash:
+          type: boolean
+          description: Есть ли у страницы мертвый хеш (важно, если данных нет, то этот факт не известен)
       required:
         - page_number
 
@@ -2714,10 +2892,18 @@ components:
               type: integer
               format: int64
               description: Размер уникальных файлов книги
+            unique_without_dead_hashes:
+              type: integer
+              format: int64
+              description: Размер уникальных файлов книги без учета мертвых хешей
             shared:
               type: integer
               format: int64
               description: Размер файлов в книге что пересекаются с другими книгами
+            dead_hashes:
+              type: integer
+              format: int64
+              description: Размер мертвых хешей в книге
             total:
               type: integer
               format: int64
@@ -2725,18 +2911,28 @@ components:
             unique_formatted:
               type: string
               description: Размер уникальных файлов книги в человекочитаемом виде
+            unique_without_dead_hashes_formatted:
+              type: string
+              description: Размер уникальных файлов книги без учета мертвых хешей  в человекочитаемом виде
             shared_formatted:
               type: string
               description: Размер файлов в книге что пересекаются с другими книгами в человекочитаемом виде
+            dead_hashes_formatted:
+              type: string
+              description: Размер мертвых хешей в книге  в человекочитаемом виде
             total_formatted:
               type: string
               description: Общий размер файлов книги в человекочитаемом виде
           required:
             - unique
+            - unique_without_dead_hashes
             - shared
+            - dead_hashes
             - total
             - unique_formatted
+            - unique_without_dead_hashes_formatted
             - shared_formatted
+            - dead_hashes_formatted
             - total_formatted
       required:
         - id

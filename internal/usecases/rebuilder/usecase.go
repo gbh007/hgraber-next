@@ -26,6 +26,8 @@ type storage interface {
 	BookPages(ctx context.Context, bookID uuid.UUID) ([]entities.Page, error)
 	NewBookPages(ctx context.Context, pages []entities.Page) error
 	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
+
+	DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.DeadHash, error)
 }
 
 type UseCase struct {

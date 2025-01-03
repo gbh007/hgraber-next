@@ -34,12 +34,14 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 	result := entities.BookPagesCompareResult{
 		OriginBook:  originBook,
 		TargetBook:  targetBook,
-		OriginPages: make([]entities.Page, 0, len(originPages)),
-		BothPages:   make([]entities.Page, 0, max(len(originPages), len(targetPages))),
-		TargetPages: make([]entities.Page, 0, len(targetPages)),
+		OriginPages: make([]entities.PageWithDeadHash, 0, len(originPages)),
+		BothPages:   make([]entities.PageWithDeadHash, 0, max(len(originPages), len(targetPages))),
+		TargetPages: make([]entities.PageWithDeadHash, 0, len(targetPages)),
 	}
 
 	hashes := make(map[entities.FileHash]int, len(originPages))
+
+	md5Sums := make([]string, 0, len(originPages)+len(targetPages))
 
 	for _, page := range originPages {
 		if page.PageNumber == entities.PageNumberForPreview {
@@ -47,6 +49,8 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 		}
 
 		hashes[page.Hash()] = 1 // Специальная логика, т.к. в книге могут быть дубликаты страниц
+
+		md5Sums = append(md5Sums, page.Md5Sum)
 	}
 
 	for _, page := range targetPages {
@@ -57,29 +61,57 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 		if hashes[page.Hash()] == 1 { // Специальная логика, т.к. в книге могут быть дубликаты страниц
 			hashes[page.Hash()] = 2
 		}
+
+		md5Sums = append(md5Sums, page.Md5Sum)
+	}
+
+	md5Sums = slices.Compact(md5Sums)
+
+	deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, md5Sums)
+	if err != nil {
+		return entities.BookPagesCompareResult{}, fmt.Errorf("storage: get dead hashes: %w", err)
+	}
+
+	existsDeadHashes := make(map[entities.FileHash]struct{}, len(deadHashes))
+
+	for _, hash := range deadHashes {
+		existsDeadHashes[hash.FileHash] = struct{}{}
 	}
 
 	for _, page := range originPages {
+		_, hasDeadHash := existsDeadHashes[page.Hash()]
+
 		if hashes[page.Hash()] == 1 {
-			result.OriginPages = append(result.OriginPages, page.Page())
+			result.OriginPages = append(result.OriginPages, entities.PageWithDeadHash{
+				Page:        page.Page(),
+				HasDeadHash: hasDeadHash,
+			})
 		} else {
-			result.BothPages = append(result.BothPages, page.Page()) // Приоритет отдаем оригинальной книге
+			result.BothPages = append(result.BothPages, entities.PageWithDeadHash{
+				Page:        page.Page(),
+				HasDeadHash: hasDeadHash,
+			}) // Приоритет отдаем оригинальной книге
 		}
 	}
 
 	for _, page := range targetPages {
+		_, hasDeadHash := existsDeadHashes[page.Hash()]
+
 		if hashes[page.Hash()] == 0 {
-			result.TargetPages = append(result.TargetPages, page.Page())
+			result.TargetPages = append(result.TargetPages, entities.PageWithDeadHash{
+				Page:        page.Page(),
+				HasDeadHash: hasDeadHash,
+			})
 		}
 	}
 
-	slices.SortStableFunc(result.OriginPages, func(a, b entities.Page) int {
+	slices.SortStableFunc(result.OriginPages, func(a, b entities.PageWithDeadHash) int {
 		return a.PageNumber - b.PageNumber
 	})
-	slices.SortStableFunc(result.BothPages, func(a, b entities.Page) int {
+	slices.SortStableFunc(result.BothPages, func(a, b entities.PageWithDeadHash) int {
 		return a.PageNumber - b.PageNumber
 	})
-	slices.SortStableFunc(result.TargetPages, func(a, b entities.Page) int {
+	slices.SortStableFunc(result.TargetPages, func(a, b entities.PageWithDeadHash) int {
 		return a.PageNumber - b.PageNumber
 	})
 

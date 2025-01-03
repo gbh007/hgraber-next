@@ -108,6 +108,24 @@ type Handler interface {
 	//
 	// POST /api/deduplicate/compare
 	APIDeduplicateComparePost(ctx context.Context, req *APIDeduplicateComparePostReq) (APIDeduplicateComparePostRes, error)
+	// APIDeduplicateDeadHashByPageCreatePost implements POST /api/deduplicate/dead-hash-by-page/create operation.
+	//
+	// Создает запись о мертвом хеше по странице.
+	//
+	// POST /api/deduplicate/dead-hash-by-page/create
+	APIDeduplicateDeadHashByPageCreatePost(ctx context.Context, req *APIDeduplicateDeadHashByPageCreatePostReq) (APIDeduplicateDeadHashByPageCreatePostRes, error)
+	// APIDeduplicateDeadHashByPageDeletePost implements POST /api/deduplicate/dead-hash-by-page/delete operation.
+	//
+	// Удаляет запись о мертвом хеше по странице.
+	//
+	// POST /api/deduplicate/dead-hash-by-page/delete
+	APIDeduplicateDeadHashByPageDeletePost(ctx context.Context, req *APIDeduplicateDeadHashByPageDeletePostReq) (APIDeduplicateDeadHashByPageDeletePostRes, error)
+	// APIDeduplicateDeleteAllPagesByHashPost implements POST /api/deduplicate/delete-all-pages-by-hash operation.
+	//
+	// Удаляет страницы с таким же хешом как у указанной.
+	//
+	// POST /api/deduplicate/delete-all-pages-by-hash
+	APIDeduplicateDeleteAllPagesByHashPost(ctx context.Context, req *APIDeduplicateDeleteAllPagesByHashPostReq) (APIDeduplicateDeleteAllPagesByHashPostRes, error)
 	// APIDeduplicateUniquePagesPost implements POST /api/deduplicate/unique-pages operation.
 	//
 	// Поиск уникальных страниц в книге.

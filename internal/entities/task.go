@@ -12,6 +12,8 @@ const (
 	DeduplicateFilesTaskCode
 	RemoveDetachedFilesTaskCode
 	RemoveFilesInStoragesMismatchTaskCode
+	FillDeadHashesTaskCode
+	CleanDeletedPagesTaskCode
 )
 
 type TaskResultWriter interface {

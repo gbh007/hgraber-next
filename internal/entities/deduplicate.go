@@ -15,14 +15,15 @@ type DeduplicateArchiveResult struct {
 	ReverseEntryPercentage float64
 }
 
-// FIXME: надо проверить и покрыть тестами,
-// сейчас есть странная аналомалия что обе функции расчета выдают не 100%,
-// при этом функция поиска страниц не находит разницу.
-func EntryPercentageForPages(current, target []PageWithHash) float64 {
+// TODO: надо проверить и покрыть тестами.
+func EntryPercentageForPages(current, target []PageWithHash, deadHashes map[FileHash]struct{}) float64 {
 	targetHashes := make(map[FileHash]struct{}, len(target))
 
 	for _, p := range target {
-		// targetHashes[p.Hash()]++ // Альтернативный вариант
+		if _, ok := deadHashes[p.Hash()]; ok {
+			continue
+		}
+
 		targetHashes[p.Hash()] = struct{}{}
 	}
 
@@ -31,35 +32,29 @@ func EntryPercentageForPages(current, target []PageWithHash) float64 {
 	count := len(targetHashes)
 
 	for _, p := range current {
-		_, ok := targetHashes[p.Hash()]
-		if ok {
-			// hits += targetHashes[p.Hash()] // Альтернативный вариант
+		if _, ok := deadHashes[p.Hash()]; ok {
+			continue
+		}
+
+		if _, ok := targetHashes[p.Hash()]; ok {
 			hits++
 
 			delete(targetHashes, p.Hash())
 		}
 	}
 
+	switch { // Обработка крайних случаев
+	case hits == 0 && count == 0:
+		return 1
+
+	case hits == 0:
+		return 0
+
+	case count == 0:
+		return 1
+	}
+
 	return float64(hits) / float64(count)
-}
-
-func EntryPercentageForPagesOld(current, target []PageWithHash) float64 {
-	targetHashes := make(map[FileHash]struct{}, len(target))
-
-	for _, p := range target {
-		targetHashes[p.Hash()] = struct{}{}
-	}
-
-	var hits int
-
-	for _, p := range current {
-		_, ok := targetHashes[p.Hash()]
-		if ok {
-			hits++
-		}
-	}
-
-	return float64(hits) / float64(len(target))
 }
 
 type DeduplicateBookResult struct {
@@ -69,15 +64,20 @@ type DeduplicateBookResult struct {
 	EntryPercentage float64
 	// Процент (0-1) вхождения целевой книги в книгу
 	ReverseEntryPercentage float64
+	// Процент (0-1) вхождения архива в книгу без учета мертвых хешей
+	EntryPercentageWithoutDeadHashes float64
+	// Процент (0-1) вхождения книги в архив без учета мертвых хешей
+	ReverseEntryPercentageWithoutDeadHashes float64
 }
 
+// TODO: очень пухлые модели из-за мертвых хешей, нужно этот признак вносить в страницу
 type BookPagesCompareResult struct {
 	OriginBook        Book
 	TargetBook        Book
 	OriginPreviewPage Page
 	TargetPreviewPage Page
 
-	OriginPages []Page
-	BothPages   []Page
-	TargetPages []Page
+	OriginPages []PageWithDeadHash
+	BothPages   []PageWithDeadHash
+	TargetPages []PageWithDeadHash
 }

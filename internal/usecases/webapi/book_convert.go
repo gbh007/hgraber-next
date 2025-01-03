@@ -10,7 +10,7 @@ import (
 func (uc *UseCase) bookConvert(bookFull entities.BookFull) entities.BookToWeb {
 	book := entities.BookToWeb{
 		Book:  bookFull.Book,
-		Pages: bookFull.Pages,
+		Pages: make([]entities.PageWithDeadHash, len(bookFull.Pages)),
 		Attributes: pkg.MapToSlice(bookFull.Attributes, func(code string, values []string) entities.AttributeToWeb {
 			return entities.AttributeToWeb{
 				Code:   code,
@@ -21,12 +21,21 @@ func (uc *UseCase) bookConvert(bookFull entities.BookFull) entities.BookToWeb {
 		Size: bookFull.Size,
 	}
 
+	for i, page := range bookFull.Pages {
+		_, hasDeadHash := bookFull.DeadHashOnPage[page.PageNumber]
+
+		book.Pages[i] = entities.PageWithDeadHash{
+			Page:        page,
+			HasDeadHash: hasDeadHash,
+		}
+	}
+
 	if len(book.Pages) > 0 {
 		book.ParsedPages = true
 
 		for _, page := range book.Pages {
 			if page.PageNumber == entities.PageNumberForPreview {
-				book.PreviewPage = page
+				book.PreviewPage = page.Page
 
 				break
 			}
@@ -46,7 +55,7 @@ func (uc *UseCase) bookConvert(bookFull entities.BookFull) entities.BookToWeb {
 		book.HasMoreTags = true
 	}
 
-	slices.SortStableFunc(book.Pages, func(a, b entities.Page) int {
+	slices.SortStableFunc(book.Pages, func(a, b entities.PageWithDeadHash) int {
 		return a.PageNumber - b.PageNumber
 	})
 

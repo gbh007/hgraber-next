@@ -506,6 +506,99 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				case 'd': // Prefix: "de"
+					origElem := elem
+					if l := len("de"); len(elem) >= l && elem[0:l] == "de" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'a': // Prefix: "ad-hash-by-page/"
+						origElem := elem
+						if l := len("ad-hash-by-page/"); len(elem) >= l && elem[0:l] == "ad-hash-by-page/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'c': // Prefix: "create"
+							origElem := elem
+							if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIDeduplicateDeadHashByPageCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'd': // Prefix: "delete"
+							origElem := elem
+							if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIDeduplicateDeadHashByPageDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'l': // Prefix: "lete-all-pages-by-hash"
+						origElem := elem
+						if l := len("lete-all-pages-by-hash"); len(elem) >= l && elem[0:l] == "lete-all-pages-by-hash" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIDeduplicateDeleteAllPagesByHashPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				case 'u': // Prefix: "unique-pages"
 					origElem := elem
 					if l := len("unique-pages"); len(elem) >= l && elem[0:l] == "unique-pages" {
@@ -1661,6 +1754,111 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						default:
 							return
 						}
+					}
+
+					elem = origElem
+				case 'd': // Prefix: "de"
+					origElem := elem
+					if l := len("de"); len(elem) >= l && elem[0:l] == "de" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'a': // Prefix: "ad-hash-by-page/"
+						origElem := elem
+						if l := len("ad-hash-by-page/"); len(elem) >= l && elem[0:l] == "ad-hash-by-page/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'c': // Prefix: "create"
+							origElem := elem
+							if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIDeduplicateDeadHashByPageCreatePostOperation
+									r.summary = "Создает запись о мертвом хеше по странице"
+									r.operationID = ""
+									r.pathPattern = "/api/deduplicate/dead-hash-by-page/create"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'd': // Prefix: "delete"
+							origElem := elem
+							if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIDeduplicateDeadHashByPageDeletePostOperation
+									r.summary = "Удаляет запись о мертвом хеше по странице"
+									r.operationID = ""
+									r.pathPattern = "/api/deduplicate/dead-hash-by-page/delete"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'l': // Prefix: "lete-all-pages-by-hash"
+						origElem := elem
+						if l := len("lete-all-pages-by-hash"); len(elem) >= l && elem[0:l] == "lete-all-pages-by-hash" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIDeduplicateDeleteAllPagesByHashPostOperation
+								r.summary = "Удаляет страницы из книг"
+								r.operationID = ""
+								r.pathPattern = "/api/deduplicate/delete-all-pages-by-hash"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
