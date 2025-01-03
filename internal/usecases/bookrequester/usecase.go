@@ -20,6 +20,8 @@ type storage interface {
 
 	BookIDsByMD5(ctx context.Context, md5sums []string) ([]uuid.UUID, error)
 	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
+
+	DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.DeadHash, error)
 }
 
 type UseCase struct {

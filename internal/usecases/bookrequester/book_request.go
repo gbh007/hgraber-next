@@ -76,6 +76,7 @@ func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.B
 	return out, nil
 }
 
+// FIXME: крайне тяжелые данные, их необходимо вынести отдельно (и в юзкейсы дедупливатора)
 func (uc *UseCase) BookSize(ctx context.Context, originBookID uuid.UUID) (entities.BookSize, error) {
 	bookPages, err := uc.storage.BookPagesWithHash(ctx, originBookID)
 	if err != nil {
@@ -118,14 +119,35 @@ func (uc *UseCase) BookSize(ctx context.Context, originBookID uuid.UUID) (entiti
 		}
 	}
 
+	deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, md5Sums)
+	if err != nil {
+		return entities.BookSize{}, fmt.Errorf("storage: get dead hashes: %w", err)
+	}
+
+	existsDeadHashes := make(map[entities.FileHash]struct{}, len(deadHashes))
+
+	for _, hash := range deadHashes {
+		existsDeadHashes[hash.FileHash] = struct{}{}
+	}
+
 	result := entities.BookSize{}
 
 	for _, page := range bookPages {
 		if c, ok := fileCounts[page.Hash()]; ok {
+			_, hasDeadHash := existsDeadHashes[page.Hash()]
+
 			if c > 1 {
 				result.Shared += page.Size
 			} else {
 				result.Unique += page.Size
+
+				if !hasDeadHash {
+					result.UniqueWithoutDeadHashes += page.Size
+				}
+			}
+
+			if hasDeadHash {
+				result.DeadHashes += page.Size
 			}
 
 			delete(fileCounts, page.Hash()) // Это нужно, чтобы дубликаты внутри книги не увеличивали уникальный объем

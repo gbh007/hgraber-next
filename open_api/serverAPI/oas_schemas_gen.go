@@ -3386,17 +3386,27 @@ func (s *BookDetailsAttributesItem) SetValues(val []string) {
 type BookDetailsSize struct {
 	// Размер уникальных файлов книги.
 	Unique int64 `json:"unique"`
+	// Размер уникальных файлов книги без учета мертвых
+	// хешей.
+	UniqueWithoutDeadHashes int64 `json:"unique_without_dead_hashes"`
 	// Размер файлов в книге что пересекаются с другими
 	// книгами.
 	Shared int64 `json:"shared"`
+	// Размер мертвых хешей в книге.
+	DeadHashes int64 `json:"dead_hashes"`
 	// Общий размер файлов книги.
 	Total int64 `json:"total"`
 	// Размер уникальных файлов книги в человекочитаемом
 	// виде.
 	UniqueFormatted string `json:"unique_formatted"`
+	// Размер уникальных файлов книги без учета мертвых
+	// хешей  в человекочитаемом виде.
+	UniqueWithoutDeadHashesFormatted string `json:"unique_without_dead_hashes_formatted"`
 	// Размер файлов в книге что пересекаются с другими
 	// книгами в человекочитаемом виде.
 	SharedFormatted string `json:"shared_formatted"`
+	// Размер мертвых хешей в книге  в человекочитаемом виде.
+	DeadHashesFormatted string `json:"dead_hashes_formatted"`
 	// Общий размер файлов книги в человекочитаемом виде.
 	TotalFormatted string `json:"total_formatted"`
 }
@@ -3406,9 +3416,19 @@ func (s *BookDetailsSize) GetUnique() int64 {
 	return s.Unique
 }
 
+// GetUniqueWithoutDeadHashes returns the value of UniqueWithoutDeadHashes.
+func (s *BookDetailsSize) GetUniqueWithoutDeadHashes() int64 {
+	return s.UniqueWithoutDeadHashes
+}
+
 // GetShared returns the value of Shared.
 func (s *BookDetailsSize) GetShared() int64 {
 	return s.Shared
+}
+
+// GetDeadHashes returns the value of DeadHashes.
+func (s *BookDetailsSize) GetDeadHashes() int64 {
+	return s.DeadHashes
 }
 
 // GetTotal returns the value of Total.
@@ -3421,9 +3441,19 @@ func (s *BookDetailsSize) GetUniqueFormatted() string {
 	return s.UniqueFormatted
 }
 
+// GetUniqueWithoutDeadHashesFormatted returns the value of UniqueWithoutDeadHashesFormatted.
+func (s *BookDetailsSize) GetUniqueWithoutDeadHashesFormatted() string {
+	return s.UniqueWithoutDeadHashesFormatted
+}
+
 // GetSharedFormatted returns the value of SharedFormatted.
 func (s *BookDetailsSize) GetSharedFormatted() string {
 	return s.SharedFormatted
+}
+
+// GetDeadHashesFormatted returns the value of DeadHashesFormatted.
+func (s *BookDetailsSize) GetDeadHashesFormatted() string {
+	return s.DeadHashesFormatted
 }
 
 // GetTotalFormatted returns the value of TotalFormatted.
@@ -3436,9 +3466,19 @@ func (s *BookDetailsSize) SetUnique(val int64) {
 	s.Unique = val
 }
 
+// SetUniqueWithoutDeadHashes sets the value of UniqueWithoutDeadHashes.
+func (s *BookDetailsSize) SetUniqueWithoutDeadHashes(val int64) {
+	s.UniqueWithoutDeadHashes = val
+}
+
 // SetShared sets the value of Shared.
 func (s *BookDetailsSize) SetShared(val int64) {
 	s.Shared = val
+}
+
+// SetDeadHashes sets the value of DeadHashes.
+func (s *BookDetailsSize) SetDeadHashes(val int64) {
+	s.DeadHashes = val
 }
 
 // SetTotal sets the value of Total.
@@ -3451,9 +3491,19 @@ func (s *BookDetailsSize) SetUniqueFormatted(val string) {
 	s.UniqueFormatted = val
 }
 
+// SetUniqueWithoutDeadHashesFormatted sets the value of UniqueWithoutDeadHashesFormatted.
+func (s *BookDetailsSize) SetUniqueWithoutDeadHashesFormatted(val string) {
+	s.UniqueWithoutDeadHashesFormatted = val
+}
+
 // SetSharedFormatted sets the value of SharedFormatted.
 func (s *BookDetailsSize) SetSharedFormatted(val string) {
 	s.SharedFormatted = val
+}
+
+// SetDeadHashesFormatted sets the value of DeadHashesFormatted.
+func (s *BookDetailsSize) SetDeadHashesFormatted(val string) {
+	s.DeadHashesFormatted = val
 }
 
 // SetTotalFormatted sets the value of TotalFormatted.

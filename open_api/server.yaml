@@ -2719,10 +2719,18 @@ components:
               type: integer
               format: int64
               description: Размер уникальных файлов книги
+            unique_without_dead_hashes:
+              type: integer
+              format: int64
+              description: Размер уникальных файлов книги без учета мертвых хешей
             shared:
               type: integer
               format: int64
               description: Размер файлов в книге что пересекаются с другими книгами
+            dead_hashes:
+              type: integer
+              format: int64
+              description: Размер мертвых хешей в книге
             total:
               type: integer
               format: int64
@@ -2730,18 +2738,28 @@ components:
             unique_formatted:
               type: string
               description: Размер уникальных файлов книги в человекочитаемом виде
+            unique_without_dead_hashes_formatted:
+              type: string
+              description: Размер уникальных файлов книги без учета мертвых хешей  в человекочитаемом виде
             shared_formatted:
               type: string
               description: Размер файлов в книге что пересекаются с другими книгами в человекочитаемом виде
+            dead_hashes_formatted:
+              type: string
+              description: Размер мертвых хешей в книге  в человекочитаемом виде
             total_formatted:
               type: string
               description: Общий размер файлов книги в человекочитаемом виде
           required:
             - unique
+            - unique_without_dead_hashes
             - shared
+            - dead_hashes
             - total
             - unique_formatted
+            - unique_without_dead_hashes_formatted
             - shared_formatted
+            - dead_hashes_formatted
             - total_formatted
       required:
         - id

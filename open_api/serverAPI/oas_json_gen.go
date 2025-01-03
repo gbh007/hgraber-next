@@ -13795,8 +13795,16 @@ func (s *BookDetailsSize) encodeFields(e *jx.Encoder) {
 		e.Int64(s.Unique)
 	}
 	{
+		e.FieldStart("unique_without_dead_hashes")
+		e.Int64(s.UniqueWithoutDeadHashes)
+	}
+	{
 		e.FieldStart("shared")
 		e.Int64(s.Shared)
+	}
+	{
+		e.FieldStart("dead_hashes")
+		e.Int64(s.DeadHashes)
 	}
 	{
 		e.FieldStart("total")
@@ -13807,8 +13815,16 @@ func (s *BookDetailsSize) encodeFields(e *jx.Encoder) {
 		e.Str(s.UniqueFormatted)
 	}
 	{
+		e.FieldStart("unique_without_dead_hashes_formatted")
+		e.Str(s.UniqueWithoutDeadHashesFormatted)
+	}
+	{
 		e.FieldStart("shared_formatted")
 		e.Str(s.SharedFormatted)
+	}
+	{
+		e.FieldStart("dead_hashes_formatted")
+		e.Str(s.DeadHashesFormatted)
 	}
 	{
 		e.FieldStart("total_formatted")
@@ -13816,13 +13832,17 @@ func (s *BookDetailsSize) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfBookDetailsSize = [6]string{
+var jsonFieldsNameOfBookDetailsSize = [10]string{
 	0: "unique",
-	1: "shared",
-	2: "total",
-	3: "unique_formatted",
-	4: "shared_formatted",
-	5: "total_formatted",
+	1: "unique_without_dead_hashes",
+	2: "shared",
+	3: "dead_hashes",
+	4: "total",
+	5: "unique_formatted",
+	6: "unique_without_dead_hashes_formatted",
+	7: "shared_formatted",
+	8: "dead_hashes_formatted",
+	9: "total_formatted",
 }
 
 // Decode decodes BookDetailsSize from json.
@@ -13830,7 +13850,7 @@ func (s *BookDetailsSize) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode BookDetailsSize to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -13846,8 +13866,20 @@ func (s *BookDetailsSize) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"unique\"")
 			}
-		case "shared":
+		case "unique_without_dead_hashes":
 			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int64()
+				s.UniqueWithoutDeadHashes = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"unique_without_dead_hashes\"")
+			}
+		case "shared":
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				v, err := d.Int64()
 				s.Shared = int64(v)
@@ -13858,8 +13890,20 @@ func (s *BookDetailsSize) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"shared\"")
 			}
+		case "dead_hashes":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int64()
+				s.DeadHashes = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"dead_hashes\"")
+			}
 		case "total":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Int64()
 				s.Total = int64(v)
@@ -13871,7 +13915,7 @@ func (s *BookDetailsSize) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"total\"")
 			}
 		case "unique_formatted":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := d.Str()
 				s.UniqueFormatted = string(v)
@@ -13882,8 +13926,20 @@ func (s *BookDetailsSize) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"unique_formatted\"")
 			}
+		case "unique_without_dead_hashes_formatted":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Str()
+				s.UniqueWithoutDeadHashesFormatted = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"unique_without_dead_hashes_formatted\"")
+			}
 		case "shared_formatted":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
 				v, err := d.Str()
 				s.SharedFormatted = string(v)
@@ -13894,8 +13950,20 @@ func (s *BookDetailsSize) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"shared_formatted\"")
 			}
+		case "dead_hashes_formatted":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.DeadHashesFormatted = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"dead_hashes_formatted\"")
+			}
 		case "total_formatted":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				v, err := d.Str()
 				s.TotalFormatted = string(v)
@@ -13915,8 +13983,9 @@ func (s *BookDetailsSize) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00111111,
+	for i, mask := range [2]uint8{
+		0b11111111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
