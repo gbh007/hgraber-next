@@ -21,6 +21,12 @@ type storage interface {
 	BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageNumber int) (entities.PageWithHash, error)
 	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
 	BookPagesWithHashByHash(ctx context.Context, hash entities.FileHash) ([]entities.PageWithHash, error)
+
+	BookPagesCountByHash(ctx context.Context, hash entities.FileHash) (int64, error)
+	SetDeadHash(ctx context.Context, hash entities.DeadHash) error
+	DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.DeadHash, error)
+	DeleteDeadHash(ctx context.Context, hash entities.DeadHash) error
+	DeletedPagesHashes(ctx context.Context) ([]entities.FileHash, error)
 }
 
 type UseCase struct {

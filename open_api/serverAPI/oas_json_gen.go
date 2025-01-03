@@ -12523,6 +12523,10 @@ func (s *APITaskCreatePostReqCode) Decode(d *jx.Decoder) error {
 		*s = APITaskCreatePostReqCodeRemoveDetachedFiles
 	case APITaskCreatePostReqCodeRemoveMismatchFiles:
 		*s = APITaskCreatePostReqCodeRemoveMismatchFiles
+	case APITaskCreatePostReqCodeFillDeadHashes:
+		*s = APITaskCreatePostReqCodeFillDeadHashes
+	case APITaskCreatePostReqCodeCleanDeletedPages:
+		*s = APITaskCreatePostReqCodeCleanDeletedPages
 	default:
 		*s = APITaskCreatePostReqCode(v)
 	}

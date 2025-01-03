@@ -17,6 +17,10 @@ func (c *Controller) APITaskCreatePost(ctx context.Context, req *serverAPI.APITa
 		code = entities.RemoveDetachedFilesTaskCode
 	case serverAPI.APITaskCreatePostReqCodeRemoveMismatchFiles:
 		code = entities.RemoveFilesInStoragesMismatchTaskCode
+	case serverAPI.APITaskCreatePostReqCodeFillDeadHashes:
+		code = entities.FillDeadHashesTaskCode
+	case serverAPI.APITaskCreatePostReqCodeCleanDeletedPages:
+		code = entities.CleanDeletedPagesTaskCode
 	}
 
 	err := c.taskUseCases.RunTask(ctx, code)

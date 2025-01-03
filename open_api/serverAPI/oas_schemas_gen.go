@@ -2902,6 +2902,8 @@ const (
 	APITaskCreatePostReqCodeDeduplicateFiles    APITaskCreatePostReqCode = "deduplicate_files"
 	APITaskCreatePostReqCodeRemoveDetachedFiles APITaskCreatePostReqCode = "remove_detached_files"
 	APITaskCreatePostReqCodeRemoveMismatchFiles APITaskCreatePostReqCode = "remove_mismatch_files"
+	APITaskCreatePostReqCodeFillDeadHashes      APITaskCreatePostReqCode = "fill_dead_hashes"
+	APITaskCreatePostReqCodeCleanDeletedPages   APITaskCreatePostReqCode = "clean_deleted_pages"
 )
 
 // AllValues returns all APITaskCreatePostReqCode values.
@@ -2910,6 +2912,8 @@ func (APITaskCreatePostReqCode) AllValues() []APITaskCreatePostReqCode {
 		APITaskCreatePostReqCodeDeduplicateFiles,
 		APITaskCreatePostReqCodeRemoveDetachedFiles,
 		APITaskCreatePostReqCodeRemoveMismatchFiles,
+		APITaskCreatePostReqCodeFillDeadHashes,
+		APITaskCreatePostReqCodeCleanDeletedPages,
 	}
 }
 
@@ -2921,6 +2925,10 @@ func (s APITaskCreatePostReqCode) MarshalText() ([]byte, error) {
 	case APITaskCreatePostReqCodeRemoveDetachedFiles:
 		return []byte(s), nil
 	case APITaskCreatePostReqCodeRemoveMismatchFiles:
+		return []byte(s), nil
+	case APITaskCreatePostReqCodeFillDeadHashes:
+		return []byte(s), nil
+	case APITaskCreatePostReqCodeCleanDeletedPages:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -2938,6 +2946,12 @@ func (s *APITaskCreatePostReqCode) UnmarshalText(data []byte) error {
 		return nil
 	case APITaskCreatePostReqCodeRemoveMismatchFiles:
 		*s = APITaskCreatePostReqCodeRemoveMismatchFiles
+		return nil
+	case APITaskCreatePostReqCodeFillDeadHashes:
+		*s = APITaskCreatePostReqCodeFillDeadHashes
+		return nil
+	case APITaskCreatePostReqCodeCleanDeletedPages:
+		*s = APITaskCreatePostReqCodeCleanDeletedPages
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)

@@ -178,6 +178,8 @@ paths:
                     - deduplicate_files
                     - remove_detached_files
                     - remove_mismatch_files
+                    - fill_dead_hashes
+                    - clean_deleted_pages
                   description: Код задачи
               required:
                 - code

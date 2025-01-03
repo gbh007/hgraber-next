@@ -976,6 +976,10 @@ func (s APITaskCreatePostReqCode) Validate() error {
 		return nil
 	case "remove_mismatch_files":
 		return nil
+	case "fill_dead_hashes":
+		return nil
+	case "clean_deleted_pages":
+		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}

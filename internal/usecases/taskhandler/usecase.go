@@ -14,11 +14,13 @@ type storage interface {
 
 type deduplicator interface {
 	DeduplicateFiles(ctx context.Context) (entities.RunnableTask, error)
+	FillDeadHashes(ctx context.Context) (entities.RunnableTask, error)
 }
 
 type cleanuper interface {
 	RemoveDetachedFiles(ctx context.Context) (entities.RunnableTask, error)
 	RemoveFilesInStoragesMismatch(ctx context.Context) (entities.RunnableTask, error)
+	CleanDeletedPages(ctx context.Context) (entities.RunnableTask, error)
 }
 
 type UseCase struct {
@@ -56,6 +58,10 @@ func (uc *UseCase) RunTask(ctx context.Context, code entities.TaskCode) error {
 		task, err = uc.cleanuper.RemoveDetachedFiles(ctx)
 	case entities.RemoveFilesInStoragesMismatchTaskCode:
 		task, err = uc.cleanuper.RemoveFilesInStoragesMismatch(ctx)
+	case entities.FillDeadHashesTaskCode:
+		task, err = uc.deduplicator.FillDeadHashes(ctx)
+	case entities.CleanDeletedPagesTaskCode:
+		task, err = uc.cleanuper.CleanDeletedPages(ctx)
 	}
 
 	if err != nil {
