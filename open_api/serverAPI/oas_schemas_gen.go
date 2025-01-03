@@ -995,6 +995,8 @@ type APIBookRebuildPostReq struct {
 	MergeWithBook OptUUID `json:"merge_with_book"`
 	// Включать только уникальные страницы.
 	OnlyUnique OptBool `json:"only_unique"`
+	// Исключить страницы с мертвыми хешами.
+	ExcludeDeadHashPages OptBool `json:"exclude_dead_hash_pages"`
 }
 
 // GetOldBook returns the value of OldBook.
@@ -1017,6 +1019,11 @@ func (s *APIBookRebuildPostReq) GetOnlyUnique() OptBool {
 	return s.OnlyUnique
 }
 
+// GetExcludeDeadHashPages returns the value of ExcludeDeadHashPages.
+func (s *APIBookRebuildPostReq) GetExcludeDeadHashPages() OptBool {
+	return s.ExcludeDeadHashPages
+}
+
 // SetOldBook sets the value of OldBook.
 func (s *APIBookRebuildPostReq) SetOldBook(val BookRaw) {
 	s.OldBook = val
@@ -1035,6 +1042,11 @@ func (s *APIBookRebuildPostReq) SetMergeWithBook(val OptUUID) {
 // SetOnlyUnique sets the value of OnlyUnique.
 func (s *APIBookRebuildPostReq) SetOnlyUnique(val OptBool) {
 	s.OnlyUnique = val
+}
+
+// SetExcludeDeadHashPages sets the value of ExcludeDeadHashPages.
+func (s *APIBookRebuildPostReq) SetExcludeDeadHashPages(val OptBool) {
+	s.ExcludeDeadHashPages = val
 }
 
 type APIBookRebuildPostUnauthorized ErrorResponse

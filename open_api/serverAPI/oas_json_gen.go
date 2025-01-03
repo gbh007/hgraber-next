@@ -3900,13 +3900,20 @@ func (s *APIBookRebuildPostReq) encodeFields(e *jx.Encoder) {
 			s.OnlyUnique.Encode(e)
 		}
 	}
+	{
+		if s.ExcludeDeadHashPages.Set {
+			e.FieldStart("exclude_dead_hash_pages")
+			s.ExcludeDeadHashPages.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIBookRebuildPostReq = [4]string{
+var jsonFieldsNameOfAPIBookRebuildPostReq = [5]string{
 	0: "old_book",
 	1: "selected_pages",
 	2: "merge_with_book",
 	3: "only_unique",
+	4: "exclude_dead_hash_pages",
 }
 
 // Decode decodes APIBookRebuildPostReq from json.
@@ -3967,6 +3974,16 @@ func (s *APIBookRebuildPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"only_unique\"")
+			}
+		case "exclude_dead_hash_pages":
+			if err := func() error {
+				s.ExcludeDeadHashPages.Reset()
+				if err := s.ExcludeDeadHashPages.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"exclude_dead_hash_pages\"")
 			}
 		default:
 			return d.Skip()

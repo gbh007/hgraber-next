@@ -24,8 +24,6 @@ type storage interface {
 
 	BookPagesCountByHash(ctx context.Context, hash entities.FileHash) (int64, error)
 	SetDeadHash(ctx context.Context, hash entities.DeadHash) error
-	DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.DeadHash, error)
-	DeleteDeadHash(ctx context.Context, hash entities.DeadHash) error
 	DeletedPagesHashes(ctx context.Context) ([]entities.FileHash, error)
 }
 

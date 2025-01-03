@@ -1058,6 +1058,9 @@ paths:
                 only_unique:
                   type: boolean
                   description: Включать только уникальные страницы
+                exclude_dead_hash_pages:
+                  type: boolean
+                  description: Исключить страницы с мертвыми хешами
               required:
                 - old_book
                 - selected_pages

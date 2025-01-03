@@ -49,7 +49,7 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		d.cacheVerifiedBookCount.Store(int64(systemSize.VerifiedBookCount))
 	}
 
-	err = d.db.GetContext(ctx, &systemSize.BookUnparsedCount, `SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE;`)
+	err = d.db.GetContext(ctx, &systemSize.BookUnparsedCount, `SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE AND is_rebuild = FALSE;`)
 	if err != nil {
 		return entities.SystemSizeInfo{}, fmt.Errorf("get book unparsed count: %w", err)
 	}

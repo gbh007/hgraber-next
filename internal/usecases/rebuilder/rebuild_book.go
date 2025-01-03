@@ -33,6 +33,7 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 		attributeToMerge map[string][]string
 		existsPageHashes map[entities.FileHash]struct{}
 		sourcePageHashes map[int]entities.FileHash
+		existsDeadHashes map[entities.FileHash]struct{}
 	)
 
 	if !isNewBook {
@@ -95,16 +96,31 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 		sourcePagesMap[page.PageNumber] = page
 	}
 
-	if request.OnlyUniquePages { // FIXME: переработать модель, чтобы этих данных было достаточно и для обычных страниц
+	if request.OnlyUniquePages || request.ExcludeDeadHashPages { // FIXME: переработать модель, чтобы этих данных было достаточно и для обычных страниц
 		pages, err := uc.storage.BookPagesWithHash(ctx, request.OldBook.Book.ID)
 		if err != nil {
-			return uuid.Nil, fmt.Errorf("storage: get source page to unique: %w", err)
+			return uuid.Nil, fmt.Errorf("storage: get source page to unique or dead hashes: %w", err)
 		}
 
 		sourcePageHashes = make(map[int]entities.FileHash, len(pages))
+		md5Sums := make([]string, 0, len(pages))
 
 		for _, page := range pages {
 			sourcePageHashes[page.PageNumber] = page.Hash()
+			md5Sums = append(md5Sums, page.Md5Sum)
+		}
+
+		if request.ExcludeDeadHashPages {
+			deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, md5Sums)
+			if err != nil {
+				return uuid.Nil, fmt.Errorf("storage: get dead hashes: %w", err)
+			}
+
+			existsDeadHashes = make(map[entities.FileHash]struct{}, len(deadHashes))
+
+			for _, hash := range deadHashes {
+				existsDeadHashes[hash.FileHash] = struct{}{}
+			}
 		}
 	}
 
@@ -122,17 +138,25 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 			return uuid.Nil, fmt.Errorf("%w (%d)", errMissingSourcePage, oldPageNumber)
 		}
 
-		if request.OnlyUniquePages {
+		if request.OnlyUniquePages || request.ExcludeDeadHashPages {
 			hash, ok := sourcePageHashes[oldPageNumber]
 			if !ok {
 				return uuid.Nil, fmt.Errorf("%w (%d): hash", errMissingSourcePage, oldPageNumber)
 			}
 
-			if _, ok := existsPageHashes[hash]; ok {
-				continue
+			if request.ExcludeDeadHashPages {
+				if _, ok := existsDeadHashes[hash]; ok {
+					continue
+				}
 			}
 
-			existsPageHashes[hash] = struct{}{}
+			if request.OnlyUniquePages {
+				if _, ok := existsPageHashes[hash]; ok {
+					continue
+				}
+
+				existsPageHashes[hash] = struct{}{}
+			}
 		}
 
 		newPageNumberCounter++
@@ -148,6 +172,10 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 
 	bookToMerge.PageCount += newPageNumberCounter
 	bookToMerge.AttributesParsed = true
+
+	if isNewBook && len(newPages) == 0 {
+		return uuid.Nil, fmt.Errorf("%w: after deduplicate for new book", errEmptyPagesOnRebuild)
+	}
 
 	if isNewBook {
 		err = uc.storage.NewBook(ctx, bookToMerge)
