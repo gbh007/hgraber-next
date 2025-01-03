@@ -1863,10 +1863,20 @@ paths:
                           type: number
                           format: float64
                           description: Процент (0-1) покрытия книги в оригинале
+                        origin_covered_target_without_dead_hashes:
+                          type: number
+                          format: float64
+                          description: Процент (0-1) покрытия оригинала в книге без учета мертвых хешей
+                        target_covered_origin_without_dead_hashes:
+                          type: number
+                          format: float64
+                          description: Процент (0-1) покрытия книги в оригинале без учета мертвых хешей
                       required:
                         - book
                         - origin_covered_target
                         - target_covered_origin
+                        - origin_covered_target_without_dead_hashes
+                        - target_covered_origin_without_dead_hashes
         400:
           description: Некорректный запрос
           content:

@@ -73,8 +73,8 @@ func (uc *UseCase) ArchiveEntryPercentage(ctx context.Context, archiveBody io.Re
 		result = append(result, entities.DeduplicateArchiveResult{
 			TargetBookID:           bookID,
 			OriginBookURL:          bookShort.OriginURL,
-			EntryPercentage:        entities.EntryPercentageForPages(archiveHashes, pages),
-			ReverseEntryPercentage: entities.EntryPercentageForPages(pages, archiveHashes),
+			EntryPercentage:        entities.EntryPercentageForPages(archiveHashes, pages, nil), // FIXME: а стоит ли игнорировать мертвые хеши?
+			ReverseEntryPercentage: entities.EntryPercentageForPages(pages, archiveHashes, nil), // FIXME: а стоит ли игнорировать мертвые хеши?
 		})
 	}
 

@@ -4764,12 +4764,22 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) encodeFields(e *jx.Encode
 		e.FieldStart("target_covered_origin")
 		e.Float64(s.TargetCoveredOrigin)
 	}
+	{
+		e.FieldStart("origin_covered_target_without_dead_hashes")
+		e.Float64(s.OriginCoveredTargetWithoutDeadHashes)
+	}
+	{
+		e.FieldStart("target_covered_origin_without_dead_hashes")
+		e.Float64(s.TargetCoveredOriginWithoutDeadHashes)
+	}
 }
 
-var jsonFieldsNameOfAPIDeduplicateBookByPageBodyPostOKResultItem = [3]string{
+var jsonFieldsNameOfAPIDeduplicateBookByPageBodyPostOKResultItem = [5]string{
 	0: "book",
 	1: "origin_covered_target",
 	2: "target_covered_origin",
+	3: "origin_covered_target_without_dead_hashes",
+	4: "target_covered_origin_without_dead_hashes",
 }
 
 // Decode decodes APIDeduplicateBookByPageBodyPostOKResultItem from json.
@@ -4815,6 +4825,30 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) Decode(d *jx.Decoder) err
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"target_covered_origin\"")
 			}
+		case "origin_covered_target_without_dead_hashes":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Float64()
+				s.OriginCoveredTargetWithoutDeadHashes = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_covered_target_without_dead_hashes\"")
+			}
+		case "target_covered_origin_without_dead_hashes":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Float64()
+				s.TargetCoveredOriginWithoutDeadHashes = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_covered_origin_without_dead_hashes\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -4825,7 +4859,7 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) Decode(d *jx.Decoder) err
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00011111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

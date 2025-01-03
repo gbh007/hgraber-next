@@ -31,6 +31,17 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 
 	result := make([]entities.DeduplicateBookResult, 0, len(bookIDs))
 
+	deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, md5Sums)
+	if err != nil {
+		return nil, fmt.Errorf("storage: get dead hashes: %w", err)
+	}
+
+	existsDeadHashes := make(map[entities.FileHash]struct{}, len(deadHashes))
+
+	for _, hash := range deadHashes {
+		existsDeadHashes[hash.FileHash] = struct{}{}
+	}
+
 	for _, bookID := range bookIDs {
 		if _, ok := bookHandled[bookID]; ok {
 			continue
@@ -59,8 +70,11 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 		result = append(result, entities.DeduplicateBookResult{
 			TargetBook:             bookShort,
 			PreviewPage:            previewPage,
-			EntryPercentage:        entities.EntryPercentageForPages(bookHashes, pages),
-			ReverseEntryPercentage: entities.EntryPercentageForPages(pages, bookHashes),
+			EntryPercentage:        entities.EntryPercentageForPages(bookHashes, pages, nil),
+			ReverseEntryPercentage: entities.EntryPercentageForPages(pages, bookHashes, nil),
+
+			EntryPercentageWithoutDeadHashes:        entities.EntryPercentageForPages(bookHashes, pages, existsDeadHashes),
+			ReverseEntryPercentageWithoutDeadHashes: entities.EntryPercentageForPages(pages, bookHashes, existsDeadHashes),
 		})
 	}
 

@@ -351,6 +351,28 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) Validate() error {
 			Error: err,
 		})
 	}
+	if err := func() error {
+		if err := (validate.Float{}).Validate(float64(s.OriginCoveredTargetWithoutDeadHashes)); err != nil {
+			return errors.Wrap(err, "float")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "origin_covered_target_without_dead_hashes",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Float{}).Validate(float64(s.TargetCoveredOriginWithoutDeadHashes)); err != nil {
+			return errors.Wrap(err, "float")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "target_covered_origin_without_dead_hashes",
+			Error: err,
+		})
+	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}

@@ -1152,6 +1152,12 @@ type APIDeduplicateBookByPageBodyPostOKResultItem struct {
 	OriginCoveredTarget float64 `json:"origin_covered_target"`
 	// Процент (0-1) покрытия книги в оригинале.
 	TargetCoveredOrigin float64 `json:"target_covered_origin"`
+	// Процент (0-1) покрытия оригинала в книге без учета
+	// мертвых хешей.
+	OriginCoveredTargetWithoutDeadHashes float64 `json:"origin_covered_target_without_dead_hashes"`
+	// Процент (0-1) покрытия книги в оригинале без учета
+	// мертвых хешей.
+	TargetCoveredOriginWithoutDeadHashes float64 `json:"target_covered_origin_without_dead_hashes"`
 }
 
 // GetBook returns the value of Book.
@@ -1169,6 +1175,16 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetCoveredOrigin() 
 	return s.TargetCoveredOrigin
 }
 
+// GetOriginCoveredTargetWithoutDeadHashes returns the value of OriginCoveredTargetWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetOriginCoveredTargetWithoutDeadHashes() float64 {
+	return s.OriginCoveredTargetWithoutDeadHashes
+}
+
+// GetTargetCoveredOriginWithoutDeadHashes returns the value of TargetCoveredOriginWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetCoveredOriginWithoutDeadHashes() float64 {
+	return s.TargetCoveredOriginWithoutDeadHashes
+}
+
 // SetBook sets the value of Book.
 func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetBook(val BookSimple) {
 	s.Book = val
@@ -1182,6 +1198,16 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetOriginCoveredTarget(va
 // SetTargetCoveredOrigin sets the value of TargetCoveredOrigin.
 func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetCoveredOrigin(val float64) {
 	s.TargetCoveredOrigin = val
+}
+
+// SetOriginCoveredTargetWithoutDeadHashes sets the value of OriginCoveredTargetWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetOriginCoveredTargetWithoutDeadHashes(val float64) {
+	s.OriginCoveredTargetWithoutDeadHashes = val
+}
+
+// SetTargetCoveredOriginWithoutDeadHashes sets the value of TargetCoveredOriginWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetCoveredOriginWithoutDeadHashes(val float64) {
+	s.TargetCoveredOriginWithoutDeadHashes = val
 }
 
 type APIDeduplicateBookByPageBodyPostReq struct {
