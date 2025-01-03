@@ -77,15 +77,7 @@ type BookPagesCompareResult struct {
 	OriginPreviewPage Page
 	TargetPreviewPage Page
 
-	OriginPages                  []Page
-	OriginPagesWithoutDeadHashes []Page
-	OriginPagesOnlyDeadHashes    []Page
-
-	BothPages                  []Page
-	BothPagesWithoutDeadHashes []Page
-	BothPagesOnlyDeadHashes    []Page
-
-	TargetPages                  []Page
-	TargetPagesWithoutDeadHashes []Page
-	TargetPagesOnlyDeadHashes    []Page
+	OriginPages []PageWithDeadHash
+	BothPages   []PageWithDeadHash
+	TargetPages []PageWithDeadHash
 }

@@ -1486,7 +1486,12 @@ type APIDeduplicateUniquePagesPostInternalServerError ErrorResponse
 func (*APIDeduplicateUniquePagesPostInternalServerError) aPIDeduplicateUniquePagesPostRes() {}
 
 type APIDeduplicateUniquePagesPostOK struct {
+	// Уникальные страницы в книге.
 	Pages []PageSimple `json:"pages"`
+	// Уникальные страницы в книге (без мертвых хешей).
+	PagesWithoutDeadHashes []PageSimple `json:"pages_without_dead_hashes"`
+	// Уникальные страницы в книге (только мертвые хеши).
+	PagesOnlyDeadHashes []PageSimple `json:"pages_only_dead_hashes"`
 }
 
 // GetPages returns the value of Pages.
@@ -1494,9 +1499,29 @@ func (s *APIDeduplicateUniquePagesPostOK) GetPages() []PageSimple {
 	return s.Pages
 }
 
+// GetPagesWithoutDeadHashes returns the value of PagesWithoutDeadHashes.
+func (s *APIDeduplicateUniquePagesPostOK) GetPagesWithoutDeadHashes() []PageSimple {
+	return s.PagesWithoutDeadHashes
+}
+
+// GetPagesOnlyDeadHashes returns the value of PagesOnlyDeadHashes.
+func (s *APIDeduplicateUniquePagesPostOK) GetPagesOnlyDeadHashes() []PageSimple {
+	return s.PagesOnlyDeadHashes
+}
+
 // SetPages sets the value of Pages.
 func (s *APIDeduplicateUniquePagesPostOK) SetPages(val []PageSimple) {
 	s.Pages = val
+}
+
+// SetPagesWithoutDeadHashes sets the value of PagesWithoutDeadHashes.
+func (s *APIDeduplicateUniquePagesPostOK) SetPagesWithoutDeadHashes(val []PageSimple) {
+	s.PagesWithoutDeadHashes = val
+}
+
+// SetPagesOnlyDeadHashes sets the value of PagesOnlyDeadHashes.
+func (s *APIDeduplicateUniquePagesPostOK) SetPagesOnlyDeadHashes(val []PageSimple) {
+	s.PagesOnlyDeadHashes = val
 }
 
 func (*APIDeduplicateUniquePagesPostOK) aPIDeduplicateUniquePagesPostRes() {}

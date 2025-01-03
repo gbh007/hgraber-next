@@ -6138,10 +6138,32 @@ func (s *APIDeduplicateUniquePagesPostOK) encodeFields(e *jx.Encoder) {
 			e.ArrEnd()
 		}
 	}
+	{
+		if s.PagesWithoutDeadHashes != nil {
+			e.FieldStart("pages_without_dead_hashes")
+			e.ArrStart()
+			for _, elem := range s.PagesWithoutDeadHashes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.PagesOnlyDeadHashes != nil {
+			e.FieldStart("pages_only_dead_hashes")
+			e.ArrStart()
+			for _, elem := range s.PagesOnlyDeadHashes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIDeduplicateUniquePagesPostOK = [1]string{
+var jsonFieldsNameOfAPIDeduplicateUniquePagesPostOK = [3]string{
 	0: "pages",
+	1: "pages_without_dead_hashes",
+	2: "pages_only_dead_hashes",
 }
 
 // Decode decodes APIDeduplicateUniquePagesPostOK from json.
@@ -6168,6 +6190,40 @@ func (s *APIDeduplicateUniquePagesPostOK) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"pages\"")
+			}
+		case "pages_without_dead_hashes":
+			if err := func() error {
+				s.PagesWithoutDeadHashes = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.PagesWithoutDeadHashes = append(s.PagesWithoutDeadHashes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"pages_without_dead_hashes\"")
+			}
+		case "pages_only_dead_hashes":
+			if err := func() error {
+				s.PagesOnlyDeadHashes = make([]PageSimple, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem PageSimple
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.PagesOnlyDeadHashes = append(s.PagesOnlyDeadHashes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"pages_only_dead_hashes\"")
 			}
 		default:
 			return d.Skip()

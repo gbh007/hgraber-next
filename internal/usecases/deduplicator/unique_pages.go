@@ -10,7 +10,7 @@ import (
 	"hgnext/internal/entities"
 )
 
-func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.Page, error) {
+func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.PageWithDeadHash, error) {
 	originBookPages, err := uc.storage.BookPagesWithHash(ctx, originBookID)
 	if err != nil {
 		return nil, fmt.Errorf("get book hashes storage: %w", err)
@@ -22,6 +22,17 @@ func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]e
 	for i, page := range originBookPages {
 		hashes[page.Hash()] = struct{}{}
 		md5Sums[i] = page.Md5Sum
+	}
+
+	deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, md5Sums)
+	if err != nil {
+		return nil, fmt.Errorf("storage: get dead hashes: %w", err)
+	}
+
+	existsDeadHashes := make(map[entities.FileHash]struct{}, len(deadHashes))
+
+	for _, hash := range deadHashes {
+		existsDeadHashes[hash.FileHash] = struct{}{}
 	}
 
 	bookIDs, err := uc.storage.BookIDsByMD5(ctx, md5Sums)
@@ -49,16 +60,22 @@ func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]e
 		}
 	}
 
-	result := make([]entities.Page, 0, len(hashes))
+	result := make([]entities.PageWithDeadHash, 0, len(hashes))
 
 	for _, page := range originBookPages {
+		_, hasDeadHash := existsDeadHashes[page.Hash()]
+
 		if _, ok := hashes[page.Hash()]; ok {
-			result = append(result, page.Page())
+			result = append(result, entities.PageWithDeadHash{
+				Page:        page.Page(),
+				HasDeadHash: hasDeadHash,
+			})
+
 			delete(hashes, page.Hash())
 		}
 	}
 
-	slices.SortFunc(result, func(a, b entities.Page) int {
+	slices.SortFunc(result, func(a, b entities.PageWithDeadHash) int {
 		return a.PageNumber - b.PageNumber
 	})
 

@@ -1931,6 +1931,17 @@ paths:
                 properties:
                   pages:
                     type: array
+                    description: Уникальные страницы в книге
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+                  pages_without_dead_hashes:
+                    type: array
+                    description: Уникальные страницы в книге (без мертвых хешей)
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+                  pages_only_dead_hashes:
+                    type: array
+                    description: Уникальные страницы в книге (только мертвые хеши)
                     items:
                       $ref: "#/components/schemas/PageSimple"
         400:

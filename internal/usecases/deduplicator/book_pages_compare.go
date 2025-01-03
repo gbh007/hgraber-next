@@ -32,19 +32,11 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 	}
 
 	result := entities.BookPagesCompareResult{
-		OriginBook:                   originBook,
-		TargetBook:                   targetBook,
-		OriginPages:                  make([]entities.Page, 0, len(originPages)),
-		OriginPagesWithoutDeadHashes: make([]entities.Page, 0, len(originPages)),
-		OriginPagesOnlyDeadHashes:    make([]entities.Page, 0, len(originPages)),
-
-		BothPages:                  make([]entities.Page, 0, max(len(originPages), len(targetPages))),
-		BothPagesWithoutDeadHashes: make([]entities.Page, 0, max(len(originPages), len(targetPages))),
-		BothPagesOnlyDeadHashes:    make([]entities.Page, 0, max(len(originPages), len(targetPages))),
-
-		TargetPages:                  make([]entities.Page, 0, len(targetPages)),
-		TargetPagesWithoutDeadHashes: make([]entities.Page, 0, len(targetPages)),
-		TargetPagesOnlyDeadHashes:    make([]entities.Page, 0, len(targetPages)),
+		OriginBook:  originBook,
+		TargetBook:  targetBook,
+		OriginPages: make([]entities.PageWithDeadHash, 0, len(originPages)),
+		BothPages:   make([]entities.PageWithDeadHash, 0, max(len(originPages), len(targetPages))),
+		TargetPages: make([]entities.PageWithDeadHash, 0, len(targetPages)),
 	}
 
 	hashes := make(map[entities.FileHash]int, len(originPages))
@@ -87,44 +79,39 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 	}
 
 	for _, page := range originPages {
+		_, hasDeadHash := existsDeadHashes[page.Hash()]
+
 		if hashes[page.Hash()] == 1 {
-			result.OriginPages = append(result.OriginPages, page.Page())
-
-			if _, ok := existsDeadHashes[page.Hash()]; ok {
-				result.OriginPagesOnlyDeadHashes = append(result.OriginPagesOnlyDeadHashes, page.Page())
-			} else {
-				result.OriginPagesWithoutDeadHashes = append(result.OriginPagesWithoutDeadHashes, page.Page())
-			}
+			result.OriginPages = append(result.OriginPages, entities.PageWithDeadHash{
+				Page:        page.Page(),
+				HasDeadHash: hasDeadHash,
+			})
 		} else {
-			result.BothPages = append(result.BothPages, page.Page()) // Приоритет отдаем оригинальной книге
-
-			if _, ok := existsDeadHashes[page.Hash()]; ok {
-				result.BothPagesOnlyDeadHashes = append(result.BothPagesOnlyDeadHashes, page.Page())
-			} else {
-				result.BothPagesWithoutDeadHashes = append(result.BothPagesWithoutDeadHashes, page.Page())
-			}
+			result.BothPages = append(result.BothPages, entities.PageWithDeadHash{
+				Page:        page.Page(),
+				HasDeadHash: hasDeadHash,
+			}) // Приоритет отдаем оригинальной книге
 		}
 	}
 
 	for _, page := range targetPages {
-		if hashes[page.Hash()] == 0 {
-			result.TargetPages = append(result.TargetPages, page.Page())
+		_, hasDeadHash := existsDeadHashes[page.Hash()]
 
-			if _, ok := existsDeadHashes[page.Hash()]; ok {
-				result.TargetPagesOnlyDeadHashes = append(result.TargetPagesOnlyDeadHashes, page.Page())
-			} else {
-				result.TargetPagesWithoutDeadHashes = append(result.TargetPagesWithoutDeadHashes, page.Page())
-			}
+		if hashes[page.Hash()] == 0 {
+			result.TargetPages = append(result.TargetPages, entities.PageWithDeadHash{
+				Page:        page.Page(),
+				HasDeadHash: hasDeadHash,
+			})
 		}
 	}
 
-	slices.SortStableFunc(result.OriginPages, func(a, b entities.Page) int {
+	slices.SortStableFunc(result.OriginPages, func(a, b entities.PageWithDeadHash) int {
 		return a.PageNumber - b.PageNumber
 	})
-	slices.SortStableFunc(result.BothPages, func(a, b entities.Page) int {
+	slices.SortStableFunc(result.BothPages, func(a, b entities.PageWithDeadHash) int {
 		return a.PageNumber - b.PageNumber
 	})
-	slices.SortStableFunc(result.TargetPages, func(a, b entities.Page) int {
+	slices.SortStableFunc(result.TargetPages, func(a, b entities.PageWithDeadHash) int {
 		return a.PageNumber - b.PageNumber
 	})
 

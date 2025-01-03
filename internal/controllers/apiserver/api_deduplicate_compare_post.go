@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
 	"hgnext/open_api/serverAPI"
 )
@@ -20,16 +21,46 @@ func (c *Controller) APIDeduplicateComparePost(ctx context.Context, req *serverA
 		Origin: c.convertSimpleBook(data.OriginBook, data.OriginPreviewPage),
 		Target: c.convertSimpleBook(data.TargetBook, data.TargetPreviewPage),
 
-		OriginPages:                  pkg.Map(data.OriginPages, c.convertSimplePage),
-		OriginPagesWithoutDeadHashes: pkg.Map(data.OriginPagesWithoutDeadHashes, c.convertSimplePage),
-		OriginPagesOnlyDeadHashes:    pkg.Map(data.OriginPagesOnlyDeadHashes, c.convertSimplePage),
+		OriginPages: pkg.Map(data.OriginPages, func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
+			return c.convertSimplePage(raw.Page)
+		}),
+		OriginPagesWithoutDeadHashes: pkg.Map(pkg.SliceFilter(data.OriginPages, func(raw entities.PageWithDeadHash) bool {
+			return !raw.HasDeadHash
+		}), func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
+			return c.convertSimplePage(raw.Page)
+		}),
+		OriginPagesOnlyDeadHashes: pkg.Map(pkg.SliceFilter(data.OriginPages, func(raw entities.PageWithDeadHash) bool {
+			return raw.HasDeadHash
+		}), func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
+			return c.convertSimplePage(raw.Page)
+		}),
 
-		BothPages:                  pkg.Map(data.BothPages, c.convertSimplePage),
-		BothPagesWithoutDeadHashes: pkg.Map(data.BothPagesWithoutDeadHashes, c.convertSimplePage),
-		BothPagesOnlyDeadHashes:    pkg.Map(data.BothPagesOnlyDeadHashes, c.convertSimplePage),
+		BothPages: pkg.Map(data.BothPages, func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
+			return c.convertSimplePage(raw.Page)
+		}),
+		BothPagesWithoutDeadHashes: pkg.Map(pkg.SliceFilter(data.BothPages, func(raw entities.PageWithDeadHash) bool {
+			return !raw.HasDeadHash
+		}), func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
+			return c.convertSimplePage(raw.Page)
+		}),
+		BothPagesOnlyDeadHashes: pkg.Map(pkg.SliceFilter(data.BothPages, func(raw entities.PageWithDeadHash) bool {
+			return raw.HasDeadHash
+		}), func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
+			return c.convertSimplePage(raw.Page)
+		}),
 
-		TargetPages:                  pkg.Map(data.TargetPages, c.convertSimplePage),
-		TargetPagesWithoutDeadHashes: pkg.Map(data.TargetPagesWithoutDeadHashes, c.convertSimplePage),
-		TargetPagesOnlyDeadHashes:    pkg.Map(data.TargetPagesOnlyDeadHashes, c.convertSimplePage),
+		TargetPages: pkg.Map(data.TargetPages, func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
+			return c.convertSimplePage(raw.Page)
+		}),
+		TargetPagesWithoutDeadHashes: pkg.Map(pkg.SliceFilter(data.TargetPages, func(raw entities.PageWithDeadHash) bool {
+			return !raw.HasDeadHash
+		}), func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
+			return c.convertSimplePage(raw.Page)
+		}),
+		TargetPagesOnlyDeadHashes: pkg.Map(pkg.SliceFilter(data.TargetPages, func(raw entities.PageWithDeadHash) bool {
+			return raw.HasDeadHash
+		}), func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
+			return c.convertSimplePage(raw.Page)
+		}),
 	}, nil
 }
