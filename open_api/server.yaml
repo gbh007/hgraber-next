@@ -2101,6 +2101,165 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/deduplicate/dead-hash-by-page/create:
+    post:
+      description: Создает запись о мертвом хеше по странице
+      summary: Создает запись о мертвом хеше по странице
+      tags:
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                page_number:
+                  type: integer
+                  description: Номер страницы в книге
+                  minimum: 1
+              required:
+                - book_id
+                - page_number
+      responses:
+        204:
+          description: Успешное выполнение
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/deduplicate/dead-hash-by-page/delete:
+    post:
+      description: Удаляет запись о мертвом хеше по странице
+      summary: Удаляет запись о мертвом хеше по странице
+      tags:
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                page_number:
+                  type: integer
+                  description: Номер страницы в книге
+                  minimum: 1
+              required:
+                - book_id
+                - page_number
+      responses:
+        204:
+          description: Успешное выполнение
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/deduplicate/delete-all-pages-by-hash:
+    post:
+      description: Удаляет страницы с таким же хешом как у указанной
+      summary: Удаляет страницы из книг
+      tags:
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                page_number:
+                  type: integer
+                  description: Номер страницы в книге
+                  minimum: 1
+                set_dead_hash:
+                  type: boolean
+                  description: Проставить мертвый хеш по той же странице
+              required:
+                - book_id
+                - page_number
+      responses:
+        204:
+          description: Успешное выполнение
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/agent/task/export:
     post:
       description: Экспорт книг в другую систему
