@@ -215,6 +215,7 @@ func (d *Database) UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID,
 
 	return nil
 }
+
 func (d *Database) AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error) {
 	rows, err := d.pool.Query(ctx, `SELECT COUNT(*), attr, value FROM book_attributes GROUP BY attr, value;`)
 	if err != nil {

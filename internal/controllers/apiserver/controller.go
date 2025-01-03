@@ -81,6 +81,11 @@ type taskUseCases interface {
 	TaskResults(ctx context.Context) ([]*entities.TaskResult, error)
 }
 
+type rebuilderUseCases interface {
+	UpdateBook(ctx context.Context, book entities.BookFull) error
+	RebuildBook(ctx context.Context, request entities.RebuildBookRequest) (uuid.UUID, error)
+}
+
 type config interface {
 	GetAddr() string
 	GetExternalAddr() string
@@ -100,6 +105,7 @@ type Controller struct {
 	exportUseCases      exportUseCases
 	deduplicateUseCases deduplicateUseCases
 	taskUseCases        taskUseCases
+	rebuilderUseCases   rebuilderUseCases
 
 	ogenServer *serverAPI.Server
 
@@ -120,6 +126,7 @@ func New(
 	exportUseCases exportUseCases,
 	deduplicateUseCases deduplicateUseCases,
 	taskUseCases taskUseCases,
+	rebuilderUseCases rebuilderUseCases,
 	debug bool,
 ) (*Controller, error) {
 	u, err := url.Parse(config.GetExternalAddr())
@@ -139,6 +146,7 @@ func New(
 		exportUseCases:             exportUseCases,
 		deduplicateUseCases:        deduplicateUseCases,
 		taskUseCases:               taskUseCases,
+		rebuilderUseCases:          rebuilderUseCases,
 		debug:                      debug,
 		staticDir:                  config.GetStaticDir(),
 		token:                      config.GetToken(),

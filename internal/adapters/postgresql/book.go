@@ -25,6 +25,7 @@ func (d *Database) NewBook(ctx context.Context, book entities.Book) error {
 			"attributes_parsed": book.AttributesParsed,
 			"verified":          book.Verified,
 			"verified_at":       model.TimeToDB(book.VerifiedAt),
+			"is_rebuild":        book.IsRebuild,
 			"create_at":         book.CreateAt,
 		},
 	)
@@ -59,6 +60,7 @@ func (d *Database) UpdateBook(ctx context.Context, book entities.Book) error {
 				"attributes_parsed": book.AttributesParsed,
 				"verified":          book.Verified,
 				"verified_at":       model.TimeToDB(book.VerifiedAt),
+				"is_rebuild":        book.IsRebuild,
 			},
 		).
 		Where(squirrel.Eq{

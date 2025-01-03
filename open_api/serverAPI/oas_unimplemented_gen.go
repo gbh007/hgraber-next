@@ -104,6 +104,26 @@ func (UnimplementedHandler) APIBookRawPost(ctx context.Context, req *APIBookRawP
 	return r, ht.ErrNotImplemented
 }
 
+// APIBookRebuildPost implements POST /api/book/rebuild operation.
+//
+// Может как создать новую книгу, так и добавить данные в
+// другую пересобранную.
+//
+// POST /api/book/rebuild
+func (UnimplementedHandler) APIBookRebuildPost(ctx context.Context, req *APIBookRebuildPostReq) (r APIBookRebuildPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIBookUpdatePost implements POST /api/book/update operation.
+//
+// Изменяет часть данных книги, ряд полей не изменяется
+// (верификация, число страниц и т.д.).
+//
+// POST /api/book/update
+func (UnimplementedHandler) APIBookUpdatePost(ctx context.Context, req *BookRaw) (r APIBookUpdatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIBookVerifyPost implements POST /api/book/verify operation.
 //
 // Подтверждение (модерация) книги, нужна в случае

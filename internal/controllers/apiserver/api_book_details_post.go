@@ -29,11 +29,12 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 		ID:         book.Book.ID,
 		Created:    book.Book.CreateAt,
 		PreviewURL: c.getPagePreview(book.PreviewPage),
-		Flags: serverAPI.BookDetailsFlags{
-			ParsedName: book.ParsedName(),
+		Flags: serverAPI.BookFlags{
+			ParsedName: book.Book.ParsedName(),
 			ParsedPage: book.ParsedPages,
 			IsVerified: book.Book.Verified,
 			IsDeleted:  book.Book.Deleted,
+			IsRebuild:  book.Book.IsRebuild,
 		},
 		Name:              book.Book.Name,
 		PageCount:         book.Book.PageCount,

@@ -76,6 +76,7 @@ type BookFilter struct {
 	ShowDeleted    BookFilterShowType
 	ShowVerified   BookFilterShowType
 	ShowDownloaded BookFilterShowType
+	ShowRebuilded  BookFilterShowType
 
 	Fields BookFilterFields
 }

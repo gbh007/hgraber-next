@@ -12,12 +12,6 @@ import (
 	"hgnext/internal/entities"
 )
 
-type fileKey struct {
-	md5    string
-	sha256 string
-	size   int64
-}
-
 func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, error) {
 	return entities.RunnableTaskFunction(func(ctx context.Context, taskResult entities.TaskResultWriter) {
 		defer taskResult.Finish()
@@ -45,16 +39,12 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 		taskResult.SetTotal(int64(len(files)))
 		span.AddEvent("transform data", trace.WithTimestamp(time.Now()))
 
-		fileMap := make(map[fileKey][]uuid.UUID)
+		fileMap := make(map[entities.FileHash][]uuid.UUID)
 
 		for _, file := range files {
 			taskResult.IncProgress()
 
-			k := fileKey{
-				md5:    file.Md5Sum,
-				sha256: file.Sha256Sum,
-				size:   file.Size,
-			}
+			k := file.Hash()
 
 			fileMap[k] = append(fileMap[k], file.ID)
 		}
@@ -73,7 +63,7 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 		for k, ids := range fileMap {
 			taskResult.IncProgress()
 
-			if k.size == 0 {
+			if k.Size == 0 {
 				uc.logger.WarnContext(
 					ctx, "empty file size",
 					slog.Any("ids", ids),
@@ -109,7 +99,7 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 				)
 			}
 
-			size += k.size * int64(len(ids))
+			size += k.Size * int64(len(ids))
 			count += len(ids)
 		}
 

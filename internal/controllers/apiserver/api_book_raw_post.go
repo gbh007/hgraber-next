@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
 	"hgnext/open_api/serverAPI"
 )
 
@@ -46,35 +45,5 @@ func (c *Controller) APIBookRawPost(ctx context.Context, req *serverAPI.APIBookR
 		}, nil
 	}
 
-	return &serverAPI.BookRaw{
-		ID:        book.Book.ID,
-		CreateAt:  book.Book.CreateAt,
-		OriginURL: optURL(book.Book.OriginURL),
-		Name:      book.Book.Name,
-		PageCount: book.Book.PageCount,
-		Attributes: pkg.MapToSlice(book.Attributes, func(code string, values []string) serverAPI.BookRawAttributesItem {
-			return serverAPI.BookRawAttributesItem{
-				Code:   code,
-				Values: values,
-			}
-		}),
-		Pages: pkg.Map(book.Pages, func(p entities.Page) serverAPI.BookRawPagesItem {
-			return serverAPI.BookRawPagesItem{
-				PageNumber: p.PageNumber,
-				OriginURL:  optURL(p.OriginURL),
-				Ext:        p.Ext,
-				CreateAt:   p.CreateAt,
-				Downloaded: p.Downloaded,
-				LoadAt:     optTime(p.LoadAt),
-			}
-		}),
-		Labels: pkg.Map(book.Labels, func(l entities.BookLabel) serverAPI.BookRawLabelsItem {
-			return serverAPI.BookRawLabelsItem{
-				PageNumber: l.PageNumber,
-				Name:       l.Name,
-				Value:      l.Value,
-				CreateAt:   l.CreateAt,
-			}
-		}),
-	}, nil
+	return convertBookFullToBookRaw(book), nil
 }

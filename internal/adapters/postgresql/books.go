@@ -118,6 +118,13 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 		builder = builder.Where(squirrel.Eq{"verified": false})
 	}
 
+	switch filter.ShowRebuilded {
+	case entities.BookFilterShowTypeOnly:
+		builder = builder.Where(squirrel.Eq{"is_rebuild": true})
+	case entities.BookFilterShowTypeExcept:
+		builder = builder.Where(squirrel.Eq{"is_rebuild": false})
+	}
+
 	switch filter.ShowDownloaded {
 	case entities.BookFilterShowTypeOnly:
 		builder = builder.Where(squirrel.And{

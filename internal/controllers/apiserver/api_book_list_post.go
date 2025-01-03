@@ -25,13 +25,18 @@ func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.BookFil
 				ID:                b.Book.ID,
 				Created:           b.Book.CreateAt,
 				PreviewURL:        c.getPagePreview(b.PreviewPage),
-				ParsedName:        b.ParsedName(),
 				Name:              b.Book.Name,
-				ParsedPage:        b.ParsedPages,
 				PageCount:         b.Book.PageCount,
 				PageLoadedPercent: b.PageDownloadPercent(),
 				Tags:              b.Tags,
 				HasMoreTags:       b.HasMoreTags,
+				Flags: serverAPI.BookFlags{
+					ParsedName: b.Book.ParsedName(),
+					ParsedPage: b.ParsedPages,
+					IsVerified: b.Book.Verified,
+					IsDeleted:  b.Book.Deleted,
+					IsRebuild:  b.Book.IsRebuild,
+				},
 			}
 		}),
 		Pages: pkg.Map(bookList.Pages, func(v int) serverAPI.APIBookListPostOKPagesItem {
@@ -70,33 +75,19 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 	}
 
 	if req.DeleteStatus.IsSet() {
-		switch req.DeleteStatus.Value {
-		case serverAPI.BookFilterDeleteStatusAll:
-		case serverAPI.BookFilterDeleteStatusOnly:
-			filter.ShowDeleted = entities.BookFilterShowTypeOnly
-		case serverAPI.BookFilterDeleteStatusExcept:
-			filter.ShowDeleted = entities.BookFilterShowTypeExcept
-		}
+		filter.ShowDeleted = convertFlagSelector(req.DeleteStatus.Value)
 	}
 
 	if req.VerifyStatus.IsSet() {
-		switch req.VerifyStatus.Value {
-		case serverAPI.BookFilterVerifyStatusAll:
-		case serverAPI.BookFilterVerifyStatusOnly:
-			filter.ShowVerified = entities.BookFilterShowTypeOnly
-		case serverAPI.BookFilterVerifyStatusExcept:
-			filter.ShowVerified = entities.BookFilterShowTypeExcept
-		}
+		filter.ShowVerified = convertFlagSelector(req.VerifyStatus.Value)
 	}
 
 	if req.DownloadStatus.IsSet() {
-		switch req.DownloadStatus.Value {
-		case serverAPI.BookFilterDownloadStatusAll:
-		case serverAPI.BookFilterDownloadStatusOnly:
-			filter.ShowDownloaded = entities.BookFilterShowTypeOnly
-		case serverAPI.BookFilterDownloadStatusExcept:
-			filter.ShowDownloaded = entities.BookFilterShowTypeExcept
-		}
+		filter.ShowDownloaded = convertFlagSelector(req.DownloadStatus.Value)
+	}
+
+	if req.ShowRebuilded.IsSet() {
+		filter.ShowRebuilded = convertFlagSelector(req.ShowRebuilded.Value)
 	}
 
 	filter.Fields.Name = req.Filter.Value.Name.Value
@@ -172,4 +163,17 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 	}
 
 	return filter
+}
+
+func convertFlagSelector(raw serverAPI.BookFilterFlagSelector) entities.BookFilterShowType {
+	switch raw {
+	case serverAPI.BookFilterFlagSelectorAll:
+		return entities.BookFilterShowTypeAll
+	case serverAPI.BookFilterFlagSelectorOnly:
+		return entities.BookFilterShowTypeOnly
+	case serverAPI.BookFilterFlagSelectorExcept:
+		return entities.BookFilterShowTypeExcept
+	}
+
+	return entities.BookFilterShowTypeAll
 }
