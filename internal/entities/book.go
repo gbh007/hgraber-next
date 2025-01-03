@@ -35,11 +35,12 @@ func (b Book) ParsedName() bool {
 
 // FIXME: подумать что делать с такими моделями
 type BookFull struct {
-	Book       Book
-	Pages      []Page
-	Attributes map[string][]string
-	Labels     []BookLabel
-	Size       BookSize
+	Book           Book
+	Pages          []Page
+	Attributes     map[string][]string
+	Labels         []BookLabel
+	Size           BookSize
+	DeadHashOnPage map[int]struct{}
 }
 
 func (b BookFull) IsLoaded() bool {

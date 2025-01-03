@@ -45,7 +45,7 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 				Values: a.Values,
 			}
 		}),
-		Pages: pkg.Map(book.Pages, c.convertSimplePage),
+		Pages: pkg.Map(book.Pages, c.convertSimplePageWithDeadHash),
 		Size: serverAPI.OptBookDetailsSize{
 			Value: serverAPI.BookDetailsSize{
 				Unique:                           book.Size.Unique,

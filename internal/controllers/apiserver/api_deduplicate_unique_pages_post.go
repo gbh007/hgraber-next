@@ -3,7 +3,6 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/entities"
 	"hgnext/internal/pkg"
 	"hgnext/open_api/serverAPI"
 )
@@ -18,18 +17,6 @@ func (c *Controller) APIDeduplicateUniquePagesPost(ctx context.Context, req *ser
 	}
 
 	return &serverAPI.APIDeduplicateUniquePagesPostOK{
-		Pages: pkg.Map(data, func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
-			return c.convertSimplePage(raw.Page)
-		}),
-		PagesWithoutDeadHashes: pkg.Map(pkg.SliceFilter(data, func(raw entities.PageWithDeadHash) bool {
-			return !raw.HasDeadHash
-		}), func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
-			return c.convertSimplePage(raw.Page)
-		}),
-		PagesOnlyDeadHashes: pkg.Map(pkg.SliceFilter(data, func(raw entities.PageWithDeadHash) bool {
-			return raw.HasDeadHash
-		}), func(raw entities.PageWithDeadHash) serverAPI.PageSimple {
-			return c.convertSimplePage(raw.Page)
-		}),
+		Pages: pkg.Map(data, c.convertSimplePageWithDeadHash),
 	}, nil
 }

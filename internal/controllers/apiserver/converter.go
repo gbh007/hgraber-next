@@ -82,10 +82,11 @@ func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.
 	}
 }
 
-func (c *Controller) convertSimplePage(page entities.Page) serverAPI.PageSimple {
+func (c *Controller) convertSimplePageWithDeadHash(page entities.PageWithDeadHash) serverAPI.PageSimple {
 	return serverAPI.PageSimple{
-		PageNumber: page.PageNumber,
-		PreviewURL: c.getPagePreview(page),
+		PageNumber:  page.PageNumber,
+		PreviewURL:  c.getPagePreview(page.Page),
+		HasDeadHash: serverAPI.NewOptBool(page.HasDeadHash),
 	}
 }
 
