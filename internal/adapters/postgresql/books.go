@@ -131,15 +131,37 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			squirrel.Eq{"attributes_parsed": true},
 			squirrel.NotEq{"name": nil},
 			squirrel.NotEq{"page_count": nil},
-			squirrel.Expr(`NOT EXISTS (SELECT book_id FROM pages WHERE downloaded = FALSE AND books.id = pages.book_id)`),
+			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE downloaded = FALSE AND books.id = pages.book_id)`),
 		})
 	case entities.BookFilterShowTypeExcept:
 		builder = builder.Where(squirrel.Or{
 			squirrel.Eq{"attributes_parsed": false},
 			squirrel.Eq{"name": nil},
 			squirrel.Eq{"page_count": nil},
-			squirrel.Expr(`EXISTS (SELECT book_id FROM pages WHERE downloaded = FALSE AND books.id = pages.book_id)`),
+			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE downloaded = FALSE AND books.id = pages.book_id)`),
 		})
+	}
+
+	switch filter.ShowWithoutPages {
+	case entities.BookFilterShowTypeOnly:
+		builder = builder.Where(
+			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id)`),
+		)
+	case entities.BookFilterShowTypeExcept:
+		builder = builder.Where(
+			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id)`),
+		)
+	}
+
+	switch filter.ShowWithoutPreview {
+	case entities.BookFilterShowTypeOnly:
+		builder = builder.Where(
+			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, entities.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?``
+		)
+	case entities.BookFilterShowTypeExcept:
+		builder = builder.Where(
+			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, entities.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?``
+		)
 	}
 
 	if filter.Fields.Name != "" {

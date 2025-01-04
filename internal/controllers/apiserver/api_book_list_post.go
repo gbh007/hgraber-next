@@ -90,6 +90,14 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 		filter.ShowRebuilded = convertFlagSelector(req.ShowRebuilded.Value)
 	}
 
+	if req.ShowWithoutPages.IsSet() {
+		filter.ShowWithoutPages = convertFlagSelector(req.ShowWithoutPages.Value)
+	}
+
+	if req.ShowWithoutPreview.IsSet() {
+		filter.ShowWithoutPreview = convertFlagSelector(req.ShowWithoutPreview.Value)
+	}
+
 	filter.Fields.Name = req.Filter.Value.Name.Value
 	filter.From = req.From.Value
 	filter.To = req.To.Value

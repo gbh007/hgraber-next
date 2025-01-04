@@ -14947,6 +14947,18 @@ func (s *BookFilter) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.ShowWithoutPages.Set {
+			e.FieldStart("show_without_pages")
+			s.ShowWithoutPages.Encode(e)
+		}
+	}
+	{
+		if s.ShowWithoutPreview.Set {
+			e.FieldStart("show_without_preview")
+			s.ShowWithoutPreview.Encode(e)
+		}
+	}
+	{
 		if s.Filter.Set {
 			e.FieldStart("filter")
 			s.Filter.Encode(e)
@@ -14954,7 +14966,7 @@ func (s *BookFilter) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfBookFilter = [11]string{
+var jsonFieldsNameOfBookFilter = [13]string{
 	0:  "sort_desc",
 	1:  "sort_field",
 	2:  "count",
@@ -14965,7 +14977,9 @@ var jsonFieldsNameOfBookFilter = [11]string{
 	7:  "delete_status",
 	8:  "download_status",
 	9:  "show_rebuilded",
-	10: "filter",
+	10: "show_without_pages",
+	11: "show_without_preview",
+	12: "filter",
 }
 
 // Decode decodes BookFilter from json.
@@ -15075,6 +15089,26 @@ func (s *BookFilter) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"show_rebuilded\"")
+			}
+		case "show_without_pages":
+			if err := func() error {
+				s.ShowWithoutPages.Reset()
+				if err := s.ShowWithoutPages.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"show_without_pages\"")
+			}
+		case "show_without_preview":
+			if err := func() error {
+				s.ShowWithoutPreview.Reset()
+				if err := s.ShowWithoutPreview.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"show_without_preview\"")
 			}
 		case "filter":
 			if err := func() error {

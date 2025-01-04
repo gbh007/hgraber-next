@@ -3725,6 +3725,10 @@ type BookFilter struct {
 	DownloadStatus OptBookFilterFlagSelector `json:"download_status"`
 	// Показывать пересобранные книги.
 	ShowRebuilded OptBookFilterFlagSelector `json:"show_rebuilded"`
+	// Показывать книги без страниц.
+	ShowWithoutPages OptBookFilterFlagSelector `json:"show_without_pages"`
+	// Показывать книги без превью.
+	ShowWithoutPreview OptBookFilterFlagSelector `json:"show_without_preview"`
 	// Фильтр по полям.
 	Filter OptBookFilterFilter `json:"filter"`
 }
@@ -3777,6 +3781,16 @@ func (s *BookFilter) GetDownloadStatus() OptBookFilterFlagSelector {
 // GetShowRebuilded returns the value of ShowRebuilded.
 func (s *BookFilter) GetShowRebuilded() OptBookFilterFlagSelector {
 	return s.ShowRebuilded
+}
+
+// GetShowWithoutPages returns the value of ShowWithoutPages.
+func (s *BookFilter) GetShowWithoutPages() OptBookFilterFlagSelector {
+	return s.ShowWithoutPages
+}
+
+// GetShowWithoutPreview returns the value of ShowWithoutPreview.
+func (s *BookFilter) GetShowWithoutPreview() OptBookFilterFlagSelector {
+	return s.ShowWithoutPreview
 }
 
 // GetFilter returns the value of Filter.
@@ -3832,6 +3846,16 @@ func (s *BookFilter) SetDownloadStatus(val OptBookFilterFlagSelector) {
 // SetShowRebuilded sets the value of ShowRebuilded.
 func (s *BookFilter) SetShowRebuilded(val OptBookFilterFlagSelector) {
 	s.ShowRebuilded = val
+}
+
+// SetShowWithoutPages sets the value of ShowWithoutPages.
+func (s *BookFilter) SetShowWithoutPages(val OptBookFilterFlagSelector) {
+	s.ShowWithoutPages = val
+}
+
+// SetShowWithoutPreview sets the value of ShowWithoutPreview.
+func (s *BookFilter) SetShowWithoutPreview(val OptBookFilterFlagSelector) {
+	s.ShowWithoutPreview = val
 }
 
 // SetFilter sets the value of Filter.

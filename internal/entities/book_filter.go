@@ -73,10 +73,12 @@ type BookFilter struct {
 
 	OriginAttributes bool
 
-	ShowDeleted    BookFilterShowType
-	ShowVerified   BookFilterShowType
-	ShowDownloaded BookFilterShowType
-	ShowRebuilded  BookFilterShowType
+	ShowDeleted        BookFilterShowType
+	ShowVerified       BookFilterShowType
+	ShowDownloaded     BookFilterShowType
+	ShowRebuilded      BookFilterShowType
+	ShowWithoutPages   BookFilterShowType
+	ShowWithoutPreview BookFilterShowType
 
 	Fields BookFilterFields
 }

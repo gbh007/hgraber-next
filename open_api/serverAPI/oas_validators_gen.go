@@ -1332,6 +1332,42 @@ func (s *BookFilter) Validate() error {
 		})
 	}
 	if err := func() error {
+		if value, ok := s.ShowWithoutPages.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "show_without_pages",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if value, ok := s.ShowWithoutPreview.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "show_without_preview",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if value, ok := s.Filter.Get(); ok {
 			if err := func() error {
 				if err := value.Validate(); err != nil {

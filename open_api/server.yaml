@@ -3110,6 +3110,12 @@ components:
         show_rebuilded:
           description: Показывать пересобранные книги
           $ref: "#/components/schemas/BookFilterFlagSelector"
+        show_without_pages:
+          description: Показывать книги без страниц
+          $ref: "#/components/schemas/BookFilterFlagSelector"
+        show_without_preview:
+          description: Показывать книги без превью
+          $ref: "#/components/schemas/BookFilterFlagSelector"
         filter:
           type: object
           description: Фильтр по полям
