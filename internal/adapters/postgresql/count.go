@@ -13,40 +13,24 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 
 	var err error
 
-	systemSize.BookCount = int(d.cacheBookCount.Load())
-
-	// Оптимизация запросов в БД
-	if systemSize.BookCount == 0 {
-		err = d.db.GetContext(ctx, &systemSize.BookCount, `SELECT COUNT(*) FROM books;`)
-		if err != nil {
-			return entities.SystemSizeInfo{}, fmt.Errorf("get book count : %w", err)
-		}
-
-		d.cacheBookCount.Store(int64(systemSize.BookCount))
+	err = d.db.GetContext(ctx, &systemSize.BookCount, `SELECT COUNT(*) FROM books;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get book count : %w", err)
 	}
 
-	systemSize.DownloadedBookCount = int(d.cacheDownloadedBookCount.Load())
-
-	// Оптимизация запросов в БД
-	if systemSize.DownloadedBookCount == 0 {
-		err = d.db.GetContext(ctx, &systemSize.DownloadedBookCount, `SELECT COUNT(*) FROM books WHERE deleted = FALSE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`)
-		if err != nil {
-			return entities.SystemSizeInfo{}, fmt.Errorf("get downloaded book count : %w", err)
-		}
-
-		d.cacheDownloadedBookCount.Store(int64(systemSize.DownloadedBookCount))
+	err = d.db.GetContext(ctx, &systemSize.DownloadedBookCount, `SELECT COUNT(*) FROM books WHERE deleted = FALSE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get downloaded book count : %w", err)
 	}
 
-	systemSize.VerifiedBookCount = int(d.cacheVerifiedBookCount.Load())
+	err = d.db.GetContext(ctx, &systemSize.VerifiedBookCount, `SELECT COUNT(*) FROM books WHERE deleted = FALSE AND verified = TRUE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get book verified count : %w", err)
+	}
 
-	// Оптимизация запросов в БД
-	if systemSize.VerifiedBookCount == 0 {
-		err = d.db.GetContext(ctx, &systemSize.VerifiedBookCount, `SELECT COUNT(*) FROM books WHERE deleted = FALSE AND verified = TRUE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`)
-		if err != nil {
-			return entities.SystemSizeInfo{}, fmt.Errorf("get book verified count : %w", err)
-		}
-
-		d.cacheVerifiedBookCount.Store(int64(systemSize.VerifiedBookCount))
+	err = d.db.GetContext(ctx, &systemSize.RebuildedBookCount, `SELECT COUNT(*) FROM books WHERE is_rebuild = TRUE;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get book rebuilded count: %w", err)
 	}
 
 	err = d.db.GetContext(ctx, &systemSize.BookUnparsedCount, `SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE AND is_rebuild = FALSE;`)
@@ -54,16 +38,19 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return entities.SystemSizeInfo{}, fmt.Errorf("get book unparsed count: %w", err)
 	}
 
-	systemSize.PageCount = int(d.cachePageCount.Load())
+	err = d.db.GetContext(ctx, &systemSize.DeletedBookCount, `SELECT COUNT(*) FROM books WHERE deleted = TRUE;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get book deleted count: %w", err)
+	}
 
-	// Оптимизация запросов в БД
-	if systemSize.PageCount == 0 {
-		err = d.db.GetContext(ctx, &systemSize.PageCount, `SELECT COUNT(*) FROM pages;`)
-		if err != nil {
-			return entities.SystemSizeInfo{}, fmt.Errorf("get page count: %w", err)
-		}
+	err = d.db.GetContext(ctx, &systemSize.DeadHashCount, `SELECT COUNT(*) FROM dead_hashes;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get dead hash count: %w", err)
+	}
 
-		d.cachePageCount.Store(int64(systemSize.PageCount))
+	err = d.db.GetContext(ctx, &systemSize.PageCount, `SELECT COUNT(*) FROM pages;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get page count: %w", err)
 	}
 
 	err = d.db.GetContext(ctx, &systemSize.PageUnloadedCount, `SELECT COUNT(*) FROM pages WHERE downloaded = FALSE;`)
@@ -76,35 +63,28 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return entities.SystemSizeInfo{}, fmt.Errorf("get page without body count: %w", err)
 	}
 
-	systemSize.PageFileSize = d.cachePageFileSize.Load()
-
-	// Оптимизация запросов в БД
-	if systemSize.PageFileSize == 0 {
-		size := sql.NullInt64{}
-
-		err = d.db.GetContext(ctx, &size, `SELECT SUM(f."size") FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL;`)
-		if err != nil {
-			return entities.SystemSizeInfo{}, fmt.Errorf("get page file size: %w", err)
-		}
-
-		systemSize.PageFileSize = size.Int64
-		d.cachePageFileSize.Store(size.Int64)
+	err = d.db.GetContext(ctx, &systemSize.DeletedPageCount, `SELECT COUNT(*) FROM deleted_pages;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get deleted page count: %w", err)
 	}
 
-	systemSize.FileSize = d.cacheFileSize.Load()
+	size := sql.NullInt64{}
 
-	// Оптимизация запросов в БД
-	if systemSize.FileSize == 0 {
-		size := sql.NullInt64{}
-
-		err = d.db.GetContext(ctx, &size, `SELECT SUM("size") FROM files WHERE "size" IS NOT NULL;`)
-		if err != nil {
-			return entities.SystemSizeInfo{}, fmt.Errorf("get file size: %w", err)
-		}
-
-		systemSize.FileSize = size.Int64
-		d.cacheFileSize.Store(size.Int64)
+	err = d.db.GetContext(ctx, &size, `SELECT SUM(f."size") FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get page file size: %w", err)
 	}
+
+	systemSize.PageFileSize = size.Int64
+
+	size = sql.NullInt64{}
+
+	err = d.db.GetContext(ctx, &size, `SELECT SUM("size") FROM files WHERE "size" IS NOT NULL;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get file size: %w", err)
+	}
+
+	systemSize.FileSize = size.Int64
 
 	return systemSize, nil
 }

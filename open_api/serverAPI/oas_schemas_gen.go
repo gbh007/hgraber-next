@@ -5398,14 +5398,23 @@ type SystemInfo struct {
 	DownloadedCount int `json:"downloaded_count"`
 	// Количество верифицированных книг.
 	VerifiedCount int `json:"verified_count"`
+	// Количество пересобранных книг.
+	RebuildedCount int `json:"rebuilded_count"`
 	// Количество не обработанных книг.
 	NotLoadCount int `json:"not_load_count"`
+	// Количество удаленных книг.
+	DeletedCount int `json:"deleted_count"`
+	// Количество мертвых хешей.
+	DeadHashCount int `json:"dead_hash_count"`
 	// Количество страниц.
 	PageCount int `json:"page_count"`
 	// Количество не загруженных страниц.
 	NotLoadPageCount int `json:"not_load_page_count"`
 	// Количество страниц без тела (файла).
 	PageWithoutBodyCount int `json:"page_without_body_count"`
+	// Количество удаленных страниц (которые не были
+	// очищены).
+	DeletedPageCount int `json:"deleted_page_count"`
 	// Объем загруженных изображений в байтах.
 	PagesSize int64 `json:"pages_size"`
 	// Объем загруженных изображений в человеко-читаемом
@@ -5434,9 +5443,24 @@ func (s *SystemInfo) GetVerifiedCount() int {
 	return s.VerifiedCount
 }
 
+// GetRebuildedCount returns the value of RebuildedCount.
+func (s *SystemInfo) GetRebuildedCount() int {
+	return s.RebuildedCount
+}
+
 // GetNotLoadCount returns the value of NotLoadCount.
 func (s *SystemInfo) GetNotLoadCount() int {
 	return s.NotLoadCount
+}
+
+// GetDeletedCount returns the value of DeletedCount.
+func (s *SystemInfo) GetDeletedCount() int {
+	return s.DeletedCount
+}
+
+// GetDeadHashCount returns the value of DeadHashCount.
+func (s *SystemInfo) GetDeadHashCount() int {
+	return s.DeadHashCount
 }
 
 // GetPageCount returns the value of PageCount.
@@ -5452,6 +5476,11 @@ func (s *SystemInfo) GetNotLoadPageCount() int {
 // GetPageWithoutBodyCount returns the value of PageWithoutBodyCount.
 func (s *SystemInfo) GetPageWithoutBodyCount() int {
 	return s.PageWithoutBodyCount
+}
+
+// GetDeletedPageCount returns the value of DeletedPageCount.
+func (s *SystemInfo) GetDeletedPageCount() int {
+	return s.DeletedPageCount
 }
 
 // GetPagesSize returns the value of PagesSize.
@@ -5494,9 +5523,24 @@ func (s *SystemInfo) SetVerifiedCount(val int) {
 	s.VerifiedCount = val
 }
 
+// SetRebuildedCount sets the value of RebuildedCount.
+func (s *SystemInfo) SetRebuildedCount(val int) {
+	s.RebuildedCount = val
+}
+
 // SetNotLoadCount sets the value of NotLoadCount.
 func (s *SystemInfo) SetNotLoadCount(val int) {
 	s.NotLoadCount = val
+}
+
+// SetDeletedCount sets the value of DeletedCount.
+func (s *SystemInfo) SetDeletedCount(val int) {
+	s.DeletedCount = val
+}
+
+// SetDeadHashCount sets the value of DeadHashCount.
+func (s *SystemInfo) SetDeadHashCount(val int) {
+	s.DeadHashCount = val
 }
 
 // SetPageCount sets the value of PageCount.
@@ -5512,6 +5556,11 @@ func (s *SystemInfo) SetNotLoadPageCount(val int) {
 // SetPageWithoutBodyCount sets the value of PageWithoutBodyCount.
 func (s *SystemInfo) SetPageWithoutBodyCount(val int) {
 	s.PageWithoutBodyCount = val
+}
+
+// SetDeletedPageCount sets the value of DeletedPageCount.
+func (s *SystemInfo) SetDeletedPageCount(val int) {
+	s.DeletedPageCount = val
 }
 
 // SetPagesSize sets the value of PagesSize.

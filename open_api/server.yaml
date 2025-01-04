@@ -2643,9 +2643,18 @@ components:
         verified_count:
           type: integer
           description: Количество верифицированных книг
+        rebuilded_count:
+          type: integer
+          description: Количество пересобранных книг
         not_load_count:
           type: integer
           description: Количество не обработанных книг
+        deleted_count:
+          type: integer
+          description: Количество удаленных книг
+        dead_hash_count:
+          type: integer
+          description: Количество мертвых хешей
         page_count:
           type: integer
           description: Количество страниц
@@ -2655,6 +2664,9 @@ components:
         page_without_body_count:
           type: integer
           description: Количество страниц без тела (файла)
+        deleted_page_count:
+          type: integer
+          description: Количество удаленных страниц (которые не были очищены)
         pages_size:
           type: integer
           format: int64
@@ -2700,9 +2712,13 @@ components:
         - count
         - downloaded_count
         - verified_count
+        - rebuilded_count
         - not_load_count
+        - deleted_count
+        - dead_hash_count
         - page_count
         - not_load_page_count
+        - deleted_page_count
         - pages_size
         - pages_size_formatted
         - page_without_body_count

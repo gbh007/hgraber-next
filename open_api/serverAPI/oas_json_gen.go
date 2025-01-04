@@ -17701,8 +17701,20 @@ func (s *SystemInfo) encodeFields(e *jx.Encoder) {
 		e.Int(s.VerifiedCount)
 	}
 	{
+		e.FieldStart("rebuilded_count")
+		e.Int(s.RebuildedCount)
+	}
+	{
 		e.FieldStart("not_load_count")
 		e.Int(s.NotLoadCount)
+	}
+	{
+		e.FieldStart("deleted_count")
+		e.Int(s.DeletedCount)
+	}
+	{
+		e.FieldStart("dead_hash_count")
+		e.Int(s.DeadHashCount)
 	}
 	{
 		e.FieldStart("page_count")
@@ -17715,6 +17727,10 @@ func (s *SystemInfo) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("page_without_body_count")
 		e.Int(s.PageWithoutBodyCount)
+	}
+	{
+		e.FieldStart("deleted_page_count")
+		e.Int(s.DeletedPageCount)
 	}
 	{
 		e.FieldStart("pages_size")
@@ -17740,19 +17756,23 @@ func (s *SystemInfo) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfSystemInfo = [12]string{
+var jsonFieldsNameOfSystemInfo = [16]string{
 	0:  "count",
 	1:  "downloaded_count",
 	2:  "verified_count",
-	3:  "not_load_count",
-	4:  "page_count",
-	5:  "not_load_page_count",
-	6:  "page_without_body_count",
-	7:  "pages_size",
-	8:  "pages_size_formatted",
-	9:  "files_size",
-	10: "files_size_formatted",
-	11: "monitor",
+	3:  "rebuilded_count",
+	4:  "not_load_count",
+	5:  "deleted_count",
+	6:  "dead_hash_count",
+	7:  "page_count",
+	8:  "not_load_page_count",
+	9:  "page_without_body_count",
+	10: "deleted_page_count",
+	11: "pages_size",
+	12: "pages_size_formatted",
+	13: "files_size",
+	14: "files_size_formatted",
+	15: "monitor",
 }
 
 // Decode decodes SystemInfo from json.
@@ -17800,8 +17820,20 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"verified_count\"")
 			}
-		case "not_load_count":
+		case "rebuilded_count":
 			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int()
+				s.RebuildedCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"rebuilded_count\"")
+			}
+		case "not_load_count":
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Int()
 				s.NotLoadCount = int(v)
@@ -17812,8 +17844,32 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"not_load_count\"")
 			}
+		case "deleted_count":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Int()
+				s.DeletedCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"deleted_count\"")
+			}
+		case "dead_hash_count":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int()
+				s.DeadHashCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"dead_hash_count\"")
+			}
 		case "page_count":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
 				v, err := d.Int()
 				s.PageCount = int(v)
@@ -17825,7 +17881,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"page_count\"")
 			}
 		case "not_load_page_count":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
 				v, err := d.Int()
 				s.NotLoadPageCount = int(v)
@@ -17837,7 +17893,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"not_load_page_count\"")
 			}
 		case "page_without_body_count":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				v, err := d.Int()
 				s.PageWithoutBodyCount = int(v)
@@ -17848,8 +17904,20 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"page_without_body_count\"")
 			}
+		case "deleted_page_count":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int()
+				s.DeletedPageCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"deleted_page_count\"")
+			}
 		case "pages_size":
-			requiredBitSet[0] |= 1 << 7
+			requiredBitSet[1] |= 1 << 3
 			if err := func() error {
 				v, err := d.Int64()
 				s.PagesSize = int64(v)
@@ -17861,7 +17929,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"pages_size\"")
 			}
 		case "pages_size_formatted":
-			requiredBitSet[1] |= 1 << 0
+			requiredBitSet[1] |= 1 << 4
 			if err := func() error {
 				v, err := d.Str()
 				s.PagesSizeFormatted = string(v)
@@ -17873,7 +17941,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"pages_size_formatted\"")
 			}
 		case "files_size":
-			requiredBitSet[1] |= 1 << 1
+			requiredBitSet[1] |= 1 << 5
 			if err := func() error {
 				v, err := d.Int64()
 				s.FilesSize = int64(v)
@@ -17885,7 +17953,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"files_size\"")
 			}
 		case "files_size_formatted":
-			requiredBitSet[1] |= 1 << 2
+			requiredBitSet[1] |= 1 << 6
 			if err := func() error {
 				v, err := d.Str()
 				s.FilesSizeFormatted = string(v)
@@ -17917,7 +17985,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00000111,
+		0b01111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

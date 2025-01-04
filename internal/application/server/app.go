@@ -213,16 +213,9 @@ func Serve() {
 		asyncController.RegisterRunner(apiAgentController)
 	}
 
-	if cfg.Application.MetricTimeout > 0 {
-		err = metrics.RegisterSystemInfoCollector(logger, webAPIUseCases, cfg.Application.MetricTimeout)
-		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail to create system metric",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
-		}
+	if cfg.Application.MetricScrapePeriod > 0 {
+		infoCollector := metrics.NewSystemInfoCollector(logger, webAPIUseCases, cfg.Application.MetricScrapePeriod)
+		asyncController.RegisterRunner(infoCollector)
 	}
 
 	logger.InfoContext(ctx, "application start")

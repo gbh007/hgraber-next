@@ -3,16 +3,16 @@ package config
 import "time"
 
 type Application struct {
-	Debug         bool          `yaml:"debug" envconfig:"DEBUG"`
-	MetricTimeout time.Duration `yaml:"metric_timeout" envconfig:"METRIC_TIMEOUT"`
-	ServiceName   string        `yaml:"service_name" envconfig:"SERVICE_NAME"`
-	TraceEndpoint string        `yaml:"trace_endpoint" envconfig:"TRACE_ENDPOINT"`
+	Debug              bool          `yaml:"debug" envconfig:"DEBUG"`
+	MetricScrapePeriod time.Duration `yaml:"metric_scrape_period" envconfig:"METRIC_SCRAPE_PERIOD"`
+	ServiceName        string        `yaml:"service_name" envconfig:"SERVICE_NAME"`
+	TraceEndpoint      string        `yaml:"trace_endpoint" envconfig:"TRACE_ENDPOINT"`
 }
 
 func ApplicationDefault() Application {
 	return Application{
-		Debug:         false,
-		MetricTimeout: 0,
-		ServiceName:   "hgraber-next",
+		Debug:              false,
+		MetricScrapePeriod: 10 * time.Second,
+		ServiceName:        "hgraber-next",
 	}
 }

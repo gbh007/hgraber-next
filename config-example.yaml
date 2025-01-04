@@ -1,6 +1,6 @@
 application:
   debug: true
-  metric_timeout: 100ms
+  metric_scrape_period: 1s
   service_name: hgraber-next-local-test
 parsing:
   parse_book_timeout: 5m
