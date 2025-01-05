@@ -70,7 +70,13 @@ func Serve() {
 	asyncController := New(logger)
 	tmpStorage := tmpdata.New()
 
-	storage, err := postgresql.New(ctx, cfg.Storage.Connection, cfg.Storage.MaxConnections, logger)
+	storage, err := postgresql.New(
+		ctx,
+		logger,
+		cfg.Application.Debug.DB,
+		cfg.Storage.Connection,
+		cfg.Storage.MaxConnections,
+	)
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail init postgres",
@@ -175,7 +181,7 @@ func Serve() {
 		deduplicateUseCases,
 		taskUseCases,
 		rebuilderUseCases,
-		cfg.Application.Debug,
+		cfg.Application.Debug.APIServer,
 	)
 	if err != nil {
 		logger.ErrorContext(
@@ -198,7 +204,7 @@ func Serve() {
 			agentCacheUseCase,
 			exportUseCases,
 			cfg.AgentServer.Addr,
-			cfg.Application.Debug,
+			cfg.Application.Debug.APIAgent,
 			cfg.AgentServer.Token,
 		)
 		if err != nil {

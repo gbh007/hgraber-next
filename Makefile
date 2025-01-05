@@ -27,3 +27,10 @@ run: create_build_dir
 	go build $(LDFLAGS) -trimpath -o ./_build/server  ./cmd/server
 
 	./_build/server
+
+
+.PHONY: config
+config: create_build_dir
+	go build $(LDFLAGS) -trimpath -o ./_build/server  ./cmd/server
+
+	./_build/server --generate-config config-generated.yaml

@@ -1,5 +1,9 @@
 application:
-  debug: true
+  debug:
+    logs: true
+    db: false
+    api_server: false
+    api_agent: false
   metric_scrape_period: 1s
   service_name: hgraber-next-local-test
 parsing:
