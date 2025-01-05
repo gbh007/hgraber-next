@@ -5539,14 +5539,67 @@ func (s *APIDeduplicateComparePostOK) encodeFields(e *jx.Encoder) {
 			e.ArrEnd()
 		}
 	}
+	{
+		if s.OriginAttributes != nil {
+			e.FieldStart("origin_attributes")
+			e.ArrStart()
+			for _, elem := range s.OriginAttributes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.BothAttributes != nil {
+			e.FieldStart("both_attributes")
+			e.ArrStart()
+			for _, elem := range s.BothAttributes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.TargetAttributes != nil {
+			e.FieldStart("target_attributes")
+			e.ArrStart()
+			for _, elem := range s.TargetAttributes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		e.FieldStart("origin_covered_target")
+		e.Float64(s.OriginCoveredTarget)
+	}
+	{
+		e.FieldStart("target_covered_origin")
+		e.Float64(s.TargetCoveredOrigin)
+	}
+	{
+		e.FieldStart("origin_covered_target_without_dead_hashes")
+		e.Float64(s.OriginCoveredTargetWithoutDeadHashes)
+	}
+	{
+		e.FieldStart("target_covered_origin_without_dead_hashes")
+		e.Float64(s.TargetCoveredOriginWithoutDeadHashes)
+	}
 }
 
-var jsonFieldsNameOfAPIDeduplicateComparePostOK = [5]string{
-	0: "origin",
-	1: "target",
-	2: "origin_pages",
-	3: "both_pages",
-	4: "target_pages",
+var jsonFieldsNameOfAPIDeduplicateComparePostOK = [12]string{
+	0:  "origin",
+	1:  "target",
+	2:  "origin_pages",
+	3:  "both_pages",
+	4:  "target_pages",
+	5:  "origin_attributes",
+	6:  "both_attributes",
+	7:  "target_attributes",
+	8:  "origin_covered_target",
+	9:  "target_covered_origin",
+	10: "origin_covered_target_without_dead_hashes",
+	11: "target_covered_origin_without_dead_hashes",
 }
 
 // Decode decodes APIDeduplicateComparePostOK from json.
@@ -5554,7 +5607,7 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode APIDeduplicateComparePostOK to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -5629,6 +5682,105 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"target_pages\"")
 			}
+		case "origin_attributes":
+			if err := func() error {
+				s.OriginAttributes = make([]BookAttribute, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem BookAttribute
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.OriginAttributes = append(s.OriginAttributes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_attributes\"")
+			}
+		case "both_attributes":
+			if err := func() error {
+				s.BothAttributes = make([]BookAttribute, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem BookAttribute
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.BothAttributes = append(s.BothAttributes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"both_attributes\"")
+			}
+		case "target_attributes":
+			if err := func() error {
+				s.TargetAttributes = make([]BookAttribute, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem BookAttribute
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.TargetAttributes = append(s.TargetAttributes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_attributes\"")
+			}
+		case "origin_covered_target":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Float64()
+				s.OriginCoveredTarget = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_covered_target\"")
+			}
+		case "target_covered_origin":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				v, err := d.Float64()
+				s.TargetCoveredOrigin = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_covered_origin\"")
+			}
+		case "origin_covered_target_without_dead_hashes":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Float64()
+				s.OriginCoveredTargetWithoutDeadHashes = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_covered_target_without_dead_hashes\"")
+			}
+		case "target_covered_origin_without_dead_hashes":
+			requiredBitSet[1] |= 1 << 3
+			if err := func() error {
+				v, err := d.Float64()
+				s.TargetCoveredOriginWithoutDeadHashes = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_covered_origin_without_dead_hashes\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -5638,8 +5790,9 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
+	for i, mask := range [2]uint8{
 		0b00000011,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -14233,6 +14386,148 @@ func (s *APIUserLoginPostReq) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *BookAttribute) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *BookAttribute) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("code")
+		e.Str(s.Code)
+	}
+	{
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+		e.FieldStart("values")
+		e.ArrStart()
+		for _, elem := range s.Values {
+			e.Str(elem)
+		}
+		e.ArrEnd()
+	}
+}
+
+var jsonFieldsNameOfBookAttribute = [3]string{
+	0: "code",
+	1: "name",
+	2: "values",
+}
+
+// Decode decodes BookAttribute from json.
+func (s *BookAttribute) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BookAttribute to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "code":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Code = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"code\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "values":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				s.Values = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Values = append(s.Values, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"values\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode BookAttribute")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfBookAttribute) {
+					name = jsonFieldsNameOfBookAttribute[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *BookAttribute) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BookAttribute) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *BookDetails) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -14403,9 +14698,9 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 			}
 		case "attributes":
 			if err := func() error {
-				s.Attributes = make([]BookDetailsAttributesItem, 0)
+				s.Attributes = make([]BookAttribute, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem BookDetailsAttributesItem
+					var elem BookAttribute
 					if err := elem.Decode(d); err != nil {
 						return err
 					}
@@ -14498,131 +14793,6 @@ func (s *BookDetails) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *BookDetails) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *BookDetailsAttributesItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *BookDetailsAttributesItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("name")
-		e.Str(s.Name)
-	}
-	{
-		e.FieldStart("values")
-		e.ArrStart()
-		for _, elem := range s.Values {
-			e.Str(elem)
-		}
-		e.ArrEnd()
-	}
-}
-
-var jsonFieldsNameOfBookDetailsAttributesItem = [2]string{
-	0: "name",
-	1: "values",
-}
-
-// Decode decodes BookDetailsAttributesItem from json.
-func (s *BookDetailsAttributesItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode BookDetailsAttributesItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "name":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Name = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
-		case "values":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				s.Values = make([]string, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem string
-					v, err := d.Str()
-					elem = string(v)
-					if err != nil {
-						return err
-					}
-					s.Values = append(s.Values, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"values\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode BookDetailsAttributesItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfBookDetailsAttributesItem) {
-					name = jsonFieldsNameOfBookDetailsAttributesItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *BookDetailsAttributesItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *BookDetailsAttributesItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

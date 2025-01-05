@@ -70,14 +70,29 @@ type DeduplicateBookResult struct {
 	ReverseEntryPercentageWithoutDeadHashes float64
 }
 
-// TODO: очень пухлые модели из-за мертвых хешей, нужно этот признак вносить в страницу
 type BookPagesCompareResult struct {
-	OriginBook        Book
-	TargetBook        Book
+	OriginBook Book
+	TargetBook Book
+
 	OriginPreviewPage Page
 	TargetPreviewPage Page
 
 	OriginPages []PageWithDeadHash
 	BothPages   []PageWithDeadHash
 	TargetPages []PageWithDeadHash
+
+	// Процент (0-1) вхождения книги в целевую книгу
+	EntryPercentage float64
+	// Процент (0-1) вхождения целевой книги в книгу
+	ReverseEntryPercentage float64
+	// Процент (0-1) вхождения архива в книгу без учета мертвых хешей
+	EntryPercentageWithoutDeadHashes float64
+	// Процент (0-1) вхождения книги в архив без учета мертвых хешей
+	ReverseEntryPercentageWithoutDeadHashes float64
+}
+
+type BookAttributesCompareResult struct {
+	OriginAttributes map[string][]string
+	BothAttributes   map[string][]string
+	TargetAttributes map[string][]string
 }

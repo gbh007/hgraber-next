@@ -167,7 +167,14 @@ func Serve() {
 	)
 	asyncController.RegisterRunner(workersController)
 
-	webAPIUseCases := webapi.New(logger, workersController, storage, fileStorage, bookRequestUseCases)
+	webAPIUseCases := webapi.New(
+		logger,
+		workersController,
+		storage,
+		fileStorage,
+		bookRequestUseCases,
+		deduplicateUseCases,
+	)
 	agentUseCases := agentUC.New(logger, agentSystem, storage)
 
 	apiController, err := apiserver.New(

@@ -2073,9 +2073,44 @@ paths:
                     description: Страницы что есть только в целевой книге
                     items:
                       $ref: "#/components/schemas/PageSimple"
+                  origin_attributes:
+                    type: array
+                    description: Атрибуты что есть только в оригинальной книге
+                    items:
+                      $ref: "#/components/schemas/BookAttribute"
+                  both_attributes:
+                    type: array
+                    description: Атрибуты что есть в обоих книгах
+                    items:
+                      $ref: "#/components/schemas/BookAttribute"
+                  target_attributes:
+                    type: array
+                    description: Атрибуты что есть только в целевой книге
+                    items:
+                      $ref: "#/components/schemas/BookAttribute"
+                  origin_covered_target:
+                    type: number
+                    format: float64
+                    description: Процент (0-1) покрытия оригинала в книге
+                  target_covered_origin:
+                    type: number
+                    format: float64
+                    description: Процент (0-1) покрытия книги в оригинале
+                  origin_covered_target_without_dead_hashes:
+                    type: number
+                    format: float64
+                    description: Процент (0-1) покрытия оригинала в книге без учета мертвых хешей
+                  target_covered_origin_without_dead_hashes:
+                    type: number
+                    format: float64
+                    description: Процент (0-1) покрытия книги в оригинале без учета мертвых хешей
                 required:
                   - origin
                   - target
+                  - origin_covered_target
+                  - target_covered_origin
+                  - origin_covered_target_without_dead_hashes
+                  - target_covered_origin_without_dead_hashes
         400:
           description: Некорректный запрос
           content:
@@ -2890,19 +2925,7 @@ components:
           type: array
           description: Данные атрибутов книги
           items:
-            type: object
-            properties:
-              name:
-                type: string
-                description: название атрибута
-              values:
-                type: array
-                description: значения атрибута
-                items:
-                  type: string
-            required:
-              - name
-              - values
+            $ref: "#/components/schemas/BookAttribute"
         pages:
           type: array
           description: данные страниц книги
@@ -2965,6 +2988,25 @@ components:
         - flags
         - page_count
         - page_loaded_percent
+
+    BookAttribute:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Код атрибута
+        name:
+          type: string
+          description: Название атрибута
+        values:
+          type: array
+          description: Значения атрибута
+          items:
+            type: string
+      required:
+        - code
+        - name
+        - values
 
     BookRaw:
       type: object

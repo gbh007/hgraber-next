@@ -29,6 +29,10 @@ type storage interface {
 
 	DeletedPagesHashes(ctx context.Context) ([]entities.FileHash, error)
 	MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, pageNumber int) error
+
+	BookAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
+	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
+	Attributes(ctx context.Context) ([]entities.Attribute, error)
 }
 
 type UseCase struct {

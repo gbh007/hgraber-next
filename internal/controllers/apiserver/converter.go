@@ -90,6 +90,14 @@ func (c *Controller) convertSimplePageWithDeadHash(page entities.PageWithDeadHas
 	}
 }
 
+func convertBookAttribute(a entities.AttributeToWeb) serverAPI.BookAttribute {
+	return serverAPI.BookAttribute{
+		Code:   a.Code,
+		Name:   a.Name,
+		Values: a.Values,
+	}
+}
+
 func convertBookFullToBookRaw(book entities.BookFull) *serverAPI.BookRaw {
 	return &serverAPI.BookRaw{
 		ID:        book.Book.ID,

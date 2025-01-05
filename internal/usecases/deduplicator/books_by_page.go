@@ -24,7 +24,7 @@ func (uc *UseCase) BooksByPage(ctx context.Context, bookID uuid.UUID, pageNumber
 	}
 
 	books := make([]entities.BookWithPreviewPage, 0, min(len(pages), 10))
-	booksHandled := make(map[uuid.UUID]struct{}, cap(books))
+	booksHandled := make(map[uuid.UUID]struct{}, min(len(pages), 10))
 
 	for _, page := range pages {
 		if _, ok := booksHandled[page.BookID]; ok {

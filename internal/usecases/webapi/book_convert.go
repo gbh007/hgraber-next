@@ -7,18 +7,12 @@ import (
 	"hgnext/internal/pkg"
 )
 
-func (uc *UseCase) bookConvert(bookFull entities.BookFull) entities.BookToWeb {
+func (uc *UseCase) bookConvert(bookFull entities.BookFull, attributes map[string]entities.Attribute) entities.BookToWeb {
 	book := entities.BookToWeb{
-		Book:  bookFull.Book,
-		Pages: make([]entities.PageWithDeadHash, len(bookFull.Pages)),
-		Attributes: pkg.MapToSlice(bookFull.Attributes, func(code string, values []string) entities.AttributeToWeb {
-			return entities.AttributeToWeb{
-				Code:   code,
-				Name:   attributeDisplayName(code),
-				Values: values,
-			}
-		}),
-		Size: bookFull.Size,
+		Book:       bookFull.Book,
+		Pages:      make([]entities.PageWithDeadHash, len(bookFull.Pages)),
+		Attributes: convertBookAttributes(attributes, bookFull.Attributes),
+		Size:       bookFull.Size,
 	}
 
 	for i, page := range bookFull.Pages {
@@ -59,53 +53,27 @@ func (uc *UseCase) bookConvert(bookFull entities.BookFull) entities.BookToWeb {
 		return a.PageNumber - b.PageNumber
 	})
 
-	slices.SortStableFunc(book.Attributes, func(a, b entities.AttributeToWeb) int {
-		return attributeOrder(a.Code) - attributeOrder(b.Code)
-	})
-
 	return book
 }
 
-// FIXME: удалить и брать из базы
-func attributeDisplayName(code string) string {
-	switch code {
-	case "author":
-		return "Авторы"
-	case "category":
-		return "Категории"
-	case "character":
-		return "Персонажи"
-	case "group":
-		return "Группы"
-	case "language":
-		return "Языки"
-	case "parody":
-		return "Пародии"
-	case "tag":
-		return "Тэги"
-	default:
-		return code
-	}
+func convertBookAttributes(attributes map[string]entities.Attribute, bookAttributes map[string][]string) []entities.AttributeToWeb {
+	result := pkg.MapToSlice(bookAttributes, func(code string, values []string) entities.AttributeToWeb {
+		return entities.AttributeToWeb{
+			Code:   code,
+			Name:   attributes[code].PluralName,
+			Values: values,
+		}
+	})
+
+	slices.SortStableFunc(result, func(a, b entities.AttributeToWeb) int {
+		return attributes[a.Code].Order - attributes[b.Code].Order
+	})
+
+	return result
 }
 
-// FIXME: удалить и брать из базы
-func attributeOrder(code string) int {
-	switch code {
-	case "author":
-		return 3
-	case "category":
-		return 2
-	case "character":
-		return 4
-	case "group":
-		return 5
-	case "language":
-		return 6
-	case "parody":
-		return 7
-	case "tag":
-		return 1
-	default:
-		return 999
-	}
+func convertAttributes(attributes []entities.Attribute) map[string]entities.Attribute {
+	return pkg.SliceToMap(attributes, func(attribute entities.Attribute) (string, entities.Attribute) {
+		return attribute.Code, attribute
+	})
 }

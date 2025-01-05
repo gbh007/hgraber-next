@@ -15,7 +15,13 @@ func (uc *UseCase) Book(ctx context.Context, bookID uuid.UUID) (entities.BookToW
 		return entities.BookToWeb{}, fmt.Errorf("book requester: %w", err)
 	}
 
-	book := uc.bookConvert(bookFull)
+	attributesInfo, err := uc.storage.Attributes(ctx)
+	if err != nil {
+		return entities.BookToWeb{}, fmt.Errorf("storage: get attributes info: %w", err)
+	}
+
+	attributesInfoMap := convertAttributes(attributesInfo)
+	book := uc.bookConvert(bookFull, attributesInfoMap)
 
 	return book, nil
 }

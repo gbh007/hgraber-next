@@ -54,6 +54,8 @@ type webAPIUseCases interface {
 	DeleteLabelPreset(ctx context.Context, name string) error
 	LabelPresets(ctx context.Context) ([]entities.BookLabelPreset, error)
 	LabelPreset(ctx context.Context, name string) (entities.BookLabelPreset, error)
+
+	BookCompare(ctx context.Context, originID, targetID uuid.UUID) (entities.BookCompareResultToWeb, error)
 }
 
 type agentUseCases interface {

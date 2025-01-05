@@ -46,3 +46,11 @@ type BookListToWeb struct {
 
 	Count int
 }
+
+type BookCompareResultToWeb struct {
+	BookPagesCompareResult
+
+	OriginAttributes []AttributeToWeb
+	BothAttributes   []AttributeToWeb
+	TargetAttributes []AttributeToWeb
+}

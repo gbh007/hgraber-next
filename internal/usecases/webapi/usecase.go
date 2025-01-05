@@ -19,6 +19,7 @@ type storage interface {
 	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
 
 	AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error)
+	Attributes(ctx context.Context) ([]entities.Attribute, error)
 
 	SetLabel(ctx context.Context, label entities.BookLabel) error
 	DeleteLabel(ctx context.Context, label entities.BookLabel) error
@@ -47,6 +48,11 @@ type fileStorage interface {
 	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
 }
 
+type deduplicator interface {
+	BookAttributesCompare(ctx context.Context, originID, targetID uuid.UUID, useOrigin bool) (entities.BookAttributesCompareResult, error)
+	BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (entities.BookPagesCompareResult, error)
+}
+
 type UseCase struct {
 	logger *slog.Logger
 
@@ -54,6 +60,7 @@ type UseCase struct {
 	storage       storage
 	fileStorage   fileStorage
 	bookRequester bookRequester
+	deduplicator  deduplicator
 }
 
 func New(
@@ -62,6 +69,7 @@ func New(
 	storage storage,
 	fileStorage fileStorage,
 	bookRequester bookRequester,
+	deduplicator deduplicator,
 ) *UseCase {
 	return &UseCase{
 		logger:        logger,
@@ -69,5 +77,6 @@ func New(
 		storage:       storage,
 		fileStorage:   fileStorage,
 		bookRequester: bookRequester,
+		deduplicator:  deduplicator,
 	}
 }

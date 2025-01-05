@@ -19,11 +19,20 @@ func (uc *UseCase) BookList(ctx context.Context, filter entities.BookFilter) (en
 		return entities.BookListToWeb{}, fmt.Errorf("get books from requester: %w", err)
 	}
 
+	attributesInfo, err := uc.storage.Attributes(ctx)
+	if err != nil {
+		return entities.BookListToWeb{}, fmt.Errorf("storage: get attributes info: %w", err)
+	}
+
+	attributesInfoMap := convertAttributes(attributesInfo)
+
 	// FIXME: тут костыли, необходимо отказаться от расчета на сервере
 	pages := generatePagination(totalToPages(filter.Offset, filter.Limit)+1, totalToPages(total, filter.Limit))
 
 	return entities.BookListToWeb{
-		Books: pkg.Map(books, uc.bookConvert),
+		Books: pkg.Map(books, func(book entities.BookFull) entities.BookToWeb {
+			return uc.bookConvert(book, attributesInfoMap)
+		}),
 		Pages: pages,
 		Count: total,
 	}, nil

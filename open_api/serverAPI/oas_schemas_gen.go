@@ -1311,6 +1311,22 @@ type APIDeduplicateComparePostOK struct {
 	BothPages []PageSimple `json:"both_pages"`
 	// Страницы что есть только в целевой книге.
 	TargetPages []PageSimple `json:"target_pages"`
+	// Атрибуты что есть только в оригинальной книге.
+	OriginAttributes []BookAttribute `json:"origin_attributes"`
+	// Атрибуты что есть в обоих книгах.
+	BothAttributes []BookAttribute `json:"both_attributes"`
+	// Атрибуты что есть только в целевой книге.
+	TargetAttributes []BookAttribute `json:"target_attributes"`
+	// Процент (0-1) покрытия оригинала в книге.
+	OriginCoveredTarget float64 `json:"origin_covered_target"`
+	// Процент (0-1) покрытия книги в оригинале.
+	TargetCoveredOrigin float64 `json:"target_covered_origin"`
+	// Процент (0-1) покрытия оригинала в книге без учета
+	// мертвых хешей.
+	OriginCoveredTargetWithoutDeadHashes float64 `json:"origin_covered_target_without_dead_hashes"`
+	// Процент (0-1) покрытия книги в оригинале без учета
+	// мертвых хешей.
+	TargetCoveredOriginWithoutDeadHashes float64 `json:"target_covered_origin_without_dead_hashes"`
 }
 
 // GetOrigin returns the value of Origin.
@@ -1338,6 +1354,41 @@ func (s *APIDeduplicateComparePostOK) GetTargetPages() []PageSimple {
 	return s.TargetPages
 }
 
+// GetOriginAttributes returns the value of OriginAttributes.
+func (s *APIDeduplicateComparePostOK) GetOriginAttributes() []BookAttribute {
+	return s.OriginAttributes
+}
+
+// GetBothAttributes returns the value of BothAttributes.
+func (s *APIDeduplicateComparePostOK) GetBothAttributes() []BookAttribute {
+	return s.BothAttributes
+}
+
+// GetTargetAttributes returns the value of TargetAttributes.
+func (s *APIDeduplicateComparePostOK) GetTargetAttributes() []BookAttribute {
+	return s.TargetAttributes
+}
+
+// GetOriginCoveredTarget returns the value of OriginCoveredTarget.
+func (s *APIDeduplicateComparePostOK) GetOriginCoveredTarget() float64 {
+	return s.OriginCoveredTarget
+}
+
+// GetTargetCoveredOrigin returns the value of TargetCoveredOrigin.
+func (s *APIDeduplicateComparePostOK) GetTargetCoveredOrigin() float64 {
+	return s.TargetCoveredOrigin
+}
+
+// GetOriginCoveredTargetWithoutDeadHashes returns the value of OriginCoveredTargetWithoutDeadHashes.
+func (s *APIDeduplicateComparePostOK) GetOriginCoveredTargetWithoutDeadHashes() float64 {
+	return s.OriginCoveredTargetWithoutDeadHashes
+}
+
+// GetTargetCoveredOriginWithoutDeadHashes returns the value of TargetCoveredOriginWithoutDeadHashes.
+func (s *APIDeduplicateComparePostOK) GetTargetCoveredOriginWithoutDeadHashes() float64 {
+	return s.TargetCoveredOriginWithoutDeadHashes
+}
+
 // SetOrigin sets the value of Origin.
 func (s *APIDeduplicateComparePostOK) SetOrigin(val BookSimple) {
 	s.Origin = val
@@ -1361,6 +1412,41 @@ func (s *APIDeduplicateComparePostOK) SetBothPages(val []PageSimple) {
 // SetTargetPages sets the value of TargetPages.
 func (s *APIDeduplicateComparePostOK) SetTargetPages(val []PageSimple) {
 	s.TargetPages = val
+}
+
+// SetOriginAttributes sets the value of OriginAttributes.
+func (s *APIDeduplicateComparePostOK) SetOriginAttributes(val []BookAttribute) {
+	s.OriginAttributes = val
+}
+
+// SetBothAttributes sets the value of BothAttributes.
+func (s *APIDeduplicateComparePostOK) SetBothAttributes(val []BookAttribute) {
+	s.BothAttributes = val
+}
+
+// SetTargetAttributes sets the value of TargetAttributes.
+func (s *APIDeduplicateComparePostOK) SetTargetAttributes(val []BookAttribute) {
+	s.TargetAttributes = val
+}
+
+// SetOriginCoveredTarget sets the value of OriginCoveredTarget.
+func (s *APIDeduplicateComparePostOK) SetOriginCoveredTarget(val float64) {
+	s.OriginCoveredTarget = val
+}
+
+// SetTargetCoveredOrigin sets the value of TargetCoveredOrigin.
+func (s *APIDeduplicateComparePostOK) SetTargetCoveredOrigin(val float64) {
+	s.TargetCoveredOrigin = val
+}
+
+// SetOriginCoveredTargetWithoutDeadHashes sets the value of OriginCoveredTargetWithoutDeadHashes.
+func (s *APIDeduplicateComparePostOK) SetOriginCoveredTargetWithoutDeadHashes(val float64) {
+	s.OriginCoveredTargetWithoutDeadHashes = val
+}
+
+// SetTargetCoveredOriginWithoutDeadHashes sets the value of TargetCoveredOriginWithoutDeadHashes.
+func (s *APIDeduplicateComparePostOK) SetTargetCoveredOriginWithoutDeadHashes(val float64) {
+	s.TargetCoveredOriginWithoutDeadHashes = val
 }
 
 func (*APIDeduplicateComparePostOK) aPIDeduplicateComparePostRes() {}
@@ -3421,6 +3507,46 @@ func (s *APIUserLoginPostReq) SetToken(val string) {
 	s.Token = val
 }
 
+// Ref: #/components/schemas/BookAttribute
+type BookAttribute struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Название атрибута.
+	Name string `json:"name"`
+	// Значения атрибута.
+	Values []string `json:"values"`
+}
+
+// GetCode returns the value of Code.
+func (s *BookAttribute) GetCode() string {
+	return s.Code
+}
+
+// GetName returns the value of Name.
+func (s *BookAttribute) GetName() string {
+	return s.Name
+}
+
+// GetValues returns the value of Values.
+func (s *BookAttribute) GetValues() []string {
+	return s.Values
+}
+
+// SetCode sets the value of Code.
+func (s *BookAttribute) SetCode(val string) {
+	s.Code = val
+}
+
+// SetName sets the value of Name.
+func (s *BookAttribute) SetName(val string) {
+	s.Name = val
+}
+
+// SetValues sets the value of Values.
+func (s *BookAttribute) SetValues(val []string) {
+	s.Values = val
+}
+
 // Данные книги.
 // Ref: #/components/schemas/BookDetails
 type BookDetails struct {
@@ -3438,7 +3564,7 @@ type BookDetails struct {
 	// Процент загруженных страниц.
 	PageLoadedPercent float64 `json:"page_loaded_percent"`
 	// Данные атрибутов книги.
-	Attributes []BookDetailsAttributesItem `json:"attributes"`
+	Attributes []BookAttribute `json:"attributes"`
 	// Данные страниц книги.
 	Pages []PageSimple `json:"pages"`
 	// Данные о размере книги.
@@ -3481,7 +3607,7 @@ func (s *BookDetails) GetPageLoadedPercent() float64 {
 }
 
 // GetAttributes returns the value of Attributes.
-func (s *BookDetails) GetAttributes() []BookDetailsAttributesItem {
+func (s *BookDetails) GetAttributes() []BookAttribute {
 	return s.Attributes
 }
 
@@ -3531,7 +3657,7 @@ func (s *BookDetails) SetPageLoadedPercent(val float64) {
 }
 
 // SetAttributes sets the value of Attributes.
-func (s *BookDetails) SetAttributes(val []BookDetailsAttributesItem) {
+func (s *BookDetails) SetAttributes(val []BookAttribute) {
 	s.Attributes = val
 }
 
@@ -3546,33 +3672,6 @@ func (s *BookDetails) SetSize(val OptBookDetailsSize) {
 }
 
 func (*BookDetails) aPIBookDetailsPostRes() {}
-
-type BookDetailsAttributesItem struct {
-	// Название атрибута.
-	Name string `json:"name"`
-	// Значения атрибута.
-	Values []string `json:"values"`
-}
-
-// GetName returns the value of Name.
-func (s *BookDetailsAttributesItem) GetName() string {
-	return s.Name
-}
-
-// GetValues returns the value of Values.
-func (s *BookDetailsAttributesItem) GetValues() []string {
-	return s.Values
-}
-
-// SetName sets the value of Name.
-func (s *BookDetailsAttributesItem) SetName(val string) {
-	s.Name = val
-}
-
-// SetValues sets the value of Values.
-func (s *BookDetailsAttributesItem) SetValues(val []string) {
-	s.Values = val
-}
 
 // Данные о размере книги.
 type BookDetailsSize struct {

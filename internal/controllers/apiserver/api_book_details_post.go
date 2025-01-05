@@ -39,13 +39,8 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 		Name:              book.Book.Name,
 		PageCount:         book.Book.PageCount,
 		PageLoadedPercent: book.PageDownloadPercent(),
-		Attributes: pkg.Map(book.Attributes, func(a entities.AttributeToWeb) serverAPI.BookDetailsAttributesItem {
-			return serverAPI.BookDetailsAttributesItem{
-				Name:   a.Name,
-				Values: a.Values,
-			}
-		}),
-		Pages: pkg.Map(book.Pages, c.convertSimplePageWithDeadHash),
+		Attributes:        pkg.Map(book.Attributes, convertBookAttribute),
+		Pages:             pkg.Map(book.Pages, c.convertSimplePageWithDeadHash),
 		Size: serverAPI.OptBookDetailsSize{
 			Value: serverAPI.BookDetailsSize{
 				Unique:                           book.Size.Unique,

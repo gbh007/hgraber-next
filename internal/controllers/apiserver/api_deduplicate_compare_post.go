@@ -8,10 +8,10 @@ import (
 )
 
 func (c *Controller) APIDeduplicateComparePost(ctx context.Context, req *serverAPI.APIDeduplicateComparePostReq) (serverAPI.APIDeduplicateComparePostRes, error) {
-	data, err := c.deduplicateUseCases.BookPagesCompare(ctx, req.OriginBookID, req.TargetBookID)
+	data, err := c.webAPIUseCases.BookCompare(ctx, req.OriginBookID, req.TargetBookID)
 	if err != nil {
 		return &serverAPI.APIDeduplicateComparePostInternalServerError{
-			InnerCode: DeduplicateUseCaseCode,
+			InnerCode: WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
@@ -23,5 +23,14 @@ func (c *Controller) APIDeduplicateComparePost(ctx context.Context, req *serverA
 		OriginPages: pkg.Map(data.OriginPages, c.convertSimplePageWithDeadHash),
 		BothPages:   pkg.Map(data.BothPages, c.convertSimplePageWithDeadHash),
 		TargetPages: pkg.Map(data.TargetPages, c.convertSimplePageWithDeadHash),
+
+		OriginAttributes: pkg.Map(data.OriginAttributes, convertBookAttribute),
+		BothAttributes:   pkg.Map(data.BothAttributes, convertBookAttribute),
+		TargetAttributes: pkg.Map(data.TargetAttributes, convertBookAttribute),
+
+		OriginCoveredTarget:                  data.EntryPercentage,
+		TargetCoveredOrigin:                  data.ReverseEntryPercentage,
+		OriginCoveredTargetWithoutDeadHashes: data.EntryPercentageWithoutDeadHashes,
+		TargetCoveredOriginWithoutDeadHashes: data.ReverseEntryPercentageWithoutDeadHashes,
 	}, nil
 }

@@ -78,6 +78,12 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 		existsDeadHashes[hash.FileHash] = struct{}{}
 	}
 
+	result.EntryPercentage = entities.EntryPercentageForPages(originPages, targetPages, nil)
+	result.ReverseEntryPercentage = entities.EntryPercentageForPages(targetPages, originPages, nil)
+
+	result.EntryPercentageWithoutDeadHashes = entities.EntryPercentageForPages(originPages, targetPages, existsDeadHashes)
+	result.ReverseEntryPercentageWithoutDeadHashes = entities.EntryPercentageForPages(targetPages, originPages, existsDeadHashes)
+
 	for _, page := range originPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]
 

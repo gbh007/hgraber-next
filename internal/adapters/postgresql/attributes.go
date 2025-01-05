@@ -32,7 +32,7 @@ func (d *Database) BookAttributes(ctx context.Context, bookID uuid.UUID) (map[st
 		return nil, fmt.Errorf("get attributes: %w", err)
 	}
 
-	out := make(map[string][]string, 7)
+	out := make(map[string][]string, entities.PossibleAttributeCount)
 
 	for _, attribute := range attributes {
 		out[attribute.Attr] = append(out[attribute.Attr], attribute.Value)
@@ -49,7 +49,7 @@ func (d *Database) BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (
 
 	defer rows.Close()
 
-	out := make(map[string][]string, 7)
+	out := make(map[string][]string, entities.PossibleAttributeCount)
 
 	for rows.Next() {
 		var (
@@ -243,6 +243,57 @@ func (d *Database) AttributesCount(ctx context.Context) ([]entities.AttributeVar
 			Value: value,
 			Count: count,
 		})
+	}
+
+	return result, nil
+}
+
+func (d *Database) Attributes(ctx context.Context) ([]entities.Attribute, error) {
+	builder := squirrel.Select(
+		"code",
+		"name",
+		"plural_name",
+		"\"order\"",
+		"description",
+	).
+		From("attributes").
+		PlaceholderFormat(squirrel.Dollar).
+		OrderBy("\"order\"")
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query: %w", err)
+	}
+
+	defer rows.Close()
+
+	result := make([]entities.Attribute, 0, entities.PossibleAttributeCount)
+
+	for rows.Next() {
+		attribute := entities.Attribute{}
+		description := sql.NullString{}
+
+		err = rows.Scan(
+			&attribute.Code,
+			&attribute.Name,
+			&attribute.PluralName,
+			&attribute.Order,
+			&description,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("scan row: %w", err)
+		}
+
+		attribute.Description = description.String
+
+		result = append(result, attribute)
 	}
 
 	return result, nil
