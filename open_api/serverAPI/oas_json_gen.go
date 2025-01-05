@@ -17747,10 +17747,6 @@ func (s *SystemInfo) encodeFields(e *jx.Encoder) {
 		e.Int(s.DeletedCount)
 	}
 	{
-		e.FieldStart("dead_hash_count")
-		e.Int(s.DeadHashCount)
-	}
-	{
 		e.FieldStart("page_count")
 		e.Int(s.PageCount)
 	}
@@ -17765,6 +17761,18 @@ func (s *SystemInfo) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("deleted_page_count")
 		e.Int(s.DeletedPageCount)
+	}
+	{
+		e.FieldStart("file_count")
+		e.Int(s.FileCount)
+	}
+	{
+		e.FieldStart("unhashed_file_count")
+		e.Int(s.UnhashedFileCount)
+	}
+	{
+		e.FieldStart("dead_hash_count")
+		e.Int(s.DeadHashCount)
 	}
 	{
 		e.FieldStart("pages_size")
@@ -17790,23 +17798,25 @@ func (s *SystemInfo) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfSystemInfo = [16]string{
+var jsonFieldsNameOfSystemInfo = [18]string{
 	0:  "count",
 	1:  "downloaded_count",
 	2:  "verified_count",
 	3:  "rebuilded_count",
 	4:  "not_load_count",
 	5:  "deleted_count",
-	6:  "dead_hash_count",
-	7:  "page_count",
-	8:  "not_load_page_count",
-	9:  "page_without_body_count",
-	10: "deleted_page_count",
-	11: "pages_size",
-	12: "pages_size_formatted",
-	13: "files_size",
-	14: "files_size_formatted",
-	15: "monitor",
+	6:  "page_count",
+	7:  "not_load_page_count",
+	8:  "page_without_body_count",
+	9:  "deleted_page_count",
+	10: "file_count",
+	11: "unhashed_file_count",
+	12: "dead_hash_count",
+	13: "pages_size",
+	14: "pages_size_formatted",
+	15: "files_size",
+	16: "files_size_formatted",
+	17: "monitor",
 }
 
 // Decode decodes SystemInfo from json.
@@ -17814,7 +17824,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode SystemInfo to nil")
 	}
-	var requiredBitSet [2]uint8
+	var requiredBitSet [3]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -17890,20 +17900,8 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"deleted_count\"")
 			}
-		case "dead_hash_count":
-			requiredBitSet[0] |= 1 << 6
-			if err := func() error {
-				v, err := d.Int()
-				s.DeadHashCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"dead_hash_count\"")
-			}
 		case "page_count":
-			requiredBitSet[0] |= 1 << 7
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := d.Int()
 				s.PageCount = int(v)
@@ -17915,7 +17913,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"page_count\"")
 			}
 		case "not_load_page_count":
-			requiredBitSet[1] |= 1 << 0
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
 				v, err := d.Int()
 				s.NotLoadPageCount = int(v)
@@ -17927,7 +17925,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"not_load_page_count\"")
 			}
 		case "page_without_body_count":
-			requiredBitSet[1] |= 1 << 1
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
 				v, err := d.Int()
 				s.PageWithoutBodyCount = int(v)
@@ -17939,7 +17937,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"page_without_body_count\"")
 			}
 		case "deleted_page_count":
-			requiredBitSet[1] |= 1 << 2
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				v, err := d.Int()
 				s.DeletedPageCount = int(v)
@@ -17950,8 +17948,44 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"deleted_page_count\"")
 			}
-		case "pages_size":
+		case "file_count":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int()
+				s.FileCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"file_count\"")
+			}
+		case "unhashed_file_count":
 			requiredBitSet[1] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int()
+				s.UnhashedFileCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"unhashed_file_count\"")
+			}
+		case "dead_hash_count":
+			requiredBitSet[1] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int()
+				s.DeadHashCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"dead_hash_count\"")
+			}
+		case "pages_size":
+			requiredBitSet[1] |= 1 << 5
 			if err := func() error {
 				v, err := d.Int64()
 				s.PagesSize = int64(v)
@@ -17963,7 +17997,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"pages_size\"")
 			}
 		case "pages_size_formatted":
-			requiredBitSet[1] |= 1 << 4
+			requiredBitSet[1] |= 1 << 6
 			if err := func() error {
 				v, err := d.Str()
 				s.PagesSizeFormatted = string(v)
@@ -17975,7 +18009,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"pages_size_formatted\"")
 			}
 		case "files_size":
-			requiredBitSet[1] |= 1 << 5
+			requiredBitSet[1] |= 1 << 7
 			if err := func() error {
 				v, err := d.Int64()
 				s.FilesSize = int64(v)
@@ -17987,7 +18021,7 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"files_size\"")
 			}
 		case "files_size_formatted":
-			requiredBitSet[1] |= 1 << 6
+			requiredBitSet[2] |= 1 << 0
 			if err := func() error {
 				v, err := d.Str()
 				s.FilesSizeFormatted = string(v)
@@ -18017,9 +18051,10 @@ func (s *SystemInfo) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [2]uint8{
+	for i, mask := range [3]uint8{
 		0b11111111,
-		0b01111111,
+		0b11111111,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

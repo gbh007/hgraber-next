@@ -47,3 +47,23 @@ func (d *Database) UnprocessedBooks(ctx context.Context) ([]entities.Book, error
 
 	return out, nil
 }
+
+// FIXME: добавить лимиты
+func (d *Database) GetUnHashedFiles(ctx context.Context) ([]entities.File, error) {
+	raw := make([]*model.File, 0)
+
+	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM files WHERE md5_sum IS NULL OR sha256_sum IS NULL OR "size" IS NULL;`)
+	if err != nil {
+		return nil, fmt.Errorf("exec: %w", err)
+	}
+
+	out := make([]entities.File, len(raw))
+	for i, v := range raw {
+		out[i], err = v.ToEntity()
+		if err != nil {
+			return nil, fmt.Errorf("convert %s: %w", v.ID, err)
+		}
+	}
+
+	return out, nil
+}

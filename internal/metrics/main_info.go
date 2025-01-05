@@ -28,11 +28,11 @@ var (
 		Name:      "page_total",
 		Help:      "Количество страниц по статусам",
 	}, []string{"type"})
-	deadHashTotal = promauto.NewGaugeVec(prometheus.GaugeOpts{
+	fileTotal = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: SystemName,
 		Subsystem: SubSystemName,
-		Name:      "dead_hash_total",
-		Help:      "Количество мертвых хешей по статусам",
+		Name:      "file_total",
+		Help:      "Количество файлов по статусам",
 	}, []string{"type"})
 	fileBytes = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: SystemName,
@@ -123,12 +123,14 @@ func (c *SystemInfoCollector) collect(ctx context.Context) {
 	bookTotal.WithLabelValues("unparsed").Set(float64(res.BookUnparsedCount))
 	bookTotal.WithLabelValues("deleted").Set(float64(res.DeletedBookCount))
 
-	deadHashTotal.WithLabelValues("all").Set(float64(res.DeadHashCount))
-
 	pageTotal.WithLabelValues("all").Set(float64(res.PageCount))
 	pageTotal.WithLabelValues("unloaded").Set(float64(res.PageUnloadedCount))
 	pageTotal.WithLabelValues("no_body").Set(float64(res.PageWithoutBodyCount))
 	pageTotal.WithLabelValues("deleted").Set(float64(res.DeletedPageCount))
+
+	fileTotal.WithLabelValues("all").Set(float64(res.FileCount))
+	fileTotal.WithLabelValues("unhashed").Set(float64(res.UnhashedFileCount))
+	fileTotal.WithLabelValues("dead_hash").Set(float64(res.DeadHashCount))
 
 	fileBytes.WithLabelValues("page").Set(float64(res.PageFileSize))
 	fileBytes.WithLabelValues("fs").Set(float64(res.FileSize))

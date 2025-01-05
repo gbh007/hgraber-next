@@ -18,21 +18,27 @@ func (c *Controller) APISystemInfoGet(ctx context.Context) (serverAPI.APISystemI
 	}
 
 	return &serverAPI.SystemInfo{
-		Count:                info.BookCount,
-		DownloadedCount:      info.DownloadedBookCount,
-		VerifiedCount:        info.VerifiedBookCount,
-		RebuildedCount:       info.RebuildedBookCount,
-		NotLoadCount:         info.BookUnparsedCount,
-		DeletedCount:         info.DeletedBookCount,
-		DeadHashCount:        info.DeadHashCount,
+		Count:           info.BookCount,
+		DownloadedCount: info.DownloadedBookCount,
+		VerifiedCount:   info.VerifiedBookCount,
+		RebuildedCount:  info.RebuildedBookCount,
+		NotLoadCount:    info.BookUnparsedCount,
+		DeletedCount:    info.DeletedBookCount,
+
 		PageCount:            info.PageCount,
 		NotLoadPageCount:     info.PageUnloadedCount,
 		PageWithoutBodyCount: info.PageWithoutBodyCount,
 		DeletedPageCount:     info.DeletedPageCount,
-		PagesSize:            info.PageFileSize,
-		PagesSizeFormatted:   entities.PrettySize(info.PageFileSize),
-		FilesSize:            info.FileSize,
-		FilesSizeFormatted:   entities.PrettySize(info.FileSize),
+
+		FileCount:         info.FileCount,
+		UnhashedFileCount: info.UnhashedFileCount,
+		DeadHashCount:     info.DeadHashCount,
+
+		PagesSize:          info.PageFileSize,
+		PagesSizeFormatted: entities.PrettySize(info.PageFileSize),
+		FilesSize:          info.FileSize,
+		FilesSizeFormatted: entities.PrettySize(info.FileSize),
+
 		Monitor: serverAPI.NewOptSystemInfoMonitor(serverAPI.SystemInfoMonitor{
 			Workers: pkg.Map(info.Workers, func(w entities.SystemWorkerStat) serverAPI.SystemInfoMonitorWorkersItem {
 				return serverAPI.SystemInfoMonitorWorkersItem{

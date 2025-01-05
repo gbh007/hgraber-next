@@ -8,12 +8,14 @@ type SystemSizeInfo struct {
 	BookUnparsedCount   int
 	DeletedBookCount    int
 
-	DeadHashCount int
-
 	PageCount            int
 	PageUnloadedCount    int
 	PageWithoutBodyCount int
 	DeletedPageCount     int
+
+	FileCount         int
+	UnhashedFileCount int
+	DeadHashCount     int
 
 	PageFileSize int64
 	FileSize     int64

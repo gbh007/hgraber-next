@@ -2652,9 +2652,6 @@ components:
         deleted_count:
           type: integer
           description: Количество удаленных книг
-        dead_hash_count:
-          type: integer
-          description: Количество мертвых хешей
         page_count:
           type: integer
           description: Количество страниц
@@ -2667,6 +2664,15 @@ components:
         deleted_page_count:
           type: integer
           description: Количество удаленных страниц (которые не были очищены)
+        file_count:
+          type: integer
+          description: Количество файлов
+        unhashed_file_count:
+          type: integer
+          description: Количество файлов без рассчитанного хеша
+        dead_hash_count:
+          type: integer
+          description: Количество мертвых хешей
         pages_size:
           type: integer
           format: int64
@@ -2715,10 +2721,12 @@ components:
         - rebuilded_count
         - not_load_count
         - deleted_count
-        - dead_hash_count
         - page_count
         - not_load_page_count
         - deleted_page_count
+        - file_count
+        - unhashed_file_count
+        - dead_hash_count
         - pages_size
         - pages_size_formatted
         - page_without_body_count

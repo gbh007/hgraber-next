@@ -13,6 +13,8 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 
 	var err error
 
+	// Книги
+
 	err = d.db.GetContext(ctx, &systemSize.BookCount, `SELECT COUNT(*) FROM books;`)
 	if err != nil {
 		return entities.SystemSizeInfo{}, fmt.Errorf("get book count : %w", err)
@@ -43,10 +45,7 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return entities.SystemSizeInfo{}, fmt.Errorf("get book deleted count: %w", err)
 	}
 
-	err = d.db.GetContext(ctx, &systemSize.DeadHashCount, `SELECT COUNT(*) FROM dead_hashes;`)
-	if err != nil {
-		return entities.SystemSizeInfo{}, fmt.Errorf("get dead hash count: %w", err)
-	}
+	// Страницы
 
 	err = d.db.GetContext(ctx, &systemSize.PageCount, `SELECT COUNT(*) FROM pages;`)
 	if err != nil {
@@ -66,6 +65,23 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 	err = d.db.GetContext(ctx, &systemSize.DeletedPageCount, `SELECT COUNT(*) FROM deleted_pages;`)
 	if err != nil {
 		return entities.SystemSizeInfo{}, fmt.Errorf("get deleted page count: %w", err)
+	}
+
+	// Файлы
+
+	err = d.db.GetContext(ctx, &systemSize.FileCount, `SELECT COUNT(*) FROM files;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get file count: %w", err)
+	}
+
+	err = d.db.GetContext(ctx, &systemSize.UnhashedFileCount, `SELECT COUNT(*) FROM files WHERE md5_sum IS NULL OR sha256_sum IS NULL OR "size" IS NULL;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get unhashed file count: %w", err)
+	}
+
+	err = d.db.GetContext(ctx, &systemSize.DeadHashCount, `SELECT COUNT(*) FROM dead_hashes;`)
+	if err != nil {
+		return entities.SystemSizeInfo{}, fmt.Errorf("get dead hash count: %w", err)
 	}
 
 	size := sql.NullInt64{}
