@@ -13,36 +13,78 @@ import (
 )
 
 func (d *Database) BookIDsByMD5(ctx context.Context, md5sums []string) ([]uuid.UUID, error) {
+	builder := squirrel.Select("b.id").
+		PlaceholderFormat(squirrel.Dollar).
+		From("books b").
+		InnerJoin("pages p ON p.book_id = b.id").
+		InnerJoin("files f ON f.id = p.file_id").
+		Where(squirrel.Eq{
+			"f.md5_sum": md5sums,
+		}).
+		GroupBy("b.id")
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
 	result := []uuid.UUID{}
 
-	err := d.db.SelectContext(ctx, &result, `SELECT b.id FROM books b
-INNER JOIN pages p ON p.book_id = b.id
-INNER JOIN files f ON f.id = p.file_id 
-WHERE f.md5_sum = ANY ($1)
-GROUP BY b.id;`, md5sums)
+	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		id := uuid.UUID{}
+
+		err := rows.Scan(&id)
+		if err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+
+		result = append(result, id)
 	}
 
 	return result, nil
 }
 
 func (d *Database) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error) {
-	pages := make([]model.PageWithHash, 0)
+	builder := squirrel.Select(model.PageWithHashColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("pages p").
+		LeftJoin("files f ON p.file_id = f.id").
+		Where(squirrel.Eq{
+			"p.book_id": bookID,
+		}).
+		OrderBy("p.page_number")
 
-	err := d.db.SelectContext(ctx, &pages, `SELECT p.book_id, p.page_number, p.ext, p.origin_url, p.downloaded, p.file_id, f.md5_sum, f.sha256_sum, f."size"
-FROM pages p left join files f on p.file_id = f.id
-WHERE p.book_id = $1 ORDER BY page_number;`, bookID)
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return nil, fmt.Errorf("get pages :%w", err)
+		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	out := make([]entities.PageWithHash, 0, len(pages))
+	d.squirrelDebugLog(ctx, query, args)
 
-	for _, pageRaw := range pages {
-		page, err := pageRaw.ToEntity()
+	out := make([]entities.PageWithHash, 0, 10)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		page := entities.PageWithHash{}
+
+		err := rows.Scan(model.PageWithHashScanner(&page))
 		if err != nil {
-			return nil, fmt.Errorf("convert page :%w", err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
 
 		out = append(out, page)
@@ -52,35 +94,36 @@ WHERE p.book_id = $1 ORDER BY page_number;`, bookID)
 }
 
 func (d *Database) BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageNumber int) (entities.PageWithHash, error) {
-	pageRaw := model.PageWithHash{}
+	builder := squirrel.Select(model.PageWithHashColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("pages p").
+		LeftJoin("files f ON p.file_id = f.id").
+		Where(squirrel.Eq{
+			"p.book_id":     bookID,
+			"p.page_number": pageNumber,
+		}).
+		Limit(1)
 
-	err := d.db.GetContext(ctx, &pageRaw, `SELECT p.book_id, p.page_number, p.ext, p.origin_url, p.downloaded, p.file_id, f.md5_sum, f.sha256_sum, f."size"
-FROM pages p left join files f on p.file_id = f.id
-WHERE p.book_id = $1 AND page_number = $2;`, bookID, pageNumber)
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return entities.PageWithHash{}, fmt.Errorf("get page :%w", err)
+		return entities.PageWithHash{}, fmt.Errorf("build query: %w", err)
 	}
 
-	page, err := pageRaw.ToEntity()
+	d.squirrelDebugLog(ctx, query, args)
+
+	page := entities.PageWithHash{}
+	row := d.pool.QueryRow(ctx, query, args...)
+
+	err = row.Scan(model.PageWithHashScanner(&page))
 	if err != nil {
-		return entities.PageWithHash{}, fmt.Errorf("convert page :%w", err)
+		return entities.PageWithHash{}, fmt.Errorf("exec query :%w", err)
 	}
 
 	return page, nil
 }
 
 func (d *Database) BookPagesWithHashByHash(ctx context.Context, hash entities.FileHash) ([]entities.PageWithHash, error) {
-	builder := squirrel.Select(
-		"p.book_id",
-		"p.page_number",
-		"p.ext",
-		"p.origin_url",
-		"p.downloaded",
-		"p.file_id",
-		"f.md5_sum",
-		"f.sha256_sum",
-		"f.size",
-	).
+	builder := squirrel.Select(model.PageWithHashColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("pages p").
 		LeftJoin("files f ON p.file_id = f.id").
@@ -97,19 +140,21 @@ func (d *Database) BookPagesWithHashByHash(ctx context.Context, hash entities.Fi
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	pages := make([]model.PageWithHash, 0)
+	out := make([]entities.PageWithHash, 0, 10)
 
-	err = d.db.SelectContext(ctx, &pages, query, args...)
+	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
-		return nil, fmt.Errorf("get pages :%w", err)
+		return nil, fmt.Errorf("exec query :%w", err)
 	}
 
-	out := make([]entities.PageWithHash, 0, len(pages))
+	defer rows.Close()
 
-	for _, pageRaw := range pages {
-		page, err := pageRaw.ToEntity()
+	for rows.Next() {
+		page := entities.PageWithHash{}
+
+		err := rows.Scan(model.PageWithHashScanner(&page))
 		if err != nil {
-			return nil, fmt.Errorf("convert page :%w", err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
 
 		out = append(out, page)
@@ -136,13 +181,13 @@ func (d *Database) BookPagesCountByHash(ctx context.Context, hash entities.FileH
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	raw := sql.NullInt64{}
+	count := sql.NullInt64{}
 	row := d.pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(&raw)
+	err = row.Scan(&count)
 	if err != nil {
 		return 0, fmt.Errorf("get count :%w", err)
 	}
 
-	return raw.Int64, nil
+	return count.Int64, nil
 }
