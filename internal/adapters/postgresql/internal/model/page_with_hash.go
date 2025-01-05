@@ -19,6 +19,8 @@ func PageWithHashColumns() []string {
 		"p.origin_url",
 		"p.downloaded",
 		"p.file_id",
+		"p.create_at",
+		"p.load_at",
 		"f.md5_sum",
 		"f.sha256_sum",
 		"f.size",
@@ -30,6 +32,7 @@ func PageWithHashScanner(p *entities.PageWithHash) RowScanner {
 		var (
 			originURL sql.NullString
 			fileID    sql.NullString
+			loadAt    sql.NullTime
 			md5Sum    sql.NullString
 			sha256Sum sql.NullString
 			size      sql.NullInt64
@@ -42,6 +45,8 @@ func PageWithHashScanner(p *entities.PageWithHash) RowScanner {
 			&originURL,
 			&p.Downloaded,
 			&fileID,
+			&p.CreateAt,
+			&loadAt,
 			&md5Sum,
 			&sha256Sum,
 			&size,
@@ -64,6 +69,7 @@ func PageWithHashScanner(p *entities.PageWithHash) RowScanner {
 			}
 		}
 
+		p.LoadAt = loadAt.Time
 		p.Md5Sum = md5Sum.String
 		p.Sha256Sum = sha256Sum.String
 		p.Size = size.Int64

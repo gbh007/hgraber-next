@@ -45,21 +45,21 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 
 	for _, page := range originPages {
 		if page.PageNumber == entities.PageNumberForPreview {
-			result.OriginPreviewPage = page.Page()
+			result.OriginPreviewPage = page.Page
 		}
 
-		hashes[page.Hash()] = 1 // Специальная логика, т.к. в книге могут быть дубликаты страниц
+		hashes[page.FileHash] = 1 // Специальная логика, т.к. в книге могут быть дубликаты страниц
 
 		md5Sums = append(md5Sums, page.Md5Sum)
 	}
 
 	for _, page := range targetPages {
 		if page.PageNumber == entities.PageNumberForPreview {
-			result.TargetPreviewPage = page.Page()
+			result.TargetPreviewPage = page.Page
 		}
 
-		if hashes[page.Hash()] == 1 { // Специальная логика, т.к. в книге могут быть дубликаты страниц
-			hashes[page.Hash()] = 2
+		if hashes[page.FileHash] == 1 { // Специальная логика, т.к. в книге могут быть дубликаты страниц
+			hashes[page.FileHash] = 2
 		}
 
 		md5Sums = append(md5Sums, page.Md5Sum)
@@ -79,27 +79,27 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 	}
 
 	for _, page := range originPages {
-		_, hasDeadHash := existsDeadHashes[page.Hash()]
+		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
-		if hashes[page.Hash()] == 1 {
+		if hashes[page.FileHash] == 1 {
 			result.OriginPages = append(result.OriginPages, entities.PageWithDeadHash{
-				Page:        page.Page(),
+				Page:        page.Page,
 				HasDeadHash: hasDeadHash,
 			})
 		} else {
 			result.BothPages = append(result.BothPages, entities.PageWithDeadHash{
-				Page:        page.Page(),
+				Page:        page.Page,
 				HasDeadHash: hasDeadHash,
 			}) // Приоритет отдаем оригинальной книге
 		}
 	}
 
 	for _, page := range targetPages {
-		_, hasDeadHash := existsDeadHashes[page.Hash()]
+		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
-		if hashes[page.Hash()] == 0 {
+		if hashes[page.FileHash] == 0 {
 			result.TargetPages = append(result.TargetPages, entities.PageWithDeadHash{
-				Page:        page.Page(),
+				Page:        page.Page,
 				HasDeadHash: hasDeadHash,
 			})
 		}

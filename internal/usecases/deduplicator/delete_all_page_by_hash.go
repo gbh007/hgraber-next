@@ -16,7 +16,7 @@ func (uc *UseCase) DeleteAllPageByHash(ctx context.Context, bookID uuid.UUID, pa
 		return fmt.Errorf("storage: get page hash: %w", err)
 	}
 
-	pages, err := uc.storage.BookPagesWithHashByHash(ctx, pageHash.Hash())
+	pages, err := uc.storage.BookPagesWithHashByHash(ctx, pageHash.FileHash)
 	if err != nil {
 		return fmt.Errorf("storage: get pages by hash: %w", err)
 	}
@@ -30,7 +30,7 @@ func (uc *UseCase) DeleteAllPageByHash(ctx context.Context, bookID uuid.UUID, pa
 
 	if setDeadHash {
 		err = uc.storage.SetDeadHash(ctx, entities.DeadHash{
-			FileHash:  pageHash.Hash(),
+			FileHash:  pageHash.FileHash,
 			CreatedAt: time.Now().UTC(),
 		})
 		if err != nil {

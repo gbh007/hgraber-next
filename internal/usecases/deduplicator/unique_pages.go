@@ -20,7 +20,7 @@ func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]e
 	md5Sums := make([]string, len(originBookPages))
 
 	for i, page := range originBookPages {
-		hashes[page.Hash()] = struct{}{}
+		hashes[page.FileHash] = struct{}{}
 		md5Sums[i] = page.Md5Sum
 	}
 
@@ -56,22 +56,22 @@ func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]e
 		}
 
 		for _, page := range pages {
-			delete(hashes, page.Hash())
+			delete(hashes, page.FileHash)
 		}
 	}
 
 	result := make([]entities.PageWithDeadHash, 0, len(hashes))
 
 	for _, page := range originBookPages {
-		_, hasDeadHash := existsDeadHashes[page.Hash()]
+		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
-		if _, ok := hashes[page.Hash()]; ok {
+		if _, ok := hashes[page.FileHash]; ok {
 			result = append(result, entities.PageWithDeadHash{
-				Page:        page.Page(),
+				Page:        page.Page,
 				HasDeadHash: hasDeadHash,
 			})
 
-			delete(hashes, page.Hash())
+			delete(hashes, page.FileHash)
 		}
 	}
 

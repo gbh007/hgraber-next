@@ -63,7 +63,7 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 
 		for _, page := range pages {
 			if page.PageNumber == entities.PageNumberForPreview {
-				previewPage = page.Page()
+				previewPage = page.Page
 			}
 		}
 

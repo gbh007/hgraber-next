@@ -18,7 +18,7 @@ func (uc *UseCase) BooksByPage(ctx context.Context, bookID uuid.UUID, pageNumber
 		return nil, fmt.Errorf("get origin page: %w", err)
 	}
 
-	pages, err := uc.storage.BookPagesWithHashByHash(ctx, originPage.Hash())
+	pages, err := uc.storage.BookPagesWithHashByHash(ctx, originPage.FileHash)
 	if err != nil {
 		return nil, fmt.Errorf("get pages by hash: %w", err)
 	}

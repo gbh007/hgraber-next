@@ -17,7 +17,7 @@ func (uc *UseCase) CreateDeadHashByPage(ctx context.Context, bookID uuid.UUID, p
 	}
 
 	err = uc.storage.SetDeadHash(ctx, entities.DeadHash{
-		FileHash:  pageHash.Hash(),
+		FileHash:  pageHash.FileHash,
 		CreatedAt: time.Now().UTC(),
 	})
 	if err != nil {
@@ -33,7 +33,7 @@ func (uc *UseCase) DeleteDeadHashByPage(ctx context.Context, bookID uuid.UUID, p
 		return fmt.Errorf("storage: get page hash: %w", err)
 	}
 
-	err = uc.storage.DeleteDeadHash(ctx, entities.DeadHash{FileHash: pageHash.Hash()})
+	err = uc.storage.DeleteDeadHash(ctx, entities.DeadHash{FileHash: pageHash.FileHash})
 	if err != nil {
 		return fmt.Errorf("storage: delete dead hash: %w", err)
 	}

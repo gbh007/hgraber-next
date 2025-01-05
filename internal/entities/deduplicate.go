@@ -20,11 +20,11 @@ func EntryPercentageForPages(current, target []PageWithHash, deadHashes map[File
 	targetHashes := make(map[FileHash]struct{}, len(target))
 
 	for _, p := range target {
-		if _, ok := deadHashes[p.Hash()]; ok {
+		if _, ok := deadHashes[p.FileHash]; ok {
 			continue
 		}
 
-		targetHashes[p.Hash()] = struct{}{}
+		targetHashes[p.FileHash] = struct{}{}
 	}
 
 	var hits int
@@ -32,14 +32,14 @@ func EntryPercentageForPages(current, target []PageWithHash, deadHashes map[File
 	count := len(targetHashes)
 
 	for _, p := range current {
-		if _, ok := deadHashes[p.Hash()]; ok {
+		if _, ok := deadHashes[p.FileHash]; ok {
 			continue
 		}
 
-		if _, ok := targetHashes[p.Hash()]; ok {
+		if _, ok := targetHashes[p.FileHash]; ok {
 			hits++
 
-			delete(targetHashes, p.Hash())
+			delete(targetHashes, p.FileHash)
 		}
 	}
 

@@ -36,12 +36,12 @@ func (uc *UseCase) ArchiveEntryPercentage(ctx context.Context, archiveBody io.Re
 
 			md5Sums = append(md5Sums, hash.Md5Sum)
 			archiveHashes = append(archiveHashes, entities.PageWithHash{
-				PageNumber: pageNumber,
-				Ext:        path.Ext(filename),
-				Downloaded: true,
-				Md5Sum:     hash.Md5Sum,
-				Sha256Sum:  hash.Sha256Sum,
-				Size:       hash.Size,
+				Page: entities.Page{
+					PageNumber: pageNumber,
+					Ext:        path.Ext(filename),
+					Downloaded: true,
+				},
+				FileHash: hash,
 			})
 
 			return nil

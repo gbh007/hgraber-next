@@ -90,7 +90,7 @@ func (uc *UseCase) BookSize(ctx context.Context, originBookID uuid.UUID) (entiti
 	for i, page := range bookPages {
 		md5Sums[i] = page.Md5Sum
 
-		fileCounts[page.Hash()] = 1 // Это условие (значение 1) нужно, чтобы дубликаты внутри книги не дали ложно-положительного срабатывания
+		fileCounts[page.FileHash] = 1 // Это условие (значение 1) нужно, чтобы дубликаты внутри книги не дали ложно-положительного срабатывания
 	}
 
 	bookIDs, err := uc.storage.BookIDsByMD5(ctx, md5Sums)
@@ -114,8 +114,8 @@ func (uc *UseCase) BookSize(ctx context.Context, originBookID uuid.UUID) (entiti
 		}
 
 		for _, page := range pages {
-			if _, ok := fileCounts[page.Hash()]; ok {
-				fileCounts[page.Hash()]++
+			if _, ok := fileCounts[page.FileHash]; ok {
+				fileCounts[page.FileHash]++
 			}
 		}
 	}
@@ -136,12 +136,12 @@ func (uc *UseCase) BookSize(ctx context.Context, originBookID uuid.UUID) (entiti
 	deadHashOnPage := make(map[int]struct{}, len(bookPages))
 
 	for _, page := range bookPages {
-		_, hasDeadHash := existsDeadHashes[page.Hash()]
+		_, hasDeadHash := existsDeadHashes[page.FileHash]
 		if hasDeadHash {
 			deadHashOnPage[page.PageNumber] = struct{}{}
 		}
 
-		if c, ok := fileCounts[page.Hash()]; ok {
+		if c, ok := fileCounts[page.FileHash]; ok {
 			if c > 1 {
 				result.Shared += page.Size
 			} else {
@@ -156,7 +156,7 @@ func (uc *UseCase) BookSize(ctx context.Context, originBookID uuid.UUID) (entiti
 				result.DeadHashes += page.Size
 			}
 
-			delete(fileCounts, page.Hash()) // Это нужно, чтобы дубликаты внутри книги не увеличивали уникальный объем
+			delete(fileCounts, page.FileHash) // Это нужно, чтобы дубликаты внутри книги не увеличивали уникальный объем
 		}
 
 		result.Total += page.Size
