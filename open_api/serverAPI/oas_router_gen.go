@@ -347,24 +347,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
-					case 'e': // Prefix: "ebuild"
+					case 'e': // Prefix: "e"
 						origElem := elem
-						if l := len("ebuild"); len(elem) >= l && elem[0:l] == "ebuild" {
+						if l := len("e"); len(elem) >= l && elem[0:l] == "e" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIBookRebuildPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
+							break
+						}
+						switch elem[0] {
+						case 'b': // Prefix: "build"
+							origElem := elem
+							if l := len("build"); len(elem) >= l && elem[0:l] == "build" {
+								elem = elem[l:]
+							} else {
+								break
 							}
 
-							return
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIBookRebuildPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 's': // Prefix: "store"
+							origElem := elem
+							if l := len("store"); len(elem) >= l && elem[0:l] == "store" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIBookRestorePostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -1682,28 +1718,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
-					case 'e': // Prefix: "ebuild"
+					case 'e': // Prefix: "e"
 						origElem := elem
-						if l := len("ebuild"); len(elem) >= l && elem[0:l] == "ebuild" {
+						if l := len("e"); len(elem) >= l && elem[0:l] == "e" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIBookRebuildPostOperation
-								r.summary = "Создает новую книгу из старой"
-								r.operationID = ""
-								r.pathPattern = "/api/book/rebuild"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
+							break
+						}
+						switch elem[0] {
+						case 'b': // Prefix: "build"
+							origElem := elem
+							if l := len("build"); len(elem) >= l && elem[0:l] == "build" {
+								elem = elem[l:]
+							} else {
+								break
 							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIBookRebuildPostOperation
+									r.summary = "Создает новую книгу из старой"
+									r.operationID = ""
+									r.pathPattern = "/api/book/rebuild"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 's': // Prefix: "store"
+							origElem := elem
+							if l := len("store"); len(elem) >= l && elem[0:l] == "store" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIBookRestorePostOperation
+									r.summary = "Восстановление удаленной книги или ее страниц"
+									r.operationID = ""
+									r.pathPattern = "/api/book/restore"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem

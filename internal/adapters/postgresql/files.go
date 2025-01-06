@@ -143,6 +143,39 @@ WHERE
 	return out, nil
 }
 
+func (d *Database) FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.File, error) {
+	builder := squirrel.Select("*").
+		PlaceholderFormat(squirrel.Dollar).
+		From("files").
+		Where(squirrel.Eq{
+			"md5_sum": md5Sums,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	raw := make([]*model.File, 0)
+
+	err = d.db.SelectContext(ctx, &raw, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec: %w", err)
+	}
+
+	out := make([]entities.File, len(raw))
+	for i, v := range raw {
+		out[i], err = v.ToEntity()
+		if err != nil {
+			return nil, fmt.Errorf("convert %s: %w", v.ID, err)
+		}
+	}
+
+	return out, nil
+}
+
 func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
 	builder := squirrel.Delete("files").
 		PlaceholderFormat(squirrel.Dollar).

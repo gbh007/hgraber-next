@@ -8,8 +8,10 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
+	"hgnext/internal/adapters/postgresql/internal/model"
 	"hgnext/internal/entities"
 )
 
@@ -126,6 +128,38 @@ WHERE
 	err = tx.Commit()
 	if err != nil {
 		return fmt.Errorf("commit tx: %w", err)
+	}
+
+	return nil
+}
+
+func (d *Database) UpdateBookDeletion(ctx context.Context, book entities.Book) error {
+	builder := squirrel.Update("books").
+		PlaceholderFormat(squirrel.Dollar).
+		SetMap(
+			map[string]interface{}{
+				"deleted":    book.Deleted,
+				"deleted_at": model.TimeToDB(book.DeletedAt),
+			},
+		).
+		Where(squirrel.Eq{
+			"id": book.ID,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("storage: build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	res, err := d.db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("storage: exec query: %w", err)
+	}
+
+	if !d.isApply(ctx, res) {
+		return entities.BookNotFoundError
 	}
 
 	return nil

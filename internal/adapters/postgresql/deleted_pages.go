@@ -5,7 +5,9 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/google/uuid"
 
+	"hgnext/internal/adapters/postgresql/internal/model"
 	"hgnext/internal/entities"
 )
 
@@ -60,6 +62,68 @@ func (d *Database) DeletedPagesHashes(ctx context.Context) ([]entities.FileHash,
 	}
 
 	return result, nil
+}
+
+func (d *Database) DeletedPages(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error) {
+	builder := squirrel.Select(model.DeletedPageToPageWithHashColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("deleted_pages").
+		Where(squirrel.Eq{
+			"book_id": bookID,
+		}).
+		OrderBy("page_number")
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	out := make([]entities.PageWithHash, 0, 10)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		page := entities.PageWithHash{}
+
+		err := rows.Scan(model.DeletedPageToPageWithHashScanner(&page))
+		if err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+
+		out = append(out, page)
+	}
+
+	return out, nil
+}
+
+func (d *Database) RemoveDeletedPages(ctx context.Context, bookID uuid.UUID, pageNumbers []int) error {
+	builder := squirrel.Delete("deleted_pages").
+		PlaceholderFormat(squirrel.Dollar).
+		Where(squirrel.Eq{
+			"book_id":     bookID,
+			"page_number": pageNumbers,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	_, err = d.pool.Exec(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("exec query :%w", err)
+	}
+
+	return nil
 }
 
 func (d *Database) TruncateDeletedPages(ctx context.Context) error {

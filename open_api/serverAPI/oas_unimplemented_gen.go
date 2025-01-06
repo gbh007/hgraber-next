@@ -114,6 +114,17 @@ func (UnimplementedHandler) APIBookRebuildPost(ctx context.Context, req *APIBook
 	return r, ht.ErrNotImplemented
 }
 
+// APIBookRestorePost implements POST /api/book/restore operation.
+//
+// Пытается восстановить книгу или ее страницы
+// (восстановление может быть не возможно если данные
+// уже были очищены).
+//
+// POST /api/book/restore
+func (UnimplementedHandler) APIBookRestorePost(ctx context.Context, req *APIBookRestorePostReq) (r APIBookRestorePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIBookUpdatePost implements POST /api/book/update operation.
 //
 // Изменяет часть данных книги, ряд полей не изменяется

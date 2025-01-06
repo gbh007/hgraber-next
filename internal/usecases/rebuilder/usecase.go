@@ -15,6 +15,7 @@ type storage interface {
 	NewBook(ctx context.Context, book entities.Book) error
 	UpdateBook(ctx context.Context, book entities.Book) error
 	DeleteBook(ctx context.Context, id uuid.UUID) error
+	UpdateBookDeletion(ctx context.Context, book entities.Book) error
 
 	ReplaceLabels(ctx context.Context, bookID uuid.UUID, labels []entities.BookLabel) error
 	SetLabels(ctx context.Context, labels []entities.BookLabel) error
@@ -31,6 +32,10 @@ type storage interface {
 	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
 
 	DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.DeadHash, error)
+
+	DeletedPages(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
+	FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.File, error)
+	RemoveDeletedPages(ctx context.Context, bookID uuid.UUID, pageNumbers []int) error
 }
 
 type UseCase struct {

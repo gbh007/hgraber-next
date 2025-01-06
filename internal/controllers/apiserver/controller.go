@@ -93,6 +93,7 @@ type taskUseCases interface {
 type rebuilderUseCases interface {
 	UpdateBook(ctx context.Context, book entities.BookFull) error
 	RebuildBook(ctx context.Context, request entities.RebuildBookRequest) (uuid.UUID, error)
+	RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages bool) error
 }
 
 type config interface {

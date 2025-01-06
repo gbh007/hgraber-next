@@ -76,6 +76,14 @@ type Handler interface {
 	//
 	// POST /api/book/rebuild
 	APIBookRebuildPost(ctx context.Context, req *APIBookRebuildPostReq) (APIBookRebuildPostRes, error)
+	// APIBookRestorePost implements POST /api/book/restore operation.
+	//
+	// Пытается восстановить книгу или ее страницы
+	// (восстановление может быть не возможно если данные
+	// уже были очищены).
+	//
+	// POST /api/book/restore
+	APIBookRestorePost(ctx context.Context, req *APIBookRestorePostReq) (APIBookRestorePostRes, error)
 	// APIBookUpdatePost implements POST /api/book/update operation.
 	//
 	// Изменяет часть данных книги, ряд полей не изменяется

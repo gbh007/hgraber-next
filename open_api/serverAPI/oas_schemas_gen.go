@@ -1053,6 +1053,54 @@ type APIBookRebuildPostUnauthorized ErrorResponse
 
 func (*APIBookRebuildPostUnauthorized) aPIBookRebuildPostRes() {}
 
+type APIBookRestorePostBadRequest ErrorResponse
+
+func (*APIBookRestorePostBadRequest) aPIBookRestorePostRes() {}
+
+type APIBookRestorePostForbidden ErrorResponse
+
+func (*APIBookRestorePostForbidden) aPIBookRestorePostRes() {}
+
+type APIBookRestorePostInternalServerError ErrorResponse
+
+func (*APIBookRestorePostInternalServerError) aPIBookRestorePostRes() {}
+
+// APIBookRestorePostNoContent is response for APIBookRestorePost operation.
+type APIBookRestorePostNoContent struct{}
+
+func (*APIBookRestorePostNoContent) aPIBookRestorePostRes() {}
+
+type APIBookRestorePostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Восстановить только страницы.
+	OnlyPages OptBool `json:"only_pages"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIBookRestorePostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetOnlyPages returns the value of OnlyPages.
+func (s *APIBookRestorePostReq) GetOnlyPages() OptBool {
+	return s.OnlyPages
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIBookRestorePostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetOnlyPages sets the value of OnlyPages.
+func (s *APIBookRestorePostReq) SetOnlyPages(val OptBool) {
+	s.OnlyPages = val
+}
+
+type APIBookRestorePostUnauthorized ErrorResponse
+
+func (*APIBookRestorePostUnauthorized) aPIBookRestorePostRes() {}
+
 type APIBookUpdatePostBadRequest ErrorResponse
 
 func (*APIBookUpdatePostBadRequest) aPIBookUpdatePostRes() {}

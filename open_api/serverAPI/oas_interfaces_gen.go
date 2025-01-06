@@ -45,6 +45,10 @@ type APIBookRebuildPostRes interface {
 	aPIBookRebuildPostRes()
 }
 
+type APIBookRestorePostRes interface {
+	aPIBookRestorePostRes()
+}
+
 type APIBookUpdatePostRes interface {
 	aPIBookUpdatePostRes()
 }

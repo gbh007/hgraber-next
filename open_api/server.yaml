@@ -1109,6 +1109,58 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/book/restore:
+    post:
+      description: Пытается восстановить книгу или ее страницы (восстановление может быть не возможно если данные уже были очищены)
+      summary: Восстановление удаленной книги или ее страниц
+      tags:
+        - book
+        - rebuild
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                only_pages:
+                  type: boolean
+                  description: Восстановить только страницы
+              required:
+                - book_id
+      responses:
+        204:
+          description: Успешное выполнение запроса
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/book/list:
     post:
       description: Список книг
