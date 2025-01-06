@@ -3895,25 +3895,18 @@ func (s *APIBookRebuildPostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.OnlyUnique.Set {
-			e.FieldStart("only_unique")
-			s.OnlyUnique.Encode(e)
-		}
-	}
-	{
-		if s.ExcludeDeadHashPages.Set {
-			e.FieldStart("exclude_dead_hash_pages")
-			s.ExcludeDeadHashPages.Encode(e)
+		if s.Flags.Set {
+			e.FieldStart("flags")
+			s.Flags.Encode(e)
 		}
 	}
 }
 
-var jsonFieldsNameOfAPIBookRebuildPostReq = [5]string{
+var jsonFieldsNameOfAPIBookRebuildPostReq = [4]string{
 	0: "old_book",
 	1: "selected_pages",
 	2: "merge_with_book",
-	3: "only_unique",
-	4: "exclude_dead_hash_pages",
+	3: "flags",
 }
 
 // Decode decodes APIBookRebuildPostReq from json.
@@ -3965,25 +3958,15 @@ func (s *APIBookRebuildPostReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"merge_with_book\"")
 			}
-		case "only_unique":
+		case "flags":
 			if err := func() error {
-				s.OnlyUnique.Reset()
-				if err := s.OnlyUnique.Decode(d); err != nil {
+				s.Flags.Reset()
+				if err := s.Flags.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"only_unique\"")
-			}
-		case "exclude_dead_hash_pages":
-			if err := func() error {
-				s.ExcludeDeadHashPages.Reset()
-				if err := s.ExcludeDeadHashPages.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"exclude_dead_hash_pages\"")
+				return errors.Wrap(err, "decode field \"flags\"")
 			}
 		default:
 			return d.Skip()
@@ -4037,6 +4020,103 @@ func (s *APIBookRebuildPostReq) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIBookRebuildPostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIBookRebuildPostReqFlags) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIBookRebuildPostReqFlags) encodeFields(e *jx.Encoder) {
+	{
+		if s.OnlyUnique.Set {
+			e.FieldStart("only_unique")
+			s.OnlyUnique.Encode(e)
+		}
+	}
+	{
+		if s.ExcludeDeadHashPages.Set {
+			e.FieldStart("exclude_dead_hash_pages")
+			s.ExcludeDeadHashPages.Encode(e)
+		}
+	}
+	{
+		if s.Only1Copy.Set {
+			e.FieldStart("only_1_copy")
+			s.Only1Copy.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAPIBookRebuildPostReqFlags = [3]string{
+	0: "only_unique",
+	1: "exclude_dead_hash_pages",
+	2: "only_1_copy",
+}
+
+// Decode decodes APIBookRebuildPostReqFlags from json.
+func (s *APIBookRebuildPostReqFlags) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookRebuildPostReqFlags to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "only_unique":
+			if err := func() error {
+				s.OnlyUnique.Reset()
+				if err := s.OnlyUnique.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"only_unique\"")
+			}
+		case "exclude_dead_hash_pages":
+			if err := func() error {
+				s.ExcludeDeadHashPages.Reset()
+				if err := s.ExcludeDeadHashPages.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"exclude_dead_hash_pages\"")
+			}
+		case "only_1_copy":
+			if err := func() error {
+				s.Only1Copy.Reset()
+				if err := s.Only1Copy.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"only_1_copy\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIBookRebuildPostReqFlags")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookRebuildPostReqFlags) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookRebuildPostReqFlags) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -18400,6 +18480,39 @@ func (s OptAPIAgentListPostOKItemStatus) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptAPIAgentListPostOKItemStatus) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIBookRebuildPostReqFlags as json.
+func (o OptAPIBookRebuildPostReqFlags) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes APIBookRebuildPostReqFlags from json.
+func (o *OptAPIBookRebuildPostReqFlags) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptAPIBookRebuildPostReqFlags to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptAPIBookRebuildPostReqFlags) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptAPIBookRebuildPostReqFlags) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

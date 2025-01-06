@@ -36,6 +36,7 @@ type storage interface {
 	DeletedPages(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
 	FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.File, error)
 	RemoveDeletedPages(ctx context.Context, bookID uuid.UUID, pageNumbers []int) error
+	BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.PageWithHash, error)
 }
 
 type UseCase struct {

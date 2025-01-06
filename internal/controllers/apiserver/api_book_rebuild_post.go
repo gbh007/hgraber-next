@@ -10,11 +10,14 @@ import (
 
 func (c *Controller) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIBookRebuildPostReq) (serverAPI.APIBookRebuildPostRes, error) {
 	id, err := c.rebuilderUseCases.RebuildBook(ctx, entities.RebuildBookRequest{
-		OldBook:              convertBookRawToBookFull(&req.OldBook),
-		SelectedPages:        req.SelectedPages,
-		MergeWithBook:        req.MergeWithBook.Value,
-		OnlyUniquePages:      req.OnlyUnique.Value,
-		ExcludeDeadHashPages: req.ExcludeDeadHashPages.Value,
+		OldBook:       convertBookRawToBookFull(&req.OldBook),
+		SelectedPages: req.SelectedPages,
+		MergeWithBook: req.MergeWithBook.Value,
+		Flags: entities.RebuildBookRequestFlags{
+			OnlyUniquePages:      req.Flags.Value.OnlyUnique.Value,
+			ExcludeDeadHashPages: req.Flags.Value.ExcludeDeadHashPages.Value,
+			Only1CopyPages:       req.Flags.Value.Only1Copy.Value,
+		},
 	})
 
 	if errors.Is(err, entities.BookNotFoundError) {

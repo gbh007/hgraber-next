@@ -12,14 +12,14 @@ import (
 	"hgnext/internal/entities"
 )
 
-func (d *Database) BookIDsByMD5(ctx context.Context, md5sums []string) ([]uuid.UUID, error) {
+func (d *Database) BookIDsByMD5(ctx context.Context, md5Sums []string) ([]uuid.UUID, error) {
 	builder := squirrel.Select("b.id").
 		PlaceholderFormat(squirrel.Dollar).
 		From("books b").
 		InnerJoin("pages p ON p.book_id = b.id").
 		InnerJoin("files f ON f.id = p.file_id").
 		Where(squirrel.Eq{
-			"f.md5_sum": md5sums,
+			"f.md5_sum": md5Sums,
 		}).
 		GroupBy("b.id")
 
@@ -131,6 +131,45 @@ func (d *Database) BookPagesWithHashByHash(ctx context.Context, hash entities.Fi
 			"f.md5_sum":    hash.Md5Sum,
 			"f.sha256_sum": hash.Sha256Sum,
 			"f.size":       hash.Size,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	out := make([]entities.PageWithHash, 0, 10)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		page := entities.PageWithHash{}
+
+		err := rows.Scan(model.PageWithHashScanner(&page))
+		if err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+
+		out = append(out, page)
+	}
+
+	return out, nil
+}
+
+func (d *Database) BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.PageWithHash, error) {
+	builder := squirrel.Select(model.PageWithHashColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("pages p").
+		LeftJoin("files f ON p.file_id = f.id").
+		Where(squirrel.Eq{
+			"f.md5_sum": md5Sums,
 		})
 
 	query, args, err := builder.ToSql()

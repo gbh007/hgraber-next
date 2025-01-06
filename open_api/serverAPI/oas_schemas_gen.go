@@ -992,11 +992,8 @@ type APIBookRebuildPostReq struct {
 	// Список страниц из старой книги.
 	SelectedPages []int `json:"selected_pages"`
 	// ID книги в которую надо добавить страницы.
-	MergeWithBook OptUUID `json:"merge_with_book"`
-	// Включать только уникальные страницы.
-	OnlyUnique OptBool `json:"only_unique"`
-	// Исключить страницы с мертвыми хешами.
-	ExcludeDeadHashPages OptBool `json:"exclude_dead_hash_pages"`
+	MergeWithBook OptUUID                       `json:"merge_with_book"`
+	Flags         OptAPIBookRebuildPostReqFlags `json:"flags"`
 }
 
 // GetOldBook returns the value of OldBook.
@@ -1014,14 +1011,9 @@ func (s *APIBookRebuildPostReq) GetMergeWithBook() OptUUID {
 	return s.MergeWithBook
 }
 
-// GetOnlyUnique returns the value of OnlyUnique.
-func (s *APIBookRebuildPostReq) GetOnlyUnique() OptBool {
-	return s.OnlyUnique
-}
-
-// GetExcludeDeadHashPages returns the value of ExcludeDeadHashPages.
-func (s *APIBookRebuildPostReq) GetExcludeDeadHashPages() OptBool {
-	return s.ExcludeDeadHashPages
+// GetFlags returns the value of Flags.
+func (s *APIBookRebuildPostReq) GetFlags() OptAPIBookRebuildPostReqFlags {
+	return s.Flags
 }
 
 // SetOldBook sets the value of OldBook.
@@ -1039,14 +1031,49 @@ func (s *APIBookRebuildPostReq) SetMergeWithBook(val OptUUID) {
 	s.MergeWithBook = val
 }
 
+// SetFlags sets the value of Flags.
+func (s *APIBookRebuildPostReq) SetFlags(val OptAPIBookRebuildPostReqFlags) {
+	s.Flags = val
+}
+
+type APIBookRebuildPostReqFlags struct {
+	// Включать только уникальные страницы.
+	OnlyUnique OptBool `json:"only_unique"`
+	// Исключить страницы с мертвыми хешами.
+	ExcludeDeadHashPages OptBool `json:"exclude_dead_hash_pages"`
+	// Включать только уникальные страницы не содержащиеся
+	// в других книгах.
+	Only1Copy OptBool `json:"only_1_copy"`
+}
+
+// GetOnlyUnique returns the value of OnlyUnique.
+func (s *APIBookRebuildPostReqFlags) GetOnlyUnique() OptBool {
+	return s.OnlyUnique
+}
+
+// GetExcludeDeadHashPages returns the value of ExcludeDeadHashPages.
+func (s *APIBookRebuildPostReqFlags) GetExcludeDeadHashPages() OptBool {
+	return s.ExcludeDeadHashPages
+}
+
+// GetOnly1Copy returns the value of Only1Copy.
+func (s *APIBookRebuildPostReqFlags) GetOnly1Copy() OptBool {
+	return s.Only1Copy
+}
+
 // SetOnlyUnique sets the value of OnlyUnique.
-func (s *APIBookRebuildPostReq) SetOnlyUnique(val OptBool) {
+func (s *APIBookRebuildPostReqFlags) SetOnlyUnique(val OptBool) {
 	s.OnlyUnique = val
 }
 
 // SetExcludeDeadHashPages sets the value of ExcludeDeadHashPages.
-func (s *APIBookRebuildPostReq) SetExcludeDeadHashPages(val OptBool) {
+func (s *APIBookRebuildPostReqFlags) SetExcludeDeadHashPages(val OptBool) {
 	s.ExcludeDeadHashPages = val
+}
+
+// SetOnly1Copy sets the value of Only1Copy.
+func (s *APIBookRebuildPostReqFlags) SetOnly1Copy(val OptBool) {
+	s.Only1Copy = val
 }
 
 type APIBookRebuildPostUnauthorized ErrorResponse
@@ -5141,6 +5168,52 @@ func (o OptAPIAgentListPostOKItemStatus) Get() (v APIAgentListPostOKItemStatus, 
 
 // Or returns value if set, or given parameter if does not.
 func (o OptAPIAgentListPostOKItemStatus) Or(d APIAgentListPostOKItemStatus) APIAgentListPostOKItemStatus {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptAPIBookRebuildPostReqFlags returns new OptAPIBookRebuildPostReqFlags with value set to v.
+func NewOptAPIBookRebuildPostReqFlags(v APIBookRebuildPostReqFlags) OptAPIBookRebuildPostReqFlags {
+	return OptAPIBookRebuildPostReqFlags{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptAPIBookRebuildPostReqFlags is optional APIBookRebuildPostReqFlags.
+type OptAPIBookRebuildPostReqFlags struct {
+	Value APIBookRebuildPostReqFlags
+	Set   bool
+}
+
+// IsSet returns true if OptAPIBookRebuildPostReqFlags was set.
+func (o OptAPIBookRebuildPostReqFlags) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptAPIBookRebuildPostReqFlags) Reset() {
+	var v APIBookRebuildPostReqFlags
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptAPIBookRebuildPostReqFlags) SetTo(v APIBookRebuildPostReqFlags) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptAPIBookRebuildPostReqFlags) Get() (v APIBookRebuildPostReqFlags, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptAPIBookRebuildPostReqFlags) Or(d APIBookRebuildPostReqFlags) APIBookRebuildPostReqFlags {
 	if v, ok := o.Get(); ok {
 		return v
 	}

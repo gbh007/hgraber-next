@@ -1055,12 +1055,18 @@ paths:
                   type: string
                   format: uuid
                   description: ID книги в которую надо добавить страницы
-                only_unique:
-                  type: boolean
-                  description: Включать только уникальные страницы
-                exclude_dead_hash_pages:
-                  type: boolean
-                  description: Исключить страницы с мертвыми хешами
+                flags:
+                  type: object
+                  properties:
+                    only_unique:
+                      type: boolean
+                      description: Включать только уникальные страницы
+                    exclude_dead_hash_pages:
+                      type: boolean
+                      description: Исключить страницы с мертвыми хешами
+                    only_1_copy:
+                      type: boolean
+                      description: Включать только уникальные страницы не содержащиеся в других книгах
               required:
                 - old_book
                 - selected_pages
