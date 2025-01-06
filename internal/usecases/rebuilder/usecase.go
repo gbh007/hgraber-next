@@ -18,10 +18,13 @@ type storage interface {
 
 	ReplaceLabels(ctx context.Context, bookID uuid.UUID, labels []entities.BookLabel) error
 	SetLabels(ctx context.Context, labels []entities.BookLabel) error
+	DeleteBookLabels(ctx context.Context, bookID uuid.UUID) error
 
 	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
 	UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
 	UpdateAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
+	DeleteBookOriginAttributes(ctx context.Context, bookID uuid.UUID) error
+	DeleteBookAttributes(ctx context.Context, bookID uuid.UUID) error
 
 	BookPages(ctx context.Context, bookID uuid.UUID) ([]entities.Page, error)
 	NewBookPages(ctx context.Context, pages []entities.Page) error
