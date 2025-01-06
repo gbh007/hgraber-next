@@ -10,16 +10,6 @@ import (
 
 func (c *Controller) logIO(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		defer func() { // TODO: перенести в отдельную мидлварь.
-			p := recover()
-			if p != nil {
-				c.logger.WarnContext(
-					r.Context(), "panic detected",
-					slog.Any("panic", p),
-				)
-			}
-		}()
-
 		if !c.debug {
 			if next != nil {
 				next.ServeHTTP(w, r)

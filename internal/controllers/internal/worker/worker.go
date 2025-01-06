@@ -159,6 +159,7 @@ handler:
 				trace.WithSpanKind(trace.SpanKindServer),
 			)
 
+			// TODO: тут может быть паника ее необходимо отловить
 			for _, data := range w.getter(ctx) {
 				select {
 				case <-ctx.Done():

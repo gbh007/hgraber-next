@@ -3,6 +3,8 @@ package worker
 import (
 	"context"
 	"log/slog"
+	"runtime"
+	"strconv"
 	"sync"
 	"time"
 
@@ -76,6 +78,7 @@ func (w *Unit[T]) handleOne(ctx context.Context, value T) {
 				slog.Any("panic", p),
 				slog.String("worker_name", w.name),
 				slog.Int("worker_unit", int(w.number)),
+				slog.Any("trace", stackTrace(3, 50)),
 			)
 		}
 	}()
@@ -140,4 +143,27 @@ func (w *Unit[T]) Serve(ctx context.Context) {
 func (w *Unit[T]) ShutDown(_ context.Context) {
 	w.cancel()
 	w.wait.Wait()
+}
+
+func stackTrace(skip, count int) []string {
+	result := []string{}
+
+	pc := make([]uintptr, count)
+	n := runtime.Callers(skip, pc)
+
+	pc = pc[:n]
+
+	frames := runtime.CallersFrames(pc)
+
+	for {
+		frame, more := frames.Next()
+
+		result = append(result, frame.File+":"+strconv.Itoa(frame.Line))
+
+		if !more {
+			break
+		}
+	}
+
+	return result
 }
