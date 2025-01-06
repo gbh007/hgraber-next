@@ -27,10 +27,10 @@ func (uc *UseCase) FillDeadHashes(_ context.Context) (entities.RunnableTask, err
 		taskResult.SetProgress(int64(len(deletedPagesHashes)))
 		taskResult.EndStage()
 
-		taskResult.StartStage("fill dead hashes")
+		taskResult.StartStage("search dead hashes")
 		taskResult.SetTotal(int64(len(deletedPagesHashes)))
 
-		count := 0
+		deadHashes := make([]entities.DeadHash, 0, len(deletedPagesHashes))
 
 		for _, hash := range deletedPagesHashes {
 			taskResult.IncProgress()
@@ -46,21 +46,27 @@ func (uc *UseCase) FillDeadHashes(_ context.Context) (entities.RunnableTask, err
 				continue
 			}
 
-			err = uc.storage.SetDeadHash(ctx, entities.DeadHash{
+			deadHashes = append(deadHashes, entities.DeadHash{
 				FileHash:  hash,
 				CreatedAt: time.Now().UTC(),
 			})
-			if err != nil {
-				taskResult.SetError(fmt.Errorf("set dead hash: %w", err))
-
-				return
-			}
-
-			count++
 		}
 
 		taskResult.EndStage()
 
-		taskResult.SetResult(fmt.Sprintf("Обработано %d", count))
+		taskResult.StartStage("set dead hashes")
+		taskResult.SetTotal(int64(len(deadHashes)))
+
+		err = uc.storage.SetDeadHashes(ctx, deadHashes)
+		if err != nil {
+			taskResult.SetError(fmt.Errorf("set dead hashes: %w", err))
+
+			return
+		}
+
+		taskResult.SetProgress(int64(len(deadHashes)))
+		taskResult.EndStage()
+
+		taskResult.SetResult(fmt.Sprintf("Обработано %d", len(deadHashes)))
 	}), nil
 }

@@ -23,10 +23,13 @@ type storage interface {
 	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
 	BookPagesWithHashByHash(ctx context.Context, hash entities.FileHash) ([]entities.PageWithHash, error)
 	BookPagesCountByHash(ctx context.Context, hash entities.FileHash) (int64, error)
+	BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.PageWithHash, error)
 
 	DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.DeadHash, error)
 	SetDeadHash(ctx context.Context, hash entities.DeadHash) error
+	SetDeadHashes(ctx context.Context, hashes []entities.DeadHash) error
 	DeleteDeadHash(ctx context.Context, hash entities.DeadHash) error
+	DeleteDeadHashes(ctx context.Context, hashes []entities.DeadHash) error
 
 	DeletedPagesHashes(ctx context.Context) ([]entities.FileHash, error)
 	MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, pageNumber int) error

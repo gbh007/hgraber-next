@@ -370,14 +370,18 @@ func (uc *UseCase) rebuildBookCleanSource(
 	unusedSourceHashes map[entities.FileHash]struct{},
 ) error {
 	if flags.MarkUnusedPagesAsDeadHash && len(unusedSourceHashes) > 0 {
+		deadHashes := make([]entities.DeadHash, 0, len(unusedSourceHashes))
+
 		for hash := range unusedSourceHashes {
-			err := uc.storage.SetDeadHash(ctx, entities.DeadHash{
+			deadHashes = append(deadHashes, entities.DeadHash{
 				FileHash:  hash,
 				CreatedAt: time.Now().UTC(),
 			})
-			if err != nil {
-				return fmt.Errorf("storage: set dead hash: %w", err)
-			}
+		}
+
+		err := uc.storage.SetDeadHashes(ctx, deadHashes)
+		if err != nil {
+			return fmt.Errorf("storage: set dead hashes: %w", err)
 		}
 	}
 

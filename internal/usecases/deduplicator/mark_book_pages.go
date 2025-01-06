@@ -16,14 +16,18 @@ func (uc *UseCase) MarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID
 		return fmt.Errorf("storage: get pages: %w", err)
 	}
 
+	deadHashes := make([]entities.DeadHash, 0, len(pages))
+
 	for _, page := range pages {
-		err = uc.storage.SetDeadHash(ctx, entities.DeadHash{
+		deadHashes = append(deadHashes, entities.DeadHash{
 			FileHash:  page.FileHash,
 			CreatedAt: time.Now().UTC(),
 		})
-		if err != nil {
-			return fmt.Errorf("storage: set dead hash (%d): %w", page.PageNumber, err)
-		}
+	}
+
+	err = uc.storage.SetDeadHashes(ctx, deadHashes)
+	if err != nil {
+		return fmt.Errorf("storage: set dead hashes: %w", err)
 	}
 
 	return nil
@@ -35,13 +39,18 @@ func (uc *UseCase) UnMarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UU
 		return fmt.Errorf("storage: get pages: %w", err)
 	}
 
+	deadHashes := make([]entities.DeadHash, 0, len(pages))
+
 	for _, page := range pages {
-		err = uc.storage.DeleteDeadHash(ctx, entities.DeadHash{
-			FileHash: page.FileHash,
+		deadHashes = append(deadHashes, entities.DeadHash{
+			FileHash:  page.FileHash,
+			CreatedAt: time.Now().UTC(),
 		})
-		if err != nil {
-			return fmt.Errorf("storage: delete dead hash (%d): %w", page.PageNumber, err)
-		}
+	}
+
+	err = uc.storage.DeleteDeadHashes(ctx, deadHashes)
+	if err != nil {
+		return fmt.Errorf("storage: delete dead hashes: %w", err)
 	}
 
 	return nil
@@ -53,29 +62,43 @@ func (uc *UseCase) RemoveBookPagesWithDeadHash(ctx context.Context, bookID uuid.
 		return fmt.Errorf("storage: get pages: %w", err)
 	}
 
-	bookIDMap := make(map[uuid.UUID]struct{})
+	md5Sums := make([]string, len(masterPages))
+	masterPageHashes := make(map[entities.FileHash]struct{}, len(masterPages))
+	deadHashes := make([]entities.DeadHash, 0, len(masterPages))
 
-	for _, masterPage := range masterPages {
-		err = uc.storage.SetDeadHash(ctx, entities.DeadHash{
-			FileHash:  masterPage.FileHash,
+	for _, page := range masterPages {
+		masterPageHashes[page.FileHash] = struct{}{}
+
+		md5Sums = append(md5Sums, page.Md5Sum)
+		deadHashes = append(deadHashes, entities.DeadHash{
+			FileHash:  page.FileHash,
 			CreatedAt: time.Now().UTC(),
 		})
-		if err != nil {
-			return fmt.Errorf("storage: set dead hash (%d): %w", masterPage.PageNumber, err)
+	}
+
+	err = uc.storage.SetDeadHashes(ctx, deadHashes)
+	if err != nil {
+		return fmt.Errorf("storage: set dead hashes: %w", err)
+	}
+
+	pages, err := uc.storage.BookPagesWithHashByMD5Sums(ctx, md5Sums)
+	if err != nil {
+		return fmt.Errorf("storage: get pages by md5: %w", err)
+	}
+
+	bookIDMap := make(map[uuid.UUID]struct{})
+
+	for _, page := range pages {
+		// Отсекаем не совпадения из-за неполного ограничения в БД
+		if _, ok := masterPageHashes[page.FileHash]; !ok {
+			continue
 		}
 
-		pages, err := uc.storage.BookPagesWithHashByHash(ctx, masterPage.FileHash)
+		bookIDMap[page.BookID] = struct{}{}
+
+		err = uc.storage.MarkPageAsDeleted(ctx, page.BookID, page.PageNumber)
 		if err != nil {
-			return fmt.Errorf("storage: get pages by hash (%d): %w", masterPage.PageNumber, err)
-		}
-
-		for _, page := range pages {
-			bookIDMap[page.BookID] = struct{}{}
-
-			err = uc.storage.MarkPageAsDeleted(ctx, page.BookID, page.PageNumber)
-			if err != nil {
-				return fmt.Errorf("storage: mark page (%s,%d) as deleted: %w", page.BookID.String(), page.PageNumber, err)
-			}
+			return fmt.Errorf("storage: mark page (%s,%d) as deleted: %w", page.BookID.String(), page.PageNumber, err)
 		}
 	}
 

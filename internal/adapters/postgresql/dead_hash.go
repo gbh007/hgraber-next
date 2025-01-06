@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/jackc/pgx/v5"
 
 	"hgnext/internal/entities"
 )
@@ -19,6 +20,39 @@ func (d *Database) SetDeadHash(ctx context.Context, hash entities.DeadHash) erro
 			"created_at": hash.CreatedAt,
 		}).
 		Suffix(`ON CONFLICT DO NOTHING`)
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	_, err = d.pool.Exec(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("exec query: %w", err)
+	}
+
+	return nil
+}
+func (d *Database) SetDeadHashes(ctx context.Context, hashes []entities.DeadHash) error {
+	builder := squirrel.Insert("dead_hashes").
+		PlaceholderFormat(squirrel.Dollar).
+		Columns(
+			"md5_sum",
+			"sha256_sum",
+			"size",
+			"created_at",
+		).
+		Suffix(`ON CONFLICT DO NOTHING`)
+
+	for _, hash := range hashes {
+		builder = builder.Values(hash.Md5Sum,
+			hash.Sha256Sum,
+			hash.Size,
+			hash.CreatedAt,
+		)
+	}
 
 	query, args, err := builder.ToSql()
 	if err != nil {
@@ -102,6 +136,44 @@ func (d *Database) DeleteDeadHash(ctx context.Context, hash entities.DeadHash) e
 	_, err = d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
+	}
+
+	return nil
+}
+
+func (d *Database) DeleteDeadHashes(ctx context.Context, hashes []entities.DeadHash) error {
+	batch := &pgx.Batch{}
+
+	resultCount := 0
+
+	for _, hash := range hashes {
+		builder := squirrel.Delete("dead_hashes").
+			PlaceholderFormat(squirrel.Dollar).
+			Where(squirrel.Eq{
+				"md5_sum":    hash.Md5Sum,
+				"sha256_sum": hash.Sha256Sum,
+				"size":       hash.Size,
+			})
+
+		query, args, err := builder.ToSql()
+		if err != nil {
+			return fmt.Errorf("build query: %w", err)
+		}
+
+		d.squirrelDebugLog(ctx, query, args)
+		batch.Queue(query, args...)
+
+		resultCount++
+	}
+
+	batchResult := d.pool.SendBatch(ctx, batch)
+	defer batchResult.Close()
+
+	for range resultCount {
+		_, err := batchResult.Exec()
+		if err != nil {
+			return fmt.Errorf("exec query: %w", err)
+		}
 	}
 
 	return nil
