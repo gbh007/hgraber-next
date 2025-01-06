@@ -1666,6 +1666,58 @@ type APIDeduplicateDeadHashByPageDeletePostUnauthorized ErrorResponse
 func (*APIDeduplicateDeadHashByPageDeletePostUnauthorized) aPIDeduplicateDeadHashByPageDeletePostRes() {
 }
 
+type APIDeduplicateDeleteAllPagesByBookPostBadRequest ErrorResponse
+
+func (*APIDeduplicateDeleteAllPagesByBookPostBadRequest) aPIDeduplicateDeleteAllPagesByBookPostRes() {
+}
+
+type APIDeduplicateDeleteAllPagesByBookPostForbidden ErrorResponse
+
+func (*APIDeduplicateDeleteAllPagesByBookPostForbidden) aPIDeduplicateDeleteAllPagesByBookPostRes() {}
+
+type APIDeduplicateDeleteAllPagesByBookPostInternalServerError ErrorResponse
+
+func (*APIDeduplicateDeleteAllPagesByBookPostInternalServerError) aPIDeduplicateDeleteAllPagesByBookPostRes() {
+}
+
+// APIDeduplicateDeleteAllPagesByBookPostNoContent is response for APIDeduplicateDeleteAllPagesByBookPost operation.
+type APIDeduplicateDeleteAllPagesByBookPostNoContent struct{}
+
+func (*APIDeduplicateDeleteAllPagesByBookPostNoContent) aPIDeduplicateDeleteAllPagesByBookPostRes() {}
+
+type APIDeduplicateDeleteAllPagesByBookPostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Пометить пустые книги которые появились после
+	// операции как удаленные.
+	MarkAsDeletedEmptyBook OptBool `json:"mark_as_deleted_empty_book"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateDeleteAllPagesByBookPostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetMarkAsDeletedEmptyBook returns the value of MarkAsDeletedEmptyBook.
+func (s *APIDeduplicateDeleteAllPagesByBookPostReq) GetMarkAsDeletedEmptyBook() OptBool {
+	return s.MarkAsDeletedEmptyBook
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateDeleteAllPagesByBookPostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetMarkAsDeletedEmptyBook sets the value of MarkAsDeletedEmptyBook.
+func (s *APIDeduplicateDeleteAllPagesByBookPostReq) SetMarkAsDeletedEmptyBook(val OptBool) {
+	s.MarkAsDeletedEmptyBook = val
+}
+
+type APIDeduplicateDeleteAllPagesByBookPostUnauthorized ErrorResponse
+
+func (*APIDeduplicateDeleteAllPagesByBookPostUnauthorized) aPIDeduplicateDeleteAllPagesByBookPostRes() {
+}
+
 type APIDeduplicateDeleteAllPagesByHashPostBadRequest ErrorResponse
 
 func (*APIDeduplicateDeleteAllPagesByHashPostBadRequest) aPIDeduplicateDeleteAllPagesByHashPostRes() {

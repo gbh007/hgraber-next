@@ -2389,6 +2389,56 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/deduplicate/delete-all-pages-by-book:
+    post:
+      description: Удаляет все страницы из книги и их дубликаты в системе
+      summary: Удаляет все страницы из книги и их дубликаты в системе
+      tags:
+        - deduplicate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги
+                mark_as_deleted_empty_book:
+                  type: boolean
+                  description: Пометить пустые книги которые появились после операции как удаленные
+              required:
+                - book_id
+      responses:
+        204:
+          description: Успешное выполнение
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/agent/task/export:
     post:
       description: Экспорт книг в другую систему

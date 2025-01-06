@@ -15,9 +15,10 @@ type storage interface {
 	ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UUID) error
 
 	GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
-	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (entities.Page, error)
-
 	BookIDsByMD5(ctx context.Context, md5sums []string) ([]uuid.UUID, error)
+
+	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (entities.Page, error)
+	BookPagesCount(ctx context.Context, bookID uuid.UUID) (int, error)
 	BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageNumber int) (entities.PageWithHash, error)
 	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
 	BookPagesWithHashByHash(ctx context.Context, hash entities.FileHash) ([]entities.PageWithHash, error)
@@ -29,6 +30,7 @@ type storage interface {
 
 	DeletedPagesHashes(ctx context.Context) ([]entities.FileHash, error)
 	MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, pageNumber int) error
+	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
 
 	BookAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
 	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)

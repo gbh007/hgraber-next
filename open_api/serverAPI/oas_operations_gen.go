@@ -26,6 +26,7 @@ const (
 	APIDeduplicateDeadHashByBookPagesDeletePostOperation OperationName = "APIDeduplicateDeadHashByBookPagesDeletePost"
 	APIDeduplicateDeadHashByPageCreatePostOperation      OperationName = "APIDeduplicateDeadHashByPageCreatePost"
 	APIDeduplicateDeadHashByPageDeletePostOperation      OperationName = "APIDeduplicateDeadHashByPageDeletePost"
+	APIDeduplicateDeleteAllPagesByBookPostOperation      OperationName = "APIDeduplicateDeleteAllPagesByBookPost"
 	APIDeduplicateDeleteAllPagesByHashPostOperation      OperationName = "APIDeduplicateDeleteAllPagesByHashPost"
 	APIDeduplicateUniquePagesPostOperation               OperationName = "APIDeduplicateUniquePagesPost"
 	APIFileIDGetOperation                                OperationName = "APIFileIDGet"

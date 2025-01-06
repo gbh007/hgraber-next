@@ -82,6 +82,7 @@ type deduplicateUseCases interface {
 
 	MarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID) error
 	UnMarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID) error
+	RemoveBookPagesWithDeadHash(ctx context.Context, bookID uuid.UUID, deleteEmptyBook bool) error
 }
 
 type taskUseCases interface {

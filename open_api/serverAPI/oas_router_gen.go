@@ -647,24 +647,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
-					case 'l': // Prefix: "lete-all-pages-by-hash"
+					case 'l': // Prefix: "lete-all-pages-by-"
 						origElem := elem
-						if l := len("lete-all-pages-by-hash"); len(elem) >= l && elem[0:l] == "lete-all-pages-by-hash" {
+						if l := len("lete-all-pages-by-"); len(elem) >= l && elem[0:l] == "lete-all-pages-by-" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIDeduplicateDeleteAllPagesByHashPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
+							break
+						}
+						switch elem[0] {
+						case 'b': // Prefix: "book"
+							origElem := elem
+							if l := len("book"); len(elem) >= l && elem[0:l] == "book" {
+								elem = elem[l:]
+							} else {
+								break
 							}
 
-							return
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIDeduplicateDeleteAllPagesByBookPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'h': // Prefix: "hash"
+							origElem := elem
+							if l := len("hash"); len(elem) >= l && elem[0:l] == "hash" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIDeduplicateDeleteAllPagesByHashPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -1986,28 +2022,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
-					case 'l': // Prefix: "lete-all-pages-by-hash"
+					case 'l': // Prefix: "lete-all-pages-by-"
 						origElem := elem
-						if l := len("lete-all-pages-by-hash"); len(elem) >= l && elem[0:l] == "lete-all-pages-by-hash" {
+						if l := len("lete-all-pages-by-"); len(elem) >= l && elem[0:l] == "lete-all-pages-by-" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIDeduplicateDeleteAllPagesByHashPostOperation
-								r.summary = "Удаляет страницы из книг"
-								r.operationID = ""
-								r.pathPattern = "/api/deduplicate/delete-all-pages-by-hash"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
+							break
+						}
+						switch elem[0] {
+						case 'b': // Prefix: "book"
+							origElem := elem
+							if l := len("book"); len(elem) >= l && elem[0:l] == "book" {
+								elem = elem[l:]
+							} else {
+								break
 							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIDeduplicateDeleteAllPagesByBookPostOperation
+									r.summary = "Удаляет все страницы из книги и их дубликаты в системе"
+									r.operationID = ""
+									r.pathPattern = "/api/deduplicate/delete-all-pages-by-book"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'h': // Prefix: "hash"
+							origElem := elem
+							if l := len("hash"); len(elem) >= l && elem[0:l] == "hash" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIDeduplicateDeleteAllPagesByHashPostOperation
+									r.summary = "Удаляет страницы из книг"
+									r.operationID = ""
+									r.pathPattern = "/api/deduplicate/delete-all-pages-by-hash"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem

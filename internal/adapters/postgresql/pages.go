@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
 	"hgnext/internal/adapters/postgresql/internal/model"
@@ -178,4 +179,30 @@ func (d *Database) PagesByURL(ctx context.Context, u url.URL) ([]entities.Page, 
 	}
 
 	return out, nil
+}
+
+func (d *Database) BookPagesCount(ctx context.Context, bookID uuid.UUID) (int, error) {
+	builder := squirrel.Select("COUNT(*)").
+		PlaceholderFormat(squirrel.Dollar).
+		From("pages").
+		Where(squirrel.Eq{
+			"book_id": bookID,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return 0, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	count := sql.NullInt64{}
+	row := d.pool.QueryRow(ctx, query, args...)
+
+	err = row.Scan(&count)
+	if err != nil {
+		return 0, fmt.Errorf("get count :%w", err)
+	}
+
+	return int(count.Int64), nil
 }
