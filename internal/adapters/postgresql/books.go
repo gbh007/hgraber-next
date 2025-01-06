@@ -72,24 +72,45 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			builder = builder.Offset(uint64(filter.Offset))
 		}
 
-		orderBy := "create_at"
+		orderBySuffix := ""
+
+		if filter.Desc {
+			orderBySuffix = " DESC"
+		} else {
+			orderBySuffix = " ASC"
+		}
+
+		orderBy := []string{
+			"create_at" + orderBySuffix,
+			"id" + orderBySuffix,
+		}
 
 		switch filter.OrderBy {
 		case entities.BookFilterOrderByCreated:
-			orderBy = "create_at"
+			orderBy = []string{
+				"create_at" + orderBySuffix,
+				"id" + orderBySuffix,
+			}
+
 		case entities.BookFilterOrderByName:
-			orderBy = "name"
+			orderBy = []string{
+				"name" + orderBySuffix,
+				"id" + orderBySuffix,
+			}
+
 		case entities.BookFilterOrderByID:
-			orderBy = "id"
+			orderBy = []string{
+				"id" + orderBySuffix,
+			}
+
 		case entities.BookFilterOrderByPageCount:
-			orderBy = "page_count"
+			orderBy = []string{
+				"page_count" + orderBySuffix,
+				"id" + orderBySuffix,
+			}
 		}
 
-		if filter.Desc {
-			builder = builder.OrderBy(orderBy + " DESC")
-		} else {
-			builder = builder.OrderBy(orderBy + " ASC")
-		}
+		builder = builder.OrderBy(orderBy...)
 	}
 
 	if !filter.From.IsZero() {
