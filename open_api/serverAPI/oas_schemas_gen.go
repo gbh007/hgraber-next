@@ -1482,6 +1482,88 @@ type APIDeduplicateComparePostUnauthorized ErrorResponse
 
 func (*APIDeduplicateComparePostUnauthorized) aPIDeduplicateComparePostRes() {}
 
+type APIDeduplicateDeadHashByBookPagesCreatePostBadRequest ErrorResponse
+
+func (*APIDeduplicateDeadHashByBookPagesCreatePostBadRequest) aPIDeduplicateDeadHashByBookPagesCreatePostRes() {
+}
+
+type APIDeduplicateDeadHashByBookPagesCreatePostForbidden ErrorResponse
+
+func (*APIDeduplicateDeadHashByBookPagesCreatePostForbidden) aPIDeduplicateDeadHashByBookPagesCreatePostRes() {
+}
+
+type APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError ErrorResponse
+
+func (*APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError) aPIDeduplicateDeadHashByBookPagesCreatePostRes() {
+}
+
+// APIDeduplicateDeadHashByBookPagesCreatePostNoContent is response for APIDeduplicateDeadHashByBookPagesCreatePost operation.
+type APIDeduplicateDeadHashByBookPagesCreatePostNoContent struct{}
+
+func (*APIDeduplicateDeadHashByBookPagesCreatePostNoContent) aPIDeduplicateDeadHashByBookPagesCreatePostRes() {
+}
+
+type APIDeduplicateDeadHashByBookPagesCreatePostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateDeadHashByBookPagesCreatePostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateDeadHashByBookPagesCreatePostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+type APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized ErrorResponse
+
+func (*APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized) aPIDeduplicateDeadHashByBookPagesCreatePostRes() {
+}
+
+type APIDeduplicateDeadHashByBookPagesDeletePostBadRequest ErrorResponse
+
+func (*APIDeduplicateDeadHashByBookPagesDeletePostBadRequest) aPIDeduplicateDeadHashByBookPagesDeletePostRes() {
+}
+
+type APIDeduplicateDeadHashByBookPagesDeletePostForbidden ErrorResponse
+
+func (*APIDeduplicateDeadHashByBookPagesDeletePostForbidden) aPIDeduplicateDeadHashByBookPagesDeletePostRes() {
+}
+
+type APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError ErrorResponse
+
+func (*APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError) aPIDeduplicateDeadHashByBookPagesDeletePostRes() {
+}
+
+// APIDeduplicateDeadHashByBookPagesDeletePostNoContent is response for APIDeduplicateDeadHashByBookPagesDeletePost operation.
+type APIDeduplicateDeadHashByBookPagesDeletePostNoContent struct{}
+
+func (*APIDeduplicateDeadHashByBookPagesDeletePostNoContent) aPIDeduplicateDeadHashByBookPagesDeletePostRes() {
+}
+
+type APIDeduplicateDeadHashByBookPagesDeletePostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateDeadHashByBookPagesDeletePostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateDeadHashByBookPagesDeletePostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+type APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized ErrorResponse
+
+func (*APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized) aPIDeduplicateDeadHashByBookPagesDeletePostRes() {
+}
+
 type APIDeduplicateDeadHashByPageCreatePostBadRequest ErrorResponse
 
 func (*APIDeduplicateDeadHashByPageCreatePostBadRequest) aPIDeduplicateDeadHashByPageCreatePostRes() {

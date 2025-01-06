@@ -161,6 +161,24 @@ func (UnimplementedHandler) APIDeduplicateComparePost(ctx context.Context, req *
 	return r, ht.ErrNotImplemented
 }
 
+// APIDeduplicateDeadHashByBookPagesCreatePost implements POST /api/deduplicate/dead-hash-by-book-pages/create operation.
+//
+// Создает запись о мертвом хеше по страницам книги.
+//
+// POST /api/deduplicate/dead-hash-by-book-pages/create
+func (UnimplementedHandler) APIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Context, req *APIDeduplicateDeadHashByBookPagesCreatePostReq) (r APIDeduplicateDeadHashByBookPagesCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIDeduplicateDeadHashByBookPagesDeletePost implements POST /api/deduplicate/dead-hash-by-book-pages/delete operation.
+//
+// Удаляет запись о мертвом хеше по страницам книги.
+//
+// POST /api/deduplicate/dead-hash-by-book-pages/delete
+func (UnimplementedHandler) APIDeduplicateDeadHashByBookPagesDeletePost(ctx context.Context, req *APIDeduplicateDeadHashByBookPagesDeletePostReq) (r APIDeduplicateDeadHashByBookPagesDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIDeduplicateDeadHashByPageCreatePost implements POST /api/deduplicate/dead-hash-by-page/create operation.
 //
 // Создает запись о мертвом хеше по странице.

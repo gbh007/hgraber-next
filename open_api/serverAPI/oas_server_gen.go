@@ -108,6 +108,18 @@ type Handler interface {
 	//
 	// POST /api/deduplicate/compare
 	APIDeduplicateComparePost(ctx context.Context, req *APIDeduplicateComparePostReq) (APIDeduplicateComparePostRes, error)
+	// APIDeduplicateDeadHashByBookPagesCreatePost implements POST /api/deduplicate/dead-hash-by-book-pages/create operation.
+	//
+	// Создает запись о мертвом хеше по страницам книги.
+	//
+	// POST /api/deduplicate/dead-hash-by-book-pages/create
+	APIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Context, req *APIDeduplicateDeadHashByBookPagesCreatePostReq) (APIDeduplicateDeadHashByBookPagesCreatePostRes, error)
+	// APIDeduplicateDeadHashByBookPagesDeletePost implements POST /api/deduplicate/dead-hash-by-book-pages/delete operation.
+	//
+	// Удаляет запись о мертвом хеше по страницам книги.
+	//
+	// POST /api/deduplicate/dead-hash-by-book-pages/delete
+	APIDeduplicateDeadHashByBookPagesDeletePost(ctx context.Context, req *APIDeduplicateDeadHashByBookPagesDeletePostReq) (APIDeduplicateDeadHashByBookPagesDeletePostRes, error)
 	// APIDeduplicateDeadHashByPageCreatePost implements POST /api/deduplicate/dead-hash-by-page/create operation.
 	//
 	// Создает запись о мертвом хеше по странице.
