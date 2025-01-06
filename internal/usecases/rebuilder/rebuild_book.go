@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"maps"
 	"slices"
 	"time"
 
@@ -19,6 +20,12 @@ var (
 	errMissingSourcePage   = errors.New("missing source page")
 )
 
+type rebuildPageResources struct {
+	SourcePagesMap     map[int]entities.PageWithHash
+	ForbiddenHashes    map[entities.FileHash]struct{}
+	UnusedSourceHashes map[entities.FileHash]struct{}
+}
+
 func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBookRequest) (_ uuid.UUID, returnErr error) {
 	if len(request.SelectedPages) == 0 {
 		return uuid.Nil, errEmptyPagesOnRebuild
@@ -31,7 +38,7 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 		return uuid.Nil, fmt.Errorf("rebuild: get target: %w", err)
 	}
 
-	sourcePagesMap, forbiddenHashes, err := uc.rebuildBookPrepareResources(
+	resources, err := uc.rebuildBookPrepareResources(
 		ctx,
 		request.Flags,
 		request.OldBook.Book.ID,
@@ -41,13 +48,12 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 		return uuid.Nil, fmt.Errorf("rebuild: prepare resources: %w", err)
 	}
 
-	pagesRemap, newPages, err := uc.rebuildBookPages(
+	pagesRemap, newPages, unusedSourceHashes, err := uc.rebuildBookPages(
 		ctx,
 		request.Flags,
 		slices.Clone(request.SelectedPages),
 		&bookToMerge,
-		sourcePagesMap,
-		forbiddenHashes,
+		resources,
 	)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("rebuild: pages: %w", err)
@@ -83,6 +89,11 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 	)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("rebuild: save: %w", err)
+	}
+
+	err = uc.rebuildBookCleanSource(ctx, request.Flags, unusedSourceHashes)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("rebuild: clean source: %w", err)
 	}
 
 	return bookToMerge.ID, nil
@@ -136,17 +147,15 @@ func (uc *UseCase) rebuildBookGetTarget(ctx context.Context, request entities.Re
 		return entities.Book{}, nil, nil, fmt.Errorf("storage: get attributes to merge: %w", err)
 	}
 
-	if request.Flags.OnlyUniquePages {
-		pages, err := uc.storage.BookPagesWithHash(ctx, request.MergeWithBook)
-		if err != nil {
-			return entities.Book{}, nil, nil, fmt.Errorf("storage: get page to unique: %w", err)
-		}
+	pages, err := uc.storage.BookPagesWithHash(ctx, request.MergeWithBook)
+	if err != nil {
+		return entities.Book{}, nil, nil, fmt.Errorf("storage: get page to unique: %w", err)
+	}
 
-		targetPageHashes = make(map[entities.FileHash]struct{}, len(pages)+len(request.SelectedPages))
+	targetPageHashes = make(map[entities.FileHash]struct{}, len(pages)+len(request.SelectedPages))
 
-		for _, page := range pages {
-			targetPageHashes[page.FileHash] = struct{}{}
-		}
+	for _, page := range pages {
+		targetPageHashes[page.FileHash] = struct{}{}
 	}
 
 	return bookToMerge, attributeToMerge, targetPageHashes, nil
@@ -158,23 +167,27 @@ func (uc *UseCase) rebuildBookPrepareResources(
 	oldBookID uuid.UUID,
 	targetPageHashes map[entities.FileHash]struct{},
 ) (
-	map[int]entities.PageWithHash,
-	map[entities.FileHash]struct{},
+	rebuildPageResources,
 	error,
 ) {
 	sourcePages, err := uc.storage.BookPagesWithHash(ctx, oldBookID)
 	if err != nil {
-		return nil, nil, fmt.Errorf("storage: get source pages: %w", err)
+		return rebuildPageResources{}, fmt.Errorf("storage: get source pages: %w", err)
 	}
 
 	sourcePagesMap := make(map[int]entities.PageWithHash, len(sourcePages))
 	sourcePagesHashes := make(map[entities.FileHash]struct{}, len(sourcePages))
 	sourcePagesMD5Sums := make([]string, 0, len(sourcePages))
+	unusedSourceHashes := make(map[entities.FileHash]struct{}, len(sourcePages))
 
 	for _, page := range sourcePages {
 		sourcePagesMap[page.PageNumber] = page
 		sourcePagesMD5Sums = append(sourcePagesMD5Sums, page.Md5Sum)
 		sourcePagesHashes[page.FileHash] = struct{}{}
+
+		if flags.MarkUnusedPagesAsDeadHash || flags.MarkUnusedPagesAsDeleted {
+			unusedSourceHashes[page.FileHash] = struct{}{}
+		}
 	}
 
 	forbiddenHashes := make(map[entities.FileHash]struct{}, len(targetPageHashes)+len(sourcePagesHashes))
@@ -182,7 +195,7 @@ func (uc *UseCase) rebuildBookPrepareResources(
 	if flags.ExcludeDeadHashPages {
 		deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, sourcePagesMD5Sums)
 		if err != nil {
-			return nil, nil, fmt.Errorf("storage: get dead hashes: %w", err)
+			return rebuildPageResources{}, fmt.Errorf("storage: get dead hashes: %w", err)
 		}
 
 		for _, hash := range deadHashes {
@@ -193,7 +206,7 @@ func (uc *UseCase) rebuildBookPrepareResources(
 	if flags.Only1CopyPages {
 		pages, err := uc.storage.BookPagesWithHashByMD5Sums(ctx, sourcePagesMD5Sums)
 		if err != nil {
-			return nil, nil, fmt.Errorf("storage: get pages by source hashes: %w", err)
+			return rebuildPageResources{}, fmt.Errorf("storage: get pages by source hashes: %w", err)
 		}
 
 		for _, page := range pages {
@@ -217,7 +230,17 @@ func (uc *UseCase) rebuildBookPrepareResources(
 		}
 	}
 
-	return sourcePagesMap, forbiddenHashes, nil
+	if flags.MarkUnusedPagesAsDeadHash || flags.MarkUnusedPagesAsDeleted {
+		for hash := range targetPageHashes {
+			delete(unusedSourceHashes, hash)
+		}
+	}
+
+	return rebuildPageResources{
+		SourcePagesMap:     sourcePagesMap,
+		ForbiddenHashes:    forbiddenHashes,
+		UnusedSourceHashes: unusedSourceHashes,
+	}, nil
 }
 
 func (uc *UseCase) rebuildBookPages(
@@ -225,9 +248,8 @@ func (uc *UseCase) rebuildBookPages(
 	flags entities.RebuildBookRequestFlags,
 	selectedPages []int,
 	bookToMerge *entities.Book,
-	sourcePagesMap map[int]entities.PageWithHash,
-	forbiddenHashes map[entities.FileHash]struct{},
-) (map[int]int, []entities.Page, error) {
+	resources rebuildPageResources,
+) (map[int]int, []entities.Page, map[entities.FileHash]struct{}, error) {
 	selectedPages = slices.Compact(selectedPages)
 	slices.Sort(selectedPages)
 
@@ -236,15 +258,20 @@ func (uc *UseCase) rebuildBookPages(
 	pagesRemap := make(map[int]int, len(selectedPages))
 	newPages := make([]entities.Page, 0, len(selectedPages))
 
+	unusedSourceHashes := maps.Clone(resources.UnusedSourceHashes)
+	if unusedSourceHashes == nil {
+		unusedSourceHashes = make(map[entities.FileHash]struct{})
+	}
+
 	newPageNumberCounter := 0
 
 	for _, oldPageNumber := range selectedPages {
-		sourcePage, ok := sourcePagesMap[oldPageNumber]
+		sourcePage, ok := resources.SourcePagesMap[oldPageNumber]
 		if !ok {
-			return nil, nil, fmt.Errorf("%w (%d)", errMissingSourcePage, oldPageNumber)
+			return nil, nil, nil, fmt.Errorf("%w (%d)", errMissingSourcePage, oldPageNumber)
 		}
 
-		if _, ok := forbiddenHashes[sourcePage.FileHash]; ok {
+		if _, ok := resources.ForbiddenHashes[sourcePage.FileHash]; ok {
 			continue
 		}
 
@@ -265,11 +292,12 @@ func (uc *UseCase) rebuildBookPages(
 		sourcePage.CreateAt = time.Now()
 
 		newPages = append(newPages, sourcePage.Page)
+		delete(unusedSourceHashes, sourcePage.FileHash)
 	}
 
 	bookToMerge.PageCount += newPageNumberCounter
 
-	return pagesRemap, newPages, nil
+	return pagesRemap, newPages, unusedSourceHashes, nil
 }
 
 func (uc *UseCase) rebuildBookSave(
@@ -330,6 +358,73 @@ func (uc *UseCase) rebuildBookSave(
 		err = uc.storage.SetLabels(ctx, newLabels)
 		if err != nil {
 			return fmt.Errorf("storage: set labels: %w", err)
+		}
+	}
+
+	return nil
+}
+
+func (uc *UseCase) rebuildBookCleanSource(
+	ctx context.Context,
+	flags entities.RebuildBookRequestFlags,
+	unusedSourceHashes map[entities.FileHash]struct{},
+) error {
+	if flags.MarkUnusedPagesAsDeadHash && len(unusedSourceHashes) > 0 {
+		for hash := range unusedSourceHashes {
+			err := uc.storage.SetDeadHash(ctx, entities.DeadHash{
+				FileHash:  hash,
+				CreatedAt: time.Now().UTC(),
+			})
+			if err != nil {
+				return fmt.Errorf("storage: set dead hash: %w", err)
+			}
+		}
+	}
+
+	if flags.MarkUnusedPagesAsDeleted && len(unusedSourceHashes) > 0 {
+		md5Sums := make([]string, len(unusedSourceHashes))
+
+		for hash := range unusedSourceHashes {
+			md5Sums = append(md5Sums, hash.Md5Sum)
+		}
+
+		pages, err := uc.storage.BookPagesWithHashByMD5Sums(ctx, md5Sums)
+		if err != nil {
+			return fmt.Errorf("storage: get pages by md5: %w", err)
+		}
+
+		bookIDs := make(map[uuid.UUID]struct{})
+
+		for _, page := range pages {
+			// Отсекаем не совпадения из-за неполного ограничения в БД
+			if _, ok := unusedSourceHashes[page.FileHash]; !ok {
+				continue
+			}
+
+			bookIDs[page.BookID] = struct{}{}
+
+			err = uc.storage.MarkPageAsDeleted(ctx, page.BookID, page.PageNumber)
+			if err != nil {
+				return fmt.Errorf("storage: mark page (%s,%d) as deleted: %w", page.BookID.String(), page.PageNumber, err)
+			}
+		}
+
+		if flags.MarkEmptyBookAsDeletedAfterRemovePages {
+			for bookID := range bookIDs {
+				count, err := uc.storage.BookPagesCount(ctx, bookID)
+				if err != nil {
+					return fmt.Errorf("storage: get book page count (%s): %w", bookID.String(), err)
+				}
+
+				if count != 0 {
+					continue
+				}
+
+				err = uc.storage.MarkBookAsDeleted(ctx, bookID)
+				if err != nil {
+					return fmt.Errorf("storage: mark book as deleted (%s): %w", bookID.String(), err)
+				}
+			}
 		}
 	}
 

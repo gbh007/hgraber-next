@@ -11,7 +11,10 @@ type RebuildBookRequest struct {
 }
 
 type RebuildBookRequestFlags struct {
-	OnlyUniquePages      bool
-	ExcludeDeadHashPages bool
-	Only1CopyPages       bool
+	OnlyUniquePages                        bool
+	ExcludeDeadHashPages                   bool
+	Only1CopyPages                         bool
+	MarkUnusedPagesAsDeadHash              bool
+	MarkUnusedPagesAsDeleted               bool
+	MarkEmptyBookAsDeletedAfterRemovePages bool
 }

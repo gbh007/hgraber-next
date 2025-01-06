@@ -14,9 +14,12 @@ func (c *Controller) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIB
 		SelectedPages: req.SelectedPages,
 		MergeWithBook: req.MergeWithBook.Value,
 		Flags: entities.RebuildBookRequestFlags{
-			OnlyUniquePages:      req.Flags.Value.OnlyUnique.Value,
-			ExcludeDeadHashPages: req.Flags.Value.ExcludeDeadHashPages.Value,
-			Only1CopyPages:       req.Flags.Value.Only1Copy.Value,
+			OnlyUniquePages:                        req.Flags.Value.OnlyUnique.Value,
+			ExcludeDeadHashPages:                   req.Flags.Value.ExcludeDeadHashPages.Value,
+			Only1CopyPages:                         req.Flags.Value.Only1Copy.Value,
+			MarkUnusedPagesAsDeadHash:              req.Flags.Value.MarkUnusedPagesAsDeadHash.Value,
+			MarkUnusedPagesAsDeleted:               req.Flags.Value.MarkUnusedPagesAsDeleted.Value,
+			MarkEmptyBookAsDeletedAfterRemovePages: req.Flags.Value.MarkEmptyBookAsDeletedAfterRemovePages.Value,
 		},
 	})
 

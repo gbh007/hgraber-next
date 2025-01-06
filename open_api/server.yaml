@@ -1067,6 +1067,15 @@ paths:
                     only_1_copy:
                       type: boolean
                       description: Включать только уникальные страницы не содержащиеся в других книгах
+                    mark_unused_pages_as_dead_hash:
+                      type: boolean
+                      description: Отметить страницы что не вошли в ребилд как мертвый хеш
+                    mark_unused_pages_as_deleted:
+                      type: boolean
+                      description: Удалить страницы что не вошли в ребилд и их копии в системе
+                    mark_empty_book_as_deleted_after_remove_pages:
+                      type: boolean
+                      description: Отметить удаленным книги что остались без страниц после их удаления
               required:
                 - old_book
                 - selected_pages

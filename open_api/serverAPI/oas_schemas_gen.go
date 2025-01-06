@@ -1044,6 +1044,15 @@ type APIBookRebuildPostReqFlags struct {
 	// Включать только уникальные страницы не содержащиеся
 	// в других книгах.
 	Only1Copy OptBool `json:"only_1_copy"`
+	// Отметить страницы что не вошли в ребилд как мертвый
+	// хеш.
+	MarkUnusedPagesAsDeadHash OptBool `json:"mark_unused_pages_as_dead_hash"`
+	// Удалить страницы что не вошли в ребилд и их копии в
+	// системе.
+	MarkUnusedPagesAsDeleted OptBool `json:"mark_unused_pages_as_deleted"`
+	// Отметить удаленным книги что остались без страниц
+	// после их удаления.
+	MarkEmptyBookAsDeletedAfterRemovePages OptBool `json:"mark_empty_book_as_deleted_after_remove_pages"`
 }
 
 // GetOnlyUnique returns the value of OnlyUnique.
@@ -1061,6 +1070,21 @@ func (s *APIBookRebuildPostReqFlags) GetOnly1Copy() OptBool {
 	return s.Only1Copy
 }
 
+// GetMarkUnusedPagesAsDeadHash returns the value of MarkUnusedPagesAsDeadHash.
+func (s *APIBookRebuildPostReqFlags) GetMarkUnusedPagesAsDeadHash() OptBool {
+	return s.MarkUnusedPagesAsDeadHash
+}
+
+// GetMarkUnusedPagesAsDeleted returns the value of MarkUnusedPagesAsDeleted.
+func (s *APIBookRebuildPostReqFlags) GetMarkUnusedPagesAsDeleted() OptBool {
+	return s.MarkUnusedPagesAsDeleted
+}
+
+// GetMarkEmptyBookAsDeletedAfterRemovePages returns the value of MarkEmptyBookAsDeletedAfterRemovePages.
+func (s *APIBookRebuildPostReqFlags) GetMarkEmptyBookAsDeletedAfterRemovePages() OptBool {
+	return s.MarkEmptyBookAsDeletedAfterRemovePages
+}
+
 // SetOnlyUnique sets the value of OnlyUnique.
 func (s *APIBookRebuildPostReqFlags) SetOnlyUnique(val OptBool) {
 	s.OnlyUnique = val
@@ -1074,6 +1098,21 @@ func (s *APIBookRebuildPostReqFlags) SetExcludeDeadHashPages(val OptBool) {
 // SetOnly1Copy sets the value of Only1Copy.
 func (s *APIBookRebuildPostReqFlags) SetOnly1Copy(val OptBool) {
 	s.Only1Copy = val
+}
+
+// SetMarkUnusedPagesAsDeadHash sets the value of MarkUnusedPagesAsDeadHash.
+func (s *APIBookRebuildPostReqFlags) SetMarkUnusedPagesAsDeadHash(val OptBool) {
+	s.MarkUnusedPagesAsDeadHash = val
+}
+
+// SetMarkUnusedPagesAsDeleted sets the value of MarkUnusedPagesAsDeleted.
+func (s *APIBookRebuildPostReqFlags) SetMarkUnusedPagesAsDeleted(val OptBool) {
+	s.MarkUnusedPagesAsDeleted = val
+}
+
+// SetMarkEmptyBookAsDeletedAfterRemovePages sets the value of MarkEmptyBookAsDeletedAfterRemovePages.
+func (s *APIBookRebuildPostReqFlags) SetMarkEmptyBookAsDeletedAfterRemovePages(val OptBool) {
+	s.MarkEmptyBookAsDeletedAfterRemovePages = val
 }
 
 type APIBookRebuildPostUnauthorized ErrorResponse
