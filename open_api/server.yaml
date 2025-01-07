@@ -890,7 +890,80 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BookDetails"
+                type: object
+                description: Данные книги
+                properties:
+                  info:
+                    $ref: "#/components/schemas/BookSimple"
+                  page_loaded_percent:
+                    type: number
+                    description: Процент загруженных страниц
+                    maximum: 100
+                    minimum: 0
+                  attributes:
+                    type: array
+                    description: Данные атрибутов книги
+                    items:
+                      $ref: "#/components/schemas/BookAttribute"
+                  pages:
+                    type: array
+                    description: данные страниц книги
+                    items:
+                      $ref: "#/components/schemas/PageSimple"
+                  size:
+                    type: object
+                    description: Данные о размере книги
+                    properties:
+                      unique:
+                        type: integer
+                        format: int64
+                        description: Размер уникальных файлов книги
+                      unique_without_dead_hashes:
+                        type: integer
+                        format: int64
+                        description: Размер уникальных файлов книги без учета мертвых хешей
+                      shared:
+                        type: integer
+                        format: int64
+                        description: Размер файлов в книге что пересекаются с другими книгами
+                      dead_hashes:
+                        type: integer
+                        format: int64
+                        description: Размер мертвых хешей в книге
+                      total:
+                        type: integer
+                        format: int64
+                        description: Общий размер файлов книги
+                      unique_formatted:
+                        type: string
+                        description: Размер уникальных файлов книги в человекочитаемом виде
+                      unique_without_dead_hashes_formatted:
+                        type: string
+                        description: Размер уникальных файлов книги без учета мертвых хешей  в человекочитаемом виде
+                      shared_formatted:
+                        type: string
+                        description: Размер файлов в книге что пересекаются с другими книгами в человекочитаемом виде
+                      dead_hashes_formatted:
+                        type: string
+                        description: Размер мертвых хешей в книге  в человекочитаемом виде
+                      total_formatted:
+                        type: string
+                        description: Общий размер файлов книги в человекочитаемом виде
+                    required:
+                      - unique
+                      - unique_without_dead_hashes
+                      - shared
+                      - dead_hashes
+                      - total
+                      - unique_formatted
+                      - unique_without_dead_hashes_formatted
+                      - shared_formatted
+                      - dead_hashes_formatted
+                      - total_formatted
+                required:
+                  - info
+                  - page_loaded_percent
+
         400:
           description: Некорректный запрос данных
           content:
@@ -1206,7 +1279,24 @@ paths:
                     type: array
                     description: Список книг
                     items:
-                      $ref: "#/components/schemas/BookShortInfo"
+                      type: object
+                      description: Данные книги в упрощенном формате
+                      properties:
+                        info:
+                          $ref: "#/components/schemas/BookSimple"
+                        page_loaded_percent:
+                          type: number
+                          description: Процент загруженных страниц
+                          maximum: 100
+                          minimum: 0
+                        tags:
+                          type: array
+                          description: Список тегов (одноименный атрибут) книги
+                          items:
+                            type: string
+                      required:
+                        - info
+                        - page_loaded_percent
                   count:
                     type: integer
                     description: Общее количество книг по фильтру
@@ -2512,7 +2602,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-
   /api/deduplicate/delete-book-dead-hashed-pages:
     post:
       description: Удаляет из книги страницы с мертвыми хешами
@@ -2559,7 +2648,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-
 
   /api/agent/task/export:
     post:
@@ -3034,52 +3122,6 @@ components:
         - files_size
         - files_size_formatted
 
-    BookShortInfo:
-      type: object
-      description: Данные книги в упрощенном формате
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID книги
-        created:
-          type: string
-          format: date-time
-          description: Время создания книги в системе
-        preview_url:
-          type: string
-          format: uri
-          description: Ссылка для предпросмотра изображения книги
-        name:
-          type: string
-          description: Название книги
-        page_count:
-          type: integer
-          description: Количество страниц
-        page_loaded_percent:
-          type: number
-          description: Процент загруженных страниц
-          maximum: 100
-          minimum: 0
-        tags:
-          type: array
-          description: Список тегов (одноименный атрибут) книги
-          items:
-            type: string
-        has_more_tags:
-          type: boolean
-          description: Есть теги которые не были включены в список
-        flags:
-          $ref: "#/components/schemas/BookFlags"
-      required:
-        - id
-        - created
-        - name
-        - page_count
-        - page_loaded_percent
-        - has_more_tags
-        - flags
-
     BookFlags:
       type: object
       description: Флаги книги
@@ -3114,7 +3156,7 @@ components:
           type: string
           format: uuid
           description: ID книги
-        create_at:
+        created_at:
           type: string
           format: date-time
           description: Время создания книги в системе
@@ -3136,7 +3178,7 @@ components:
           $ref: "#/components/schemas/BookFlags"
       required:
         - id
-        - create_at
+        - created_at
         - name
         - page_count
         - flags
@@ -3157,107 +3199,6 @@ components:
           description: Есть ли у страницы мертвый хеш (важно, если данных нет, то этот факт не известен)
       required:
         - page_number
-
-    BookDetails:
-      type: object
-      description: Данные книги
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID книги
-        created:
-          type: string
-          format: date-time
-          description: Время создания книги в системе
-        preview_url:
-          type: string
-          format: uri
-          description: Ссылка для предпросмотра изображения книги
-        flags:
-          $ref: "#/components/schemas/BookFlags"
-        name:
-          type: string
-          description: Название книги
-        page_count:
-          type: integer
-          description: Количество страниц
-        page_loaded_percent:
-          type: number
-          description: Процент загруженных страниц
-          maximum: 100
-          minimum: 0
-        origin_url:
-          type: string
-          format: uri
-          description: Оригинальная ссылка на книгу (во внешней системе)
-        attributes:
-          type: array
-          description: Данные атрибутов книги
-          items:
-            $ref: "#/components/schemas/BookAttribute"
-        pages:
-          type: array
-          description: данные страниц книги
-          items:
-            $ref: "#/components/schemas/PageSimple"
-        size:
-          type: object
-          description: Данные о размере книги
-          properties:
-            unique:
-              type: integer
-              format: int64
-              description: Размер уникальных файлов книги
-            unique_without_dead_hashes:
-              type: integer
-              format: int64
-              description: Размер уникальных файлов книги без учета мертвых хешей
-            shared:
-              type: integer
-              format: int64
-              description: Размер файлов в книге что пересекаются с другими книгами
-            dead_hashes:
-              type: integer
-              format: int64
-              description: Размер мертвых хешей в книге
-            total:
-              type: integer
-              format: int64
-              description: Общий размер файлов книги
-            unique_formatted:
-              type: string
-              description: Размер уникальных файлов книги в человекочитаемом виде
-            unique_without_dead_hashes_formatted:
-              type: string
-              description: Размер уникальных файлов книги без учета мертвых хешей  в человекочитаемом виде
-            shared_formatted:
-              type: string
-              description: Размер файлов в книге что пересекаются с другими книгами в человекочитаемом виде
-            dead_hashes_formatted:
-              type: string
-              description: Размер мертвых хешей в книге  в человекочитаемом виде
-            total_formatted:
-              type: string
-              description: Общий размер файлов книги в человекочитаемом виде
-          required:
-            - unique
-            - unique_without_dead_hashes
-            - shared
-            - dead_hashes
-            - total
-            - unique_formatted
-            - unique_without_dead_hashes_formatted
-            - shared_formatted
-            - dead_hashes_formatted
-            - total_formatted
-      required:
-        - id
-        - created
-        - name
-        - flags
-        - page_count
-        - page_loaded_percent
 
     BookAttribute:
       type: object

@@ -1308,7 +1308,7 @@ func decodeAPIBookDetailsPostResponse(resp *http.Response) (res APIBookDetailsPo
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response BookDetails
+			var response APIBookDetailsPostOK
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

@@ -67,7 +67,7 @@ func (c *Controller) getPagePreview(p entities.Page) serverAPI.OptURI {
 func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.Page) serverAPI.BookSimple {
 	return serverAPI.BookSimple{
 		ID:         book.ID,
-		CreateAt:   book.CreateAt,
+		CreatedAt:  book.CreateAt,
 		OriginURL:  optURL(book.OriginURL),
 		Name:       book.Name,
 		PageCount:  book.PageCount,

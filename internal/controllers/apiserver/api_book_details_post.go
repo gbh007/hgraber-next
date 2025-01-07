@@ -25,25 +25,13 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 		}, nil
 	}
 
-	return &serverAPI.BookDetails{
-		ID:         book.Book.ID,
-		Created:    book.Book.CreateAt,
-		PreviewURL: c.getPagePreview(book.PreviewPage),
-		Flags: serverAPI.BookFlags{
-			ParsedName: book.Book.ParsedName(),
-			ParsedPage: book.ParsedPages,
-			IsVerified: book.Book.Verified,
-			IsDeleted:  book.Book.Deleted,
-			IsRebuild:  book.Book.IsRebuild,
-		},
-		Name:              book.Book.Name,
-		PageCount:         book.Book.PageCount,
+	return &serverAPI.APIBookDetailsPostOK{
+		Info:              c.convertSimpleBook(book.Book, book.PreviewPage),
 		PageLoadedPercent: book.PageDownloadPercent(),
-		OriginURL:         optURL(book.Book.OriginURL),
 		Attributes:        pkg.Map(book.Attributes, convertBookAttribute),
 		Pages:             pkg.Map(book.Pages, c.convertSimplePageWithDeadHash),
-		Size: serverAPI.OptBookDetailsSize{
-			Value: serverAPI.BookDetailsSize{
+		Size: serverAPI.OptAPIBookDetailsPostOKSize{
+			Value: serverAPI.APIBookDetailsPostOKSize{
 				Unique:                           book.Size.Unique,
 				UniqueWithoutDeadHashes:          book.Size.UniqueWithoutDeadHashes,
 				Shared:                           book.Size.Shared,

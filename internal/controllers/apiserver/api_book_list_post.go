@@ -20,23 +20,11 @@ func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.BookFil
 	}
 
 	return &serverAPI.APIBookListPostOK{
-		Books: pkg.Map(bookList.Books, func(b entities.BookToWeb) serverAPI.BookShortInfo {
-			return serverAPI.BookShortInfo{
-				ID:                b.Book.ID,
-				Created:           b.Book.CreateAt,
-				PreviewURL:        c.getPagePreview(b.PreviewPage),
-				Name:              b.Book.Name,
-				PageCount:         b.Book.PageCount,
+		Books: pkg.Map(bookList.Books, func(b entities.BookToWeb) serverAPI.APIBookListPostOKBooksItem {
+			return serverAPI.APIBookListPostOKBooksItem{
+				Info:              c.convertSimpleBook(b.Book, b.PreviewPage),
 				PageLoadedPercent: b.PageDownloadPercent(),
 				Tags:              b.Tags,
-				HasMoreTags:       b.HasMoreTags,
-				Flags: serverAPI.BookFlags{
-					ParsedName: b.Book.ParsedName(),
-					ParsedPage: b.ParsedPages,
-					IsVerified: b.Book.Verified,
-					IsDeleted:  b.Book.Deleted,
-					IsRebuild:  b.Book.IsRebuild,
-				},
 			}
 		}),
 		Pages: pkg.Map(bookList.Pages, func(v int) serverAPI.APIBookListPostOKPagesItem {

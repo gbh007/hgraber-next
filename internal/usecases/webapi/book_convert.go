@@ -44,11 +44,6 @@ func (uc *UseCase) bookConvert(bookFull entities.BookFull, attributes map[string
 		}
 	}
 
-	if len(book.Tags) > 8 { // FIXME: отказаться от такой логике на сервере
-		book.Tags = book.Tags[:8]
-		book.HasMoreTags = true
-	}
-
 	slices.SortStableFunc(book.Pages, func(a, b entities.PageWithDeadHash) int {
 		return a.PageNumber - b.PageNumber
 	})

@@ -792,6 +792,200 @@ type APIBookDetailsPostNotFound ErrorResponse
 
 func (*APIBookDetailsPostNotFound) aPIBookDetailsPostRes() {}
 
+// Данные книги.
+type APIBookDetailsPostOK struct {
+	Info BookSimple `json:"info"`
+	// Процент загруженных страниц.
+	PageLoadedPercent float64 `json:"page_loaded_percent"`
+	// Данные атрибутов книги.
+	Attributes []BookAttribute `json:"attributes"`
+	// Данные страниц книги.
+	Pages []PageSimple `json:"pages"`
+	// Данные о размере книги.
+	Size OptAPIBookDetailsPostOKSize `json:"size"`
+}
+
+// GetInfo returns the value of Info.
+func (s *APIBookDetailsPostOK) GetInfo() BookSimple {
+	return s.Info
+}
+
+// GetPageLoadedPercent returns the value of PageLoadedPercent.
+func (s *APIBookDetailsPostOK) GetPageLoadedPercent() float64 {
+	return s.PageLoadedPercent
+}
+
+// GetAttributes returns the value of Attributes.
+func (s *APIBookDetailsPostOK) GetAttributes() []BookAttribute {
+	return s.Attributes
+}
+
+// GetPages returns the value of Pages.
+func (s *APIBookDetailsPostOK) GetPages() []PageSimple {
+	return s.Pages
+}
+
+// GetSize returns the value of Size.
+func (s *APIBookDetailsPostOK) GetSize() OptAPIBookDetailsPostOKSize {
+	return s.Size
+}
+
+// SetInfo sets the value of Info.
+func (s *APIBookDetailsPostOK) SetInfo(val BookSimple) {
+	s.Info = val
+}
+
+// SetPageLoadedPercent sets the value of PageLoadedPercent.
+func (s *APIBookDetailsPostOK) SetPageLoadedPercent(val float64) {
+	s.PageLoadedPercent = val
+}
+
+// SetAttributes sets the value of Attributes.
+func (s *APIBookDetailsPostOK) SetAttributes(val []BookAttribute) {
+	s.Attributes = val
+}
+
+// SetPages sets the value of Pages.
+func (s *APIBookDetailsPostOK) SetPages(val []PageSimple) {
+	s.Pages = val
+}
+
+// SetSize sets the value of Size.
+func (s *APIBookDetailsPostOK) SetSize(val OptAPIBookDetailsPostOKSize) {
+	s.Size = val
+}
+
+func (*APIBookDetailsPostOK) aPIBookDetailsPostRes() {}
+
+// Данные о размере книги.
+type APIBookDetailsPostOKSize struct {
+	// Размер уникальных файлов книги.
+	Unique int64 `json:"unique"`
+	// Размер уникальных файлов книги без учета мертвых
+	// хешей.
+	UniqueWithoutDeadHashes int64 `json:"unique_without_dead_hashes"`
+	// Размер файлов в книге что пересекаются с другими
+	// книгами.
+	Shared int64 `json:"shared"`
+	// Размер мертвых хешей в книге.
+	DeadHashes int64 `json:"dead_hashes"`
+	// Общий размер файлов книги.
+	Total int64 `json:"total"`
+	// Размер уникальных файлов книги в человекочитаемом
+	// виде.
+	UniqueFormatted string `json:"unique_formatted"`
+	// Размер уникальных файлов книги без учета мертвых
+	// хешей  в человекочитаемом виде.
+	UniqueWithoutDeadHashesFormatted string `json:"unique_without_dead_hashes_formatted"`
+	// Размер файлов в книге что пересекаются с другими
+	// книгами в человекочитаемом виде.
+	SharedFormatted string `json:"shared_formatted"`
+	// Размер мертвых хешей в книге  в человекочитаемом виде.
+	DeadHashesFormatted string `json:"dead_hashes_formatted"`
+	// Общий размер файлов книги в человекочитаемом виде.
+	TotalFormatted string `json:"total_formatted"`
+}
+
+// GetUnique returns the value of Unique.
+func (s *APIBookDetailsPostOKSize) GetUnique() int64 {
+	return s.Unique
+}
+
+// GetUniqueWithoutDeadHashes returns the value of UniqueWithoutDeadHashes.
+func (s *APIBookDetailsPostOKSize) GetUniqueWithoutDeadHashes() int64 {
+	return s.UniqueWithoutDeadHashes
+}
+
+// GetShared returns the value of Shared.
+func (s *APIBookDetailsPostOKSize) GetShared() int64 {
+	return s.Shared
+}
+
+// GetDeadHashes returns the value of DeadHashes.
+func (s *APIBookDetailsPostOKSize) GetDeadHashes() int64 {
+	return s.DeadHashes
+}
+
+// GetTotal returns the value of Total.
+func (s *APIBookDetailsPostOKSize) GetTotal() int64 {
+	return s.Total
+}
+
+// GetUniqueFormatted returns the value of UniqueFormatted.
+func (s *APIBookDetailsPostOKSize) GetUniqueFormatted() string {
+	return s.UniqueFormatted
+}
+
+// GetUniqueWithoutDeadHashesFormatted returns the value of UniqueWithoutDeadHashesFormatted.
+func (s *APIBookDetailsPostOKSize) GetUniqueWithoutDeadHashesFormatted() string {
+	return s.UniqueWithoutDeadHashesFormatted
+}
+
+// GetSharedFormatted returns the value of SharedFormatted.
+func (s *APIBookDetailsPostOKSize) GetSharedFormatted() string {
+	return s.SharedFormatted
+}
+
+// GetDeadHashesFormatted returns the value of DeadHashesFormatted.
+func (s *APIBookDetailsPostOKSize) GetDeadHashesFormatted() string {
+	return s.DeadHashesFormatted
+}
+
+// GetTotalFormatted returns the value of TotalFormatted.
+func (s *APIBookDetailsPostOKSize) GetTotalFormatted() string {
+	return s.TotalFormatted
+}
+
+// SetUnique sets the value of Unique.
+func (s *APIBookDetailsPostOKSize) SetUnique(val int64) {
+	s.Unique = val
+}
+
+// SetUniqueWithoutDeadHashes sets the value of UniqueWithoutDeadHashes.
+func (s *APIBookDetailsPostOKSize) SetUniqueWithoutDeadHashes(val int64) {
+	s.UniqueWithoutDeadHashes = val
+}
+
+// SetShared sets the value of Shared.
+func (s *APIBookDetailsPostOKSize) SetShared(val int64) {
+	s.Shared = val
+}
+
+// SetDeadHashes sets the value of DeadHashes.
+func (s *APIBookDetailsPostOKSize) SetDeadHashes(val int64) {
+	s.DeadHashes = val
+}
+
+// SetTotal sets the value of Total.
+func (s *APIBookDetailsPostOKSize) SetTotal(val int64) {
+	s.Total = val
+}
+
+// SetUniqueFormatted sets the value of UniqueFormatted.
+func (s *APIBookDetailsPostOKSize) SetUniqueFormatted(val string) {
+	s.UniqueFormatted = val
+}
+
+// SetUniqueWithoutDeadHashesFormatted sets the value of UniqueWithoutDeadHashesFormatted.
+func (s *APIBookDetailsPostOKSize) SetUniqueWithoutDeadHashesFormatted(val string) {
+	s.UniqueWithoutDeadHashesFormatted = val
+}
+
+// SetSharedFormatted sets the value of SharedFormatted.
+func (s *APIBookDetailsPostOKSize) SetSharedFormatted(val string) {
+	s.SharedFormatted = val
+}
+
+// SetDeadHashesFormatted sets the value of DeadHashesFormatted.
+func (s *APIBookDetailsPostOKSize) SetDeadHashesFormatted(val string) {
+	s.DeadHashesFormatted = val
+}
+
+// SetTotalFormatted sets the value of TotalFormatted.
+func (s *APIBookDetailsPostOKSize) SetTotalFormatted(val string) {
+	s.TotalFormatted = val
+}
+
 type APIBookDetailsPostReq struct {
 	// ID книги.
 	ID uuid.UUID `json:"id"`
@@ -825,7 +1019,7 @@ func (*APIBookListPostInternalServerError) aPIBookListPostRes() {}
 
 type APIBookListPostOK struct {
 	// Список книг.
-	Books []BookShortInfo `json:"books"`
+	Books []APIBookListPostOKBooksItem `json:"books"`
 	// Общее количество книг по фильтру.
 	Count int `json:"count"`
 	// Форматированный список страниц.
@@ -833,7 +1027,7 @@ type APIBookListPostOK struct {
 }
 
 // GetBooks returns the value of Books.
-func (s *APIBookListPostOK) GetBooks() []BookShortInfo {
+func (s *APIBookListPostOK) GetBooks() []APIBookListPostOKBooksItem {
 	return s.Books
 }
 
@@ -848,7 +1042,7 @@ func (s *APIBookListPostOK) GetPages() []APIBookListPostOKPagesItem {
 }
 
 // SetBooks sets the value of Books.
-func (s *APIBookListPostOK) SetBooks(val []BookShortInfo) {
+func (s *APIBookListPostOK) SetBooks(val []APIBookListPostOKBooksItem) {
 	s.Books = val
 }
 
@@ -863,6 +1057,45 @@ func (s *APIBookListPostOK) SetPages(val []APIBookListPostOKPagesItem) {
 }
 
 func (*APIBookListPostOK) aPIBookListPostRes() {}
+
+// Данные книги в упрощенном формате.
+type APIBookListPostOKBooksItem struct {
+	Info BookSimple `json:"info"`
+	// Процент загруженных страниц.
+	PageLoadedPercent float64 `json:"page_loaded_percent"`
+	// Список тегов (одноименный атрибут) книги.
+	Tags []string `json:"tags"`
+}
+
+// GetInfo returns the value of Info.
+func (s *APIBookListPostOKBooksItem) GetInfo() BookSimple {
+	return s.Info
+}
+
+// GetPageLoadedPercent returns the value of PageLoadedPercent.
+func (s *APIBookListPostOKBooksItem) GetPageLoadedPercent() float64 {
+	return s.PageLoadedPercent
+}
+
+// GetTags returns the value of Tags.
+func (s *APIBookListPostOKBooksItem) GetTags() []string {
+	return s.Tags
+}
+
+// SetInfo sets the value of Info.
+func (s *APIBookListPostOKBooksItem) SetInfo(val BookSimple) {
+	s.Info = val
+}
+
+// SetPageLoadedPercent sets the value of PageLoadedPercent.
+func (s *APIBookListPostOKBooksItem) SetPageLoadedPercent(val float64) {
+	s.PageLoadedPercent = val
+}
+
+// SetTags sets the value of Tags.
+func (s *APIBookListPostOKBooksItem) SetTags(val []string) {
+	s.Tags = val
+}
 
 type APIBookListPostOKPagesItem struct {
 	// Номер страницы.
@@ -3862,273 +4095,6 @@ func (s *BookAttribute) SetValues(val []string) {
 	s.Values = val
 }
 
-// Данные книги.
-// Ref: #/components/schemas/BookDetails
-type BookDetails struct {
-	// ID книги.
-	ID uuid.UUID `json:"id"`
-	// Время создания книги в системе.
-	Created time.Time `json:"created"`
-	// Ссылка для предпросмотра изображения книги.
-	PreviewURL OptURI    `json:"preview_url"`
-	Flags      BookFlags `json:"flags"`
-	// Название книги.
-	Name string `json:"name"`
-	// Количество страниц.
-	PageCount int `json:"page_count"`
-	// Процент загруженных страниц.
-	PageLoadedPercent float64 `json:"page_loaded_percent"`
-	// Оригинальная ссылка на книгу (во внешней системе).
-	OriginURL OptURI `json:"origin_url"`
-	// Данные атрибутов книги.
-	Attributes []BookAttribute `json:"attributes"`
-	// Данные страниц книги.
-	Pages []PageSimple `json:"pages"`
-	// Данные о размере книги.
-	Size OptBookDetailsSize `json:"size"`
-}
-
-// GetID returns the value of ID.
-func (s *BookDetails) GetID() uuid.UUID {
-	return s.ID
-}
-
-// GetCreated returns the value of Created.
-func (s *BookDetails) GetCreated() time.Time {
-	return s.Created
-}
-
-// GetPreviewURL returns the value of PreviewURL.
-func (s *BookDetails) GetPreviewURL() OptURI {
-	return s.PreviewURL
-}
-
-// GetFlags returns the value of Flags.
-func (s *BookDetails) GetFlags() BookFlags {
-	return s.Flags
-}
-
-// GetName returns the value of Name.
-func (s *BookDetails) GetName() string {
-	return s.Name
-}
-
-// GetPageCount returns the value of PageCount.
-func (s *BookDetails) GetPageCount() int {
-	return s.PageCount
-}
-
-// GetPageLoadedPercent returns the value of PageLoadedPercent.
-func (s *BookDetails) GetPageLoadedPercent() float64 {
-	return s.PageLoadedPercent
-}
-
-// GetOriginURL returns the value of OriginURL.
-func (s *BookDetails) GetOriginURL() OptURI {
-	return s.OriginURL
-}
-
-// GetAttributes returns the value of Attributes.
-func (s *BookDetails) GetAttributes() []BookAttribute {
-	return s.Attributes
-}
-
-// GetPages returns the value of Pages.
-func (s *BookDetails) GetPages() []PageSimple {
-	return s.Pages
-}
-
-// GetSize returns the value of Size.
-func (s *BookDetails) GetSize() OptBookDetailsSize {
-	return s.Size
-}
-
-// SetID sets the value of ID.
-func (s *BookDetails) SetID(val uuid.UUID) {
-	s.ID = val
-}
-
-// SetCreated sets the value of Created.
-func (s *BookDetails) SetCreated(val time.Time) {
-	s.Created = val
-}
-
-// SetPreviewURL sets the value of PreviewURL.
-func (s *BookDetails) SetPreviewURL(val OptURI) {
-	s.PreviewURL = val
-}
-
-// SetFlags sets the value of Flags.
-func (s *BookDetails) SetFlags(val BookFlags) {
-	s.Flags = val
-}
-
-// SetName sets the value of Name.
-func (s *BookDetails) SetName(val string) {
-	s.Name = val
-}
-
-// SetPageCount sets the value of PageCount.
-func (s *BookDetails) SetPageCount(val int) {
-	s.PageCount = val
-}
-
-// SetPageLoadedPercent sets the value of PageLoadedPercent.
-func (s *BookDetails) SetPageLoadedPercent(val float64) {
-	s.PageLoadedPercent = val
-}
-
-// SetOriginURL sets the value of OriginURL.
-func (s *BookDetails) SetOriginURL(val OptURI) {
-	s.OriginURL = val
-}
-
-// SetAttributes sets the value of Attributes.
-func (s *BookDetails) SetAttributes(val []BookAttribute) {
-	s.Attributes = val
-}
-
-// SetPages sets the value of Pages.
-func (s *BookDetails) SetPages(val []PageSimple) {
-	s.Pages = val
-}
-
-// SetSize sets the value of Size.
-func (s *BookDetails) SetSize(val OptBookDetailsSize) {
-	s.Size = val
-}
-
-func (*BookDetails) aPIBookDetailsPostRes() {}
-
-// Данные о размере книги.
-type BookDetailsSize struct {
-	// Размер уникальных файлов книги.
-	Unique int64 `json:"unique"`
-	// Размер уникальных файлов книги без учета мертвых
-	// хешей.
-	UniqueWithoutDeadHashes int64 `json:"unique_without_dead_hashes"`
-	// Размер файлов в книге что пересекаются с другими
-	// книгами.
-	Shared int64 `json:"shared"`
-	// Размер мертвых хешей в книге.
-	DeadHashes int64 `json:"dead_hashes"`
-	// Общий размер файлов книги.
-	Total int64 `json:"total"`
-	// Размер уникальных файлов книги в человекочитаемом
-	// виде.
-	UniqueFormatted string `json:"unique_formatted"`
-	// Размер уникальных файлов книги без учета мертвых
-	// хешей  в человекочитаемом виде.
-	UniqueWithoutDeadHashesFormatted string `json:"unique_without_dead_hashes_formatted"`
-	// Размер файлов в книге что пересекаются с другими
-	// книгами в человекочитаемом виде.
-	SharedFormatted string `json:"shared_formatted"`
-	// Размер мертвых хешей в книге  в человекочитаемом виде.
-	DeadHashesFormatted string `json:"dead_hashes_formatted"`
-	// Общий размер файлов книги в человекочитаемом виде.
-	TotalFormatted string `json:"total_formatted"`
-}
-
-// GetUnique returns the value of Unique.
-func (s *BookDetailsSize) GetUnique() int64 {
-	return s.Unique
-}
-
-// GetUniqueWithoutDeadHashes returns the value of UniqueWithoutDeadHashes.
-func (s *BookDetailsSize) GetUniqueWithoutDeadHashes() int64 {
-	return s.UniqueWithoutDeadHashes
-}
-
-// GetShared returns the value of Shared.
-func (s *BookDetailsSize) GetShared() int64 {
-	return s.Shared
-}
-
-// GetDeadHashes returns the value of DeadHashes.
-func (s *BookDetailsSize) GetDeadHashes() int64 {
-	return s.DeadHashes
-}
-
-// GetTotal returns the value of Total.
-func (s *BookDetailsSize) GetTotal() int64 {
-	return s.Total
-}
-
-// GetUniqueFormatted returns the value of UniqueFormatted.
-func (s *BookDetailsSize) GetUniqueFormatted() string {
-	return s.UniqueFormatted
-}
-
-// GetUniqueWithoutDeadHashesFormatted returns the value of UniqueWithoutDeadHashesFormatted.
-func (s *BookDetailsSize) GetUniqueWithoutDeadHashesFormatted() string {
-	return s.UniqueWithoutDeadHashesFormatted
-}
-
-// GetSharedFormatted returns the value of SharedFormatted.
-func (s *BookDetailsSize) GetSharedFormatted() string {
-	return s.SharedFormatted
-}
-
-// GetDeadHashesFormatted returns the value of DeadHashesFormatted.
-func (s *BookDetailsSize) GetDeadHashesFormatted() string {
-	return s.DeadHashesFormatted
-}
-
-// GetTotalFormatted returns the value of TotalFormatted.
-func (s *BookDetailsSize) GetTotalFormatted() string {
-	return s.TotalFormatted
-}
-
-// SetUnique sets the value of Unique.
-func (s *BookDetailsSize) SetUnique(val int64) {
-	s.Unique = val
-}
-
-// SetUniqueWithoutDeadHashes sets the value of UniqueWithoutDeadHashes.
-func (s *BookDetailsSize) SetUniqueWithoutDeadHashes(val int64) {
-	s.UniqueWithoutDeadHashes = val
-}
-
-// SetShared sets the value of Shared.
-func (s *BookDetailsSize) SetShared(val int64) {
-	s.Shared = val
-}
-
-// SetDeadHashes sets the value of DeadHashes.
-func (s *BookDetailsSize) SetDeadHashes(val int64) {
-	s.DeadHashes = val
-}
-
-// SetTotal sets the value of Total.
-func (s *BookDetailsSize) SetTotal(val int64) {
-	s.Total = val
-}
-
-// SetUniqueFormatted sets the value of UniqueFormatted.
-func (s *BookDetailsSize) SetUniqueFormatted(val string) {
-	s.UniqueFormatted = val
-}
-
-// SetUniqueWithoutDeadHashesFormatted sets the value of UniqueWithoutDeadHashesFormatted.
-func (s *BookDetailsSize) SetUniqueWithoutDeadHashesFormatted(val string) {
-	s.UniqueWithoutDeadHashesFormatted = val
-}
-
-// SetSharedFormatted sets the value of SharedFormatted.
-func (s *BookDetailsSize) SetSharedFormatted(val string) {
-	s.SharedFormatted = val
-}
-
-// SetDeadHashesFormatted sets the value of DeadHashesFormatted.
-func (s *BookDetailsSize) SetDeadHashesFormatted(val string) {
-	s.DeadHashesFormatted = val
-}
-
-// SetTotalFormatted sets the value of TotalFormatted.
-func (s *BookDetailsSize) SetTotalFormatted(val string) {
-	s.TotalFormatted = val
-}
-
 // Ref: #/components/schemas/BookFilter
 type BookFilter struct {
 	// Сортировать в обратном порядке.
@@ -4989,125 +4955,13 @@ func (s *BookRawPagesItem) SetLoadAt(val OptDateTime) {
 	s.LoadAt = val
 }
 
-// Данные книги в упрощенном формате.
-// Ref: #/components/schemas/BookShortInfo
-type BookShortInfo struct {
-	// ID книги.
-	ID uuid.UUID `json:"id"`
-	// Время создания книги в системе.
-	Created time.Time `json:"created"`
-	// Ссылка для предпросмотра изображения книги.
-	PreviewURL OptURI `json:"preview_url"`
-	// Название книги.
-	Name string `json:"name"`
-	// Количество страниц.
-	PageCount int `json:"page_count"`
-	// Процент загруженных страниц.
-	PageLoadedPercent float64 `json:"page_loaded_percent"`
-	// Список тегов (одноименный атрибут) книги.
-	Tags []string `json:"tags"`
-	// Есть теги которые не были включены в список.
-	HasMoreTags bool      `json:"has_more_tags"`
-	Flags       BookFlags `json:"flags"`
-}
-
-// GetID returns the value of ID.
-func (s *BookShortInfo) GetID() uuid.UUID {
-	return s.ID
-}
-
-// GetCreated returns the value of Created.
-func (s *BookShortInfo) GetCreated() time.Time {
-	return s.Created
-}
-
-// GetPreviewURL returns the value of PreviewURL.
-func (s *BookShortInfo) GetPreviewURL() OptURI {
-	return s.PreviewURL
-}
-
-// GetName returns the value of Name.
-func (s *BookShortInfo) GetName() string {
-	return s.Name
-}
-
-// GetPageCount returns the value of PageCount.
-func (s *BookShortInfo) GetPageCount() int {
-	return s.PageCount
-}
-
-// GetPageLoadedPercent returns the value of PageLoadedPercent.
-func (s *BookShortInfo) GetPageLoadedPercent() float64 {
-	return s.PageLoadedPercent
-}
-
-// GetTags returns the value of Tags.
-func (s *BookShortInfo) GetTags() []string {
-	return s.Tags
-}
-
-// GetHasMoreTags returns the value of HasMoreTags.
-func (s *BookShortInfo) GetHasMoreTags() bool {
-	return s.HasMoreTags
-}
-
-// GetFlags returns the value of Flags.
-func (s *BookShortInfo) GetFlags() BookFlags {
-	return s.Flags
-}
-
-// SetID sets the value of ID.
-func (s *BookShortInfo) SetID(val uuid.UUID) {
-	s.ID = val
-}
-
-// SetCreated sets the value of Created.
-func (s *BookShortInfo) SetCreated(val time.Time) {
-	s.Created = val
-}
-
-// SetPreviewURL sets the value of PreviewURL.
-func (s *BookShortInfo) SetPreviewURL(val OptURI) {
-	s.PreviewURL = val
-}
-
-// SetName sets the value of Name.
-func (s *BookShortInfo) SetName(val string) {
-	s.Name = val
-}
-
-// SetPageCount sets the value of PageCount.
-func (s *BookShortInfo) SetPageCount(val int) {
-	s.PageCount = val
-}
-
-// SetPageLoadedPercent sets the value of PageLoadedPercent.
-func (s *BookShortInfo) SetPageLoadedPercent(val float64) {
-	s.PageLoadedPercent = val
-}
-
-// SetTags sets the value of Tags.
-func (s *BookShortInfo) SetTags(val []string) {
-	s.Tags = val
-}
-
-// SetHasMoreTags sets the value of HasMoreTags.
-func (s *BookShortInfo) SetHasMoreTags(val bool) {
-	s.HasMoreTags = val
-}
-
-// SetFlags sets the value of Flags.
-func (s *BookShortInfo) SetFlags(val BookFlags) {
-	s.Flags = val
-}
-
 // Крайне упрощенная модель книги.
 // Ref: #/components/schemas/BookSimple
 type BookSimple struct {
 	// ID книги.
 	ID uuid.UUID `json:"id"`
 	// Время создания книги в системе.
-	CreateAt time.Time `json:"create_at"`
+	CreatedAt time.Time `json:"created_at"`
 	// Оригинальная ссылка на книгу (во внешней системе).
 	OriginURL OptURI `json:"origin_url"`
 	// Название книги.
@@ -5124,9 +4978,9 @@ func (s *BookSimple) GetID() uuid.UUID {
 	return s.ID
 }
 
-// GetCreateAt returns the value of CreateAt.
-func (s *BookSimple) GetCreateAt() time.Time {
-	return s.CreateAt
+// GetCreatedAt returns the value of CreatedAt.
+func (s *BookSimple) GetCreatedAt() time.Time {
+	return s.CreatedAt
 }
 
 // GetOriginURL returns the value of OriginURL.
@@ -5159,9 +5013,9 @@ func (s *BookSimple) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
-// SetCreateAt sets the value of CreateAt.
-func (s *BookSimple) SetCreateAt(val time.Time) {
-	s.CreateAt = val
+// SetCreatedAt sets the value of CreatedAt.
+func (s *BookSimple) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
 }
 
 // SetOriginURL sets the value of OriginURL.
@@ -5292,6 +5146,52 @@ func (o OptAPIAgentListPostOKItemStatus) Or(d APIAgentListPostOKItemStatus) APIA
 	return d
 }
 
+// NewOptAPIBookDetailsPostOKSize returns new OptAPIBookDetailsPostOKSize with value set to v.
+func NewOptAPIBookDetailsPostOKSize(v APIBookDetailsPostOKSize) OptAPIBookDetailsPostOKSize {
+	return OptAPIBookDetailsPostOKSize{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptAPIBookDetailsPostOKSize is optional APIBookDetailsPostOKSize.
+type OptAPIBookDetailsPostOKSize struct {
+	Value APIBookDetailsPostOKSize
+	Set   bool
+}
+
+// IsSet returns true if OptAPIBookDetailsPostOKSize was set.
+func (o OptAPIBookDetailsPostOKSize) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptAPIBookDetailsPostOKSize) Reset() {
+	var v APIBookDetailsPostOKSize
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptAPIBookDetailsPostOKSize) SetTo(v APIBookDetailsPostOKSize) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptAPIBookDetailsPostOKSize) Get() (v APIBookDetailsPostOKSize, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptAPIBookDetailsPostOKSize) Or(d APIBookDetailsPostOKSize) APIBookDetailsPostOKSize {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptAPIBookRebuildPostReqFlags returns new OptAPIBookRebuildPostReqFlags with value set to v.
 func NewOptAPIBookRebuildPostReqFlags(v APIBookRebuildPostReqFlags) OptAPIBookRebuildPostReqFlags {
 	return OptAPIBookRebuildPostReqFlags{
@@ -5332,52 +5232,6 @@ func (o OptAPIBookRebuildPostReqFlags) Get() (v APIBookRebuildPostReqFlags, ok b
 
 // Or returns value if set, or given parameter if does not.
 func (o OptAPIBookRebuildPostReqFlags) Or(d APIBookRebuildPostReqFlags) APIBookRebuildPostReqFlags {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptBookDetailsSize returns new OptBookDetailsSize with value set to v.
-func NewOptBookDetailsSize(v BookDetailsSize) OptBookDetailsSize {
-	return OptBookDetailsSize{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptBookDetailsSize is optional BookDetailsSize.
-type OptBookDetailsSize struct {
-	Value BookDetailsSize
-	Set   bool
-}
-
-// IsSet returns true if OptBookDetailsSize was set.
-func (o OptBookDetailsSize) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptBookDetailsSize) Reset() {
-	var v BookDetailsSize
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptBookDetailsSize) SetTo(v BookDetailsSize) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptBookDetailsSize) Get() (v BookDetailsSize, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptBookDetailsSize) Or(d BookDetailsSize) BookDetailsSize {
 	if v, ok := o.Get(); ok {
 		return v
 	}
