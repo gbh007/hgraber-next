@@ -21,8 +21,16 @@ var (
 )
 
 type rebuildPageResources struct {
+	SourceBook         entities.Book
 	SourcePagesMap     map[int]entities.PageWithHash
 	ForbiddenHashes    map[entities.FileHash]struct{}
+	UnusedSourceHashes map[entities.FileHash]struct{}
+}
+
+type rebuildedPagesInfo struct {
+	PagesRemap         map[int]int
+	SourcePageNumbers  []int
+	NewPages           []entities.Page
 	UnusedSourceHashes map[entities.FileHash]struct{}
 }
 
@@ -41,14 +49,14 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 	resources, err := uc.rebuildBookPrepareResources(
 		ctx,
 		request.Flags,
-		request.OldBook.Book.ID,
+		request.ModifiedOldBook.Book.ID,
 		targetPageHashes,
 	)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("rebuild: prepare resources: %w", err)
 	}
 
-	pagesRemap, newPages, unusedSourceHashes, err := uc.rebuildBookPages(
+	pagesInfo, err := uc.rebuildBookPages(
 		ctx,
 		request.Flags,
 		slices.Clone(request.SelectedPages),
@@ -59,25 +67,23 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 		return uuid.Nil, fmt.Errorf("rebuild: pages: %w", err)
 	}
 
-	newLabels := make([]entities.BookLabel, 0, len(request.OldBook.Labels))
-
-	for _, label := range request.OldBook.Labels {
-		_, ok := pagesRemap[label.PageNumber]
-		if !ok && label.PageNumber != 0 { // Отсекаем данные которые не были замаплены или не привязаны к книге.
-			continue
-		}
-
-		label.BookID = bookToMerge.ID
-		label.PageNumber = pagesRemap[label.PageNumber]
-
-		newLabels = append(newLabels, label)
+	if isNewBook && len(pagesInfo.NewPages) == 0 {
+		return uuid.Nil, fmt.Errorf("%w: after deduplicate for new book", errEmptyPagesOnRebuild)
 	}
 
 	bookToMerge.AttributesParsed = true
-	newAttributes := entities.MergeAttributeMap(attributeToMerge, request.OldBook.Attributes)
+	newAttributes := entities.MergeAttributeMap(attributeToMerge, request.ModifiedOldBook.Attributes)
 
-	if isNewBook && len(newPages) == 0 {
-		return uuid.Nil, fmt.Errorf("%w: after deduplicate for new book", errEmptyPagesOnRebuild)
+	newLabels, err := uc.rebuildBookLabels(
+		ctx,
+		bookToMerge,
+		resources.SourceBook,
+		request.Flags,
+		request.ModifiedOldBook.Labels,
+		pagesInfo,
+	)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("rebuild: labels: %w", err)
 	}
 
 	err = uc.rebuildBookSave(
@@ -85,13 +91,14 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 		isNewBook,
 		bookToMerge,
 		newAttributes,
-		newPages, newLabels,
+		pagesInfo.NewPages,
+		newLabels,
 	)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("rebuild: save: %w", err)
 	}
 
-	err = uc.rebuildBookCleanSource(ctx, request.Flags, unusedSourceHashes)
+	err = uc.rebuildBookCleanSource(ctx, request.Flags, pagesInfo.UnusedSourceHashes)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("rebuild: clean source: %w", err)
 	}
@@ -117,8 +124,8 @@ func (uc *UseCase) rebuildBookGetTarget(ctx context.Context, request entities.Re
 	if isNewBook {
 		bookToMerge = entities.Book{
 			ID:         uuid.Must(uuid.NewV7()),
-			Name:       request.OldBook.Book.Name,
-			OriginURL:  request.OldBook.Book.OriginURL,
+			Name:       request.ModifiedOldBook.Book.Name,
+			OriginURL:  request.ModifiedOldBook.Book.OriginURL,
 			PageCount:  0,
 			IsRebuild:  true,
 			CreateAt:   time.Now().UTC(),
@@ -170,6 +177,11 @@ func (uc *UseCase) rebuildBookPrepareResources(
 	rebuildPageResources,
 	error,
 ) {
+	sourceBook, err := uc.storage.GetBook(ctx, oldBookID)
+	if err != nil {
+		return rebuildPageResources{}, fmt.Errorf("storage: get source book: %w", err)
+	}
+
 	sourcePages, err := uc.storage.BookPagesWithHash(ctx, oldBookID)
 	if err != nil {
 		return rebuildPageResources{}, fmt.Errorf("storage: get source pages: %w", err)
@@ -237,6 +249,7 @@ func (uc *UseCase) rebuildBookPrepareResources(
 	}
 
 	return rebuildPageResources{
+		SourceBook:         sourceBook,
 		SourcePagesMap:     sourcePagesMap,
 		ForbiddenHashes:    forbiddenHashes,
 		UnusedSourceHashes: unusedSourceHashes,
@@ -249,7 +262,7 @@ func (uc *UseCase) rebuildBookPages(
 	selectedPages []int,
 	bookToMerge *entities.Book,
 	resources rebuildPageResources,
-) (map[int]int, []entities.Page, map[entities.FileHash]struct{}, error) {
+) (rebuildedPagesInfo, error) {
 	selectedPages = slices.Compact(selectedPages)
 	slices.Sort(selectedPages)
 
@@ -257,6 +270,7 @@ func (uc *UseCase) rebuildBookPages(
 
 	pagesRemap := make(map[int]int, len(selectedPages))
 	newPages := make([]entities.Page, 0, len(selectedPages))
+	sourcePageNumbers := make([]int, 0, len(selectedPages))
 
 	unusedSourceHashes := maps.Clone(resources.UnusedSourceHashes)
 	if unusedSourceHashes == nil {
@@ -268,7 +282,7 @@ func (uc *UseCase) rebuildBookPages(
 	for _, oldPageNumber := range selectedPages {
 		sourcePage, ok := resources.SourcePagesMap[oldPageNumber]
 		if !ok {
-			return nil, nil, nil, fmt.Errorf("%w (%d)", errMissingSourcePage, oldPageNumber)
+			return rebuildedPagesInfo{}, fmt.Errorf("%w (%d)", errMissingSourcePage, oldPageNumber)
 		}
 
 		if _, ok := resources.ForbiddenHashes[sourcePage.FileHash]; ok {
@@ -292,12 +306,128 @@ func (uc *UseCase) rebuildBookPages(
 		sourcePage.CreateAt = time.Now()
 
 		newPages = append(newPages, sourcePage.Page)
+		sourcePageNumbers = append(sourcePageNumbers, oldPageNumber)
+
 		delete(unusedSourceHashes, sourcePage.FileHash)
 	}
 
 	bookToMerge.PageCount += newPageNumberCounter
 
-	return pagesRemap, newPages, unusedSourceHashes, nil
+	return rebuildedPagesInfo{
+		PagesRemap:         pagesRemap,
+		SourcePageNumbers:  sourcePageNumbers,
+		NewPages:           newPages,
+		UnusedSourceHashes: unusedSourceHashes,
+	}, nil
+}
+
+func (uc *UseCase) rebuildBookLabels(
+	_ context.Context,
+	bookToMerge entities.Book,
+	sourceBook entities.Book,
+	flags entities.RebuildBookRequestFlags,
+	labelsFromRequest []entities.BookLabel,
+	pagesInfo rebuildedPagesInfo,
+) ([]entities.BookLabel, error) {
+	type labelInBookKey struct {
+		Name       string
+		PageNumber int
+	}
+
+	newLabels := make([]entities.BookLabel, 0, len(labelsFromRequest))
+	existsNewLabels := make(map[labelInBookKey]struct{}, len(labelsFromRequest))
+
+	for _, label := range labelsFromRequest {
+		newPageNumber, ok := pagesInfo.PagesRemap[label.PageNumber]
+		if !ok && label.PageNumber != 0 { // Отсекаем данные которые не были замаплены или не привязаны к книге.
+			continue
+		}
+
+		label.BookID = bookToMerge.ID
+		label.PageNumber = newPageNumber
+
+		newLabels = append(newLabels, label)
+
+		existsNewLabels[labelInBookKey{
+			Name:       label.Name,
+			PageNumber: label.PageNumber,
+		}] = struct{}{}
+	}
+
+	if !flags.SetOriginLabels {
+		return newLabels, nil
+	}
+
+	for _, oldPageNumber := range pagesInfo.SourcePageNumbers {
+		newPageNumber, hasRemap := pagesInfo.PagesRemap[oldPageNumber]
+		if !hasRemap && oldPageNumber != 0 { // Отсекаем данные которые не были замаплены или не привязаны к книге.
+			continue
+		}
+
+		_, hasOriginID := existsNewLabels[labelInBookKey{
+			Name:       entities.LabelNameRebuildOriginID,
+			PageNumber: newPageNumber,
+		}]
+
+		_, hasOriginName := existsNewLabels[labelInBookKey{
+			Name:       entities.LabelNameRebuildOriginName,
+			PageNumber: newPageNumber,
+		}]
+
+		_, hasOriginURL := existsNewLabels[labelInBookKey{
+			Name:       entities.LabelNameRebuildOriginURL,
+			PageNumber: newPageNumber,
+		}]
+
+		if hasOriginID || hasOriginName || hasOriginURL { // Данные уже проставлены в любом виде
+			continue
+		}
+
+		newLabels = append(newLabels, entities.BookLabel{
+			BookID:     bookToMerge.ID,
+			PageNumber: newPageNumber,
+			Name:       entities.LabelNameRebuildOriginID,
+			Value:      sourceBook.ID.String(),
+			CreateAt:   time.Now().UTC(),
+		})
+
+		if sourceBook.Name != "" {
+			newLabels = append(newLabels, entities.BookLabel{
+				BookID:     bookToMerge.ID,
+				PageNumber: newPageNumber,
+				Name:       entities.LabelNameRebuildOriginName,
+				Value:      sourceBook.Name,
+				CreateAt:   time.Now().UTC(),
+			})
+		}
+
+		if sourceBook.OriginURL != nil {
+			newLabels = append(newLabels, entities.BookLabel{
+				BookID:     bookToMerge.ID,
+				PageNumber: newPageNumber,
+				Name:       entities.LabelNameRebuildOriginURL,
+				Value:      sourceBook.OriginURL.String(),
+				CreateAt:   time.Now().UTC(),
+			})
+		}
+
+		existsNewLabels[labelInBookKey{
+			Name:       entities.LabelNameRebuildOriginID,
+			PageNumber: newPageNumber,
+		}] = struct{}{}
+
+		existsNewLabels[labelInBookKey{
+			Name:       entities.LabelNameRebuildOriginName,
+			PageNumber: newPageNumber,
+		}] = struct{}{}
+
+		existsNewLabels[labelInBookKey{
+			Name:       entities.LabelNameRebuildOriginURL,
+			PageNumber: newPageNumber,
+		}] = struct{}{}
+	}
+
+	return newLabels, nil
 }
 
 func (uc *UseCase) rebuildBookSave(

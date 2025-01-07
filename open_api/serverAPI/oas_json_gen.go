@@ -4052,6 +4052,12 @@ func (s *APIBookRebuildPostReqFlags) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.SetOriginLabels.Set {
+			e.FieldStart("set_origin_labels")
+			s.SetOriginLabels.Encode(e)
+		}
+	}
+	{
 		if s.MarkUnusedPagesAsDeadHash.Set {
 			e.FieldStart("mark_unused_pages_as_dead_hash")
 			s.MarkUnusedPagesAsDeadHash.Encode(e)
@@ -4071,13 +4077,14 @@ func (s *APIBookRebuildPostReqFlags) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIBookRebuildPostReqFlags = [6]string{
+var jsonFieldsNameOfAPIBookRebuildPostReqFlags = [7]string{
 	0: "only_unique",
 	1: "exclude_dead_hash_pages",
 	2: "only_1_copy",
-	3: "mark_unused_pages_as_dead_hash",
-	4: "mark_unused_pages_as_deleted",
-	5: "mark_empty_book_as_deleted_after_remove_pages",
+	3: "set_origin_labels",
+	4: "mark_unused_pages_as_dead_hash",
+	5: "mark_unused_pages_as_deleted",
+	6: "mark_empty_book_as_deleted_after_remove_pages",
 }
 
 // Decode decodes APIBookRebuildPostReqFlags from json.
@@ -4117,6 +4124,16 @@ func (s *APIBookRebuildPostReqFlags) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"only_1_copy\"")
+			}
+		case "set_origin_labels":
+			if err := func() error {
+				s.SetOriginLabels.Reset()
+				if err := s.SetOriginLabels.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"set_origin_labels\"")
 			}
 		case "mark_unused_pages_as_dead_hash":
 			if err := func() error {

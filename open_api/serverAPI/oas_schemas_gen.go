@@ -1044,6 +1044,9 @@ type APIBookRebuildPostReqFlags struct {
 	// Включать только уникальные страницы не содержащиеся
 	// в других книгах.
 	Only1Copy OptBool `json:"only_1_copy"`
+	// Проставить каждой страницы метки об оригинальной
+	// книге если ее нет.
+	SetOriginLabels OptBool `json:"set_origin_labels"`
 	// Отметить страницы что не вошли в ребилд как мертвый
 	// хеш.
 	MarkUnusedPagesAsDeadHash OptBool `json:"mark_unused_pages_as_dead_hash"`
@@ -1068,6 +1071,11 @@ func (s *APIBookRebuildPostReqFlags) GetExcludeDeadHashPages() OptBool {
 // GetOnly1Copy returns the value of Only1Copy.
 func (s *APIBookRebuildPostReqFlags) GetOnly1Copy() OptBool {
 	return s.Only1Copy
+}
+
+// GetSetOriginLabels returns the value of SetOriginLabels.
+func (s *APIBookRebuildPostReqFlags) GetSetOriginLabels() OptBool {
+	return s.SetOriginLabels
 }
 
 // GetMarkUnusedPagesAsDeadHash returns the value of MarkUnusedPagesAsDeadHash.
@@ -1098,6 +1106,11 @@ func (s *APIBookRebuildPostReqFlags) SetExcludeDeadHashPages(val OptBool) {
 // SetOnly1Copy sets the value of Only1Copy.
 func (s *APIBookRebuildPostReqFlags) SetOnly1Copy(val OptBool) {
 	s.Only1Copy = val
+}
+
+// SetSetOriginLabels sets the value of SetOriginLabels.
+func (s *APIBookRebuildPostReqFlags) SetSetOriginLabels(val OptBool) {
+	s.SetOriginLabels = val
 }
 
 // SetMarkUnusedPagesAsDeadHash sets the value of MarkUnusedPagesAsDeadHash.

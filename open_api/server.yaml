@@ -1067,6 +1067,9 @@ paths:
                     only_1_copy:
                       type: boolean
                       description: Включать только уникальные страницы не содержащиеся в других книгах
+                    set_origin_labels:
+                      type: boolean
+                      description: Проставить каждой страницы метки об оригинальной книге если ее нет
                     mark_unused_pages_as_dead_hash:
                       type: boolean
                       description: Отметить страницы что не вошли в ребилд как мертвый хеш

@@ -6,6 +6,12 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	LabelNameRebuildOriginName = "rebuild:origin:name"
+	LabelNameRebuildOriginID   = "rebuild:origin:id"
+	LabelNameRebuildOriginURL  = "rebuild:origin:url"
+)
+
 type BookLabel struct {
 	BookID     uuid.UUID
 	PageNumber int
