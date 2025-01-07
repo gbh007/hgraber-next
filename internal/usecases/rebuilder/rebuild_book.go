@@ -2,19 +2,12 @@ package rebuilder
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"slices"
 
 	"github.com/google/uuid"
 
 	"hgnext/internal/entities"
-)
-
-var (
-	errForbiddenMerge      = errors.New("merge with book forbidden")
-	errEmptyPagesOnRebuild = errors.New("empty pages on rebuild")
-	errMissingSourcePage   = errors.New("missing source page")
 )
 
 type rebuildPageResources struct {
@@ -33,7 +26,7 @@ type rebuildedPagesInfo struct {
 
 func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBookRequest) (_ uuid.UUID, returnErr error) {
 	if len(request.SelectedPages) == 0 {
-		return uuid.Nil, errEmptyPagesOnRebuild
+		return uuid.Nil, fmt.Errorf("%w: %w", entities.ErrRebuildBookIncorrectRequest, entities.ErrRebuildBookEmptyPages)
 	}
 
 	isNewBook := request.MergeWithBook == uuid.Nil
@@ -65,7 +58,7 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 	}
 
 	if isNewBook && len(pagesInfo.NewPages) == 0 {
-		return uuid.Nil, fmt.Errorf("%w: after deduplicate for new book", errEmptyPagesOnRebuild)
+		return uuid.Nil, fmt.Errorf("%w: after deduplicate for new book", entities.ErrRebuildBookEmptyPages)
 	}
 
 	bookToMerge.AttributesParsed = true
@@ -95,7 +88,13 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 		return uuid.Nil, fmt.Errorf("rebuild: save: %w", err)
 	}
 
-	err = uc.rebuildBookCleanSource(ctx, request.Flags, pagesInfo.UnusedSourceHashes)
+	err = uc.rebuildBookCleanSource(
+		ctx,
+		request.Flags,
+		resources.SourceBook.ID,
+		pagesInfo.UnusedSourceHashes,
+		pagesInfo.SourcePageNumbers,
+	)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("rebuild: clean source: %w", err)
 	}

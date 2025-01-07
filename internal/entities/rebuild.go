@@ -1,6 +1,17 @@
 package entities
 
-import "github.com/google/uuid"
+import (
+	"errors"
+
+	"github.com/google/uuid"
+)
+
+var (
+	ErrRebuildBookForbiddenMerge    = errors.New("merge with book forbidden")
+	ErrRebuildBookIncorrectRequest  = errors.New("incorrect request")
+	ErrRebuildBookEmptyPages        = errors.New("empty pages on rebuild")
+	ErrRebuildBookMissingSourcePage = errors.New("missing source page")
+)
 
 type RebuildBookRequest struct {
 	ModifiedOldBook BookFull
@@ -16,6 +27,8 @@ type RebuildBookRequestFlags struct {
 	Only1CopyPages       bool
 
 	SetOriginLabels bool
+
+	ExtractMode bool
 
 	MarkUnusedPagesAsDeadHash              bool
 	MarkUnusedPagesAsDeleted               bool

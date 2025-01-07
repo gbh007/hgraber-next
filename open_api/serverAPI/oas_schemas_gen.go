@@ -1047,6 +1047,9 @@ type APIBookRebuildPostReqFlags struct {
 	// Проставить каждой страницы метки об оригинальной
 	// книге если ее нет.
 	SetOriginLabels OptBool `json:"set_origin_labels"`
+	// Режим экстракции - вынос страниц в новую книгу с
+	// удалением их только из исходной.
+	ExtractMode OptBool `json:"extract_mode"`
 	// Отметить страницы что не вошли в ребилд как мертвый
 	// хеш.
 	MarkUnusedPagesAsDeadHash OptBool `json:"mark_unused_pages_as_dead_hash"`
@@ -1076,6 +1079,11 @@ func (s *APIBookRebuildPostReqFlags) GetOnly1Copy() OptBool {
 // GetSetOriginLabels returns the value of SetOriginLabels.
 func (s *APIBookRebuildPostReqFlags) GetSetOriginLabels() OptBool {
 	return s.SetOriginLabels
+}
+
+// GetExtractMode returns the value of ExtractMode.
+func (s *APIBookRebuildPostReqFlags) GetExtractMode() OptBool {
+	return s.ExtractMode
 }
 
 // GetMarkUnusedPagesAsDeadHash returns the value of MarkUnusedPagesAsDeadHash.
@@ -1111,6 +1119,11 @@ func (s *APIBookRebuildPostReqFlags) SetOnly1Copy(val OptBool) {
 // SetSetOriginLabels sets the value of SetOriginLabels.
 func (s *APIBookRebuildPostReqFlags) SetSetOriginLabels(val OptBool) {
 	s.SetOriginLabels = val
+}
+
+// SetExtractMode sets the value of ExtractMode.
+func (s *APIBookRebuildPostReqFlags) SetExtractMode(val OptBool) {
+	s.ExtractMode = val
 }
 
 // SetMarkUnusedPagesAsDeadHash sets the value of MarkUnusedPagesAsDeadHash.

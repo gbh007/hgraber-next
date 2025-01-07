@@ -36,7 +36,7 @@ func (uc *UseCase) rebuildBookPages(
 	for _, oldPageNumber := range selectedPages {
 		sourcePage, ok := resources.SourcePagesMap[oldPageNumber]
 		if !ok {
-			return rebuildedPagesInfo{}, fmt.Errorf("%w (%d)", errMissingSourcePage, oldPageNumber)
+			return rebuildedPagesInfo{}, fmt.Errorf("%w (%d)", entities.ErrRebuildBookMissingSourcePage, oldPageNumber)
 		}
 
 		if _, ok := resources.ForbiddenHashes[sourcePage.FileHash]; ok {

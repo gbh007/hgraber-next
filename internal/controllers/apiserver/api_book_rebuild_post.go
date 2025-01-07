@@ -20,6 +20,8 @@ func (c *Controller) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIB
 
 			SetOriginLabels: req.Flags.Value.SetOriginLabels.Value,
 
+			ExtractMode: req.Flags.Value.ExtractMode.Value,
+
 			MarkUnusedPagesAsDeadHash:              req.Flags.Value.MarkUnusedPagesAsDeadHash.Value,
 			MarkUnusedPagesAsDeleted:               req.Flags.Value.MarkUnusedPagesAsDeleted.Value,
 			MarkEmptyBookAsDeletedAfterRemovePages: req.Flags.Value.MarkEmptyBookAsDeletedAfterRemovePages.Value,

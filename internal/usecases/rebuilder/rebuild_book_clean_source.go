@@ -13,7 +13,9 @@ import (
 func (uc *UseCase) rebuildBookCleanSource(
 	ctx context.Context,
 	flags entities.RebuildBookRequestFlags,
+	sourceBookID uuid.UUID,
 	unusedSourceHashes map[entities.FileHash]struct{},
+	usedSourcePageNumbers []int,
 ) error {
 	if flags.MarkUnusedPagesAsDeadHash && len(unusedSourceHashes) > 0 {
 		deadHashes := make([]entities.DeadHash, 0, len(unusedSourceHashes))
@@ -73,6 +75,29 @@ func (uc *UseCase) rebuildBookCleanSource(
 				err = uc.storage.MarkBookAsDeleted(ctx, bookID)
 				if err != nil {
 					return fmt.Errorf("storage: mark book as deleted (%s): %w", bookID.String(), err)
+				}
+			}
+		}
+	}
+
+	if flags.ExtractMode && len(usedSourcePageNumbers) > 0 {
+		for _, pageNUmber := range usedSourcePageNumbers {
+			err := uc.storage.MarkPageAsDeleted(ctx, sourceBookID, pageNUmber)
+			if err != nil {
+				return fmt.Errorf("storage: mark page (%s,%d) as deleted: %w", sourceBookID.String(), pageNUmber, err)
+			}
+		}
+
+		if flags.MarkEmptyBookAsDeletedAfterRemovePages {
+			count, err := uc.storage.BookPagesCount(ctx, sourceBookID)
+			if err != nil {
+				return fmt.Errorf("storage: get book page count (%s): %w", sourceBookID.String(), err)
+			}
+
+			if count == 0 {
+				err = uc.storage.MarkBookAsDeleted(ctx, sourceBookID)
+				if err != nil {
+					return fmt.Errorf("storage: mark book as deleted (%s): %w", sourceBookID.String(), err)
 				}
 			}
 		}

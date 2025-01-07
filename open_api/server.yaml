@@ -1070,6 +1070,9 @@ paths:
                     set_origin_labels:
                       type: boolean
                       description: Проставить каждой страницы метки об оригинальной книге если ее нет
+                    extract_mode:
+                      type: boolean
+                      description: Режим экстракции - вынос страниц в новую книгу с удалением их только из исходной
                     mark_unused_pages_as_dead_hash:
                       type: boolean
                       description: Отметить страницы что не вошли в ребилд как мертвый хеш

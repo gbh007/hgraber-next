@@ -46,11 +46,11 @@ func (uc *UseCase) rebuildBookGetTarget(ctx context.Context, request entities.Re
 	}
 
 	if !bookToMerge.IsRebuild {
-		return entities.Book{}, nil, nil, fmt.Errorf("%w: not rebuilded book", errForbiddenMerge)
+		return entities.Book{}, nil, nil, fmt.Errorf("%w: not rebuilded book", entities.ErrRebuildBookForbiddenMerge)
 	}
 
 	if bookToMerge.Deleted {
-		return entities.Book{}, nil, nil, fmt.Errorf("%w: deleted book", errForbiddenMerge)
+		return entities.Book{}, nil, nil, fmt.Errorf("%w: deleted book", entities.ErrRebuildBookForbiddenMerge)
 	}
 
 	attributeToMerge, err = uc.storage.BookOriginAttributes(ctx, request.MergeWithBook)
