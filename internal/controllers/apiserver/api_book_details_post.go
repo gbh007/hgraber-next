@@ -39,6 +39,7 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 		Name:              book.Book.Name,
 		PageCount:         book.Book.PageCount,
 		PageLoadedPercent: book.PageDownloadPercent(),
+		OriginURL:         optURL(book.Book.OriginURL),
 		Attributes:        pkg.Map(book.Attributes, convertBookAttribute),
 		Pages:             pkg.Map(book.Pages, c.convertSimplePageWithDeadHash),
 		Size: serverAPI.OptBookDetailsSize{

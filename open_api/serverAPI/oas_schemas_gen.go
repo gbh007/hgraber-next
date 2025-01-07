@@ -3837,6 +3837,8 @@ type BookDetails struct {
 	PageCount int `json:"page_count"`
 	// Процент загруженных страниц.
 	PageLoadedPercent float64 `json:"page_loaded_percent"`
+	// Оригинальная ссылка на книгу (во внешней системе).
+	OriginURL OptURI `json:"origin_url"`
 	// Данные атрибутов книги.
 	Attributes []BookAttribute `json:"attributes"`
 	// Данные страниц книги.
@@ -3878,6 +3880,11 @@ func (s *BookDetails) GetPageCount() int {
 // GetPageLoadedPercent returns the value of PageLoadedPercent.
 func (s *BookDetails) GetPageLoadedPercent() float64 {
 	return s.PageLoadedPercent
+}
+
+// GetOriginURL returns the value of OriginURL.
+func (s *BookDetails) GetOriginURL() OptURI {
+	return s.OriginURL
 }
 
 // GetAttributes returns the value of Attributes.
@@ -3928,6 +3935,11 @@ func (s *BookDetails) SetPageCount(val int) {
 // SetPageLoadedPercent sets the value of PageLoadedPercent.
 func (s *BookDetails) SetPageLoadedPercent(val float64) {
 	s.PageLoadedPercent = val
+}
+
+// SetOriginURL sets the value of OriginURL.
+func (s *BookDetails) SetOriginURL(val OptURI) {
+	s.OriginURL = val
 }
 
 // SetAttributes sets the value of Attributes.

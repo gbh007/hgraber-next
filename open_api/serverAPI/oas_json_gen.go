@@ -15758,6 +15758,12 @@ func (s *BookDetails) encodeFields(e *jx.Encoder) {
 		e.Float64(s.PageLoadedPercent)
 	}
 	{
+		if s.OriginURL.Set {
+			e.FieldStart("origin_url")
+			s.OriginURL.Encode(e)
+		}
+	}
+	{
 		if s.Attributes != nil {
 			e.FieldStart("attributes")
 			e.ArrStart()
@@ -15785,17 +15791,18 @@ func (s *BookDetails) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfBookDetails = [10]string{
-	0: "id",
-	1: "created",
-	2: "preview_url",
-	3: "flags",
-	4: "name",
-	5: "page_count",
-	6: "page_loaded_percent",
-	7: "attributes",
-	8: "pages",
-	9: "size",
+var jsonFieldsNameOfBookDetails = [11]string{
+	0:  "id",
+	1:  "created",
+	2:  "preview_url",
+	3:  "flags",
+	4:  "name",
+	5:  "page_count",
+	6:  "page_loaded_percent",
+	7:  "origin_url",
+	8:  "attributes",
+	9:  "pages",
+	10: "size",
 }
 
 // Decode decodes BookDetails from json.
@@ -15886,6 +15893,16 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"page_loaded_percent\"")
+			}
+		case "origin_url":
+			if err := func() error {
+				s.OriginURL.Reset()
+				if err := s.OriginURL.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_url\"")
 			}
 		case "attributes":
 			if err := func() error {

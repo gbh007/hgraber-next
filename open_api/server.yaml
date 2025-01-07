@@ -3138,6 +3138,10 @@ components:
           description: Процент загруженных страниц
           maximum: 100
           minimum: 0
+        origin_url:
+          type: string
+          format: uri
+          description: Оригинальная ссылка на книгу (во внешней системе)
         attributes:
           type: array
           description: Данные атрибутов книги
