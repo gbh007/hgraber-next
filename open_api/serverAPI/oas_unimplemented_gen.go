@@ -226,6 +226,15 @@ func (UnimplementedHandler) APIDeduplicateDeleteAllPagesByHashPost(ctx context.C
 	return r, ht.ErrNotImplemented
 }
 
+// APIDeduplicateDeleteBookDeadHashedPagesPost implements POST /api/deduplicate/delete-book-dead-hashed-pages operation.
+//
+// Удаляет из книги страницы с мертвыми хешами.
+//
+// POST /api/deduplicate/delete-book-dead-hashed-pages
+func (UnimplementedHandler) APIDeduplicateDeleteBookDeadHashedPagesPost(ctx context.Context, req *APIDeduplicateDeleteBookDeadHashedPagesPostReq) (r APIDeduplicateDeleteBookDeadHashedPagesPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIDeduplicateUniquePagesPost implements POST /api/deduplicate/unique-pages operation.
 //
 // Поиск уникальных страниц в книге.

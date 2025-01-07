@@ -152,6 +152,12 @@ type Handler interface {
 	//
 	// POST /api/deduplicate/delete-all-pages-by-hash
 	APIDeduplicateDeleteAllPagesByHashPost(ctx context.Context, req *APIDeduplicateDeleteAllPagesByHashPostReq) (APIDeduplicateDeleteAllPagesByHashPostRes, error)
+	// APIDeduplicateDeleteBookDeadHashedPagesPost implements POST /api/deduplicate/delete-book-dead-hashed-pages operation.
+	//
+	// Удаляет из книги страницы с мертвыми хешами.
+	//
+	// POST /api/deduplicate/delete-book-dead-hashed-pages
+	APIDeduplicateDeleteBookDeadHashedPagesPost(ctx context.Context, req *APIDeduplicateDeleteBookDeadHashedPagesPostReq) (APIDeduplicateDeleteBookDeadHashedPagesPostRes, error)
 	// APIDeduplicateUniquePagesPost implements POST /api/deduplicate/unique-pages operation.
 	//
 	// Поиск уникальных страниц в книге.

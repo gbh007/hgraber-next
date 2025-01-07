@@ -93,6 +93,10 @@ type APIDeduplicateDeleteAllPagesByHashPostRes interface {
 	aPIDeduplicateDeleteAllPagesByHashPostRes()
 }
 
+type APIDeduplicateDeleteBookDeadHashedPagesPostRes interface {
+	aPIDeduplicateDeleteBookDeadHashedPagesPostRes()
+}
+
 type APIDeduplicateUniquePagesPostRes interface {
 	aPIDeduplicateUniquePagesPostRes()
 }

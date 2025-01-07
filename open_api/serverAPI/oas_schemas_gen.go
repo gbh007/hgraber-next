@@ -1921,6 +1921,47 @@ type APIDeduplicateDeleteAllPagesByHashPostUnauthorized ErrorResponse
 func (*APIDeduplicateDeleteAllPagesByHashPostUnauthorized) aPIDeduplicateDeleteAllPagesByHashPostRes() {
 }
 
+type APIDeduplicateDeleteBookDeadHashedPagesPostBadRequest ErrorResponse
+
+func (*APIDeduplicateDeleteBookDeadHashedPagesPostBadRequest) aPIDeduplicateDeleteBookDeadHashedPagesPostRes() {
+}
+
+type APIDeduplicateDeleteBookDeadHashedPagesPostForbidden ErrorResponse
+
+func (*APIDeduplicateDeleteBookDeadHashedPagesPostForbidden) aPIDeduplicateDeleteBookDeadHashedPagesPostRes() {
+}
+
+type APIDeduplicateDeleteBookDeadHashedPagesPostInternalServerError ErrorResponse
+
+func (*APIDeduplicateDeleteBookDeadHashedPagesPostInternalServerError) aPIDeduplicateDeleteBookDeadHashedPagesPostRes() {
+}
+
+// APIDeduplicateDeleteBookDeadHashedPagesPostNoContent is response for APIDeduplicateDeleteBookDeadHashedPagesPost operation.
+type APIDeduplicateDeleteBookDeadHashedPagesPostNoContent struct{}
+
+func (*APIDeduplicateDeleteBookDeadHashedPagesPostNoContent) aPIDeduplicateDeleteBookDeadHashedPagesPostRes() {
+}
+
+type APIDeduplicateDeleteBookDeadHashedPagesPostReq struct {
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIDeduplicateDeleteBookDeadHashedPagesPostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIDeduplicateDeleteBookDeadHashedPagesPostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+type APIDeduplicateDeleteBookDeadHashedPagesPostUnauthorized ErrorResponse
+
+func (*APIDeduplicateDeleteBookDeadHashedPagesPostUnauthorized) aPIDeduplicateDeleteBookDeadHashedPagesPostRes() {
+}
+
 type APIDeduplicateUniquePagesPostBadRequest ErrorResponse
 
 func (*APIDeduplicateUniquePagesPostBadRequest) aPIDeduplicateUniquePagesPostRes() {}

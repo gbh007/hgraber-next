@@ -21,13 +21,6 @@ func (uc *UseCase) DeleteAllPageByHash(ctx context.Context, bookID uuid.UUID, pa
 		return fmt.Errorf("storage: get pages by hash: %w", err)
 	}
 
-	for _, page := range pages {
-		err = uc.storage.MarkPageAsDeleted(ctx, page.BookID, page.PageNumber)
-		if err != nil {
-			return fmt.Errorf("storage: mark page (%s,%d) as deleted: %w", page.BookID.String(), page.PageNumber, err)
-		}
-	}
-
 	if setDeadHash {
 		err = uc.storage.SetDeadHash(ctx, entities.DeadHash{
 			FileHash:  pageHash.FileHash,
@@ -35,6 +28,13 @@ func (uc *UseCase) DeleteAllPageByHash(ctx context.Context, bookID uuid.UUID, pa
 		})
 		if err != nil {
 			return fmt.Errorf("storage: set dead hash: %w", err)
+		}
+	}
+
+	for _, page := range pages {
+		err = uc.storage.MarkPageAsDeleted(ctx, page.BookID, page.PageNumber)
+		if err != nil {
+			return fmt.Errorf("storage: mark page (%s,%d) as deleted: %w", page.BookID.String(), page.PageNumber, err)
 		}
 	}
 
