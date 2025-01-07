@@ -35,29 +35,17 @@ func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]e
 		existsDeadHashes[hash.FileHash] = struct{}{}
 	}
 
-	bookIDs, err := uc.storage.BookIDsByMD5(ctx, md5Sums)
+	pages, err := uc.storage.BookPagesWithHashByMD5Sums(ctx, md5Sums)
 	if err != nil {
-		return nil, fmt.Errorf("get books by md5 from storage: %w", err)
+		return nil, fmt.Errorf("storage: get pages by md5: %w", err)
 	}
 
-	bookHandled := make(map[uuid.UUID]struct{}, len(bookIDs))
-	bookHandled[originBookID] = struct{}{}
-
-	for _, bookID := range bookIDs {
-		if _, ok := bookHandled[bookID]; ok {
+	for _, page := range pages {
+		if page.BookID == originBookID {
 			continue
 		}
 
-		bookHandled[bookID] = struct{}{}
-
-		pages, err := uc.storage.BookPagesWithHash(ctx, bookID)
-		if err != nil {
-			return nil, fmt.Errorf("get pages (%s) from storage: %w", bookID.String(), err)
-		}
-
-		for _, page := range pages {
-			delete(hashes, page.FileHash)
-		}
+		delete(hashes, page.FileHash)
 	}
 
 	result := make([]entities.PageWithDeadHash, 0, len(hashes))
