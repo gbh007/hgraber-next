@@ -6,6 +6,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 
 	"hgnext/internal/adapters/postgresql/internal/model"
 	"hgnext/internal/entities"
@@ -121,6 +122,68 @@ func (d *Database) RemoveDeletedPages(ctx context.Context, bookID uuid.UUID, pag
 	_, err = d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query :%w", err)
+	}
+
+	return nil
+}
+
+func (d *Database) RemoveDeletedPagesByHash(ctx context.Context, hash entities.FileHash) error {
+	builder := squirrel.Delete("deleted_pages").
+		PlaceholderFormat(squirrel.Dollar).
+		Where(squirrel.Eq{
+			"md5_sum":    hash.Md5Sum,
+			"sha256_sum": hash.Sha256Sum,
+			"\"size\"":   hash.Size,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	_, err = d.pool.Exec(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("exec query :%w", err)
+	}
+
+	return nil
+}
+
+func (d *Database) RemoveDeletedPagesByHashes(ctx context.Context, hashes []entities.FileHash) error {
+	batch := &pgx.Batch{}
+
+	resultCount := 0
+
+	for _, hash := range hashes {
+		builder := squirrel.Delete("deleted_pages").
+			PlaceholderFormat(squirrel.Dollar).
+			Where(squirrel.Eq{
+				"md5_sum":    hash.Md5Sum,
+				"sha256_sum": hash.Sha256Sum,
+				"\"size\"":   hash.Size,
+			})
+
+		query, args, err := builder.ToSql()
+		if err != nil {
+			return fmt.Errorf("build query: %w", err)
+		}
+
+		d.squirrelDebugLog(ctx, query, args)
+		batch.Queue(query, args...)
+
+		resultCount++
+	}
+
+	batchResult := d.pool.SendBatch(ctx, batch)
+	defer batchResult.Close()
+
+	for range resultCount {
+		_, err := batchResult.Exec()
+		if err != nil {
+			return fmt.Errorf("exec query: %w", err)
+		}
 	}
 
 	return nil

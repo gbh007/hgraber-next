@@ -1329,6 +1329,8 @@ func (s APITaskCreatePostReqCode) Validate() error {
 		return nil
 	case "fill_dead_hashes":
 		return nil
+	case "fill_dead_hashes_with_remove_deleted_pages":
+		return nil
 	case "clean_deleted_pages":
 		return nil
 	default:

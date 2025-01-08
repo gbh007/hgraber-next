@@ -34,6 +34,7 @@ type storage interface {
 	DeletedPagesHashes(ctx context.Context) ([]entities.FileHash, error)
 	MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, pageNumber int) error
 	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
+	RemoveDeletedPagesByHashes(ctx context.Context, hashes []entities.FileHash) error
 
 	BookAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
 	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)

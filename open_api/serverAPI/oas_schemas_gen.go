@@ -3737,11 +3737,12 @@ func (s *APITaskCreatePostReq) SetCode(val APITaskCreatePostReqCode) {
 type APITaskCreatePostReqCode string
 
 const (
-	APITaskCreatePostReqCodeDeduplicateFiles    APITaskCreatePostReqCode = "deduplicate_files"
-	APITaskCreatePostReqCodeRemoveDetachedFiles APITaskCreatePostReqCode = "remove_detached_files"
-	APITaskCreatePostReqCodeRemoveMismatchFiles APITaskCreatePostReqCode = "remove_mismatch_files"
-	APITaskCreatePostReqCodeFillDeadHashes      APITaskCreatePostReqCode = "fill_dead_hashes"
-	APITaskCreatePostReqCodeCleanDeletedPages   APITaskCreatePostReqCode = "clean_deleted_pages"
+	APITaskCreatePostReqCodeDeduplicateFiles                     APITaskCreatePostReqCode = "deduplicate_files"
+	APITaskCreatePostReqCodeRemoveDetachedFiles                  APITaskCreatePostReqCode = "remove_detached_files"
+	APITaskCreatePostReqCodeRemoveMismatchFiles                  APITaskCreatePostReqCode = "remove_mismatch_files"
+	APITaskCreatePostReqCodeFillDeadHashes                       APITaskCreatePostReqCode = "fill_dead_hashes"
+	APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages APITaskCreatePostReqCode = "fill_dead_hashes_with_remove_deleted_pages"
+	APITaskCreatePostReqCodeCleanDeletedPages                    APITaskCreatePostReqCode = "clean_deleted_pages"
 )
 
 // AllValues returns all APITaskCreatePostReqCode values.
@@ -3751,6 +3752,7 @@ func (APITaskCreatePostReqCode) AllValues() []APITaskCreatePostReqCode {
 		APITaskCreatePostReqCodeRemoveDetachedFiles,
 		APITaskCreatePostReqCodeRemoveMismatchFiles,
 		APITaskCreatePostReqCodeFillDeadHashes,
+		APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages,
 		APITaskCreatePostReqCodeCleanDeletedPages,
 	}
 }
@@ -3765,6 +3767,8 @@ func (s APITaskCreatePostReqCode) MarshalText() ([]byte, error) {
 	case APITaskCreatePostReqCodeRemoveMismatchFiles:
 		return []byte(s), nil
 	case APITaskCreatePostReqCodeFillDeadHashes:
+		return []byte(s), nil
+	case APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages:
 		return []byte(s), nil
 	case APITaskCreatePostReqCodeCleanDeletedPages:
 		return []byte(s), nil
@@ -3787,6 +3791,9 @@ func (s *APITaskCreatePostReqCode) UnmarshalText(data []byte) error {
 		return nil
 	case APITaskCreatePostReqCodeFillDeadHashes:
 		*s = APITaskCreatePostReqCodeFillDeadHashes
+		return nil
+	case APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages:
+		*s = APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages
 		return nil
 	case APITaskCreatePostReqCodeCleanDeletedPages:
 		*s = APITaskCreatePostReqCodeCleanDeletedPages

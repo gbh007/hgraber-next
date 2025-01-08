@@ -14,7 +14,7 @@ type storage interface {
 
 type deduplicator interface {
 	DeduplicateFiles(ctx context.Context) (entities.RunnableTask, error)
-	FillDeadHashes(ctx context.Context) (entities.RunnableTask, error)
+	FillDeadHashes(ctx context.Context, withRemoveDeletedPages bool) (entities.RunnableTask, error)
 }
 
 type cleanuper interface {
@@ -59,7 +59,9 @@ func (uc *UseCase) RunTask(ctx context.Context, code entities.TaskCode) error {
 	case entities.RemoveFilesInStoragesMismatchTaskCode:
 		task, err = uc.cleanuper.RemoveFilesInStoragesMismatch(ctx)
 	case entities.FillDeadHashesTaskCode:
-		task, err = uc.deduplicator.FillDeadHashes(ctx)
+		task, err = uc.deduplicator.FillDeadHashes(ctx, false)
+	case entities.FillDeadHashesAndRemoveDeletedPagesTaskCode:
+		task, err = uc.deduplicator.FillDeadHashes(ctx, true)
 	case entities.CleanDeletedPagesTaskCode:
 		task, err = uc.cleanuper.CleanDeletedPages(ctx)
 	}

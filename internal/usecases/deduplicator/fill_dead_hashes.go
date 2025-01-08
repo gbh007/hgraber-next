@@ -8,11 +8,15 @@ import (
 	"hgnext/internal/entities"
 )
 
-func (uc *UseCase) FillDeadHashes(_ context.Context) (entities.RunnableTask, error) {
+func (uc *UseCase) FillDeadHashes(_ context.Context, withRemoveDeletedPages bool) (entities.RunnableTask, error) {
 	return entities.RunnableTaskFunction(func(ctx context.Context, taskResult entities.TaskResultWriter) {
 		defer taskResult.Finish()
 
-		taskResult.SetName("FillDeadHashes")
+		if withRemoveDeletedPages {
+			taskResult.SetName("FillDeadHashesWithRemoveDeletedPages")
+		} else {
+			taskResult.SetName("FillDeadHashes")
+		}
 
 		taskResult.StartStage("search hashes")
 
@@ -31,6 +35,7 @@ func (uc *UseCase) FillDeadHashes(_ context.Context) (entities.RunnableTask, err
 		taskResult.SetTotal(int64(len(deletedPagesHashes)))
 
 		deadHashes := make([]entities.DeadHash, 0, len(deletedPagesHashes))
+		deadHashesToRemoveFromDeletedPages := make([]entities.FileHash, 0, len(deletedPagesHashes))
 
 		for _, hash := range deletedPagesHashes {
 			taskResult.IncProgress()
@@ -50,6 +55,10 @@ func (uc *UseCase) FillDeadHashes(_ context.Context) (entities.RunnableTask, err
 				FileHash:  hash,
 				CreatedAt: time.Now().UTC(),
 			})
+
+			if withRemoveDeletedPages {
+				deadHashesToRemoveFromDeletedPages = append(deadHashesToRemoveFromDeletedPages, hash)
+			}
 		}
 
 		taskResult.EndStage()
@@ -57,15 +66,34 @@ func (uc *UseCase) FillDeadHashes(_ context.Context) (entities.RunnableTask, err
 		taskResult.StartStage("set dead hashes")
 		taskResult.SetTotal(int64(len(deadHashes)))
 
-		err = uc.storage.SetDeadHashes(ctx, deadHashes)
-		if err != nil {
-			taskResult.SetError(fmt.Errorf("set dead hashes: %w", err))
+		if len(deadHashes) > 0 {
+			err = uc.storage.SetDeadHashes(ctx, deadHashes)
+			if err != nil {
+				taskResult.SetError(fmt.Errorf("set dead hashes: %w", err))
 
-			return
+				return
+			}
 		}
 
 		taskResult.SetProgress(int64(len(deadHashes)))
 		taskResult.EndStage()
+
+		if withRemoveDeletedPages {
+			taskResult.StartStage("remove deleted page by new dead hashes")
+			taskResult.SetTotal(int64(len(deadHashesToRemoveFromDeletedPages)))
+
+			if len(deadHashesToRemoveFromDeletedPages) > 0 {
+				err = uc.storage.RemoveDeletedPagesByHashes(ctx, deadHashesToRemoveFromDeletedPages)
+				if err != nil {
+					taskResult.SetError(fmt.Errorf("remove deleted pages by hashes: %w", err))
+
+					return
+				}
+			}
+
+			taskResult.SetProgress(int64(len(deadHashesToRemoveFromDeletedPages)))
+			taskResult.EndStage()
+		}
 
 		taskResult.SetResult(fmt.Sprintf("Обработано %d", len(deadHashes)))
 	}), nil

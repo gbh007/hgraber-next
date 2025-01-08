@@ -13,6 +13,7 @@ const (
 	RemoveDetachedFilesTaskCode
 	RemoveFilesInStoragesMismatchTaskCode
 	FillDeadHashesTaskCode
+	FillDeadHashesAndRemoveDeletedPagesTaskCode
 	CleanDeletedPagesTaskCode
 )
 

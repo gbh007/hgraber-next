@@ -19,6 +19,8 @@ func (c *Controller) APITaskCreatePost(ctx context.Context, req *serverAPI.APITa
 		code = entities.RemoveFilesInStoragesMismatchTaskCode
 	case serverAPI.APITaskCreatePostReqCodeFillDeadHashes:
 		code = entities.FillDeadHashesTaskCode
+	case serverAPI.APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages:
+		code = entities.FillDeadHashesAndRemoveDeletedPagesTaskCode
 	case serverAPI.APITaskCreatePostReqCodeCleanDeletedPages:
 		code = entities.CleanDeletedPagesTaskCode
 	}
