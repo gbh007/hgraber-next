@@ -591,7 +591,7 @@ paths:
                 - values
       responses:
         204:
-          description: Успешное создание пересета
+          description: Успешное создание
         400:
           description: Некорректный запрос данных
           content:
@@ -646,7 +646,7 @@ paths:
                 - values
       responses:
         204:
-          description: Успешное создание пересета
+          description: Успешное обновление
         400:
           description: Некорректный запрос данных
           content:
@@ -698,7 +698,7 @@ paths:
                 - name
       responses:
         204:
-          description: Успешное создание пересета
+          description: Успешное удаление
         400:
           description: Некорректный запрос данных
           content:
@@ -3018,6 +3018,240 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/attribute/color/create:
+    post:
+      description: Создание покраски аттрибута
+      summary: Создание покраски аттрибута
+      tags:
+        - attribute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AttributeColor"
+      responses:
+        204:
+          description: Успешное создание
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/attribute/color/update:
+    post:
+      description: Обновления покраски атрибута
+      summary: Обновления покраски атрибута
+      tags:
+        - attribute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AttributeColor"
+      responses:
+        204:
+          description: Успешное обновление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/attribute/color/delete:
+    post:
+      description: Удаление цвета атрибута
+      summary: Удаление цвета атрибута
+      tags:
+        - attribute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: Код атрибута
+                value:
+                  type: string
+                  description: Значение атрибута
+              required:
+                - code
+                - value
+      responses:
+        204:
+          description: Успешное удаление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/attribute/color/get:
+    post:
+      description: Цвет конкретного атрибута
+      summary: Цвет конкретного атрибута
+      tags:
+        - attribute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: Код атрибута
+                value:
+                  type: string
+                  description: Значение атрибута
+              required:
+                - code
+                - value
+      responses:
+        200:
+          description: Информация о цвете
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttributeColor"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/attribute/color/list:
+    get:
+      description: Цвета атрибутов
+      summary: Цвета атрибутов
+      tags:
+        - attribute
+      responses:
+        200:
+          description: Информация о цветах
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  colors:
+                    description: Список пресетов
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AttributeColor"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     SystemInfo:
@@ -3203,6 +3437,7 @@ components:
 
     BookAttribute:
       type: object
+      description: Аттрибут книги
       properties:
         code:
           type: string
@@ -3219,6 +3454,33 @@ components:
         - code
         - name
         - values
+
+    AttributeColor:
+      type: object
+      description: Цвет аттрибута
+      properties:
+        code:
+          type: string
+          description: Код атрибута
+        value:
+          type: string
+          description: Значение атрибута
+        text_color:
+          type: string
+          description: Цвет текста
+        background_color:
+          type: string
+          description: Цвет фона
+        created_at:
+          type: string
+          format: date-time
+          description: Время создания
+      required:
+        - code
+        - value
+        - text_color
+        - background_color
+        - created_at
 
     BookRaw:
       type: object

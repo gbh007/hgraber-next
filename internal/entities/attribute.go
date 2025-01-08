@@ -1,6 +1,8 @@
 package entities
 
 import (
+	"time"
+
 	"hgnext/internal/pkg"
 )
 
@@ -10,6 +12,22 @@ type AttributeVariant struct {
 	Code  string
 	Value string
 	Count int
+}
+
+type Attribute struct {
+	Code        string
+	Name        string
+	PluralName  string
+	Order       int
+	Description string
+}
+
+type AttributeColor struct {
+	Code            string
+	Value           string
+	TextColor       string
+	BackgroundColor string
+	CreatedAt       time.Time
 }
 
 func MergeAttributeMap(a, b map[string][]string) map[string][]string {
@@ -60,12 +78,4 @@ func AttributesValuesDiff(a, b []string) (aUniq, both, bUniq []string) {
 	}
 
 	return
-}
-
-type Attribute struct {
-	Code        string
-	Name        string
-	PluralName  string
-	Order       int
-	Description string
 }

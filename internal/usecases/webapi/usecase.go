@@ -29,6 +29,12 @@ type storage interface {
 	DeleteLabelPreset(ctx context.Context, name string) error
 	LabelPresets(ctx context.Context) ([]entities.BookLabelPreset, error)
 	LabelPreset(ctx context.Context, name string) (entities.BookLabelPreset, error)
+
+	InsertAttributeColor(ctx context.Context, color entities.AttributeColor) error
+	UpdateAttributeColor(ctx context.Context, color entities.AttributeColor) error
+	DeleteAttributeColor(ctx context.Context, code, value string) error
+	AttributeColors(ctx context.Context) ([]entities.AttributeColor, error)
+	AttributeColor(ctx context.Context, code, value string) (entities.AttributeColor, error)
 }
 
 type bookRequester interface {

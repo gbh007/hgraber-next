@@ -595,6 +595,176 @@ type APIAgentTaskExportPostUnauthorized ErrorResponse
 
 func (*APIAgentTaskExportPostUnauthorized) aPIAgentTaskExportPostRes() {}
 
+type APIAttributeColorCreatePostBadRequest ErrorResponse
+
+func (*APIAttributeColorCreatePostBadRequest) aPIAttributeColorCreatePostRes() {}
+
+type APIAttributeColorCreatePostForbidden ErrorResponse
+
+func (*APIAttributeColorCreatePostForbidden) aPIAttributeColorCreatePostRes() {}
+
+type APIAttributeColorCreatePostInternalServerError ErrorResponse
+
+func (*APIAttributeColorCreatePostInternalServerError) aPIAttributeColorCreatePostRes() {}
+
+// APIAttributeColorCreatePostNoContent is response for APIAttributeColorCreatePost operation.
+type APIAttributeColorCreatePostNoContent struct{}
+
+func (*APIAttributeColorCreatePostNoContent) aPIAttributeColorCreatePostRes() {}
+
+type APIAttributeColorCreatePostUnauthorized ErrorResponse
+
+func (*APIAttributeColorCreatePostUnauthorized) aPIAttributeColorCreatePostRes() {}
+
+type APIAttributeColorDeletePostBadRequest ErrorResponse
+
+func (*APIAttributeColorDeletePostBadRequest) aPIAttributeColorDeletePostRes() {}
+
+type APIAttributeColorDeletePostForbidden ErrorResponse
+
+func (*APIAttributeColorDeletePostForbidden) aPIAttributeColorDeletePostRes() {}
+
+type APIAttributeColorDeletePostInternalServerError ErrorResponse
+
+func (*APIAttributeColorDeletePostInternalServerError) aPIAttributeColorDeletePostRes() {}
+
+// APIAttributeColorDeletePostNoContent is response for APIAttributeColorDeletePost operation.
+type APIAttributeColorDeletePostNoContent struct{}
+
+func (*APIAttributeColorDeletePostNoContent) aPIAttributeColorDeletePostRes() {}
+
+type APIAttributeColorDeletePostNotFound ErrorResponse
+
+func (*APIAttributeColorDeletePostNotFound) aPIAttributeColorDeletePostRes() {}
+
+type APIAttributeColorDeletePostReq struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeColorDeletePostReq) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeColorDeletePostReq) GetValue() string {
+	return s.Value
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeColorDeletePostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeColorDeletePostReq) SetValue(val string) {
+	s.Value = val
+}
+
+type APIAttributeColorDeletePostUnauthorized ErrorResponse
+
+func (*APIAttributeColorDeletePostUnauthorized) aPIAttributeColorDeletePostRes() {}
+
+type APIAttributeColorGetPostForbidden ErrorResponse
+
+func (*APIAttributeColorGetPostForbidden) aPIAttributeColorGetPostRes() {}
+
+type APIAttributeColorGetPostInternalServerError ErrorResponse
+
+func (*APIAttributeColorGetPostInternalServerError) aPIAttributeColorGetPostRes() {}
+
+type APIAttributeColorGetPostNotFound ErrorResponse
+
+func (*APIAttributeColorGetPostNotFound) aPIAttributeColorGetPostRes() {}
+
+type APIAttributeColorGetPostReq struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeColorGetPostReq) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeColorGetPostReq) GetValue() string {
+	return s.Value
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeColorGetPostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeColorGetPostReq) SetValue(val string) {
+	s.Value = val
+}
+
+type APIAttributeColorGetPostUnauthorized ErrorResponse
+
+func (*APIAttributeColorGetPostUnauthorized) aPIAttributeColorGetPostRes() {}
+
+type APIAttributeColorListGetForbidden ErrorResponse
+
+func (*APIAttributeColorListGetForbidden) aPIAttributeColorListGetRes() {}
+
+type APIAttributeColorListGetInternalServerError ErrorResponse
+
+func (*APIAttributeColorListGetInternalServerError) aPIAttributeColorListGetRes() {}
+
+type APIAttributeColorListGetOK struct {
+	// Список пресетов.
+	Colors []AttributeColor `json:"colors"`
+}
+
+// GetColors returns the value of Colors.
+func (s *APIAttributeColorListGetOK) GetColors() []AttributeColor {
+	return s.Colors
+}
+
+// SetColors sets the value of Colors.
+func (s *APIAttributeColorListGetOK) SetColors(val []AttributeColor) {
+	s.Colors = val
+}
+
+func (*APIAttributeColorListGetOK) aPIAttributeColorListGetRes() {}
+
+type APIAttributeColorListGetUnauthorized ErrorResponse
+
+func (*APIAttributeColorListGetUnauthorized) aPIAttributeColorListGetRes() {}
+
+type APIAttributeColorUpdatePostBadRequest ErrorResponse
+
+func (*APIAttributeColorUpdatePostBadRequest) aPIAttributeColorUpdatePostRes() {}
+
+type APIAttributeColorUpdatePostForbidden ErrorResponse
+
+func (*APIAttributeColorUpdatePostForbidden) aPIAttributeColorUpdatePostRes() {}
+
+type APIAttributeColorUpdatePostInternalServerError ErrorResponse
+
+func (*APIAttributeColorUpdatePostInternalServerError) aPIAttributeColorUpdatePostRes() {}
+
+// APIAttributeColorUpdatePostNoContent is response for APIAttributeColorUpdatePost operation.
+type APIAttributeColorUpdatePostNoContent struct{}
+
+func (*APIAttributeColorUpdatePostNoContent) aPIAttributeColorUpdatePostRes() {}
+
+type APIAttributeColorUpdatePostNotFound ErrorResponse
+
+func (*APIAttributeColorUpdatePostNotFound) aPIAttributeColorUpdatePostRes() {}
+
+type APIAttributeColorUpdatePostUnauthorized ErrorResponse
+
+func (*APIAttributeColorUpdatePostUnauthorized) aPIAttributeColorUpdatePostRes() {}
+
 type APIAttributeCountGetForbidden ErrorResponse
 
 func (*APIAttributeCountGetForbidden) aPIAttributeCountGetRes() {}
@@ -4062,6 +4232,74 @@ func (s *APIUserLoginPostReq) SetToken(val string) {
 	s.Token = val
 }
 
+// Цвет аттрибута.
+// Ref: #/components/schemas/AttributeColor
+type AttributeColor struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+	// Цвет текста.
+	TextColor string `json:"text_color"`
+	// Цвет фона.
+	BackgroundColor string `json:"background_color"`
+	// Время создания.
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// GetCode returns the value of Code.
+func (s *AttributeColor) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *AttributeColor) GetValue() string {
+	return s.Value
+}
+
+// GetTextColor returns the value of TextColor.
+func (s *AttributeColor) GetTextColor() string {
+	return s.TextColor
+}
+
+// GetBackgroundColor returns the value of BackgroundColor.
+func (s *AttributeColor) GetBackgroundColor() string {
+	return s.BackgroundColor
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *AttributeColor) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetCode sets the value of Code.
+func (s *AttributeColor) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *AttributeColor) SetValue(val string) {
+	s.Value = val
+}
+
+// SetTextColor sets the value of TextColor.
+func (s *AttributeColor) SetTextColor(val string) {
+	s.TextColor = val
+}
+
+// SetBackgroundColor sets the value of BackgroundColor.
+func (s *AttributeColor) SetBackgroundColor(val string) {
+	s.BackgroundColor = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *AttributeColor) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+func (*AttributeColor) aPIAttributeColorGetPostRes() {}
+
+// Аттрибут книги.
 // Ref: #/components/schemas/BookAttribute
 type BookAttribute struct {
 	// Код атрибута.

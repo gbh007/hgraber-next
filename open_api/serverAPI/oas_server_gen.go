@@ -32,6 +32,36 @@ type Handler interface {
 	//
 	// POST /api/agent/task/export
 	APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error)
+	// APIAttributeColorCreatePost implements POST /api/attribute/color/create operation.
+	//
+	// Создание покраски аттрибута.
+	//
+	// POST /api/attribute/color/create
+	APIAttributeColorCreatePost(ctx context.Context, req *AttributeColor) (APIAttributeColorCreatePostRes, error)
+	// APIAttributeColorDeletePost implements POST /api/attribute/color/delete operation.
+	//
+	// Удаление цвета атрибута.
+	//
+	// POST /api/attribute/color/delete
+	APIAttributeColorDeletePost(ctx context.Context, req *APIAttributeColorDeletePostReq) (APIAttributeColorDeletePostRes, error)
+	// APIAttributeColorGetPost implements POST /api/attribute/color/get operation.
+	//
+	// Цвет конкретного атрибута.
+	//
+	// POST /api/attribute/color/get
+	APIAttributeColorGetPost(ctx context.Context, req *APIAttributeColorGetPostReq) (APIAttributeColorGetPostRes, error)
+	// APIAttributeColorListGet implements GET /api/attribute/color/list operation.
+	//
+	// Цвета атрибутов.
+	//
+	// GET /api/attribute/color/list
+	APIAttributeColorListGet(ctx context.Context) (APIAttributeColorListGetRes, error)
+	// APIAttributeColorUpdatePost implements POST /api/attribute/color/update operation.
+	//
+	// Обновления покраски атрибута.
+	//
+	// POST /api/attribute/color/update
+	APIAttributeColorUpdatePost(ctx context.Context, req *AttributeColor) (APIAttributeColorUpdatePostRes, error)
 	// APIAttributeCountGet implements GET /api/attribute/count operation.
 	//
 	// Получение информации о количестве вариантов

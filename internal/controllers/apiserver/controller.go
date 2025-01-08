@@ -41,6 +41,11 @@ type webAPIUseCases interface {
 	SetWorkerConfig(ctx context.Context, counts map[string]int)
 
 	AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error)
+	CreateAttributeColor(ctx context.Context, color entities.AttributeColor) error
+	UpdateAttributeColor(ctx context.Context, color entities.AttributeColor) error
+	DeleteAttributeColor(ctx context.Context, code, value string) error
+	AttributeColors(ctx context.Context) ([]entities.AttributeColor, error)
+	AttributeColor(ctx context.Context, code, value string) (entities.AttributeColor, error)
 
 	SetLabel(ctx context.Context, label entities.BookLabel) error
 	DeleteLabel(ctx context.Context, label entities.BookLabel) error

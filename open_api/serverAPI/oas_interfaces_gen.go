@@ -17,6 +17,26 @@ type APIAgentTaskExportPostRes interface {
 	aPIAgentTaskExportPostRes()
 }
 
+type APIAttributeColorCreatePostRes interface {
+	aPIAttributeColorCreatePostRes()
+}
+
+type APIAttributeColorDeletePostRes interface {
+	aPIAttributeColorDeletePostRes()
+}
+
+type APIAttributeColorGetPostRes interface {
+	aPIAttributeColorGetPostRes()
+}
+
+type APIAttributeColorListGetRes interface {
+	aPIAttributeColorListGetRes()
+}
+
+type APIAttributeColorUpdatePostRes interface {
+	aPIAttributeColorUpdatePostRes()
+}
+
 type APIAttributeCountGetRes interface {
 	aPIAttributeCountGetRes()
 }

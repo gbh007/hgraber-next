@@ -49,6 +49,51 @@ func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req *API
 	return r, ht.ErrNotImplemented
 }
 
+// APIAttributeColorCreatePost implements POST /api/attribute/color/create operation.
+//
+// Создание покраски аттрибута.
+//
+// POST /api/attribute/color/create
+func (UnimplementedHandler) APIAttributeColorCreatePost(ctx context.Context, req *AttributeColor) (r APIAttributeColorCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIAttributeColorDeletePost implements POST /api/attribute/color/delete operation.
+//
+// Удаление цвета атрибута.
+//
+// POST /api/attribute/color/delete
+func (UnimplementedHandler) APIAttributeColorDeletePost(ctx context.Context, req *APIAttributeColorDeletePostReq) (r APIAttributeColorDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIAttributeColorGetPost implements POST /api/attribute/color/get operation.
+//
+// Цвет конкретного атрибута.
+//
+// POST /api/attribute/color/get
+func (UnimplementedHandler) APIAttributeColorGetPost(ctx context.Context, req *APIAttributeColorGetPostReq) (r APIAttributeColorGetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIAttributeColorListGet implements GET /api/attribute/color/list operation.
+//
+// Цвета атрибутов.
+//
+// GET /api/attribute/color/list
+func (UnimplementedHandler) APIAttributeColorListGet(ctx context.Context) (r APIAttributeColorListGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIAttributeColorUpdatePost implements POST /api/attribute/color/update operation.
+//
+// Обновления покраски атрибута.
+//
+// POST /api/attribute/color/update
+func (UnimplementedHandler) APIAttributeColorUpdatePost(ctx context.Context, req *AttributeColor) (r APIAttributeColorUpdatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIAttributeCountGet implements GET /api/attribute/count operation.
 //
 // Получение информации о количестве вариантов
