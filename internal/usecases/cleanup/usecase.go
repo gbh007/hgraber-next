@@ -16,6 +16,9 @@ type storage interface {
 	FileIDs(ctx context.Context) ([]uuid.UUID, error)
 
 	TruncateDeletedPages(ctx context.Context) error
+
+	BookIDsWithDeletedRebuilds(ctx context.Context) ([]uuid.UUID, error)
+	DeleteBooks(ctx context.Context, ids []uuid.UUID) error
 }
 
 type fileStorage interface {

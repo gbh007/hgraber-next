@@ -21,6 +21,7 @@ type cleanuper interface {
 	RemoveDetachedFiles(ctx context.Context) (entities.RunnableTask, error)
 	RemoveFilesInStoragesMismatch(ctx context.Context) (entities.RunnableTask, error)
 	CleanDeletedPages(ctx context.Context) (entities.RunnableTask, error)
+	CleanDeletedRebuilds(ctx context.Context) (entities.RunnableTask, error)
 }
 
 type UseCase struct {
@@ -64,6 +65,8 @@ func (uc *UseCase) RunTask(ctx context.Context, code entities.TaskCode) error {
 		task, err = uc.deduplicator.FillDeadHashes(ctx, true)
 	case entities.CleanDeletedPagesTaskCode:
 		task, err = uc.cleanuper.CleanDeletedPages(ctx)
+	case entities.CleanDeletedRebuildsTaskCode:
+		task, err = uc.cleanuper.CleanDeletedRebuilds(ctx)
 	}
 
 	if err != nil {

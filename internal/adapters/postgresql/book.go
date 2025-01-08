@@ -147,3 +147,68 @@ func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {
 
 	return nil
 }
+
+func (d *Database) DeleteBooks(ctx context.Context, ids []uuid.UUID) error {
+	builder := squirrel.Delete("books").
+		PlaceholderFormat(squirrel.Dollar).
+		Where(squirrel.Eq{
+			"id": ids,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	res, err := d.db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("exec query: %w", err)
+	}
+
+	if !d.isApply(ctx, res) {
+		return entities.BookNotFoundError
+	}
+
+	return nil
+}
+
+func (d *Database) BookIDsWithDeletedRebuilds(ctx context.Context) ([]uuid.UUID, error) {
+	builder := squirrel.Select("id").
+		PlaceholderFormat(squirrel.Dollar).
+		From("books").
+		Where(squirrel.Eq{
+			"deleted":    true,
+			"is_rebuild": true,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	result := []uuid.UUID{}
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		id := uuid.UUID{}
+
+		err := rows.Scan(&id)
+		if err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+
+		result = append(result, id)
+	}
+
+	return result, nil
+}

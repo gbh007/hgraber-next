@@ -30,7 +30,7 @@ func (c *Controller) APITaskResultsGet(ctx context.Context) (serverAPI.APITaskRe
 					return serverAPI.APITaskResultsGetOKResultsItemStagesItem{
 						Name:              rawStage.Name,
 						Error:             optString(rawStage.Error),
-						Result:            optString(rawStage.Error),
+						Result:            optString(rawStage.Result),
 						DurationFormatted: max(rawStage.Duration(), 0).String(),
 						StartedAt:         rawStage.StartedAt,
 						EndedAt:           rawStage.EndedAt,

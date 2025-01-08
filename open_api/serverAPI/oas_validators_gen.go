@@ -1333,6 +1333,8 @@ func (s APITaskCreatePostReqCode) Validate() error {
 		return nil
 	case "clean_deleted_pages":
 		return nil
+	case "clean_deleted_rebuilds":
+		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}

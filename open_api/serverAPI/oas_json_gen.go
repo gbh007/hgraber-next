@@ -16657,6 +16657,8 @@ func (s *APITaskCreatePostReqCode) Decode(d *jx.Decoder) error {
 		*s = APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages
 	case APITaskCreatePostReqCodeCleanDeletedPages:
 		*s = APITaskCreatePostReqCodeCleanDeletedPages
+	case APITaskCreatePostReqCodeCleanDeletedRebuilds:
+		*s = APITaskCreatePostReqCodeCleanDeletedRebuilds
 	default:
 		*s = APITaskCreatePostReqCode(v)
 	}

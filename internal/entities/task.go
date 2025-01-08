@@ -15,6 +15,7 @@ const (
 	FillDeadHashesTaskCode
 	FillDeadHashesAndRemoveDeletedPagesTaskCode
 	CleanDeletedPagesTaskCode
+	CleanDeletedRebuildsTaskCode
 )
 
 type TaskResultWriter interface {

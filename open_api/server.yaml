@@ -181,6 +181,7 @@ paths:
                     - fill_dead_hashes
                     - fill_dead_hashes_with_remove_deleted_pages
                     - clean_deleted_pages
+                    - clean_deleted_rebuilds
                   description: Код задачи
               required:
                 - code
