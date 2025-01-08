@@ -22,6 +22,15 @@ func (UnimplementedHandler) APIAgentDeletePost(ctx context.Context, req *APIAgen
 	return r, ht.ErrNotImplemented
 }
 
+// APIAgentGetPost implements POST /api/agent/get operation.
+//
+// Получение данных агента.
+//
+// POST /api/agent/get
+func (UnimplementedHandler) APIAgentGetPost(ctx context.Context, req *APIAgentGetPostReq) (r APIAgentGetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIAgentListPost implements POST /api/agent/list operation.
 //
 // Список агентов.
@@ -46,6 +55,15 @@ func (UnimplementedHandler) APIAgentNewPost(ctx context.Context, req *APIAgentNe
 //
 // POST /api/agent/task/export
 func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) (r APIAgentTaskExportPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIAgentUpdatePost implements POST /api/agent/update operation.
+//
+// Обновление данных агента.
+//
+// POST /api/agent/update
+func (UnimplementedHandler) APIAgentUpdatePost(ctx context.Context, req *Agent) (r APIAgentUpdatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

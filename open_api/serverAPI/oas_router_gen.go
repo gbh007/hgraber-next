@@ -106,6 +106,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
+					case 'g': // Prefix: "get"
+						origElem := elem
+						if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIAgentGetPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					case 'l': // Prefix: "list"
 						origElem := elem
 						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
@@ -161,6 +182,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							switch r.Method {
 							case "POST":
 								s.handleAPIAgentTaskExportPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'u': // Prefix: "update"
+						origElem := elem
+						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIAgentUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "POST")
 							}
@@ -1614,6 +1656,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
+					case 'g': // Prefix: "get"
+						origElem := elem
+						if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIAgentGetPostOperation
+								r.summary = "Получение данных агента"
+								r.operationID = ""
+								r.pathPattern = "/api/agent/get"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					case 'l': // Prefix: "list"
 						origElem := elem
 						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
@@ -1680,6 +1747,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.summary = "Экспорт книг в другую систему"
 								r.operationID = ""
 								r.pathPattern = "/api/agent/task/export"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'u': // Prefix: "update"
+						origElem := elem
+						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIAgentUpdatePostOperation
+								r.summary = "Обновление данных агента"
+								r.operationID = ""
+								r.pathPattern = "/api/agent/update"
 								r.args = args
 								r.count = 0
 								return r, true

@@ -5,6 +5,10 @@ type APIAgentDeletePostRes interface {
 	aPIAgentDeletePostRes()
 }
 
+type APIAgentGetPostRes interface {
+	aPIAgentGetPostRes()
+}
+
 type APIAgentListPostRes interface {
 	aPIAgentListPostRes()
 }
@@ -15,6 +19,10 @@ type APIAgentNewPostRes interface {
 
 type APIAgentTaskExportPostRes interface {
 	aPIAgentTaskExportPostRes()
+}
+
+type APIAgentUpdatePostRes interface {
+	aPIAgentUpdatePostRes()
 }
 
 type APIAttributeColorCreatePostRes interface {

@@ -70,15 +70,8 @@ func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAge
 		}
 
 		return serverAPI.APIAgentListPostOKItem{
-			Status:        status,
-			ID:            aws.Agent.ID,
-			Name:          aws.Agent.Name,
-			Addr:          aws.Agent.Addr,
-			CanParse:      aws.Agent.CanParse,
-			CanParseMulti: aws.Agent.CanParseMulti,
-			CanExport:     aws.Agent.CanExport,
-			Priority:      aws.Agent.Priority,
-			CreateAt:      aws.Agent.CreateAt,
+			Status: status,
+			Info:   convertAgentToAPI(aws.Agent),
 		}
 	})
 

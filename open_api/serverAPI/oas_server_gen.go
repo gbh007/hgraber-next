@@ -14,6 +14,12 @@ type Handler interface {
 	//
 	// POST /api/agent/delete
 	APIAgentDeletePost(ctx context.Context, req *APIAgentDeletePostReq) (APIAgentDeletePostRes, error)
+	// APIAgentGetPost implements POST /api/agent/get operation.
+	//
+	// Получение данных агента.
+	//
+	// POST /api/agent/get
+	APIAgentGetPost(ctx context.Context, req *APIAgentGetPostReq) (APIAgentGetPostRes, error)
 	// APIAgentListPost implements POST /api/agent/list operation.
 	//
 	// Список агентов.
@@ -32,6 +38,12 @@ type Handler interface {
 	//
 	// POST /api/agent/task/export
 	APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error)
+	// APIAgentUpdatePost implements POST /api/agent/update operation.
+	//
+	// Обновление данных агента.
+	//
+	// POST /api/agent/update
+	APIAgentUpdatePost(ctx context.Context, req *Agent) (APIAgentUpdatePostRes, error)
 	// APIAttributeColorCreatePost implements POST /api/attribute/color/create operation.
 	//
 	// Создание покраски аттрибута.

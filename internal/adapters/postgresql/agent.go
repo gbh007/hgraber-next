@@ -59,6 +59,37 @@ func (d *Database) Agents(ctx context.Context, filter entities.AgentFilter) ([]e
 	return result, nil
 }
 
+func (d *Database) Agent(ctx context.Context, id uuid.UUID) (entities.Agent, error) {
+	raw := model.Agent{}
+
+	builder := squirrel.Select("*").
+		PlaceholderFormat(squirrel.Dollar).
+		From("agents").
+		Where(squirrel.Eq{
+			"id": id,
+		}).
+		Limit(1)
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return entities.Agent{}, fmt.Errorf("storage: build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	err = d.db.GetContext(ctx, &raw, query, args...)
+	if err != nil {
+		return entities.Agent{}, fmt.Errorf("storage: exec query: %w", err)
+	}
+
+	result, err := raw.ToEntity()
+	if err != nil {
+		return entities.Agent{}, fmt.Errorf("storage: convert: %w", err)
+	}
+
+	return result, nil
+}
+
 func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 	builder := squirrel.Insert("agents").
 		PlaceholderFormat(squirrel.Dollar).

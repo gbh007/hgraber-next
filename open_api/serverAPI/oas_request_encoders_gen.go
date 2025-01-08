@@ -25,6 +25,20 @@ func encodeAPIAgentDeletePostRequest(
 	return nil
 }
 
+func encodeAPIAgentGetPostRequest(
+	req *APIAgentGetPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIAgentListPostRequest(
 	req *APIAgentListPostReq,
 	r *http.Request,
@@ -55,6 +69,20 @@ func encodeAPIAgentNewPostRequest(
 
 func encodeAPIAgentTaskExportPostRequest(
 	req *APIAgentTaskExportPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIAgentUpdatePostRequest(
+	req *Agent,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

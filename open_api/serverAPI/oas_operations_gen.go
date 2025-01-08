@@ -7,9 +7,11 @@ type OperationName = string
 
 const (
 	APIAgentDeletePostOperation                          OperationName = "APIAgentDeletePost"
+	APIAgentGetPostOperation                             OperationName = "APIAgentGetPost"
 	APIAgentListPostOperation                            OperationName = "APIAgentListPost"
 	APIAgentNewPostOperation                             OperationName = "APIAgentNewPost"
 	APIAgentTaskExportPostOperation                      OperationName = "APIAgentTaskExportPost"
+	APIAgentUpdatePostOperation                          OperationName = "APIAgentUpdatePost"
 	APIAttributeColorCreatePostOperation                 OperationName = "APIAttributeColorCreatePost"
 	APIAttributeColorDeletePostOperation                 OperationName = "APIAttributeColorDeletePost"
 	APIAttributeColorGetPostOperation                    OperationName = "APIAttributeColorGetPost"

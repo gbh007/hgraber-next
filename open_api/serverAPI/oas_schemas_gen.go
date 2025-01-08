@@ -51,6 +51,41 @@ type APIAgentDeletePostUnauthorized ErrorResponse
 
 func (*APIAgentDeletePostUnauthorized) aPIAgentDeletePostRes() {}
 
+type APIAgentGetPostBadRequest ErrorResponse
+
+func (*APIAgentGetPostBadRequest) aPIAgentGetPostRes() {}
+
+type APIAgentGetPostForbidden ErrorResponse
+
+func (*APIAgentGetPostForbidden) aPIAgentGetPostRes() {}
+
+type APIAgentGetPostInternalServerError ErrorResponse
+
+func (*APIAgentGetPostInternalServerError) aPIAgentGetPostRes() {}
+
+type APIAgentGetPostNotFound ErrorResponse
+
+func (*APIAgentGetPostNotFound) aPIAgentGetPostRes() {}
+
+type APIAgentGetPostReq struct {
+	// ID агента.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIAgentGetPostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIAgentGetPostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIAgentGetPostUnauthorized ErrorResponse
+
+func (*APIAgentGetPostUnauthorized) aPIAgentGetPostRes() {}
+
 type APIAgentListPostBadRequest ErrorResponse
 
 func (*APIAgentListPostBadRequest) aPIAgentListPostRes() {}
@@ -70,23 +105,7 @@ func (*APIAgentListPostOKApplicationJSON) aPIAgentListPostRes() {}
 type APIAgentListPostOKItem struct {
 	// Статус агента.
 	Status OptAPIAgentListPostOKItemStatus `json:"status"`
-	// ID агента.
-	ID uuid.UUID `json:"id"`
-	// Название агента.
-	Name string `json:"name"`
-	// Адрес агента.
-	Addr url.URL `json:"addr"`
-	// Может ли агент обрабатывать ссылки внешних систем.
-	CanParse bool `json:"can_parse"`
-	// Может ли агент обрабатывать множественные ссылки
-	// внешних систем.
-	CanParseMulti bool `json:"can_parse_multi"`
-	// Может ли агент экспортировать данные из системы.
-	CanExport bool `json:"can_export"`
-	// Приоритет при выборе агентов.
-	Priority int `json:"priority"`
-	// Время создания агента.
-	CreateAt time.Time `json:"create_at"`
+	Info   Agent                           `json:"info"`
 }
 
 // GetStatus returns the value of Status.
@@ -94,44 +113,9 @@ func (s *APIAgentListPostOKItem) GetStatus() OptAPIAgentListPostOKItemStatus {
 	return s.Status
 }
 
-// GetID returns the value of ID.
-func (s *APIAgentListPostOKItem) GetID() uuid.UUID {
-	return s.ID
-}
-
-// GetName returns the value of Name.
-func (s *APIAgentListPostOKItem) GetName() string {
-	return s.Name
-}
-
-// GetAddr returns the value of Addr.
-func (s *APIAgentListPostOKItem) GetAddr() url.URL {
-	return s.Addr
-}
-
-// GetCanParse returns the value of CanParse.
-func (s *APIAgentListPostOKItem) GetCanParse() bool {
-	return s.CanParse
-}
-
-// GetCanParseMulti returns the value of CanParseMulti.
-func (s *APIAgentListPostOKItem) GetCanParseMulti() bool {
-	return s.CanParseMulti
-}
-
-// GetCanExport returns the value of CanExport.
-func (s *APIAgentListPostOKItem) GetCanExport() bool {
-	return s.CanExport
-}
-
-// GetPriority returns the value of Priority.
-func (s *APIAgentListPostOKItem) GetPriority() int {
-	return s.Priority
-}
-
-// GetCreateAt returns the value of CreateAt.
-func (s *APIAgentListPostOKItem) GetCreateAt() time.Time {
-	return s.CreateAt
+// GetInfo returns the value of Info.
+func (s *APIAgentListPostOKItem) GetInfo() Agent {
+	return s.Info
 }
 
 // SetStatus sets the value of Status.
@@ -139,44 +123,9 @@ func (s *APIAgentListPostOKItem) SetStatus(val OptAPIAgentListPostOKItemStatus) 
 	s.Status = val
 }
 
-// SetID sets the value of ID.
-func (s *APIAgentListPostOKItem) SetID(val uuid.UUID) {
-	s.ID = val
-}
-
-// SetName sets the value of Name.
-func (s *APIAgentListPostOKItem) SetName(val string) {
-	s.Name = val
-}
-
-// SetAddr sets the value of Addr.
-func (s *APIAgentListPostOKItem) SetAddr(val url.URL) {
-	s.Addr = val
-}
-
-// SetCanParse sets the value of CanParse.
-func (s *APIAgentListPostOKItem) SetCanParse(val bool) {
-	s.CanParse = val
-}
-
-// SetCanParseMulti sets the value of CanParseMulti.
-func (s *APIAgentListPostOKItem) SetCanParseMulti(val bool) {
-	s.CanParseMulti = val
-}
-
-// SetCanExport sets the value of CanExport.
-func (s *APIAgentListPostOKItem) SetCanExport(val bool) {
-	s.CanExport = val
-}
-
-// SetPriority sets the value of Priority.
-func (s *APIAgentListPostOKItem) SetPriority(val int) {
-	s.Priority = val
-}
-
-// SetCreateAt sets the value of CreateAt.
-func (s *APIAgentListPostOKItem) SetCreateAt(val time.Time) {
-	s.CreateAt = val
+// SetInfo sets the value of Info.
+func (s *APIAgentListPostOKItem) SetInfo(val Agent) {
+	s.Info = val
 }
 
 // Статус агента.
@@ -594,6 +543,27 @@ func (s *APIAgentTaskExportPostReq) SetDeleteAfter(val OptBool) {
 type APIAgentTaskExportPostUnauthorized ErrorResponse
 
 func (*APIAgentTaskExportPostUnauthorized) aPIAgentTaskExportPostRes() {}
+
+type APIAgentUpdatePostBadRequest ErrorResponse
+
+func (*APIAgentUpdatePostBadRequest) aPIAgentUpdatePostRes() {}
+
+type APIAgentUpdatePostForbidden ErrorResponse
+
+func (*APIAgentUpdatePostForbidden) aPIAgentUpdatePostRes() {}
+
+type APIAgentUpdatePostInternalServerError ErrorResponse
+
+func (*APIAgentUpdatePostInternalServerError) aPIAgentUpdatePostRes() {}
+
+// APIAgentUpdatePostNoContent is response for APIAgentUpdatePost operation.
+type APIAgentUpdatePostNoContent struct{}
+
+func (*APIAgentUpdatePostNoContent) aPIAgentUpdatePostRes() {}
+
+type APIAgentUpdatePostUnauthorized ErrorResponse
+
+func (*APIAgentUpdatePostUnauthorized) aPIAgentUpdatePostRes() {}
 
 type APIAttributeColorCreatePostBadRequest ErrorResponse
 
@@ -4238,6 +4208,121 @@ func (s *APIUserLoginPostReq) GetToken() string {
 func (s *APIUserLoginPostReq) SetToken(val string) {
 	s.Token = val
 }
+
+// Ref: #/components/schemas/Agent
+type Agent struct {
+	// ID агента.
+	ID uuid.UUID `json:"id"`
+	// Название агента.
+	Name string `json:"name"`
+	// Адрес агента.
+	Addr url.URL `json:"addr"`
+	// Токен доступа к агенту.
+	Token string `json:"token"`
+	// Может ли агент обрабатывать ссылки внешних систем.
+	CanParse bool `json:"can_parse"`
+	// Может ли агент обрабатывать множественные ссылки
+	// внешних систем.
+	CanParseMulti bool `json:"can_parse_multi"`
+	// Может ли агент экспортировать данные из системы.
+	CanExport bool `json:"can_export"`
+	// Приоритет при выборе агентов.
+	Priority int `json:"priority"`
+	// Время создания.
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// GetID returns the value of ID.
+func (s *Agent) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *Agent) GetName() string {
+	return s.Name
+}
+
+// GetAddr returns the value of Addr.
+func (s *Agent) GetAddr() url.URL {
+	return s.Addr
+}
+
+// GetToken returns the value of Token.
+func (s *Agent) GetToken() string {
+	return s.Token
+}
+
+// GetCanParse returns the value of CanParse.
+func (s *Agent) GetCanParse() bool {
+	return s.CanParse
+}
+
+// GetCanParseMulti returns the value of CanParseMulti.
+func (s *Agent) GetCanParseMulti() bool {
+	return s.CanParseMulti
+}
+
+// GetCanExport returns the value of CanExport.
+func (s *Agent) GetCanExport() bool {
+	return s.CanExport
+}
+
+// GetPriority returns the value of Priority.
+func (s *Agent) GetPriority() int {
+	return s.Priority
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Agent) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Agent) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *Agent) SetName(val string) {
+	s.Name = val
+}
+
+// SetAddr sets the value of Addr.
+func (s *Agent) SetAddr(val url.URL) {
+	s.Addr = val
+}
+
+// SetToken sets the value of Token.
+func (s *Agent) SetToken(val string) {
+	s.Token = val
+}
+
+// SetCanParse sets the value of CanParse.
+func (s *Agent) SetCanParse(val bool) {
+	s.CanParse = val
+}
+
+// SetCanParseMulti sets the value of CanParseMulti.
+func (s *Agent) SetCanParseMulti(val bool) {
+	s.CanParseMulti = val
+}
+
+// SetCanExport sets the value of CanExport.
+func (s *Agent) SetCanExport(val bool) {
+	s.CanExport = val
+}
+
+// SetPriority sets the value of Priority.
+func (s *Agent) SetPriority(val int) {
+	s.Priority = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Agent) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+func (*Agent) aPIAgentGetPostRes() {}
 
 // Цвет аттрибута.
 // Ref: #/components/schemas/AttributeColor

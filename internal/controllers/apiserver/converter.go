@@ -172,3 +172,17 @@ func convertBookRawToBookFull(book *serverAPI.BookRaw) entities.BookFull {
 		}),
 	}
 }
+
+func convertAgentToAPI(raw entities.Agent) serverAPI.Agent {
+	return serverAPI.Agent{
+		ID:            raw.ID,
+		Name:          raw.Name,
+		Addr:          raw.Addr,
+		Token:         raw.Token,
+		CanParse:      raw.CanParse,
+		CanParseMulti: raw.CanParseMulti,
+		CanExport:     raw.CanExport,
+		Priority:      raw.Priority,
+		CreatedAt:     raw.CreateAt,
+	}
+}

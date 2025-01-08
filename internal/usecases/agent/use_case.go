@@ -17,6 +17,7 @@ type agentSystemAdapter interface {
 
 type storage interface {
 	Agents(ctx context.Context, filter entities.AgentFilter) ([]entities.Agent, error)
+	Agent(ctx context.Context, id uuid.UUID) (entities.Agent, error)
 	NewAgent(ctx context.Context, agent entities.Agent) error
 	UpdateAgent(ctx context.Context, agent entities.Agent) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
