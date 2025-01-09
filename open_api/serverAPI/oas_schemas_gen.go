@@ -1432,6 +1432,9 @@ type APIBookRebuildPostReqFlags struct {
 	// Отметить удаленным книги что остались без страниц
 	// после их удаления.
 	MarkEmptyBookAsDeletedAfterRemovePages OptBool `json:"mark_empty_book_as_deleted_after_remove_pages"`
+	// Устанавливает статус верификации ребилда в
+	// подтвержденный.
+	AutoVerify OptBool `json:"auto_verify"`
 }
 
 // GetOnlyUnique returns the value of OnlyUnique.
@@ -1474,6 +1477,11 @@ func (s *APIBookRebuildPostReqFlags) GetMarkEmptyBookAsDeletedAfterRemovePages()
 	return s.MarkEmptyBookAsDeletedAfterRemovePages
 }
 
+// GetAutoVerify returns the value of AutoVerify.
+func (s *APIBookRebuildPostReqFlags) GetAutoVerify() OptBool {
+	return s.AutoVerify
+}
+
 // SetOnlyUnique sets the value of OnlyUnique.
 func (s *APIBookRebuildPostReqFlags) SetOnlyUnique(val OptBool) {
 	s.OnlyUnique = val
@@ -1512,6 +1520,11 @@ func (s *APIBookRebuildPostReqFlags) SetMarkUnusedPagesAsDeleted(val OptBool) {
 // SetMarkEmptyBookAsDeletedAfterRemovePages sets the value of MarkEmptyBookAsDeletedAfterRemovePages.
 func (s *APIBookRebuildPostReqFlags) SetMarkEmptyBookAsDeletedAfterRemovePages(val OptBool) {
 	s.MarkEmptyBookAsDeletedAfterRemovePages = val
+}
+
+// SetAutoVerify sets the value of AutoVerify.
+func (s *APIBookRebuildPostReqFlags) SetAutoVerify(val OptBool) {
+	s.AutoVerify = val
 }
 
 type APIBookRebuildPostUnauthorized ErrorResponse
@@ -1615,6 +1628,8 @@ func (*APIBookVerifyPostNotFound) aPIBookVerifyPostRes() {}
 type APIBookVerifyPostReq struct {
 	// ID книги.
 	ID uuid.UUID `json:"id"`
+	// Новый статус подтверждения.
+	VerifyStatus bool `json:"verify_status"`
 }
 
 // GetID returns the value of ID.
@@ -1622,9 +1637,19 @@ func (s *APIBookVerifyPostReq) GetID() uuid.UUID {
 	return s.ID
 }
 
+// GetVerifyStatus returns the value of VerifyStatus.
+func (s *APIBookVerifyPostReq) GetVerifyStatus() bool {
+	return s.VerifyStatus
+}
+
 // SetID sets the value of ID.
 func (s *APIBookVerifyPostReq) SetID(val uuid.UUID) {
 	s.ID = val
+}
+
+// SetVerifyStatus sets the value of VerifyStatus.
+func (s *APIBookVerifyPostReq) SetVerifyStatus(val bool) {
+	s.VerifyStatus = val
 }
 
 type APIBookVerifyPostUnauthorized ErrorResponse

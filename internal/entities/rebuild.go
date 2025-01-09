@@ -27,6 +27,7 @@ type RebuildBookRequestFlags struct {
 	Only1CopyPages       bool
 
 	SetOriginLabels bool
+	AutoVerify      bool
 
 	ExtractMode bool
 

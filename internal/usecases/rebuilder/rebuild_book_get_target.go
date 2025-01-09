@@ -27,14 +27,17 @@ func (uc *UseCase) rebuildBookGetTarget(ctx context.Context, request entities.Re
 
 	if isNewBook {
 		bookToMerge = entities.Book{
-			ID:         uuid.Must(uuid.NewV7()),
-			Name:       request.ModifiedOldBook.Book.Name,
-			OriginURL:  request.ModifiedOldBook.Book.OriginURL,
-			PageCount:  0,
-			IsRebuild:  true,
-			CreateAt:   time.Now().UTC(),
-			Verified:   true,
-			VerifiedAt: time.Now().UTC(),
+			ID:        uuid.Must(uuid.NewV7()),
+			Name:      request.ModifiedOldBook.Book.Name,
+			OriginURL: request.ModifiedOldBook.Book.OriginURL,
+			PageCount: 0,
+			IsRebuild: true,
+			CreateAt:  time.Now().UTC(),
+		}
+
+		if request.Flags.AutoVerify {
+			bookToMerge.Verified = true
+			bookToMerge.VerifiedAt = time.Now().UTC()
 		}
 
 		return bookToMerge, nil, nil, nil

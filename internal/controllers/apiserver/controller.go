@@ -35,7 +35,7 @@ type webAPIUseCases interface {
 	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
 	BookList(ctx context.Context, filter entities.BookFilter) (entities.BookListToWeb, error)
 
-	VerifyBook(ctx context.Context, bookID uuid.UUID) error
+	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool) error
 	DeleteBook(ctx context.Context, bookID uuid.UUID) error
 
 	SetWorkerConfig(ctx context.Context, counts map[string]int)

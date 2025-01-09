@@ -200,8 +200,8 @@ func (UnimplementedHandler) APIBookUpdatePost(ctx context.Context, req *BookRaw)
 
 // APIBookVerifyPost implements POST /api/book/verify operation.
 //
-// Подтверждение (модерация) книги, нужна в случае
-// массовой обработки.
+// Изменение статуса подтверждения (модерации) книги,
+// нужна в случае массовой обработки.
 //
 // POST /api/book/verify
 func (UnimplementedHandler) APIBookVerifyPost(ctx context.Context, req *APIBookVerifyPostReq) (r APIBookVerifyPostRes, _ error) {

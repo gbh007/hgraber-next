@@ -3986,8 +3986,8 @@ func (s *Server) handleAPIBookUpdatePostRequest(args [0]string, argsEscaped bool
 
 // handleAPIBookVerifyPostRequest handles POST /api/book/verify operation.
 //
-// Подтверждение (модерация) книги, нужна в случае
-// массовой обработки.
+// Изменение статуса подтверждения (модерации) книги,
+// нужна в случае массовой обработки.
 //
 // POST /api/book/verify
 func (s *Server) handleAPIBookVerifyPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -4141,7 +4141,7 @@ func (s *Server) handleAPIBookVerifyPostRequest(args [0]string, argsEscaped bool
 		mreq := middleware.Request{
 			Context:          ctx,
 			OperationName:    APIBookVerifyPostOperation,
-			OperationSummary: "Подтверждение (модерация) книги",
+			OperationSummary: "Изменение статуса подтверждения (модерации) книги",
 			OperationID:      "",
 			Body:             request,
 			Params:           middleware.Parameters{},

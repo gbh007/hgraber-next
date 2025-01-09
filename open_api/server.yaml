@@ -1157,6 +1157,9 @@ paths:
                     mark_empty_book_as_deleted_after_remove_pages:
                       type: boolean
                       description: Отметить удаленным книги что остались без страниц после их удаления
+                    auto_verify:
+                      type: boolean
+                      description: Устанавливает статус верификации ребилда в подтвержденный
               required:
                 - old_book
                 - selected_pages
@@ -1523,8 +1526,8 @@ paths:
 
   /api/book/verify:
     post:
-      description: Подтверждение (модерация) книги, нужна в случае массовой обработки
-      summary: Подтверждение (модерация) книги
+      description: Изменение статуса подтверждения (модерации) книги, нужна в случае массовой обработки
+      summary: Изменение статуса подтверждения (модерации) книги
       tags:
         - book
       requestBody:
@@ -1538,8 +1541,12 @@ paths:
                   type: string
                   format: uuid
                   description: ID книги
+                verify_status:
+                  type: boolean
+                  description: Новый статус подтверждения
               required:
                 - id
+                - verify_status
       responses:
         204:
           description: Успешное подтверждение

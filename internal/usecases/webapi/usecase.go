@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log/slog"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -15,7 +16,7 @@ type storage interface {
 	BookCount(ctx context.Context, filter entities.BookFilter) (int, error)
 	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (entities.Page, error)
 
-	VerifyBook(ctx context.Context, bookID uuid.UUID) error
+	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool, verifiedAt time.Time) error
 	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
 
 	AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error)

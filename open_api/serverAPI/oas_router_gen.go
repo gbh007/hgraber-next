@@ -2242,7 +2242,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						switch method {
 						case "POST":
 							r.name = APIBookVerifyPostOperation
-							r.summary = "Подтверждение (модерация) книги"
+							r.summary = "Изменение статуса подтверждения (модерации) книги"
 							r.operationID = ""
 							r.pathPattern = "/api/book/verify"
 							r.args = args

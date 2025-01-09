@@ -6070,9 +6070,15 @@ func (s *APIBookRebuildPostReqFlags) encodeFields(e *jx.Encoder) {
 			s.MarkEmptyBookAsDeletedAfterRemovePages.Encode(e)
 		}
 	}
+	{
+		if s.AutoVerify.Set {
+			e.FieldStart("auto_verify")
+			s.AutoVerify.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIBookRebuildPostReqFlags = [8]string{
+var jsonFieldsNameOfAPIBookRebuildPostReqFlags = [9]string{
 	0: "only_unique",
 	1: "exclude_dead_hash_pages",
 	2: "only_1_copy",
@@ -6081,6 +6087,7 @@ var jsonFieldsNameOfAPIBookRebuildPostReqFlags = [8]string{
 	5: "mark_unused_pages_as_dead_hash",
 	6: "mark_unused_pages_as_deleted",
 	7: "mark_empty_book_as_deleted_after_remove_pages",
+	8: "auto_verify",
 }
 
 // Decode decodes APIBookRebuildPostReqFlags from json.
@@ -6170,6 +6177,16 @@ func (s *APIBookRebuildPostReqFlags) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"mark_empty_book_as_deleted_after_remove_pages\"")
+			}
+		case "auto_verify":
+			if err := func() error {
+				s.AutoVerify.Reset()
+				if err := s.AutoVerify.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"auto_verify\"")
 			}
 		default:
 			return d.Skip()
@@ -6853,10 +6870,15 @@ func (s *APIBookVerifyPostReq) encodeFields(e *jx.Encoder) {
 		e.FieldStart("id")
 		json.EncodeUUID(e, s.ID)
 	}
+	{
+		e.FieldStart("verify_status")
+		e.Bool(s.VerifyStatus)
+	}
 }
 
-var jsonFieldsNameOfAPIBookVerifyPostReq = [1]string{
+var jsonFieldsNameOfAPIBookVerifyPostReq = [2]string{
 	0: "id",
+	1: "verify_status",
 }
 
 // Decode decodes APIBookVerifyPostReq from json.
@@ -6880,6 +6902,18 @@ func (s *APIBookVerifyPostReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"id\"")
 			}
+		case "verify_status":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Bool()
+				s.VerifyStatus = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"verify_status\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -6890,7 +6924,7 @@ func (s *APIBookVerifyPostReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

@@ -150,8 +150,8 @@ type Invoker interface {
 	APIBookUpdatePost(ctx context.Context, request *BookRaw) (APIBookUpdatePostRes, error)
 	// APIBookVerifyPost invokes POST /api/book/verify operation.
 	//
-	// Подтверждение (модерация) книги, нужна в случае
-	// массовой обработки.
+	// Изменение статуса подтверждения (модерации) книги,
+	// нужна в случае массовой обработки.
 	//
 	// POST /api/book/verify
 	APIBookVerifyPost(ctx context.Context, request *APIBookVerifyPostReq) (APIBookVerifyPostRes, error)
@@ -2791,8 +2791,8 @@ func (c *Client) sendAPIBookUpdatePost(ctx context.Context, request *BookRaw) (r
 
 // APIBookVerifyPost invokes POST /api/book/verify operation.
 //
-// Подтверждение (модерация) книги, нужна в случае
-// массовой обработки.
+// Изменение статуса подтверждения (модерации) книги,
+// нужна в случае массовой обработки.
 //
 // POST /api/book/verify
 func (c *Client) APIBookVerifyPost(ctx context.Context, request *APIBookVerifyPostReq) (APIBookVerifyPostRes, error) {

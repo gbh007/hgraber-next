@@ -7,14 +7,15 @@ import (
 
 	"github.com/google/uuid"
 
+	"hgnext/internal/adapters/postgresql/internal/model"
 	"hgnext/internal/entities"
 )
 
-func (d *Database) VerifyBook(ctx context.Context, bookID uuid.UUID) error {
+func (d *Database) VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool, verifiedAt time.Time) error {
 	res, err := d.db.ExecContext(
 		ctx,
 		`UPDATE books SET verified_at = $2, verified = $3 WHERE id = $1;`,
-		bookID.String(), time.Now().UTC(), true,
+		bookID.String(), model.TimeToDB(verifiedAt), verified,
 	)
 	if err != nil {
 		return fmt.Errorf("update book: %w", err)

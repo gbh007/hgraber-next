@@ -19,6 +19,7 @@ func (c *Controller) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIB
 			Only1CopyPages:       req.Flags.Value.Only1Copy.Value,
 
 			SetOriginLabels: req.Flags.Value.SetOriginLabels.Value,
+			AutoVerify:      req.Flags.Value.AutoVerify.Value,
 
 			ExtractMode: req.Flags.Value.ExtractMode.Value,
 
