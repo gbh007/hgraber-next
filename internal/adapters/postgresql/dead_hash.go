@@ -8,6 +8,7 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"hgnext/internal/entities"
+	"hgnext/internal/pkg"
 )
 
 func (d *Database) SetDeadHash(ctx context.Context, hash entities.DeadHash) error {
@@ -36,34 +37,38 @@ func (d *Database) SetDeadHash(ctx context.Context, hash entities.DeadHash) erro
 	return nil
 }
 func (d *Database) SetDeadHashes(ctx context.Context, hashes []entities.DeadHash) error {
-	builder := squirrel.Insert("dead_hashes").
-		PlaceholderFormat(squirrel.Dollar).
-		Columns(
-			"md5_sum",
-			"sha256_sum",
-			"size",
-			"created_at",
-		).
-		Suffix(`ON CONFLICT DO NOTHING`)
+	batches := pkg.Batching(hashes, 5000)
 
-	for _, hash := range hashes {
-		builder = builder.Values(hash.Md5Sum,
-			hash.Sha256Sum,
-			hash.Size,
-			hash.CreatedAt,
-		)
-	}
+	for _, batch := range batches {
+		builder := squirrel.Insert("dead_hashes").
+			PlaceholderFormat(squirrel.Dollar).
+			Columns(
+				"md5_sum",
+				"sha256_sum",
+				"size",
+				"created_at",
+			).
+			Suffix(`ON CONFLICT DO NOTHING`)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return fmt.Errorf("build query: %w", err)
-	}
+		for _, hash := range batch {
+			builder = builder.Values(hash.Md5Sum,
+				hash.Sha256Sum,
+				hash.Size,
+				hash.CreatedAt,
+			)
+		}
 
-	d.squirrelDebugLog(ctx, query, args)
+		query, args, err := builder.ToSql()
+		if err != nil {
+			return fmt.Errorf("build query: %w", err)
+		}
 
-	_, err = d.pool.Exec(ctx, query, args...)
-	if err != nil {
-		return fmt.Errorf("exec query: %w", err)
+		d.squirrelDebugLog(ctx, query, args)
+
+		_, err = d.pool.Exec(ctx, query, args...)
+		if err != nil {
+			return fmt.Errorf("exec query: %w", err)
+		}
 	}
 
 	return nil

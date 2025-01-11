@@ -66,3 +66,24 @@ func Unique[V comparable](s ...[]V) []V {
 
 	return result
 }
+
+func Batching[T any](a []T, size int) [][]T {
+	if len(a) == 0 {
+		return nil
+	}
+
+	if len(a) <= size {
+		return [][]T{a}
+	}
+
+	result := make([][]T, 0, len(a)/size+1)
+
+	for len(a) > 0 {
+		l := min(size, len(a))
+
+		result = append(result, a[:l])
+		a = a[l:]
+	}
+
+	return result
+}
