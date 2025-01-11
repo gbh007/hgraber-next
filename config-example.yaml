@@ -4,7 +4,10 @@ application:
     db: false
     api_server: false
     api_agent: false
-  metric_scrape_period: 1s
+  metric:
+    scrape_period:
+      main_info: 10s
+      book_statistic: 1h0m0s
   service_name: hgraber-next-local-test
 parsing:
   parse_book_timeout: 5m

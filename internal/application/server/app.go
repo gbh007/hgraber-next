@@ -226,8 +226,13 @@ func Serve() {
 		asyncController.RegisterRunner(apiAgentController)
 	}
 
-	if cfg.Application.MetricScrapePeriod > 0 {
-		infoCollector := metrics.NewSystemInfoCollector(logger, webAPIUseCases, cfg.Application.MetricScrapePeriod)
+	if cfg.Application.Metric.Enabled() {
+		infoCollector := metrics.NewSystemInfoCollector(
+			logger,
+			webAPIUseCases,
+			storage,
+			cfg.Application.Metric,
+		)
 		asyncController.RegisterRunner(infoCollector)
 	}
 

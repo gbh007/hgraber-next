@@ -46,3 +46,8 @@ func HashFile(body io.Reader) (FileHash, error) {
 		Sha256Sum: fmt.Sprintf("%x", sha256.Sum256(data)),
 	}, nil
 }
+
+type SizeWithCount struct {
+	Count int64
+	Size  int64
+}
