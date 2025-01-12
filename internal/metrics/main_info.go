@@ -225,6 +225,7 @@ func (c *SystemInfoCollector) collectBookSizeStatistic(ctx context.Context) {
 
 	pageInBookBuckets := make(map[float64]uint64, len(pageInBookBucket))
 	bookSizeBuckets := make(map[float64]uint64, len(bookSizeBucket))
+	pageSizeBuckets := make(map[float64]uint64, len(pageSizeBucket))
 
 	var (
 		pageInBookCount uint64
@@ -232,6 +233,9 @@ func (c *SystemInfoCollector) collectBookSizeStatistic(ctx context.Context) {
 
 		bookSizeCount uint64
 		bookSizeSum   float64
+
+		pageSizeCount uint64
+		pageSizeSum   float64
 	)
 
 	for _, size := range bookSizes {
@@ -240,6 +244,11 @@ func (c *SystemInfoCollector) collectBookSizeStatistic(ctx context.Context) {
 
 		bookSizeCount++
 		bookSizeSum += float64(size.Size)
+
+		pageAvgSize := float64(size.Size) / float64(size.Count)
+
+		pageSizeCount += uint64(size.Count)
+		pageSizeSum += pageAvgSize
 
 		for _, bucket := range pageInBookBucket {
 			if size.Count <= int64(bucket) {
@@ -250,6 +259,12 @@ func (c *SystemInfoCollector) collectBookSizeStatistic(ctx context.Context) {
 		for _, bucket := range bookSizeBucket {
 			if size.Size <= int64(bucket) {
 				bookSizeBuckets[bucket]++
+			}
+		}
+
+		for _, bucket := range pageSizeBucket {
+			if pageAvgSize <= bucket {
+				pageSizeBuckets[bucket] += uint64(size.Count)
 			}
 		}
 	}
@@ -264,6 +279,12 @@ func (c *SystemInfoCollector) collectBookSizeStatistic(ctx context.Context) {
 		buckets: bookSizeBuckets,
 		count:   bookSizeCount,
 		sum:     bookSizeSum,
+	})
+
+	c.statisticCollector.pageSize.Store(&histogramData{
+		buckets: pageSizeBuckets,
+		count:   pageSizeCount,
+		sum:     pageSizeSum,
 	})
 }
 

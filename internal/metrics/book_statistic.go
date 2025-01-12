@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	kilobyte = 1 << 10
 	megabyte = 1 << 20
 	gigabyte = 1 << 30
 )
@@ -23,7 +24,13 @@ var (
 		"Данные размера книг",
 		nil, nil,
 	)
-	bookSizeBucket        = []float64{megabyte, 5 * megabyte, 10 * megabyte, 30 * megabyte, 50 * megabyte, 100 * megabyte, 300 * megabyte, 600 * megabyte, gigabyte}
+	bookSizeBucket = []float64{megabyte, 5 * megabyte, 10 * megabyte, 30 * megabyte, 50 * megabyte, 100 * megabyte, 300 * megabyte, 600 * megabyte, gigabyte}
+	pageSizeDesc   = prometheus.NewDesc(
+		prometheus.BuildFQName(SystemName, SubSystemName, "statistic_page_size"),
+		"Данные размера страниц",
+		nil, nil,
+	)
+	pageSizeBucket        = []float64{50 * kilobyte, 200 * kilobyte, 500 * kilobyte, megabyte, 2 * megabyte, 5 * megabyte, 10 * megabyte}
 	bookCountByAuthorDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(SystemName, SubSystemName, "statistic_books_by_author"),
 		"Данные количества книг у одного автора",
@@ -55,6 +62,7 @@ type histogramData struct {
 type BookStatisticCollector struct {
 	bookPages         atomic.Pointer[histogramData]
 	bookSize          atomic.Pointer[histogramData]
+	pageSize          atomic.Pointer[histogramData]
 	bookCountByAuthor atomic.Pointer[histogramData]
 	pagesByAuthor     atomic.Pointer[histogramData]
 	pagesSizeByAuthor atomic.Pointer[histogramData]
@@ -64,6 +72,7 @@ func NewBookStatisticCollector() *BookStatisticCollector {
 	return &BookStatisticCollector{
 		bookPages:         atomic.Pointer[histogramData]{},
 		bookSize:          atomic.Pointer[histogramData]{},
+		pageSize:          atomic.Pointer[histogramData]{},
 		bookCountByAuthor: atomic.Pointer[histogramData]{},
 		pagesByAuthor:     atomic.Pointer[histogramData]{},
 		pagesSizeByAuthor: atomic.Pointer[histogramData]{},
@@ -73,6 +82,10 @@ func NewBookStatisticCollector() *BookStatisticCollector {
 func (c *BookStatisticCollector) Describe(desc chan<- *prometheus.Desc) {
 	desc <- pageInBookDesc
 	desc <- bookSizeDesc
+	desc <- pageSizeDesc
+	desc <- bookCountByAuthorDesc
+	desc <- pagesByAuthorDesc
+	desc <- pagesSizeByAuthorDesc
 }
 
 func (c *BookStatisticCollector) Collect(metr chan<- prometheus.Metric) {
@@ -93,6 +106,16 @@ func (c *BookStatisticCollector) Collect(metr chan<- prometheus.Metric) {
 			bookSize.count,
 			bookSize.sum,
 			bookSize.buckets,
+		)
+	}
+
+	pageSize := c.pageSize.Load()
+	if pageSize != nil {
+		metr <- prometheus.MustNewConstHistogram(
+			pageSizeDesc,
+			pageSize.count,
+			pageSize.sum,
+			pageSize.buckets,
 		)
 	}
 
