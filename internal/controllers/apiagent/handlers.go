@@ -12,6 +12,7 @@ import (
 
 	"github.com/ogen-go/ogen/middleware"
 	"github.com/ogen-go/ogen/ogenerrors"
+	"github.com/ogen-go/ogen/validate"
 
 	"hgnext/open_api/agentAPI"
 )
@@ -85,6 +86,8 @@ func methodErrorHandler(ctx context.Context, w http.ResponseWriter, r *http.Requ
 		errorDescription = err.Error()
 	}
 
+	validateError := new(validate.Error)
+
 	switch {
 	case errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied):
 		httpCode = http.StatusUnauthorized
@@ -95,6 +98,9 @@ func methodErrorHandler(ctx context.Context, w http.ResponseWriter, r *http.Requ
 	case errors.Is(err, errPanicDetected):
 		httpCode = http.StatusInternalServerError
 		errorCode = "panic"
+	case errors.As(err, &validateError):
+		httpCode = http.StatusBadRequest
+		errorCode = "validate"
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
