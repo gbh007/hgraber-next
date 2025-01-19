@@ -591,8 +591,8 @@ func encodeAPISystemImportArchivePostRequest(
 	return nil
 }
 
-func encodeAPISystemWorkerConfigPostRequest(
-	req *APISystemWorkerConfigPostReq,
+func encodeAPISystemTaskCreatePostRequest(
+	req *APISystemTaskCreatePostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -605,8 +605,8 @@ func encodeAPISystemWorkerConfigPostRequest(
 	return nil
 }
 
-func encodeAPITaskCreatePostRequest(
-	req *APITaskCreatePostReq,
+func encodeAPISystemWorkerConfigPostRequest(
+	req *APISystemWorkerConfigPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

@@ -54,8 +54,8 @@ const (
 	APISystemHandlePostOperation                         OperationName = "APISystemHandlePost"
 	APISystemImportArchivePostOperation                  OperationName = "APISystemImportArchivePost"
 	APISystemInfoGetOperation                            OperationName = "APISystemInfoGet"
+	APISystemTaskCreatePostOperation                     OperationName = "APISystemTaskCreatePost"
+	APISystemTaskResultsGetOperation                     OperationName = "APISystemTaskResultsGet"
 	APISystemWorkerConfigPostOperation                   OperationName = "APISystemWorkerConfigPost"
-	APITaskCreatePostOperation                           OperationName = "APITaskCreatePost"
-	APITaskResultsGetOperation                           OperationName = "APITaskResultsGet"
 	APIUserLoginPostOperation                            OperationName = "APIUserLoginPost"
 )

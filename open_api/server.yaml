@@ -28,8 +28,6 @@ tags:
     description: Перестроение и изменение книг
   - name: deduplicate
     description: Дедупликация данных
-  - name: task
-    description: Взаимодействие с асинхронными задачами
   - name: system
     description: Взаимодействие с системой граббера
 
@@ -159,12 +157,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/task/create:
+  /api/system/task/create:
     post:
       description: Создание и фоновый запуск задачи
       summary: Создание и запуск задачи
       tags:
-        - task
+        - system
       requestBody:
         required: true
         content:
@@ -174,14 +172,6 @@ paths:
               properties:
                 code:
                   type: string
-                  enum:
-                    - deduplicate_files
-                    - remove_detached_files
-                    - remove_mismatch_files
-                    - fill_dead_hashes
-                    - fill_dead_hashes_with_remove_deleted_pages
-                    - clean_deleted_pages
-                    - clean_deleted_rebuilds
                   description: Код задачи
               required:
                 - code
@@ -213,12 +203,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/task/results:
+  /api/system/task/results:
     get:
       description: Получение результатов задач
       summary: Получение результатов задач
       tags:
-        - task
+        - system
       responses:
         200:
           description: Информация о результатах
@@ -226,7 +216,27 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - tasks
                 properties:
+                  tasks:
+                    description: Данные о доступных тасках
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: Код задачи
+                        name:
+                          type: string
+                          description: Название задачи
+                        description:
+                          type: string
+                          description: Описание задачи
+                      required:
+                        - code
+                        - name
                   results:
                     description: Результаты
                     type: array

@@ -1296,20 +1296,20 @@ func (s *APISystemHandlePostReq) Validate() error {
 	return nil
 }
 
-func (s *APITaskCreatePostReq) Validate() error {
+func (s *APISystemTaskResultsGetOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Code.Validate(); err != nil {
-			return err
+		if s.Tasks == nil {
+			return errors.New("nil is invalid value")
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "code",
+			Name:  "tasks",
 			Error: err,
 		})
 	}
@@ -1317,27 +1317,6 @@ func (s *APITaskCreatePostReq) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s APITaskCreatePostReqCode) Validate() error {
-	switch s {
-	case "deduplicate_files":
-		return nil
-	case "remove_detached_files":
-		return nil
-	case "remove_mismatch_files":
-		return nil
-	case "fill_dead_hashes":
-		return nil
-	case "fill_dead_hashes_with_remove_deleted_pages":
-		return nil
-	case "clean_deleted_pages":
-		return nil
-	case "clean_deleted_rebuilds":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *BookAttribute) Validate() error {

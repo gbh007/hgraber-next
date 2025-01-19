@@ -303,6 +303,18 @@ type Handler interface {
 	//
 	// GET /api/system/info
 	APISystemInfoGet(ctx context.Context) (APISystemInfoGetRes, error)
+	// APISystemTaskCreatePost implements POST /api/system/task/create operation.
+	//
+	// Создание и фоновый запуск задачи.
+	//
+	// POST /api/system/task/create
+	APISystemTaskCreatePost(ctx context.Context, req *APISystemTaskCreatePostReq) (APISystemTaskCreatePostRes, error)
+	// APISystemTaskResultsGet implements GET /api/system/task/results operation.
+	//
+	// Получение результатов задач.
+	//
+	// GET /api/system/task/results
+	APISystemTaskResultsGet(ctx context.Context) (APISystemTaskResultsGetRes, error)
 	// APISystemWorkerConfigPost implements POST /api/system/worker/config operation.
 	//
 	// Динамическая конфигурация раннеров (воркеров),
@@ -310,18 +322,6 @@ type Handler interface {
 	//
 	// POST /api/system/worker/config
 	APISystemWorkerConfigPost(ctx context.Context, req *APISystemWorkerConfigPostReq) (APISystemWorkerConfigPostRes, error)
-	// APITaskCreatePost implements POST /api/task/create operation.
-	//
-	// Создание и фоновый запуск задачи.
-	//
-	// POST /api/task/create
-	APITaskCreatePost(ctx context.Context, req *APITaskCreatePostReq) (APITaskCreatePostRes, error)
-	// APITaskResultsGet implements GET /api/task/results operation.
-	//
-	// Получение результатов задач.
-	//
-	// GET /api/task/results
-	APITaskResultsGet(ctx context.Context) (APITaskResultsGetRes, error)
 	// APIUserLoginPost implements POST /api/user/login operation.
 	//
 	// Проставление токена в куки.

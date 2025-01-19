@@ -193,16 +193,16 @@ type APISystemInfoGetRes interface {
 	aPISystemInfoGetRes()
 }
 
+type APISystemTaskCreatePostRes interface {
+	aPISystemTaskCreatePostRes()
+}
+
+type APISystemTaskResultsGetRes interface {
+	aPISystemTaskResultsGetRes()
+}
+
 type APISystemWorkerConfigPostRes interface {
 	aPISystemWorkerConfigPostRes()
-}
-
-type APITaskCreatePostRes interface {
-	aPITaskCreatePostRes()
-}
-
-type APITaskResultsGetRes interface {
-	aPITaskResultsGetRes()
 }
 
 type APIUserLoginPostRes interface {

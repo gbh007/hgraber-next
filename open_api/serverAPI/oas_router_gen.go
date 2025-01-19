@@ -1410,6 +1410,63 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				case 't': // Prefix: "task/"
+					origElem := elem
+					if l := len("task/"); len(elem) >= l && elem[0:l] == "task/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'c': // Prefix: "create"
+						origElem := elem
+						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPISystemTaskCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'r': // Prefix: "results"
+						origElem := elem
+						if l := len("results"); len(elem) >= l && elem[0:l] == "results" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleAPISystemTaskResultsGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				case 'w': // Prefix: "worker/config"
 					origElem := elem
 					if l := len("worker/config"); len(elem) >= l && elem[0:l] == "worker/config" {
@@ -1425,63 +1482,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							s.handleAPISystemWorkerConfigPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				}
-
-				elem = origElem
-			case 't': // Prefix: "task/"
-				origElem := elem
-				if l := len("task/"); len(elem) >= l && elem[0:l] == "task/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					break
-				}
-				switch elem[0] {
-				case 'c': // Prefix: "create"
-					origElem := elem
-					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPITaskCreatePostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				case 'r': // Prefix: "results"
-					origElem := elem
-					if l := len("results"); len(elem) >= l && elem[0:l] == "results" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "GET":
-							s.handleAPITaskResultsGetRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET")
 						}
 
 						return
@@ -3144,6 +3144,71 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
+				case 't': // Prefix: "task/"
+					origElem := elem
+					if l := len("task/"); len(elem) >= l && elem[0:l] == "task/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'c': // Prefix: "create"
+						origElem := elem
+						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APISystemTaskCreatePostOperation
+								r.summary = "Создание и запуск задачи"
+								r.operationID = ""
+								r.pathPattern = "/api/system/task/create"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'r': // Prefix: "results"
+						origElem := elem
+						if l := len("results"); len(elem) >= l && elem[0:l] == "results" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = APISystemTaskResultsGetOperation
+								r.summary = "Получение результатов задач"
+								r.operationID = ""
+								r.pathPattern = "/api/system/task/results"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				case 'w': // Prefix: "worker/config"
 					origElem := elem
 					if l := len("worker/config"); len(elem) >= l && elem[0:l] == "worker/config" {
@@ -3160,71 +3225,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.summary = "Динамическая конфигурация раннеров (воркеров)"
 							r.operationID = ""
 							r.pathPattern = "/api/system/worker/config"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				}
-
-				elem = origElem
-			case 't': // Prefix: "task/"
-				origElem := elem
-				if l := len("task/"); len(elem) >= l && elem[0:l] == "task/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					break
-				}
-				switch elem[0] {
-				case 'c': // Prefix: "create"
-					origElem := elem
-					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APITaskCreatePostOperation
-							r.summary = "Создание и запуск задачи"
-							r.operationID = ""
-							r.pathPattern = "/api/task/create"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				case 'r': // Prefix: "results"
-					origElem := elem
-					if l := len("results"); len(elem) >= l && elem[0:l] == "results" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "GET":
-							r.name = APITaskResultsGetOperation
-							r.summary = "Получение результатов задач"
-							r.operationID = ""
-							r.pathPattern = "/api/task/results"
 							r.args = args
 							r.count = 0
 							return r, true

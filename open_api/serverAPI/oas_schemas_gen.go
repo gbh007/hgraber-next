@@ -3803,6 +3803,308 @@ type APISystemInfoGetUnauthorized ErrorResponse
 
 func (*APISystemInfoGetUnauthorized) aPISystemInfoGetRes() {}
 
+type APISystemTaskCreatePostBadRequest ErrorResponse
+
+func (*APISystemTaskCreatePostBadRequest) aPISystemTaskCreatePostRes() {}
+
+type APISystemTaskCreatePostForbidden ErrorResponse
+
+func (*APISystemTaskCreatePostForbidden) aPISystemTaskCreatePostRes() {}
+
+type APISystemTaskCreatePostInternalServerError ErrorResponse
+
+func (*APISystemTaskCreatePostInternalServerError) aPISystemTaskCreatePostRes() {}
+
+// APISystemTaskCreatePostNoContent is response for APISystemTaskCreatePost operation.
+type APISystemTaskCreatePostNoContent struct{}
+
+func (*APISystemTaskCreatePostNoContent) aPISystemTaskCreatePostRes() {}
+
+type APISystemTaskCreatePostReq struct {
+	// Код задачи.
+	Code string `json:"code"`
+}
+
+// GetCode returns the value of Code.
+func (s *APISystemTaskCreatePostReq) GetCode() string {
+	return s.Code
+}
+
+// SetCode sets the value of Code.
+func (s *APISystemTaskCreatePostReq) SetCode(val string) {
+	s.Code = val
+}
+
+type APISystemTaskCreatePostUnauthorized ErrorResponse
+
+func (*APISystemTaskCreatePostUnauthorized) aPISystemTaskCreatePostRes() {}
+
+type APISystemTaskResultsGetForbidden ErrorResponse
+
+func (*APISystemTaskResultsGetForbidden) aPISystemTaskResultsGetRes() {}
+
+type APISystemTaskResultsGetInternalServerError ErrorResponse
+
+func (*APISystemTaskResultsGetInternalServerError) aPISystemTaskResultsGetRes() {}
+
+type APISystemTaskResultsGetOK struct {
+	// Данные о доступных тасках.
+	Tasks []APISystemTaskResultsGetOKTasksItem `json:"tasks"`
+	// Результаты.
+	Results []APISystemTaskResultsGetOKResultsItem `json:"results"`
+}
+
+// GetTasks returns the value of Tasks.
+func (s *APISystemTaskResultsGetOK) GetTasks() []APISystemTaskResultsGetOKTasksItem {
+	return s.Tasks
+}
+
+// GetResults returns the value of Results.
+func (s *APISystemTaskResultsGetOK) GetResults() []APISystemTaskResultsGetOKResultsItem {
+	return s.Results
+}
+
+// SetTasks sets the value of Tasks.
+func (s *APISystemTaskResultsGetOK) SetTasks(val []APISystemTaskResultsGetOKTasksItem) {
+	s.Tasks = val
+}
+
+// SetResults sets the value of Results.
+func (s *APISystemTaskResultsGetOK) SetResults(val []APISystemTaskResultsGetOKResultsItem) {
+	s.Results = val
+}
+
+func (*APISystemTaskResultsGetOK) aPISystemTaskResultsGetRes() {}
+
+type APISystemTaskResultsGetOKResultsItem struct {
+	// Название задачи.
+	Name string `json:"name"`
+	// Данные об ошибке.
+	Error OptString `json:"error"`
+	// Данные результата.
+	Result OptString `json:"result"`
+	// Продолжительность выполнения задачи.
+	DurationFormatted string `json:"duration_formatted"`
+	// Время запуска задачи.
+	StartedAt time.Time `json:"started_at"`
+	// Время завершения задачи.
+	EndedAt time.Time `json:"ended_at"`
+	// Этапы выполнения задачи.
+	Stages []APISystemTaskResultsGetOKResultsItemStagesItem `json:"stages"`
+}
+
+// GetName returns the value of Name.
+func (s *APISystemTaskResultsGetOKResultsItem) GetName() string {
+	return s.Name
+}
+
+// GetError returns the value of Error.
+func (s *APISystemTaskResultsGetOKResultsItem) GetError() OptString {
+	return s.Error
+}
+
+// GetResult returns the value of Result.
+func (s *APISystemTaskResultsGetOKResultsItem) GetResult() OptString {
+	return s.Result
+}
+
+// GetDurationFormatted returns the value of DurationFormatted.
+func (s *APISystemTaskResultsGetOKResultsItem) GetDurationFormatted() string {
+	return s.DurationFormatted
+}
+
+// GetStartedAt returns the value of StartedAt.
+func (s *APISystemTaskResultsGetOKResultsItem) GetStartedAt() time.Time {
+	return s.StartedAt
+}
+
+// GetEndedAt returns the value of EndedAt.
+func (s *APISystemTaskResultsGetOKResultsItem) GetEndedAt() time.Time {
+	return s.EndedAt
+}
+
+// GetStages returns the value of Stages.
+func (s *APISystemTaskResultsGetOKResultsItem) GetStages() []APISystemTaskResultsGetOKResultsItemStagesItem {
+	return s.Stages
+}
+
+// SetName sets the value of Name.
+func (s *APISystemTaskResultsGetOKResultsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetError sets the value of Error.
+func (s *APISystemTaskResultsGetOKResultsItem) SetError(val OptString) {
+	s.Error = val
+}
+
+// SetResult sets the value of Result.
+func (s *APISystemTaskResultsGetOKResultsItem) SetResult(val OptString) {
+	s.Result = val
+}
+
+// SetDurationFormatted sets the value of DurationFormatted.
+func (s *APISystemTaskResultsGetOKResultsItem) SetDurationFormatted(val string) {
+	s.DurationFormatted = val
+}
+
+// SetStartedAt sets the value of StartedAt.
+func (s *APISystemTaskResultsGetOKResultsItem) SetStartedAt(val time.Time) {
+	s.StartedAt = val
+}
+
+// SetEndedAt sets the value of EndedAt.
+func (s *APISystemTaskResultsGetOKResultsItem) SetEndedAt(val time.Time) {
+	s.EndedAt = val
+}
+
+// SetStages sets the value of Stages.
+func (s *APISystemTaskResultsGetOKResultsItem) SetStages(val []APISystemTaskResultsGetOKResultsItemStagesItem) {
+	s.Stages = val
+}
+
+type APISystemTaskResultsGetOKResultsItemStagesItem struct {
+	// Название этапа.
+	Name string `json:"name"`
+	// Данные об ошибке.
+	Error OptString `json:"error"`
+	// Данные результата.
+	Result OptString `json:"result"`
+	// Продолжительность выполнения этапа.
+	DurationFormatted string `json:"duration_formatted"`
+	// Время запуска этапа.
+	StartedAt time.Time `json:"started_at"`
+	// Время завершения этапа.
+	EndedAt time.Time `json:"ended_at"`
+	// Количество выполненных шагов.
+	Progress int64 `json:"progress"`
+	// Общеее число шагов которое нужно для завершения этапа.
+	Total int64 `json:"total"`
+}
+
+// GetName returns the value of Name.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) GetName() string {
+	return s.Name
+}
+
+// GetError returns the value of Error.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) GetError() OptString {
+	return s.Error
+}
+
+// GetResult returns the value of Result.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) GetResult() OptString {
+	return s.Result
+}
+
+// GetDurationFormatted returns the value of DurationFormatted.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) GetDurationFormatted() string {
+	return s.DurationFormatted
+}
+
+// GetStartedAt returns the value of StartedAt.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) GetStartedAt() time.Time {
+	return s.StartedAt
+}
+
+// GetEndedAt returns the value of EndedAt.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) GetEndedAt() time.Time {
+	return s.EndedAt
+}
+
+// GetProgress returns the value of Progress.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) GetProgress() int64 {
+	return s.Progress
+}
+
+// GetTotal returns the value of Total.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) GetTotal() int64 {
+	return s.Total
+}
+
+// SetName sets the value of Name.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetError sets the value of Error.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) SetError(val OptString) {
+	s.Error = val
+}
+
+// SetResult sets the value of Result.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) SetResult(val OptString) {
+	s.Result = val
+}
+
+// SetDurationFormatted sets the value of DurationFormatted.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) SetDurationFormatted(val string) {
+	s.DurationFormatted = val
+}
+
+// SetStartedAt sets the value of StartedAt.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) SetStartedAt(val time.Time) {
+	s.StartedAt = val
+}
+
+// SetEndedAt sets the value of EndedAt.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) SetEndedAt(val time.Time) {
+	s.EndedAt = val
+}
+
+// SetProgress sets the value of Progress.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) SetProgress(val int64) {
+	s.Progress = val
+}
+
+// SetTotal sets the value of Total.
+func (s *APISystemTaskResultsGetOKResultsItemStagesItem) SetTotal(val int64) {
+	s.Total = val
+}
+
+type APISystemTaskResultsGetOKTasksItem struct {
+	// Код задачи.
+	Code string `json:"code"`
+	// Название задачи.
+	Name string `json:"name"`
+	// Описание задачи.
+	Description OptString `json:"description"`
+}
+
+// GetCode returns the value of Code.
+func (s *APISystemTaskResultsGetOKTasksItem) GetCode() string {
+	return s.Code
+}
+
+// GetName returns the value of Name.
+func (s *APISystemTaskResultsGetOKTasksItem) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APISystemTaskResultsGetOKTasksItem) GetDescription() OptString {
+	return s.Description
+}
+
+// SetCode sets the value of Code.
+func (s *APISystemTaskResultsGetOKTasksItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetName sets the value of Name.
+func (s *APISystemTaskResultsGetOKTasksItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APISystemTaskResultsGetOKTasksItem) SetDescription(val OptString) {
+	s.Description = val
+}
+
+type APISystemTaskResultsGetUnauthorized ErrorResponse
+
+func (*APISystemTaskResultsGetUnauthorized) aPISystemTaskResultsGetRes() {}
+
 type APISystemWorkerConfigPostBadRequest ErrorResponse
 
 func (*APISystemWorkerConfigPostBadRequest) aPISystemWorkerConfigPostRes() {}
@@ -3865,334 +4167,6 @@ func (s *APISystemWorkerConfigPostReqRunnersCountItem) SetCount(val int) {
 type APISystemWorkerConfigPostUnauthorized ErrorResponse
 
 func (*APISystemWorkerConfigPostUnauthorized) aPISystemWorkerConfigPostRes() {}
-
-type APITaskCreatePostBadRequest ErrorResponse
-
-func (*APITaskCreatePostBadRequest) aPITaskCreatePostRes() {}
-
-type APITaskCreatePostForbidden ErrorResponse
-
-func (*APITaskCreatePostForbidden) aPITaskCreatePostRes() {}
-
-type APITaskCreatePostInternalServerError ErrorResponse
-
-func (*APITaskCreatePostInternalServerError) aPITaskCreatePostRes() {}
-
-// APITaskCreatePostNoContent is response for APITaskCreatePost operation.
-type APITaskCreatePostNoContent struct{}
-
-func (*APITaskCreatePostNoContent) aPITaskCreatePostRes() {}
-
-type APITaskCreatePostReq struct {
-	// Код задачи.
-	Code APITaskCreatePostReqCode `json:"code"`
-}
-
-// GetCode returns the value of Code.
-func (s *APITaskCreatePostReq) GetCode() APITaskCreatePostReqCode {
-	return s.Code
-}
-
-// SetCode sets the value of Code.
-func (s *APITaskCreatePostReq) SetCode(val APITaskCreatePostReqCode) {
-	s.Code = val
-}
-
-// Код задачи.
-type APITaskCreatePostReqCode string
-
-const (
-	APITaskCreatePostReqCodeDeduplicateFiles                     APITaskCreatePostReqCode = "deduplicate_files"
-	APITaskCreatePostReqCodeRemoveDetachedFiles                  APITaskCreatePostReqCode = "remove_detached_files"
-	APITaskCreatePostReqCodeRemoveMismatchFiles                  APITaskCreatePostReqCode = "remove_mismatch_files"
-	APITaskCreatePostReqCodeFillDeadHashes                       APITaskCreatePostReqCode = "fill_dead_hashes"
-	APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages APITaskCreatePostReqCode = "fill_dead_hashes_with_remove_deleted_pages"
-	APITaskCreatePostReqCodeCleanDeletedPages                    APITaskCreatePostReqCode = "clean_deleted_pages"
-	APITaskCreatePostReqCodeCleanDeletedRebuilds                 APITaskCreatePostReqCode = "clean_deleted_rebuilds"
-)
-
-// AllValues returns all APITaskCreatePostReqCode values.
-func (APITaskCreatePostReqCode) AllValues() []APITaskCreatePostReqCode {
-	return []APITaskCreatePostReqCode{
-		APITaskCreatePostReqCodeDeduplicateFiles,
-		APITaskCreatePostReqCodeRemoveDetachedFiles,
-		APITaskCreatePostReqCodeRemoveMismatchFiles,
-		APITaskCreatePostReqCodeFillDeadHashes,
-		APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages,
-		APITaskCreatePostReqCodeCleanDeletedPages,
-		APITaskCreatePostReqCodeCleanDeletedRebuilds,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s APITaskCreatePostReqCode) MarshalText() ([]byte, error) {
-	switch s {
-	case APITaskCreatePostReqCodeDeduplicateFiles:
-		return []byte(s), nil
-	case APITaskCreatePostReqCodeRemoveDetachedFiles:
-		return []byte(s), nil
-	case APITaskCreatePostReqCodeRemoveMismatchFiles:
-		return []byte(s), nil
-	case APITaskCreatePostReqCodeFillDeadHashes:
-		return []byte(s), nil
-	case APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages:
-		return []byte(s), nil
-	case APITaskCreatePostReqCodeCleanDeletedPages:
-		return []byte(s), nil
-	case APITaskCreatePostReqCodeCleanDeletedRebuilds:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *APITaskCreatePostReqCode) UnmarshalText(data []byte) error {
-	switch APITaskCreatePostReqCode(data) {
-	case APITaskCreatePostReqCodeDeduplicateFiles:
-		*s = APITaskCreatePostReqCodeDeduplicateFiles
-		return nil
-	case APITaskCreatePostReqCodeRemoveDetachedFiles:
-		*s = APITaskCreatePostReqCodeRemoveDetachedFiles
-		return nil
-	case APITaskCreatePostReqCodeRemoveMismatchFiles:
-		*s = APITaskCreatePostReqCodeRemoveMismatchFiles
-		return nil
-	case APITaskCreatePostReqCodeFillDeadHashes:
-		*s = APITaskCreatePostReqCodeFillDeadHashes
-		return nil
-	case APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages:
-		*s = APITaskCreatePostReqCodeFillDeadHashesWithRemoveDeletedPages
-		return nil
-	case APITaskCreatePostReqCodeCleanDeletedPages:
-		*s = APITaskCreatePostReqCodeCleanDeletedPages
-		return nil
-	case APITaskCreatePostReqCodeCleanDeletedRebuilds:
-		*s = APITaskCreatePostReqCodeCleanDeletedRebuilds
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type APITaskCreatePostUnauthorized ErrorResponse
-
-func (*APITaskCreatePostUnauthorized) aPITaskCreatePostRes() {}
-
-type APITaskResultsGetForbidden ErrorResponse
-
-func (*APITaskResultsGetForbidden) aPITaskResultsGetRes() {}
-
-type APITaskResultsGetInternalServerError ErrorResponse
-
-func (*APITaskResultsGetInternalServerError) aPITaskResultsGetRes() {}
-
-type APITaskResultsGetOK struct {
-	// Результаты.
-	Results []APITaskResultsGetOKResultsItem `json:"results"`
-}
-
-// GetResults returns the value of Results.
-func (s *APITaskResultsGetOK) GetResults() []APITaskResultsGetOKResultsItem {
-	return s.Results
-}
-
-// SetResults sets the value of Results.
-func (s *APITaskResultsGetOK) SetResults(val []APITaskResultsGetOKResultsItem) {
-	s.Results = val
-}
-
-func (*APITaskResultsGetOK) aPITaskResultsGetRes() {}
-
-type APITaskResultsGetOKResultsItem struct {
-	// Название задачи.
-	Name string `json:"name"`
-	// Данные об ошибке.
-	Error OptString `json:"error"`
-	// Данные результата.
-	Result OptString `json:"result"`
-	// Продолжительность выполнения задачи.
-	DurationFormatted string `json:"duration_formatted"`
-	// Время запуска задачи.
-	StartedAt time.Time `json:"started_at"`
-	// Время завершения задачи.
-	EndedAt time.Time `json:"ended_at"`
-	// Этапы выполнения задачи.
-	Stages []APITaskResultsGetOKResultsItemStagesItem `json:"stages"`
-}
-
-// GetName returns the value of Name.
-func (s *APITaskResultsGetOKResultsItem) GetName() string {
-	return s.Name
-}
-
-// GetError returns the value of Error.
-func (s *APITaskResultsGetOKResultsItem) GetError() OptString {
-	return s.Error
-}
-
-// GetResult returns the value of Result.
-func (s *APITaskResultsGetOKResultsItem) GetResult() OptString {
-	return s.Result
-}
-
-// GetDurationFormatted returns the value of DurationFormatted.
-func (s *APITaskResultsGetOKResultsItem) GetDurationFormatted() string {
-	return s.DurationFormatted
-}
-
-// GetStartedAt returns the value of StartedAt.
-func (s *APITaskResultsGetOKResultsItem) GetStartedAt() time.Time {
-	return s.StartedAt
-}
-
-// GetEndedAt returns the value of EndedAt.
-func (s *APITaskResultsGetOKResultsItem) GetEndedAt() time.Time {
-	return s.EndedAt
-}
-
-// GetStages returns the value of Stages.
-func (s *APITaskResultsGetOKResultsItem) GetStages() []APITaskResultsGetOKResultsItemStagesItem {
-	return s.Stages
-}
-
-// SetName sets the value of Name.
-func (s *APITaskResultsGetOKResultsItem) SetName(val string) {
-	s.Name = val
-}
-
-// SetError sets the value of Error.
-func (s *APITaskResultsGetOKResultsItem) SetError(val OptString) {
-	s.Error = val
-}
-
-// SetResult sets the value of Result.
-func (s *APITaskResultsGetOKResultsItem) SetResult(val OptString) {
-	s.Result = val
-}
-
-// SetDurationFormatted sets the value of DurationFormatted.
-func (s *APITaskResultsGetOKResultsItem) SetDurationFormatted(val string) {
-	s.DurationFormatted = val
-}
-
-// SetStartedAt sets the value of StartedAt.
-func (s *APITaskResultsGetOKResultsItem) SetStartedAt(val time.Time) {
-	s.StartedAt = val
-}
-
-// SetEndedAt sets the value of EndedAt.
-func (s *APITaskResultsGetOKResultsItem) SetEndedAt(val time.Time) {
-	s.EndedAt = val
-}
-
-// SetStages sets the value of Stages.
-func (s *APITaskResultsGetOKResultsItem) SetStages(val []APITaskResultsGetOKResultsItemStagesItem) {
-	s.Stages = val
-}
-
-type APITaskResultsGetOKResultsItemStagesItem struct {
-	// Название этапа.
-	Name string `json:"name"`
-	// Данные об ошибке.
-	Error OptString `json:"error"`
-	// Данные результата.
-	Result OptString `json:"result"`
-	// Продолжительность выполнения этапа.
-	DurationFormatted string `json:"duration_formatted"`
-	// Время запуска этапа.
-	StartedAt time.Time `json:"started_at"`
-	// Время завершения этапа.
-	EndedAt time.Time `json:"ended_at"`
-	// Количество выполненных шагов.
-	Progress int64 `json:"progress"`
-	// Общеее число шагов которое нужно для завершения этапа.
-	Total int64 `json:"total"`
-}
-
-// GetName returns the value of Name.
-func (s *APITaskResultsGetOKResultsItemStagesItem) GetName() string {
-	return s.Name
-}
-
-// GetError returns the value of Error.
-func (s *APITaskResultsGetOKResultsItemStagesItem) GetError() OptString {
-	return s.Error
-}
-
-// GetResult returns the value of Result.
-func (s *APITaskResultsGetOKResultsItemStagesItem) GetResult() OptString {
-	return s.Result
-}
-
-// GetDurationFormatted returns the value of DurationFormatted.
-func (s *APITaskResultsGetOKResultsItemStagesItem) GetDurationFormatted() string {
-	return s.DurationFormatted
-}
-
-// GetStartedAt returns the value of StartedAt.
-func (s *APITaskResultsGetOKResultsItemStagesItem) GetStartedAt() time.Time {
-	return s.StartedAt
-}
-
-// GetEndedAt returns the value of EndedAt.
-func (s *APITaskResultsGetOKResultsItemStagesItem) GetEndedAt() time.Time {
-	return s.EndedAt
-}
-
-// GetProgress returns the value of Progress.
-func (s *APITaskResultsGetOKResultsItemStagesItem) GetProgress() int64 {
-	return s.Progress
-}
-
-// GetTotal returns the value of Total.
-func (s *APITaskResultsGetOKResultsItemStagesItem) GetTotal() int64 {
-	return s.Total
-}
-
-// SetName sets the value of Name.
-func (s *APITaskResultsGetOKResultsItemStagesItem) SetName(val string) {
-	s.Name = val
-}
-
-// SetError sets the value of Error.
-func (s *APITaskResultsGetOKResultsItemStagesItem) SetError(val OptString) {
-	s.Error = val
-}
-
-// SetResult sets the value of Result.
-func (s *APITaskResultsGetOKResultsItemStagesItem) SetResult(val OptString) {
-	s.Result = val
-}
-
-// SetDurationFormatted sets the value of DurationFormatted.
-func (s *APITaskResultsGetOKResultsItemStagesItem) SetDurationFormatted(val string) {
-	s.DurationFormatted = val
-}
-
-// SetStartedAt sets the value of StartedAt.
-func (s *APITaskResultsGetOKResultsItemStagesItem) SetStartedAt(val time.Time) {
-	s.StartedAt = val
-}
-
-// SetEndedAt sets the value of EndedAt.
-func (s *APITaskResultsGetOKResultsItemStagesItem) SetEndedAt(val time.Time) {
-	s.EndedAt = val
-}
-
-// SetProgress sets the value of Progress.
-func (s *APITaskResultsGetOKResultsItemStagesItem) SetProgress(val int64) {
-	s.Progress = val
-}
-
-// SetTotal sets the value of Total.
-func (s *APITaskResultsGetOKResultsItemStagesItem) SetTotal(val int64) {
-	s.Total = val
-}
-
-type APITaskResultsGetUnauthorized ErrorResponse
-
-func (*APITaskResultsGetUnauthorized) aPITaskResultsGetRes() {}
 
 type APIUserLoginPostBadRequest ErrorResponse
 

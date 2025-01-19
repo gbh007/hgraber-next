@@ -452,6 +452,24 @@ func (UnimplementedHandler) APISystemInfoGet(ctx context.Context) (r APISystemIn
 	return r, ht.ErrNotImplemented
 }
 
+// APISystemTaskCreatePost implements POST /api/system/task/create operation.
+//
+// Создание и фоновый запуск задачи.
+//
+// POST /api/system/task/create
+func (UnimplementedHandler) APISystemTaskCreatePost(ctx context.Context, req *APISystemTaskCreatePostReq) (r APISystemTaskCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APISystemTaskResultsGet implements GET /api/system/task/results operation.
+//
+// Получение результатов задач.
+//
+// GET /api/system/task/results
+func (UnimplementedHandler) APISystemTaskResultsGet(ctx context.Context) (r APISystemTaskResultsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APISystemWorkerConfigPost implements POST /api/system/worker/config operation.
 //
 // Динамическая конфигурация раннеров (воркеров),
@@ -459,24 +477,6 @@ func (UnimplementedHandler) APISystemInfoGet(ctx context.Context) (r APISystemIn
 //
 // POST /api/system/worker/config
 func (UnimplementedHandler) APISystemWorkerConfigPost(ctx context.Context, req *APISystemWorkerConfigPostReq) (r APISystemWorkerConfigPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APITaskCreatePost implements POST /api/task/create operation.
-//
-// Создание и фоновый запуск задачи.
-//
-// POST /api/task/create
-func (UnimplementedHandler) APITaskCreatePost(ctx context.Context, req *APITaskCreatePostReq) (r APITaskCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APITaskResultsGet implements GET /api/task/results operation.
-//
-// Получение результатов задач.
-//
-// GET /api/task/results
-func (UnimplementedHandler) APITaskResultsGet(ctx context.Context) (r APITaskResultsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
