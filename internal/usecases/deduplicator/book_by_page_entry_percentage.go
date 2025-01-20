@@ -17,6 +17,7 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 	}
 
 	md5Sums := make([]string, len(bookHashes))
+
 	for i, page := range bookHashes {
 		md5Sums[i] = page.Md5Sum
 	}
@@ -67,7 +68,7 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 			}
 		}
 
-		result = append(result, entities.DeduplicateBookResult{
+		deduplicateResult := entities.DeduplicateBookResult{ // TODO: подумать над оптимизациями
 			TargetBook:             bookShort,
 			PreviewPage:            previewPage,
 			EntryPercentage:        entities.EntryPercentageForPages(bookHashes, pages, nil),
@@ -75,7 +76,33 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 
 			EntryPercentageWithoutDeadHashes:        entities.EntryPercentageForPages(bookHashes, pages, existsDeadHashes),
 			ReverseEntryPercentageWithoutDeadHashes: entities.EntryPercentageForPages(pages, bookHashes, existsDeadHashes),
-		})
+		}
+
+		bookHashMap := make(map[entities.FileHash]struct{}, len(bookHashes))
+
+		for _, page := range bookHashes {
+			bookHashMap[page.FileHash] = struct{}{}
+		}
+
+		for _, page := range pages {
+			deduplicateResult.TargetSize += page.Size
+
+			if _, ok := bookHashMap[page.FileHash]; !ok {
+				continue
+			}
+
+			deduplicateResult.SharedPages++
+			deduplicateResult.SharedSize += page.Size
+
+			if _, ok := existsDeadHashes[page.FileHash]; !ok {
+				deduplicateResult.SharedPagesWithoutDeadHashes++
+				deduplicateResult.SharedSizeWithoutDeadHashes += page.Size
+			}
+
+			delete(bookHashMap, page.FileHash)
+		}
+
+		result = append(result, deduplicateResult)
 	}
 
 	slices.SortFunc(result, func(a, b entities.DeduplicateBookResult) int {

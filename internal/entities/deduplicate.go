@@ -68,6 +68,14 @@ type DeduplicateBookResult struct {
 	EntryPercentageWithoutDeadHashes float64
 	// Процент (0-1) вхождения книги в архив без учета мертвых хешей
 	ReverseEntryPercentageWithoutDeadHashes float64
+
+	SharedSize                  int64
+	SharedSizeWithoutDeadHashes int64
+
+	SharedPages                  int
+	SharedPagesWithoutDeadHashes int
+
+	TargetSize int64
 }
 
 type BookPagesCompareResult struct {

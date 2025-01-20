@@ -1696,6 +1696,26 @@ type APIDeduplicateBookByPageBodyPostOKResultItem struct {
 	// Процент (0-1) покрытия книги в оригинале без учета
 	// мертвых хешей.
 	TargetCoveredOriginWithoutDeadHashes float64 `json:"target_covered_origin_without_dead_hashes"`
+	// Общий размер целевой книги.
+	TargetSize int64 `json:"target_size"`
+	// Общий размер книг без учета внутренних страниц дублей.
+	SharedSize int64 `json:"shared_size"`
+	// Общий размер книг без учета внутренних страниц
+	// дублей и мертвых хешей.
+	SharedSizeWithoutDeadHashes int64 `json:"shared_size_without_dead_hashes"`
+	// Общее количество страниц книг без учета внутренних
+	// страниц дублей.
+	SharedPageCount int `json:"shared_page_count"`
+	// Общее количество страниц книг без учета внутренних
+	// страниц дублей и мертвых хешей.
+	SharedPageCountWithoutDeadHashes int `json:"shared_page_count_without_dead_hashes"`
+	// Общий размер целевой книги.
+	TargetSizeFormatted string `json:"target_size_formatted"`
+	// Общий размер книг без учета внутренних страниц дублей.
+	SharedSizeFormatted string `json:"shared_size_formatted"`
+	// Общий размер книг без учета внутренних страниц
+	// дублей и мертвых хешей.
+	SharedSizeWithoutDeadHashesFormatted string `json:"shared_size_without_dead_hashes_formatted"`
 }
 
 // GetBook returns the value of Book.
@@ -1723,6 +1743,46 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetCoveredOriginWit
 	return s.TargetCoveredOriginWithoutDeadHashes
 }
 
+// GetTargetSize returns the value of TargetSize.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetSize() int64 {
+	return s.TargetSize
+}
+
+// GetSharedSize returns the value of SharedSize.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetSharedSize() int64 {
+	return s.SharedSize
+}
+
+// GetSharedSizeWithoutDeadHashes returns the value of SharedSizeWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetSharedSizeWithoutDeadHashes() int64 {
+	return s.SharedSizeWithoutDeadHashes
+}
+
+// GetSharedPageCount returns the value of SharedPageCount.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetSharedPageCount() int {
+	return s.SharedPageCount
+}
+
+// GetSharedPageCountWithoutDeadHashes returns the value of SharedPageCountWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetSharedPageCountWithoutDeadHashes() int {
+	return s.SharedPageCountWithoutDeadHashes
+}
+
+// GetTargetSizeFormatted returns the value of TargetSizeFormatted.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetSizeFormatted() string {
+	return s.TargetSizeFormatted
+}
+
+// GetSharedSizeFormatted returns the value of SharedSizeFormatted.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetSharedSizeFormatted() string {
+	return s.SharedSizeFormatted
+}
+
+// GetSharedSizeWithoutDeadHashesFormatted returns the value of SharedSizeWithoutDeadHashesFormatted.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetSharedSizeWithoutDeadHashesFormatted() string {
+	return s.SharedSizeWithoutDeadHashesFormatted
+}
+
 // SetBook sets the value of Book.
 func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetBook(val BookSimple) {
 	s.Book = val
@@ -1746,6 +1806,46 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetOriginCoveredTargetWit
 // SetTargetCoveredOriginWithoutDeadHashes sets the value of TargetCoveredOriginWithoutDeadHashes.
 func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetCoveredOriginWithoutDeadHashes(val float64) {
 	s.TargetCoveredOriginWithoutDeadHashes = val
+}
+
+// SetTargetSize sets the value of TargetSize.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetSize(val int64) {
+	s.TargetSize = val
+}
+
+// SetSharedSize sets the value of SharedSize.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetSharedSize(val int64) {
+	s.SharedSize = val
+}
+
+// SetSharedSizeWithoutDeadHashes sets the value of SharedSizeWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetSharedSizeWithoutDeadHashes(val int64) {
+	s.SharedSizeWithoutDeadHashes = val
+}
+
+// SetSharedPageCount sets the value of SharedPageCount.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetSharedPageCount(val int) {
+	s.SharedPageCount = val
+}
+
+// SetSharedPageCountWithoutDeadHashes sets the value of SharedPageCountWithoutDeadHashes.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetSharedPageCountWithoutDeadHashes(val int) {
+	s.SharedPageCountWithoutDeadHashes = val
+}
+
+// SetTargetSizeFormatted sets the value of TargetSizeFormatted.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetSizeFormatted(val string) {
+	s.TargetSizeFormatted = val
+}
+
+// SetSharedSizeFormatted sets the value of SharedSizeFormatted.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetSharedSizeFormatted(val string) {
+	s.SharedSizeFormatted = val
+}
+
+// SetSharedSizeWithoutDeadHashesFormatted sets the value of SharedSizeWithoutDeadHashesFormatted.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetSharedSizeWithoutDeadHashesFormatted(val string) {
+	s.SharedSizeWithoutDeadHashesFormatted = val
 }
 
 type APIDeduplicateBookByPageBodyPostReq struct {

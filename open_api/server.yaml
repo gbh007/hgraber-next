@@ -2053,12 +2053,47 @@ paths:
                           type: number
                           format: float64
                           description: Процент (0-1) покрытия книги в оригинале без учета мертвых хешей
+                        target_size:
+                          type: integer
+                          format: int64
+                          description: Общий размер целевой книги
+                        shared_size:
+                          type: integer
+                          format: int64
+                          description: Общий размер книг без учета внутренних страниц дублей
+                        shared_size_without_dead_hashes:
+                          type: integer
+                          format: int64
+                          description: Общий размер книг без учета внутренних страниц дублей и мертвых хешей
+                        shared_page_count:
+                          type: integer
+                          description: Общее количество страниц книг без учета внутренних страниц дублей
+                        shared_page_count_without_dead_hashes:
+                          type: integer
+                          description: Общее количество страниц книг без учета внутренних страниц дублей и мертвых хешей
+                        target_size_formatted:
+                          type: string
+                          description: Общий размер целевой книги
+                        shared_size_formatted:
+                          type: string
+                          description: Общий размер книг без учета внутренних страниц дублей
+                        shared_size_without_dead_hashes_formatted:
+                          type: string
+                          description: Общий размер книг без учета внутренних страниц дублей и мертвых хешей
                       required:
                         - book
                         - origin_covered_target
                         - target_covered_origin
                         - origin_covered_target_without_dead_hashes
                         - target_covered_origin_without_dead_hashes
+                        - target_size
+                        - shared_size
+                        - shared_size_without_dead_hashes
+                        - shared_page_count
+                        - shared_page_count_without_dead_hashes
+                        - target_size_formatted
+                        - shared_size_formatted
+                        - shared_size_without_dead_hashes_formatted
         400:
           description: Некорректный запрос
           content:

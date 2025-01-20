@@ -7225,14 +7225,54 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) encodeFields(e *jx.Encode
 		e.FieldStart("target_covered_origin_without_dead_hashes")
 		e.Float64(s.TargetCoveredOriginWithoutDeadHashes)
 	}
+	{
+		e.FieldStart("target_size")
+		e.Int64(s.TargetSize)
+	}
+	{
+		e.FieldStart("shared_size")
+		e.Int64(s.SharedSize)
+	}
+	{
+		e.FieldStart("shared_size_without_dead_hashes")
+		e.Int64(s.SharedSizeWithoutDeadHashes)
+	}
+	{
+		e.FieldStart("shared_page_count")
+		e.Int(s.SharedPageCount)
+	}
+	{
+		e.FieldStart("shared_page_count_without_dead_hashes")
+		e.Int(s.SharedPageCountWithoutDeadHashes)
+	}
+	{
+		e.FieldStart("target_size_formatted")
+		e.Str(s.TargetSizeFormatted)
+	}
+	{
+		e.FieldStart("shared_size_formatted")
+		e.Str(s.SharedSizeFormatted)
+	}
+	{
+		e.FieldStart("shared_size_without_dead_hashes_formatted")
+		e.Str(s.SharedSizeWithoutDeadHashesFormatted)
+	}
 }
 
-var jsonFieldsNameOfAPIDeduplicateBookByPageBodyPostOKResultItem = [5]string{
-	0: "book",
-	1: "origin_covered_target",
-	2: "target_covered_origin",
-	3: "origin_covered_target_without_dead_hashes",
-	4: "target_covered_origin_without_dead_hashes",
+var jsonFieldsNameOfAPIDeduplicateBookByPageBodyPostOKResultItem = [13]string{
+	0:  "book",
+	1:  "origin_covered_target",
+	2:  "target_covered_origin",
+	3:  "origin_covered_target_without_dead_hashes",
+	4:  "target_covered_origin_without_dead_hashes",
+	5:  "target_size",
+	6:  "shared_size",
+	7:  "shared_size_without_dead_hashes",
+	8:  "shared_page_count",
+	9:  "shared_page_count_without_dead_hashes",
+	10: "target_size_formatted",
+	11: "shared_size_formatted",
+	12: "shared_size_without_dead_hashes_formatted",
 }
 
 // Decode decodes APIDeduplicateBookByPageBodyPostOKResultItem from json.
@@ -7240,7 +7280,7 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) Decode(d *jx.Decoder) err
 	if s == nil {
 		return errors.New("invalid: unable to decode APIDeduplicateBookByPageBodyPostOKResultItem to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -7302,6 +7342,102 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) Decode(d *jx.Decoder) err
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"target_covered_origin_without_dead_hashes\"")
 			}
+		case "target_size":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Int64()
+				s.TargetSize = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_size\"")
+			}
+		case "shared_size":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int64()
+				s.SharedSize = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"shared_size\"")
+			}
+		case "shared_size_without_dead_hashes":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int64()
+				s.SharedSizeWithoutDeadHashes = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"shared_size_without_dead_hashes\"")
+			}
+		case "shared_page_count":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.SharedPageCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"shared_page_count\"")
+			}
+		case "shared_page_count_without_dead_hashes":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int()
+				s.SharedPageCountWithoutDeadHashes = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"shared_page_count_without_dead_hashes\"")
+			}
+		case "target_size_formatted":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.TargetSizeFormatted = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_size_formatted\"")
+			}
+		case "shared_size_formatted":
+			requiredBitSet[1] |= 1 << 3
+			if err := func() error {
+				v, err := d.Str()
+				s.SharedSizeFormatted = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"shared_size_formatted\"")
+			}
+		case "shared_size_without_dead_hashes_formatted":
+			requiredBitSet[1] |= 1 << 4
+			if err := func() error {
+				v, err := d.Str()
+				s.SharedSizeWithoutDeadHashesFormatted = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"shared_size_without_dead_hashes_formatted\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -7311,7 +7447,8 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) Decode(d *jx.Decoder) err
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
+	for i, mask := range [2]uint8{
+		0b11111111,
 		0b00011111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
