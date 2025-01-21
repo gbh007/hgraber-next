@@ -102,6 +102,13 @@ type BookSize struct {
 	Shared                  int64
 	DeadHashes              int64
 	Total                   int64
+
+	// TODO: технически это не размер, лучше всего будет отделить
+	UniqueCount                  int
+	UniqueWithoutDeadHashesCount int
+	SharedCount                  int
+	DeadHashesCount              int
+	InnerDuplicateCount          int
 }
 
 // TODO: подумать что делать с такими моделями

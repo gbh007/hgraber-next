@@ -4428,19 +4428,44 @@ func (s *APIBookDetailsPostOKSize) encodeFields(e *jx.Encoder) {
 		e.FieldStart("total_formatted")
 		e.Str(s.TotalFormatted)
 	}
+	{
+		e.FieldStart("unique_count")
+		e.Int(s.UniqueCount)
+	}
+	{
+		e.FieldStart("unique_without_dead_hashes_count")
+		e.Int(s.UniqueWithoutDeadHashesCount)
+	}
+	{
+		e.FieldStart("shared_count")
+		e.Int(s.SharedCount)
+	}
+	{
+		e.FieldStart("dead_hashes_count")
+		e.Int(s.DeadHashesCount)
+	}
+	{
+		e.FieldStart("inner_duplicate_count")
+		e.Int(s.InnerDuplicateCount)
+	}
 }
 
-var jsonFieldsNameOfAPIBookDetailsPostOKSize = [10]string{
-	0: "unique",
-	1: "unique_without_dead_hashes",
-	2: "shared",
-	3: "dead_hashes",
-	4: "total",
-	5: "unique_formatted",
-	6: "unique_without_dead_hashes_formatted",
-	7: "shared_formatted",
-	8: "dead_hashes_formatted",
-	9: "total_formatted",
+var jsonFieldsNameOfAPIBookDetailsPostOKSize = [15]string{
+	0:  "unique",
+	1:  "unique_without_dead_hashes",
+	2:  "shared",
+	3:  "dead_hashes",
+	4:  "total",
+	5:  "unique_formatted",
+	6:  "unique_without_dead_hashes_formatted",
+	7:  "shared_formatted",
+	8:  "dead_hashes_formatted",
+	9:  "total_formatted",
+	10: "unique_count",
+	11: "unique_without_dead_hashes_count",
+	12: "shared_count",
+	13: "dead_hashes_count",
+	14: "inner_duplicate_count",
 }
 
 // Decode decodes APIBookDetailsPostOKSize from json.
@@ -4572,6 +4597,66 @@ func (s *APIBookDetailsPostOKSize) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"total_formatted\"")
 			}
+		case "unique_count":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int()
+				s.UniqueCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"unique_count\"")
+			}
+		case "unique_without_dead_hashes_count":
+			requiredBitSet[1] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int()
+				s.UniqueWithoutDeadHashesCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"unique_without_dead_hashes_count\"")
+			}
+		case "shared_count":
+			requiredBitSet[1] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int()
+				s.SharedCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"shared_count\"")
+			}
+		case "dead_hashes_count":
+			requiredBitSet[1] |= 1 << 5
+			if err := func() error {
+				v, err := d.Int()
+				s.DeadHashesCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"dead_hashes_count\"")
+			}
+		case "inner_duplicate_count":
+			requiredBitSet[1] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int()
+				s.InnerDuplicateCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"inner_duplicate_count\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -4583,7 +4668,7 @@ func (s *APIBookDetailsPostOKSize) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00000011,
+		0b01111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

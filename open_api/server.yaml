@@ -961,6 +961,21 @@ paths:
                       total_formatted:
                         type: string
                         description: Общий размер файлов книги в человекочитаемом виде
+                      unique_count:
+                        type: integer
+                        description: Количество уникальных файлов книги
+                      unique_without_dead_hashes_count:
+                        type: integer
+                        description: Количество уникальных файлов книги без учета мертвых хешей
+                      shared_count:
+                        type: integer
+                        description: Количество файлов в книге что пересекаются с другими книгами
+                      dead_hashes_count:
+                        type: integer
+                        description: Количество мертвых хешей в книге
+                      inner_duplicate_count:
+                        type: integer
+                        description: Количество страниц дубликатов внутри книги
                     required:
                       - unique
                       - unique_without_dead_hashes
@@ -972,6 +987,11 @@ paths:
                       - shared_formatted
                       - dead_hashes_formatted
                       - total_formatted
+                      - unique_count
+                      - unique_without_dead_hashes_count
+                      - shared_count
+                      - dead_hashes_count
+                      - inner_duplicate_count
                 required:
                   - info
                   - page_loaded_percent

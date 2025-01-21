@@ -144,19 +144,25 @@ func (uc *UseCase) BookSize(ctx context.Context, originBookID uuid.UUID) (entiti
 		if c, ok := fileCounts[page.FileHash]; ok {
 			if c > 1 {
 				result.Shared += page.Size
+				result.SharedCount++
 			} else {
 				result.Unique += page.Size
+				result.UniqueCount++
 
 				if !hasDeadHash {
 					result.UniqueWithoutDeadHashes += page.Size
+					result.UniqueWithoutDeadHashesCount++
 				}
 			}
 
 			if hasDeadHash {
 				result.DeadHashes += page.Size
+				result.DeadHashesCount++
 			}
 
 			delete(fileCounts, page.FileHash) // Это нужно, чтобы дубликаты внутри книги не увеличивали уникальный объем
+		} else {
+			result.InnerDuplicateCount++
 		}
 
 		result.Total += page.Size

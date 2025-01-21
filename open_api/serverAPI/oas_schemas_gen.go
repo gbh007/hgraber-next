@@ -1024,6 +1024,18 @@ type APIBookDetailsPostOKSize struct {
 	DeadHashesFormatted string `json:"dead_hashes_formatted"`
 	// Общий размер файлов книги в человекочитаемом виде.
 	TotalFormatted string `json:"total_formatted"`
+	// Количество уникальных файлов книги.
+	UniqueCount int `json:"unique_count"`
+	// Количество уникальных файлов книги без учета мертвых
+	// хешей.
+	UniqueWithoutDeadHashesCount int `json:"unique_without_dead_hashes_count"`
+	// Количество файлов в книге что пересекаются с другими
+	// книгами.
+	SharedCount int `json:"shared_count"`
+	// Количество мертвых хешей в книге.
+	DeadHashesCount int `json:"dead_hashes_count"`
+	// Количество страниц дубликатов внутри книги.
+	InnerDuplicateCount int `json:"inner_duplicate_count"`
 }
 
 // GetUnique returns the value of Unique.
@@ -1076,6 +1088,31 @@ func (s *APIBookDetailsPostOKSize) GetTotalFormatted() string {
 	return s.TotalFormatted
 }
 
+// GetUniqueCount returns the value of UniqueCount.
+func (s *APIBookDetailsPostOKSize) GetUniqueCount() int {
+	return s.UniqueCount
+}
+
+// GetUniqueWithoutDeadHashesCount returns the value of UniqueWithoutDeadHashesCount.
+func (s *APIBookDetailsPostOKSize) GetUniqueWithoutDeadHashesCount() int {
+	return s.UniqueWithoutDeadHashesCount
+}
+
+// GetSharedCount returns the value of SharedCount.
+func (s *APIBookDetailsPostOKSize) GetSharedCount() int {
+	return s.SharedCount
+}
+
+// GetDeadHashesCount returns the value of DeadHashesCount.
+func (s *APIBookDetailsPostOKSize) GetDeadHashesCount() int {
+	return s.DeadHashesCount
+}
+
+// GetInnerDuplicateCount returns the value of InnerDuplicateCount.
+func (s *APIBookDetailsPostOKSize) GetInnerDuplicateCount() int {
+	return s.InnerDuplicateCount
+}
+
 // SetUnique sets the value of Unique.
 func (s *APIBookDetailsPostOKSize) SetUnique(val int64) {
 	s.Unique = val
@@ -1124,6 +1161,31 @@ func (s *APIBookDetailsPostOKSize) SetDeadHashesFormatted(val string) {
 // SetTotalFormatted sets the value of TotalFormatted.
 func (s *APIBookDetailsPostOKSize) SetTotalFormatted(val string) {
 	s.TotalFormatted = val
+}
+
+// SetUniqueCount sets the value of UniqueCount.
+func (s *APIBookDetailsPostOKSize) SetUniqueCount(val int) {
+	s.UniqueCount = val
+}
+
+// SetUniqueWithoutDeadHashesCount sets the value of UniqueWithoutDeadHashesCount.
+func (s *APIBookDetailsPostOKSize) SetUniqueWithoutDeadHashesCount(val int) {
+	s.UniqueWithoutDeadHashesCount = val
+}
+
+// SetSharedCount sets the value of SharedCount.
+func (s *APIBookDetailsPostOKSize) SetSharedCount(val int) {
+	s.SharedCount = val
+}
+
+// SetDeadHashesCount sets the value of DeadHashesCount.
+func (s *APIBookDetailsPostOKSize) SetDeadHashesCount(val int) {
+	s.DeadHashesCount = val
+}
+
+// SetInnerDuplicateCount sets the value of InnerDuplicateCount.
+func (s *APIBookDetailsPostOKSize) SetInnerDuplicateCount(val int) {
+	s.InnerDuplicateCount = val
 }
 
 type APIBookDetailsPostReq struct {
