@@ -4595,92 +4595,22 @@ func (s *BookAttribute) SetValues(val []string) {
 
 // Ref: #/components/schemas/BookFilter
 type BookFilter struct {
-	// Сортировать в обратном порядке.
-	SortDesc OptBool `json:"sort_desc"`
-	// Поле для сортировки.
-	SortField OptBookFilterSortField `json:"sort_field"`
-	// Количество книг на странице.
-	Count OptInt `json:"count"`
-	// Номер страницы.
-	Page OptInt `json:"page"`
-	// Время создание книги от.
-	From OptDateTime `json:"from"`
-	// Время создание книги до.
-	To OptDateTime `json:"to"`
-	// Статус подтверждения книги.
-	VerifyStatus OptBookFilterFlagSelector `json:"verify_status"`
-	// Статус удаления книги.
-	DeleteStatus OptBookFilterFlagSelector `json:"delete_status"`
-	// Статус загрузки книги.
-	DownloadStatus OptBookFilterFlagSelector `json:"download_status"`
-	// Показывать пересобранные книги.
-	ShowRebuilded OptBookFilterFlagSelector `json:"show_rebuilded"`
-	// Показывать книги без страниц.
-	ShowWithoutPages OptBookFilterFlagSelector `json:"show_without_pages"`
-	// Показывать книги без превью.
-	ShowWithoutPreview OptBookFilterFlagSelector `json:"show_without_preview"`
+	// Параметры сортировки.
+	Sort OptBookFilterSort `json:"sort"`
+	// Параметры пагинации.
+	Pagination OptBookFilterPagination `json:"pagination"`
 	// Фильтр по полям.
 	Filter OptBookFilterFilter `json:"filter"`
 }
 
-// GetSortDesc returns the value of SortDesc.
-func (s *BookFilter) GetSortDesc() OptBool {
-	return s.SortDesc
+// GetSort returns the value of Sort.
+func (s *BookFilter) GetSort() OptBookFilterSort {
+	return s.Sort
 }
 
-// GetSortField returns the value of SortField.
-func (s *BookFilter) GetSortField() OptBookFilterSortField {
-	return s.SortField
-}
-
-// GetCount returns the value of Count.
-func (s *BookFilter) GetCount() OptInt {
-	return s.Count
-}
-
-// GetPage returns the value of Page.
-func (s *BookFilter) GetPage() OptInt {
-	return s.Page
-}
-
-// GetFrom returns the value of From.
-func (s *BookFilter) GetFrom() OptDateTime {
-	return s.From
-}
-
-// GetTo returns the value of To.
-func (s *BookFilter) GetTo() OptDateTime {
-	return s.To
-}
-
-// GetVerifyStatus returns the value of VerifyStatus.
-func (s *BookFilter) GetVerifyStatus() OptBookFilterFlagSelector {
-	return s.VerifyStatus
-}
-
-// GetDeleteStatus returns the value of DeleteStatus.
-func (s *BookFilter) GetDeleteStatus() OptBookFilterFlagSelector {
-	return s.DeleteStatus
-}
-
-// GetDownloadStatus returns the value of DownloadStatus.
-func (s *BookFilter) GetDownloadStatus() OptBookFilterFlagSelector {
-	return s.DownloadStatus
-}
-
-// GetShowRebuilded returns the value of ShowRebuilded.
-func (s *BookFilter) GetShowRebuilded() OptBookFilterFlagSelector {
-	return s.ShowRebuilded
-}
-
-// GetShowWithoutPages returns the value of ShowWithoutPages.
-func (s *BookFilter) GetShowWithoutPages() OptBookFilterFlagSelector {
-	return s.ShowWithoutPages
-}
-
-// GetShowWithoutPreview returns the value of ShowWithoutPreview.
-func (s *BookFilter) GetShowWithoutPreview() OptBookFilterFlagSelector {
-	return s.ShowWithoutPreview
+// GetPagination returns the value of Pagination.
+func (s *BookFilter) GetPagination() OptBookFilterPagination {
+	return s.Pagination
 }
 
 // GetFilter returns the value of Filter.
@@ -4688,64 +4618,14 @@ func (s *BookFilter) GetFilter() OptBookFilterFilter {
 	return s.Filter
 }
 
-// SetSortDesc sets the value of SortDesc.
-func (s *BookFilter) SetSortDesc(val OptBool) {
-	s.SortDesc = val
+// SetSort sets the value of Sort.
+func (s *BookFilter) SetSort(val OptBookFilterSort) {
+	s.Sort = val
 }
 
-// SetSortField sets the value of SortField.
-func (s *BookFilter) SetSortField(val OptBookFilterSortField) {
-	s.SortField = val
-}
-
-// SetCount sets the value of Count.
-func (s *BookFilter) SetCount(val OptInt) {
-	s.Count = val
-}
-
-// SetPage sets the value of Page.
-func (s *BookFilter) SetPage(val OptInt) {
-	s.Page = val
-}
-
-// SetFrom sets the value of From.
-func (s *BookFilter) SetFrom(val OptDateTime) {
-	s.From = val
-}
-
-// SetTo sets the value of To.
-func (s *BookFilter) SetTo(val OptDateTime) {
-	s.To = val
-}
-
-// SetVerifyStatus sets the value of VerifyStatus.
-func (s *BookFilter) SetVerifyStatus(val OptBookFilterFlagSelector) {
-	s.VerifyStatus = val
-}
-
-// SetDeleteStatus sets the value of DeleteStatus.
-func (s *BookFilter) SetDeleteStatus(val OptBookFilterFlagSelector) {
-	s.DeleteStatus = val
-}
-
-// SetDownloadStatus sets the value of DownloadStatus.
-func (s *BookFilter) SetDownloadStatus(val OptBookFilterFlagSelector) {
-	s.DownloadStatus = val
-}
-
-// SetShowRebuilded sets the value of ShowRebuilded.
-func (s *BookFilter) SetShowRebuilded(val OptBookFilterFlagSelector) {
-	s.ShowRebuilded = val
-}
-
-// SetShowWithoutPages sets the value of ShowWithoutPages.
-func (s *BookFilter) SetShowWithoutPages(val OptBookFilterFlagSelector) {
-	s.ShowWithoutPages = val
-}
-
-// SetShowWithoutPreview sets the value of ShowWithoutPreview.
-func (s *BookFilter) SetShowWithoutPreview(val OptBookFilterFlagSelector) {
-	s.ShowWithoutPreview = val
+// SetPagination sets the value of Pagination.
+func (s *BookFilter) SetPagination(val OptBookFilterPagination) {
+	s.Pagination = val
 }
 
 // SetFilter sets the value of Filter.
@@ -4757,6 +4637,10 @@ func (s *BookFilter) SetFilter(val OptBookFilterFilter) {
 type BookFilterFilter struct {
 	// Фильтр по названию, без учета регистра.
 	Name OptString `json:"name"`
+	// Фильтрация по дате создания книги.
+	CreatedAt OptBookFilterFilterCreatedAt `json:"created_at"`
+	// Различные флаги.
+	Flags OptBookFilterFilterFlags `json:"flags"`
 	// Фильтр по атрибутам.
 	Attributes []BookFilterFilterAttributesItem `json:"attributes"`
 	// Фильтр по меткам (без разделения на метки страниц и
@@ -4767,6 +4651,16 @@ type BookFilterFilter struct {
 // GetName returns the value of Name.
 func (s *BookFilterFilter) GetName() OptString {
 	return s.Name
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *BookFilterFilter) GetCreatedAt() OptBookFilterFilterCreatedAt {
+	return s.CreatedAt
+}
+
+// GetFlags returns the value of Flags.
+func (s *BookFilterFilter) GetFlags() OptBookFilterFilterFlags {
+	return s.Flags
 }
 
 // GetAttributes returns the value of Attributes.
@@ -4782,6 +4676,16 @@ func (s *BookFilterFilter) GetLabels() []BookFilterFilterLabelsItem {
 // SetName sets the value of Name.
 func (s *BookFilterFilter) SetName(val OptString) {
 	s.Name = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *BookFilterFilter) SetCreatedAt(val OptBookFilterFilterCreatedAt) {
+	s.CreatedAt = val
+}
+
+// SetFlags sets the value of Flags.
+func (s *BookFilterFilter) SetFlags(val OptBookFilterFilterFlags) {
+	s.Flags = val
 }
 
 // SetAttributes sets the value of Attributes.
@@ -4907,6 +4811,110 @@ func (s *BookFilterFilterAttributesItemType) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+// Фильтрация по дате создания книги.
+type BookFilterFilterCreatedAt struct {
+	// Время создание книги от.
+	From OptDateTime `json:"from"`
+	// Время создание книги до.
+	To OptDateTime `json:"to"`
+}
+
+// GetFrom returns the value of From.
+func (s *BookFilterFilterCreatedAt) GetFrom() OptDateTime {
+	return s.From
+}
+
+// GetTo returns the value of To.
+func (s *BookFilterFilterCreatedAt) GetTo() OptDateTime {
+	return s.To
+}
+
+// SetFrom sets the value of From.
+func (s *BookFilterFilterCreatedAt) SetFrom(val OptDateTime) {
+	s.From = val
+}
+
+// SetTo sets the value of To.
+func (s *BookFilterFilterCreatedAt) SetTo(val OptDateTime) {
+	s.To = val
+}
+
+// Различные флаги.
+type BookFilterFilterFlags struct {
+	// Статус подтверждения книги.
+	VerifyStatus OptBookFilterFlagSelector `json:"verify_status"`
+	// Статус удаления книги.
+	DeleteStatus OptBookFilterFlagSelector `json:"delete_status"`
+	// Статус загрузки книги.
+	DownloadStatus OptBookFilterFlagSelector `json:"download_status"`
+	// Показывать пересобранные книги.
+	ShowRebuilded OptBookFilterFlagSelector `json:"show_rebuilded"`
+	// Показывать книги без страниц.
+	ShowWithoutPages OptBookFilterFlagSelector `json:"show_without_pages"`
+	// Показывать книги без превью.
+	ShowWithoutPreview OptBookFilterFlagSelector `json:"show_without_preview"`
+}
+
+// GetVerifyStatus returns the value of VerifyStatus.
+func (s *BookFilterFilterFlags) GetVerifyStatus() OptBookFilterFlagSelector {
+	return s.VerifyStatus
+}
+
+// GetDeleteStatus returns the value of DeleteStatus.
+func (s *BookFilterFilterFlags) GetDeleteStatus() OptBookFilterFlagSelector {
+	return s.DeleteStatus
+}
+
+// GetDownloadStatus returns the value of DownloadStatus.
+func (s *BookFilterFilterFlags) GetDownloadStatus() OptBookFilterFlagSelector {
+	return s.DownloadStatus
+}
+
+// GetShowRebuilded returns the value of ShowRebuilded.
+func (s *BookFilterFilterFlags) GetShowRebuilded() OptBookFilterFlagSelector {
+	return s.ShowRebuilded
+}
+
+// GetShowWithoutPages returns the value of ShowWithoutPages.
+func (s *BookFilterFilterFlags) GetShowWithoutPages() OptBookFilterFlagSelector {
+	return s.ShowWithoutPages
+}
+
+// GetShowWithoutPreview returns the value of ShowWithoutPreview.
+func (s *BookFilterFilterFlags) GetShowWithoutPreview() OptBookFilterFlagSelector {
+	return s.ShowWithoutPreview
+}
+
+// SetVerifyStatus sets the value of VerifyStatus.
+func (s *BookFilterFilterFlags) SetVerifyStatus(val OptBookFilterFlagSelector) {
+	s.VerifyStatus = val
+}
+
+// SetDeleteStatus sets the value of DeleteStatus.
+func (s *BookFilterFilterFlags) SetDeleteStatus(val OptBookFilterFlagSelector) {
+	s.DeleteStatus = val
+}
+
+// SetDownloadStatus sets the value of DownloadStatus.
+func (s *BookFilterFilterFlags) SetDownloadStatus(val OptBookFilterFlagSelector) {
+	s.DownloadStatus = val
+}
+
+// SetShowRebuilded sets the value of ShowRebuilded.
+func (s *BookFilterFilterFlags) SetShowRebuilded(val OptBookFilterFlagSelector) {
+	s.ShowRebuilded = val
+}
+
+// SetShowWithoutPages sets the value of ShowWithoutPages.
+func (s *BookFilterFilterFlags) SetShowWithoutPages(val OptBookFilterFlagSelector) {
+	s.ShowWithoutPages = val
+}
+
+// SetShowWithoutPreview sets the value of ShowWithoutPreview.
+func (s *BookFilterFilterFlags) SetShowWithoutPreview(val OptBookFilterFlagSelector) {
+	s.ShowWithoutPreview = val
 }
 
 type BookFilterFilterLabelsItem struct {
@@ -5072,6 +5080,62 @@ func (s *BookFilterFlagSelector) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+// Параметры пагинации.
+type BookFilterPagination struct {
+	// Количество книг на странице.
+	Count OptInt `json:"count"`
+	// Номер страницы.
+	Page OptInt `json:"page"`
+}
+
+// GetCount returns the value of Count.
+func (s *BookFilterPagination) GetCount() OptInt {
+	return s.Count
+}
+
+// GetPage returns the value of Page.
+func (s *BookFilterPagination) GetPage() OptInt {
+	return s.Page
+}
+
+// SetCount sets the value of Count.
+func (s *BookFilterPagination) SetCount(val OptInt) {
+	s.Count = val
+}
+
+// SetPage sets the value of Page.
+func (s *BookFilterPagination) SetPage(val OptInt) {
+	s.Page = val
+}
+
+// Параметры сортировки.
+type BookFilterSort struct {
+	// Сортировать в обратном порядке.
+	Desc OptBool `json:"desc"`
+	// Поле для сортировки.
+	Field OptBookFilterSortField `json:"field"`
+}
+
+// GetDesc returns the value of Desc.
+func (s *BookFilterSort) GetDesc() OptBool {
+	return s.Desc
+}
+
+// GetField returns the value of Field.
+func (s *BookFilterSort) GetField() OptBookFilterSortField {
+	return s.Field
+}
+
+// SetDesc sets the value of Desc.
+func (s *BookFilterSort) SetDesc(val OptBool) {
+	s.Desc = val
+}
+
+// SetField sets the value of Field.
+func (s *BookFilterSort) SetField(val OptBookFilterSortField) {
+	s.Field = val
 }
 
 // Поле для сортировки.
@@ -5782,6 +5846,98 @@ func (o OptBookFilterFilter) Or(d BookFilterFilter) BookFilterFilter {
 	return d
 }
 
+// NewOptBookFilterFilterCreatedAt returns new OptBookFilterFilterCreatedAt with value set to v.
+func NewOptBookFilterFilterCreatedAt(v BookFilterFilterCreatedAt) OptBookFilterFilterCreatedAt {
+	return OptBookFilterFilterCreatedAt{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookFilterFilterCreatedAt is optional BookFilterFilterCreatedAt.
+type OptBookFilterFilterCreatedAt struct {
+	Value BookFilterFilterCreatedAt
+	Set   bool
+}
+
+// IsSet returns true if OptBookFilterFilterCreatedAt was set.
+func (o OptBookFilterFilterCreatedAt) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookFilterFilterCreatedAt) Reset() {
+	var v BookFilterFilterCreatedAt
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookFilterFilterCreatedAt) SetTo(v BookFilterFilterCreatedAt) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookFilterFilterCreatedAt) Get() (v BookFilterFilterCreatedAt, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookFilterFilterCreatedAt) Or(d BookFilterFilterCreatedAt) BookFilterFilterCreatedAt {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptBookFilterFilterFlags returns new OptBookFilterFilterFlags with value set to v.
+func NewOptBookFilterFilterFlags(v BookFilterFilterFlags) OptBookFilterFilterFlags {
+	return OptBookFilterFilterFlags{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookFilterFilterFlags is optional BookFilterFilterFlags.
+type OptBookFilterFilterFlags struct {
+	Value BookFilterFilterFlags
+	Set   bool
+}
+
+// IsSet returns true if OptBookFilterFilterFlags was set.
+func (o OptBookFilterFilterFlags) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookFilterFilterFlags) Reset() {
+	var v BookFilterFilterFlags
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookFilterFilterFlags) SetTo(v BookFilterFilterFlags) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookFilterFilterFlags) Get() (v BookFilterFilterFlags, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookFilterFilterFlags) Or(d BookFilterFilterFlags) BookFilterFilterFlags {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptBookFilterFlagSelector returns new OptBookFilterFlagSelector with value set to v.
 func NewOptBookFilterFlagSelector(v BookFilterFlagSelector) OptBookFilterFlagSelector {
 	return OptBookFilterFlagSelector{
@@ -5822,6 +5978,98 @@ func (o OptBookFilterFlagSelector) Get() (v BookFilterFlagSelector, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptBookFilterFlagSelector) Or(d BookFilterFlagSelector) BookFilterFlagSelector {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptBookFilterPagination returns new OptBookFilterPagination with value set to v.
+func NewOptBookFilterPagination(v BookFilterPagination) OptBookFilterPagination {
+	return OptBookFilterPagination{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookFilterPagination is optional BookFilterPagination.
+type OptBookFilterPagination struct {
+	Value BookFilterPagination
+	Set   bool
+}
+
+// IsSet returns true if OptBookFilterPagination was set.
+func (o OptBookFilterPagination) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookFilterPagination) Reset() {
+	var v BookFilterPagination
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookFilterPagination) SetTo(v BookFilterPagination) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookFilterPagination) Get() (v BookFilterPagination, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookFilterPagination) Or(d BookFilterPagination) BookFilterPagination {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptBookFilterSort returns new OptBookFilterSort with value set to v.
+func NewOptBookFilterSort(v BookFilterSort) OptBookFilterSort {
+	return OptBookFilterSort{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookFilterSort is optional BookFilterSort.
+type OptBookFilterSort struct {
+	Value BookFilterSort
+	Set   bool
+}
+
+// IsSet returns true if OptBookFilterSort was set.
+func (o OptBookFilterSort) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookFilterSort) Reset() {
+	var v BookFilterSort
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookFilterSort) SetTo(v BookFilterSort) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookFilterSort) Get() (v BookFilterSort, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookFilterSort) Or(d BookFilterSort) BookFilterSort {
 	if v, ok := o.Get(); ok {
 		return v
 	}

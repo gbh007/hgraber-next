@@ -30,7 +30,7 @@ func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.BookFil
 		Pages: pkg.Map(bookList.Pages, func(v int) serverAPI.APIBookListPostOKPagesItem {
 			return serverAPI.APIBookListPostOKPagesItem{
 				Value:       v,
-				IsCurrent:   v == req.Page.Value,
+				IsCurrent:   v == req.Pagination.Value.Page.Value,
 				IsSeparator: v == -1,
 			}
 		}),
@@ -41,14 +41,14 @@ func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.BookFil
 func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 	filter := entities.BookFilter{}
 
-	if req.Count.IsSet() {
-		filter.FillLimits(req.Page.Value, req.Count.Value)
+	if req.Pagination.Value.Count.IsSet() {
+		filter.FillLimits(req.Pagination.Value.Page.Value, req.Pagination.Value.Count.Value)
 	}
 
-	filter.Desc = req.SortDesc.Value
+	filter.Desc = req.Sort.Value.Desc.Value
 
-	if req.SortField.IsSet() {
-		switch req.SortField.Value {
+	if req.Sort.Value.Field.IsSet() {
+		switch req.Sort.Value.Field.Value {
 		case serverAPI.BookFilterSortFieldCreatedAt:
 			filter.OrderBy = entities.BookFilterOrderByCreated
 		case serverAPI.BookFilterSortFieldID:
@@ -62,33 +62,33 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 		}
 	}
 
-	if req.DeleteStatus.IsSet() {
-		filter.ShowDeleted = convertFlagSelector(req.DeleteStatus.Value)
+	if req.Filter.Value.Flags.Value.DeleteStatus.IsSet() {
+		filter.ShowDeleted = convertFlagSelector(req.Filter.Value.Flags.Value.DeleteStatus.Value)
 	}
 
-	if req.VerifyStatus.IsSet() {
-		filter.ShowVerified = convertFlagSelector(req.VerifyStatus.Value)
+	if req.Filter.Value.Flags.Value.VerifyStatus.IsSet() {
+		filter.ShowVerified = convertFlagSelector(req.Filter.Value.Flags.Value.VerifyStatus.Value)
 	}
 
-	if req.DownloadStatus.IsSet() {
-		filter.ShowDownloaded = convertFlagSelector(req.DownloadStatus.Value)
+	if req.Filter.Value.Flags.Value.DownloadStatus.IsSet() {
+		filter.ShowDownloaded = convertFlagSelector(req.Filter.Value.Flags.Value.DownloadStatus.Value)
 	}
 
-	if req.ShowRebuilded.IsSet() {
-		filter.ShowRebuilded = convertFlagSelector(req.ShowRebuilded.Value)
+	if req.Filter.Value.Flags.Value.ShowRebuilded.IsSet() {
+		filter.ShowRebuilded = convertFlagSelector(req.Filter.Value.Flags.Value.ShowRebuilded.Value)
 	}
 
-	if req.ShowWithoutPages.IsSet() {
-		filter.ShowWithoutPages = convertFlagSelector(req.ShowWithoutPages.Value)
+	if req.Filter.Value.Flags.Value.ShowWithoutPages.IsSet() {
+		filter.ShowWithoutPages = convertFlagSelector(req.Filter.Value.Flags.Value.ShowWithoutPages.Value)
 	}
 
-	if req.ShowWithoutPreview.IsSet() {
-		filter.ShowWithoutPreview = convertFlagSelector(req.ShowWithoutPreview.Value)
+	if req.Filter.Value.Flags.Value.ShowWithoutPreview.IsSet() {
+		filter.ShowWithoutPreview = convertFlagSelector(req.Filter.Value.Flags.Value.ShowWithoutPreview.Value)
 	}
 
 	filter.Fields.Name = req.Filter.Value.Name.Value
-	filter.From = req.From.Value
-	filter.To = req.To.Value
+	filter.From = req.Filter.Value.CreatedAt.Value.From.Value
+	filter.To = req.Filter.Value.CreatedAt.Value.To.Value
 
 	filter.Fields.Attributes = make([]entities.BookFilterAttribute, 0, len(req.Filter.Value.Attributes))
 

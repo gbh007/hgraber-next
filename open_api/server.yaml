@@ -3733,50 +3733,32 @@ components:
     BookFilter:
       type: object
       properties:
-        sort_desc:
-          type: boolean
-          description: Сортировать в обратном порядке
-        sort_field:
-          type: string
-          description: Поле для сортировки
-          enum:
-            - created_at
-            - name
-            - id
-            - page_count
-        count:
-          type: integer
-          description: Количество книг на странице
-        page:
-          type: integer
-          description: Номер страницы
-          minimum: 1
-        from:
-          type: string
-          format: date-time
-          description: Время создание книги от
-        to:
-          type: string
-          format: date-time
-          description: Время создание книги до
-        verify_status:
-          description: Статус подтверждения книги
-          $ref: "#/components/schemas/BookFilterFlagSelector"
-        delete_status:
-          description: Статус удаления книги
-          $ref: "#/components/schemas/BookFilterFlagSelector"
-        download_status:
-          description: Статус загрузки книги
-          $ref: "#/components/schemas/BookFilterFlagSelector"
-        show_rebuilded:
-          description: Показывать пересобранные книги
-          $ref: "#/components/schemas/BookFilterFlagSelector"
-        show_without_pages:
-          description: Показывать книги без страниц
-          $ref: "#/components/schemas/BookFilterFlagSelector"
-        show_without_preview:
-          description: Показывать книги без превью
-          $ref: "#/components/schemas/BookFilterFlagSelector"
+        sort:
+          type: object
+          description: Параметры сортировки
+          properties:
+            desc:
+              type: boolean
+              description: Сортировать в обратном порядке
+            field:
+              type: string
+              description: Поле для сортировки
+              enum:
+                - created_at
+                - name
+                - id
+                - page_count
+        pagination:
+          type: object
+          description: Параметры пагинации
+          properties:
+            count:
+              type: integer
+              description: Количество книг на странице
+            page:
+              type: integer
+              description: Номер страницы
+              minimum: 1
         filter:
           type: object
           description: Фильтр по полям
@@ -3784,6 +3766,40 @@ components:
             name:
               type: string
               description: Фильтр по названию, без учета регистра
+            created_at:
+              type: object
+              description: Фильтрация по дате создания книги
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                  description: Время создание книги от
+                to:
+                  type: string
+                  format: date-time
+                  description: Время создание книги до
+            flags:
+              type: object
+              description: Различные флаги
+              properties:
+                verify_status:
+                  description: Статус подтверждения книги
+                  $ref: "#/components/schemas/BookFilterFlagSelector"
+                delete_status:
+                  description: Статус удаления книги
+                  $ref: "#/components/schemas/BookFilterFlagSelector"
+                download_status:
+                  description: Статус загрузки книги
+                  $ref: "#/components/schemas/BookFilterFlagSelector"
+                show_rebuilded:
+                  description: Показывать пересобранные книги
+                  $ref: "#/components/schemas/BookFilterFlagSelector"
+                show_without_pages:
+                  description: Показывать книги без страниц
+                  $ref: "#/components/schemas/BookFilterFlagSelector"
+                show_without_preview:
+                  description: Показывать книги без превью
+                  $ref: "#/components/schemas/BookFilterFlagSelector"
             attributes:
               type: array
               description: Фильтр по атрибутам
