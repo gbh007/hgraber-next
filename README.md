@@ -4,9 +4,9 @@
 
 Это пятая итерация HGraber, которая не является обратно совместимой с предыдущими и создана с целью обработки большего количества данных более эффективным способом.
 
-[Пример агента](https://github.com/gbh007/hgraber-next-agent-example) для системы
+[Базовый агент](https://github.com/gbh007/hgraber-next-agent-core) для системы
 
-[Целевая версия UI на React TS](https://github.com/gbh007/hgraber-next-react-ui)
+[UI на React TS](https://github.com/gbh007/hgraber-next-react-ui)
 
 ## Roadmap
 
