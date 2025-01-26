@@ -144,6 +144,7 @@ func (uc *UseCase) ImportArchive(
 				ID:       fileID,
 				Filename: fmt.Sprintf("%d%s", p.PageNumber, p.Ext),
 				Ext:      p.Ext,
+				FSID:     fsID,
 				CreateAt: time.Now(),
 			})
 			if err != nil {

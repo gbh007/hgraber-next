@@ -15,5 +15,5 @@ func (c *Controller) APIFsUpdatePost(ctx context.Context, req *serverAPI.FileSys
 		}, nil
 	}
 
-	return &serverAPI.APIFsUpdatePostNotFound{}, nil
+	return &serverAPI.APIFsUpdatePostNoContent{}, nil
 }

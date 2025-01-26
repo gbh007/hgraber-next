@@ -39,6 +39,7 @@ func (uc *UseCase) DownloadPage(ctx context.Context, agentID uuid.UUID, page ent
 		ID:       fileID,
 		Filename: fmt.Sprintf("%d%s", page.PageNumber, page.Ext),
 		Ext:      page.Ext,
+		FSID:     fsID,
 		CreateAt: time.Now(),
 	})
 	if err != nil {
