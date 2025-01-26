@@ -32,7 +32,6 @@ type webAPIUseCases interface {
 	PageBody(ctx context.Context, bookID uuid.UUID, pageNumber int) (io.Reader, error)
 
 	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
-	BookList(ctx context.Context, filter entities.BookFilter) (entities.BookListToWeb, error)
 
 	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool) error
 	DeleteBook(ctx context.Context, bookID uuid.UUID) error
@@ -109,6 +108,7 @@ type fsUseCases interface {
 
 type bffUseCases interface {
 	BookDetails(ctx context.Context, bookID uuid.UUID) (entities.BFFBookDetails, error)
+	BookList(ctx context.Context, filter entities.BookFilter) (entities.BFFBookList, error)
 }
 
 type config interface {

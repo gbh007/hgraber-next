@@ -19,9 +19,12 @@ type storage interface {
 
 	BookIDsByMD5(ctx context.Context, md5sums []string) ([]uuid.UUID, error)
 	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
+	BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageNumber int) (entities.PageWithHash, error)
 	BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.PageWithHash, error)
 
 	DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.DeadHash, error)
+
+	BookCount(ctx context.Context, filter entities.BookFilter) (int, error)
 
 	Attributes(ctx context.Context) ([]entities.Attribute, error)
 }

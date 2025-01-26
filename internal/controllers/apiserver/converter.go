@@ -113,6 +113,7 @@ func (c *Controller) convertPreviewPage(page entities.PreviewPage) serverAPI.Pag
 	}
 }
 
+// FIXME: избавится и перейти на обобщенные страницы превью
 func (c *Controller) convertSimplePageWithDeadHash(page entities.PageWithDeadHash) serverAPI.PageSimple {
 	return serverAPI.PageSimple{
 		PageNumber:  page.PageNumber,

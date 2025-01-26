@@ -1287,8 +1287,6 @@ func (*APIBookListPostOK) aPIBookListPostRes() {}
 // Данные книги в упрощенном формате.
 type APIBookListPostOKBooksItem struct {
 	Info BookSimple `json:"info"`
-	// Процент загруженных страниц.
-	PageLoadedPercent float64 `json:"page_loaded_percent"`
 	// Список тегов (одноименный атрибут) книги.
 	Tags []string `json:"tags"`
 }
@@ -1296,11 +1294,6 @@ type APIBookListPostOKBooksItem struct {
 // GetInfo returns the value of Info.
 func (s *APIBookListPostOKBooksItem) GetInfo() BookSimple {
 	return s.Info
-}
-
-// GetPageLoadedPercent returns the value of PageLoadedPercent.
-func (s *APIBookListPostOKBooksItem) GetPageLoadedPercent() float64 {
-	return s.PageLoadedPercent
 }
 
 // GetTags returns the value of Tags.
@@ -1311,11 +1304,6 @@ func (s *APIBookListPostOKBooksItem) GetTags() []string {
 // SetInfo sets the value of Info.
 func (s *APIBookListPostOKBooksItem) SetInfo(val BookSimple) {
 	s.Info = val
-}
-
-// SetPageLoadedPercent sets the value of PageLoadedPercent.
-func (s *APIBookListPostOKBooksItem) SetPageLoadedPercent(val float64) {
-	s.PageLoadedPercent = val
 }
 
 // SetTags sets the value of Tags.

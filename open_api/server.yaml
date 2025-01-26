@@ -1327,11 +1327,6 @@ paths:
                       properties:
                         info:
                           $ref: "#/components/schemas/BookSimple"
-                        page_loaded_percent:
-                          type: number
-                          description: Процент загруженных страниц
-                          maximum: 100
-                          minimum: 0
                         tags:
                           type: array
                           description: Список тегов (одноименный атрибут) книги

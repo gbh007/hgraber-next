@@ -27,3 +27,16 @@ func (book BFFBookDetails) PageDownloadPercent() float64 {
 
 	return math.Round(float64(downloadedPageCount)*10000/float64(len(book.Pages))) / 100
 }
+
+type BFFBookShort struct {
+	Book        Book
+	PreviewPage PreviewPage
+	Tags        []string
+}
+
+type BFFBookList struct {
+	Books []BFFBookShort
+	Pages []int
+
+	Count int
+}

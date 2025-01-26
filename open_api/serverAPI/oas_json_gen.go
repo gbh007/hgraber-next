@@ -5162,10 +5162,6 @@ func (s *APIBookListPostOKBooksItem) encodeFields(e *jx.Encoder) {
 		s.Info.Encode(e)
 	}
 	{
-		e.FieldStart("page_loaded_percent")
-		e.Float64(s.PageLoadedPercent)
-	}
-	{
 		if s.Tags != nil {
 			e.FieldStart("tags")
 			e.ArrStart()
@@ -5177,10 +5173,9 @@ func (s *APIBookListPostOKBooksItem) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIBookListPostOKBooksItem = [3]string{
+var jsonFieldsNameOfAPIBookListPostOKBooksItem = [2]string{
 	0: "info",
-	1: "page_loaded_percent",
-	2: "tags",
+	1: "tags",
 }
 
 // Decode decodes APIBookListPostOKBooksItem from json.
@@ -5201,18 +5196,6 @@ func (s *APIBookListPostOKBooksItem) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"info\"")
-			}
-		case "page_loaded_percent":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Float64()
-				s.PageLoadedPercent = float64(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page_loaded_percent\"")
 			}
 		case "tags":
 			if err := func() error {
@@ -5243,7 +5226,7 @@ func (s *APIBookListPostOKBooksItem) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
