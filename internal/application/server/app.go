@@ -21,6 +21,7 @@ import (
 	"hgnext/internal/metrics"
 	agentUC "hgnext/internal/usecases/agent"
 	"hgnext/internal/usecases/agentcache"
+	"hgnext/internal/usecases/bff"
 	"hgnext/internal/usecases/bookrequester"
 	"hgnext/internal/usecases/cleanup"
 	"hgnext/internal/usecases/deduplicator"
@@ -140,6 +141,7 @@ func Serve() {
 	taskUseCases := taskhandler.New(logger, tmpStorage, deduplicateUseCases, cleanupUseCases)
 	rebuilderUseCases := rebuilder.New(logger, tracer, storage)
 	fsUseCases := filesystem.New(storage, fileStorageAdapter)
+	bffUseCases := bff.New(logger, storage)
 
 	metricProvider := metrics.MetricProvider{}
 
@@ -175,6 +177,7 @@ func Serve() {
 		taskUseCases,
 		rebuilderUseCases,
 		fsUseCases,
+		bffUseCases,
 		cfg.Application.Debug.APIServer,
 	)
 	if err != nil {

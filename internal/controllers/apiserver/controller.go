@@ -31,7 +31,6 @@ type webAPIUseCases interface {
 	File(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 	PageBody(ctx context.Context, bookID uuid.UUID, pageNumber int) (io.Reader, error)
 
-	Book(ctx context.Context, bookID uuid.UUID) (entities.BookToWeb, error)
 	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
 	BookList(ctx context.Context, filter entities.BookFilter) (entities.BookListToWeb, error)
 
@@ -108,6 +107,10 @@ type fsUseCases interface {
 	DeleteFileStorage(ctx context.Context, id uuid.UUID) error
 }
 
+type bffUseCases interface {
+	BookDetails(ctx context.Context, bookID uuid.UUID) (entities.BFFBookDetails, error)
+}
+
 type config interface {
 	GetAddr() string
 	GetExternalAddr() string
@@ -129,6 +132,7 @@ type Controller struct {
 	taskUseCases        taskUseCases
 	rebuilderUseCases   rebuilderUseCases
 	fsUseCases          fsUseCases
+	bffUseCases         bffUseCases
 
 	ogenServer *serverAPI.Server
 
@@ -151,6 +155,7 @@ func New(
 	taskUseCases taskUseCases,
 	rebuilderUseCases rebuilderUseCases,
 	fsUseCases fsUseCases,
+	bffUseCases bffUseCases,
 	debug bool,
 ) (*Controller, error) {
 	u, err := url.Parse(config.GetExternalAddr())
@@ -172,6 +177,7 @@ func New(
 		taskUseCases:               taskUseCases,
 		rebuilderUseCases:          rebuilderUseCases,
 		fsUseCases:                 fsUseCases,
+		bffUseCases:                bffUseCases,
 		debug:                      debug,
 		staticDir:                  config.GetStaticDir(),
 		token:                      config.GetToken(),

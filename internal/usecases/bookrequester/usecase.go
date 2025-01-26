@@ -67,33 +67,6 @@ func (uc *UseCase) Books(ctx context.Context, filter entities.BookFilter) ([]ent
 	return books, nil
 }
 
-func (uc *UseCase) Book(ctx context.Context, bookID uuid.UUID) (entities.Book, error) {
-	book, err := uc.requestBook(ctx, bookRequest{
-		ID: bookID,
-	})
-	if err != nil {
-		return entities.Book{}, err
-	}
-
-	return book.Book, nil
-}
-
-func (uc *UseCase) BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error) {
-	book, err := uc.requestBook(ctx, bookRequest{
-		ID:                   bookID,
-		IncludeAttributes:    true,
-		IncludePages:         true,
-		IncludePagesWithHash: true,
-		IncludeLabels:        true,
-		IncludeSize:          true,
-	})
-	if err != nil {
-		return entities.BookContainer{}, err
-	}
-
-	return book, nil
-}
-
 func (uc *UseCase) BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error) {
 	book, err := uc.requestBook(ctx, bookRequest{
 		ID:                      bookID,

@@ -43,7 +43,6 @@ type tmpStorage interface {
 
 type bookRequester interface {
 	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookContainer, error)
-	Book(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
 	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
 }
 

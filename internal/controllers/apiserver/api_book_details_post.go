@@ -10,17 +10,17 @@ import (
 )
 
 func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIBookDetailsPostReq) (serverAPI.APIBookDetailsPostRes, error) {
-	book, err := c.webAPIUseCases.Book(ctx, req.ID)
+	book, err := c.bffUseCases.BookDetails(ctx, req.ID)
 	if errors.Is(err, entities.BookNotFoundError) {
 		return &serverAPI.APIBookDetailsPostNotFound{
-			InnerCode: WebAPIUseCaseCode,
+			InnerCode: BFFUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
 		return &serverAPI.APIBookDetailsPostInternalServerError{
-			InnerCode: WebAPIUseCaseCode,
+			InnerCode: BFFUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}

@@ -32,8 +32,6 @@ func (uc *UseCase) bookConvert(bookFull entities.BookContainer, attributes map[s
 	}
 
 	if len(book.Pages) > 0 {
-		book.ParsedPages = true
-
 		for _, page := range book.Pages {
 			if page.PageNumber == entities.PageNumberForPreview {
 				book.PreviewPage = page

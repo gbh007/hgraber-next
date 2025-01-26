@@ -23,7 +23,6 @@ type BookToWeb struct {
 	Attributes []AttributeToWeb
 
 	PreviewPage PreviewPage
-	ParsedPages bool
 	Tags        []string
 
 	Size BookSize
