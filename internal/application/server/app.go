@@ -107,12 +107,23 @@ func Serve() {
 		logger,
 		agentSystem,
 		storage,
+		false, // FIXME: вынести в конфиг
 	)
 
-	err = fileStorageAdapter.InitLegacy(ctx, cfg.Storage.FSAgentID, cfg.Storage.FilePath)
+	err = fileStorageAdapter.InitLegacy(ctx, cfg.Storage.FSAgentID, cfg.Storage.FilePath, true) // TODO: отключить принудительную часть
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail init legacy file system",
+			slog.Any("error", err),
+		)
+
+		os.Exit(1)
+	}
+
+	err = fileStorageAdapter.Init(ctx)
+	if err != nil {
+		logger.ErrorContext(
+			ctx, "fail init file system",
 			slog.Any("error", err),
 		)
 

@@ -9,6 +9,7 @@ var (
 	AgentNotFoundError        = errors.New("agent not found")
 	BookAlreadyExistsError    = errors.New("book already exists")
 	UnsupportedAttributeError = errors.New("attribute is not supported")
+	MissingFSError            = errors.New("missing fs")
 )
 
 var (
