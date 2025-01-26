@@ -100,6 +100,14 @@ type rebuilderUseCases interface {
 	RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages bool) error
 }
 
+type fsUseCases interface {
+	FileStoragesWithStatus(ctx context.Context) ([]entities.FSWithStatus, error)
+	FileStorage(ctx context.Context, id uuid.UUID) (entities.FileStorageSystem, error)
+	NewFileStorage(ctx context.Context, fs entities.FileStorageSystem) (uuid.UUID, error)
+	UpdateFileStorage(ctx context.Context, fs entities.FileStorageSystem) error
+	DeleteFileStorage(ctx context.Context, id uuid.UUID) error
+}
+
 type config interface {
 	GetAddr() string
 	GetExternalAddr() string
@@ -120,6 +128,7 @@ type Controller struct {
 	deduplicateUseCases deduplicateUseCases
 	taskUseCases        taskUseCases
 	rebuilderUseCases   rebuilderUseCases
+	fsUseCases          fsUseCases
 
 	ogenServer *serverAPI.Server
 
@@ -141,6 +150,7 @@ func New(
 	deduplicateUseCases deduplicateUseCases,
 	taskUseCases taskUseCases,
 	rebuilderUseCases rebuilderUseCases,
+	fsUseCases fsUseCases,
 	debug bool,
 ) (*Controller, error) {
 	u, err := url.Parse(config.GetExternalAddr())
@@ -161,6 +171,7 @@ func New(
 		deduplicateUseCases:        deduplicateUseCases,
 		taskUseCases:               taskUseCases,
 		rebuilderUseCases:          rebuilderUseCases,
+		fsUseCases:                 fsUseCases,
 		debug:                      debug,
 		staticDir:                  config.GetStaticDir(),
 		token:                      config.GetToken(),

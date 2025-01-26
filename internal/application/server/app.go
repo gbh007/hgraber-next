@@ -26,6 +26,7 @@ import (
 	"hgnext/internal/usecases/deduplicator"
 	"hgnext/internal/usecases/export"
 	"hgnext/internal/usecases/filelogic"
+	"hgnext/internal/usecases/filesystem"
 	"hgnext/internal/usecases/parsing"
 	"hgnext/internal/usecases/rebuilder"
 	"hgnext/internal/usecases/taskhandler"
@@ -120,7 +121,7 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	err = fileStorageAdapter.Init(ctx)
+	err = fileStorageAdapter.Init(ctx, true)
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail init file system",
@@ -138,6 +139,7 @@ func Serve() {
 	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorageAdapter)
 	taskUseCases := taskhandler.New(logger, tmpStorage, deduplicateUseCases, cleanupUseCases)
 	rebuilderUseCases := rebuilder.New(logger, tracer, storage)
+	fsUseCases := filesystem.New(storage, fileStorageAdapter)
 
 	metricProvider := metrics.MetricProvider{}
 
@@ -172,6 +174,7 @@ func Serve() {
 		deduplicateUseCases,
 		taskUseCases,
 		rebuilderUseCases,
+		fsUseCases,
 		cfg.Application.Debug.APIServer,
 	)
 	if err != nil {

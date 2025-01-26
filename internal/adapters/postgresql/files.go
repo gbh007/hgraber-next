@@ -279,3 +279,49 @@ func (d *Database) File(ctx context.Context, id uuid.UUID) (entities.File, error
 
 	return out, nil
 }
+
+func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData bool) (entities.FSFilesInfo, error) {
+	builder := squirrel.Select(
+		"COUNT(*)",
+		"SUM(\"size\")",
+	).
+		PlaceholderFormat(squirrel.Dollar).
+		From("files")
+
+	if onlyInvalidData {
+		builder = builder.Where(squirrel.Eq{
+			"invalid_data": true,
+		})
+	}
+
+	if fsID == uuid.Nil {
+		builder = builder.Where(squirrel.Eq{
+			"fs_id": nil,
+		})
+	} else {
+		builder = builder.Where(squirrel.Eq{
+			"fs_id": fsID,
+		})
+	}
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return entities.FSFilesInfo{}, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	var count, size sql.NullInt64
+
+	row := d.pool.QueryRow(ctx, query, args...)
+
+	err = row.Scan(&count, &size)
+	if err != nil {
+		return entities.FSFilesInfo{}, fmt.Errorf("scan :%w", err)
+	}
+
+	return entities.FSFilesInfo{
+		Count: count.Int64,
+		Size:  size.Int64,
+	}, nil
+}

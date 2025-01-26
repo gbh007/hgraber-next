@@ -9,5 +9,6 @@ const (
 	CleanupUseCaseCode     = "cleanup_uc"
 	TaskerUseCaseCode      = "tasker_uc"
 	RebuilderUseCaseCode   = "rebuilder_uc"
+	FSUseCaseCode          = "fs_uc"
 	ValidationCode         = "validation"
 )

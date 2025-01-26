@@ -18,7 +18,22 @@ type FileStorageSystem struct {
 	HighwayEnabled      bool
 	HighwayAddr         *url.URL
 	CreatedAt           time.Time
+}
+
+func (fs FileStorageSystem) NotAvailable() bool {
+	return fs.AgentID == uuid.Nil && fs.Path == ""
+}
+
+type FSWithStatus struct {
+	Info FileStorageSystem
 
 	// Признак того что это устаревшее хранилище через конфиг
 	IsLegacy bool
+
+	DBFile FSFilesInfo
+}
+
+type FSFilesInfo struct {
+	Count int64
+	Size  int64
 }

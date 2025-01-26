@@ -110,13 +110,17 @@ func (s *Storage) InitLegacy(ctx context.Context, fsAgentID uuid.UUID, filePath 
 	return nil
 }
 
-func (s *Storage) Init(ctx context.Context) error {
+func (s *Storage) Init(ctx context.Context, skipNotAvailable bool) error {
 	storages, err := s.dataStorage.FileStorages(ctx)
 	if err != nil {
 		return fmt.Errorf("get fs from db: %w", err)
 	}
 
 	for _, fs := range storages {
+		if skipNotAvailable && fs.NotAvailable() {
+			continue
+		}
+
 		storage, err := s.connect(ctx, fs)
 		if err != nil {
 			return fmt.Errorf("connect fs (%s): %w", fs.ID.String(), err)

@@ -54,6 +54,31 @@ func (s *Storage) getFS(ctx context.Context, fsID uuid.UUID, tryReconnect bool) 
 	return rawFileStorageData{}, entities.MissingFSError
 }
 
+func (s *Storage) FSChange(ctx context.Context, fsID uuid.UUID, deleted bool) error {
+	s.storageMapMutex.Lock()
+	defer s.storageMapMutex.Unlock()
+
+	delete(s.storageMap, fsID)
+
+	if deleted {
+		return nil
+	}
+
+	fsInfo, err := s.dataStorage.FileStorage(ctx, fsID)
+	if err != nil {
+		return fmt.Errorf("get fs from db: %w", err)
+	}
+
+	storage, err := s.connect(ctx, fsInfo)
+	if err != nil {
+		return fmt.Errorf("connect fs: %w", err)
+	}
+
+	s.storageMap[fsID] = storage
+
+	return nil
+}
+
 func (s *Storage) connect(_ context.Context, fs entities.FileStorageSystem) (rawFileStorageData, error) {
 	var (
 		err     error
