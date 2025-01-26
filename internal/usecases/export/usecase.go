@@ -12,8 +12,9 @@ import (
 )
 
 type fileStorage interface {
-	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
-	Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
+	Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
+	Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error
+	FSIDForDownload(ctx context.Context) (uuid.UUID, error)
 }
 
 type storage interface {

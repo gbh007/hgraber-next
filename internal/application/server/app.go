@@ -2,19 +2,16 @@ package server
 
 import (
 	"context"
-	"io"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
 
 	"hgnext/internal/adapters/agent"
-	"hgnext/internal/adapters/agentFS"
-	"hgnext/internal/adapters/files"
+	"hgnext/internal/adapters/fileStorage"
 	"hgnext/internal/adapters/postgresql"
 	"hgnext/internal/adapters/tmpdata"
 	"hgnext/internal/controllers/apiagent"
@@ -106,52 +103,28 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	var fileStorage interface {
-		Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
-		Delete(ctx context.Context, fileID uuid.UUID) error
-		Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
-		IDs(ctx context.Context) ([]uuid.UUID, error)
-	}
+	fileStorageAdapter := fileStorage.New(
+		logger,
+		agentSystem,
+		storage,
+	)
 
-	switch {
-	case cfg.Storage.FSAgentID != uuid.Nil:
-		fileStorage = agentFS.New(cfg.Storage.FSAgentID, logger, agentSystem)
-
-		logger.DebugContext(
-			ctx, "use agent file storage",
-			slog.String("agent_id", cfg.Storage.FSAgentID.String()),
-		)
-
-	case cfg.Storage.FilePath != "":
-		fileStorage, err = files.New(cfg.Storage.FilePath, logger)
-		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail init local file storage",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
-		}
-
-		logger.DebugContext(
-			ctx, "use local file storage",
-			slog.String("path", cfg.Storage.FilePath),
-		)
-
-	default:
+	err = fileStorageAdapter.InitLegacy(ctx, cfg.Storage.FSAgentID, cfg.Storage.FilePath)
+	if err != nil {
 		logger.ErrorContext(
-			ctx, "no configuration for file storage",
+			ctx, "fail init legacy file system",
+			slog.Any("error", err),
 		)
 
 		os.Exit(1)
 	}
 
 	bookRequestUseCases := bookrequester.New(logger, storage)
-	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorage, bookRequestUseCases, cfg.Parsing.ParseBookTimeout)
-	fileUseCases := filelogic.New(logger, storage, fileStorage)
-	exportUseCases := export.New(logger, storage, fileStorage, agentSystem, tmpStorage, bookRequestUseCases)
+	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorageAdapter, bookRequestUseCases, cfg.Parsing.ParseBookTimeout)
+	fileUseCases := filelogic.New(logger, storage, fileStorageAdapter)
+	exportUseCases := export.New(logger, storage, fileStorageAdapter, agentSystem, tmpStorage, bookRequestUseCases)
 	deduplicateUseCases := deduplicator.New(logger, storage, tracer)
-	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorage)
+	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorageAdapter)
 	taskUseCases := taskhandler.New(logger, tmpStorage, deduplicateUseCases, cleanupUseCases)
 	rebuilderUseCases := rebuilder.New(logger, tracer, storage)
 
@@ -171,7 +144,7 @@ func Serve() {
 		logger,
 		workersController,
 		storage,
-		fileStorage,
+		fileStorageAdapter,
 		bookRequestUseCases,
 		deduplicateUseCases,
 	)

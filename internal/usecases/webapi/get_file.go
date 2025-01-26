@@ -8,5 +8,5 @@ import (
 )
 
 func (uc *UseCase) File(ctx context.Context, fileID uuid.UUID) (io.Reader, error) {
-	return uc.fileStorage.Get(ctx, fileID)
+	return uc.fileStorage.Get(ctx, fileID, nil) // FIXME: получать из запроса и пробрасывать сюда FS
 }

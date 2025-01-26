@@ -52,7 +52,7 @@ type workerManager interface {
 }
 
 type fileStorage interface {
-	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
+	Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 }
 
 type deduplicator interface {

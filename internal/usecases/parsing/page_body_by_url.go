@@ -20,7 +20,8 @@ func (uc *UseCase) PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, err
 			continue
 		}
 
-		body, err := uc.fileStorage.Get(ctx, p.FileID)
+		// TODO: перейти на прямую работу с FS используя page with hash
+		body, err := uc.fileStorage.Get(ctx, p.FileID, nil)
 		if err != nil {
 			return nil, fmt.Errorf("get file from file storage: %w", err)
 		}

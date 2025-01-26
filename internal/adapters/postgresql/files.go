@@ -248,3 +248,34 @@ func (d *Database) UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, 
 
 	return nil
 }
+
+func (d *Database) File(ctx context.Context, id uuid.UUID) (entities.File, error) {
+	builder := squirrel.Select("*").
+		PlaceholderFormat(squirrel.Dollar).
+		From("files").
+		Where(squirrel.Eq{
+			"id": id,
+		}).
+		Limit(1)
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return entities.File{}, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	raw := model.File{}
+
+	err = d.db.GetContext(ctx, &raw, query, args...)
+	if err != nil {
+		return entities.File{}, fmt.Errorf("exec: %w", err)
+	}
+
+	out, err := raw.ToEntity()
+	if err != nil {
+		return entities.File{}, fmt.Errorf("convert: %w", err)
+	}
+
+	return out, nil
+}

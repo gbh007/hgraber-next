@@ -14,7 +14,7 @@ func WriteArchiveAdapter(
 	ctx context.Context,
 	zipWriter *zip.Writer,
 	files interface {
-		Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
+		Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 	},
 	book entities.BookFull,
 ) error {
@@ -33,7 +33,7 @@ func WriteArchiveAdapter(
 					return nil, ErrSkipPageBody
 				}
 
-				return files.Get(ctx, page.FileID)
+				return files.Get(ctx, page.FileID, nil)
 			}
 
 			return nil, ErrSkipPageBody

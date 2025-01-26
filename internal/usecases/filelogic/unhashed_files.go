@@ -12,7 +12,7 @@ func (uc *UseCase) UnHashedFiles(ctx context.Context) ([]entities.File, error) {
 }
 
 func (uc *UseCase) HandleFileHash(ctx context.Context, f entities.File) error {
-	body, err := uc.fileStorage.Get(ctx, f.ID)
+	body, err := uc.fileStorage.Get(ctx, f.ID, &f.FSID)
 	if err != nil {
 		return fmt.Errorf("get file body: %w", err)
 	}
