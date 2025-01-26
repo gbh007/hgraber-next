@@ -4,12 +4,14 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"slices"
 	"time"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
 	"hgnext/internal/entities"
+	"hgnext/internal/pkg"
 )
 
 func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, error) {
@@ -20,6 +22,20 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 
 		ctx, span := uc.tracer.Start(ctx, "DeduplicateFiles")
 		defer span.End()
+
+		taskResult.StartStage("get fs from db")
+		span.AddEvent("get fs from db", trace.WithTimestamp(time.Now()))
+
+		storages, err := uc.storage.FileStorages(ctx)
+		if err != nil {
+			taskResult.SetError(err)
+
+			return
+		}
+
+		storageMap := pkg.SliceToMap(storages, func(s entities.FileStorageSystem) (uuid.UUID, entities.FileStorageSystem) {
+			return s.ID, s
+		})
 
 		taskResult.StartStage("get duplicates from storage")
 		span.AddEvent("get duplicates from storage", trace.WithTimestamp(time.Now()))
@@ -39,14 +55,14 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 		taskResult.SetTotal(int64(len(files)))
 		span.AddEvent("transform data", trace.WithTimestamp(time.Now()))
 
-		fileMap := make(map[entities.FileHash][]uuid.UUID)
+		fileMap := make(map[entities.FileHash][]entities.File)
 
 		for _, file := range files {
 			taskResult.IncProgress()
 
 			k := file.Hash()
 
-			fileMap[k] = append(fileMap[k], file.ID)
+			fileMap[k] = append(fileMap[k], file)
 		}
 
 		taskResult.EndStage()
@@ -60,32 +76,37 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 			size  int64
 		)
 
-		for k, ids := range fileMap {
+		for k, files := range fileMap {
 			taskResult.IncProgress()
 
 			if k.Size == 0 {
 				uc.logger.WarnContext(
 					ctx, "empty file size",
-					slog.Any("ids", ids),
+					slog.Any("ids", files),
 				)
 
 				continue
 			}
 
-			if len(ids) < 2 {
+			if len(files) < 2 {
 				uc.logger.WarnContext(
 					ctx, "invalid deduplicate ids len",
-					slog.Any("ids", ids),
+					slog.Any("ids", files),
 				)
 
 				continue
 			}
 
-			newID := ids[0]
-			ids = ids[1:]
+			// Оставляем файл с наивысшим приоритетом его ФС для сохранения
+			slices.SortStableFunc(files, func(a, b entities.File) int {
+				return storageMap[b.FSID].DeduplicatePriority - storageMap[a.FSID].DeduplicatePriority
+			})
 
-			for _, id := range ids {
-				err = uc.storage.ReplaceFile(ctx, id, newID)
+			newID := files[0].ID
+			filesToRemove := files[1:]
+
+			for _, file := range filesToRemove {
+				err = uc.storage.ReplaceFile(ctx, file.ID, newID)
 				if err != nil {
 					taskResult.SetError(fmt.Errorf("replace id in storage: %w", err))
 
@@ -94,13 +115,13 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 
 				uc.logger.InfoContext(
 					ctx, "replaced file",
-					slog.String("old", id.String()),
+					slog.String("old", file.ID.String()),
 					slog.String("new", newID.String()),
 				)
 			}
 
-			size += k.Size * int64(len(ids))
-			count += len(ids)
+			size += k.Size * int64(len(filesToRemove))
+			count += len(filesToRemove)
 		}
 
 		taskResult.EndStage()
