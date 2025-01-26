@@ -14,17 +14,19 @@ type bookRequest struct {
 	IncludeAttributes       bool
 	IncludeOriginAttributes bool
 	IncludePages            bool
+	IncludePagesWithHash    bool
 	IncludeLabels           bool
 	IncludeSize             bool
 }
 
-func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.BookFull, error) {
+// FIXME: избавится от этого непотребства, вынести в отдельные методы получение списка книг и получение детальных данных по 1 книге.
+func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.BookContainer, error) {
 	b, err := uc.storage.GetBook(ctx, req.ID)
 	if err != nil {
-		return entities.BookFull{}, fmt.Errorf("get book :%w", err)
+		return entities.BookContainer{}, fmt.Errorf("get book: %w", err)
 	}
 
-	out := entities.BookFull{
+	out := entities.BookContainer{
 		Book: b,
 	}
 
@@ -32,7 +34,7 @@ func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.B
 	case req.IncludeOriginAttributes:
 		attributes, err := uc.storage.BookOriginAttributes(ctx, req.ID)
 		if err != nil {
-			return entities.BookFull{}, fmt.Errorf("get attributes :%w", err)
+			return entities.BookContainer{}, fmt.Errorf("get attributes: %w", err)
 		}
 
 		out.Attributes = attributes
@@ -40,16 +42,30 @@ func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.B
 	case req.IncludeAttributes:
 		attributes, err := uc.storage.BookAttributes(ctx, req.ID)
 		if err != nil {
-			return entities.BookFull{}, fmt.Errorf("get attributes :%w", err)
+			return entities.BookContainer{}, fmt.Errorf("get attributes: %w", err)
 		}
 
 		out.Attributes = attributes
 	}
 
-	if req.IncludePages {
+	if req.IncludePagesWithHash {
+		pages, err := uc.storage.BookPagesWithHash(ctx, req.ID)
+		if err != nil {
+			return entities.BookContainer{}, fmt.Errorf("get pages with hash:%w", err)
+		}
+
+		out.PagesWithHash = pages
+
+		if req.IncludePages {
+			out.Pages = make([]entities.Page, 0, len(pages))
+			for _, page := range pages {
+				out.Pages = append(out.Pages, page.Page)
+			}
+		}
+	} else if req.IncludePages {
 		pages, err := uc.storage.BookPages(ctx, req.ID)
 		if err != nil {
-			return entities.BookFull{}, fmt.Errorf("get pages :%w", err)
+			return entities.BookContainer{}, fmt.Errorf("get pages: %w", err)
 		}
 
 		out.Pages = pages
@@ -58,7 +74,7 @@ func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.B
 	if req.IncludeLabels {
 		labels, err := uc.storage.Labels(ctx, req.ID)
 		if err != nil {
-			return entities.BookFull{}, fmt.Errorf("get labels :%w", err)
+			return entities.BookContainer{}, fmt.Errorf("get labels: %w", err)
 		}
 
 		out.Labels = labels
@@ -67,7 +83,7 @@ func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.B
 	if req.IncludeSize {
 		size, deadHashOnPage, err := uc.BookSize(ctx, req.ID)
 		if err != nil {
-			return entities.BookFull{}, fmt.Errorf("get size :%w", err)
+			return entities.BookContainer{}, fmt.Errorf("get size: %w", err)
 		}
 
 		out.Size = size

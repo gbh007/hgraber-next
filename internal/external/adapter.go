@@ -16,7 +16,7 @@ func WriteArchiveAdapter(
 	files interface {
 		Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 	},
-	book entities.BookFull,
+	book entities.BookContainer,
 ) error {
 	return WriteArchive(
 		ctx,

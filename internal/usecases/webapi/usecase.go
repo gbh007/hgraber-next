@@ -39,10 +39,10 @@ type storage interface {
 }
 
 type bookRequester interface {
-	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
+	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookContainer, error)
 	Book(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
-	BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
-	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
 }
 
 type workerManager interface {

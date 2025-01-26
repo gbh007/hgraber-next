@@ -3,6 +3,8 @@ package entities
 import (
 	"math"
 
+	"github.com/google/uuid"
+
 	"hgnext/internal/pkg"
 )
 
@@ -17,10 +19,10 @@ type AttributeToWeb struct {
 // TODO: подумать что делать с такими моделями
 type BookToWeb struct {
 	Book       Book
-	Pages      []PageWithDeadHash
+	Pages      []PreviewPage
 	Attributes []AttributeToWeb
 
-	PreviewPage Page
+	PreviewPage PreviewPage
 	ParsedPages bool
 	Tags        []string
 
@@ -28,7 +30,7 @@ type BookToWeb struct {
 }
 
 func (book BookToWeb) PageDownloadPercent() float64 {
-	downloadedPageCount := pkg.SliceReduce(book.Pages, func(v int, p PageWithDeadHash) int {
+	downloadedPageCount := pkg.SliceReduce(book.Pages, func(v int, p PreviewPage) int {
 		if p.Downloaded {
 			v++
 		}
@@ -37,6 +39,15 @@ func (book BookToWeb) PageDownloadPercent() float64 {
 	})
 
 	return math.Round(float64(downloadedPageCount)*10000/float64(len(book.Pages))) / 100
+}
+
+type PreviewPage struct {
+	PageNumber  int
+	Ext         string
+	Downloaded  bool
+	FileID      uuid.UUID
+	FSID        *uuid.UUID
+	HasDeadHash *bool
 }
 
 type BookListToWeb struct {

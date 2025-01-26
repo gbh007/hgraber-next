@@ -46,6 +46,15 @@ func (p Page) ToAgentBookDetailsPagesItem() AgentBookDetailsPagesItem {
 	}
 }
 
+func (p Page) ToPreview() PreviewPage {
+	return PreviewPage{
+		PageNumber: p.PageNumber,
+		Ext:        p.Ext,
+		Downloaded: p.Downloaded,
+		FileID:     p.FileID,
+	}
+}
+
 type PageForDownload struct {
 	BookID     uuid.UUID
 	PageNumber int
@@ -63,4 +72,16 @@ type PageWithHash struct {
 	Page
 	FileHash
 	FSID uuid.UUID
+}
+
+func (p PageWithHash) ToPreview() PreviewPage {
+	fsID := p.FSID
+
+	return PreviewPage{
+		PageNumber: p.PageNumber,
+		Ext:        p.Ext,
+		Downloaded: p.Downloaded,
+		FileID:     p.FileID,
+		FSID:       &fsID,
+	}
 }

@@ -6532,6 +6532,10 @@ func (s *Server) handleAPIFileIDGetRequest(args [1]string, argsEscaped bool, w h
 					Name: "id",
 					In:   "path",
 				}: params.ID,
+				{
+					Name: "fsid",
+					In:   "query",
+				}: params.Fsid,
 			},
 			Raw: r,
 		}

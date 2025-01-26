@@ -29,7 +29,7 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 		Info:              c.convertSimpleBook(book.Book, book.PreviewPage),
 		PageLoadedPercent: book.PageDownloadPercent(),
 		Attributes:        pkg.Map(book.Attributes, convertBookAttribute),
-		Pages:             pkg.Map(book.Pages, c.convertSimplePageWithDeadHash),
+		Pages:             pkg.Map(book.Pages, c.convertPreviewPage),
 		Size: serverAPI.OptAPIBookDetailsPostOKSize{
 			Value: serverAPI.APIBookDetailsPostOKSize{
 				Unique:                           book.Size.Unique,

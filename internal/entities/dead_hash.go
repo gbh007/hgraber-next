@@ -1,6 +1,10 @@
 package entities
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type DeadHash struct {
 	FileHash
@@ -9,5 +13,6 @@ type DeadHash struct {
 
 type PageWithDeadHash struct {
 	Page
+	FSID        *uuid.UUID
 	HasDeadHash bool
 }

@@ -34,16 +34,17 @@ func (b Book) ParsedName() bool {
 }
 
 // FIXME: подумать что делать с такими моделями
-type BookFull struct {
+type BookContainer struct {
 	Book           Book
 	Pages          []Page
+	PagesWithHash  []PageWithHash
 	Attributes     map[string][]string
 	Labels         []BookLabel
 	Size           BookSize
 	DeadHashOnPage map[int]struct{}
 }
 
-func (b BookFull) IsLoaded() bool {
+func (b BookContainer) IsLoaded() bool {
 	if !b.Book.IsLoaded() {
 		return false
 	}
@@ -57,7 +58,7 @@ func (b BookFull) IsLoaded() bool {
 	return true
 }
 
-func (b BookFull) ToAgentBookDetails() AgentBookDetails {
+func (b BookContainer) ToAgentBookDetails() AgentBookDetails {
 	var u url.URL
 
 	if b.Book.OriginURL != nil {
@@ -80,7 +81,7 @@ func (b BookFull) ToAgentBookDetails() AgentBookDetails {
 	}
 }
 
-func (b BookFull) Filename() string {
+func (b BookContainer) Filename() string {
 	return b.Book.ID.String() + " " + EscapeBookFileName(b.Book.Name) + ".zip"
 }
 
@@ -90,7 +91,7 @@ type BookWithAgent struct {
 }
 
 type BookFullWithAgent struct {
-	BookFull
+	BookContainer
 	AgentID uuid.UUID
 
 	DeleteAfterExport bool
@@ -114,5 +115,5 @@ type BookSize struct {
 // TODO: подумать что делать с такими моделями
 type BookWithPreviewPage struct {
 	Book
-	PreviewPage Page
+	PreviewPage PreviewPage
 }

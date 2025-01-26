@@ -19,7 +19,7 @@ type parseUseCases interface {
 
 	BooksExists(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error)
 	PagesExists(ctx context.Context, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
-	BookByURL(ctx context.Context, u url.URL) (entities.BookFull, error)
+	BookByURL(ctx context.Context, u url.URL) (entities.BookContainer, error)
 	PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error)
 
 	NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (entities.MultiHandleMultipleResult, error)
@@ -28,11 +28,11 @@ type parseUseCases interface {
 type webAPIUseCases interface {
 	SystemInfo(ctx context.Context) (entities.SystemSizeInfoWithMonitor, error)
 
-	File(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
+	File(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 	PageBody(ctx context.Context, bookID uuid.UUID, pageNumber int) (io.Reader, error)
 
 	Book(ctx context.Context, bookID uuid.UUID) (entities.BookToWeb, error)
-	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
 	BookList(ctx context.Context, filter entities.BookFilter) (entities.BookListToWeb, error)
 
 	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool) error
@@ -69,7 +69,7 @@ type agentUseCases interface {
 
 type exportUseCases interface {
 	Export(ctx context.Context, agentID uuid.UUID, filter entities.BookFilter, deleteAfter bool) error
-	ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, entities.BookFull, error)
+	ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, entities.BookContainer, error)
 	ImportArchive(ctx context.Context, body io.Reader, deduplicate bool, autoVerify bool) (uuid.UUID, error)
 }
 
@@ -95,7 +95,7 @@ type taskUseCases interface {
 }
 
 type rebuilderUseCases interface {
-	UpdateBook(ctx context.Context, book entities.BookFull) error
+	UpdateBook(ctx context.Context, book entities.BookContainer) error
 	RebuildBook(ctx context.Context, request entities.RebuildBookRequest) (uuid.UUID, error)
 	RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages bool) error
 }

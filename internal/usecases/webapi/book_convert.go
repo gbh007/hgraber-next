@@ -7,20 +7,27 @@ import (
 	"hgnext/internal/pkg"
 )
 
-func (uc *UseCase) bookConvert(bookFull entities.BookFull, attributes map[string]entities.Attribute) entities.BookToWeb {
+func (uc *UseCase) bookConvert(bookFull entities.BookContainer, attributes map[string]entities.Attribute) entities.BookToWeb {
 	book := entities.BookToWeb{
 		Book:       bookFull.Book,
-		Pages:      make([]entities.PageWithDeadHash, len(bookFull.Pages)),
+		Pages:      make([]entities.PreviewPage, len(bookFull.Pages)),
 		Attributes: convertBookAttributes(attributes, bookFull.Attributes),
 		Size:       bookFull.Size,
 	}
 
-	for i, page := range bookFull.Pages {
-		_, hasDeadHash := bookFull.DeadHashOnPage[page.PageNumber]
+	if len(bookFull.PagesWithHash) > 0 {
+		for i, page := range bookFull.PagesWithHash {
+			_, hasDeadHash := bookFull.DeadHashOnPage[page.PageNumber]
 
-		book.Pages[i] = entities.PageWithDeadHash{
-			Page:        page,
-			HasDeadHash: hasDeadHash,
+			book.Pages[i] = page.ToPreview()
+			book.Pages[i].HasDeadHash = &hasDeadHash
+		}
+	} else {
+		for i, page := range bookFull.Pages {
+			_, hasDeadHash := bookFull.DeadHashOnPage[page.PageNumber]
+
+			book.Pages[i] = page.ToPreview()
+			book.Pages[i].HasDeadHash = &hasDeadHash
 		}
 	}
 
@@ -29,7 +36,7 @@ func (uc *UseCase) bookConvert(bookFull entities.BookFull, attributes map[string
 
 		for _, page := range book.Pages {
 			if page.PageNumber == entities.PageNumberForPreview {
-				book.PreviewPage = page.Page
+				book.PreviewPage = page
 
 				break
 			}
@@ -44,7 +51,7 @@ func (uc *UseCase) bookConvert(bookFull entities.BookFull, attributes map[string
 		}
 	}
 
-	slices.SortStableFunc(book.Pages, func(a, b entities.PageWithDeadHash) int {
+	slices.SortStableFunc(book.Pages, func(a, b entities.PreviewPage) int {
 		return a.PageNumber - b.PageNumber
 	})
 

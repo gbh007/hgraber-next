@@ -51,28 +51,37 @@ func optUUID(u uuid.UUID) serverAPI.OptUUID {
 	return serverAPI.NewOptUUID(u)
 }
 
-func (c *Controller) getFileURL(fileID uuid.UUID, ext string) url.URL {
-	return url.URL{
+func (c *Controller) getFileURL(fileID uuid.UUID, ext string, fsID *uuid.UUID) url.URL {
+	u := url.URL{
 		Scheme: c.externalServerScheme,
 		Host:   c.externalServerHostWithPort,
 		Path:   "/api/file/" + fileID.String() + ext,
 	}
+
+	if fsID != nil {
+		v := url.Values{}
+		v.Add("fsid", fsID.String())
+		u.RawQuery = v.Encode()
+	}
+
+	return u
 }
 
-func (c *Controller) getPagePreview(p entities.Page) serverAPI.OptURI {
+func (c *Controller) getPagePreview(p entities.PreviewPage) serverAPI.OptURI {
 	previewURL := serverAPI.OptURI{}
 
 	if p.Downloaded {
 		previewURL = serverAPI.NewOptURI(c.getFileURL(
 			p.FileID,
 			p.Ext,
+			p.FSID,
 		))
 	}
 
 	return previewURL
 }
 
-func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.Page) serverAPI.BookSimple {
+func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.PreviewPage) serverAPI.BookSimple {
 	return serverAPI.BookSimple{
 		ID:         book.ID,
 		CreatedAt:  book.CreateAt,
@@ -90,10 +99,24 @@ func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.
 	}
 }
 
+func (c *Controller) convertPreviewPage(page entities.PreviewPage) serverAPI.PageSimple {
+	hasDeadHash := serverAPI.OptBool{}
+
+	if page.HasDeadHash != nil {
+		hasDeadHash = serverAPI.NewOptBool(*page.HasDeadHash)
+	}
+
+	return serverAPI.PageSimple{
+		PageNumber:  page.PageNumber,
+		PreviewURL:  c.getPagePreview(page),
+		HasDeadHash: hasDeadHash,
+	}
+}
+
 func (c *Controller) convertSimplePageWithDeadHash(page entities.PageWithDeadHash) serverAPI.PageSimple {
 	return serverAPI.PageSimple{
 		PageNumber:  page.PageNumber,
-		PreviewURL:  c.getPagePreview(page.Page),
+		PreviewURL:  c.getPagePreview(page.ToPreview()),
 		HasDeadHash: serverAPI.NewOptBool(page.HasDeadHash),
 	}
 }
@@ -106,7 +129,7 @@ func convertBookAttribute(a entities.AttributeToWeb) serverAPI.BookAttribute {
 	}
 }
 
-func convertBookFullToBookRaw(book entities.BookFull) *serverAPI.BookRaw {
+func convertBookFullToBookRaw(book entities.BookContainer) *serverAPI.BookRaw {
 	return &serverAPI.BookRaw{
 		ID:        book.Book.ID,
 		CreateAt:  book.Book.CreateAt,
@@ -140,12 +163,12 @@ func convertBookFullToBookRaw(book entities.BookFull) *serverAPI.BookRaw {
 	}
 }
 
-func convertBookRawToBookFull(book *serverAPI.BookRaw) entities.BookFull {
+func convertBookRawToBookFull(book *serverAPI.BookRaw) entities.BookContainer {
 	if book == nil {
-		return entities.BookFull{}
+		return entities.BookContainer{}
 	}
 
-	return entities.BookFull{
+	return entities.BookContainer{
 		Book: entities.Book{
 			ID:        book.ID,
 			Name:      book.Name,
@@ -190,6 +213,7 @@ func convertAgentToAPI(raw entities.Agent) serverAPI.Agent {
 		CanParse:      raw.CanParse,
 		CanParseMulti: raw.CanParseMulti,
 		CanExport:     raw.CanExport,
+		HasFs:         raw.HasFS,
 		Priority:      raw.Priority,
 		CreatedAt:     raw.CreateAt,
 	}

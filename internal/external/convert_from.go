@@ -7,7 +7,7 @@ import (
 	"hgnext/internal/pkg"
 )
 
-func BookFromEntity(raw entities.BookFull) Book {
+func BookFromEntity(raw entities.BookContainer) Book {
 	labels := make(map[int][]Label, raw.Book.PageCount+1)
 
 	for _, l := range raw.Labels {
@@ -61,7 +61,7 @@ func BookFromEntity(raw entities.BookFull) Book {
 	return b
 }
 
-func Convert(raw entities.BookFull) Info {
+func Convert(raw entities.BookContainer) Info {
 	return Info{
 		Version: CurrentVersion,
 		Meta: Meta{

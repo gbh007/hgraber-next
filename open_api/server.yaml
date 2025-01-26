@@ -87,6 +87,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: fsid
+          in: query
+          description: ID файловой системы, для ускорения получения файла
+          schema:
+            type: string
+            format: uuid
       responses:
         200:
           description: Успешный ответ с данными
@@ -2811,6 +2817,9 @@ paths:
                 can_export:
                   type: boolean
                   description: Может ли агент экспортировать данные из системы
+                has_fs:
+                  type: boolean
+                  description: Может ли агент работать в режиме ФС
                 priority:
                   type: integer
                   description: Приоритет при выборе агентов
@@ -2965,6 +2974,9 @@ paths:
                 can_parse_multi:
                   type: boolean
                   description: Может ли агент обрабатывать множественные ссылки внешних систем
+                has_fs:
+                  type: boolean
+                  description: Может ли агент работать в режиме ФС
                 include_status:
                   type: boolean
                   description: Проверить состояние агента (запрос статуса у самого агента)
@@ -4164,6 +4176,9 @@ components:
         can_export:
           type: boolean
           description: Может ли агент экспортировать данные из системы
+        has_fs:
+          type: boolean
+          description: Может ли агент работать в режиме ФС
         priority:
           type: integer
           description: Приоритет при выборе агентов
@@ -4179,6 +4194,7 @@ components:
         - can_parse
         - can_parse_multi
         - can_export
+        - has_fs
         - priority
         - created_at
 

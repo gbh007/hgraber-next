@@ -1245,6 +1245,12 @@ func (s *APIAgentListPostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.HasFs.Set {
+			e.FieldStart("has_fs")
+			s.HasFs.Encode(e)
+		}
+	}
+	{
 		if s.IncludeStatus.Set {
 			e.FieldStart("include_status")
 			s.IncludeStatus.Encode(e)
@@ -1252,11 +1258,12 @@ func (s *APIAgentListPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIAgentListPostReq = [4]string{
+var jsonFieldsNameOfAPIAgentListPostReq = [5]string{
 	0: "can_parse",
 	1: "can_export",
 	2: "can_parse_multi",
-	3: "include_status",
+	3: "has_fs",
+	4: "include_status",
 }
 
 // Decode decodes APIAgentListPostReq from json.
@@ -1296,6 +1303,16 @@ func (s *APIAgentListPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"can_parse_multi\"")
+			}
+		case "has_fs":
+			if err := func() error {
+				s.HasFs.Reset()
+				if err := s.HasFs.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"has_fs\"")
 			}
 		case "include_status":
 			if err := func() error {
@@ -1523,6 +1540,12 @@ func (s *APIAgentNewPostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.HasFs.Set {
+			e.FieldStart("has_fs")
+			s.HasFs.Encode(e)
+		}
+	}
+	{
 		if s.Priority.Set {
 			e.FieldStart("priority")
 			s.Priority.Encode(e)
@@ -1530,14 +1553,15 @@ func (s *APIAgentNewPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIAgentNewPostReq = [7]string{
+var jsonFieldsNameOfAPIAgentNewPostReq = [8]string{
 	0: "name",
 	1: "addr",
 	2: "token",
 	3: "can_parse",
 	4: "can_parse_multi",
 	5: "can_export",
-	6: "priority",
+	6: "has_fs",
+	7: "priority",
 }
 
 // Decode decodes APIAgentNewPostReq from json.
@@ -1614,6 +1638,16 @@ func (s *APIAgentNewPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"can_export\"")
+			}
+		case "has_fs":
+			if err := func() error {
+				s.HasFs.Reset()
+				if err := s.HasFs.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"has_fs\"")
 			}
 		case "priority":
 			if err := func() error {
@@ -19734,6 +19768,10 @@ func (s *Agent) encodeFields(e *jx.Encoder) {
 		e.Bool(s.CanExport)
 	}
 	{
+		e.FieldStart("has_fs")
+		e.Bool(s.HasFs)
+	}
+	{
 		e.FieldStart("priority")
 		e.Int(s.Priority)
 	}
@@ -19743,7 +19781,7 @@ func (s *Agent) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAgent = [9]string{
+var jsonFieldsNameOfAgent = [10]string{
 	0: "id",
 	1: "name",
 	2: "addr",
@@ -19751,8 +19789,9 @@ var jsonFieldsNameOfAgent = [9]string{
 	4: "can_parse",
 	5: "can_parse_multi",
 	6: "can_export",
-	7: "priority",
-	8: "created_at",
+	7: "has_fs",
+	8: "priority",
+	9: "created_at",
 }
 
 // Decode decodes Agent from json.
@@ -19848,8 +19887,20 @@ func (s *Agent) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"can_export\"")
 			}
-		case "priority":
+		case "has_fs":
 			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Bool()
+				s.HasFs = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"has_fs\"")
+			}
+		case "priority":
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
 				v, err := d.Int()
 				s.Priority = int(v)
@@ -19861,7 +19912,7 @@ func (s *Agent) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"priority\"")
 			}
 		case "created_at":
-			requiredBitSet[1] |= 1 << 0
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreatedAt = v
@@ -19883,7 +19934,7 @@ func (s *Agent) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

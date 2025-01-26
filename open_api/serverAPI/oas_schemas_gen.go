@@ -327,6 +327,8 @@ type APIAgentListPostReq struct {
 	// Может ли агент обрабатывать множественные ссылки
 	// внешних систем.
 	CanParseMulti OptBool `json:"can_parse_multi"`
+	// Может ли агент работать в режиме ФС.
+	HasFs OptBool `json:"has_fs"`
 	// Проверить состояние агента (запрос статуса у самого
 	// агента).
 	IncludeStatus OptBool `json:"include_status"`
@@ -347,6 +349,11 @@ func (s *APIAgentListPostReq) GetCanParseMulti() OptBool {
 	return s.CanParseMulti
 }
 
+// GetHasFs returns the value of HasFs.
+func (s *APIAgentListPostReq) GetHasFs() OptBool {
+	return s.HasFs
+}
+
 // GetIncludeStatus returns the value of IncludeStatus.
 func (s *APIAgentListPostReq) GetIncludeStatus() OptBool {
 	return s.IncludeStatus
@@ -365,6 +372,11 @@ func (s *APIAgentListPostReq) SetCanExport(val OptBool) {
 // SetCanParseMulti sets the value of CanParseMulti.
 func (s *APIAgentListPostReq) SetCanParseMulti(val OptBool) {
 	s.CanParseMulti = val
+}
+
+// SetHasFs sets the value of HasFs.
+func (s *APIAgentListPostReq) SetHasFs(val OptBool) {
+	s.HasFs = val
 }
 
 // SetIncludeStatus sets the value of IncludeStatus.
@@ -407,6 +419,8 @@ type APIAgentNewPostReq struct {
 	CanParseMulti OptBool `json:"can_parse_multi"`
 	// Может ли агент экспортировать данные из системы.
 	CanExport OptBool `json:"can_export"`
+	// Может ли агент работать в режиме ФС.
+	HasFs OptBool `json:"has_fs"`
 	// Приоритет при выборе агентов.
 	Priority OptInt `json:"priority"`
 }
@@ -439,6 +453,11 @@ func (s *APIAgentNewPostReq) GetCanParseMulti() OptBool {
 // GetCanExport returns the value of CanExport.
 func (s *APIAgentNewPostReq) GetCanExport() OptBool {
 	return s.CanExport
+}
+
+// GetHasFs returns the value of HasFs.
+func (s *APIAgentNewPostReq) GetHasFs() OptBool {
+	return s.HasFs
 }
 
 // GetPriority returns the value of Priority.
@@ -474,6 +493,11 @@ func (s *APIAgentNewPostReq) SetCanParseMulti(val OptBool) {
 // SetCanExport sets the value of CanExport.
 func (s *APIAgentNewPostReq) SetCanExport(val OptBool) {
 	s.CanExport = val
+}
+
+// SetHasFs sets the value of HasFs.
+func (s *APIAgentNewPostReq) SetHasFs(val OptBool) {
+	s.HasFs = val
 }
 
 // SetPriority sets the value of Priority.
@@ -4636,6 +4660,8 @@ type Agent struct {
 	CanParseMulti bool `json:"can_parse_multi"`
 	// Может ли агент экспортировать данные из системы.
 	CanExport bool `json:"can_export"`
+	// Может ли агент работать в режиме ФС.
+	HasFs bool `json:"has_fs"`
 	// Приоритет при выборе агентов.
 	Priority int `json:"priority"`
 	// Время создания.
@@ -4675,6 +4701,11 @@ func (s *Agent) GetCanParseMulti() bool {
 // GetCanExport returns the value of CanExport.
 func (s *Agent) GetCanExport() bool {
 	return s.CanExport
+}
+
+// GetHasFs returns the value of HasFs.
+func (s *Agent) GetHasFs() bool {
+	return s.HasFs
 }
 
 // GetPriority returns the value of Priority.
@@ -4720,6 +4751,11 @@ func (s *Agent) SetCanParseMulti(val bool) {
 // SetCanExport sets the value of CanExport.
 func (s *Agent) SetCanExport(val bool) {
 	s.CanExport = val
+}
+
+// SetHasFs sets the value of HasFs.
+func (s *Agent) SetHasFs(val bool) {
+	s.HasFs = val
 }
 
 // SetPriority sets the value of Priority.

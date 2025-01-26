@@ -8,7 +8,7 @@ import (
 	"hgnext/internal/pkg"
 )
 
-func BookToEntity(raw Book) (entities.BookFull, error) {
+func BookToEntity(raw Book) (entities.BookContainer, error) {
 	var err error
 
 	book := entities.Book{
@@ -21,7 +21,7 @@ func BookToEntity(raw Book) (entities.BookFull, error) {
 	if raw.OriginURL != "" {
 		u, err := url.Parse(raw.OriginURL)
 		if err != nil {
-			return entities.BookFull{}, fmt.Errorf("parse book url: %w", err)
+			return entities.BookContainer{}, fmt.Errorf("parse book url: %w", err)
 		}
 
 		book.OriginURL = u
@@ -44,7 +44,7 @@ func BookToEntity(raw Book) (entities.BookFull, error) {
 		if p.OriginURL != "" {
 			u, err = url.Parse(p.OriginURL)
 			if err != nil {
-				return entities.BookFull{}, fmt.Errorf("parse page (%d) url: %w", p.PageNumber, err)
+				return entities.BookContainer{}, fmt.Errorf("parse page (%d) url: %w", p.PageNumber, err)
 			}
 		}
 
@@ -67,7 +67,7 @@ func BookToEntity(raw Book) (entities.BookFull, error) {
 		}
 	}
 
-	b := entities.BookFull{
+	b := entities.BookContainer{
 		Book:   book,
 		Labels: labels,
 		Attributes: pkg.SliceToMap(raw.Attributes, func(attr Attribute) (string, []string) {

@@ -30,7 +30,7 @@ func (uc *UseCase) BookList(ctx context.Context, filter entities.BookFilter) (en
 	pages := generatePagination(totalToPages(filter.Offset, filter.Limit)+1, totalToPages(total, filter.Limit))
 
 	return entities.BookListToWeb{
-		Books: pkg.Map(books, func(book entities.BookFull) entities.BookToWeb {
+		Books: pkg.Map(books, func(book entities.BookContainer) entities.BookToWeb {
 			return uc.bookConvert(book, attributesInfoMap)
 		}),
 		Pages: pages,

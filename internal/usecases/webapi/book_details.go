@@ -26,10 +26,10 @@ func (uc *UseCase) Book(ctx context.Context, bookID uuid.UUID) (entities.BookToW
 	return book, nil
 }
 
-func (uc *UseCase) BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error) {
+func (uc *UseCase) BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error) {
 	bookFull, err := uc.bookRequester.BookOriginFull(ctx, bookID)
 	if err != nil {
-		return entities.BookFull{}, fmt.Errorf("book requester: %w", err)
+		return entities.BookContainer{}, fmt.Errorf("book requester: %w", err)
 	}
 
 	return bookFull, nil

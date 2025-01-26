@@ -56,6 +56,7 @@ func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]e
 		if _, ok := hashes[page.FileHash]; ok {
 			result = append(result, entities.PageWithDeadHash{
 				Page:        page.Page,
+				FSID:        &page.FSID,
 				HasDeadHash: hasDeadHash,
 			})
 

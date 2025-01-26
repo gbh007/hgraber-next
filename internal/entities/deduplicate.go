@@ -59,7 +59,7 @@ func EntryPercentageForPages(current, target []PageWithHash, deadHashes map[File
 
 type DeduplicateBookResult struct {
 	TargetBook  Book
-	PreviewPage Page
+	PreviewPage PreviewPage
 	// Процент (0-1) вхождения книги в целевую книгу
 	EntryPercentage float64
 	// Процент (0-1) вхождения целевой книги в книгу
@@ -82,8 +82,8 @@ type BookPagesCompareResult struct {
 	OriginBook Book
 	TargetBook Book
 
-	OriginPreviewPage Page
-	TargetPreviewPage Page
+	OriginPreviewPage PreviewPage
+	TargetPreviewPage PreviewPage
 
 	OriginPages []PageWithDeadHash
 	BothPages   []PageWithDeadHash

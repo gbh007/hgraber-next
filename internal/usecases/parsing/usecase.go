@@ -49,7 +49,7 @@ type fileStorage interface {
 }
 
 type bookRequester interface {
-	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
 }
 
 type UseCase struct {

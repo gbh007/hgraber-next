@@ -14,7 +14,7 @@ var (
 )
 
 type RebuildBookRequest struct {
-	ModifiedOldBook BookFull
+	ModifiedOldBook BookContainer
 	SelectedPages   []int
 	MergeWithBook   uuid.UUID
 
