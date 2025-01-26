@@ -316,6 +316,51 @@ func (UnimplementedHandler) APIFileIDGet(ctx context.Context, params APIFileIDGe
 	return r, ht.ErrNotImplemented
 }
 
+// APIFsCreatePost implements POST /api/fs/create operation.
+//
+// Создание файловой системы.
+//
+// POST /api/fs/create
+func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req *FileSystemInfo) (r APIFsCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIFsDeletePost implements POST /api/fs/delete operation.
+//
+// Удаление файловой системы.
+//
+// POST /api/fs/delete
+func (UnimplementedHandler) APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) (r APIFsDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIFsGetPost implements POST /api/fs/get operation.
+//
+// Данные настроек файловой системы.
+//
+// POST /api/fs/get
+func (UnimplementedHandler) APIFsGetPost(ctx context.Context, req *APIFsGetPostReq) (r APIFsGetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIFsListPost implements POST /api/fs/list operation.
+//
+// Список файловых систем.
+//
+// POST /api/fs/list
+func (UnimplementedHandler) APIFsListPost(ctx context.Context, req *APIFsListPostReq) (r APIFsListPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIFsUpdatePost implements POST /api/fs/update operation.
+//
+// Изменение настроек файловой системы.
+//
+// POST /api/fs/update
+func (UnimplementedHandler) APIFsUpdatePost(ctx context.Context, req *FileSystemInfo) (r APIFsUpdatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APILabelDeletePost implements POST /api/label/delete operation.
 //
 // Удаление метки на книгу или страницу.

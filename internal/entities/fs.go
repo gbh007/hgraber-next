@@ -30,7 +30,7 @@ type FSWithStatus struct {
 	// Признак того что это устаревшее хранилище через конфиг
 	IsLegacy bool
 
-	DBFile FSFilesInfo
+	DBFile *FSFilesInfo
 }
 
 type FSFilesInfo struct {

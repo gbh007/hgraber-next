@@ -212,6 +212,36 @@ type Handler interface {
 	//
 	// GET /api/file/{id}
 	APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (APIFileIDGetRes, error)
+	// APIFsCreatePost implements POST /api/fs/create operation.
+	//
+	// Создание файловой системы.
+	//
+	// POST /api/fs/create
+	APIFsCreatePost(ctx context.Context, req *FileSystemInfo) (APIFsCreatePostRes, error)
+	// APIFsDeletePost implements POST /api/fs/delete operation.
+	//
+	// Удаление файловой системы.
+	//
+	// POST /api/fs/delete
+	APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) (APIFsDeletePostRes, error)
+	// APIFsGetPost implements POST /api/fs/get operation.
+	//
+	// Данные настроек файловой системы.
+	//
+	// POST /api/fs/get
+	APIFsGetPost(ctx context.Context, req *APIFsGetPostReq) (APIFsGetPostRes, error)
+	// APIFsListPost implements POST /api/fs/list operation.
+	//
+	// Список файловых систем.
+	//
+	// POST /api/fs/list
+	APIFsListPost(ctx context.Context, req *APIFsListPostReq) (APIFsListPostRes, error)
+	// APIFsUpdatePost implements POST /api/fs/update operation.
+	//
+	// Изменение настроек файловой системы.
+	//
+	// POST /api/fs/update
+	APIFsUpdatePost(ctx context.Context, req *FileSystemInfo) (APIFsUpdatePostRes, error)
 	// APILabelDeletePost implements POST /api/label/delete operation.
 	//
 	// Удаление метки на книгу или страницу.

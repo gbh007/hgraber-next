@@ -40,19 +40,21 @@ func New(
 	}
 }
 
-func (uc *UseCase) FileStoragesWithStatus(ctx context.Context) ([]entities.FSWithStatus, error) {
+func (uc *UseCase) FileStoragesWithStatus(ctx context.Context, includeDBInfo bool) ([]entities.FSWithStatus, error) {
 	storages, err := uc.fileStorage.FSList(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("file storage: get fs list: %w", err)
 	}
 
-	for i, storage := range storages {
-		info, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, false)
-		if err != nil {
-			return nil, fmt.Errorf("storage: get files info (%s): %w", storage.Info.ID.String(), err)
-		}
+	if includeDBInfo {
+		for i, storage := range storages {
+			info, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, false)
+			if err != nil {
+				return nil, fmt.Errorf("storage: get files info (%s): %w", storage.Info.ID.String(), err)
+			}
 
-		storages[i].DBFile = info
+			storages[i].DBFile = &info
+		}
 	}
 
 	slices.SortStableFunc(storages, func(a, b entities.FSWithStatus) int {

@@ -28,6 +28,8 @@ tags:
     description: Перестроение и изменение книг
   - name: deduplicate
     description: Дедупликация данных
+  - name: fs
+    description: Взаимодействие с файловыми системами
   - name: system
     description: Взаимодействие с системой граббера
 
@@ -3366,10 +3368,286 @@ paths:
                 type: object
                 properties:
                   colors:
-                    description: Список пресетов
+                    description: Список цветов
                     type: array
                     items:
                       $ref: "#/components/schemas/AttributeColor"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/fs/get:
+    post:
+      description: Данные настроек файловой системы
+      summary: Данные настроек файловой системы
+      tags:
+        - fs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID ФС
+              required:
+                - id
+      responses:
+        200:
+          description: Информация о ФС
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FileSystemInfo"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/fs/create:
+    post:
+      description: Создание файловой системы
+      summary: Создание файловой системы
+      tags:
+        - fs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FileSystemInfo"
+      responses:
+        200:
+          description: Успешное создание
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID ФС
+                required:
+                  - id
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/fs/update:
+    post:
+      description: Изменение настроек файловой системы
+      summary: Изменение настроек файловой системы
+      tags:
+        - fs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FileSystemInfo"
+      responses:
+        204:
+          description: Успешное обновление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/fs/delete:
+    post:
+      description: Удаление файловой системы
+      summary: Удаление файловой системы
+      tags:
+        - fs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID ФС
+              required:
+                - id
+      responses:
+        204:
+          description: Успешное удаление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/fs/list:
+    post:
+      description: Список файловых систем
+      summary: Список файловых систем
+      tags:
+        - fs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                include_db_file_size:
+                  type: boolean
+                  description: Включает в данные размер файлов по данным из БД
+      responses:
+        200:
+          description: Информация о ФС
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file_systems:
+                    description: Список ФС
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        info:
+                          $ref: "#/components/schemas/FileSystemInfo"
+                        is_legacy:
+                          type: boolean
+                          description: Признак того что это ФС старого типа
+                        db_files_info:
+                          type: object
+                          properties:
+                            count:
+                              type: integer
+                              format: int64
+                              description: Количество файлов
+                            size:
+                              type: integer
+                              format: int64
+                              description: Размер файлов
+                            size_formatted:
+                              type: string
+                              description: Размер файлов в человеко читаемом виде
+                          required:
+                            - count
+                            - size
+                            - size_formatted
+                      required:
+                        - info
+                        - is_legacy
         401:
           description: Пользователь не авторизован
           content:
@@ -3916,6 +4194,53 @@ components:
           description: Детальные данные ошибки
       required:
         - inner_code
+
+    FileSystemInfo:
+      type: object
+      description: Данные о файловой системе
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID ФС
+        name:
+          type: string
+          description: Название ФС
+        description:
+          type: string
+          description: Описание ФС
+        agent_id:
+          type: string
+          format: uuid
+          description: ID агента
+        path:
+          type: string
+          description: Название ФС
+        download_priority:
+          type: integer
+          description: Приоритет при загрузке новых файлов
+        deduplicate_priority:
+          type: integer
+          description: Приоритет при удалении дубликатов (приоритет сохранить файл с этой ФС)
+        highway_enabled:
+          type: boolean
+          description: Включен ли режим highway для ФС
+        highway_addr:
+          type: string
+          description: Внешний адрес highway
+          format: uri
+          example: http://example.com
+        created_at:
+          type: string
+          format: date-time
+          description: Время создания
+      required:
+        - id
+        - name
+        - download_priority
+        - deduplicate_priority
+        - highway_enabled
+        - created_at
 
   securitySchemes:
     headerAuth:

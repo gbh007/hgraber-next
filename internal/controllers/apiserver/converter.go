@@ -43,6 +43,14 @@ func optString(s string) serverAPI.OptString {
 	return serverAPI.NewOptString(s)
 }
 
+func optUUID(u uuid.UUID) serverAPI.OptUUID {
+	if u == uuid.Nil {
+		return serverAPI.OptUUID{}
+	}
+
+	return serverAPI.NewOptUUID(u)
+}
+
 func (c *Controller) getFileURL(fileID uuid.UUID, ext string) url.URL {
 	return url.URL{
 		Scheme: c.externalServerScheme,
@@ -184,5 +192,35 @@ func convertAgentToAPI(raw entities.Agent) serverAPI.Agent {
 		CanExport:     raw.CanExport,
 		Priority:      raw.Priority,
 		CreatedAt:     raw.CreateAt,
+	}
+}
+
+func convertFileSystemInfoFromAPI(raw *serverAPI.FileSystemInfo) entities.FileStorageSystem {
+	return entities.FileStorageSystem{
+		ID:                  raw.ID,
+		Name:                raw.Name,
+		Description:         raw.Description.Value,
+		AgentID:             raw.AgentID.Value,
+		Path:                raw.Path.Value,
+		DownloadPriority:    raw.DownloadPriority,
+		DeduplicatePriority: raw.DeduplicatePriority,
+		HighwayEnabled:      raw.HighwayEnabled,
+		HighwayAddr:         urlFromOpt(raw.HighwayAddr),
+		CreatedAt:           raw.CreatedAt,
+	}
+}
+
+func convertFileSystemInfoToAPI(raw entities.FileStorageSystem) serverAPI.FileSystemInfo {
+	return serverAPI.FileSystemInfo{
+		ID:                  raw.ID,
+		Name:                raw.Name,
+		Description:         optString(raw.Description),
+		AgentID:             optUUID(raw.AgentID),
+		Path:                optString(raw.Path),
+		DownloadPriority:    raw.DownloadPriority,
+		DeduplicatePriority: raw.DeduplicatePriority,
+		HighwayEnabled:      raw.HighwayEnabled,
+		HighwayAddr:         optURL(raw.HighwayAddr),
+		CreatedAt:           raw.CreatedAt,
 	}
 }
