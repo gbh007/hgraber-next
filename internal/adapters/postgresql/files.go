@@ -62,18 +62,13 @@ func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha
 func (d *Database) NewFile(ctx context.Context, file entities.File) error {
 	builder := squirrel.Insert("files").
 		PlaceholderFormat(squirrel.Dollar).
-		Columns(
-			"id",
-			"filename",
-			"ext",
-			"create_at",
-		).
-		Values(
-			file.ID.String(),
-			file.Filename,
-			file.Ext,
-			file.CreateAt,
-		)
+		SetMap(map[string]interface{}{
+			"id":        file.ID,
+			"filename":  file.Filename,
+			"ext":       file.Ext,
+			"create_at": file.CreateAt,
+			"fs_id":     model.UUIDToDB(file.FSID),
+		})
 
 	query, args, err := builder.ToSql()
 	if err != nil {
@@ -93,11 +88,9 @@ func (d *Database) NewFile(ctx context.Context, file entities.File) error {
 func (d *Database) ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UUID) error {
 	builder := squirrel.Update("pages").
 		PlaceholderFormat(squirrel.Dollar).
-		SetMap(
-			map[string]interface{}{
-				"file_id": newFileID.String(),
-			},
-		).
+		SetMap(map[string]interface{}{
+			"file_id": newFileID.String(),
+		}).
 		Where(squirrel.Eq{
 			"file_id": oldFileID.String(),
 		})
@@ -211,4 +204,47 @@ func (d *Database) FileIDs(ctx context.Context) ([]uuid.UUID, error) {
 	}
 
 	return raw, nil
+}
+
+func (d *Database) FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error) {
+	raw := make([]uuid.UUID, 0)
+
+	if fsID == uuid.Nil {
+		err := d.db.SelectContext(ctx, &raw, `SELECT id FROM files WHERE fs_id IS NULL;`)
+		if err != nil {
+			return nil, fmt.Errorf("exec: %w", err)
+		}
+	} else {
+		err := d.db.SelectContext(ctx, &raw, `SELECT id FROM files WHERE fs_id = $1;`, fsID)
+		if err != nil {
+			return nil, fmt.Errorf("exec: %w", err)
+		}
+	}
+
+	return raw, nil
+}
+
+func (d *Database) UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, invalidData bool) error {
+	builder := squirrel.Update("files").
+		PlaceholderFormat(squirrel.Dollar).
+		SetMap(map[string]interface{}{
+			"invalid_data": invalidData,
+		}).
+		Where(squirrel.Eq{
+			"id": fileID,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	_, err = d.pool.Exec(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("exec query: %w", err)
+	}
+
+	return nil
 }

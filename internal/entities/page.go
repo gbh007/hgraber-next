@@ -62,4 +62,5 @@ type PageForDownloadWithAgent struct {
 type PageWithHash struct {
 	Page
 	FileHash
+	FSID uuid.UUID
 }

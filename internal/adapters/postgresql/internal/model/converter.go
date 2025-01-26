@@ -15,10 +15,10 @@ func TimeToDB(t time.Time) sql.NullTime {
 	}
 }
 
-func UUIDToDB(u uuid.UUID) sql.NullString {
-	return sql.NullString{
-		String: u.String(),
-		Valid:  u != uuid.Nil,
+func UUIDToDB(u uuid.UUID) uuid.NullUUID {
+	return uuid.NullUUID{
+		UUID:  u,
+		Valid: u != uuid.Nil,
 	}
 }
 

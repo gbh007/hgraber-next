@@ -16,6 +16,7 @@ type Agent struct {
 	CanParse      bool
 	CanParseMulti bool
 	CanExport     bool
+	HasFS         bool
 	Priority      int
 	CreateAt      time.Time
 }
@@ -24,6 +25,7 @@ type AgentFilter struct {
 	CanParse      bool
 	CanParseMulti bool
 	CanExport     bool
+	HasFS         bool
 }
 
 type AgentBookDetails struct {

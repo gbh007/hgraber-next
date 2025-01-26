@@ -37,6 +37,12 @@ func (d *Database) Agents(ctx context.Context, filter entities.AgentFilter) ([]e
 		})
 	}
 
+	if filter.HasFS {
+		builder = builder.Where(squirrel.Eq{
+			"has_fs": true,
+		})
+	}
+
 	query, args, err := builder.ToSql()
 	if err != nil {
 		return nil, fmt.Errorf("storage: build query: %w", err)
@@ -101,6 +107,7 @@ func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 			"can_parse":       agent.CanParse,
 			"can_parse_multi": agent.CanParseMulti,
 			"can_export":      agent.CanExport,
+			"has_fs":          agent.HasFS,
 			"priority":        agent.Priority,
 			"create_at":       agent.CreateAt,
 		})
@@ -130,6 +137,7 @@ func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error 
 			"can_parse":       agent.CanParse,
 			"can_parse_multi": agent.CanParseMulti,
 			"can_export":      agent.CanExport,
+			"has_fs":          agent.HasFS,
 			"priority":        agent.Priority,
 		}).
 		Where(squirrel.Eq{
