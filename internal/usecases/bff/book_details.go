@@ -59,14 +59,14 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (entities.
 
 	result := entities.BFFBookDetails{
 		Book:  book,
-		Pages: make([]entities.PreviewPage, 0, len(bookPages)),
+		Pages: make([]entities.BFFPreviewPage, 0, len(bookPages)),
 	}
 
 	for _, page := range bookPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
 		preview := page.ToPreview()
-		preview.HasDeadHash = &hasDeadHash
+		preview.HasDeadHash = entities.NewStatusFlag(hasDeadHash)
 
 		result.Pages = append(result.Pages, preview)
 

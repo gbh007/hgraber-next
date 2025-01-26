@@ -35,13 +35,10 @@ func (b Book) ParsedName() bool {
 
 // FIXME: подумать что делать с такими моделями
 type BookContainer struct {
-	Book           Book
-	Pages          []Page
-	PagesWithHash  []PageWithHash
-	Attributes     map[string][]string
-	Labels         []BookLabel
-	Size           BookSize
-	DeadHashOnPage map[int]struct{}
+	Book       Book
+	Pages      []Page
+	Attributes map[string][]string
+	Labels     []BookLabel
 }
 
 func (b BookContainer) IsLoaded() bool {
@@ -115,5 +112,5 @@ type BookSize struct {
 // TODO: подумать что делать с такими моделями
 type BookWithPreviewPage struct {
 	Book
-	PreviewPage PreviewPage
+	PreviewPage BFFPreviewPage
 }

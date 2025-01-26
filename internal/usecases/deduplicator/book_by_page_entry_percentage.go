@@ -60,13 +60,13 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 			return nil, fmt.Errorf("get book (%s) from storage: %w", bookID.String(), err)
 		}
 
-		var previewPage entities.PreviewPage
+		var previewPage entities.BFFPreviewPage
 
 		for _, page := range pages {
 			if page.PageNumber == entities.PageNumberForPreview {
 				previewPage = page.ToPreview()
 				_, ok := existsDeadHashes[page.FileHash]
-				previewPage.HasDeadHash = &ok
+				previewPage.HasDeadHash = entities.NewStatusFlag(ok)
 			}
 		}
 

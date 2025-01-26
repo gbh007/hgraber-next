@@ -51,23 +51,21 @@ func optUUID(u uuid.UUID) serverAPI.OptUUID {
 	return serverAPI.NewOptUUID(u)
 }
 
-func (c *Controller) getFileURL(fileID uuid.UUID, ext string, fsID *uuid.UUID) url.URL {
+func (c *Controller) getFileURL(fileID uuid.UUID, ext string, fsID uuid.UUID) url.URL {
 	u := url.URL{
 		Scheme: c.externalServerScheme,
 		Host:   c.externalServerHostWithPort,
 		Path:   "/api/file/" + fileID.String() + ext,
 	}
 
-	if fsID != nil {
-		v := url.Values{}
-		v.Add("fsid", fsID.String())
-		u.RawQuery = v.Encode()
-	}
+	v := url.Values{}
+	v.Add("fsid", fsID.String())
+	u.RawQuery = v.Encode()
 
 	return u
 }
 
-func (c *Controller) getPagePreview(p entities.PreviewPage) serverAPI.OptURI {
+func (c *Controller) getPagePreview(p entities.BFFPreviewPage) serverAPI.OptURI {
 	previewURL := serverAPI.OptURI{}
 
 	if p.Downloaded {
@@ -81,7 +79,7 @@ func (c *Controller) getPagePreview(p entities.PreviewPage) serverAPI.OptURI {
 	return previewURL
 }
 
-func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.PreviewPage) serverAPI.BookSimple {
+func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.BFFPreviewPage) serverAPI.BookSimple {
 	return serverAPI.BookSimple{
 		ID:         book.ID,
 		CreatedAt:  book.CreateAt,
@@ -99,26 +97,11 @@ func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.
 	}
 }
 
-func (c *Controller) convertPreviewPage(page entities.PreviewPage) serverAPI.PageSimple {
-	hasDeadHash := serverAPI.OptBool{}
-
-	if page.HasDeadHash != nil {
-		hasDeadHash = serverAPI.NewOptBool(*page.HasDeadHash)
-	}
-
+func (c *Controller) convertPreviewPage(page entities.BFFPreviewPage) serverAPI.PageSimple {
 	return serverAPI.PageSimple{
 		PageNumber:  page.PageNumber,
 		PreviewURL:  c.getPagePreview(page),
-		HasDeadHash: hasDeadHash,
-	}
-}
-
-// FIXME: избавится и перейти на обобщенные страницы превью
-func (c *Controller) convertSimplePageWithDeadHash(page entities.PageWithDeadHash) serverAPI.PageSimple {
-	return serverAPI.PageSimple{
-		PageNumber:  page.PageNumber,
-		PreviewURL:  c.getPagePreview(page.ToPreview()),
-		HasDeadHash: serverAPI.NewOptBool(page.HasDeadHash),
+		HasDeadHash: convertStatusFlagToAPI(page.HasDeadHash),
 	}
 }
 
@@ -247,5 +230,12 @@ func convertFileSystemInfoToAPI(raw entities.FileStorageSystem) serverAPI.FileSy
 		HighwayEnabled:      raw.HighwayEnabled,
 		HighwayAddr:         optURL(raw.HighwayAddr),
 		CreatedAt:           raw.CreatedAt,
+	}
+}
+
+func convertStatusFlagToAPI(f entities.StatusFlag) serverAPI.OptBool {
+	return serverAPI.OptBool{
+		Value: f == entities.TrueStatusFlag,
+		Set:   f != entities.UnknownStatusFlag,
 	}
 }

@@ -3,21 +3,39 @@ package entities
 import (
 	"math"
 
+	"github.com/google/uuid"
+
 	"hgnext/internal/pkg"
 )
 
+type StatusFlag byte
+
+const (
+	UnknownStatusFlag StatusFlag = iota
+	TrueStatusFlag
+	FalseStatusFlag
+)
+
+func NewStatusFlag(ok bool) StatusFlag {
+	if ok {
+		return TrueStatusFlag
+	}
+
+	return FalseStatusFlag
+}
+
 type BFFBookDetails struct {
 	Book       Book
-	Pages      []PreviewPage
+	Pages      []BFFPreviewPage
 	Attributes []AttributeToWeb
 
-	PreviewPage PreviewPage
+	PreviewPage BFFPreviewPage
 
 	Size BookSize
 }
 
 func (book BFFBookDetails) PageDownloadPercent() float64 {
-	downloadedPageCount := pkg.SliceReduce(book.Pages, func(v int, p PreviewPage) int {
+	downloadedPageCount := pkg.SliceReduce(book.Pages, func(v int, p BFFPreviewPage) int {
 		if p.Downloaded {
 			v++
 		}
@@ -30,7 +48,7 @@ func (book BFFBookDetails) PageDownloadPercent() float64 {
 
 type BFFBookShort struct {
 	Book        Book
-	PreviewPage PreviewPage
+	PreviewPage BFFPreviewPage
 	Tags        []string
 }
 
@@ -39,4 +57,29 @@ type BFFBookList struct {
 	Pages []int
 
 	Count int
+}
+
+const PageNumberForPreview int = 1
+
+type AttributeToWeb struct {
+	Code   string
+	Name   string
+	Values []string
+}
+
+type BFFPreviewPage struct {
+	PageNumber  int
+	Ext         string
+	Downloaded  bool
+	FileID      uuid.UUID
+	FSID        uuid.UUID
+	HasDeadHash StatusFlag
+}
+
+type BookCompareResultToWeb struct {
+	BookPagesCompareResult
+
+	OriginAttributes []AttributeToWeb
+	BothAttributes   []AttributeToWeb
+	TargetAttributes []AttributeToWeb
 }

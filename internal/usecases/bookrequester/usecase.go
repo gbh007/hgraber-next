@@ -54,7 +54,6 @@ func (uc *UseCase) Books(ctx context.Context, filter entities.BookFilter) ([]ent
 			IncludeOriginAttributes: filter.OriginAttributes,
 			IncludeAttributes:       !filter.OriginAttributes,
 			IncludePages:            true,
-			IncludePagesWithHash:    true,
 			IncludeLabels:           true,
 		})
 		if err != nil {

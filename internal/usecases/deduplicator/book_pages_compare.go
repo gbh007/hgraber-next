@@ -13,34 +13,33 @@ import (
 func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (entities.BookPagesCompareResult, error) {
 	originBook, err := uc.storage.GetBook(ctx, originID)
 	if err != nil {
-		return entities.BookPagesCompareResult{}, fmt.Errorf("get book (%s) from storage: %w", originID.String(), err)
+		return entities.BookPagesCompareResult{}, fmt.Errorf("storage: get book (%s): %w", originID.String(), err)
 	}
 
 	targetBook, err := uc.storage.GetBook(ctx, targetID)
 	if err != nil {
-		return entities.BookPagesCompareResult{}, fmt.Errorf("get book (%s) from storage: %w", targetID.String(), err)
+		return entities.BookPagesCompareResult{}, fmt.Errorf("storage: get book (%s): %w", targetID.String(), err)
 	}
 
 	originPages, err := uc.storage.BookPagesWithHash(ctx, originID)
 	if err != nil {
-		return entities.BookPagesCompareResult{}, fmt.Errorf("get pages (%s) from storage: %w", originID.String(), err)
+		return entities.BookPagesCompareResult{}, fmt.Errorf("storage: get pages (%s): %w", originID.String(), err)
 	}
 
 	targetPages, err := uc.storage.BookPagesWithHash(ctx, targetID)
 	if err != nil {
-		return entities.BookPagesCompareResult{}, fmt.Errorf("get pages (%s) from storage: %w", targetID.String(), err)
+		return entities.BookPagesCompareResult{}, fmt.Errorf("storage: get pages (%s): %w", targetID.String(), err)
 	}
 
 	result := entities.BookPagesCompareResult{
 		OriginBook:  originBook,
 		TargetBook:  targetBook,
-		OriginPages: make([]entities.PageWithDeadHash, 0, len(originPages)),
-		BothPages:   make([]entities.PageWithDeadHash, 0, max(len(originPages), len(targetPages))),
-		TargetPages: make([]entities.PageWithDeadHash, 0, len(targetPages)),
+		OriginPages: make([]entities.BFFPreviewPage, 0, len(originPages)),
+		BothPages:   make([]entities.BFFPreviewPage, 0, max(len(originPages), len(targetPages))),
+		TargetPages: make([]entities.BFFPreviewPage, 0, len(targetPages)),
 	}
 
 	hashes := make(map[entities.FileHash]int, len(originPages))
-
 	md5Sums := make([]string, 0, len(originPages)+len(targetPages))
 
 	for _, page := range originPages {
@@ -79,52 +78,42 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 	for _, page := range originPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
+		preview := page.ToPreview()
+		preview.HasDeadHash = entities.NewStatusFlag(hasDeadHash)
+
 		if page.PageNumber == entities.PageNumberForPreview {
-			result.OriginPreviewPage = page.ToPreview()
-			result.OriginPreviewPage.HasDeadHash = &hasDeadHash
+			result.OriginPreviewPage = preview
 		}
 
 		if hashes[page.FileHash] == 1 {
-			result.OriginPages = append(result.OriginPages, entities.PageWithDeadHash{
-				Page:        page.Page,
-				FSID:        &page.FSID,
-				HasDeadHash: hasDeadHash,
-			})
+			result.OriginPages = append(result.OriginPages, preview)
 		} else {
-			result.BothPages = append(result.BothPages, entities.PageWithDeadHash{
-				Page:        page.Page,
-				FSID:        &page.FSID,
-				HasDeadHash: hasDeadHash,
-			}) // Приоритет отдаем оригинальной книге
+			result.BothPages = append(result.BothPages, preview) // Приоритет отдаем оригинальной книге
 		}
 	}
 
 	for _, page := range targetPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
+		preview := page.ToPreview()
+		preview.HasDeadHash = entities.NewStatusFlag(hasDeadHash)
+
 		if page.PageNumber == entities.PageNumberForPreview {
-			result.TargetPreviewPage = page.ToPreview()
-			result.TargetPreviewPage.HasDeadHash = &hasDeadHash
+			result.TargetPreviewPage = preview
 		}
 
 		if hashes[page.FileHash] == 0 {
-			result.TargetPages = append(result.TargetPages, entities.PageWithDeadHash{
-				Page:        page.Page,
-				FSID:        &page.FSID,
-				HasDeadHash: hasDeadHash,
-			})
+			result.TargetPages = append(result.TargetPages, preview)
 		}
 	}
 
-	slices.SortStableFunc(result.OriginPages, func(a, b entities.PageWithDeadHash) int {
+	pageSortFunc := func(a, b entities.BFFPreviewPage) int {
 		return a.PageNumber - b.PageNumber
-	})
-	slices.SortStableFunc(result.BothPages, func(a, b entities.PageWithDeadHash) int {
-		return a.PageNumber - b.PageNumber
-	})
-	slices.SortStableFunc(result.TargetPages, func(a, b entities.PageWithDeadHash) int {
-		return a.PageNumber - b.PageNumber
-	})
+	}
+
+	slices.SortStableFunc(result.OriginPages, pageSortFunc)
+	slices.SortStableFunc(result.BothPages, pageSortFunc)
+	slices.SortStableFunc(result.TargetPages, pageSortFunc)
 
 	return result, nil
 }

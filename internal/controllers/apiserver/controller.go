@@ -74,7 +74,7 @@ type exportUseCases interface {
 type deduplicateUseCases interface {
 	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]entities.DeduplicateArchiveResult, error)
 	BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]entities.DeduplicateBookResult, error)
-	UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.PageWithDeadHash, error)
+	UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.BFFPreviewPage, error)
 	BooksByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) ([]entities.BookWithPreviewPage, error)
 
 	CreateDeadHashByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) error
