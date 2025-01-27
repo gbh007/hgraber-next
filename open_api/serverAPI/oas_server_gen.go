@@ -236,12 +236,25 @@ type Handler interface {
 	//
 	// POST /api/fs/list
 	APIFsListPost(ctx context.Context, req *APIFsListPostReq) (APIFsListPostRes, error)
+	// APIFsRemoveMismatchPost implements POST /api/fs/remove-mismatch operation.
+	//
+	// Запускает задачу удаления не совпавших файлов между
+	// базой данных и файловым хранилищем.
+	//
+	// POST /api/fs/remove-mismatch
+	APIFsRemoveMismatchPost(ctx context.Context, req *APIFsRemoveMismatchPostReq) (APIFsRemoveMismatchPostRes, error)
 	// APIFsUpdatePost implements POST /api/fs/update operation.
 	//
 	// Изменение настроек файловой системы.
 	//
 	// POST /api/fs/update
 	APIFsUpdatePost(ctx context.Context, req *FileSystemInfo) (APIFsUpdatePostRes, error)
+	// APIFsValidatePost implements POST /api/fs/validate operation.
+	//
+	// Запускает валидацию файлов на файловой системе.
+	//
+	// POST /api/fs/validate
+	APIFsValidatePost(ctx context.Context, req *APIFsValidatePostReq) (APIFsValidatePostRes, error)
 	// APILabelDeletePost implements POST /api/label/delete operation.
 	//
 	// Удаление метки на книгу или страницу.

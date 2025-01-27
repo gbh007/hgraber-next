@@ -140,7 +140,7 @@ func Serve() {
 	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorageAdapter)
 	taskUseCases := taskhandler.New(logger, tmpStorage, deduplicateUseCases, cleanupUseCases)
 	rebuilderUseCases := rebuilder.New(logger, tracer, storage)
-	fsUseCases := filesystem.New(storage, fileStorageAdapter)
+	fsUseCases := filesystem.New(logger, storage, fileStorageAdapter, tmpStorage)
 	bffUseCases := bff.New(logger, storage)
 
 	metricProvider := metrics.MetricProvider{}
@@ -152,6 +152,7 @@ func Serve() {
 		workermanager.NewHasher(fileUseCases, logger, tracer, cfg.Workers.Hasher, metricProvider),
 		workermanager.NewExporter(exportUseCases, logger, tracer, cfg.Workers.Exporter, metricProvider),
 		workermanager.NewTasker(tmpStorage, logger, tracer, cfg.Workers.Tasker, metricProvider),
+		workermanager.NewFileValidator(fsUseCases, logger, tracer, cfg.Workers.FileValidator, metricProvider),
 	)
 	asyncController.RegisterRunner(workersController)
 

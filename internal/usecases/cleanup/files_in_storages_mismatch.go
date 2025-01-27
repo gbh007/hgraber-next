@@ -122,8 +122,8 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UU
 		taskResult.EndStage()
 
 		taskResult.SetResult(fmt.Sprintf(
-			"remove from fs: %d remove from db: %d",
-			len(fileNotInDB), len(fileNotInFS),
+			"fs id: %s\nremove from fs: %d remove from db: %d",
+			fsID.String(), len(fileNotInDB), len(fileNotInFS),
 		))
 	}), nil
 }

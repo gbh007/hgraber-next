@@ -3424,6 +3424,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FileSystemInfo"
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         401:
           description: Пользователь не авторизован
           content:
@@ -3569,7 +3575,7 @@ paths:
         204:
           description: Успешное удаление
         400:
-          description: Некорректный запрос данных
+          description: Некорректный запрос
           content:
             application/json:
               schema:
@@ -3655,6 +3661,106 @@ paths:
                       required:
                         - info
                         - is_legacy
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/fs/validate:
+    post:
+      description: Запускает валидацию файлов на файловой системе
+      summary: Запускает валидацию файлов на файловой системе
+      tags:
+        - fs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID ФС
+              required:
+                - id
+      responses:
+        204:
+          description: Процесс запущен
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/fs/remove-mismatch:
+    post:
+      description: Запускает задачу удаления не совпавших файлов между базой данных и файловым хранилищем
+      summary: Запускает задачу удаления не синхронизированных файлов
+      tags:
+        - fs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID ФС
+              required:
+                - id
+      responses:
+        204:
+          description: Задача запущена
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         401:
           description: Пользователь не авторизован
           content:

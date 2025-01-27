@@ -149,8 +149,16 @@ type APIFsListPostRes interface {
 	aPIFsListPostRes()
 }
 
+type APIFsRemoveMismatchPostRes interface {
+	aPIFsRemoveMismatchPostRes()
+}
+
 type APIFsUpdatePostRes interface {
 	aPIFsUpdatePostRes()
+}
+
+type APIFsValidatePostRes interface {
+	aPIFsValidatePostRes()
 }
 
 type APILabelDeletePostRes interface {

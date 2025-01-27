@@ -1116,6 +1116,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
+					case 'r': // Prefix: "remove-mismatch"
+						origElem := elem
+						if l := len("remove-mismatch"); len(elem) >= l && elem[0:l] == "remove-mismatch" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIFsRemoveMismatchPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					case 'u': // Prefix: "update"
 						origElem := elem
 						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
@@ -1129,6 +1150,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							switch r.Method {
 							case "POST":
 								s.handleAPIFsUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'v': // Prefix: "validate"
+						origElem := elem
+						if l := len("validate"); len(elem) >= l && elem[0:l] == "validate" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIFsValidatePostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "POST")
 							}
@@ -2941,6 +2983,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
+					case 'r': // Prefix: "remove-mismatch"
+						origElem := elem
+						if l := len("remove-mismatch"); len(elem) >= l && elem[0:l] == "remove-mismatch" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIFsRemoveMismatchPostOperation
+								r.summary = "Запускает задачу удаления не синхронизированных файлов"
+								r.operationID = ""
+								r.pathPattern = "/api/fs/remove-mismatch"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					case 'u': // Prefix: "update"
 						origElem := elem
 						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
@@ -2957,6 +3024,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.summary = "Изменение настроек файловой системы"
 								r.operationID = ""
 								r.pathPattern = "/api/fs/update"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'v': // Prefix: "validate"
+						origElem := elem
+						if l := len("validate"); len(elem) >= l && elem[0:l] == "validate" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIFsValidatePostOperation
+								r.summary = "Запускает валидацию файлов на файловой системе"
+								r.operationID = ""
+								r.pathPattern = "/api/fs/validate"
 								r.args = args
 								r.count = 0
 								return r, true

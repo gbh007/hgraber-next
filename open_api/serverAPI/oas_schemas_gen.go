@@ -2717,6 +2717,10 @@ type APIFsDeletePostUnauthorized ErrorResponse
 
 func (*APIFsDeletePostUnauthorized) aPIFsDeletePostRes() {}
 
+type APIFsGetPostBadRequest ErrorResponse
+
+func (*APIFsGetPostBadRequest) aPIFsGetPostRes() {}
+
 type APIFsGetPostForbidden ErrorResponse
 
 func (*APIFsGetPostForbidden) aPIFsGetPostRes() {}
@@ -2747,6 +2751,10 @@ func (s *APIFsGetPostReq) SetID(val uuid.UUID) {
 type APIFsGetPostUnauthorized ErrorResponse
 
 func (*APIFsGetPostUnauthorized) aPIFsGetPostRes() {}
+
+type APIFsListPostBadRequest ErrorResponse
+
+func (*APIFsListPostBadRequest) aPIFsListPostRes() {}
 
 type APIFsListPostForbidden ErrorResponse
 
@@ -2868,6 +2876,42 @@ type APIFsListPostUnauthorized ErrorResponse
 
 func (*APIFsListPostUnauthorized) aPIFsListPostRes() {}
 
+type APIFsRemoveMismatchPostBadRequest ErrorResponse
+
+func (*APIFsRemoveMismatchPostBadRequest) aPIFsRemoveMismatchPostRes() {}
+
+type APIFsRemoveMismatchPostForbidden ErrorResponse
+
+func (*APIFsRemoveMismatchPostForbidden) aPIFsRemoveMismatchPostRes() {}
+
+type APIFsRemoveMismatchPostInternalServerError ErrorResponse
+
+func (*APIFsRemoveMismatchPostInternalServerError) aPIFsRemoveMismatchPostRes() {}
+
+// APIFsRemoveMismatchPostNoContent is response for APIFsRemoveMismatchPost operation.
+type APIFsRemoveMismatchPostNoContent struct{}
+
+func (*APIFsRemoveMismatchPostNoContent) aPIFsRemoveMismatchPostRes() {}
+
+type APIFsRemoveMismatchPostReq struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIFsRemoveMismatchPostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIFsRemoveMismatchPostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIFsRemoveMismatchPostUnauthorized ErrorResponse
+
+func (*APIFsRemoveMismatchPostUnauthorized) aPIFsRemoveMismatchPostRes() {}
+
 type APIFsUpdatePostBadRequest ErrorResponse
 
 func (*APIFsUpdatePostBadRequest) aPIFsUpdatePostRes() {}
@@ -2892,6 +2936,42 @@ func (*APIFsUpdatePostNotFound) aPIFsUpdatePostRes() {}
 type APIFsUpdatePostUnauthorized ErrorResponse
 
 func (*APIFsUpdatePostUnauthorized) aPIFsUpdatePostRes() {}
+
+type APIFsValidatePostBadRequest ErrorResponse
+
+func (*APIFsValidatePostBadRequest) aPIFsValidatePostRes() {}
+
+type APIFsValidatePostForbidden ErrorResponse
+
+func (*APIFsValidatePostForbidden) aPIFsValidatePostRes() {}
+
+type APIFsValidatePostInternalServerError ErrorResponse
+
+func (*APIFsValidatePostInternalServerError) aPIFsValidatePostRes() {}
+
+// APIFsValidatePostNoContent is response for APIFsValidatePost operation.
+type APIFsValidatePostNoContent struct{}
+
+func (*APIFsValidatePostNoContent) aPIFsValidatePostRes() {}
+
+type APIFsValidatePostReq struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIFsValidatePostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIFsValidatePostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIFsValidatePostUnauthorized ErrorResponse
+
+func (*APIFsValidatePostUnauthorized) aPIFsValidatePostRes() {}
 
 type APILabelDeletePostBadRequest ErrorResponse
 

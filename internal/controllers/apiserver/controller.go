@@ -90,6 +90,7 @@ type deduplicateUseCases interface {
 type taskUseCases interface {
 	RunTask(ctx context.Context, code entities.TaskCode) error
 	TaskResults(ctx context.Context) ([]*entities.TaskResult, error)
+	RemoveFilesInFSMismatch(ctx context.Context, fsID uuid.UUID) error
 }
 
 type rebuilderUseCases interface {
@@ -104,6 +105,7 @@ type fsUseCases interface {
 	NewFileStorage(ctx context.Context, fs entities.FileStorageSystem) (uuid.UUID, error)
 	UpdateFileStorage(ctx context.Context, fs entities.FileStorageSystem) error
 	DeleteFileStorage(ctx context.Context, id uuid.UUID) error
+	ValidateFS(ctx context.Context, fsID uuid.UUID) error
 }
 
 type bffUseCases interface {

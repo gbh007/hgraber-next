@@ -352,12 +352,31 @@ func (UnimplementedHandler) APIFsListPost(ctx context.Context, req *APIFsListPos
 	return r, ht.ErrNotImplemented
 }
 
+// APIFsRemoveMismatchPost implements POST /api/fs/remove-mismatch operation.
+//
+// Запускает задачу удаления не совпавших файлов между
+// базой данных и файловым хранилищем.
+//
+// POST /api/fs/remove-mismatch
+func (UnimplementedHandler) APIFsRemoveMismatchPost(ctx context.Context, req *APIFsRemoveMismatchPostReq) (r APIFsRemoveMismatchPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIFsUpdatePost implements POST /api/fs/update operation.
 //
 // Изменение настроек файловой системы.
 //
 // POST /api/fs/update
 func (UnimplementedHandler) APIFsUpdatePost(ctx context.Context, req *FileSystemInfo) (r APIFsUpdatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIFsValidatePost implements POST /api/fs/validate operation.
+//
+// Запускает валидацию файлов на файловой системе.
+//
+// POST /api/fs/validate
+func (UnimplementedHandler) APIFsValidatePost(ctx context.Context, req *APIFsValidatePostReq) (r APIFsValidatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

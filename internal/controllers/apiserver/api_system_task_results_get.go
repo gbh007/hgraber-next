@@ -58,12 +58,6 @@ func (c *Controller) APISystemTaskResultsGet(ctx context.Context) (serverAPI.API
 				Name:        "Удалить ни с чем не связанные файлы",
 				Description: optString("Удаляет из БД и файловой системы файлы, которые остались без привязки к страницам"),
 			},
-			// FIXME: удалить если не будет дальнейших модификаций
-			// {
-			// 	Code:        "remove_mismatch_files",
-			// 	Name:        "Удалить не синхронизированные (FS/DB) файлы",
-			// 	Description: optString("Удаляет файлы что не совпадают в БД и файловой системе"),
-			// },
 			{
 				Code:        "fill_dead_hashes",
 				Name:        "Наполнить мертвые хеши",
