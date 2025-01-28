@@ -3780,6 +3780,61 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/fs/transfer:
+    post:
+      description: Запускает перенос файлов между файловыми системами
+      summary: Запускает перенос файлов между файловыми системами
+      tags:
+        - fs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  format: uuid
+                  description: ID файловой системы с которой переносить
+                to:
+                  type: string
+                  format: uuid
+                  description: ID файловой системы на которую переносить
+                only_preview_pages:
+                  type: boolean
+                  description: Перенести только страницы для превью
+              required:
+                - from
+                - to
+      responses:
+        204:
+          description: Процесс запущен
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     SystemInfo:

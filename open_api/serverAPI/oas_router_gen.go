@@ -1137,6 +1137,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
+					case 't': // Prefix: "transfer"
+						origElem := elem
+						if l := len("transfer"); len(elem) >= l && elem[0:l] == "transfer" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIFsTransferPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					case 'u': // Prefix: "update"
 						origElem := elem
 						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
@@ -2999,6 +3020,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.summary = "Запускает задачу удаления не синхронизированных файлов"
 								r.operationID = ""
 								r.pathPattern = "/api/fs/remove-mismatch"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 't': // Prefix: "transfer"
+						origElem := elem
+						if l := len("transfer"); len(elem) >= l && elem[0:l] == "transfer" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIFsTransferPostOperation
+								r.summary = "Запускает перенос файлов между файловыми системами"
+								r.operationID = ""
+								r.pathPattern = "/api/fs/transfer"
 								r.args = args
 								r.count = 0
 								return r, true

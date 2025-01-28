@@ -2912,6 +2912,66 @@ type APIFsRemoveMismatchPostUnauthorized ErrorResponse
 
 func (*APIFsRemoveMismatchPostUnauthorized) aPIFsRemoveMismatchPostRes() {}
 
+type APIFsTransferPostBadRequest ErrorResponse
+
+func (*APIFsTransferPostBadRequest) aPIFsTransferPostRes() {}
+
+type APIFsTransferPostForbidden ErrorResponse
+
+func (*APIFsTransferPostForbidden) aPIFsTransferPostRes() {}
+
+type APIFsTransferPostInternalServerError ErrorResponse
+
+func (*APIFsTransferPostInternalServerError) aPIFsTransferPostRes() {}
+
+// APIFsTransferPostNoContent is response for APIFsTransferPost operation.
+type APIFsTransferPostNoContent struct{}
+
+func (*APIFsTransferPostNoContent) aPIFsTransferPostRes() {}
+
+type APIFsTransferPostReq struct {
+	// ID файловой системы с которой переносить.
+	From uuid.UUID `json:"from"`
+	// ID файловой системы на которую переносить.
+	To uuid.UUID `json:"to"`
+	// Перенести только страницы для превью.
+	OnlyPreviewPages OptBool `json:"only_preview_pages"`
+}
+
+// GetFrom returns the value of From.
+func (s *APIFsTransferPostReq) GetFrom() uuid.UUID {
+	return s.From
+}
+
+// GetTo returns the value of To.
+func (s *APIFsTransferPostReq) GetTo() uuid.UUID {
+	return s.To
+}
+
+// GetOnlyPreviewPages returns the value of OnlyPreviewPages.
+func (s *APIFsTransferPostReq) GetOnlyPreviewPages() OptBool {
+	return s.OnlyPreviewPages
+}
+
+// SetFrom sets the value of From.
+func (s *APIFsTransferPostReq) SetFrom(val uuid.UUID) {
+	s.From = val
+}
+
+// SetTo sets the value of To.
+func (s *APIFsTransferPostReq) SetTo(val uuid.UUID) {
+	s.To = val
+}
+
+// SetOnlyPreviewPages sets the value of OnlyPreviewPages.
+func (s *APIFsTransferPostReq) SetOnlyPreviewPages(val OptBool) {
+	s.OnlyPreviewPages = val
+}
+
+type APIFsTransferPostUnauthorized ErrorResponse
+
+func (*APIFsTransferPostUnauthorized) aPIFsTransferPostRes() {}
+
 type APIFsUpdatePostBadRequest ErrorResponse
 
 func (*APIFsUpdatePostBadRequest) aPIFsUpdatePostRes() {}

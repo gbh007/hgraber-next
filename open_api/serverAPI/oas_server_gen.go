@@ -243,6 +243,12 @@ type Handler interface {
 	//
 	// POST /api/fs/remove-mismatch
 	APIFsRemoveMismatchPost(ctx context.Context, req *APIFsRemoveMismatchPostReq) (APIFsRemoveMismatchPostRes, error)
+	// APIFsTransferPost implements POST /api/fs/transfer operation.
+	//
+	// Запускает перенос файлов между файловыми системами.
+	//
+	// POST /api/fs/transfer
+	APIFsTransferPost(ctx context.Context, req *APIFsTransferPostReq) (APIFsTransferPostRes, error)
 	// APIFsUpdatePost implements POST /api/fs/update operation.
 	//
 	// Изменение настроек файловой системы.

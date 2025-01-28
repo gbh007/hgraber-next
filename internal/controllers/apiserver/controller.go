@@ -106,6 +106,7 @@ type fsUseCases interface {
 	UpdateFileStorage(ctx context.Context, fs entities.FileStorageSystem) error
 	DeleteFileStorage(ctx context.Context, id uuid.UUID) error
 	ValidateFS(ctx context.Context, fsID uuid.UUID) error
+	TransferFSFiles(ctx context.Context, from, to uuid.UUID, onlyPreview bool) error
 }
 
 type bffUseCases interface {

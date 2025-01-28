@@ -253,7 +253,7 @@ func (d *Database) UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid
 	builder := squirrel.Update("files").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
-			"fs_id": fsID,
+			"fs_id": model.UUIDToDB(fsID),
 		}).
 		Where(squirrel.Eq{
 			"id": fileID,
