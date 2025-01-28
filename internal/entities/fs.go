@@ -37,3 +37,8 @@ type FSFilesInfo struct {
 	Count int64
 	Size  int64
 }
+
+type FileTransfer struct {
+	FileID uuid.UUID
+	FSID   uuid.UUID
+}

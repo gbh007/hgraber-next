@@ -153,6 +153,7 @@ func Serve() {
 		workermanager.NewExporter(exportUseCases, logger, tracer, cfg.Workers.Exporter, metricProvider),
 		workermanager.NewTasker(tmpStorage, logger, tracer, cfg.Workers.Tasker, metricProvider),
 		workermanager.NewFileValidator(fsUseCases, logger, tracer, cfg.Workers.FileValidator, metricProvider),
+		workermanager.NewFileTransfer(fsUseCases, logger, tracer, cfg.Workers.FileTransferer, metricProvider),
 	)
 	asyncController.RegisterRunner(workersController)
 

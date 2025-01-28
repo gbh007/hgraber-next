@@ -18,6 +18,7 @@ type storage interface {
 	FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData bool) (entities.FSFilesInfo, error)
 
 	File(ctx context.Context, id uuid.UUID) (entities.File, error)
+	UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid.UUID) error
 	FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error)
 	UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, invalidData bool) error
 }
@@ -26,11 +27,16 @@ type fileStorage interface {
 	FSList(ctx context.Context) ([]entities.FSWithStatus, error)
 	FSChange(ctx context.Context, fsID uuid.UUID, deleted bool) error
 	Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
+	Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error
+	Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) error
 }
 
 type tmpStorage interface {
 	AddToValidate(ids []uuid.UUID)
 	ValidateList() []uuid.UUID
+
+	AddToFileTransfer(transfers []entities.FileTransfer)
+	FileTransferList() []entities.FileTransfer
 }
 
 type UseCase struct {
