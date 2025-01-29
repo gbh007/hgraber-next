@@ -350,3 +350,70 @@ func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidD
 		Size:  size.Int64,
 	}, nil
 }
+
+func (d *Database) FileIDsByFilter(ctx context.Context, filter entities.FileFilter) ([]uuid.UUID, error) {
+	builder := squirrel.Select("id").
+		PlaceholderFormat(squirrel.Dollar).
+		From("files")
+
+	if filter.FSID != nil {
+		builder = builder.Where(squirrel.Eq{
+			"fs_id": model.UUIDToDB(*filter.FSID),
+		})
+	}
+
+	if filter.BookID != nil || filter.PageNumber != nil {
+		subBuilder := squirrel.Select("1").
+			PlaceholderFormat(squirrel.Question). // Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			From("pages").
+			Where(squirrel.Expr(`file_id = files.id`))
+
+		if filter.BookID != nil {
+			subBuilder = subBuilder.Where(squirrel.Eq{
+				"book_id": *filter.BookID,
+			})
+		}
+
+		if filter.PageNumber != nil {
+			subBuilder = subBuilder.Where(squirrel.Eq{
+				"page_number": *filter.PageNumber,
+			})
+		}
+
+		subQuery, subArgs, err := subBuilder.ToSql()
+		if err != nil {
+			return nil, fmt.Errorf("build pages sub query: %w", err)
+		}
+
+		builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
+	}
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec: %w", err)
+	}
+
+	defer rows.Close()
+
+	ids := make([]uuid.UUID, 0, 10)
+
+	for rows.Next() {
+		var id uuid.UUID
+
+		err = rows.Scan(&id)
+		if err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+
+		ids = append(ids, id)
+	}
+
+	return ids, nil
+}

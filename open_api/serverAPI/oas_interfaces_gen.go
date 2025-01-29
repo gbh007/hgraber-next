@@ -153,6 +153,10 @@ type APIFsRemoveMismatchPostRes interface {
 	aPIFsRemoveMismatchPostRes()
 }
 
+type APIFsTransferBookPostRes interface {
+	aPIFsTransferBookPostRes()
+}
+
 type APIFsTransferPostRes interface {
 	aPIFsTransferPostRes()
 }

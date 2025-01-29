@@ -487,6 +487,20 @@ func encodeAPIFsRemoveMismatchPostRequest(
 	return nil
 }
 
+func encodeAPIFsTransferBookPostRequest(
+	req *APIFsTransferBookPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIFsTransferPostRequest(
 	req *APIFsTransferPostReq,
 	r *http.Request,

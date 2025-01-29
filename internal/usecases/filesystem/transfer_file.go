@@ -11,9 +11,37 @@ import (
 )
 
 func (uc *UseCase) TransferFSFiles(ctx context.Context, from, to uuid.UUID, onlyPreview bool) error {
-	_ = onlyPreview // FIXME: поддержать логику переноса только превью.
+	filter := entities.FileFilter{
+		FSID: &from,
+	}
 
-	ids, err := uc.storage.FileIDsByFS(ctx, from)
+	if onlyPreview {
+		p := entities.PageNumberForPreview
+		filter.PageNumber = &p
+	}
+
+	ids, err := uc.storage.FileIDsByFilter(ctx, filter)
+	if err != nil {
+		return err
+	}
+
+	uc.tmpStorage.AddToFileTransfer(pkg.Map(ids, func(fileID uuid.UUID) entities.FileTransfer {
+		return entities.FileTransfer{
+			FileID: fileID,
+			FSID:   to,
+		}
+	}))
+
+	return nil
+}
+
+func (uc *UseCase) TransferFSFilesByBook(ctx context.Context, bookID, to uuid.UUID, pageNumber *int) error {
+	filter := entities.FileFilter{
+		BookID:     &bookID,
+		PageNumber: pageNumber,
+	}
+
+	ids, err := uc.storage.FileIDsByFilter(ctx, filter)
 	if err != nil {
 		return err
 	}

@@ -44,6 +44,7 @@ const (
 	APIFsGetPostOperation                                OperationName = "APIFsGetPost"
 	APIFsListPostOperation                               OperationName = "APIFsListPost"
 	APIFsRemoveMismatchPostOperation                     OperationName = "APIFsRemoveMismatchPost"
+	APIFsTransferBookPostOperation                       OperationName = "APIFsTransferBookPost"
 	APIFsTransferPostOperation                           OperationName = "APIFsTransferPost"
 	APIFsUpdatePostOperation                             OperationName = "APIFsUpdatePost"
 	APIFsValidatePostOperation                           OperationName = "APIFsValidatePost"

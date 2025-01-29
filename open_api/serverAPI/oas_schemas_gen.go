@@ -2912,6 +2912,78 @@ type APIFsRemoveMismatchPostUnauthorized ErrorResponse
 
 func (*APIFsRemoveMismatchPostUnauthorized) aPIFsRemoveMismatchPostRes() {}
 
+type APIFsTransferBookPostBadRequest ErrorResponse
+
+func (*APIFsTransferBookPostBadRequest) aPIFsTransferBookPostRes() {}
+
+type APIFsTransferBookPostForbidden ErrorResponse
+
+func (*APIFsTransferBookPostForbidden) aPIFsTransferBookPostRes() {}
+
+type APIFsTransferBookPostInternalServerError ErrorResponse
+
+func (*APIFsTransferBookPostInternalServerError) aPIFsTransferBookPostRes() {}
+
+// APIFsTransferBookPostNoContent is response for APIFsTransferBookPost operation.
+type APIFsTransferBookPostNoContent struct{}
+
+func (*APIFsTransferBookPostNoContent) aPIFsTransferBookPostRes() {}
+
+type APIFsTransferBookPostReq struct {
+	// ID книги которую переносить.
+	BookID uuid.UUID `json:"book_id"`
+	// ID файловой системы на которую переносить.
+	To uuid.UUID `json:"to"`
+	// Номер страницы для переноса.
+	PageNumber OptInt `json:"page_number"`
+	// Перенести только страницу для превью.
+	OnlyPreviewPages OptBool `json:"only_preview_pages"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIFsTransferBookPostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetTo returns the value of To.
+func (s *APIFsTransferBookPostReq) GetTo() uuid.UUID {
+	return s.To
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIFsTransferBookPostReq) GetPageNumber() OptInt {
+	return s.PageNumber
+}
+
+// GetOnlyPreviewPages returns the value of OnlyPreviewPages.
+func (s *APIFsTransferBookPostReq) GetOnlyPreviewPages() OptBool {
+	return s.OnlyPreviewPages
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIFsTransferBookPostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetTo sets the value of To.
+func (s *APIFsTransferBookPostReq) SetTo(val uuid.UUID) {
+	s.To = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIFsTransferBookPostReq) SetPageNumber(val OptInt) {
+	s.PageNumber = val
+}
+
+// SetOnlyPreviewPages sets the value of OnlyPreviewPages.
+func (s *APIFsTransferBookPostReq) SetOnlyPreviewPages(val OptBool) {
+	s.OnlyPreviewPages = val
+}
+
+type APIFsTransferBookPostUnauthorized ErrorResponse
+
+func (*APIFsTransferBookPostUnauthorized) aPIFsTransferBookPostRes() {}
+
 type APIFsTransferPostBadRequest ErrorResponse
 
 func (*APIFsTransferPostBadRequest) aPIFsTransferPostRes() {}

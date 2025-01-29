@@ -362,6 +362,15 @@ func (UnimplementedHandler) APIFsRemoveMismatchPost(ctx context.Context, req *AP
 	return r, ht.ErrNotImplemented
 }
 
+// APIFsTransferBookPost implements POST /api/fs/transfer/book operation.
+//
+// Запускает перенос файлов между файловыми системами.
+//
+// POST /api/fs/transfer/book
+func (UnimplementedHandler) APIFsTransferBookPost(ctx context.Context, req *APIFsTransferBookPostReq) (r APIFsTransferBookPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIFsTransferPost implements POST /api/fs/transfer operation.
 //
 // Запускает перенос файлов между файловыми системами.

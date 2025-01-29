@@ -53,3 +53,9 @@ type SizeWithCount struct {
 	Count int64
 	Size  int64
 }
+
+type FileFilter struct {
+	FSID       *uuid.UUID
+	BookID     *uuid.UUID
+	PageNumber *int
+}

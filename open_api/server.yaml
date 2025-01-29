@@ -3835,6 +3835,64 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/fs/transfer/book:
+    post:
+      description: Запускает перенос файлов между файловыми системами
+      summary: Запускает перенос файлов между файловыми системами
+      tags:
+        - fs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: string
+                  format: uuid
+                  description: ID книги которую переносить
+                to:
+                  type: string
+                  format: uuid
+                  description: ID файловой системы на которую переносить
+                page_number:
+                  type: integer
+                  description: Номер страницы для переноса
+                only_preview_pages:
+                  type: boolean
+                  description: Перенести только страницу для превью
+              required:
+                - book_id
+                - to
+      responses:
+        204:
+          description: Процесс запущен
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     SystemInfo:

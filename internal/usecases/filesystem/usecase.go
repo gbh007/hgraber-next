@@ -21,6 +21,8 @@ type storage interface {
 	UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid.UUID) error
 	FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error)
 	UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, invalidData bool) error
+
+	FileIDsByFilter(ctx context.Context, filter entities.FileFilter) ([]uuid.UUID, error)
 }
 
 type fileStorage interface {
