@@ -239,3 +239,15 @@ func convertStatusFlagToAPI(f entities.StatusFlag) serverAPI.OptBool {
 		Set:   f != entities.UnknownStatusFlag,
 	}
 }
+
+func convertFSDBFilesInfoToAPI(raw *entities.FSFilesInfo) serverAPI.OptFSDBFilesInfo {
+	if raw == nil {
+		return serverAPI.OptFSDBFilesInfo{}
+	}
+
+	return serverAPI.NewOptFSDBFilesInfo(serverAPI.FSDBFilesInfo{
+		Count:         raw.Count,
+		Size:          raw.Size,
+		SizeFormatted: entities.PrettySize(raw.Size),
+	})
+}

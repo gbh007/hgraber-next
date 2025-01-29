@@ -305,7 +305,7 @@ func (d *Database) File(ctx context.Context, id uuid.UUID) (entities.File, error
 	return out, nil
 }
 
-func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData bool) (entities.FSFilesInfo, error) {
+func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (entities.FSFilesInfo, error) {
 	builder := squirrel.Select(
 		"COUNT(*)",
 		"SUM(\"size\")",
@@ -327,6 +327,12 @@ func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidD
 		builder = builder.Where(squirrel.Eq{
 			"fs_id": fsID,
 		})
+	}
+
+	if onlyDetached {
+		builder = builder.Where(
+			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE file_id = files.id)`),
+		)
 	}
 
 	query, args, err := builder.ToSql()

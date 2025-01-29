@@ -3641,23 +3641,11 @@ paths:
                           type: boolean
                           description: Признак того что это ФС старого типа
                         db_files_info:
-                          type: object
-                          properties:
-                            count:
-                              type: integer
-                              format: int64
-                              description: Количество файлов
-                            size:
-                              type: integer
-                              format: int64
-                              description: Размер файлов
-                            size_formatted:
-                              type: string
-                              description: Размер файлов в человеко читаемом виде
-                          required:
-                            - count
-                            - size
-                            - size_formatted
+                          $ref: "#/components/schemas/FSDBFilesInfo"
+                        db_invalid_files_info:
+                          $ref: "#/components/schemas/FSDBFilesInfo"
+                        db_detached_files_info:
+                          $ref: "#/components/schemas/FSDBFilesInfo"
                       required:
                         - info
                         - is_legacy
@@ -4471,6 +4459,26 @@ components:
         - deduplicate_priority
         - highway_enabled
         - created_at
+
+    FSDBFilesInfo:
+      type: object
+      description: Информация о размерах файлов и их количестве
+      properties:
+        count:
+          type: integer
+          format: int64
+          description: Количество файлов
+        size:
+          type: integer
+          format: int64
+          description: Размер файлов
+        size_formatted:
+          type: string
+          description: Размер файлов в человеко читаемом виде
+      required:
+        - count
+        - size
+        - size_formatted
 
   securitySchemes:
     headerAuth:

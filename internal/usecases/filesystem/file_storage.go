@@ -19,12 +19,26 @@ func (uc *UseCase) FileStoragesWithStatus(ctx context.Context, includeDBInfo boo
 
 	if includeDBInfo {
 		for i, storage := range storages {
-			info, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, false)
+			info, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, false, false)
 			if err != nil {
 				return nil, fmt.Errorf("storage: get files info (%s): %w", storage.Info.ID.String(), err)
 			}
 
 			storages[i].DBFile = &info
+
+			invalidInfo, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, true, false)
+			if err != nil {
+				return nil, fmt.Errorf("storage: get invalid files info (%s): %w", storage.Info.ID.String(), err)
+			}
+
+			storages[i].DBInvalidFile = &invalidInfo
+
+			detachedInfo, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, false, true)
+			if err != nil {
+				return nil, fmt.Errorf("storage: get detached files info (%s): %w", storage.Info.ID.String(), err)
+			}
+
+			storages[i].DBDetachedFile = &detachedInfo
 		}
 	}
 

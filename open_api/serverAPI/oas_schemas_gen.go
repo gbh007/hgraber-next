@@ -2784,8 +2784,10 @@ func (*APIFsListPostOK) aPIFsListPostRes() {}
 type APIFsListPostOKFileSystemsItem struct {
 	Info FileSystemInfo `json:"info"`
 	// Признак того что это ФС старого типа.
-	IsLegacy    bool                                         `json:"is_legacy"`
-	DbFilesInfo OptAPIFsListPostOKFileSystemsItemDbFilesInfo `json:"db_files_info"`
+	IsLegacy            bool             `json:"is_legacy"`
+	DbFilesInfo         OptFSDBFilesInfo `json:"db_files_info"`
+	DbInvalidFilesInfo  OptFSDBFilesInfo `json:"db_invalid_files_info"`
+	DbDetachedFilesInfo OptFSDBFilesInfo `json:"db_detached_files_info"`
 }
 
 // GetInfo returns the value of Info.
@@ -2799,8 +2801,18 @@ func (s *APIFsListPostOKFileSystemsItem) GetIsLegacy() bool {
 }
 
 // GetDbFilesInfo returns the value of DbFilesInfo.
-func (s *APIFsListPostOKFileSystemsItem) GetDbFilesInfo() OptAPIFsListPostOKFileSystemsItemDbFilesInfo {
+func (s *APIFsListPostOKFileSystemsItem) GetDbFilesInfo() OptFSDBFilesInfo {
 	return s.DbFilesInfo
+}
+
+// GetDbInvalidFilesInfo returns the value of DbInvalidFilesInfo.
+func (s *APIFsListPostOKFileSystemsItem) GetDbInvalidFilesInfo() OptFSDBFilesInfo {
+	return s.DbInvalidFilesInfo
+}
+
+// GetDbDetachedFilesInfo returns the value of DbDetachedFilesInfo.
+func (s *APIFsListPostOKFileSystemsItem) GetDbDetachedFilesInfo() OptFSDBFilesInfo {
+	return s.DbDetachedFilesInfo
 }
 
 // SetInfo sets the value of Info.
@@ -2814,47 +2826,18 @@ func (s *APIFsListPostOKFileSystemsItem) SetIsLegacy(val bool) {
 }
 
 // SetDbFilesInfo sets the value of DbFilesInfo.
-func (s *APIFsListPostOKFileSystemsItem) SetDbFilesInfo(val OptAPIFsListPostOKFileSystemsItemDbFilesInfo) {
+func (s *APIFsListPostOKFileSystemsItem) SetDbFilesInfo(val OptFSDBFilesInfo) {
 	s.DbFilesInfo = val
 }
 
-type APIFsListPostOKFileSystemsItemDbFilesInfo struct {
-	// Количество файлов.
-	Count int64 `json:"count"`
-	// Размер файлов.
-	Size int64 `json:"size"`
-	// Размер файлов в человеко читаемом виде.
-	SizeFormatted string `json:"size_formatted"`
+// SetDbInvalidFilesInfo sets the value of DbInvalidFilesInfo.
+func (s *APIFsListPostOKFileSystemsItem) SetDbInvalidFilesInfo(val OptFSDBFilesInfo) {
+	s.DbInvalidFilesInfo = val
 }
 
-// GetCount returns the value of Count.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) GetCount() int64 {
-	return s.Count
-}
-
-// GetSize returns the value of Size.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) GetSize() int64 {
-	return s.Size
-}
-
-// GetSizeFormatted returns the value of SizeFormatted.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) GetSizeFormatted() string {
-	return s.SizeFormatted
-}
-
-// SetCount sets the value of Count.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) SetCount(val int64) {
-	s.Count = val
-}
-
-// SetSize sets the value of Size.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) SetSize(val int64) {
-	s.Size = val
-}
-
-// SetSizeFormatted sets the value of SizeFormatted.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) SetSizeFormatted(val string) {
-	s.SizeFormatted = val
+// SetDbDetachedFilesInfo sets the value of DbDetachedFilesInfo.
+func (s *APIFsListPostOKFileSystemsItem) SetDbDetachedFilesInfo(val OptFSDBFilesInfo) {
+	s.DbDetachedFilesInfo = val
 }
 
 type APIFsListPostReq struct {
@@ -6133,6 +6116,47 @@ func (s *ErrorResponse) SetDetails(val OptString) {
 	s.Details = val
 }
 
+// Информация о размерах файлов и их количестве.
+// Ref: #/components/schemas/FSDBFilesInfo
+type FSDBFilesInfo struct {
+	// Количество файлов.
+	Count int64 `json:"count"`
+	// Размер файлов.
+	Size int64 `json:"size"`
+	// Размер файлов в человеко читаемом виде.
+	SizeFormatted string `json:"size_formatted"`
+}
+
+// GetCount returns the value of Count.
+func (s *FSDBFilesInfo) GetCount() int64 {
+	return s.Count
+}
+
+// GetSize returns the value of Size.
+func (s *FSDBFilesInfo) GetSize() int64 {
+	return s.Size
+}
+
+// GetSizeFormatted returns the value of SizeFormatted.
+func (s *FSDBFilesInfo) GetSizeFormatted() string {
+	return s.SizeFormatted
+}
+
+// SetCount sets the value of Count.
+func (s *FSDBFilesInfo) SetCount(val int64) {
+	s.Count = val
+}
+
+// SetSize sets the value of Size.
+func (s *FSDBFilesInfo) SetSize(val int64) {
+	s.Size = val
+}
+
+// SetSizeFormatted sets the value of SizeFormatted.
+func (s *FSDBFilesInfo) SetSizeFormatted(val string) {
+	s.SizeFormatted = val
+}
+
 // Данные о файловой системе.
 // Ref: #/components/schemas/FileSystemInfo
 type FileSystemInfo struct {
@@ -6407,52 +6431,6 @@ func (o OptAPIBookRebuildPostReqFlags) Get() (v APIBookRebuildPostReqFlags, ok b
 
 // Or returns value if set, or given parameter if does not.
 func (o OptAPIBookRebuildPostReqFlags) Or(d APIBookRebuildPostReqFlags) APIBookRebuildPostReqFlags {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptAPIFsListPostOKFileSystemsItemDbFilesInfo returns new OptAPIFsListPostOKFileSystemsItemDbFilesInfo with value set to v.
-func NewOptAPIFsListPostOKFileSystemsItemDbFilesInfo(v APIFsListPostOKFileSystemsItemDbFilesInfo) OptAPIFsListPostOKFileSystemsItemDbFilesInfo {
-	return OptAPIFsListPostOKFileSystemsItemDbFilesInfo{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptAPIFsListPostOKFileSystemsItemDbFilesInfo is optional APIFsListPostOKFileSystemsItemDbFilesInfo.
-type OptAPIFsListPostOKFileSystemsItemDbFilesInfo struct {
-	Value APIFsListPostOKFileSystemsItemDbFilesInfo
-	Set   bool
-}
-
-// IsSet returns true if OptAPIFsListPostOKFileSystemsItemDbFilesInfo was set.
-func (o OptAPIFsListPostOKFileSystemsItemDbFilesInfo) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptAPIFsListPostOKFileSystemsItemDbFilesInfo) Reset() {
-	var v APIFsListPostOKFileSystemsItemDbFilesInfo
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptAPIFsListPostOKFileSystemsItemDbFilesInfo) SetTo(v APIFsListPostOKFileSystemsItemDbFilesInfo) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptAPIFsListPostOKFileSystemsItemDbFilesInfo) Get() (v APIFsListPostOKFileSystemsItemDbFilesInfo, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptAPIFsListPostOKFileSystemsItemDbFilesInfo) Or(d APIFsListPostOKFileSystemsItemDbFilesInfo) APIFsListPostOKFileSystemsItemDbFilesInfo {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -6867,6 +6845,52 @@ func (o OptDateTime) Get() (v time.Time, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptDateTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptFSDBFilesInfo returns new OptFSDBFilesInfo with value set to v.
+func NewOptFSDBFilesInfo(v FSDBFilesInfo) OptFSDBFilesInfo {
+	return OptFSDBFilesInfo{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptFSDBFilesInfo is optional FSDBFilesInfo.
+type OptFSDBFilesInfo struct {
+	Value FSDBFilesInfo
+	Set   bool
+}
+
+// IsSet returns true if OptFSDBFilesInfo was set.
+func (o OptFSDBFilesInfo) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptFSDBFilesInfo) Reset() {
+	var v FSDBFilesInfo
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptFSDBFilesInfo) SetTo(v FSDBFilesInfo) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptFSDBFilesInfo) Get() (v FSDBFilesInfo, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptFSDBFilesInfo) Or(d FSDBFilesInfo) FSDBFilesInfo {
 	if v, ok := o.Get(); ok {
 		return v
 	}

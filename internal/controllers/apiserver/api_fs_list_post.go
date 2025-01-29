@@ -19,20 +19,12 @@ func (c *Controller) APIFsListPost(ctx context.Context, req *serverAPI.APIFsList
 
 	return &serverAPI.APIFsListPostOK{
 		FileSystems: pkg.Map(storages, func(raw entities.FSWithStatus) serverAPI.APIFsListPostOKFileSystemsItem {
-			dbInfo := serverAPI.OptAPIFsListPostOKFileSystemsItemDbFilesInfo{}
-
-			if raw.DBFile != nil {
-				dbInfo = serverAPI.NewOptAPIFsListPostOKFileSystemsItemDbFilesInfo(serverAPI.APIFsListPostOKFileSystemsItemDbFilesInfo{
-					Count:         raw.DBFile.Count,
-					Size:          raw.DBFile.Size,
-					SizeFormatted: entities.PrettySize(raw.DBFile.Size),
-				})
-			}
-
 			return serverAPI.APIFsListPostOKFileSystemsItem{
-				Info:        convertFileSystemInfoToAPI(raw.Info),
-				IsLegacy:    raw.IsLegacy,
-				DbFilesInfo: dbInfo,
+				Info:                convertFileSystemInfoToAPI(raw.Info),
+				IsLegacy:            raw.IsLegacy,
+				DbFilesInfo:         convertFSDBFilesInfoToAPI(raw.DBFile),
+				DbInvalidFilesInfo:  convertFSDBFilesInfoToAPI(raw.DBInvalidFile),
+				DbDetachedFilesInfo: convertFSDBFilesInfoToAPI(raw.DBDetachedFile),
 			}
 		}),
 	}, nil

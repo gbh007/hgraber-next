@@ -12045,12 +12045,26 @@ func (s *APIFsListPostOKFileSystemsItem) encodeFields(e *jx.Encoder) {
 			s.DbFilesInfo.Encode(e)
 		}
 	}
+	{
+		if s.DbInvalidFilesInfo.Set {
+			e.FieldStart("db_invalid_files_info")
+			s.DbInvalidFilesInfo.Encode(e)
+		}
+	}
+	{
+		if s.DbDetachedFilesInfo.Set {
+			e.FieldStart("db_detached_files_info")
+			s.DbDetachedFilesInfo.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIFsListPostOKFileSystemsItem = [3]string{
+var jsonFieldsNameOfAPIFsListPostOKFileSystemsItem = [5]string{
 	0: "info",
 	1: "is_legacy",
 	2: "db_files_info",
+	3: "db_invalid_files_info",
+	4: "db_detached_files_info",
 }
 
 // Decode decodes APIFsListPostOKFileSystemsItem from json.
@@ -12093,6 +12107,26 @@ func (s *APIFsListPostOKFileSystemsItem) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"db_files_info\"")
+			}
+		case "db_invalid_files_info":
+			if err := func() error {
+				s.DbInvalidFilesInfo.Reset()
+				if err := s.DbInvalidFilesInfo.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"db_invalid_files_info\"")
+			}
+		case "db_detached_files_info":
+			if err := func() error {
+				s.DbDetachedFilesInfo.Reset()
+				if err := s.DbDetachedFilesInfo.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"db_detached_files_info\"")
 			}
 		default:
 			return d.Skip()
@@ -12146,136 +12180,6 @@ func (s *APIFsListPostOKFileSystemsItem) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIFsListPostOKFileSystemsItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("count")
-		e.Int64(s.Count)
-	}
-	{
-		e.FieldStart("size")
-		e.Int64(s.Size)
-	}
-	{
-		e.FieldStart("size_formatted")
-		e.Str(s.SizeFormatted)
-	}
-}
-
-var jsonFieldsNameOfAPIFsListPostOKFileSystemsItemDbFilesInfo = [3]string{
-	0: "count",
-	1: "size",
-	2: "size_formatted",
-}
-
-// Decode decodes APIFsListPostOKFileSystemsItemDbFilesInfo from json.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIFsListPostOKFileSystemsItemDbFilesInfo to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "count":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Int64()
-				s.Count = int64(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"count\"")
-			}
-		case "size":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Int64()
-				s.Size = int64(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"size\"")
-			}
-		case "size_formatted":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Str()
-				s.SizeFormatted = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"size_formatted\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIFsListPostOKFileSystemsItemDbFilesInfo")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIFsListPostOKFileSystemsItemDbFilesInfo) {
-					name = jsonFieldsNameOfAPIFsListPostOKFileSystemsItemDbFilesInfo[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIFsListPostOKFileSystemsItemDbFilesInfo) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -23729,6 +23633,136 @@ func (s *ErrorResponse) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *FSDBFilesInfo) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *FSDBFilesInfo) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("count")
+		e.Int64(s.Count)
+	}
+	{
+		e.FieldStart("size")
+		e.Int64(s.Size)
+	}
+	{
+		e.FieldStart("size_formatted")
+		e.Str(s.SizeFormatted)
+	}
+}
+
+var jsonFieldsNameOfFSDBFilesInfo = [3]string{
+	0: "count",
+	1: "size",
+	2: "size_formatted",
+}
+
+// Decode decodes FSDBFilesInfo from json.
+func (s *FSDBFilesInfo) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode FSDBFilesInfo to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "count":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int64()
+				s.Count = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"count\"")
+			}
+		case "size":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int64()
+				s.Size = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"size\"")
+			}
+		case "size_formatted":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.SizeFormatted = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"size_formatted\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode FSDBFilesInfo")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfFSDBFilesInfo) {
+					name = jsonFieldsNameOfFSDBFilesInfo[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *FSDBFilesInfo) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *FSDBFilesInfo) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *FileSystemInfo) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -24077,39 +24111,6 @@ func (s *OptAPIBookRebuildPostReqFlags) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes APIFsListPostOKFileSystemsItemDbFilesInfo as json.
-func (o OptAPIFsListPostOKFileSystemsItemDbFilesInfo) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes APIFsListPostOKFileSystemsItemDbFilesInfo from json.
-func (o *OptAPIFsListPostOKFileSystemsItemDbFilesInfo) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptAPIFsListPostOKFileSystemsItemDbFilesInfo to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptAPIFsListPostOKFileSystemsItemDbFilesInfo) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptAPIFsListPostOKFileSystemsItemDbFilesInfo) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode encodes BookFilterFilter as json.
 func (o OptBookFilterFilter) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -24409,6 +24410,39 @@ func (s OptDateTime) MarshalJSON() ([]byte, error) {
 func (s *OptDateTime) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d, json.DecodeDateTime)
+}
+
+// Encode encodes FSDBFilesInfo as json.
+func (o OptFSDBFilesInfo) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes FSDBFilesInfo from json.
+func (o *OptFSDBFilesInfo) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptFSDBFilesInfo to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptFSDBFilesInfo) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptFSDBFilesInfo) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
 }
 
 // Encode encodes int as json.
