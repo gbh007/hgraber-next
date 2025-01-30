@@ -58,12 +58,30 @@ func (UnimplementedHandler) APIFsGetGet(ctx context.Context, params APIFsGetGetP
 	return r, ht.ErrNotImplemented
 }
 
-// APIFsIdsGet implements GET /api/fs/ids operation.
+// APIFsInfoPost implements POST /api/fs/info operation.
 //
-// Получение ID всех хранимых файлов.
+// Получение информации о состоянии файловой системы.
 //
-// GET /api/fs/ids
-func (UnimplementedHandler) APIFsIdsGet(ctx context.Context) (r APIFsIdsGetRes, _ error) {
+// POST /api/fs/info
+func (UnimplementedHandler) APIFsInfoPost(ctx context.Context, req *APIFsInfoPostReq) (r APIFsInfoPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIHighwayFileIDExtGet implements GET /api/highway/file/{id}.{ext} operation.
+//
+// Получение файла через highway.
+//
+// GET /api/highway/file/{id}.{ext}
+func (UnimplementedHandler) APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (r APIHighwayFileIDExtGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIHighwayTokenCreatePost implements POST /api/highway/token/create operation.
+//
+// Создание нового токена для highway.
+//
+// POST /api/highway/token/create
+func (UnimplementedHandler) APIHighwayTokenCreatePost(ctx context.Context) (r APIHighwayTokenCreatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

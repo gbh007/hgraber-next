@@ -570,22 +570,75 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/fs/ids:
-    get:
-      description: Получение ID всех хранимых файлов
-      summary: Получение ID всех хранимых файлов
+  /api/fs/info:
+    post:
+      description: Получение информации о состоянии файловой системы
+      summary: Получение информации о состоянии файловой системы
       tags:
         - fs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                include_file_ids:
+                  type: boolean
+                  description: Включить в ответ ID файлов в файловой системе
+                include_file_sizes:
+                  type: boolean
+                  description: Включить в ответ размер файлов в файловой системе
+              required:
+                - include_file_ids
+                - include_file_sizes
       responses:
         200:
           description: Успешный ответ с данными
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-                  format: uuid
+                type: object
+                properties:
+                  file_ids:
+                    type: array
+                    description: ID файлов что есть в файловой системе
+                    items:
+                      type: string
+                      format: uuid
+                  files:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: ID файла
+                        size:
+                          type: integer
+                          format: int64
+                          description: Размер файла
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Время создания файла
+                      required:
+                        - id
+                        - size
+                        - created_at
+                  total_file_size:
+                    type: integer
+                    format: int64
+                    description: Размер файлов на файловой системе
+                  total_file_count:
+                    type: integer
+                    format: int64
+                    description: Количество файлов на файловой системе
+                  available_size:
+                    type: integer
+                    format: int64
+                    description: Доступный (свободный) размер для загрузки файлов
         400:
           description: Некорректный запрос
           content:
@@ -633,6 +686,121 @@ paths:
       responses:
         204:
           description: Успешное удаление
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/highway/token/create:
+    post:
+      description: Создание нового токена для highway
+      summary: Создание нового токена для highway
+      tags:
+        - fs
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - valid_until
+                  - token
+                properties:
+                  valid_until:
+                    type: string
+                    format: date-time
+                    description: Время до которого будет активен токен
+                  token:
+                    type: string
+                    description: Токен highway
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/highway/file/{id}.{ext}:
+    get:
+      description: Получение файла через highway
+      summary: Получение файла через highway
+      tags:
+        - fs
+      parameters:
+        - name: id
+          description: ID файла в системе
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: ext
+          description: MIME тип файла
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: token
+          description: Токен для доступа к файлу
+          in: query
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
         400:
           description: Некорректный запрос
           content:

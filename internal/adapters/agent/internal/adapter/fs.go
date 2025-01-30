@@ -105,26 +105,29 @@ func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error
 	}
 }
 
+// FIXME: заменить на более детальную инфу в дальнейшем.
 func (a *FSAdapter) IDs(ctx context.Context) ([]uuid.UUID, error) {
-	res, err := a.rawClient.APIFsIdsGet(ctx)
+	res, err := a.rawClient.APIFsInfoPost(ctx, &agentAPI.APIFsInfoPostReq{
+		IncludeFileIds: true,
+	})
 	if err != nil {
 		return nil, err
 	}
 
 	switch typedRes := res.(type) {
-	case *agentAPI.APIFsIdsGetOKApplicationJSON:
-		return *typedRes, nil
+	case *agentAPI.APIFsInfoPostOK:
+		return typedRes.FileIds, nil
 
-	case *agentAPI.APIFsIdsGetBadRequest:
+	case *agentAPI.APIFsInfoPostBadRequest:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *agentAPI.APIFsIdsGetUnauthorized:
+	case *agentAPI.APIFsInfoPostUnauthorized:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *agentAPI.APIFsIdsGetForbidden:
+	case *agentAPI.APIFsInfoPostForbidden:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *agentAPI.APIFsIdsGetInternalServerError:
+	case *agentAPI.APIFsInfoPostInternalServerError:
 		return nil, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:

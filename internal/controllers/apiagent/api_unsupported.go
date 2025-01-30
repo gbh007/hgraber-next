@@ -27,15 +27,29 @@ func (c *Controller) APIFsGetGet(ctx context.Context, params agentAPI.APIFsGetGe
 	}, nil
 }
 
-func (c *Controller) APIFsIdsGet(ctx context.Context) (agentAPI.APIFsIdsGetRes, error) {
-	return &agentAPI.APIFsIdsGetBadRequest{
+func (c *Controller) APIParsingBookMultiPost(ctx context.Context, req *agentAPI.APIParsingBookMultiPostReq) (agentAPI.APIParsingBookMultiPostRes, error) {
+	return &agentAPI.APIParsingBookMultiPostBadRequest{
 		InnerCode: ValidationCode,
 		Details:   agentAPI.NewOptString("unsupported api"),
 	}, nil
 }
 
-func (c *Controller) APIParsingBookMultiPost(ctx context.Context, req *agentAPI.APIParsingBookMultiPostReq) (agentAPI.APIParsingBookMultiPostRes, error) {
-	return &agentAPI.APIParsingBookMultiPostBadRequest{
+func (c *Controller) APIFsInfoPost(ctx context.Context, req *agentAPI.APIFsInfoPostReq) (agentAPI.APIFsInfoPostRes, error) {
+	return &agentAPI.APIFsInfoPostBadRequest{
+		InnerCode: ValidationCode,
+		Details:   agentAPI.NewOptString("unsupported api"),
+	}, nil
+}
+
+func (c *Controller) APIHighwayFileIDExtGet(ctx context.Context, params agentAPI.APIHighwayFileIDExtGetParams) (agentAPI.APIHighwayFileIDExtGetRes, error) {
+	return &agentAPI.APIHighwayFileIDExtGetBadRequest{
+		InnerCode: ValidationCode,
+		Details:   agentAPI.NewOptString("unsupported api"),
+	}, nil
+}
+
+func (c *Controller) APIHighwayTokenCreatePost(ctx context.Context) (agentAPI.APIHighwayTokenCreatePostRes, error) {
+	return &agentAPI.APIHighwayTokenCreatePostBadRequest{
 		InnerCode: ValidationCode,
 		Details:   agentAPI.NewOptString("unsupported api"),
 	}, nil
