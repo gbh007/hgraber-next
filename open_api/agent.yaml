@@ -770,6 +770,7 @@ paths:
     get:
       description: Получение файла через highway
       summary: Получение файла через highway
+      security: []
       tags:
         - fs
       parameters:
