@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log/slog"
+	"net/url"
 
 	"github.com/google/uuid"
 
@@ -31,6 +32,7 @@ type fileStorage interface {
 	Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 	Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error
 	Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) error
+	HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error)
 }
 
 type tmpStorage interface {
@@ -60,4 +62,8 @@ func New(
 		fileStorage: fileStorage,
 		tmpStorage:  tmpStorage,
 	}
+}
+
+func (uc *UseCase) HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error) {
+	return uc.fileStorage.HighwayFileURL(ctx, fileID, ext, fsID)
 }

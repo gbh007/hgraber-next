@@ -3,6 +3,7 @@ package agent
 import (
 	"context"
 	"io"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -41,4 +42,13 @@ func (c *Client) FSIDs(ctx context.Context, agentID uuid.UUID) ([]uuid.UUID, err
 	}
 
 	return adapter.ToFS().IDs(ctx)
+}
+
+func (c *Client) CreateHighwayToken(ctx context.Context, agentID uuid.UUID) (string, time.Time, error) {
+	adapter, err := c.getAdapter(agentID)
+	if err != nil {
+		return "", time.Time{}, err
+	}
+
+	return adapter.ToFS().CreateHighwayToken(ctx)
 }

@@ -1,6 +1,8 @@
 package apiserver
 
 import (
+	"context"
+	"log/slog"
 	"net/url"
 	"time"
 
@@ -52,6 +54,26 @@ func optUUID(u uuid.UUID) serverAPI.OptUUID {
 }
 
 func (c *Controller) getFileURL(fileID uuid.UUID, ext string, fsID uuid.UUID) url.URL {
+	if c.fsUseCases != nil {
+		// FIXME: подумать над местом получше,
+		// или более явным пробросом контекста,
+		// или автообновлением токенов, чтобы не было надобности в ошибках.
+		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+		defer cancel()
+
+		u, ok, err := c.fsUseCases.HighwayFileURL(ctx, fileID, ext, fsID)
+		if err != nil {
+			c.logger.ErrorContext(
+				ctx, "get highway file url",
+				slog.Any("error", err),
+			)
+		}
+
+		if ok {
+			return u
+		}
+	}
+
 	u := url.URL{
 		Scheme: c.externalServerScheme,
 		Host:   c.externalServerHostWithPort,

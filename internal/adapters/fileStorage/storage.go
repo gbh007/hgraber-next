@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"slices"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -20,6 +21,8 @@ type agentController interface {
 	FSDelete(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) error
 	FSGet(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) (io.Reader, error)
 	FSIDs(ctx context.Context, agentID uuid.UUID) ([]uuid.UUID, error)
+
+	CreateHighwayToken(ctx context.Context, agentID uuid.UUID) (string, time.Time, error)
 }
 
 type dataStorage interface {
@@ -39,6 +42,13 @@ type rawFileStorageData struct {
 	FS      rawFileStorage
 	AgentID uuid.UUID
 	Path    string
+
+	EnableHighway          bool
+	HighwayToken           string
+	HighwayTokenValidUntil time.Time
+
+	HighwayServerScheme       string
+	HighwayServerHostWithPort string
 }
 
 type Storage struct {

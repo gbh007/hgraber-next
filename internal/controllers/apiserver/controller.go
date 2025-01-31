@@ -108,6 +108,8 @@ type fsUseCases interface {
 	ValidateFS(ctx context.Context, fsID uuid.UUID) error
 	TransferFSFiles(ctx context.Context, from, to uuid.UUID, onlyPreview bool) error
 	TransferFSFilesByBook(ctx context.Context, bookID, to uuid.UUID, pageNumber *int) error
+
+	HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error)
 }
 
 type bffUseCases interface {

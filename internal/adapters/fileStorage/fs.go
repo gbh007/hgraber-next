@@ -89,10 +89,18 @@ func (s *Storage) connect(_ context.Context, fs entities.FileStorageSystem) (raw
 	case fs.AgentID != uuid.Nil:
 		storage = agentFS.New(fs.AgentID, s.logger, s.agentController)
 
-		return rawFileStorageData{
+		raw := rawFileStorageData{
 			FS:      storage,
 			AgentID: fs.AgentID,
-		}, nil
+		}
+
+		if fs.HighwayEnabled && fs.HighwayAddr != nil {
+			raw.EnableHighway = true
+			raw.HighwayServerScheme = fs.HighwayAddr.Scheme
+			raw.HighwayServerHostWithPort = fs.HighwayAddr.Host
+		}
+
+		return raw, nil
 
 	case fs.Path != "":
 		storage, err = localFiles.New(fs.Path, s.logger)

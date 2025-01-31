@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -132,5 +133,32 @@ func (a *FSAdapter) IDs(ctx context.Context) ([]uuid.UUID, error) {
 
 	default:
 		return nil, entities.AgentAPIUnknownResponse
+	}
+}
+
+func (a *FSAdapter) CreateHighwayToken(ctx context.Context) (string, time.Time, error) {
+	res, err := a.rawClient.APIHighwayTokenCreatePost(ctx)
+	if err != nil {
+		return "", time.Time{}, err
+	}
+
+	switch typedRes := res.(type) {
+	case *agentAPI.APIHighwayTokenCreatePostOK:
+		return typedRes.Token, typedRes.ValidUntil, nil
+
+	case *agentAPI.APIHighwayTokenCreatePostBadRequest:
+		return "", time.Time{}, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
+
+	case *agentAPI.APIHighwayTokenCreatePostUnauthorized:
+		return "", time.Time{}, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
+
+	case *agentAPI.APIHighwayTokenCreatePostForbidden:
+		return "", time.Time{}, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
+
+	case *agentAPI.APIHighwayTokenCreatePostInternalServerError:
+		return "", time.Time{}, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
+
+	default:
+		return "", time.Time{}, entities.AgentAPIUnknownResponse
 	}
 }
