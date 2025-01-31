@@ -25,12 +25,14 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UU
 		taskResult.StartStage("search file ids in fs")
 		span.AddEvent("search file ids in fs", trace.WithTimestamp(time.Now()))
 
-		fileIDs, err := uc.fileStorage.IDs(ctx, fsID)
+		fsState, err := uc.fileStorage.State(ctx, true, false, fsID)
 		if err != nil {
 			taskResult.SetError(err)
 
 			return
 		}
+
+		fileIDs := fsState.FileIDs
 
 		taskResult.SetTotal(int64(len(fileIDs)))
 		taskResult.SetProgress(int64(len(fileIDs)))

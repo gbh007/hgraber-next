@@ -20,7 +20,7 @@ type agentController interface {
 	FSCreate(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID, body io.Reader) error
 	FSDelete(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) error
 	FSGet(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) (io.Reader, error)
-	FSIDs(ctx context.Context, agentID uuid.UUID) ([]uuid.UUID, error)
+	FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (entities.FSState, error)
 
 	CreateHighwayToken(ctx context.Context, agentID uuid.UUID) (string, time.Time, error)
 }
@@ -35,7 +35,7 @@ type rawFileStorage interface {
 	Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
 	Delete(ctx context.Context, fileID uuid.UUID) error
 	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
-	IDs(ctx context.Context) ([]uuid.UUID, error)
+	State(ctx context.Context, includeFileIDs, includeFileSizes bool) (entities.FSState, error)
 }
 
 type rawFileStorageData struct {

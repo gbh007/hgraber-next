@@ -7,13 +7,15 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
+
+	"hgnext/internal/entities"
 )
 
 type agentController interface {
 	FSCreate(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID, body io.Reader) error
 	FSDelete(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) error
 	FSGet(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) (io.Reader, error)
-	FSIDs(ctx context.Context, agentID uuid.UUID) ([]uuid.UUID, error)
+	FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (entities.FSState, error)
 }
 
 type Storage struct {
@@ -62,11 +64,11 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error) 
 	return body, nil
 }
 
-func (s *Storage) IDs(ctx context.Context) ([]uuid.UUID, error) {
-	ids, err := s.agentController.FSIDs(ctx, s.agentID)
+func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (entities.FSState, error) {
+	state, err := s.agentController.FSState(ctx, s.agentID, includeFileIDs, includeFileSizes)
 	if err != nil {
-		return nil, fmt.Errorf("agent fs: %w", err)
+		return entities.FSState{}, fmt.Errorf("agent fs: %w", err)
 	}
 
-	return ids, nil
+	return state, nil
 }

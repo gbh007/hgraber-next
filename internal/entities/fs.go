@@ -44,3 +44,18 @@ type FileTransfer struct {
 	FileID uuid.UUID
 	FSID   uuid.UUID
 }
+
+type FSState struct {
+	FileIDs []uuid.UUID
+	Files   []FSStateFile
+
+	TotalFileCount int64
+	TotalFileSize  int64
+	AvailableSize  int64
+}
+
+type FSStateFile struct {
+	ID        uuid.UUID
+	Size      int64
+	CreatedAt time.Time
+}

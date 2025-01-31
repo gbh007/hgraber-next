@@ -71,19 +71,19 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (i
 	return storage.FS.Get(ctx, fileID)
 }
 
-func (s *Storage) IDs(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error) {
+func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (entities.FSState, error) {
 	if fsID == uuid.Nil {
 		if s.legacyFileStorage == nil {
-			return nil, fmt.Errorf("%w: legacy", entities.MissingFSError)
+			return entities.FSState{}, fmt.Errorf("%w: legacy", entities.MissingFSError)
 		}
 
-		return s.legacyFileStorage.FS.IDs(ctx)
+		return s.legacyFileStorage.FS.State(ctx, includeFileIDs, includeFileSizes)
 	}
 
 	storage, err := s.getFS(ctx, fsID, s.tryReconnect)
 	if err != nil {
-		return nil, fmt.Errorf("get fs: %w", err)
+		return entities.FSState{}, fmt.Errorf("get fs: %w", err)
 	}
 
-	return storage.FS.IDs(ctx)
+	return storage.FS.State(ctx, includeFileIDs, includeFileSizes)
 }

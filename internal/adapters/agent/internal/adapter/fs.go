@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 
 	"hgnext/internal/entities"
+	"hgnext/internal/pkg"
 	"hgnext/open_api/agentAPI"
 )
 
@@ -106,33 +107,44 @@ func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error
 	}
 }
 
-// FIXME: заменить на более детальную инфу в дальнейшем.
-func (a *FSAdapter) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (entities.FSState, error) {
 	res, err := a.rawClient.APIFsInfoPost(ctx, &agentAPI.APIFsInfoPostReq{
 		IncludeFileIds: true,
 	})
 	if err != nil {
-		return nil, err
+		return entities.FSState{}, err
 	}
 
 	switch typedRes := res.(type) {
 	case *agentAPI.APIFsInfoPostOK:
-		return typedRes.FileIds, nil
+		return entities.FSState{
+			FileIDs: typedRes.FileIds,
+			Files: pkg.Map(typedRes.Files, func(raw agentAPI.APIFsInfoPostOKFilesItem) entities.FSStateFile {
+				return entities.FSStateFile{
+					ID:        raw.ID,
+					Size:      raw.Size,
+					CreatedAt: raw.CreatedAt,
+				}
+			}),
+			TotalFileCount: typedRes.TotalFileCount.Value,
+			TotalFileSize:  typedRes.TotalFileSize.Value,
+			AvailableSize:  typedRes.AvailableSize.Value,
+		}, nil
 
 	case *agentAPI.APIFsInfoPostBadRequest:
-		return nil, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
+		return entities.FSState{}, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentAPI.APIFsInfoPostUnauthorized:
-		return nil, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
+		return entities.FSState{}, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentAPI.APIFsInfoPostForbidden:
-		return nil, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
+		return entities.FSState{}, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentAPI.APIFsInfoPostInternalServerError:
-		return nil, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
+		return entities.FSState{}, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return nil, entities.AgentAPIUnknownResponse
+		return entities.FSState{}, entities.AgentAPIUnknownResponse
 	}
 }
 
