@@ -589,9 +589,6 @@ paths:
                 include_file_sizes:
                   type: boolean
                   description: Включить в ответ размер файлов в файловой системе
-              required:
-                - include_file_ids
-                - include_file_sizes
       responses:
         200:
           description: Успешный ответ с данными

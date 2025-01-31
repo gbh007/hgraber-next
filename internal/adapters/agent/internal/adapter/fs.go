@@ -109,7 +109,8 @@ func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error
 
 func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (entities.FSState, error) {
 	res, err := a.rawClient.APIFsInfoPost(ctx, &agentAPI.APIFsInfoPostReq{
-		IncludeFileIds: true,
+		IncludeFileIds:   agentAPI.NewOptBool(includeFileIDs),
+		IncludeFileSizes: agentAPI.NewOptBool(includeFileSizes),
 	})
 	if err != nil {
 		return entities.FSState{}, err

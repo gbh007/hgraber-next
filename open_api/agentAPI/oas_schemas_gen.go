@@ -460,28 +460,28 @@ func (s *APIFsInfoPostOKFilesItem) SetCreatedAt(val time.Time) {
 
 type APIFsInfoPostReq struct {
 	// Включить в ответ ID файлов в файловой системе.
-	IncludeFileIds bool `json:"include_file_ids"`
+	IncludeFileIds OptBool `json:"include_file_ids"`
 	// Включить в ответ размер файлов в файловой системе.
-	IncludeFileSizes bool `json:"include_file_sizes"`
+	IncludeFileSizes OptBool `json:"include_file_sizes"`
 }
 
 // GetIncludeFileIds returns the value of IncludeFileIds.
-func (s *APIFsInfoPostReq) GetIncludeFileIds() bool {
+func (s *APIFsInfoPostReq) GetIncludeFileIds() OptBool {
 	return s.IncludeFileIds
 }
 
 // GetIncludeFileSizes returns the value of IncludeFileSizes.
-func (s *APIFsInfoPostReq) GetIncludeFileSizes() bool {
+func (s *APIFsInfoPostReq) GetIncludeFileSizes() OptBool {
 	return s.IncludeFileSizes
 }
 
 // SetIncludeFileIds sets the value of IncludeFileIds.
-func (s *APIFsInfoPostReq) SetIncludeFileIds(val bool) {
+func (s *APIFsInfoPostReq) SetIncludeFileIds(val OptBool) {
 	s.IncludeFileIds = val
 }
 
 // SetIncludeFileSizes sets the value of IncludeFileSizes.
-func (s *APIFsInfoPostReq) SetIncludeFileSizes(val bool) {
+func (s *APIFsInfoPostReq) SetIncludeFileSizes(val OptBool) {
 	s.IncludeFileSizes = val
 }
 
@@ -1294,6 +1294,52 @@ func (s *HeaderAuth) GetAPIKey() string {
 // SetAPIKey sets the value of APIKey.
 func (s *HeaderAuth) SetAPIKey(val string) {
 	s.APIKey = val
+}
+
+// NewOptBool returns new OptBool with value set to v.
+func NewOptBool(v bool) OptBool {
+	return OptBool{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBool is optional bool.
+type OptBool struct {
+	Value bool
+	Set   bool
+}
+
+// IsSet returns true if OptBool was set.
+func (o OptBool) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBool) Reset() {
+	var v bool
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBool) SetTo(v bool) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBool) Get() (v bool, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBool) Or(d bool) bool {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }
 
 // NewOptInt64 returns new OptInt64 with value set to v.

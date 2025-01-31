@@ -1728,12 +1728,16 @@ func (s *APIFsInfoPostReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *APIFsInfoPostReq) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("include_file_ids")
-		e.Bool(s.IncludeFileIds)
+		if s.IncludeFileIds.Set {
+			e.FieldStart("include_file_ids")
+			s.IncludeFileIds.Encode(e)
+		}
 	}
 	{
-		e.FieldStart("include_file_sizes")
-		e.Bool(s.IncludeFileSizes)
+		if s.IncludeFileSizes.Set {
+			e.FieldStart("include_file_sizes")
+			s.IncludeFileSizes.Encode(e)
+		}
 	}
 }
 
@@ -1747,16 +1751,13 @@ func (s *APIFsInfoPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode APIFsInfoPostReq to nil")
 	}
-	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "include_file_ids":
-			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Bool()
-				s.IncludeFileIds = bool(v)
-				if err != nil {
+				s.IncludeFileIds.Reset()
+				if err := s.IncludeFileIds.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -1764,11 +1765,9 @@ func (s *APIFsInfoPostReq) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"include_file_ids\"")
 			}
 		case "include_file_sizes":
-			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := d.Bool()
-				s.IncludeFileSizes = bool(v)
-				if err != nil {
+				s.IncludeFileSizes.Reset()
+				if err := s.IncludeFileSizes.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -1781,38 +1780,6 @@ func (s *APIFsInfoPostReq) Decode(d *jx.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode APIFsInfoPostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIFsInfoPostReq) {
-					name = jsonFieldsNameOfAPIFsInfoPostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
 	}
 
 	return nil
@@ -4911,6 +4878,41 @@ func (s *ErrorResponse) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *ErrorResponse) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes bool as json.
+func (o OptBool) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Bool(bool(o.Value))
+}
+
+// Decode decodes bool from json.
+func (o *OptBool) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptBool to nil")
+	}
+	o.Set = true
+	v, err := d.Bool()
+	if err != nil {
+		return err
+	}
+	o.Value = bool(v)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptBool) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptBool) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
