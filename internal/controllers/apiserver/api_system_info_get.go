@@ -30,14 +30,14 @@ func (c *Controller) APISystemInfoGet(ctx context.Context) (serverAPI.APISystemI
 		PageWithoutBodyCount: info.PageWithoutBodyCount,
 		DeletedPageCount:     info.DeletedPageCount,
 
-		FileCount:         info.FileCount,
-		UnhashedFileCount: info.UnhashedFileCount,
+		FileCount:         int(info.FileCountByFSSum()),
+		UnhashedFileCount: int(info.UnhashedFileCountByFSSum()),
 		DeadHashCount:     info.DeadHashCount,
 
-		PagesSize:          info.PageFileSize,
-		PagesSizeFormatted: entities.PrettySize(info.PageFileSize),
-		FilesSize:          info.FileSize,
-		FilesSizeFormatted: entities.PrettySize(info.FileSize),
+		PagesSize:          info.PageFileSizeByFSSum(),
+		PagesSizeFormatted: entities.PrettySize(info.PageFileSizeByFSSum()),
+		FilesSize:          info.FileSizeByFSSum(),
+		FilesSizeFormatted: entities.PrettySize(info.FileSizeByFSSum()),
 
 		Monitor: serverAPI.NewOptSystemInfoMonitor(serverAPI.SystemInfoMonitor{
 			Workers: pkg.Map(info.Workers, func(w entities.SystemWorkerStat) serverAPI.SystemInfoMonitorWorkersItem {

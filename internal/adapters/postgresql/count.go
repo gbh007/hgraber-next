@@ -5,13 +5,19 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
 	"hgnext/internal/entities"
 )
 
 func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, error) {
-	systemSize := entities.SystemSizeInfo{}
+	systemSize := entities.SystemSizeInfo{
+		FileCountByFS:         make(map[uuid.UUID]int64, entities.ApproximateFSCount),
+		UnhashedFileCountByFS: make(map[uuid.UUID]int64, entities.ApproximateFSCount),
+		PageFileSizeByFS:      make(map[uuid.UUID]int64, entities.ApproximateFSCount),
+		FileSizeByFS:          make(map[uuid.UUID]int64, entities.ApproximateFSCount),
+	}
 	batch := &pgx.Batch{}
 
 	// Книги
@@ -110,24 +116,6 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 
 	// Файлы
 
-	batch.Queue(`SELECT COUNT(*) FROM files;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.FileCount)
-		if err != nil {
-			return fmt.Errorf("get file count: %w", err)
-		}
-
-		return nil
-	})
-
-	batch.Queue(`SELECT COUNT(*) FROM files WHERE md5_sum IS NULL OR sha256_sum IS NULL OR "size" IS NULL;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.UnhashedFileCount)
-		if err != nil {
-			return fmt.Errorf("get unhashed file count: %w", err)
-		}
-
-		return nil
-	})
-
 	batch.Queue(`SELECT COUNT(*) FROM dead_hashes;`).QueryRow(func(row pgx.Row) error {
 		err := row.Scan(&systemSize.DeadHashCount)
 		if err != nil {
@@ -137,28 +125,82 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 		return nil
 	})
 
-	batch.Queue(`SELECT SUM(f."size") FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL;`).QueryRow(func(row pgx.Row) error {
-		size := sql.NullInt64{}
+	batch.Queue(`SELECT COUNT(*), fs_id FROM files GROUP BY fs_id;`).Query(func(rows pgx.Rows) error {
+		defer rows.Close()
 
-		err := row.Scan(&size)
-		if err != nil {
-			return fmt.Errorf("get page file size: %w", err)
+		for rows.Next() {
+			var (
+				count sql.NullInt64
+				fsID  uuid.NullUUID
+			)
+
+			err := rows.Scan(&count, &fsID)
+			if err != nil {
+				return fmt.Errorf("get file count: %w", err)
+			}
+
+			systemSize.FileCountByFS[fsID.UUID] = count.Int64
 		}
-
-		systemSize.PageFileSize = size.Int64
 
 		return nil
 	})
 
-	batch.Queue(`SELECT SUM("size") FROM files WHERE "size" IS NOT NULL;`).QueryRow(func(row pgx.Row) error {
-		size := sql.NullInt64{}
+	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE md5_sum IS NULL OR sha256_sum IS NULL OR "size" IS NULL GROUP BY fs_id;`).Query(func(rows pgx.Rows) error {
+		defer rows.Close()
 
-		err := row.Scan(&size)
-		if err != nil {
-			return fmt.Errorf("get file size: %w", err)
+		for rows.Next() {
+			var (
+				count sql.NullInt64
+				fsID  uuid.NullUUID
+			)
+
+			err := rows.Scan(&count, &fsID)
+			if err != nil {
+				return fmt.Errorf("get unhashed file count: %w", err)
+			}
+
+			systemSize.UnhashedFileCountByFS[fsID.UUID] = count.Int64
 		}
 
-		systemSize.FileSize = size.Int64
+		return nil
+	})
+
+	batch.Queue(`SELECT SUM(f."size"), fs_id FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL GROUP BY f.fs_id;`).Query(func(rows pgx.Rows) error {
+		defer rows.Close()
+
+		for rows.Next() {
+			var (
+				size sql.NullInt64
+				fsID uuid.NullUUID
+			)
+
+			err := rows.Scan(&size, &fsID)
+			if err != nil {
+				return fmt.Errorf("get page file size: %w", err)
+			}
+
+			systemSize.PageFileSizeByFS[fsID.UUID] = size.Int64
+		}
+
+		return nil
+	})
+
+	batch.Queue(`SELECT SUM("size"), fs_id FROM files WHERE "size" IS NOT NULL GROUP BY fs_id;`).Query(func(rows pgx.Rows) error {
+		defer rows.Close()
+
+		for rows.Next() {
+			var (
+				size sql.NullInt64
+				fsID uuid.NullUUID
+			)
+
+			err := rows.Scan(&size, &fsID)
+			if err != nil {
+				return fmt.Errorf("get file size: %w", err)
+			}
+
+			systemSize.FileSizeByFS[fsID.UUID] = size.Int64
+		}
 
 		return nil
 	})

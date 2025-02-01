@@ -7,6 +7,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const ApproximateFSCount = 10
+
 type FileStorageSystem struct {
 	ID                  uuid.UUID
 	Name                string
