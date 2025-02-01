@@ -20,7 +20,7 @@ func (uc *UseCase) PageBody(ctx context.Context, bookID uuid.UUID, pageNumber in
 		return nil, fmt.Errorf("missing page body: %w", entities.FileNotFoundError)
 	}
 
-	body, err := uc.fileStorage.Get(ctx, page.FileID)
+	body, err := uc.fileStorage.Get(ctx, page.FileID, nil)
 	if err != nil {
 		return nil, fmt.Errorf("get file from file storage: %w", err)
 	}

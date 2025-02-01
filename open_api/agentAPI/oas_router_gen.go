@@ -40,6 +40,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s.notFound(w, r)
 		return
 	}
+	args := [2]string{}
 
 	// Static code generated router with unwrapped path search.
 	switch {
@@ -177,9 +178,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 'i': // Prefix: "ids"
+				case 'i': // Prefix: "info"
 					origElem := elem
-					if l := len("ids"); len(elem) >= l && elem[0:l] == "ids" {
+					if l := len("info"); len(elem) >= l && elem[0:l] == "info" {
 						elem = elem[l:]
 					} else {
 						break
@@ -188,10 +189,99 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						// Leaf node.
 						switch r.Method {
-						case "GET":
-							s.handleAPIFsIdsGetRequest([0]string{}, elemIsEscaped, w, r)
+						case "POST":
+							s.handleAPIFsInfoPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "GET")
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
+			case 'h': // Prefix: "highway/"
+				origElem := elem
+				if l := len("highway/"); len(elem) >= l && elem[0:l] == "highway/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'f': // Prefix: "file/"
+					origElem := elem
+					if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Match until "."
+					idx := strings.IndexByte(elem, '.')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case '.': // Prefix: "."
+						origElem := elem
+						if l := len("."); len(elem) >= l && elem[0:l] == "." {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "ext"
+						// Leaf parameter
+						args[1] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleAPIHighwayFileIDExtGetRequest([2]string{
+									args[0],
+									args[1],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				case 't': // Prefix: "token/create"
+					origElem := elem
+					if l := len("token/create"); len(elem) >= l && elem[0:l] == "token/create" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIHighwayTokenCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
 						}
 
 						return
@@ -353,7 +443,7 @@ type Route struct {
 	operationID string
 	pathPattern string
 	count       int
-	args        [0]string
+	args        [2]string
 }
 
 // Name returns ogen operation name.
@@ -570,9 +660,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				case 'i': // Prefix: "ids"
+				case 'i': // Prefix: "info"
 					origElem := elem
-					if l := len("ids"); len(elem) >= l && elem[0:l] == "ids" {
+					if l := len("info"); len(elem) >= l && elem[0:l] == "info" {
 						elem = elem[l:]
 					} else {
 						break
@@ -581,11 +671,105 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						// Leaf node.
 						switch method {
-						case "GET":
-							r.name = APIFsIdsGetOperation
-							r.summary = "Получение ID всех хранимых файлов"
+						case "POST":
+							r.name = APIFsInfoPostOperation
+							r.summary = "Получение информации о состоянии файловой системы"
 							r.operationID = ""
-							r.pathPattern = "/api/fs/ids"
+							r.pathPattern = "/api/fs/info"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
+			case 'h': // Prefix: "highway/"
+				origElem := elem
+				if l := len("highway/"); len(elem) >= l && elem[0:l] == "highway/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'f': // Prefix: "file/"
+					origElem := elem
+					if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Match until "."
+					idx := strings.IndexByte(elem, '.')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case '.': // Prefix: "."
+						origElem := elem
+						if l := len("."); len(elem) >= l && elem[0:l] == "." {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "ext"
+						// Leaf parameter
+						args[1] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = APIHighwayFileIDExtGetOperation
+								r.summary = "Получение файла через highway"
+								r.operationID = ""
+								r.pathPattern = "/api/highway/file/{id}.{ext}"
+								r.args = args
+								r.count = 2
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				case 't': // Prefix: "token/create"
+					origElem := elem
+					if l := len("token/create"); len(elem) >= l && elem[0:l] == "token/create" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIHighwayTokenCreatePostOperation
+							r.summary = "Создание нового токена для highway"
+							r.operationID = ""
+							r.pathPattern = "/api/highway/token/create"
 							r.args = args
 							r.count = 0
 							return r, true

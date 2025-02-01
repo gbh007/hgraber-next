@@ -343,25 +343,258 @@ type APIFsGetGetUnauthorized ErrorResponse
 
 func (*APIFsGetGetUnauthorized) aPIFsGetGetRes() {}
 
-type APIFsIdsGetBadRequest ErrorResponse
+type APIFsInfoPostBadRequest ErrorResponse
 
-func (*APIFsIdsGetBadRequest) aPIFsIdsGetRes() {}
+func (*APIFsInfoPostBadRequest) aPIFsInfoPostRes() {}
 
-type APIFsIdsGetForbidden ErrorResponse
+type APIFsInfoPostForbidden ErrorResponse
 
-func (*APIFsIdsGetForbidden) aPIFsIdsGetRes() {}
+func (*APIFsInfoPostForbidden) aPIFsInfoPostRes() {}
 
-type APIFsIdsGetInternalServerError ErrorResponse
+type APIFsInfoPostInternalServerError ErrorResponse
 
-func (*APIFsIdsGetInternalServerError) aPIFsIdsGetRes() {}
+func (*APIFsInfoPostInternalServerError) aPIFsInfoPostRes() {}
 
-type APIFsIdsGetOKApplicationJSON []uuid.UUID
+type APIFsInfoPostOK struct {
+	// ID файлов что есть в файловой системе.
+	FileIds []uuid.UUID                `json:"file_ids"`
+	Files   []APIFsInfoPostOKFilesItem `json:"files"`
+	// Размер файлов на файловой системе.
+	TotalFileSize OptInt64 `json:"total_file_size"`
+	// Количество файлов на файловой системе.
+	TotalFileCount OptInt64 `json:"total_file_count"`
+	// Доступный (свободный) размер для загрузки файлов.
+	AvailableSize OptInt64 `json:"available_size"`
+}
 
-func (*APIFsIdsGetOKApplicationJSON) aPIFsIdsGetRes() {}
+// GetFileIds returns the value of FileIds.
+func (s *APIFsInfoPostOK) GetFileIds() []uuid.UUID {
+	return s.FileIds
+}
 
-type APIFsIdsGetUnauthorized ErrorResponse
+// GetFiles returns the value of Files.
+func (s *APIFsInfoPostOK) GetFiles() []APIFsInfoPostOKFilesItem {
+	return s.Files
+}
 
-func (*APIFsIdsGetUnauthorized) aPIFsIdsGetRes() {}
+// GetTotalFileSize returns the value of TotalFileSize.
+func (s *APIFsInfoPostOK) GetTotalFileSize() OptInt64 {
+	return s.TotalFileSize
+}
+
+// GetTotalFileCount returns the value of TotalFileCount.
+func (s *APIFsInfoPostOK) GetTotalFileCount() OptInt64 {
+	return s.TotalFileCount
+}
+
+// GetAvailableSize returns the value of AvailableSize.
+func (s *APIFsInfoPostOK) GetAvailableSize() OptInt64 {
+	return s.AvailableSize
+}
+
+// SetFileIds sets the value of FileIds.
+func (s *APIFsInfoPostOK) SetFileIds(val []uuid.UUID) {
+	s.FileIds = val
+}
+
+// SetFiles sets the value of Files.
+func (s *APIFsInfoPostOK) SetFiles(val []APIFsInfoPostOKFilesItem) {
+	s.Files = val
+}
+
+// SetTotalFileSize sets the value of TotalFileSize.
+func (s *APIFsInfoPostOK) SetTotalFileSize(val OptInt64) {
+	s.TotalFileSize = val
+}
+
+// SetTotalFileCount sets the value of TotalFileCount.
+func (s *APIFsInfoPostOK) SetTotalFileCount(val OptInt64) {
+	s.TotalFileCount = val
+}
+
+// SetAvailableSize sets the value of AvailableSize.
+func (s *APIFsInfoPostOK) SetAvailableSize(val OptInt64) {
+	s.AvailableSize = val
+}
+
+func (*APIFsInfoPostOK) aPIFsInfoPostRes() {}
+
+type APIFsInfoPostOKFilesItem struct {
+	// ID файла.
+	ID uuid.UUID `json:"id"`
+	// Размер файла.
+	Size int64 `json:"size"`
+	// Время создания файла.
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// GetID returns the value of ID.
+func (s *APIFsInfoPostOKFilesItem) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetSize returns the value of Size.
+func (s *APIFsInfoPostOKFilesItem) GetSize() int64 {
+	return s.Size
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *APIFsInfoPostOKFilesItem) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *APIFsInfoPostOKFilesItem) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetSize sets the value of Size.
+func (s *APIFsInfoPostOKFilesItem) SetSize(val int64) {
+	s.Size = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *APIFsInfoPostOKFilesItem) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+type APIFsInfoPostReq struct {
+	// Включить в ответ ID файлов в файловой системе.
+	IncludeFileIds OptBool `json:"include_file_ids"`
+	// Включить в ответ размер файлов в файловой системе.
+	IncludeFileSizes OptBool `json:"include_file_sizes"`
+}
+
+// GetIncludeFileIds returns the value of IncludeFileIds.
+func (s *APIFsInfoPostReq) GetIncludeFileIds() OptBool {
+	return s.IncludeFileIds
+}
+
+// GetIncludeFileSizes returns the value of IncludeFileSizes.
+func (s *APIFsInfoPostReq) GetIncludeFileSizes() OptBool {
+	return s.IncludeFileSizes
+}
+
+// SetIncludeFileIds sets the value of IncludeFileIds.
+func (s *APIFsInfoPostReq) SetIncludeFileIds(val OptBool) {
+	s.IncludeFileIds = val
+}
+
+// SetIncludeFileSizes sets the value of IncludeFileSizes.
+func (s *APIFsInfoPostReq) SetIncludeFileSizes(val OptBool) {
+	s.IncludeFileSizes = val
+}
+
+type APIFsInfoPostUnauthorized ErrorResponse
+
+func (*APIFsInfoPostUnauthorized) aPIFsInfoPostRes() {}
+
+type APIHighwayFileIDExtGetBadRequest ErrorResponse
+
+func (*APIHighwayFileIDExtGetBadRequest) aPIHighwayFileIDExtGetRes() {}
+
+type APIHighwayFileIDExtGetForbidden ErrorResponse
+
+func (*APIHighwayFileIDExtGetForbidden) aPIHighwayFileIDExtGetRes() {}
+
+type APIHighwayFileIDExtGetInternalServerError ErrorResponse
+
+func (*APIHighwayFileIDExtGetInternalServerError) aPIHighwayFileIDExtGetRes() {}
+
+type APIHighwayFileIDExtGetNotFound ErrorResponse
+
+func (*APIHighwayFileIDExtGetNotFound) aPIHighwayFileIDExtGetRes() {}
+
+type APIHighwayFileIDExtGetOK struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APIHighwayFileIDExtGetOK) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+// APIHighwayFileIDExtGetOKHeaders wraps APIHighwayFileIDExtGetOK with response headers.
+type APIHighwayFileIDExtGetOKHeaders struct {
+	ContentType string
+	Response    APIHighwayFileIDExtGetOK
+}
+
+// GetContentType returns the value of ContentType.
+func (s *APIHighwayFileIDExtGetOKHeaders) GetContentType() string {
+	return s.ContentType
+}
+
+// GetResponse returns the value of Response.
+func (s *APIHighwayFileIDExtGetOKHeaders) GetResponse() APIHighwayFileIDExtGetOK {
+	return s.Response
+}
+
+// SetContentType sets the value of ContentType.
+func (s *APIHighwayFileIDExtGetOKHeaders) SetContentType(val string) {
+	s.ContentType = val
+}
+
+// SetResponse sets the value of Response.
+func (s *APIHighwayFileIDExtGetOKHeaders) SetResponse(val APIHighwayFileIDExtGetOK) {
+	s.Response = val
+}
+
+func (*APIHighwayFileIDExtGetOKHeaders) aPIHighwayFileIDExtGetRes() {}
+
+type APIHighwayFileIDExtGetUnauthorized ErrorResponse
+
+func (*APIHighwayFileIDExtGetUnauthorized) aPIHighwayFileIDExtGetRes() {}
+
+type APIHighwayTokenCreatePostBadRequest ErrorResponse
+
+func (*APIHighwayTokenCreatePostBadRequest) aPIHighwayTokenCreatePostRes() {}
+
+type APIHighwayTokenCreatePostForbidden ErrorResponse
+
+func (*APIHighwayTokenCreatePostForbidden) aPIHighwayTokenCreatePostRes() {}
+
+type APIHighwayTokenCreatePostInternalServerError ErrorResponse
+
+func (*APIHighwayTokenCreatePostInternalServerError) aPIHighwayTokenCreatePostRes() {}
+
+type APIHighwayTokenCreatePostOK struct {
+	// Время до которого будет активен токен.
+	ValidUntil time.Time `json:"valid_until"`
+	// Токен highway.
+	Token string `json:"token"`
+}
+
+// GetValidUntil returns the value of ValidUntil.
+func (s *APIHighwayTokenCreatePostOK) GetValidUntil() time.Time {
+	return s.ValidUntil
+}
+
+// GetToken returns the value of Token.
+func (s *APIHighwayTokenCreatePostOK) GetToken() string {
+	return s.Token
+}
+
+// SetValidUntil sets the value of ValidUntil.
+func (s *APIHighwayTokenCreatePostOK) SetValidUntil(val time.Time) {
+	s.ValidUntil = val
+}
+
+// SetToken sets the value of Token.
+func (s *APIHighwayTokenCreatePostOK) SetToken(val string) {
+	s.Token = val
+}
+
+func (*APIHighwayTokenCreatePostOK) aPIHighwayTokenCreatePostRes() {}
+
+type APIHighwayTokenCreatePostUnauthorized ErrorResponse
+
+func (*APIHighwayTokenCreatePostUnauthorized) aPIHighwayTokenCreatePostRes() {}
 
 type APIParsingBookCheckPostBadRequest ErrorResponse
 
@@ -1061,6 +1294,98 @@ func (s *HeaderAuth) GetAPIKey() string {
 // SetAPIKey sets the value of APIKey.
 func (s *HeaderAuth) SetAPIKey(val string) {
 	s.APIKey = val
+}
+
+// NewOptBool returns new OptBool with value set to v.
+func NewOptBool(v bool) OptBool {
+	return OptBool{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBool is optional bool.
+type OptBool struct {
+	Value bool
+	Set   bool
+}
+
+// IsSet returns true if OptBool was set.
+func (o OptBool) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBool) Reset() {
+	var v bool
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBool) SetTo(v bool) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBool) Get() (v bool, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBool) Or(d bool) bool {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt64 returns new OptInt64 with value set to v.
+func NewOptInt64(v int64) OptInt64 {
+	return OptInt64{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt64 is optional int64.
+type OptInt64 struct {
+	Value int64
+	Set   bool
+}
+
+// IsSet returns true if OptInt64 was set.
+func (o OptInt64) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt64) Reset() {
+	var v int64
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt64) SetTo(v int64) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt64) Get() (v int64, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt64) Or(d int64) int64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }
 
 // NewOptString returns new OptString with value set to v.

@@ -20,9 +20,9 @@ func (c *Controller) APIDeduplicateComparePost(ctx context.Context, req *serverA
 		Origin: c.convertSimpleBook(data.OriginBook, data.OriginPreviewPage),
 		Target: c.convertSimpleBook(data.TargetBook, data.TargetPreviewPage),
 
-		OriginPages: pkg.Map(data.OriginPages, c.convertSimplePageWithDeadHash),
-		BothPages:   pkg.Map(data.BothPages, c.convertSimplePageWithDeadHash),
-		TargetPages: pkg.Map(data.TargetPages, c.convertSimplePageWithDeadHash),
+		OriginPages: pkg.Map(data.OriginPages, c.convertPreviewPage),
+		BothPages:   pkg.Map(data.BothPages, c.convertPreviewPage),
+		TargetPages: pkg.Map(data.TargetPages, c.convertPreviewPage),
 
 		OriginAttributes: pkg.Map(data.OriginAttributes, convertBookAttribute),
 		BothAttributes:   pkg.Map(data.BothAttributes, convertBookAttribute),

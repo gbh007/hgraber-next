@@ -1,6 +1,8 @@
 package apiserver
 
 import (
+	"context"
+	"log/slog"
 	"net/url"
 	"time"
 
@@ -43,28 +45,63 @@ func optString(s string) serverAPI.OptString {
 	return serverAPI.NewOptString(s)
 }
 
-func (c *Controller) getFileURL(fileID uuid.UUID, ext string) url.URL {
-	return url.URL{
+func optUUID(u uuid.UUID) serverAPI.OptUUID {
+	if u == uuid.Nil {
+		return serverAPI.OptUUID{}
+	}
+
+	return serverAPI.NewOptUUID(u)
+}
+
+func (c *Controller) getFileURL(fileID uuid.UUID, ext string, fsID uuid.UUID) url.URL {
+	if c.fsUseCases != nil {
+		// FIXME: подумать над местом получше,
+		// или более явным пробросом контекста,
+		// или автообновлением токенов, чтобы не было надобности в ошибках.
+		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+		defer cancel()
+
+		u, ok, err := c.fsUseCases.HighwayFileURL(ctx, fileID, ext, fsID)
+		if err != nil {
+			c.logger.ErrorContext(
+				ctx, "get highway file url",
+				slog.Any("error", err),
+			)
+		}
+
+		if ok {
+			return u
+		}
+	}
+
+	u := url.URL{
 		Scheme: c.externalServerScheme,
 		Host:   c.externalServerHostWithPort,
 		Path:   "/api/file/" + fileID.String() + ext,
 	}
+
+	v := url.Values{}
+	v.Add("fsid", fsID.String())
+	u.RawQuery = v.Encode()
+
+	return u
 }
 
-func (c *Controller) getPagePreview(p entities.Page) serverAPI.OptURI {
+func (c *Controller) getPagePreview(p entities.BFFPreviewPage) serverAPI.OptURI {
 	previewURL := serverAPI.OptURI{}
 
 	if p.Downloaded {
 		previewURL = serverAPI.NewOptURI(c.getFileURL(
 			p.FileID,
 			p.Ext,
+			p.FSID,
 		))
 	}
 
 	return previewURL
 }
 
-func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.Page) serverAPI.BookSimple {
+func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.BFFPreviewPage) serverAPI.BookSimple {
 	return serverAPI.BookSimple{
 		ID:         book.ID,
 		CreatedAt:  book.CreateAt,
@@ -82,11 +119,11 @@ func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.
 	}
 }
 
-func (c *Controller) convertSimplePageWithDeadHash(page entities.PageWithDeadHash) serverAPI.PageSimple {
+func (c *Controller) convertPreviewPage(page entities.BFFPreviewPage) serverAPI.PageSimple {
 	return serverAPI.PageSimple{
 		PageNumber:  page.PageNumber,
-		PreviewURL:  c.getPagePreview(page.Page),
-		HasDeadHash: serverAPI.NewOptBool(page.HasDeadHash),
+		PreviewURL:  c.getPagePreview(page),
+		HasDeadHash: convertStatusFlagToAPI(page.HasDeadHash),
 	}
 }
 
@@ -98,7 +135,7 @@ func convertBookAttribute(a entities.AttributeToWeb) serverAPI.BookAttribute {
 	}
 }
 
-func convertBookFullToBookRaw(book entities.BookFull) *serverAPI.BookRaw {
+func convertBookFullToBookRaw(book entities.BookContainer) *serverAPI.BookRaw {
 	return &serverAPI.BookRaw{
 		ID:        book.Book.ID,
 		CreateAt:  book.Book.CreateAt,
@@ -132,12 +169,12 @@ func convertBookFullToBookRaw(book entities.BookFull) *serverAPI.BookRaw {
 	}
 }
 
-func convertBookRawToBookFull(book *serverAPI.BookRaw) entities.BookFull {
+func convertBookRawToBookFull(book *serverAPI.BookRaw) entities.BookContainer {
 	if book == nil {
-		return entities.BookFull{}
+		return entities.BookContainer{}
 	}
 
-	return entities.BookFull{
+	return entities.BookContainer{
 		Book: entities.Book{
 			ID:        book.ID,
 			Name:      book.Name,
@@ -182,7 +219,57 @@ func convertAgentToAPI(raw entities.Agent) serverAPI.Agent {
 		CanParse:      raw.CanParse,
 		CanParseMulti: raw.CanParseMulti,
 		CanExport:     raw.CanExport,
+		HasFs:         raw.HasFS,
 		Priority:      raw.Priority,
 		CreatedAt:     raw.CreateAt,
 	}
+}
+
+func convertFileSystemInfoFromAPI(raw *serverAPI.FileSystemInfo) entities.FileStorageSystem {
+	return entities.FileStorageSystem{
+		ID:                  raw.ID,
+		Name:                raw.Name,
+		Description:         raw.Description.Value,
+		AgentID:             raw.AgentID.Value,
+		Path:                raw.Path.Value,
+		DownloadPriority:    raw.DownloadPriority,
+		DeduplicatePriority: raw.DeduplicatePriority,
+		HighwayEnabled:      raw.HighwayEnabled,
+		HighwayAddr:         urlFromOpt(raw.HighwayAddr),
+		CreatedAt:           raw.CreatedAt,
+	}
+}
+
+func convertFileSystemInfoToAPI(raw entities.FileStorageSystem) serverAPI.FileSystemInfo {
+	return serverAPI.FileSystemInfo{
+		ID:                  raw.ID,
+		Name:                raw.Name,
+		Description:         optString(raw.Description),
+		AgentID:             optUUID(raw.AgentID),
+		Path:                optString(raw.Path),
+		DownloadPriority:    raw.DownloadPriority,
+		DeduplicatePriority: raw.DeduplicatePriority,
+		HighwayEnabled:      raw.HighwayEnabled,
+		HighwayAddr:         optURL(raw.HighwayAddr),
+		CreatedAt:           raw.CreatedAt,
+	}
+}
+
+func convertStatusFlagToAPI(f entities.StatusFlag) serverAPI.OptBool {
+	return serverAPI.OptBool{
+		Value: f == entities.TrueStatusFlag,
+		Set:   f != entities.UnknownStatusFlag,
+	}
+}
+
+func convertFSDBFilesInfoToAPI(raw *entities.FSFilesInfo) serverAPI.OptFSDBFilesInfo {
+	if raw == nil {
+		return serverAPI.OptFSDBFilesInfo{}
+	}
+
+	return serverAPI.NewOptFSDBFilesInfo(serverAPI.FSDBFilesInfo{
+		Count:         raw.Count,
+		Size:          raw.Size,
+		SizeFormatted: entities.PrettySize(raw.Size),
+	})
 }

@@ -13,6 +13,7 @@ func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAge
 		CanParse:      req.CanParse.Value,
 		CanExport:     req.CanExport.Value,
 		CanParseMulti: req.CanParseMulti.Value,
+		HasFS:         req.HasFs.Value,
 	}, req.IncludeStatus.Value)
 	if err != nil {
 		return &serverAPI.APIAgentListPostInternalServerError{

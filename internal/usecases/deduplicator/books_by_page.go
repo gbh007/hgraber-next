@@ -36,7 +36,7 @@ func (uc *UseCase) BooksByPage(ctx context.Context, bookID uuid.UUID, pageNumber
 			return nil, fmt.Errorf("get book %s: %w", page.BookID.String(), err)
 		}
 
-		previewPage, err := uc.storage.GetPage(ctx, book.ID, entities.PageNumberForPreview)
+		previewPage, err := uc.storage.BookPageWithHash(ctx, book.ID, entities.PageNumberForPreview)
 		if err != nil && !errors.Is(err, entities.PageNotFoundError) { // Отсутствие превью это нормально
 			return nil, fmt.Errorf("get book %s preview page: %w", page.BookID.String(), err)
 		}
@@ -45,7 +45,7 @@ func (uc *UseCase) BooksByPage(ctx context.Context, bookID uuid.UUID, pageNumber
 
 		books = append(books, entities.BookWithPreviewPage{
 			Book:        book,
-			PreviewPage: previewPage,
+			PreviewPage: previewPage.ToPreview(),
 		})
 	}
 

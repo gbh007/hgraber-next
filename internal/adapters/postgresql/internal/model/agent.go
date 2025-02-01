@@ -18,6 +18,7 @@ type Agent struct {
 	CanParse      bool      `db:"can_parse"`
 	CanParseMulti bool      `db:"can_parse_multi"`
 	CanExport     bool      `db:"can_export"`
+	HasFS         bool      `db:"has_fs"`
 	Priority      int       `db:"priority"`
 	CreateAt      time.Time `db:"create_at"`
 }
@@ -41,6 +42,7 @@ func (a Agent) ToEntity() (entities.Agent, error) {
 		CanParse:      a.CanParse,
 		CanParseMulti: a.CanParseMulti,
 		CanExport:     a.CanExport,
+		HasFS:         a.HasFS,
 		Priority:      a.Priority,
 		CreateAt:      a.CreateAt,
 	}, nil

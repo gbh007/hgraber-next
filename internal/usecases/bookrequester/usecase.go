@@ -40,13 +40,13 @@ func New(
 	}
 }
 
-func (uc *UseCase) Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error) {
+func (uc *UseCase) Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookContainer, error) {
 	ids, err := uc.storage.BookIDs(ctx, filter)
 	if err != nil {
 		return nil, fmt.Errorf("get ids :%w", err)
 	}
 
-	books := make([]entities.BookFull, len(ids))
+	books := make([]entities.BookContainer, len(ids))
 
 	for i, id := range ids {
 		book, err := uc.requestBook(ctx, bookRequest{
@@ -66,33 +66,7 @@ func (uc *UseCase) Books(ctx context.Context, filter entities.BookFilter) ([]ent
 	return books, nil
 }
 
-func (uc *UseCase) Book(ctx context.Context, bookID uuid.UUID) (entities.Book, error) {
-	book, err := uc.requestBook(ctx, bookRequest{
-		ID: bookID,
-	})
-	if err != nil {
-		return entities.Book{}, err
-	}
-
-	return book.Book, nil
-}
-
-func (uc *UseCase) BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error) {
-	book, err := uc.requestBook(ctx, bookRequest{
-		ID:                bookID,
-		IncludeAttributes: true,
-		IncludePages:      true,
-		IncludeLabels:     true,
-		IncludeSize:       true,
-	})
-	if err != nil {
-		return entities.BookFull{}, err
-	}
-
-	return book, nil
-}
-
-func (uc *UseCase) BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error) {
+func (uc *UseCase) BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error) {
 	book, err := uc.requestBook(ctx, bookRequest{
 		ID:                      bookID,
 		IncludeOriginAttributes: true,
@@ -100,7 +74,7 @@ func (uc *UseCase) BookOriginFull(ctx context.Context, bookID uuid.UUID) (entiti
 		IncludeLabels:           true,
 	})
 	if err != nil {
-		return entities.BookFull{}, err
+		return entities.BookContainer{}, err
 	}
 
 	return book, nil

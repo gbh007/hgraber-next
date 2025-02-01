@@ -62,4 +62,15 @@ type PageForDownloadWithAgent struct {
 type PageWithHash struct {
 	Page
 	FileHash
+	FSID uuid.UUID
+}
+
+func (p PageWithHash) ToPreview() BFFPreviewPage {
+	return BFFPreviewPage{
+		PageNumber: p.PageNumber,
+		Ext:        p.Ext,
+		Downloaded: p.Downloaded,
+		FileID:     p.FileID,
+		FSID:       p.FSID,
+	}
 }

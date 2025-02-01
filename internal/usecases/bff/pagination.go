@@ -1,4 +1,4 @@
-package webapi
+package bff
 
 // totalToPages - конвертирует количество данных в количество страниц
 func totalToPages(total int, onPageCount int) (pageCount int) {

@@ -13,7 +13,7 @@ import (
 type storage interface {
 	DetachedFiles(ctx context.Context) ([]entities.File, error)
 	DeleteFile(ctx context.Context, id uuid.UUID) error
-	FileIDs(ctx context.Context) ([]uuid.UUID, error)
+	FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error)
 
 	TruncateDeletedPages(ctx context.Context) error
 
@@ -22,8 +22,8 @@ type storage interface {
 }
 
 type fileStorage interface {
-	Delete(ctx context.Context, fileID uuid.UUID) error
-	IDs(ctx context.Context) ([]uuid.UUID, error)
+	Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) error
+	State(ctx context.Context, includeFileIDs, includeFileSizes bool, fsID uuid.UUID) (entities.FSState, error)
 }
 
 type UseCase struct {

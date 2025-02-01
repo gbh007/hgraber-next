@@ -4,6 +4,8 @@ import (
 	"context"
 	"log/slog"
 
+	"github.com/google/uuid"
+
 	"hgnext/internal/entities"
 )
 
@@ -19,7 +21,7 @@ type deduplicator interface {
 
 type cleanuper interface {
 	RemoveDetachedFiles(ctx context.Context) (entities.RunnableTask, error)
-	RemoveFilesInStoragesMismatch(ctx context.Context) (entities.RunnableTask, error)
+	RemoveFilesInStoragesMismatch(ctx context.Context, fsID uuid.UUID) (entities.RunnableTask, error)
 	CleanDeletedPages(ctx context.Context) (entities.RunnableTask, error)
 	CleanDeletedRebuilds(ctx context.Context) (entities.RunnableTask, error)
 }
@@ -57,8 +59,6 @@ func (uc *UseCase) RunTask(ctx context.Context, code entities.TaskCode) error {
 		task, err = uc.deduplicator.DeduplicateFiles(ctx)
 	case entities.RemoveDetachedFilesTaskCode:
 		task, err = uc.cleanuper.RemoveDetachedFiles(ctx)
-	case entities.RemoveFilesInStoragesMismatchTaskCode:
-		task, err = uc.cleanuper.RemoveFilesInStoragesMismatch(ctx)
 	case entities.FillDeadHashesTaskCode:
 		task, err = uc.deduplicator.FillDeadHashes(ctx, false)
 	case entities.FillDeadHashesAndRemoveDeletedPagesTaskCode:
@@ -82,4 +82,15 @@ func (uc *UseCase) RunTask(ctx context.Context, code entities.TaskCode) error {
 
 func (uc *UseCase) TaskResults(ctx context.Context) ([]*entities.TaskResult, error) {
 	return uc.storage.GetTaskResults(), nil
+}
+
+func (uc *UseCase) RemoveFilesInFSMismatch(ctx context.Context, fsID uuid.UUID) error {
+	task, err := uc.cleanuper.RemoveFilesInStoragesMismatch(ctx, fsID)
+	if err != nil {
+		return err
+	}
+
+	uc.storage.SaveTask(task)
+
+	return nil
 }

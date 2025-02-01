@@ -12,8 +12,9 @@ import (
 )
 
 type fileStorage interface {
-	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
-	Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
+	Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
+	Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error
+	FSIDForDownload(ctx context.Context) (uuid.UUID, error)
 }
 
 type storage interface {
@@ -41,9 +42,8 @@ type tmpStorage interface {
 }
 
 type bookRequester interface {
-	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
-	Book(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
-	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookContainer, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
 }
 
 type UseCase struct {

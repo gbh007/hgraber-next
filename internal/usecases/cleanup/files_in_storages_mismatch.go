@@ -13,7 +13,7 @@ import (
 	"hgnext/internal/pkg"
 )
 
-func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context) (entities.RunnableTask, error) {
+func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UUID) (entities.RunnableTask, error) {
 	return entities.RunnableTaskFunction(func(ctx context.Context, taskResult entities.TaskResultWriter) {
 		defer taskResult.Finish()
 
@@ -25,12 +25,14 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context) (entities.Ru
 		taskResult.StartStage("search file ids in fs")
 		span.AddEvent("search file ids in fs", trace.WithTimestamp(time.Now()))
 
-		fileIDs, err := uc.fileStorage.IDs(ctx)
+		fsState, err := uc.fileStorage.State(ctx, true, false, fsID)
 		if err != nil {
 			taskResult.SetError(err)
 
 			return
 		}
+
+		fileIDs := fsState.FileIDs
 
 		taskResult.SetTotal(int64(len(fileIDs)))
 		taskResult.SetProgress(int64(len(fileIDs)))
@@ -39,7 +41,7 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context) (entities.Ru
 		taskResult.StartStage("search file ids in storage")
 		span.AddEvent("search file ids in storage", trace.WithTimestamp(time.Now()))
 
-		storageIDs, err := uc.storage.FileIDs(ctx)
+		storageIDs, err := uc.storage.FileIDsByFS(ctx, fsID)
 		if err != nil {
 			taskResult.SetError(err)
 
@@ -94,7 +96,7 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context) (entities.Ru
 		for id := range fileNotInDB {
 			taskResult.IncProgress()
 
-			err = uc.fileStorage.Delete(ctx, id)
+			err = uc.fileStorage.Delete(ctx, id, &fsID)
 			if err != nil {
 				taskResult.SetError(err)
 
@@ -122,8 +124,8 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context) (entities.Ru
 		taskResult.EndStage()
 
 		taskResult.SetResult(fmt.Sprintf(
-			"remove from fs: %d remove from db: %d",
-			len(fileNotInDB), len(fileNotInFS),
+			"fs id: %s\nremove from fs: %d remove from db: %d",
+			fsID.String(), len(fileNotInDB), len(fileNotInFS),
 		))
 	}), nil
 }

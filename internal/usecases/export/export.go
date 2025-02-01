@@ -23,9 +23,9 @@ func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter entitie
 	}
 
 	uc.tmpStorage.AddToExport(
-		pkg.Map(books, func(b entities.BookFull) entities.BookFullWithAgent {
+		pkg.Map(books, func(b entities.BookContainer) entities.BookFullWithAgent {
 			return entities.BookFullWithAgent{
-				BookFull:          b,
+				BookContainer:     b,
 				AgentID:           agentID,
 				DeleteAfterExport: deleteAfter,
 			}
@@ -40,7 +40,7 @@ func (uc *UseCase) ExportList() []entities.BookFullWithAgent {
 }
 
 func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWithAgent, retry bool) error {
-	body, err := uc.newArchive(ctx, book.BookFull)
+	body, err := uc.newArchive(ctx, book.BookContainer)
 	if err != nil {
 		if retry {
 			uc.tmpStorage.AddToExport([]entities.BookFullWithAgent{book})
@@ -77,21 +77,21 @@ func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWith
 	return nil
 }
 
-func (uc *UseCase) ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, entities.BookFull, error) {
+func (uc *UseCase) ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, entities.BookContainer, error) {
 	book, err := uc.bookRequester.BookOriginFull(ctx, bookID)
 	if err != nil {
-		return nil, entities.BookFull{}, fmt.Errorf("get book: %w", err)
+		return nil, entities.BookContainer{}, fmt.Errorf("get book: %w", err)
 	}
 
 	body, err := uc.newArchive(ctx, book)
 	if err != nil {
-		return nil, entities.BookFull{}, fmt.Errorf("archive book: %w", err)
+		return nil, entities.BookContainer{}, fmt.Errorf("archive book: %w", err)
 	}
 
 	return body, book, nil
 }
 
-func (uc *UseCase) newArchive(ctx context.Context, book entities.BookFull) (io.Reader, error) {
+func (uc *UseCase) newArchive(ctx context.Context, book entities.BookContainer) (io.Reader, error) {
 	zipFile := &bytes.Buffer{}
 	zipWriter := zip.NewWriter(zipFile)
 

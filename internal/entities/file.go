@@ -11,13 +11,15 @@ import (
 )
 
 type File struct {
-	ID        uuid.UUID
-	Filename  string
-	Ext       string
-	Md5Sum    string
-	Sha256Sum string
-	Size      int64
-	CreateAt  time.Time
+	ID          uuid.UUID
+	Filename    string
+	Ext         string
+	Md5Sum      string
+	Sha256Sum   string
+	Size        int64
+	FSID        uuid.UUID
+	InvalidData bool
+	CreateAt    time.Time
 }
 
 func (f File) Hash() FileHash {
@@ -50,4 +52,10 @@ func HashFile(body io.Reader) (FileHash, error) {
 type SizeWithCount struct {
 	Count int64
 	Size  int64
+}
+
+type FileFilter struct {
+	FSID       *uuid.UUID
+	BookID     *uuid.UUID
+	PageNumber *int
 }

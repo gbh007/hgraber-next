@@ -22,6 +22,11 @@ func (uc *UseCase) ImportArchive(
 	deduplicate bool,
 	autoVerify bool,
 ) (returnedBookID uuid.UUID, returnedErr error) {
+	fsID, err := uc.fileStorage.FSIDForDownload(ctx)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("get fs id for download: %w", err)
+	}
+
 	bodyRaw, err := io.ReadAll(body)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("read archive body: %w", err)
@@ -41,7 +46,7 @@ func (uc *UseCase) ImportArchive(
 			HandlePageBody: func(ctx context.Context, pageNumber int, _ string, body io.Reader) error {
 				fileID := uuid.Must(uuid.NewV7())
 
-				err := uc.fileStorage.Create(ctx, fileID, body)
+				err := uc.fileStorage.Create(ctx, fileID, body, fsID)
 				if err != nil {
 					return fmt.Errorf("page (%d) store file (%s): %w", pageNumber, fileID.String(), err)
 				}
@@ -139,6 +144,7 @@ func (uc *UseCase) ImportArchive(
 				ID:       fileID,
 				Filename: fmt.Sprintf("%d%s", p.PageNumber, p.Ext),
 				Ext:      p.Ext,
+				FSID:     fsID,
 				CreateAt: time.Now(),
 			})
 			if err != nil {

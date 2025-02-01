@@ -43,12 +43,13 @@ type agentSystem interface {
 }
 
 type fileStorage interface {
-	Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
-	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
+	FSIDForDownload(ctx context.Context) (uuid.UUID, error)
+	Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error
+	Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 }
 
 type bookRequester interface {
-	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
 }
 
 type UseCase struct {

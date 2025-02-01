@@ -3,6 +3,7 @@ package postgresql
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -115,6 +116,11 @@ func (d *Database) BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageN
 	row := d.pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(model.PageWithHashScanner(&page))
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return entities.PageWithHash{}, entities.PageNotFoundError
+	}
+
 	if err != nil {
 		return entities.PageWithHash{}, fmt.Errorf("exec query :%w", err)
 	}

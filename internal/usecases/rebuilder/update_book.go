@@ -7,7 +7,7 @@ import (
 	"hgnext/internal/entities"
 )
 
-func (uc *UseCase) UpdateBook(ctx context.Context, book entities.BookFull) error {
+func (uc *UseCase) UpdateBook(ctx context.Context, book entities.BookContainer) error {
 	originBook, err := uc.storage.GetBook(ctx, book.Book.ID)
 	if err != nil {
 		return fmt.Errorf("storage: get book: %w", err)

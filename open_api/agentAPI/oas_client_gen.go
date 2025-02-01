@@ -53,12 +53,24 @@ type Invoker interface {
 	//
 	// GET /api/fs/get
 	APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (APIFsGetGetRes, error)
-	// APIFsIdsGet invokes GET /api/fs/ids operation.
+	// APIFsInfoPost invokes POST /api/fs/info operation.
 	//
-	// Получение ID всех хранимых файлов.
+	// Получение информации о состоянии файловой системы.
 	//
-	// GET /api/fs/ids
-	APIFsIdsGet(ctx context.Context) (APIFsIdsGetRes, error)
+	// POST /api/fs/info
+	APIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (APIFsInfoPostRes, error)
+	// APIHighwayFileIDExtGet invokes GET /api/highway/file/{id}.{ext} operation.
+	//
+	// Получение файла через highway.
+	//
+	// GET /api/highway/file/{id}.{ext}
+	APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (APIHighwayFileIDExtGetRes, error)
+	// APIHighwayTokenCreatePost invokes POST /api/highway/token/create operation.
+	//
+	// Создание нового токена для highway.
+	//
+	// POST /api/highway/token/create
+	APIHighwayTokenCreatePost(ctx context.Context) (APIHighwayTokenCreatePostRes, error)
 	// APIParsingBookCheckPost invokes POST /api/parsing/book/check operation.
 	//
 	// Предварительная проверка ссылок на новые книги.
@@ -742,20 +754,20 @@ func (c *Client) sendAPIFsGetGet(ctx context.Context, params APIFsGetGetParams) 
 	return result, nil
 }
 
-// APIFsIdsGet invokes GET /api/fs/ids operation.
+// APIFsInfoPost invokes POST /api/fs/info operation.
 //
-// Получение ID всех хранимых файлов.
+// Получение информации о состоянии файловой системы.
 //
-// GET /api/fs/ids
-func (c *Client) APIFsIdsGet(ctx context.Context) (APIFsIdsGetRes, error) {
-	res, err := c.sendAPIFsIdsGet(ctx)
+// POST /api/fs/info
+func (c *Client) APIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (APIFsInfoPostRes, error) {
+	res, err := c.sendAPIFsInfoPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIFsIdsGet(ctx context.Context) (res APIFsIdsGetRes, err error) {
+func (c *Client) sendAPIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (res APIFsInfoPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/fs/ids"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/fs/info"),
 	}
 
 	// Run stopwatch.
@@ -770,7 +782,7 @@ func (c *Client) sendAPIFsIdsGet(ctx context.Context) (res APIFsIdsGetRes, err e
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIFsIdsGetOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, APIFsInfoPostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -788,13 +800,16 @@ func (c *Client) sendAPIFsIdsGet(ctx context.Context) (res APIFsIdsGetRes, err e
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/api/fs/ids"
+	pathParts[0] = "/api/fs/info"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIFsInfoPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
 	}
 
 	{
@@ -802,7 +817,7 @@ func (c *Client) sendAPIFsIdsGet(ctx context.Context) (res APIFsIdsGetRes, err e
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APIFsIdsGetOperation, r); {
+			switch err := c.securityHeaderAuth(ctx, APIFsInfoPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -838,7 +853,237 @@ func (c *Client) sendAPIFsIdsGet(ctx context.Context) (res APIFsIdsGetRes, err e
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeAPIFsIdsGetResponse(resp)
+	result, err := decodeAPIFsInfoPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIHighwayFileIDExtGet invokes GET /api/highway/file/{id}.{ext} operation.
+//
+// Получение файла через highway.
+//
+// GET /api/highway/file/{id}.{ext}
+func (c *Client) APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (APIHighwayFileIDExtGetRes, error) {
+	res, err := c.sendAPIHighwayFileIDExtGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendAPIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (res APIHighwayFileIDExtGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/highway/file/{id}.{ext}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIHighwayFileIDExtGetOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [4]string
+	pathParts[0] = "/api/highway/file/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "."
+	{
+		// Encode "ext" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "ext",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.Ext))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "token" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "token",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.Token))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIHighwayFileIDExtGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIHighwayTokenCreatePost invokes POST /api/highway/token/create operation.
+//
+// Создание нового токена для highway.
+//
+// POST /api/highway/token/create
+func (c *Client) APIHighwayTokenCreatePost(ctx context.Context) (APIHighwayTokenCreatePostRes, error) {
+	res, err := c.sendAPIHighwayTokenCreatePost(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIHighwayTokenCreatePost(ctx context.Context) (res APIHighwayTokenCreatePostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/highway/token/create"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIHighwayTokenCreatePostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/highway/token/create"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIHighwayTokenCreatePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIHighwayTokenCreatePostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

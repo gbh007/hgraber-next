@@ -22,7 +22,13 @@ func (c *Controller) APIFileIDGet(ctx context.Context, params serverAPI.APIFileI
 		}, nil
 	}
 
-	body, err := c.webAPIUseCases.File(ctx, fileID)
+	var fsID *uuid.UUID
+
+	if params.Fsid.Set {
+		fsID = &params.Fsid.Value
+	}
+
+	body, err := c.webAPIUseCases.File(ctx, fileID, fsID)
 	if errors.Is(err, entities.FileNotFoundError) {
 		return &serverAPI.APIFileIDGetNotFound{
 			InnerCode: WebAPIUseCaseCode,

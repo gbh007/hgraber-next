@@ -39,6 +39,8 @@ type storage interface {
 	BookAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
 	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
 	Attributes(ctx context.Context) ([]entities.Attribute, error)
+
+	FileStorages(ctx context.Context) ([]entities.FileStorageSystem, error)
 }
 
 type UseCase struct {

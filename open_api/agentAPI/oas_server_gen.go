@@ -38,12 +38,24 @@ type Handler interface {
 	//
 	// GET /api/fs/get
 	APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (APIFsGetGetRes, error)
-	// APIFsIdsGet implements GET /api/fs/ids operation.
+	// APIFsInfoPost implements POST /api/fs/info operation.
 	//
-	// Получение ID всех хранимых файлов.
+	// Получение информации о состоянии файловой системы.
 	//
-	// GET /api/fs/ids
-	APIFsIdsGet(ctx context.Context) (APIFsIdsGetRes, error)
+	// POST /api/fs/info
+	APIFsInfoPost(ctx context.Context, req *APIFsInfoPostReq) (APIFsInfoPostRes, error)
+	// APIHighwayFileIDExtGet implements GET /api/highway/file/{id}.{ext} operation.
+	//
+	// Получение файла через highway.
+	//
+	// GET /api/highway/file/{id}.{ext}
+	APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (APIHighwayFileIDExtGetRes, error)
+	// APIHighwayTokenCreatePost implements POST /api/highway/token/create operation.
+	//
+	// Создание нового токена для highway.
+	//
+	// POST /api/highway/token/create
+	APIHighwayTokenCreatePost(ctx context.Context) (APIHighwayTokenCreatePostRes, error)
 	// APIParsingBookCheckPost implements POST /api/parsing/book/check operation.
 	//
 	// Предварительная проверка ссылок на новые книги.

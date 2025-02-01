@@ -46,13 +46,13 @@ var (
 		Subsystem: SubSystemName,
 		Name:      "file_total",
 		Help:      "Количество файлов по статусам",
-	}, []string{"type"})
+	}, []string{"type", "fs_id"})
 	fileBytes = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: SystemName,
 		Subsystem: SubSystemName,
 		Name:      "file_bytes",
 		Help:      "Размер файлов по статусам",
-	}, []string{"type"})
+	}, []string{"type", "fs_id"})
 	workerTotal = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: SystemName,
 		Subsystem: SubSystemName,
@@ -194,12 +194,31 @@ func (c *SystemInfoCollector) collectMainInfo(ctx context.Context) {
 	pageTotal.WithLabelValues("no_body").Set(float64(res.PageWithoutBodyCount))
 	pageTotal.WithLabelValues("deleted").Set(float64(res.DeletedPageCount))
 
-	fileTotal.WithLabelValues("all").Set(float64(res.FileCount))
-	fileTotal.WithLabelValues("unhashed").Set(float64(res.UnhashedFileCount))
-	fileTotal.WithLabelValues("dead_hash").Set(float64(res.DeadHashCount))
+	fileTotal.WithLabelValues("dead_hash", "").Set(float64(res.DeadHashCount))
 
-	fileBytes.WithLabelValues("page").Set(float64(res.PageFileSize))
-	fileBytes.WithLabelValues("fs").Set(float64(res.FileSize))
+	for fsID, v := range res.FileCountByFS {
+		fileTotal.WithLabelValues("all", fsID.String()).Set(float64(v))
+	}
+
+	for fsID, v := range res.UnhashedFileCountByFS {
+		fileTotal.WithLabelValues("unhashed", fsID.String()).Set(float64(v))
+	}
+
+	for fsID, v := range res.InvalidFileCountByFS {
+		fileTotal.WithLabelValues("invalid", fsID.String()).Set(float64(v))
+	}
+
+	for fsID, v := range res.DetachedFileCountByFS {
+		fileTotal.WithLabelValues("detached", fsID.String()).Set(float64(v))
+	}
+
+	for fsID, v := range res.PageFileSizeByFS {
+		fileBytes.WithLabelValues("page", fsID.String()).Set(float64(v))
+	}
+
+	for fsID, v := range res.FileSizeByFS {
+		fileBytes.WithLabelValues("fs", fsID.String()).Set(float64(v))
+	}
 
 	for _, worker := range res.Workers {
 		workerTotal.WithLabelValues(worker.Name, "in_queue").Set(float64(worker.InQueueCount))

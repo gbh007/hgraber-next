@@ -10,17 +10,17 @@ import (
 )
 
 func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIBookDetailsPostReq) (serverAPI.APIBookDetailsPostRes, error) {
-	book, err := c.webAPIUseCases.Book(ctx, req.ID)
+	book, err := c.bffUseCases.BookDetails(ctx, req.ID)
 	if errors.Is(err, entities.BookNotFoundError) {
 		return &serverAPI.APIBookDetailsPostNotFound{
-			InnerCode: WebAPIUseCaseCode,
+			InnerCode: BFFUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
 		return &serverAPI.APIBookDetailsPostInternalServerError{
-			InnerCode: WebAPIUseCaseCode,
+			InnerCode: BFFUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
@@ -29,7 +29,7 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 		Info:              c.convertSimpleBook(book.Book, book.PreviewPage),
 		PageLoadedPercent: book.PageDownloadPercent(),
 		Attributes:        pkg.Map(book.Attributes, convertBookAttribute),
-		Pages:             pkg.Map(book.Pages, c.convertSimplePageWithDeadHash),
+		Pages:             pkg.Map(book.Pages, c.convertPreviewPage),
 		Size: serverAPI.OptAPIBookDetailsPostOKSize{
 			Value: serverAPI.APIBookDetailsPostOKSize{
 				Unique:                           book.Size.Unique,
@@ -50,5 +50,16 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 			},
 			Set: book.Size.Total > 0,
 		},
+		FsDisposition: pkg.Map(book.FSDisposition, func(raw entities.BFFBookDetailsFSDisposition) serverAPI.APIBookDetailsPostOKFsDispositionItem {
+			return serverAPI.APIBookDetailsPostOKFsDispositionItem{
+				ID:   raw.ID,
+				Name: raw.Name,
+				Files: serverAPI.FSDBFilesInfo{
+					Count:         raw.Count,
+					Size:          raw.Size,
+					SizeFormatted: entities.PrettySize(raw.Size),
+				},
+			}
+		}),
 	}, nil
 }

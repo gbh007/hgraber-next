@@ -21,8 +21,16 @@ type APIFsGetGetRes interface {
 	aPIFsGetGetRes()
 }
 
-type APIFsIdsGetRes interface {
-	aPIFsIdsGetRes()
+type APIFsInfoPostRes interface {
+	aPIFsInfoPostRes()
+}
+
+type APIHighwayFileIDExtGetRes interface {
+	aPIHighwayFileIDExtGetRes()
+}
+
+type APIHighwayTokenCreatePostRes interface {
+	aPIHighwayTokenCreatePostRes()
 }
 
 type APIParsingBookCheckPostRes interface {

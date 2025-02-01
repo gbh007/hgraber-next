@@ -10,7 +10,7 @@ import (
 
 func (c *Controller) APIBookRawPost(ctx context.Context, req *serverAPI.APIBookRawPostReq) (serverAPI.APIBookRawPostRes, error) {
 	var (
-		book      entities.BookFull
+		book      entities.BookContainer
 		err       error
 		innerCode string
 	)

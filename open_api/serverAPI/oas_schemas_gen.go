@@ -327,6 +327,8 @@ type APIAgentListPostReq struct {
 	// Может ли агент обрабатывать множественные ссылки
 	// внешних систем.
 	CanParseMulti OptBool `json:"can_parse_multi"`
+	// Может ли агент работать в режиме ФС.
+	HasFs OptBool `json:"has_fs"`
 	// Проверить состояние агента (запрос статуса у самого
 	// агента).
 	IncludeStatus OptBool `json:"include_status"`
@@ -347,6 +349,11 @@ func (s *APIAgentListPostReq) GetCanParseMulti() OptBool {
 	return s.CanParseMulti
 }
 
+// GetHasFs returns the value of HasFs.
+func (s *APIAgentListPostReq) GetHasFs() OptBool {
+	return s.HasFs
+}
+
 // GetIncludeStatus returns the value of IncludeStatus.
 func (s *APIAgentListPostReq) GetIncludeStatus() OptBool {
 	return s.IncludeStatus
@@ -365,6 +372,11 @@ func (s *APIAgentListPostReq) SetCanExport(val OptBool) {
 // SetCanParseMulti sets the value of CanParseMulti.
 func (s *APIAgentListPostReq) SetCanParseMulti(val OptBool) {
 	s.CanParseMulti = val
+}
+
+// SetHasFs sets the value of HasFs.
+func (s *APIAgentListPostReq) SetHasFs(val OptBool) {
+	s.HasFs = val
 }
 
 // SetIncludeStatus sets the value of IncludeStatus.
@@ -407,6 +419,8 @@ type APIAgentNewPostReq struct {
 	CanParseMulti OptBool `json:"can_parse_multi"`
 	// Может ли агент экспортировать данные из системы.
 	CanExport OptBool `json:"can_export"`
+	// Может ли агент работать в режиме ФС.
+	HasFs OptBool `json:"has_fs"`
 	// Приоритет при выборе агентов.
 	Priority OptInt `json:"priority"`
 }
@@ -439,6 +453,11 @@ func (s *APIAgentNewPostReq) GetCanParseMulti() OptBool {
 // GetCanExport returns the value of CanExport.
 func (s *APIAgentNewPostReq) GetCanExport() OptBool {
 	return s.CanExport
+}
+
+// GetHasFs returns the value of HasFs.
+func (s *APIAgentNewPostReq) GetHasFs() OptBool {
+	return s.HasFs
 }
 
 // GetPriority returns the value of Priority.
@@ -474,6 +493,11 @@ func (s *APIAgentNewPostReq) SetCanParseMulti(val OptBool) {
 // SetCanExport sets the value of CanExport.
 func (s *APIAgentNewPostReq) SetCanExport(val OptBool) {
 	s.CanExport = val
+}
+
+// SetHasFs sets the value of HasFs.
+func (s *APIAgentNewPostReq) SetHasFs(val OptBool) {
+	s.HasFs = val
 }
 
 // SetPriority sets the value of Priority.
@@ -690,7 +714,7 @@ type APIAttributeColorListGetInternalServerError ErrorResponse
 func (*APIAttributeColorListGetInternalServerError) aPIAttributeColorListGetRes() {}
 
 type APIAttributeColorListGetOK struct {
-	// Список пресетов.
+	// Список цветов.
 	Colors []AttributeColor `json:"colors"`
 }
 
@@ -942,7 +966,8 @@ type APIBookDetailsPostOK struct {
 	// Данные страниц книги.
 	Pages []PageSimple `json:"pages"`
 	// Данные о размере книги.
-	Size OptAPIBookDetailsPostOKSize `json:"size"`
+	Size          OptAPIBookDetailsPostOKSize             `json:"size"`
+	FsDisposition []APIBookDetailsPostOKFsDispositionItem `json:"fs_disposition"`
 }
 
 // GetInfo returns the value of Info.
@@ -970,6 +995,11 @@ func (s *APIBookDetailsPostOK) GetSize() OptAPIBookDetailsPostOKSize {
 	return s.Size
 }
 
+// GetFsDisposition returns the value of FsDisposition.
+func (s *APIBookDetailsPostOK) GetFsDisposition() []APIBookDetailsPostOKFsDispositionItem {
+	return s.FsDisposition
+}
+
 // SetInfo sets the value of Info.
 func (s *APIBookDetailsPostOK) SetInfo(val BookSimple) {
 	s.Info = val
@@ -995,7 +1025,50 @@ func (s *APIBookDetailsPostOK) SetSize(val OptAPIBookDetailsPostOKSize) {
 	s.Size = val
 }
 
+// SetFsDisposition sets the value of FsDisposition.
+func (s *APIBookDetailsPostOK) SetFsDisposition(val []APIBookDetailsPostOKFsDispositionItem) {
+	s.FsDisposition = val
+}
+
 func (*APIBookDetailsPostOK) aPIBookDetailsPostRes() {}
+
+type APIBookDetailsPostOKFsDispositionItem struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+	// Название ФС.
+	Name  string        `json:"name"`
+	Files FSDBFilesInfo `json:"files"`
+}
+
+// GetID returns the value of ID.
+func (s *APIBookDetailsPostOKFsDispositionItem) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIBookDetailsPostOKFsDispositionItem) GetName() string {
+	return s.Name
+}
+
+// GetFiles returns the value of Files.
+func (s *APIBookDetailsPostOKFsDispositionItem) GetFiles() FSDBFilesInfo {
+	return s.Files
+}
+
+// SetID sets the value of ID.
+func (s *APIBookDetailsPostOKFsDispositionItem) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIBookDetailsPostOKFsDispositionItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetFiles sets the value of Files.
+func (s *APIBookDetailsPostOKFsDispositionItem) SetFiles(val FSDBFilesInfo) {
+	s.Files = val
+}
 
 // Данные о размере книги.
 type APIBookDetailsPostOKSize struct {
@@ -1263,8 +1336,6 @@ func (*APIBookListPostOK) aPIBookListPostRes() {}
 // Данные книги в упрощенном формате.
 type APIBookListPostOKBooksItem struct {
 	Info BookSimple `json:"info"`
-	// Процент загруженных страниц.
-	PageLoadedPercent float64 `json:"page_loaded_percent"`
 	// Список тегов (одноименный атрибут) книги.
 	Tags []string `json:"tags"`
 }
@@ -1272,11 +1343,6 @@ type APIBookListPostOKBooksItem struct {
 // GetInfo returns the value of Info.
 func (s *APIBookListPostOKBooksItem) GetInfo() BookSimple {
 	return s.Info
-}
-
-// GetPageLoadedPercent returns the value of PageLoadedPercent.
-func (s *APIBookListPostOKBooksItem) GetPageLoadedPercent() float64 {
-	return s.PageLoadedPercent
 }
 
 // GetTags returns the value of Tags.
@@ -1287,11 +1353,6 @@ func (s *APIBookListPostOKBooksItem) GetTags() []string {
 // SetInfo sets the value of Info.
 func (s *APIBookListPostOKBooksItem) SetInfo(val BookSimple) {
 	s.Info = val
-}
-
-// SetPageLoadedPercent sets the value of PageLoadedPercent.
-func (s *APIBookListPostOKBooksItem) SetPageLoadedPercent(val float64) {
-	s.PageLoadedPercent = val
 }
 
 // SetTags sets the value of Tags.
@@ -2631,6 +2692,486 @@ func (*APIFileIDGetOKHeaders) aPIFileIDGetRes() {}
 type APIFileIDGetUnauthorized ErrorResponse
 
 func (*APIFileIDGetUnauthorized) aPIFileIDGetRes() {}
+
+type APIFsCreatePostBadRequest ErrorResponse
+
+func (*APIFsCreatePostBadRequest) aPIFsCreatePostRes() {}
+
+type APIFsCreatePostForbidden ErrorResponse
+
+func (*APIFsCreatePostForbidden) aPIFsCreatePostRes() {}
+
+type APIFsCreatePostInternalServerError ErrorResponse
+
+func (*APIFsCreatePostInternalServerError) aPIFsCreatePostRes() {}
+
+type APIFsCreatePostOK struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIFsCreatePostOK) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIFsCreatePostOK) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+func (*APIFsCreatePostOK) aPIFsCreatePostRes() {}
+
+type APIFsCreatePostUnauthorized ErrorResponse
+
+func (*APIFsCreatePostUnauthorized) aPIFsCreatePostRes() {}
+
+type APIFsDeletePostBadRequest ErrorResponse
+
+func (*APIFsDeletePostBadRequest) aPIFsDeletePostRes() {}
+
+type APIFsDeletePostForbidden ErrorResponse
+
+func (*APIFsDeletePostForbidden) aPIFsDeletePostRes() {}
+
+type APIFsDeletePostInternalServerError ErrorResponse
+
+func (*APIFsDeletePostInternalServerError) aPIFsDeletePostRes() {}
+
+// APIFsDeletePostNoContent is response for APIFsDeletePost operation.
+type APIFsDeletePostNoContent struct{}
+
+func (*APIFsDeletePostNoContent) aPIFsDeletePostRes() {}
+
+type APIFsDeletePostNotFound ErrorResponse
+
+func (*APIFsDeletePostNotFound) aPIFsDeletePostRes() {}
+
+type APIFsDeletePostReq struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIFsDeletePostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIFsDeletePostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIFsDeletePostUnauthorized ErrorResponse
+
+func (*APIFsDeletePostUnauthorized) aPIFsDeletePostRes() {}
+
+type APIFsGetPostBadRequest ErrorResponse
+
+func (*APIFsGetPostBadRequest) aPIFsGetPostRes() {}
+
+type APIFsGetPostForbidden ErrorResponse
+
+func (*APIFsGetPostForbidden) aPIFsGetPostRes() {}
+
+type APIFsGetPostInternalServerError ErrorResponse
+
+func (*APIFsGetPostInternalServerError) aPIFsGetPostRes() {}
+
+type APIFsGetPostNotFound ErrorResponse
+
+func (*APIFsGetPostNotFound) aPIFsGetPostRes() {}
+
+type APIFsGetPostReq struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIFsGetPostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIFsGetPostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIFsGetPostUnauthorized ErrorResponse
+
+func (*APIFsGetPostUnauthorized) aPIFsGetPostRes() {}
+
+type APIFsListPostBadRequest ErrorResponse
+
+func (*APIFsListPostBadRequest) aPIFsListPostRes() {}
+
+type APIFsListPostForbidden ErrorResponse
+
+func (*APIFsListPostForbidden) aPIFsListPostRes() {}
+
+type APIFsListPostInternalServerError ErrorResponse
+
+func (*APIFsListPostInternalServerError) aPIFsListPostRes() {}
+
+type APIFsListPostOK struct {
+	// Список ФС.
+	FileSystems []APIFsListPostOKFileSystemsItem `json:"file_systems"`
+}
+
+// GetFileSystems returns the value of FileSystems.
+func (s *APIFsListPostOK) GetFileSystems() []APIFsListPostOKFileSystemsItem {
+	return s.FileSystems
+}
+
+// SetFileSystems sets the value of FileSystems.
+func (s *APIFsListPostOK) SetFileSystems(val []APIFsListPostOKFileSystemsItem) {
+	s.FileSystems = val
+}
+
+func (*APIFsListPostOK) aPIFsListPostRes() {}
+
+type APIFsListPostOKFileSystemsItem struct {
+	Info FileSystemInfo `json:"info"`
+	// Признак того что это ФС старого типа.
+	IsLegacy            bool             `json:"is_legacy"`
+	DbFilesInfo         OptFSDBFilesInfo `json:"db_files_info"`
+	DbInvalidFilesInfo  OptFSDBFilesInfo `json:"db_invalid_files_info"`
+	DbDetachedFilesInfo OptFSDBFilesInfo `json:"db_detached_files_info"`
+	// Доступное место.
+	AvailableSize OptInt64 `json:"available_size"`
+	// Доступное место в человеко читаемом виде.
+	AvailableSizeFormatted OptString `json:"available_size_formatted"`
+}
+
+// GetInfo returns the value of Info.
+func (s *APIFsListPostOKFileSystemsItem) GetInfo() FileSystemInfo {
+	return s.Info
+}
+
+// GetIsLegacy returns the value of IsLegacy.
+func (s *APIFsListPostOKFileSystemsItem) GetIsLegacy() bool {
+	return s.IsLegacy
+}
+
+// GetDbFilesInfo returns the value of DbFilesInfo.
+func (s *APIFsListPostOKFileSystemsItem) GetDbFilesInfo() OptFSDBFilesInfo {
+	return s.DbFilesInfo
+}
+
+// GetDbInvalidFilesInfo returns the value of DbInvalidFilesInfo.
+func (s *APIFsListPostOKFileSystemsItem) GetDbInvalidFilesInfo() OptFSDBFilesInfo {
+	return s.DbInvalidFilesInfo
+}
+
+// GetDbDetachedFilesInfo returns the value of DbDetachedFilesInfo.
+func (s *APIFsListPostOKFileSystemsItem) GetDbDetachedFilesInfo() OptFSDBFilesInfo {
+	return s.DbDetachedFilesInfo
+}
+
+// GetAvailableSize returns the value of AvailableSize.
+func (s *APIFsListPostOKFileSystemsItem) GetAvailableSize() OptInt64 {
+	return s.AvailableSize
+}
+
+// GetAvailableSizeFormatted returns the value of AvailableSizeFormatted.
+func (s *APIFsListPostOKFileSystemsItem) GetAvailableSizeFormatted() OptString {
+	return s.AvailableSizeFormatted
+}
+
+// SetInfo sets the value of Info.
+func (s *APIFsListPostOKFileSystemsItem) SetInfo(val FileSystemInfo) {
+	s.Info = val
+}
+
+// SetIsLegacy sets the value of IsLegacy.
+func (s *APIFsListPostOKFileSystemsItem) SetIsLegacy(val bool) {
+	s.IsLegacy = val
+}
+
+// SetDbFilesInfo sets the value of DbFilesInfo.
+func (s *APIFsListPostOKFileSystemsItem) SetDbFilesInfo(val OptFSDBFilesInfo) {
+	s.DbFilesInfo = val
+}
+
+// SetDbInvalidFilesInfo sets the value of DbInvalidFilesInfo.
+func (s *APIFsListPostOKFileSystemsItem) SetDbInvalidFilesInfo(val OptFSDBFilesInfo) {
+	s.DbInvalidFilesInfo = val
+}
+
+// SetDbDetachedFilesInfo sets the value of DbDetachedFilesInfo.
+func (s *APIFsListPostOKFileSystemsItem) SetDbDetachedFilesInfo(val OptFSDBFilesInfo) {
+	s.DbDetachedFilesInfo = val
+}
+
+// SetAvailableSize sets the value of AvailableSize.
+func (s *APIFsListPostOKFileSystemsItem) SetAvailableSize(val OptInt64) {
+	s.AvailableSize = val
+}
+
+// SetAvailableSizeFormatted sets the value of AvailableSizeFormatted.
+func (s *APIFsListPostOKFileSystemsItem) SetAvailableSizeFormatted(val OptString) {
+	s.AvailableSizeFormatted = val
+}
+
+type APIFsListPostReq struct {
+	// Включает в данные размер файлов по данным из БД.
+	IncludeDbFileSize OptBool `json:"include_db_file_size"`
+	// Включает в данные свободный размер в хранилище.
+	IncludeAvailableSize OptBool `json:"include_available_size"`
+}
+
+// GetIncludeDbFileSize returns the value of IncludeDbFileSize.
+func (s *APIFsListPostReq) GetIncludeDbFileSize() OptBool {
+	return s.IncludeDbFileSize
+}
+
+// GetIncludeAvailableSize returns the value of IncludeAvailableSize.
+func (s *APIFsListPostReq) GetIncludeAvailableSize() OptBool {
+	return s.IncludeAvailableSize
+}
+
+// SetIncludeDbFileSize sets the value of IncludeDbFileSize.
+func (s *APIFsListPostReq) SetIncludeDbFileSize(val OptBool) {
+	s.IncludeDbFileSize = val
+}
+
+// SetIncludeAvailableSize sets the value of IncludeAvailableSize.
+func (s *APIFsListPostReq) SetIncludeAvailableSize(val OptBool) {
+	s.IncludeAvailableSize = val
+}
+
+type APIFsListPostUnauthorized ErrorResponse
+
+func (*APIFsListPostUnauthorized) aPIFsListPostRes() {}
+
+type APIFsRemoveMismatchPostBadRequest ErrorResponse
+
+func (*APIFsRemoveMismatchPostBadRequest) aPIFsRemoveMismatchPostRes() {}
+
+type APIFsRemoveMismatchPostForbidden ErrorResponse
+
+func (*APIFsRemoveMismatchPostForbidden) aPIFsRemoveMismatchPostRes() {}
+
+type APIFsRemoveMismatchPostInternalServerError ErrorResponse
+
+func (*APIFsRemoveMismatchPostInternalServerError) aPIFsRemoveMismatchPostRes() {}
+
+// APIFsRemoveMismatchPostNoContent is response for APIFsRemoveMismatchPost operation.
+type APIFsRemoveMismatchPostNoContent struct{}
+
+func (*APIFsRemoveMismatchPostNoContent) aPIFsRemoveMismatchPostRes() {}
+
+type APIFsRemoveMismatchPostReq struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIFsRemoveMismatchPostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIFsRemoveMismatchPostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIFsRemoveMismatchPostUnauthorized ErrorResponse
+
+func (*APIFsRemoveMismatchPostUnauthorized) aPIFsRemoveMismatchPostRes() {}
+
+type APIFsTransferBookPostBadRequest ErrorResponse
+
+func (*APIFsTransferBookPostBadRequest) aPIFsTransferBookPostRes() {}
+
+type APIFsTransferBookPostForbidden ErrorResponse
+
+func (*APIFsTransferBookPostForbidden) aPIFsTransferBookPostRes() {}
+
+type APIFsTransferBookPostInternalServerError ErrorResponse
+
+func (*APIFsTransferBookPostInternalServerError) aPIFsTransferBookPostRes() {}
+
+// APIFsTransferBookPostNoContent is response for APIFsTransferBookPost operation.
+type APIFsTransferBookPostNoContent struct{}
+
+func (*APIFsTransferBookPostNoContent) aPIFsTransferBookPostRes() {}
+
+type APIFsTransferBookPostReq struct {
+	// ID книги которую переносить.
+	BookID uuid.UUID `json:"book_id"`
+	// ID файловой системы на которую переносить.
+	To uuid.UUID `json:"to"`
+	// Номер страницы для переноса.
+	PageNumber OptInt `json:"page_number"`
+	// Перенести только страницу для превью.
+	OnlyPreviewPages OptBool `json:"only_preview_pages"`
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIFsTransferBookPostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetTo returns the value of To.
+func (s *APIFsTransferBookPostReq) GetTo() uuid.UUID {
+	return s.To
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIFsTransferBookPostReq) GetPageNumber() OptInt {
+	return s.PageNumber
+}
+
+// GetOnlyPreviewPages returns the value of OnlyPreviewPages.
+func (s *APIFsTransferBookPostReq) GetOnlyPreviewPages() OptBool {
+	return s.OnlyPreviewPages
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIFsTransferBookPostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetTo sets the value of To.
+func (s *APIFsTransferBookPostReq) SetTo(val uuid.UUID) {
+	s.To = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIFsTransferBookPostReq) SetPageNumber(val OptInt) {
+	s.PageNumber = val
+}
+
+// SetOnlyPreviewPages sets the value of OnlyPreviewPages.
+func (s *APIFsTransferBookPostReq) SetOnlyPreviewPages(val OptBool) {
+	s.OnlyPreviewPages = val
+}
+
+type APIFsTransferBookPostUnauthorized ErrorResponse
+
+func (*APIFsTransferBookPostUnauthorized) aPIFsTransferBookPostRes() {}
+
+type APIFsTransferPostBadRequest ErrorResponse
+
+func (*APIFsTransferPostBadRequest) aPIFsTransferPostRes() {}
+
+type APIFsTransferPostForbidden ErrorResponse
+
+func (*APIFsTransferPostForbidden) aPIFsTransferPostRes() {}
+
+type APIFsTransferPostInternalServerError ErrorResponse
+
+func (*APIFsTransferPostInternalServerError) aPIFsTransferPostRes() {}
+
+// APIFsTransferPostNoContent is response for APIFsTransferPost operation.
+type APIFsTransferPostNoContent struct{}
+
+func (*APIFsTransferPostNoContent) aPIFsTransferPostRes() {}
+
+type APIFsTransferPostReq struct {
+	// ID файловой системы с которой переносить.
+	From uuid.UUID `json:"from"`
+	// ID файловой системы на которую переносить.
+	To uuid.UUID `json:"to"`
+	// Перенести только страницы для превью.
+	OnlyPreviewPages OptBool `json:"only_preview_pages"`
+}
+
+// GetFrom returns the value of From.
+func (s *APIFsTransferPostReq) GetFrom() uuid.UUID {
+	return s.From
+}
+
+// GetTo returns the value of To.
+func (s *APIFsTransferPostReq) GetTo() uuid.UUID {
+	return s.To
+}
+
+// GetOnlyPreviewPages returns the value of OnlyPreviewPages.
+func (s *APIFsTransferPostReq) GetOnlyPreviewPages() OptBool {
+	return s.OnlyPreviewPages
+}
+
+// SetFrom sets the value of From.
+func (s *APIFsTransferPostReq) SetFrom(val uuid.UUID) {
+	s.From = val
+}
+
+// SetTo sets the value of To.
+func (s *APIFsTransferPostReq) SetTo(val uuid.UUID) {
+	s.To = val
+}
+
+// SetOnlyPreviewPages sets the value of OnlyPreviewPages.
+func (s *APIFsTransferPostReq) SetOnlyPreviewPages(val OptBool) {
+	s.OnlyPreviewPages = val
+}
+
+type APIFsTransferPostUnauthorized ErrorResponse
+
+func (*APIFsTransferPostUnauthorized) aPIFsTransferPostRes() {}
+
+type APIFsUpdatePostBadRequest ErrorResponse
+
+func (*APIFsUpdatePostBadRequest) aPIFsUpdatePostRes() {}
+
+type APIFsUpdatePostForbidden ErrorResponse
+
+func (*APIFsUpdatePostForbidden) aPIFsUpdatePostRes() {}
+
+type APIFsUpdatePostInternalServerError ErrorResponse
+
+func (*APIFsUpdatePostInternalServerError) aPIFsUpdatePostRes() {}
+
+// APIFsUpdatePostNoContent is response for APIFsUpdatePost operation.
+type APIFsUpdatePostNoContent struct{}
+
+func (*APIFsUpdatePostNoContent) aPIFsUpdatePostRes() {}
+
+type APIFsUpdatePostNotFound ErrorResponse
+
+func (*APIFsUpdatePostNotFound) aPIFsUpdatePostRes() {}
+
+type APIFsUpdatePostUnauthorized ErrorResponse
+
+func (*APIFsUpdatePostUnauthorized) aPIFsUpdatePostRes() {}
+
+type APIFsValidatePostBadRequest ErrorResponse
+
+func (*APIFsValidatePostBadRequest) aPIFsValidatePostRes() {}
+
+type APIFsValidatePostForbidden ErrorResponse
+
+func (*APIFsValidatePostForbidden) aPIFsValidatePostRes() {}
+
+type APIFsValidatePostInternalServerError ErrorResponse
+
+func (*APIFsValidatePostInternalServerError) aPIFsValidatePostRes() {}
+
+// APIFsValidatePostNoContent is response for APIFsValidatePost operation.
+type APIFsValidatePostNoContent struct{}
+
+func (*APIFsValidatePostNoContent) aPIFsValidatePostRes() {}
+
+type APIFsValidatePostReq struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIFsValidatePostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIFsValidatePostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIFsValidatePostUnauthorized ErrorResponse
+
+func (*APIFsValidatePostUnauthorized) aPIFsValidatePostRes() {}
 
 type APILabelDeletePostBadRequest ErrorResponse
 
@@ -4387,6 +4928,8 @@ type Agent struct {
 	CanParseMulti bool `json:"can_parse_multi"`
 	// Может ли агент экспортировать данные из системы.
 	CanExport bool `json:"can_export"`
+	// Может ли агент работать в режиме ФС.
+	HasFs bool `json:"has_fs"`
 	// Приоритет при выборе агентов.
 	Priority int `json:"priority"`
 	// Время создания.
@@ -4426,6 +4969,11 @@ func (s *Agent) GetCanParseMulti() bool {
 // GetCanExport returns the value of CanExport.
 func (s *Agent) GetCanExport() bool {
 	return s.CanExport
+}
+
+// GetHasFs returns the value of HasFs.
+func (s *Agent) GetHasFs() bool {
+	return s.HasFs
 }
 
 // GetPriority returns the value of Priority.
@@ -4471,6 +5019,11 @@ func (s *Agent) SetCanParseMulti(val bool) {
 // SetCanExport sets the value of CanExport.
 func (s *Agent) SetCanExport(val bool) {
 	s.CanExport = val
+}
+
+// SetHasFs sets the value of HasFs.
+func (s *Agent) SetHasFs(val bool) {
+	s.HasFs = val
 }
 
 // SetPriority sets the value of Priority.
@@ -5648,6 +6201,175 @@ func (s *ErrorResponse) SetDetails(val OptString) {
 	s.Details = val
 }
 
+// Информация о размерах файлов и их количестве.
+// Ref: #/components/schemas/FSDBFilesInfo
+type FSDBFilesInfo struct {
+	// Количество файлов.
+	Count int64 `json:"count"`
+	// Размер файлов.
+	Size int64 `json:"size"`
+	// Размер файлов в человеко читаемом виде.
+	SizeFormatted string `json:"size_formatted"`
+}
+
+// GetCount returns the value of Count.
+func (s *FSDBFilesInfo) GetCount() int64 {
+	return s.Count
+}
+
+// GetSize returns the value of Size.
+func (s *FSDBFilesInfo) GetSize() int64 {
+	return s.Size
+}
+
+// GetSizeFormatted returns the value of SizeFormatted.
+func (s *FSDBFilesInfo) GetSizeFormatted() string {
+	return s.SizeFormatted
+}
+
+// SetCount sets the value of Count.
+func (s *FSDBFilesInfo) SetCount(val int64) {
+	s.Count = val
+}
+
+// SetSize sets the value of Size.
+func (s *FSDBFilesInfo) SetSize(val int64) {
+	s.Size = val
+}
+
+// SetSizeFormatted sets the value of SizeFormatted.
+func (s *FSDBFilesInfo) SetSizeFormatted(val string) {
+	s.SizeFormatted = val
+}
+
+// Данные о файловой системе.
+// Ref: #/components/schemas/FileSystemInfo
+type FileSystemInfo struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+	// Название ФС.
+	Name string `json:"name"`
+	// Описание ФС.
+	Description OptString `json:"description"`
+	// ID агента.
+	AgentID OptUUID `json:"agent_id"`
+	// Название ФС.
+	Path OptString `json:"path"`
+	// Приоритет при загрузке новых файлов.
+	DownloadPriority int `json:"download_priority"`
+	// Приоритет при удалении дубликатов (приоритет
+	// сохранить файл с этой ФС).
+	DeduplicatePriority int `json:"deduplicate_priority"`
+	// Включен ли режим highway для ФС.
+	HighwayEnabled bool `json:"highway_enabled"`
+	// Внешний адрес highway.
+	HighwayAddr OptURI `json:"highway_addr"`
+	// Время создания.
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// GetID returns the value of ID.
+func (s *FileSystemInfo) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *FileSystemInfo) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *FileSystemInfo) GetDescription() OptString {
+	return s.Description
+}
+
+// GetAgentID returns the value of AgentID.
+func (s *FileSystemInfo) GetAgentID() OptUUID {
+	return s.AgentID
+}
+
+// GetPath returns the value of Path.
+func (s *FileSystemInfo) GetPath() OptString {
+	return s.Path
+}
+
+// GetDownloadPriority returns the value of DownloadPriority.
+func (s *FileSystemInfo) GetDownloadPriority() int {
+	return s.DownloadPriority
+}
+
+// GetDeduplicatePriority returns the value of DeduplicatePriority.
+func (s *FileSystemInfo) GetDeduplicatePriority() int {
+	return s.DeduplicatePriority
+}
+
+// GetHighwayEnabled returns the value of HighwayEnabled.
+func (s *FileSystemInfo) GetHighwayEnabled() bool {
+	return s.HighwayEnabled
+}
+
+// GetHighwayAddr returns the value of HighwayAddr.
+func (s *FileSystemInfo) GetHighwayAddr() OptURI {
+	return s.HighwayAddr
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *FileSystemInfo) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *FileSystemInfo) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *FileSystemInfo) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *FileSystemInfo) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetAgentID sets the value of AgentID.
+func (s *FileSystemInfo) SetAgentID(val OptUUID) {
+	s.AgentID = val
+}
+
+// SetPath sets the value of Path.
+func (s *FileSystemInfo) SetPath(val OptString) {
+	s.Path = val
+}
+
+// SetDownloadPriority sets the value of DownloadPriority.
+func (s *FileSystemInfo) SetDownloadPriority(val int) {
+	s.DownloadPriority = val
+}
+
+// SetDeduplicatePriority sets the value of DeduplicatePriority.
+func (s *FileSystemInfo) SetDeduplicatePriority(val int) {
+	s.DeduplicatePriority = val
+}
+
+// SetHighwayEnabled sets the value of HighwayEnabled.
+func (s *FileSystemInfo) SetHighwayEnabled(val bool) {
+	s.HighwayEnabled = val
+}
+
+// SetHighwayAddr sets the value of HighwayAddr.
+func (s *FileSystemInfo) SetHighwayAddr(val OptURI) {
+	s.HighwayAddr = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *FileSystemInfo) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+func (*FileSystemInfo) aPIFsGetPostRes() {}
+
 type HeaderAuth struct {
 	APIKey string
 }
@@ -6214,6 +6936,52 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
+// NewOptFSDBFilesInfo returns new OptFSDBFilesInfo with value set to v.
+func NewOptFSDBFilesInfo(v FSDBFilesInfo) OptFSDBFilesInfo {
+	return OptFSDBFilesInfo{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptFSDBFilesInfo is optional FSDBFilesInfo.
+type OptFSDBFilesInfo struct {
+	Value FSDBFilesInfo
+	Set   bool
+}
+
+// IsSet returns true if OptFSDBFilesInfo was set.
+func (o OptFSDBFilesInfo) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptFSDBFilesInfo) Reset() {
+	var v FSDBFilesInfo
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptFSDBFilesInfo) SetTo(v FSDBFilesInfo) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptFSDBFilesInfo) Get() (v FSDBFilesInfo, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptFSDBFilesInfo) Or(d FSDBFilesInfo) FSDBFilesInfo {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
 	return OptInt{
@@ -6254,6 +7022,52 @@ func (o OptInt) Get() (v int, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt64 returns new OptInt64 with value set to v.
+func NewOptInt64(v int64) OptInt64 {
+	return OptInt64{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt64 is optional int64.
+type OptInt64 struct {
+	Value int64
+	Set   bool
+}
+
+// IsSet returns true if OptInt64 was set.
+func (o OptInt64) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt64) Reset() {
+	var v int64
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt64) SetTo(v int64) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt64) Get() (v int64, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt64) Or(d int64) int64 {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -6513,6 +7327,11 @@ type SystemInfo struct {
 	FileCount int `json:"file_count"`
 	// Количество файлов без рассчитанного хеша.
 	UnhashedFileCount int `json:"unhashed_file_count"`
+	// Количество поврежденных файлов.
+	InvalidFileCount int `json:"invalid_file_count"`
+	// Количество неиспользуемых файлов (нет привязки к
+	// странице).
+	DetachedFileCount int `json:"detached_file_count"`
 	// Количество мертвых хешей.
 	DeadHashCount int `json:"dead_hash_count"`
 	// Объем загруженных изображений в байтах.
@@ -6586,6 +7405,16 @@ func (s *SystemInfo) GetFileCount() int {
 // GetUnhashedFileCount returns the value of UnhashedFileCount.
 func (s *SystemInfo) GetUnhashedFileCount() int {
 	return s.UnhashedFileCount
+}
+
+// GetInvalidFileCount returns the value of InvalidFileCount.
+func (s *SystemInfo) GetInvalidFileCount() int {
+	return s.InvalidFileCount
+}
+
+// GetDetachedFileCount returns the value of DetachedFileCount.
+func (s *SystemInfo) GetDetachedFileCount() int {
+	return s.DetachedFileCount
 }
 
 // GetDeadHashCount returns the value of DeadHashCount.
@@ -6676,6 +7505,16 @@ func (s *SystemInfo) SetFileCount(val int) {
 // SetUnhashedFileCount sets the value of UnhashedFileCount.
 func (s *SystemInfo) SetUnhashedFileCount(val int) {
 	s.UnhashedFileCount = val
+}
+
+// SetInvalidFileCount sets the value of InvalidFileCount.
+func (s *SystemInfo) SetInvalidFileCount(val int) {
+	s.InvalidFileCount = val
+}
+
+// SetDetachedFileCount sets the value of DetachedFileCount.
+func (s *SystemInfo) SetDetachedFileCount(val int) {
+	s.DetachedFileCount = val
 }
 
 // SetDeadHashCount sets the value of DeadHashCount.

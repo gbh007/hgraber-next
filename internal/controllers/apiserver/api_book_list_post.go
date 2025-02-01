@@ -11,20 +11,19 @@ import (
 func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.BookFilter) (serverAPI.APIBookListPostRes, error) {
 	filter := convertAPIBookFilter(*req)
 
-	bookList, err := c.webAPIUseCases.BookList(ctx, filter)
+	bookList, err := c.bffUseCases.BookList(ctx, filter)
 	if err != nil {
 		return &serverAPI.APIBookListPostInternalServerError{
-			InnerCode: WebAPIUseCaseCode,
+			InnerCode: BFFUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	return &serverAPI.APIBookListPostOK{
-		Books: pkg.Map(bookList.Books, func(b entities.BookToWeb) serverAPI.APIBookListPostOKBooksItem {
+		Books: pkg.Map(bookList.Books, func(b entities.BFFBookShort) serverAPI.APIBookListPostOKBooksItem {
 			return serverAPI.APIBookListPostOKBooksItem{
-				Info:              c.convertSimpleBook(b.Book, b.PreviewPage),
-				PageLoadedPercent: b.PageDownloadPercent(),
-				Tags:              b.Tags,
+				Info: c.convertSimpleBook(b.Book, b.PreviewPage),
+				Tags: b.Tags,
 			}
 		}),
 		Pages: pkg.Map(bookList.Pages, func(v int) serverAPI.APIBookListPostOKPagesItem {

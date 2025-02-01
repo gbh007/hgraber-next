@@ -62,7 +62,7 @@ func (uc *UseCase) RemoveDetachedFiles(_ context.Context) (entities.RunnableTask
 				return
 			}
 
-			err = uc.fileStorage.Delete(ctx, file.ID)
+			err = uc.fileStorage.Delete(ctx, file.ID, &file.FSID)
 			if err != nil {
 				taskResult.SetError(fmt.Errorf("delete file (%s) from file-storage: %w", file.ID.String(), err))
 

@@ -12,7 +12,7 @@ import (
 type parseUseCases interface {
 	BooksExists(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error)
 	PagesExists(ctx context.Context, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
-	BookByURL(ctx context.Context, u url.URL) (entities.BookFull, error)
+	BookByURL(ctx context.Context, u url.URL) (entities.BookContainer, error)
 	PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error)
 }
 

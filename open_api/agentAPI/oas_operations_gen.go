@@ -6,15 +6,17 @@ package agentAPI
 type OperationName = string
 
 const (
-	APICoreStatusGetOperation        OperationName = "APICoreStatusGet"
-	APIExportArchivePostOperation    OperationName = "APIExportArchivePost"
-	APIFsCreatePostOperation         OperationName = "APIFsCreatePost"
-	APIFsDeletePostOperation         OperationName = "APIFsDeletePost"
-	APIFsGetGetOperation             OperationName = "APIFsGetGet"
-	APIFsIdsGetOperation             OperationName = "APIFsIdsGet"
-	APIParsingBookCheckPostOperation OperationName = "APIParsingBookCheckPost"
-	APIParsingBookMultiPostOperation OperationName = "APIParsingBookMultiPost"
-	APIParsingBookPostOperation      OperationName = "APIParsingBookPost"
-	APIParsingPageCheckPostOperation OperationName = "APIParsingPageCheckPost"
-	APIParsingPagePostOperation      OperationName = "APIParsingPagePost"
+	APICoreStatusGetOperation          OperationName = "APICoreStatusGet"
+	APIExportArchivePostOperation      OperationName = "APIExportArchivePost"
+	APIFsCreatePostOperation           OperationName = "APIFsCreatePost"
+	APIFsDeletePostOperation           OperationName = "APIFsDeletePost"
+	APIFsGetGetOperation               OperationName = "APIFsGetGet"
+	APIFsInfoPostOperation             OperationName = "APIFsInfoPost"
+	APIHighwayFileIDExtGetOperation    OperationName = "APIHighwayFileIDExtGet"
+	APIHighwayTokenCreatePostOperation OperationName = "APIHighwayTokenCreatePost"
+	APIParsingBookCheckPostOperation   OperationName = "APIParsingBookCheckPost"
+	APIParsingBookMultiPostOperation   OperationName = "APIParsingBookMultiPost"
+	APIParsingBookPostOperation        OperationName = "APIParsingBookPost"
+	APIParsingPageCheckPostOperation   OperationName = "APIParsingPageCheckPost"
+	APIParsingPagePostOperation        OperationName = "APIParsingPagePost"
 )

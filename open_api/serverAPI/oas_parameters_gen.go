@@ -86,6 +86,8 @@ func decodeAPIBookArchiveIDGetParams(args [1]string, argsEscaped bool, r *http.R
 type APIFileIDGetParams struct {
 	// ID файла для получения.
 	ID string
+	// ID файловой системы, для ускорения получения файла.
+	Fsid OptUUID
 }
 
 func unpackAPIFileIDGetParams(packed middleware.Parameters) (params APIFileIDGetParams) {
@@ -96,10 +98,20 @@ func unpackAPIFileIDGetParams(packed middleware.Parameters) (params APIFileIDGet
 		}
 		params.ID = packed[key].(string)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "fsid",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Fsid = v.(OptUUID)
+		}
+	}
 	return params
 }
 
 func decodeAPIFileIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params APIFileIDGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
 	if err := func() error {
 		param := args[0]
@@ -142,6 +154,47 @@ func decodeAPIFileIDGetParams(args [1]string, argsEscaped bool, r *http.Request)
 		return params, &ogenerrors.DecodeParamError{
 			Name: "id",
 			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode query: fsid.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "fsid",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotFsidVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotFsidVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Fsid.SetTo(paramsDotFsidVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "fsid",
+			In:   "query",
 			Err:  err,
 		}
 	}

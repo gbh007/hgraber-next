@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/go-faster/errors"
-	"github.com/google/uuid"
 
 	"github.com/ogen-go/ogen/validate"
 )
@@ -106,14 +105,6 @@ func (s APICoreStatusGetOKStatus) Validate() error {
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
-}
-
-func (s APIFsIdsGetOKApplicationJSON) Validate() error {
-	alias := ([]uuid.UUID)(s)
-	if alias == nil {
-		return errors.New("nil is invalid value")
-	}
-	return nil
 }
 
 func (s *APIParsingBookCheckPostReq) Validate() error {

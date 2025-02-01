@@ -16,6 +16,7 @@ func (c *Controller) APIAgentUpdatePost(ctx context.Context, req *serverAPI.Agen
 		CanParse:      req.CanParse,
 		CanParseMulti: req.CanParseMulti,
 		CanExport:     req.CanExport,
+		HasFS:         req.HasFs,
 		Priority:      req.Priority,
 		CreateAt:      req.CreatedAt,
 	})

@@ -13,7 +13,6 @@ import (
 
 type storage interface {
 	SystemSize(ctx context.Context) (entities.SystemSizeInfo, error)
-	BookCount(ctx context.Context, filter entities.BookFilter) (int, error)
 	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (entities.Page, error)
 
 	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool, verifiedAt time.Time) error
@@ -39,10 +38,7 @@ type storage interface {
 }
 
 type bookRequester interface {
-	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookFull, error)
-	Book(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
-	BookFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
-	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
 }
 
 type workerManager interface {
@@ -52,7 +48,7 @@ type workerManager interface {
 }
 
 type fileStorage interface {
-	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
+	Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 }
 
 type deduplicator interface {

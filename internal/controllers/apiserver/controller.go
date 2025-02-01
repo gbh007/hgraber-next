@@ -19,7 +19,7 @@ type parseUseCases interface {
 
 	BooksExists(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error)
 	PagesExists(ctx context.Context, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
-	BookByURL(ctx context.Context, u url.URL) (entities.BookFull, error)
+	BookByURL(ctx context.Context, u url.URL) (entities.BookContainer, error)
 	PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error)
 
 	NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (entities.MultiHandleMultipleResult, error)
@@ -28,12 +28,10 @@ type parseUseCases interface {
 type webAPIUseCases interface {
 	SystemInfo(ctx context.Context) (entities.SystemSizeInfoWithMonitor, error)
 
-	File(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
+	File(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 	PageBody(ctx context.Context, bookID uuid.UUID, pageNumber int) (io.Reader, error)
 
-	Book(ctx context.Context, bookID uuid.UUID) (entities.BookToWeb, error)
-	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookFull, error)
-	BookList(ctx context.Context, filter entities.BookFilter) (entities.BookListToWeb, error)
+	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
 
 	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool) error
 	DeleteBook(ctx context.Context, bookID uuid.UUID) error
@@ -69,14 +67,14 @@ type agentUseCases interface {
 
 type exportUseCases interface {
 	Export(ctx context.Context, agentID uuid.UUID, filter entities.BookFilter, deleteAfter bool) error
-	ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, entities.BookFull, error)
+	ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, entities.BookContainer, error)
 	ImportArchive(ctx context.Context, body io.Reader, deduplicate bool, autoVerify bool) (uuid.UUID, error)
 }
 
 type deduplicateUseCases interface {
 	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]entities.DeduplicateArchiveResult, error)
 	BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]entities.DeduplicateBookResult, error)
-	UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.PageWithDeadHash, error)
+	UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.BFFPreviewPage, error)
 	BooksByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) ([]entities.BookWithPreviewPage, error)
 
 	CreateDeadHashByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) error
@@ -92,12 +90,31 @@ type deduplicateUseCases interface {
 type taskUseCases interface {
 	RunTask(ctx context.Context, code entities.TaskCode) error
 	TaskResults(ctx context.Context) ([]*entities.TaskResult, error)
+	RemoveFilesInFSMismatch(ctx context.Context, fsID uuid.UUID) error
 }
 
 type rebuilderUseCases interface {
-	UpdateBook(ctx context.Context, book entities.BookFull) error
+	UpdateBook(ctx context.Context, book entities.BookContainer) error
 	RebuildBook(ctx context.Context, request entities.RebuildBookRequest) (uuid.UUID, error)
 	RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages bool) error
+}
+
+type fsUseCases interface {
+	FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]entities.FSWithStatus, error)
+	FileStorage(ctx context.Context, id uuid.UUID) (entities.FileStorageSystem, error)
+	NewFileStorage(ctx context.Context, fs entities.FileStorageSystem) (uuid.UUID, error)
+	UpdateFileStorage(ctx context.Context, fs entities.FileStorageSystem) error
+	DeleteFileStorage(ctx context.Context, id uuid.UUID) error
+	ValidateFS(ctx context.Context, fsID uuid.UUID) error
+	TransferFSFiles(ctx context.Context, from, to uuid.UUID, onlyPreview bool) error
+	TransferFSFilesByBook(ctx context.Context, bookID, to uuid.UUID, pageNumber *int) error
+
+	HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error)
+}
+
+type bffUseCases interface {
+	BookDetails(ctx context.Context, bookID uuid.UUID) (entities.BFFBookDetails, error)
+	BookList(ctx context.Context, filter entities.BookFilter) (entities.BFFBookList, error)
 }
 
 type config interface {
@@ -120,6 +137,8 @@ type Controller struct {
 	deduplicateUseCases deduplicateUseCases
 	taskUseCases        taskUseCases
 	rebuilderUseCases   rebuilderUseCases
+	fsUseCases          fsUseCases
+	bffUseCases         bffUseCases
 
 	ogenServer *serverAPI.Server
 
@@ -141,6 +160,8 @@ func New(
 	deduplicateUseCases deduplicateUseCases,
 	taskUseCases taskUseCases,
 	rebuilderUseCases rebuilderUseCases,
+	fsUseCases fsUseCases,
+	bffUseCases bffUseCases,
 	debug bool,
 ) (*Controller, error) {
 	u, err := url.Parse(config.GetExternalAddr())
@@ -161,6 +182,8 @@ func New(
 		deduplicateUseCases:        deduplicateUseCases,
 		taskUseCases:               taskUseCases,
 		rebuilderUseCases:          rebuilderUseCases,
+		fsUseCases:                 fsUseCases,
+		bffUseCases:                bffUseCases,
 		debug:                      debug,
 		staticDir:                  config.GetStaticDir(),
 		token:                      config.GetToken(),

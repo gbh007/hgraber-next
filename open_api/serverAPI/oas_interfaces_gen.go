@@ -133,6 +133,42 @@ type APIFileIDGetRes interface {
 	aPIFileIDGetRes()
 }
 
+type APIFsCreatePostRes interface {
+	aPIFsCreatePostRes()
+}
+
+type APIFsDeletePostRes interface {
+	aPIFsDeletePostRes()
+}
+
+type APIFsGetPostRes interface {
+	aPIFsGetPostRes()
+}
+
+type APIFsListPostRes interface {
+	aPIFsListPostRes()
+}
+
+type APIFsRemoveMismatchPostRes interface {
+	aPIFsRemoveMismatchPostRes()
+}
+
+type APIFsTransferBookPostRes interface {
+	aPIFsTransferBookPostRes()
+}
+
+type APIFsTransferPostRes interface {
+	aPIFsTransferPostRes()
+}
+
+type APIFsUpdatePostRes interface {
+	aPIFsUpdatePostRes()
+}
+
+type APIFsValidatePostRes interface {
+	aPIFsValidatePostRes()
+}
+
 type APILabelDeletePostRes interface {
 	aPILabelDeletePostRes()
 }

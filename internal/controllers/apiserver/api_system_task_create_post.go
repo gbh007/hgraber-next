@@ -15,8 +15,9 @@ func (c *Controller) APISystemTaskCreatePost(ctx context.Context, req *serverAPI
 		code = entities.DeduplicateFilesTaskCode
 	case "remove_detached_files":
 		code = entities.RemoveDetachedFilesTaskCode
-	case "remove_mismatch_files":
-		code = entities.RemoveFilesInStoragesMismatchTaskCode
+	// FIXME: удалить если не будет дальнейших модификаций
+	// case "remove_mismatch_files":
+	// 	code = entities.RemoveFilesInStoragesMismatchTaskCode
 	case "fill_dead_hashes":
 		code = entities.FillDeadHashesTaskCode
 	case "fill_dead_hashes_with_remove_deleted_pages":

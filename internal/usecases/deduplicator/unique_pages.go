@@ -10,7 +10,7 @@ import (
 	"hgnext/internal/entities"
 )
 
-func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.PageWithDeadHash, error) {
+func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.BFFPreviewPage, error) {
 	originBookPages, err := uc.storage.BookPagesWithHash(ctx, originBookID)
 	if err != nil {
 		return nil, fmt.Errorf("get book hashes storage: %w", err)
@@ -48,22 +48,22 @@ func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]e
 		delete(hashes, page.FileHash)
 	}
 
-	result := make([]entities.PageWithDeadHash, 0, len(hashes))
+	result := make([]entities.BFFPreviewPage, 0, len(hashes))
 
 	for _, page := range originBookPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
 		if _, ok := hashes[page.FileHash]; ok {
-			result = append(result, entities.PageWithDeadHash{
-				Page:        page.Page,
-				HasDeadHash: hasDeadHash,
-			})
+			preview := page.ToPreview()
+			preview.HasDeadHash = entities.NewStatusFlag(hasDeadHash)
+
+			result = append(result, preview)
 
 			delete(hashes, page.FileHash)
 		}
 	}
 
-	slices.SortFunc(result, func(a, b entities.PageWithDeadHash) int {
+	slices.SortFunc(result, func(a, b entities.BFFPreviewPage) int {
 		return a.PageNumber - b.PageNumber
 	})
 

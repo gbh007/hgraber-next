@@ -3,8 +3,11 @@ package agent
 import (
 	"context"
 	"io"
+	"time"
 
 	"github.com/google/uuid"
+
+	"hgnext/internal/entities"
 )
 
 func (c *Client) FSCreate(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID, body io.Reader) error {
@@ -34,11 +37,20 @@ func (c *Client) FSGet(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID)
 	return adapter.ToFS().Get(ctx, fileID)
 }
 
-func (c *Client) FSIDs(ctx context.Context, agentID uuid.UUID) ([]uuid.UUID, error) {
+func (c *Client) FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (entities.FSState, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
-		return nil, err
+		return entities.FSState{}, err
 	}
 
-	return adapter.ToFS().IDs(ctx)
+	return adapter.ToFS().State(ctx, includeFileIDs, includeFileSizes)
+}
+
+func (c *Client) CreateHighwayToken(ctx context.Context, agentID uuid.UUID) (string, time.Time, error) {
+	adapter, err := c.getAdapter(agentID)
+	if err != nil {
+		return "", time.Time{}, err
+	}
+
+	return adapter.ToFS().CreateHighwayToken(ctx)
 }

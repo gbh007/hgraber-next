@@ -3,20 +3,24 @@ package config
 import "time"
 
 type Workers struct {
-	Page     Worker `yaml:"page" envconfig:"PAGE"`
-	Book     Worker `yaml:"book" envconfig:"BOOK"`
-	Hasher   Worker `yaml:"hasher" envconfig:"HASHER"`
-	Exporter Worker `yaml:"exporter" envconfig:"EXPORTER"`
-	Tasker   Worker `yaml:"tasker" envconfig:"TASKER"`
+	Page           Worker `yaml:"page" envconfig:"PAGE"`
+	Book           Worker `yaml:"book" envconfig:"BOOK"`
+	Hasher         Worker `yaml:"hasher" envconfig:"HASHER"`
+	Exporter       Worker `yaml:"exporter" envconfig:"EXPORTER"`
+	Tasker         Worker `yaml:"tasker" envconfig:"TASKER"`
+	FileValidator  Worker `yaml:"file_validator" envconfig:"FILE_VALIDATOR"`
+	FileTransferer Worker `yaml:"file_transferer" envconfig:"FILE_TRANSFERER"`
 }
 
 func WorkersDefault() Workers {
 	return Workers{
-		Page:     WorkerDefault(),
-		Book:     WorkerDefault(),
-		Hasher:   WorkerDefault(),
-		Exporter: WorkerDefault(),
-		Tasker:   WorkerDefault(),
+		Page:           WorkerDefault(),
+		Book:           WorkerDefault(),
+		Hasher:         WorkerDefault(),
+		Exporter:       WorkerDefault(),
+		Tasker:         WorkerDefault(),
+		FileValidator:  WorkerDefault(),
+		FileTransferer: WorkerDefault(),
 	}
 }
 

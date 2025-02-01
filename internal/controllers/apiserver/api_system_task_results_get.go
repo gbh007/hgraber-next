@@ -59,11 +59,6 @@ func (c *Controller) APISystemTaskResultsGet(ctx context.Context) (serverAPI.API
 				Description: optString("Удаляет из БД и файловой системы файлы, которые остались без привязки к страницам"),
 			},
 			{
-				Code:        "remove_mismatch_files",
-				Name:        "Удалить не синхронизированные (FS/DB) файлы",
-				Description: optString("Удаляет файлы что не совпадают в БД и файловой системе"),
-			},
-			{
 				Code:        "fill_dead_hashes",
 				Name:        "Наполнить мертвые хеши",
 				Description: optString("Наполняет мертвые хеши по данным удаленных страниц, для которых нет таких же хешей для \"живых\" страниц"),

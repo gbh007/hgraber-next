@@ -212,6 +212,61 @@ type Handler interface {
 	//
 	// GET /api/file/{id}
 	APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (APIFileIDGetRes, error)
+	// APIFsCreatePost implements POST /api/fs/create operation.
+	//
+	// Создание файловой системы.
+	//
+	// POST /api/fs/create
+	APIFsCreatePost(ctx context.Context, req *FileSystemInfo) (APIFsCreatePostRes, error)
+	// APIFsDeletePost implements POST /api/fs/delete operation.
+	//
+	// Удаление файловой системы.
+	//
+	// POST /api/fs/delete
+	APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) (APIFsDeletePostRes, error)
+	// APIFsGetPost implements POST /api/fs/get operation.
+	//
+	// Данные настроек файловой системы.
+	//
+	// POST /api/fs/get
+	APIFsGetPost(ctx context.Context, req *APIFsGetPostReq) (APIFsGetPostRes, error)
+	// APIFsListPost implements POST /api/fs/list operation.
+	//
+	// Список файловых систем.
+	//
+	// POST /api/fs/list
+	APIFsListPost(ctx context.Context, req *APIFsListPostReq) (APIFsListPostRes, error)
+	// APIFsRemoveMismatchPost implements POST /api/fs/remove-mismatch operation.
+	//
+	// Запускает задачу удаления не совпавших файлов между
+	// базой данных и файловым хранилищем.
+	//
+	// POST /api/fs/remove-mismatch
+	APIFsRemoveMismatchPost(ctx context.Context, req *APIFsRemoveMismatchPostReq) (APIFsRemoveMismatchPostRes, error)
+	// APIFsTransferBookPost implements POST /api/fs/transfer/book operation.
+	//
+	// Запускает перенос файлов между файловыми системами.
+	//
+	// POST /api/fs/transfer/book
+	APIFsTransferBookPost(ctx context.Context, req *APIFsTransferBookPostReq) (APIFsTransferBookPostRes, error)
+	// APIFsTransferPost implements POST /api/fs/transfer operation.
+	//
+	// Запускает перенос файлов между файловыми системами.
+	//
+	// POST /api/fs/transfer
+	APIFsTransferPost(ctx context.Context, req *APIFsTransferPostReq) (APIFsTransferPostRes, error)
+	// APIFsUpdatePost implements POST /api/fs/update operation.
+	//
+	// Изменение настроек файловой системы.
+	//
+	// POST /api/fs/update
+	APIFsUpdatePost(ctx context.Context, req *FileSystemInfo) (APIFsUpdatePostRes, error)
+	// APIFsValidatePost implements POST /api/fs/validate operation.
+	//
+	// Запускает валидацию файлов на файловой системе.
+	//
+	// POST /api/fs/validate
+	APIFsValidatePost(ctx context.Context, req *APIFsValidatePostReq) (APIFsValidatePostRes, error)
 	// APILabelDeletePost implements POST /api/label/delete operation.
 	//
 	// Удаление метки на книгу или страницу.

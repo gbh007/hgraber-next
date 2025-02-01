@@ -24,6 +24,7 @@ func PageWithHashColumns() []string {
 		"f.md5_sum",
 		"f.sha256_sum",
 		"f.size",
+		"f.fs_id",
 	}
 }
 
@@ -36,6 +37,7 @@ func PageWithHashScanner(p *entities.PageWithHash) RowScanner {
 			md5Sum    sql.NullString
 			sha256Sum sql.NullString
 			size      sql.NullInt64
+			fsID      uuid.NullUUID
 		)
 
 		err := rows.Scan(
@@ -50,6 +52,7 @@ func PageWithHashScanner(p *entities.PageWithHash) RowScanner {
 			&md5Sum,
 			&sha256Sum,
 			&size,
+			&fsID,
 		)
 		if err != nil {
 			return fmt.Errorf("scan to model: %w", err)
@@ -73,6 +76,7 @@ func PageWithHashScanner(p *entities.PageWithHash) RowScanner {
 		p.Md5Sum = md5Sum.String
 		p.Sha256Sum = sha256Sum.String
 		p.Size = size.Int64
+		p.FSID = fsID.UUID
 
 		return nil
 	}

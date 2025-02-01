@@ -8,22 +8,22 @@ import (
 	"hgnext/internal/entities"
 )
 
-func (uc *UseCase) BookByURL(ctx context.Context, u url.URL) (entities.BookFull, error) {
+func (uc *UseCase) BookByURL(ctx context.Context, u url.URL) (entities.BookContainer, error) {
 	ids, err := uc.storage.GetBookIDsByURL(ctx, u)
 	if err != nil {
-		return entities.BookFull{}, fmt.Errorf("get books by url: %w", err)
+		return entities.BookContainer{}, fmt.Errorf("get books by url: %w", err)
 	}
 
 	if len(ids) == 0 {
-		return entities.BookFull{}, entities.BookNotFoundError
+		return entities.BookContainer{}, entities.BookNotFoundError
 	}
 
-	firstBook := entities.BookFull{}
+	firstBook := entities.BookContainer{}
 
 	for i, id := range ids {
 		book, err := uc.bookRequester.BookOriginFull(ctx, id)
 		if err != nil {
-			return entities.BookFull{}, fmt.Errorf("get book by id (%s): %w", id.String(), err)
+			return entities.BookContainer{}, fmt.Errorf("get book by id (%s): %w", id.String(), err)
 		}
 
 		// Предпочитаем отдавать загруженную книгу
