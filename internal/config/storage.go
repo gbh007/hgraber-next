@@ -12,3 +12,11 @@ type Storage struct {
 func StorageDefault() Storage {
 	return Storage{}
 }
+
+type FileStorage struct {
+	TryReconnect bool `yaml:"try_reconnect" envconfig:"TRY_RECONNECT"`
+}
+
+func FileStorageDefault() FileStorage {
+	return FileStorage{}
+}

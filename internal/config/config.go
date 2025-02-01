@@ -9,6 +9,7 @@ type Config struct {
 	Parsing     Parsing     `yaml:"parsing" envconfig:"PARSING"`
 	Workers     Workers     `yaml:"workers" envconfig:"WORKERS"`
 	Storage     Storage     `yaml:"storage" envconfig:"STORAGE"`
+	FileStorage FileStorage `yaml:"file_storage" envconfig:"FILE_STORAGE"`
 	API         API         `yaml:"api" envconfig:"API"`
 	AgentServer AgentServer `yaml:"agent_server" envconfig:"AGENT_SERVER"`
 }
@@ -20,6 +21,7 @@ func ConfigDefault() Config {
 		API:         APIDefault(),
 		Workers:     WorkersDefault(),
 		Storage:     StorageDefault(),
+		FileStorage: FileStorageDefault(),
 		AgentServer: AgentServerDefault(),
 	}
 }
