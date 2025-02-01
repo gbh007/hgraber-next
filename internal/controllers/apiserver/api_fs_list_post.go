@@ -9,7 +9,11 @@ import (
 )
 
 func (c *Controller) APIFsListPost(ctx context.Context, req *serverAPI.APIFsListPostReq) (serverAPI.APIFsListPostRes, error) {
-	storages, err := c.fsUseCases.FileStoragesWithStatus(ctx, req.IncludeDbFileSize.Value)
+	storages, err := c.fsUseCases.FileStoragesWithStatus(
+		ctx,
+		req.IncludeDbFileSize.Value,
+		req.IncludeAvailableSize.Value,
+	)
 	if err != nil {
 		return &serverAPI.APIFsListPostInternalServerError{
 			InnerCode: FSUseCaseCode,
@@ -25,6 +29,14 @@ func (c *Controller) APIFsListPost(ctx context.Context, req *serverAPI.APIFsList
 				DbFilesInfo:         convertFSDBFilesInfoToAPI(raw.DBFile),
 				DbInvalidFilesInfo:  convertFSDBFilesInfoToAPI(raw.DBInvalidFile),
 				DbDetachedFilesInfo: convertFSDBFilesInfoToAPI(raw.DBDetachedFile),
+				AvailableSize: serverAPI.OptInt64{
+					Value: raw.AvailableSize,
+					Set:   raw.AvailableSize > 0,
+				},
+				AvailableSizeFormatted: serverAPI.OptString{
+					Value: entities.PrettySize(raw.AvailableSize),
+					Set:   raw.AvailableSize > 0,
+				},
 			}
 		}),
 	}, nil

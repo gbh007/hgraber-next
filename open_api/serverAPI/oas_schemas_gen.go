@@ -966,7 +966,8 @@ type APIBookDetailsPostOK struct {
 	// Данные страниц книги.
 	Pages []PageSimple `json:"pages"`
 	// Данные о размере книги.
-	Size OptAPIBookDetailsPostOKSize `json:"size"`
+	Size          OptAPIBookDetailsPostOKSize             `json:"size"`
+	FsDisposition []APIBookDetailsPostOKFsDispositionItem `json:"fs_disposition"`
 }
 
 // GetInfo returns the value of Info.
@@ -994,6 +995,11 @@ func (s *APIBookDetailsPostOK) GetSize() OptAPIBookDetailsPostOKSize {
 	return s.Size
 }
 
+// GetFsDisposition returns the value of FsDisposition.
+func (s *APIBookDetailsPostOK) GetFsDisposition() []APIBookDetailsPostOKFsDispositionItem {
+	return s.FsDisposition
+}
+
 // SetInfo sets the value of Info.
 func (s *APIBookDetailsPostOK) SetInfo(val BookSimple) {
 	s.Info = val
@@ -1019,7 +1025,50 @@ func (s *APIBookDetailsPostOK) SetSize(val OptAPIBookDetailsPostOKSize) {
 	s.Size = val
 }
 
+// SetFsDisposition sets the value of FsDisposition.
+func (s *APIBookDetailsPostOK) SetFsDisposition(val []APIBookDetailsPostOKFsDispositionItem) {
+	s.FsDisposition = val
+}
+
 func (*APIBookDetailsPostOK) aPIBookDetailsPostRes() {}
+
+type APIBookDetailsPostOKFsDispositionItem struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+	// Название ФС.
+	Name  string        `json:"name"`
+	Files FSDBFilesInfo `json:"files"`
+}
+
+// GetID returns the value of ID.
+func (s *APIBookDetailsPostOKFsDispositionItem) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIBookDetailsPostOKFsDispositionItem) GetName() string {
+	return s.Name
+}
+
+// GetFiles returns the value of Files.
+func (s *APIBookDetailsPostOKFsDispositionItem) GetFiles() FSDBFilesInfo {
+	return s.Files
+}
+
+// SetID sets the value of ID.
+func (s *APIBookDetailsPostOKFsDispositionItem) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIBookDetailsPostOKFsDispositionItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetFiles sets the value of Files.
+func (s *APIBookDetailsPostOKFsDispositionItem) SetFiles(val FSDBFilesInfo) {
+	s.Files = val
+}
 
 // Данные о размере книги.
 type APIBookDetailsPostOKSize struct {
@@ -2788,6 +2837,10 @@ type APIFsListPostOKFileSystemsItem struct {
 	DbFilesInfo         OptFSDBFilesInfo `json:"db_files_info"`
 	DbInvalidFilesInfo  OptFSDBFilesInfo `json:"db_invalid_files_info"`
 	DbDetachedFilesInfo OptFSDBFilesInfo `json:"db_detached_files_info"`
+	// Доступное место.
+	AvailableSize OptInt64 `json:"available_size"`
+	// Доступное место в человеко читаемом виде.
+	AvailableSizeFormatted OptString `json:"available_size_formatted"`
 }
 
 // GetInfo returns the value of Info.
@@ -2815,6 +2868,16 @@ func (s *APIFsListPostOKFileSystemsItem) GetDbDetachedFilesInfo() OptFSDBFilesIn
 	return s.DbDetachedFilesInfo
 }
 
+// GetAvailableSize returns the value of AvailableSize.
+func (s *APIFsListPostOKFileSystemsItem) GetAvailableSize() OptInt64 {
+	return s.AvailableSize
+}
+
+// GetAvailableSizeFormatted returns the value of AvailableSizeFormatted.
+func (s *APIFsListPostOKFileSystemsItem) GetAvailableSizeFormatted() OptString {
+	return s.AvailableSizeFormatted
+}
+
 // SetInfo sets the value of Info.
 func (s *APIFsListPostOKFileSystemsItem) SetInfo(val FileSystemInfo) {
 	s.Info = val
@@ -2840,9 +2903,21 @@ func (s *APIFsListPostOKFileSystemsItem) SetDbDetachedFilesInfo(val OptFSDBFiles
 	s.DbDetachedFilesInfo = val
 }
 
+// SetAvailableSize sets the value of AvailableSize.
+func (s *APIFsListPostOKFileSystemsItem) SetAvailableSize(val OptInt64) {
+	s.AvailableSize = val
+}
+
+// SetAvailableSizeFormatted sets the value of AvailableSizeFormatted.
+func (s *APIFsListPostOKFileSystemsItem) SetAvailableSizeFormatted(val OptString) {
+	s.AvailableSizeFormatted = val
+}
+
 type APIFsListPostReq struct {
 	// Включает в данные размер файлов по данным из БД.
 	IncludeDbFileSize OptBool `json:"include_db_file_size"`
+	// Включает в данные свободный размер в хранилище.
+	IncludeAvailableSize OptBool `json:"include_available_size"`
 }
 
 // GetIncludeDbFileSize returns the value of IncludeDbFileSize.
@@ -2850,9 +2925,19 @@ func (s *APIFsListPostReq) GetIncludeDbFileSize() OptBool {
 	return s.IncludeDbFileSize
 }
 
+// GetIncludeAvailableSize returns the value of IncludeAvailableSize.
+func (s *APIFsListPostReq) GetIncludeAvailableSize() OptBool {
+	return s.IncludeAvailableSize
+}
+
 // SetIncludeDbFileSize sets the value of IncludeDbFileSize.
 func (s *APIFsListPostReq) SetIncludeDbFileSize(val OptBool) {
 	s.IncludeDbFileSize = val
+}
+
+// SetIncludeAvailableSize sets the value of IncludeAvailableSize.
+func (s *APIFsListPostReq) SetIncludeAvailableSize(val OptBool) {
+	s.IncludeAvailableSize = val
 }
 
 type APIFsListPostUnauthorized ErrorResponse
@@ -6937,6 +7022,52 @@ func (o OptInt) Get() (v int, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt64 returns new OptInt64 with value set to v.
+func NewOptInt64(v int64) OptInt64 {
+	return OptInt64{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt64 is optional int64.
+type OptInt64 struct {
+	Value int64
+	Set   bool
+}
+
+// IsSet returns true if OptInt64 was set.
+func (o OptInt64) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt64) Reset() {
+	var v int64
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt64) SetTo(v int64) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt64) Get() (v int64, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt64) Or(d int64) int64 {
 	if v, ok := o.Get(); ok {
 		return v
 	}

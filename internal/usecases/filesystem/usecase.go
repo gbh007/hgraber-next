@@ -33,6 +33,7 @@ type fileStorage interface {
 	Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error
 	Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) error
 	HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error)
+	State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (entities.FSState, error)
 }
 
 type tmpStorage interface {

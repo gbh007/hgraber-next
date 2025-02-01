@@ -1000,6 +1000,24 @@ paths:
                       - shared_count
                       - dead_hashes_count
                       - inner_duplicate_count
+                  fs_disposition:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: ID ФС
+                        name:
+                          type: string
+                          description: Название ФС
+                        files:
+                          $ref: "#/components/schemas/FSDBFilesInfo"
+                      required:
+                        - id
+                        - name
+                        - files
                 required:
                   - info
                   - page_loaded_percent
@@ -3621,6 +3639,9 @@ paths:
                 include_db_file_size:
                   type: boolean
                   description: Включает в данные размер файлов по данным из БД
+                include_available_size:
+                  type: boolean
+                  description: Включает в данные свободный размер в хранилище
       responses:
         200:
           description: Информация о ФС
@@ -3646,6 +3667,13 @@ paths:
                           $ref: "#/components/schemas/FSDBFilesInfo"
                         db_detached_files_info:
                           $ref: "#/components/schemas/FSDBFilesInfo"
+                        available_size:
+                          type: integer
+                          format: int64
+                          description: Доступное место
+                        available_size_formatted:
+                          type: string
+                          description: Доступное место в человеко читаемом виде
                       required:
                         - info
                         - is_legacy

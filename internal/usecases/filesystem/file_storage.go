@@ -11,34 +11,45 @@ import (
 	"hgnext/internal/entities"
 )
 
-func (uc *UseCase) FileStoragesWithStatus(ctx context.Context, includeDBInfo bool) ([]entities.FSWithStatus, error) {
+func (uc *UseCase) FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]entities.FSWithStatus, error) {
 	storages, err := uc.fileStorage.FSList(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("file storage: get fs list: %w", err)
 	}
 
-	if includeDBInfo {
+	if includeDBInfo || includeAvailableSizeInfo {
 		for i, storage := range storages {
-			info, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, false, false)
-			if err != nil {
-				return nil, fmt.Errorf("storage: get files info (%s): %w", storage.Info.ID.String(), err)
+			if includeDBInfo {
+				info, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, false, false)
+				if err != nil {
+					return nil, fmt.Errorf("storage: get files info (%s): %w", storage.Info.ID.String(), err)
+				}
+
+				storages[i].DBFile = &info
+
+				invalidInfo, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, true, false)
+				if err != nil {
+					return nil, fmt.Errorf("storage: get invalid files info (%s): %w", storage.Info.ID.String(), err)
+				}
+
+				storages[i].DBInvalidFile = &invalidInfo
+
+				detachedInfo, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, false, true)
+				if err != nil {
+					return nil, fmt.Errorf("storage: get detached files info (%s): %w", storage.Info.ID.String(), err)
+				}
+
+				storages[i].DBDetachedFile = &detachedInfo
 			}
 
-			storages[i].DBFile = &info
+			if includeAvailableSizeInfo {
+				state, err := uc.fileStorage.State(ctx, false, false, storage.Info.ID)
+				if err != nil {
+					return nil, fmt.Errorf("file storage: get state (%s): %w", storage.Info.ID.String(), err)
+				}
 
-			invalidInfo, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, true, false)
-			if err != nil {
-				return nil, fmt.Errorf("storage: get invalid files info (%s): %w", storage.Info.ID.String(), err)
+				storages[i].AvailableSize = state.AvailableSize
 			}
-
-			storages[i].DBInvalidFile = &invalidInfo
-
-			detachedInfo, err := uc.storage.FSFilesInfo(ctx, storage.Info.ID, false, true)
-			if err != nil {
-				return nil, fmt.Errorf("storage: get detached files info (%s): %w", storage.Info.ID.String(), err)
-			}
-
-			storages[i].DBDetachedFile = &detachedInfo
 		}
 	}
 

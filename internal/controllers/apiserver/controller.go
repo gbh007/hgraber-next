@@ -100,7 +100,7 @@ type rebuilderUseCases interface {
 }
 
 type fsUseCases interface {
-	FileStoragesWithStatus(ctx context.Context, includeDBInfo bool) ([]entities.FSWithStatus, error)
+	FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]entities.FSWithStatus, error)
 	FileStorage(ctx context.Context, id uuid.UUID) (entities.FileStorageSystem, error)
 	NewFileStorage(ctx context.Context, fs entities.FileStorageSystem) (uuid.UUID, error)
 	UpdateFileStorage(ctx context.Context, fs entities.FileStorageSystem) error

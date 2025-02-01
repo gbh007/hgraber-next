@@ -62,6 +62,13 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (entities.
 		Pages: make([]entities.BFFPreviewPage, 0, len(bookPages)),
 	}
 
+	fsInfos, err := uc.storage.FileStorages(ctx)
+	if err != nil {
+		return entities.BFFBookDetails{}, fmt.Errorf("storage: get file storages: %w", err)
+	}
+
+	fsDisposition := make(map[uuid.UUID]entities.SizeWithCount, len(fsInfos))
+
 	for _, page := range bookPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
@@ -99,7 +106,30 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (entities.
 		}
 
 		result.Size.Total += page.Size
+
+		fs := fsDisposition[page.FSID]
+		fs.Count++
+		fs.Size += page.Size
+		fsDisposition[page.FSID] = fs
 	}
+
+	result.FSDisposition = make([]entities.BFFBookDetailsFSDisposition, 0, len(fsDisposition))
+
+	for _, fs := range fsInfos {
+		v := fsDisposition[fs.ID]
+
+		if v.Count > 0 {
+			result.FSDisposition = append(result.FSDisposition, entities.BFFBookDetailsFSDisposition{
+				ID:            fs.ID,
+				Name:          fs.Name,
+				SizeWithCount: v,
+			})
+		}
+	}
+
+	slices.SortStableFunc(result.FSDisposition, func(a, b entities.BFFBookDetailsFSDisposition) int {
+		return int(b.Size) - int(a.Size)
+	})
 
 	attributes, err := uc.storage.BookAttributes(ctx, bookID)
 	if err != nil {

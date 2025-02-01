@@ -50,5 +50,16 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 			},
 			Set: book.Size.Total > 0,
 		},
+		FsDisposition: pkg.Map(book.FSDisposition, func(raw entities.BFFBookDetailsFSDisposition) serverAPI.APIBookDetailsPostOKFsDispositionItem {
+			return serverAPI.APIBookDetailsPostOKFsDispositionItem{
+				ID:   raw.ID,
+				Name: raw.Name,
+				Files: serverAPI.FSDBFilesInfo{
+					Count:         raw.Count,
+					Size:          raw.Size,
+					SizeFormatted: entities.PrettySize(raw.Size),
+				},
+			}
+		}),
 	}, nil
 }

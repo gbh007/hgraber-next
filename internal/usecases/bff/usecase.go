@@ -27,6 +27,8 @@ type storage interface {
 	BookCount(ctx context.Context, filter entities.BookFilter) (int, error)
 
 	Attributes(ctx context.Context) ([]entities.Attribute, error)
+
+	FileStorages(ctx context.Context) ([]entities.FileStorageSystem, error)
 }
 
 type UseCase struct {

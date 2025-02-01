@@ -33,8 +33,11 @@ type FSWithStatus struct {
 	DBFile         *FSFilesInfo
 	DBInvalidFile  *FSFilesInfo
 	DBDetachedFile *FSFilesInfo
+
+	AvailableSize int64
 }
 
+// FIXME: слить с моделью SizeWithCount
 type FSFilesInfo struct {
 	Count int64
 	Size  int64

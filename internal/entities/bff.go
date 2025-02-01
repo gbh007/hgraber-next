@@ -32,6 +32,8 @@ type BFFBookDetails struct {
 	PreviewPage BFFPreviewPage
 
 	Size BookSize
+
+	FSDisposition []BFFBookDetailsFSDisposition
 }
 
 func (book BFFBookDetails) PageDownloadPercent() float64 {
@@ -44,6 +46,12 @@ func (book BFFBookDetails) PageDownloadPercent() float64 {
 	})
 
 	return math.Round(float64(downloadedPageCount)*10000/float64(len(book.Pages))) / 100
+}
+
+type BFFBookDetailsFSDisposition struct {
+	ID   uuid.UUID
+	Name string
+	SizeWithCount
 }
 
 type BFFBookShort struct {
