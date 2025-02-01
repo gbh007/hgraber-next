@@ -204,6 +204,14 @@ func (c *SystemInfoCollector) collectMainInfo(ctx context.Context) {
 		fileTotal.WithLabelValues("unhashed", fsID.String()).Set(float64(v))
 	}
 
+	for fsID, v := range res.InvalidFileCountByFS {
+		fileTotal.WithLabelValues("invalid", fsID.String()).Set(float64(v))
+	}
+
+	for fsID, v := range res.DetachedFileCountByFS {
+		fileTotal.WithLabelValues("detached", fsID.String()).Set(float64(v))
+	}
+
 	for fsID, v := range res.PageFileSizeByFS {
 		fileBytes.WithLabelValues("page", fsID.String()).Set(float64(v))
 	}

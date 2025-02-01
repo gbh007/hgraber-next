@@ -32,7 +32,10 @@ func (c *Controller) APISystemInfoGet(ctx context.Context) (serverAPI.APISystemI
 
 		FileCount:         int(info.FileCountByFSSum()),
 		UnhashedFileCount: int(info.UnhashedFileCountByFSSum()),
-		DeadHashCount:     info.DeadHashCount,
+		InvalidFileCount:  int(info.InvalidFileCountByFSSum()),
+		DetachedFileCount: int(info.DetachedFileCountByFSSum()),
+
+		DeadHashCount: info.DeadHashCount,
 
 		PagesSize:          info.PageFileSizeByFSSum(),
 		PagesSizeFormatted: entities.PrettySize(info.PageFileSizeByFSSum()),

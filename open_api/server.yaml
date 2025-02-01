@@ -3951,6 +3951,12 @@ components:
         unhashed_file_count:
           type: integer
           description: Количество файлов без рассчитанного хеша
+        invalid_file_count:
+          type: integer
+          description: Количество поврежденных файлов
+        detached_file_count:
+          type: integer
+          description: Количество неиспользуемых файлов (нет привязки к странице)
         dead_hash_count:
           type: integer
           description: Количество мертвых хешей
@@ -4007,6 +4013,8 @@ components:
         - deleted_page_count
         - file_count
         - unhashed_file_count
+        - invalid_file_count
+        - detached_file_count
         - dead_hash_count
         - pages_size
         - pages_size_formatted

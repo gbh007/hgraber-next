@@ -7327,6 +7327,11 @@ type SystemInfo struct {
 	FileCount int `json:"file_count"`
 	// Количество файлов без рассчитанного хеша.
 	UnhashedFileCount int `json:"unhashed_file_count"`
+	// Количество поврежденных файлов.
+	InvalidFileCount int `json:"invalid_file_count"`
+	// Количество неиспользуемых файлов (нет привязки к
+	// странице).
+	DetachedFileCount int `json:"detached_file_count"`
 	// Количество мертвых хешей.
 	DeadHashCount int `json:"dead_hash_count"`
 	// Объем загруженных изображений в байтах.
@@ -7400,6 +7405,16 @@ func (s *SystemInfo) GetFileCount() int {
 // GetUnhashedFileCount returns the value of UnhashedFileCount.
 func (s *SystemInfo) GetUnhashedFileCount() int {
 	return s.UnhashedFileCount
+}
+
+// GetInvalidFileCount returns the value of InvalidFileCount.
+func (s *SystemInfo) GetInvalidFileCount() int {
+	return s.InvalidFileCount
+}
+
+// GetDetachedFileCount returns the value of DetachedFileCount.
+func (s *SystemInfo) GetDetachedFileCount() int {
+	return s.DetachedFileCount
 }
 
 // GetDeadHashCount returns the value of DeadHashCount.
@@ -7490,6 +7505,16 @@ func (s *SystemInfo) SetFileCount(val int) {
 // SetUnhashedFileCount sets the value of UnhashedFileCount.
 func (s *SystemInfo) SetUnhashedFileCount(val int) {
 	s.UnhashedFileCount = val
+}
+
+// SetInvalidFileCount sets the value of InvalidFileCount.
+func (s *SystemInfo) SetInvalidFileCount(val int) {
+	s.InvalidFileCount = val
+}
+
+// SetDetachedFileCount sets the value of DetachedFileCount.
+func (s *SystemInfo) SetDetachedFileCount(val int) {
+	s.DetachedFileCount = val
 }
 
 // SetDeadHashCount sets the value of DeadHashCount.

@@ -15,6 +15,8 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 	systemSize := entities.SystemSizeInfo{
 		FileCountByFS:         make(map[uuid.UUID]int64, entities.ApproximateFSCount),
 		UnhashedFileCountByFS: make(map[uuid.UUID]int64, entities.ApproximateFSCount),
+		InvalidFileCountByFS:  make(map[uuid.UUID]int64, entities.ApproximateFSCount),
+		DetachedFileCountByFS: make(map[uuid.UUID]int64, entities.ApproximateFSCount),
 		PageFileSizeByFS:      make(map[uuid.UUID]int64, entities.ApproximateFSCount),
 		FileSizeByFS:          make(map[uuid.UUID]int64, entities.ApproximateFSCount),
 	}
@@ -160,6 +162,46 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 			}
 
 			systemSize.UnhashedFileCountByFS[fsID.UUID] = count.Int64
+		}
+
+		return nil
+	})
+
+	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE invalid_data = TRUE GROUP BY fs_id;`).Query(func(rows pgx.Rows) error {
+		defer rows.Close()
+
+		for rows.Next() {
+			var (
+				count sql.NullInt64
+				fsID  uuid.NullUUID
+			)
+
+			err := rows.Scan(&count, &fsID)
+			if err != nil {
+				return fmt.Errorf("get invalid file count: %w", err)
+			}
+
+			systemSize.InvalidFileCountByFS[fsID.UUID] = count.Int64
+		}
+
+		return nil
+	})
+
+	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE NOT EXISTS (SELECT 1 FROM pages WHERE pages.file_id = files.id) GROUP BY fs_id;`).Query(func(rows pgx.Rows) error {
+		defer rows.Close()
+
+		for rows.Next() {
+			var (
+				count sql.NullInt64
+				fsID  uuid.NullUUID
+			)
+
+			err := rows.Scan(&count, &fsID)
+			if err != nil {
+				return fmt.Errorf("get detached file count: %w", err)
+			}
+
+			systemSize.DetachedFileCountByFS[fsID.UUID] = count.Int64
 		}
 
 		return nil

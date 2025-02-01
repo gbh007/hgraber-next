@@ -19,8 +19,11 @@ type SystemSizeInfo struct {
 
 	FileCountByFS         map[uuid.UUID]int64
 	UnhashedFileCountByFS map[uuid.UUID]int64
-	PageFileSizeByFS      map[uuid.UUID]int64
-	FileSizeByFS          map[uuid.UUID]int64
+	InvalidFileCountByFS  map[uuid.UUID]int64
+	DetachedFileCountByFS map[uuid.UUID]int64
+
+	PageFileSizeByFS map[uuid.UUID]int64
+	FileSizeByFS     map[uuid.UUID]int64
 }
 
 func (info SystemSizeInfo) FileCountByFSSum() int64 {
@@ -37,6 +40,26 @@ func (info SystemSizeInfo) UnhashedFileCountByFSSum() int64 {
 	var s int64
 
 	for _, v := range info.UnhashedFileCountByFS {
+		s += v
+	}
+
+	return s
+}
+
+func (info SystemSizeInfo) InvalidFileCountByFSSum() int64 {
+	var s int64
+
+	for _, v := range info.InvalidFileCountByFS {
+		s += v
+	}
+
+	return s
+}
+
+func (info SystemSizeInfo) DetachedFileCountByFSSum() int64 {
+	var s int64
+
+	for _, v := range info.DetachedFileCountByFS {
 		s += v
 	}
 
