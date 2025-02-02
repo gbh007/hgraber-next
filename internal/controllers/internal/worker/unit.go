@@ -15,6 +15,10 @@ import (
 
 type workerHandlerFunc[T any] func(context.Context, T) error
 
+type workerUnitQueue[T any] interface {
+	PopOne() (T, bool)
+}
+
 type UnitCallback struct {
 	StartHandleOne  func()
 	FinishHandleOne func()
@@ -27,7 +31,8 @@ type Unit[T any] struct {
 	name   string
 	number int32
 
-	queue <-chan T
+	queue              workerUnitQueue[T]
+	queueSleepDuration time.Duration
 
 	handler workerHandlerFunc[T]
 
@@ -48,13 +53,15 @@ func NewUnit[T any](
 	handler workerHandlerFunc[T],
 	tracer trace.Tracer,
 	metricProvider metricProvider,
-	queue <-chan T,
+	queue workerUnitQueue[T],
 	callback UnitCallback,
+	queueSleepDuration time.Duration,
 ) *Unit[T] {
 	w := &Unit[T]{
-		name:    name,
-		queue:   queue,
-		handler: handler,
+		name:               name,
+		queue:              queue,
+		queueSleepDuration: queueSleepDuration,
+		handler:            handler,
 
 		logger:         logger,
 		tracer:         tracer,
@@ -128,19 +135,26 @@ func (w *Unit[T]) Serve(ctx context.Context) {
 		default:
 		}
 
-		select {
-		case value := <-w.queue:
-			err := w.handleOne(ctx, value)
-			if err != nil {
-				w.logger.ErrorContext(
-					ctx, "worker fail task",
-					slog.String("worker_name", w.name),
-					slog.Int("worker_unit", int(w.number)),
-					slog.Any("error", err),
-				)
+		value, ok := w.queue.PopOne()
+		if !ok {
+			runtime.Gosched()
+
+			select {
+			case <-time.After(w.queueSleepDuration):
+				continue
+			case <-ctx.Done():
+				return
 			}
-		case <-ctx.Done():
-			return
+		}
+
+		err := w.handleOne(ctx, value)
+		if err != nil {
+			w.logger.ErrorContext(
+				ctx, "worker fail task",
+				slog.String("worker_name", w.name),
+				slog.Int("worker_unit", int(w.number)),
+				slog.Any("error", err),
+			)
 		}
 	}
 }

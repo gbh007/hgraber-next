@@ -4,22 +4,23 @@ import (
 	"github.com/google/uuid"
 
 	"hgnext/internal/entities"
+	"hgnext/internal/pkg"
 )
 
 type Storage struct {
-	toExport       *dataQueue[entities.BookFullWithAgent]
-	toRun          *dataQueue[entities.RunnableTask]
+	toExport       *pkg.DataQueue[entities.BookFullWithAgent]
+	toRun          *pkg.DataQueue[entities.RunnableTask]
 	taskResult     *dataList[*entities.TaskResult]
-	toValidate     *dataQueue[uuid.UUID]
-	toFileTransfer *dataQueue[entities.FileTransfer]
+	toValidate     *pkg.DataQueue[uuid.UUID]
+	toFileTransfer *pkg.DataQueue[entities.FileTransfer]
 }
 
 func New() *Storage {
 	return &Storage{
-		toExport:       newDataQueue[entities.BookFullWithAgent](100),
-		toRun:          newDataQueue[entities.RunnableTask](10),
+		toExport:       pkg.NewDataQueue[entities.BookFullWithAgent](100),
+		toRun:          pkg.NewDataQueue[entities.RunnableTask](10),
 		taskResult:     newDataList[*entities.TaskResult](50),
-		toValidate:     newDataQueue[uuid.UUID](1000),
-		toFileTransfer: newDataQueue[entities.FileTransfer](1000),
+		toValidate:     pkg.NewDataQueue[uuid.UUID](1000),
+		toFileTransfer: pkg.NewDataQueue[entities.FileTransfer](1000),
 	}
 }

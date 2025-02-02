@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"go.opentelemetry.io/otel/trace"
+
+	"hgnext/internal/pkg"
 )
 
 type workerTaskGetterFunc[T any] func(context.Context) ([]T, error)
@@ -18,7 +20,7 @@ type metricProvider interface {
 
 type Worker[T any] struct {
 	name  string
-	queue chan T
+	queue *pkg.DataQueue[T]
 
 	inWorkRunnersCount  atomic.Int32
 	runnersCount        atomic.Int32
@@ -52,7 +54,7 @@ func New[T any](
 ) *Worker[T] {
 	w := &Worker[T]{
 		name:     name,
-		queue:    make(chan T, queueSize),
+		queue:    pkg.NewDataQueue[T](queueSize),
 		interval: interval,
 		handler:  handler,
 		getter:   getter,
@@ -68,7 +70,7 @@ func New[T any](
 }
 
 func (w *Worker[T]) InQueueCount() int {
-	return len(w.queue)
+	return w.queue.Size()
 }
 
 func (w *Worker[T]) InWorkCount() int {
@@ -116,6 +118,7 @@ func (w *Worker[T]) SetRunnersCount(newUnitCount int) {
 							w.unitsWG.Done()
 						},
 					},
+					max(w.interval/2, time.Millisecond*100),
 				)
 
 				w.units = append(w.units, unit)
@@ -151,8 +154,8 @@ handler:
 			break handler
 
 		case <-timer.C:
-			// FIXME: сейчас это скорее заглушка, чтобы не было избыточных переобработок.
-			if len(w.queue) > 0 || w.inWorkRunnersCount.Load() > 0 {
+			// TODO: сейчас это скорее заглушка, чтобы не было избыточных переобработок.
+			if w.queue.Size() > 0 || w.inWorkRunnersCount.Load() > 0 {
 				continue
 			}
 
@@ -195,12 +198,5 @@ func (w *Worker[T]) fetch(ctx context.Context) {
 		return
 	}
 
-	for _, data := range data {
-		select {
-		case <-ctx.Done():
-			return
-
-		case w.queue <- data:
-		}
-	}
+	w.queue.Push(data)
 }

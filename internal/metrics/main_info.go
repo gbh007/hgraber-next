@@ -82,12 +82,14 @@ func NewSystemInfoCollector(
 ) (*SystemInfoCollector, error) {
 	bookStatisticCollector := NewBookStatisticCollector()
 
-	err := prometheus.Register(bookStatisticCollector)
-	if err != nil {
-		return nil, fmt.Errorf("register book collector: %w", err)
+	if config.BookStatistic() > 0 {
+		err := prometheus.Register(bookStatisticCollector)
+		if err != nil {
+			return nil, fmt.Errorf("register book collector: %w", err)
+		}
 	}
 
-	err = RegisterWorkerInfoCollector(logger, infoProvider, time.Millisecond*100) // TODO: настраивать таймаут через конфиг
+	err := RegisterWorkerInfoCollector(logger, infoProvider, time.Millisecond*100) // TODO: настраивать таймаут через конфиг
 	if err != nil {
 		return nil, fmt.Errorf("register worker collector: %w", err)
 	}
