@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"net/url"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 type parseUseCases interface {

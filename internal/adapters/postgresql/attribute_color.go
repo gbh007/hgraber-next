@@ -6,7 +6,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (d *Database) InsertAttributeColor(ctx context.Context, color entities.AttributeColor) error {

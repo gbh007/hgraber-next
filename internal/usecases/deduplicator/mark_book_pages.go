@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) MarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID) error {

@@ -3,7 +3,7 @@ package cleanup
 import (
 	"context"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) CleanDeletedPages(_ context.Context) (entities.RunnableTask, error) {

@@ -7,8 +7,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/adapters/agent/internal/adapter"
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/adapters/agent/internal/adapter"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 type Client struct {

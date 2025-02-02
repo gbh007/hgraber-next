@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"hgnext/internal/entities"
-	"hgnext/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APIBookDeletePost(ctx context.Context, req *serverAPI.APIBookDeletePostReq) (serverAPI.APIBookDeletePostRes, error) {

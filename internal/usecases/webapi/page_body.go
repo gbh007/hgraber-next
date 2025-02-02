@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) PageBody(ctx context.Context, bookID uuid.UUID, pageNumber int) (io.Reader, error) {

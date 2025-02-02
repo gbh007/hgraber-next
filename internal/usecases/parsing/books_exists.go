@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) BooksExists(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error) {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type Book struct {

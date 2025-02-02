@@ -10,8 +10,8 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, error) {

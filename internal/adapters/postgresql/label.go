@@ -11,9 +11,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
-	"hgnext/internal/adapters/postgresql/internal/model"
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/adapters/postgresql/internal/model"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (d *Database) SetLabel(ctx context.Context, label entities.BookLabel) error {

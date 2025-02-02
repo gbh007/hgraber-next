@@ -98,7 +98,7 @@ func (w *Unit[T]) handleOne(ctx context.Context, value T) (err error) {
 	)
 	defer span.End()
 
-	span.SetAttributes(attribute.Int("hgnext.worker.unit", int(w.number)))
+	span.SetAttributes(attribute.Int("github.com/gbh007/hgraber-next.worker.unit", int(w.number)))
 
 	w.callback.StartHandleOne()
 	defer w.callback.FinishHandleOne()

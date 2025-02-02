@@ -7,7 +7,7 @@ import (
 
 	"go.opentelemetry.io/otel/trace"
 
-	"hgnext/internal/config"
+	"github.com/gbh007/hgraber-next/internal/config"
 )
 
 func initLogger(cfg config.Config) *slog.Logger {

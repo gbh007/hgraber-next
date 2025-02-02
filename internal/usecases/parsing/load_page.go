@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) DownloadPage(ctx context.Context, agentID uuid.UUID, page entities.PageForDownload) error {

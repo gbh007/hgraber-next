@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"hgnext/internal/adapters/postgresql/internal/model"
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/adapters/postgresql/internal/model"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 // FIXME: добавить лимиты

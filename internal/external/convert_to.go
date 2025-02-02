@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/url"
 
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func BookToEntity(raw Book) (entities.BookContainer, error) {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) BookByURL(ctx context.Context, u url.URL) (entities.BookContainer, error) {

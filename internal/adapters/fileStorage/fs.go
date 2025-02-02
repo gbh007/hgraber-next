@@ -6,9 +6,9 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/adapters/agentFS"
-	"hgnext/internal/adapters/localFiles"
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/adapters/agentFS"
+	"github.com/gbh007/hgraber-next/internal/adapters/localFiles"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (s *Storage) searchFS(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (uuid.UUID, error) {

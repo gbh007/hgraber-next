@@ -14,7 +14,7 @@ import (
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/validate"
 
-	"hgnext/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func methodNotAllowed(w http.ResponseWriter, r *http.Request, allowed string) {

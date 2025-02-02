@@ -7,8 +7,8 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"hgnext/internal/controllers/internal/worker"
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/controllers/internal/worker"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type validateFileUnitUseCases interface {

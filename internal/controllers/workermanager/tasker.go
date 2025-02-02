@@ -6,8 +6,8 @@ import (
 
 	"go.opentelemetry.io/otel/trace"
 
-	"hgnext/internal/controllers/internal/worker"
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/controllers/internal/worker"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 type taskerDataProvider interface {

@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log/slog"
 
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownloadWithAgent, error) {

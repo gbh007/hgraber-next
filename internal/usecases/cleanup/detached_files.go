@@ -8,7 +8,7 @@ import (
 
 	"go.opentelemetry.io/otel/trace"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) RemoveDetachedFiles(_ context.Context) (entities.RunnableTask, error) {

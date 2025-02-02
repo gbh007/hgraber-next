@@ -7,7 +7,7 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (d *Database) BookCount(ctx context.Context, filter entities.BookFilter) (int, error) {

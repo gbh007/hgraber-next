@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (uc *UseCase) Agents(ctx context.Context, filter entities.AgentFilter, includeStatus bool) ([]entities.AgentWithStatus, error) {

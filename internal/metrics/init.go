@@ -4,7 +4,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
-	"hgnext/internal/version"
+	"github.com/gbh007/hgraber-next/internal/version"
 )
 
 var versionInfo = promauto.NewGauge(prometheus.GaugeOpts{

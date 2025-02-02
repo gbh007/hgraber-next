@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	"hgnext/internal/config"
+	"github.com/gbh007/hgraber-next/internal/config"
 )
 
 func parseConfig() (config.Config, error) {

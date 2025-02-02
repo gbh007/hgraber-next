@@ -4,9 +4,9 @@ import (
 	"context"
 	"slices"
 
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
-	"hgnext/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APISystemTaskResultsGet(ctx context.Context) (serverAPI.APISystemTaskResultsGetRes, error) {

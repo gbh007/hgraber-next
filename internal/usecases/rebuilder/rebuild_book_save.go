@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) rebuildBookSave(

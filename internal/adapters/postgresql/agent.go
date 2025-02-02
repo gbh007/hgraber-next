@@ -7,9 +7,9 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
-	"hgnext/internal/adapters/postgresql/internal/model"
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/adapters/postgresql/internal/model"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (d *Database) Agents(ctx context.Context, filter entities.AgentFilter) ([]entities.Agent, error) {

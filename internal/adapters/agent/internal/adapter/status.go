@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
-	"hgnext/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
 func (a *Adapter) Status(ctx context.Context) (entities.AgentStatus, error) {

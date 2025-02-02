@@ -3,7 +3,7 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APISystemWorkerConfigPost(ctx context.Context, req *serverAPI.APISystemWorkerConfigPostReq) (serverAPI.APISystemWorkerConfigPostRes, error) {

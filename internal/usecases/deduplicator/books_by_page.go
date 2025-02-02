@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 // TODO: по факту для этого метода не нужны превью, подумать над выделением в BFF.

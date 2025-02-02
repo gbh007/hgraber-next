@@ -7,8 +7,8 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
-	"hgnext/internal/adapters/postgresql/internal/model"
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/adapters/postgresql/internal/model"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (d *Database) InsertLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error {

@@ -3,8 +3,8 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/entities"
-	"hgnext/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APILabelSetPost(ctx context.Context, req *serverAPI.APILabelSetPostReq) (serverAPI.APILabelSetPostRes, error) {

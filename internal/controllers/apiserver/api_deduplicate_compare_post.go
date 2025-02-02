@@ -3,8 +3,8 @@ package apiserver
 import (
 	"context"
 
-	"hgnext/internal/pkg"
-	"hgnext/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APIDeduplicateComparePost(ctx context.Context, req *serverAPI.APIDeduplicateComparePostReq) (serverAPI.APIDeduplicateComparePostRes, error) {

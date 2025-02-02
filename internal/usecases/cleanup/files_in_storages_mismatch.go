@@ -9,8 +9,8 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UUID) (entities.RunnableTask, error) {

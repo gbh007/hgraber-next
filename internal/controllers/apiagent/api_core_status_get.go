@@ -3,7 +3,7 @@ package apiagent
 import (
 	"context"
 
-	"hgnext/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
 func (c *Controller) APICoreStatusGet(ctx context.Context) (agentAPI.APICoreStatusGetRes, error) {

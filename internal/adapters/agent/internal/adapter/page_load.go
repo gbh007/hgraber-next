@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	"hgnext/internal/entities"
-	"hgnext/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
 func (a *Adapter) PageLoad(ctx context.Context, url entities.AgentPageURL) (io.Reader, error) {

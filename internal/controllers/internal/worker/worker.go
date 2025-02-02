@@ -9,7 +9,7 @@ import (
 
 	"go.opentelemetry.io/otel/trace"
 
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type workerTaskGetterFunc[T any] func(context.Context) ([]T, error)

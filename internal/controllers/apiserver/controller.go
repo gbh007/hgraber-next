@@ -10,8 +10,8 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"hgnext/internal/entities"
-	"hgnext/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 type parseUseCases interface {

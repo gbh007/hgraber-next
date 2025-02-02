@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) BookCompare(ctx context.Context, originID, targetID uuid.UUID) (entities.BookCompareResultToWeb, error) {

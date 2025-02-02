@@ -3,7 +3,7 @@ package apiagent
 import (
 	"context"
 
-	"hgnext/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
 func (c *Controller) APIExportArchivePost(ctx context.Context, req agentAPI.APIExportArchivePostReq, params agentAPI.APIExportArchivePostParams) (agentAPI.APIExportArchivePostRes, error) {

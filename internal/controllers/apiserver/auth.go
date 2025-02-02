@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"hgnext/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 var errorAccessForbidden = errors.New("access forbidden")

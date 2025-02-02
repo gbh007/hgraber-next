@@ -3,7 +3,7 @@ package entities
 import (
 	"time"
 
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 const PossibleAttributeCount = 7

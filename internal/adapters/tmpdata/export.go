@@ -1,7 +1,7 @@
 package tmpdata
 
 import (
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (s *Storage) AddToExport(books []entities.BookFullWithAgent) {

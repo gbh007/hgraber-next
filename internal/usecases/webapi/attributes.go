@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error) {

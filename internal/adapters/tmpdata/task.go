@@ -1,6 +1,6 @@
 package tmpdata
 
-import "hgnext/internal/entities"
+import "github.com/gbh007/hgraber-next/internal/entities"
 
 func (s *Storage) SaveTask(task entities.RunnableTask) {
 	s.toRun.PushOne(task)

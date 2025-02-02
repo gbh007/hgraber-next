@@ -3,8 +3,8 @@ package tmpdata
 import (
 	"github.com/google/uuid"
 
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type Storage struct {

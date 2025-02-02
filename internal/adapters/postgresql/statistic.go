@@ -8,7 +8,7 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (d *Database) BooksCountByAuthor(ctx context.Context) (map[string]int64, error) {

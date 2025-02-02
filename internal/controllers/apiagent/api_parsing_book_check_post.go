@@ -3,9 +3,9 @@ package apiagent
 import (
 	"context"
 
-	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
-	"hgnext/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
 func (c *Controller) APIParsingBookCheckPost(ctx context.Context, req *agentAPI.APIParsingBookCheckPostReq) (agentAPI.APIParsingBookCheckPostRes, error) {

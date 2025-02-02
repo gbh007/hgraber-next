@@ -1,4 +1,4 @@
-module hgnext
+module github.com/gbh007/hgraber-next
 
 go 1.23.3
 

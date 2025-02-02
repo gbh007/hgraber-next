@@ -12,8 +12,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/entities"
-	"hgnext/internal/external"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/external"
 )
 
 func (uc *UseCase) ImportArchive(

@@ -1,6 +1,6 @@
 package main
 
-import "hgnext/internal/application/server"
+import "github.com/gbh007/hgraber-next/internal/application/server"
 
 func main() {
 	server.Serve()

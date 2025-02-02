@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/url"
 
-	"hgnext/internal/entities"
-	"hgnext/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/internal/entities"
+	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
 func (a *Adapter) BooksCheckMulti(ctx context.Context, u url.URL) ([]entities.AgentBookCheckResult, error) {

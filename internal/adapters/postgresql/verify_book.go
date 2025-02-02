@@ -7,8 +7,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"hgnext/internal/adapters/postgresql/internal/model"
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/adapters/postgresql/internal/model"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (d *Database) VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool, verifiedAt time.Time) error {

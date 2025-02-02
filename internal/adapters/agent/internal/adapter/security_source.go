@@ -3,7 +3,7 @@ package adapter
 import (
 	"context"
 
-	"hgnext/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
 type securitySource struct {

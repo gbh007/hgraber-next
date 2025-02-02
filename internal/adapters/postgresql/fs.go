@@ -7,8 +7,8 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
-	"hgnext/internal/adapters/postgresql/internal/model"
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/adapters/postgresql/internal/model"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (d *Database) FileStorages(ctx context.Context) ([]entities.FileStorageSystem, error) {

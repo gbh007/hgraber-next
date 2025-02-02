@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (s *Storage) FSList(ctx context.Context) ([]entities.FSWithStatus, error) {

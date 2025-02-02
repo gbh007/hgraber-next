@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) BookList(ctx context.Context, filter entities.BookFilter) (entities.BFFBookList, error) {

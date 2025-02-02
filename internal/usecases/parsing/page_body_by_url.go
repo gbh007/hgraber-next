@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/url"
 
-	"hgnext/internal/entities"
+	"github.com/gbh007/hgraber-next/internal/entities"
 )
 
 func (uc *UseCase) PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error) {
