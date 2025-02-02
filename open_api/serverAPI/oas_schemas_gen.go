@@ -1109,6 +1109,10 @@ type APIBookDetailsPostOKSize struct {
 	DeadHashesCount int `json:"dead_hashes_count"`
 	// Количество страниц дубликатов внутри книги.
 	InnerDuplicateCount int `json:"inner_duplicate_count"`
+	// Средний размер страницы.
+	AvgPageSize int64 `json:"avg_page_size"`
+	// Средний размер страницы в человекочитаемом виде.
+	AvgPageSizeFormatted string `json:"avg_page_size_formatted"`
 }
 
 // GetUnique returns the value of Unique.
@@ -1186,6 +1190,16 @@ func (s *APIBookDetailsPostOKSize) GetInnerDuplicateCount() int {
 	return s.InnerDuplicateCount
 }
 
+// GetAvgPageSize returns the value of AvgPageSize.
+func (s *APIBookDetailsPostOKSize) GetAvgPageSize() int64 {
+	return s.AvgPageSize
+}
+
+// GetAvgPageSizeFormatted returns the value of AvgPageSizeFormatted.
+func (s *APIBookDetailsPostOKSize) GetAvgPageSizeFormatted() string {
+	return s.AvgPageSizeFormatted
+}
+
 // SetUnique sets the value of Unique.
 func (s *APIBookDetailsPostOKSize) SetUnique(val int64) {
 	s.Unique = val
@@ -1259,6 +1273,16 @@ func (s *APIBookDetailsPostOKSize) SetDeadHashesCount(val int) {
 // SetInnerDuplicateCount sets the value of InnerDuplicateCount.
 func (s *APIBookDetailsPostOKSize) SetInnerDuplicateCount(val int) {
 	s.InnerDuplicateCount = val
+}
+
+// SetAvgPageSize sets the value of AvgPageSize.
+func (s *APIBookDetailsPostOKSize) SetAvgPageSize(val int64) {
+	s.AvgPageSize = val
+}
+
+// SetAvgPageSizeFormatted sets the value of AvgPageSizeFormatted.
+func (s *APIBookDetailsPostOKSize) SetAvgPageSizeFormatted(val string) {
+	s.AvgPageSizeFormatted = val
 }
 
 type APIBookDetailsPostReq struct {
@@ -1839,6 +1863,12 @@ type APIDeduplicateBookByPageBodyPostOKResultItem struct {
 	// Общий размер книг без учета внутренних страниц
 	// дублей и мертвых хешей.
 	SharedSizeWithoutDeadHashesFormatted string `json:"shared_size_without_dead_hashes_formatted"`
+	// Средний размер страницы цели.
+	TargetAvgPageSize int64 `json:"target_avg_page_size"`
+	// Средний размер страницы цели в человекочитаемом виде.
+	TargetAvgPageSizeFormatted string `json:"target_avg_page_size_formatted"`
+	// Фактическое количество страниц цели.
+	TargetPageCount int `json:"target_page_count"`
 }
 
 // GetBook returns the value of Book.
@@ -1906,6 +1936,21 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetSharedSizeWithoutDeadH
 	return s.SharedSizeWithoutDeadHashesFormatted
 }
 
+// GetTargetAvgPageSize returns the value of TargetAvgPageSize.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetAvgPageSize() int64 {
+	return s.TargetAvgPageSize
+}
+
+// GetTargetAvgPageSizeFormatted returns the value of TargetAvgPageSizeFormatted.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetAvgPageSizeFormatted() string {
+	return s.TargetAvgPageSizeFormatted
+}
+
+// GetTargetPageCount returns the value of TargetPageCount.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) GetTargetPageCount() int {
+	return s.TargetPageCount
+}
+
 // SetBook sets the value of Book.
 func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetBook(val BookSimple) {
 	s.Book = val
@@ -1969,6 +2014,21 @@ func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetSharedSizeFormatted(va
 // SetSharedSizeWithoutDeadHashesFormatted sets the value of SharedSizeWithoutDeadHashesFormatted.
 func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetSharedSizeWithoutDeadHashesFormatted(val string) {
 	s.SharedSizeWithoutDeadHashesFormatted = val
+}
+
+// SetTargetAvgPageSize sets the value of TargetAvgPageSize.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetAvgPageSize(val int64) {
+	s.TargetAvgPageSize = val
+}
+
+// SetTargetAvgPageSizeFormatted sets the value of TargetAvgPageSizeFormatted.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetAvgPageSizeFormatted(val string) {
+	s.TargetAvgPageSizeFormatted = val
+}
+
+// SetTargetPageCount sets the value of TargetPageCount.
+func (s *APIDeduplicateBookByPageBodyPostOKResultItem) SetTargetPageCount(val int) {
+	s.TargetPageCount = val
 }
 
 type APIDeduplicateBookByPageBodyPostReq struct {

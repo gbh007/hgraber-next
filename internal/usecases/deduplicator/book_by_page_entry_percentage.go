@@ -87,7 +87,8 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 		}
 
 		for _, page := range pages {
-			deduplicateResult.TargetSize += page.Size
+			deduplicateResult.TargetSize.Size += page.Size
+			deduplicateResult.TargetSize.Count++
 
 			if _, ok := bookHashMap[page.FileHash]; !ok {
 				continue
@@ -119,11 +120,11 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 			return 1
 		}
 
-		if a.TargetBook.PageCount > b.TargetBook.PageCount {
+		if a.TargetSize.Count > b.TargetSize.Count {
 			return -1
 		}
 
-		if a.TargetBook.PageCount < b.TargetBook.PageCount {
+		if a.TargetSize.Count < b.TargetSize.Count {
 			return 1
 		}
 

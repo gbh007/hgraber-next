@@ -48,6 +48,14 @@ func (book BFFBookDetails) PageDownloadPercent() float64 {
 	return math.Round(float64(downloadedPageCount)*10000/float64(len(book.Pages))) / 100
 }
 
+func (book BFFBookDetails) AvgPageSize() int64 {
+	if len(book.Pages) == 0 {
+		return 0
+	}
+
+	return book.Size.Total / int64(len(book.Pages))
+}
+
 type BFFBookDetailsFSDisposition struct {
 	ID   uuid.UUID
 	Name string

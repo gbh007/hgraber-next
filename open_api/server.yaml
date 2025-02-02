@@ -1123,6 +1123,13 @@ paths:
                       inner_duplicate_count:
                         type: integer
                         description: Количество страниц дубликатов внутри книги
+                      avg_page_size:
+                        type: integer
+                        format: int64
+                        description: Средний размер страницы
+                      avg_page_size_formatted:
+                        type: string
+                        description: Средний размер страницы в человекочитаемом виде
                     required:
                       - unique
                       - unique_without_dead_hashes
@@ -1139,6 +1146,8 @@ paths:
                       - shared_count
                       - dead_hashes_count
                       - inner_duplicate_count
+                      - avg_page_size
+                      - avg_page_size_formatted
                   fs_disposition:
                     type: array
                     items:
@@ -2260,6 +2269,16 @@ paths:
                         shared_size_without_dead_hashes_formatted:
                           type: string
                           description: Общий размер книг без учета внутренних страниц дублей и мертвых хешей
+                        target_avg_page_size:
+                          type: integer
+                          format: int64
+                          description: Средний размер страницы цели
+                        target_avg_page_size_formatted:
+                          type: string
+                          description: Средний размер страницы цели в человекочитаемом виде
+                        target_page_count:
+                          type: integer
+                          description: Фактическое количество страниц цели
                       required:
                         - book
                         - origin_covered_target
@@ -2274,6 +2293,9 @@ paths:
                         - target_size_formatted
                         - shared_size_formatted
                         - shared_size_without_dead_hashes_formatted
+                        - target_avg_page_size
+                        - target_avg_page_size_formatted
+                        - target_page_count
         400:
           description: Некорректный запрос
           content:

@@ -15,15 +15,15 @@ parsing:
 workers:
   page:
     count: 1
-    queue_size: 10000
+    queue_size: 100
     interval: 3s
   book:
     count: 1
-    queue_size: 1000
+    queue_size: 100
     interval: 3s
   hasher:
     count: 1
-    queue_size: 1000
+    queue_size: 100
     interval: 3s
   exporter:
     count: 1

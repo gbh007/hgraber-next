@@ -47,6 +47,8 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 				SharedCount:                      book.Size.SharedCount,
 				DeadHashesCount:                  book.Size.DeadHashesCount,
 				InnerDuplicateCount:              book.Size.InnerDuplicateCount,
+				AvgPageSize:                      book.AvgPageSize(),
+				AvgPageSizeFormatted:             entities.PrettySize(book.AvgPageSize()),
 			},
 			Set: book.Size.Total > 0,
 		},

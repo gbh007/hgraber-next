@@ -75,7 +75,7 @@ type DeduplicateBookResult struct {
 	SharedPages                  int
 	SharedPagesWithoutDeadHashes int
 
-	TargetSize int64
+	TargetSize SizeWithCount
 }
 
 type BookPagesCompareResult struct {

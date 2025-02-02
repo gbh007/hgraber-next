@@ -54,6 +54,14 @@ type SizeWithCount struct {
 	Size  int64
 }
 
+func (s SizeWithCount) Avg() int64 {
+	if s.Count == 0 {
+		return 0
+	}
+
+	return s.Size / s.Count
+}
+
 type FileFilter struct {
 	FSID       *uuid.UUID
 	BookID     *uuid.UUID

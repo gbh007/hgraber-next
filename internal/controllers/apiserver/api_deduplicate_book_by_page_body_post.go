@@ -26,15 +26,19 @@ func (c *Controller) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *
 				OriginCoveredTargetWithoutDeadHashes: raw.EntryPercentageWithoutDeadHashes,
 				TargetCoveredOriginWithoutDeadHashes: raw.ReverseEntryPercentageWithoutDeadHashes,
 
-				TargetSize:                       raw.TargetSize,
+				TargetSize:                       raw.TargetSize.Size,
 				SharedSize:                       raw.SharedSize,
 				SharedSizeWithoutDeadHashes:      raw.SharedSizeWithoutDeadHashes,
 				SharedPageCount:                  raw.SharedPages,
 				SharedPageCountWithoutDeadHashes: raw.SharedPagesWithoutDeadHashes,
 
-				TargetSizeFormatted:                  entities.PrettySize(raw.TargetSize),
+				TargetSizeFormatted:                  entities.PrettySize(raw.TargetSize.Size),
 				SharedSizeFormatted:                  entities.PrettySize(raw.SharedSize),
 				SharedSizeWithoutDeadHashesFormatted: entities.PrettySize(raw.SharedSizeWithoutDeadHashes),
+
+				TargetAvgPageSize:          raw.TargetSize.Avg(),
+				TargetAvgPageSizeFormatted: entities.PrettySize(raw.TargetSize.Avg()),
+				TargetPageCount:            int(raw.TargetSize.Count),
 			}
 		}),
 	}, nil
