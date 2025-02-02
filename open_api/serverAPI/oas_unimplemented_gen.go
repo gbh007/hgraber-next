@@ -525,12 +525,21 @@ func (UnimplementedHandler) APISystemImportArchivePost(ctx context.Context, req 
 	return r, ht.ErrNotImplemented
 }
 
-// APISystemInfoGet implements GET /api/system/info operation.
+// APISystemInfoSizeGet implements GET /api/system/info/size operation.
 //
 // Получение общей информации о системе.
 //
-// GET /api/system/info
-func (UnimplementedHandler) APISystemInfoGet(ctx context.Context) (r APISystemInfoGetRes, _ error) {
+// GET /api/system/info/size
+func (UnimplementedHandler) APISystemInfoSizeGet(ctx context.Context) (r APISystemInfoSizeGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APISystemInfoWorkersGet implements GET /api/system/info/workers operation.
+//
+// Получение информации о воркерах в системе.
+//
+// GET /api/system/info/workers
+func (UnimplementedHandler) APISystemInfoWorkersGet(ctx context.Context) (r APISystemInfoWorkersGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

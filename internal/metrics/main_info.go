@@ -2,6 +2,7 @@ package metrics
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"sync"
 	"time"
@@ -14,13 +15,14 @@ import (
 )
 
 type infoProvider interface {
-	SystemInfo(ctx context.Context) (entities.SystemSizeInfoWithMonitor, error)
+	WorkersInfo(ctx context.Context) []entities.SystemWorkerStat
 }
 
 type statisticProvider interface {
 	BooksCountByAuthor(ctx context.Context) (map[string]int64, error)
 	PageSizeByAuthor(ctx context.Context) (map[string]entities.SizeWithCount, error)
 	BookSizes(ctx context.Context) (map[uuid.UUID]entities.SizeWithCount, error)
+	SystemSize(ctx context.Context) (entities.SystemSizeInfo, error)
 }
 
 type config interface {
@@ -53,12 +55,6 @@ var (
 		Name:      "file_bytes",
 		Help:      "Размер файлов по статусам",
 	}, []string{"type", "fs_id"})
-	workerTotal = promauto.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: SystemName,
-		Subsystem: SubSystemName,
-		Name:      "worker_total",
-		Help:      "Данные воркеров",
-	}, []string{"worker_name", "counter"})
 	lastCollectorScrapeDuration = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: SystemName,
 		Subsystem: SubSystemName,
@@ -83,9 +79,18 @@ func NewSystemInfoCollector(
 	infoProvider infoProvider,
 	statisticProvider statisticProvider,
 	config config,
-) *SystemInfoCollector {
+) (*SystemInfoCollector, error) {
 	bookStatisticCollector := NewBookStatisticCollector()
-	prometheus.MustRegister(bookStatisticCollector)
+
+	err := prometheus.Register(bookStatisticCollector)
+	if err != nil {
+		return nil, fmt.Errorf("register book collector: %w", err)
+	}
+
+	err = RegisterWorkerInfoCollector(logger, infoProvider, time.Millisecond*100) // TODO: настраивать таймаут через конфиг
+	if err != nil {
+		return nil, fmt.Errorf("register worker collector: %w", err)
+	}
 
 	return &SystemInfoCollector{
 		logger:             logger,
@@ -94,7 +99,7 @@ func NewSystemInfoCollector(
 		mainInfoInterval:   config.MainInfo(),
 		statisticInterval:  config.BookStatistic(),
 		statisticCollector: bookStatisticCollector,
-	}
+	}, nil
 }
 
 func (c *SystemInfoCollector) Name() string {
@@ -170,7 +175,7 @@ func (c *SystemInfoCollector) Start(ctx context.Context) (chan struct{}, error) 
 func (c *SystemInfoCollector) collectMainInfo(ctx context.Context) {
 	tStart := time.Now()
 
-	res, err := c.infoProvider.SystemInfo(ctx)
+	res, err := c.statisticProvider.SystemSize(ctx)
 	if err != nil {
 		c.logger.ErrorContext(
 			ctx, "failed scrap system info",
@@ -218,12 +223,6 @@ func (c *SystemInfoCollector) collectMainInfo(ctx context.Context) {
 
 	for fsID, v := range res.FileSizeByFS {
 		fileBytes.WithLabelValues("fs", fsID.String()).Set(float64(v))
-	}
-
-	for _, worker := range res.Workers {
-		workerTotal.WithLabelValues(worker.Name, "in_queue").Set(float64(worker.InQueueCount))
-		workerTotal.WithLabelValues(worker.Name, "in_work").Set(float64(worker.InWorkCount))
-		workerTotal.WithLabelValues(worker.Name, "runners").Set(float64(worker.RunnersCount))
 	}
 }
 

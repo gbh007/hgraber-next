@@ -26,7 +26,8 @@ type parseUseCases interface {
 }
 
 type webAPIUseCases interface {
-	SystemInfo(ctx context.Context) (entities.SystemSizeInfoWithMonitor, error)
+	SystemSize(ctx context.Context) (entities.SystemSizeInfo, error)
+	WorkersInfo(ctx context.Context) []entities.SystemWorkerStat
 
 	File(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 	PageBody(ctx context.Context, bookID uuid.UUID, pageNumber int) (io.Reader, error)

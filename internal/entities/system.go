@@ -86,11 +86,6 @@ func (info SystemSizeInfo) FileSizeByFSSum() int64 {
 	return s
 }
 
-type SystemSizeInfoWithMonitor struct {
-	SystemSizeInfo
-	Workers []SystemWorkerStat
-}
-
 type SystemWorkerStat struct {
 	Name         string
 	InQueueCount int

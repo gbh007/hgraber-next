@@ -219,12 +219,21 @@ func Serve() {
 	}
 
 	if cfg.Application.Metric.Enabled() {
-		infoCollector := metrics.NewSystemInfoCollector(
+		infoCollector, err := metrics.NewSystemInfoCollector(
 			logger,
 			webAPIUseCases,
 			storage,
 			cfg.Application.Metric,
 		)
+		if err != nil {
+			logger.ErrorContext(
+				ctx, "fail to create info collector",
+				slog.Any("error", err),
+			)
+
+			os.Exit(1)
+		}
+
 		asyncController.RegisterRunner(infoCollector)
 	}
 

@@ -132,7 +132,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/system/info:
+  /api/system/info/size:
     get:
       description: Получение общей информации о системе
       summary: Текущее состояние системы
@@ -145,7 +145,146 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SystemInfo"
+                type: object
+                description: Информация о системе
+                properties:
+                  count:
+                    type: integer
+                    description: Количество книг
+                  downloaded_count:
+                    type: integer
+                    description: Количество загруженных книг
+                  verified_count:
+                    type: integer
+                    description: Количество верифицированных книг
+                  rebuilded_count:
+                    type: integer
+                    description: Количество пересобранных книг
+                  not_load_count:
+                    type: integer
+                    description: Количество не обработанных книг
+                  deleted_count:
+                    type: integer
+                    description: Количество удаленных книг
+                  page_count:
+                    type: integer
+                    description: Количество страниц
+                  not_load_page_count:
+                    type: integer
+                    description: Количество не загруженных страниц
+                  page_without_body_count:
+                    type: integer
+                    description: Количество страниц без тела (файла)
+                  deleted_page_count:
+                    type: integer
+                    description: Количество удаленных страниц (которые не были очищены)
+                  file_count:
+                    type: integer
+                    description: Количество файлов
+                  unhashed_file_count:
+                    type: integer
+                    description: Количество файлов без рассчитанного хеша
+                  invalid_file_count:
+                    type: integer
+                    description: Количество поврежденных файлов
+                  detached_file_count:
+                    type: integer
+                    description: Количество неиспользуемых файлов (нет привязки к странице)
+                  dead_hash_count:
+                    type: integer
+                    description: Количество мертвых хешей
+                  pages_size:
+                    type: integer
+                    format: int64
+                    description: Объем загруженных изображений в байтах
+                  pages_size_formatted:
+                    type: string
+                    description: Объем загруженных изображений в человеко-читаемом формате
+                  files_size:
+                    type: integer
+                    format: int64
+                    description: Объем файлов в байтах
+                  files_size_formatted:
+                    type: string
+                    description: Объем файлов в человеко-читаемом формате
+                required:
+                  - count
+                  - downloaded_count
+                  - verified_count
+                  - rebuilded_count
+                  - not_load_count
+                  - deleted_count
+                  - page_count
+                  - not_load_page_count
+                  - deleted_page_count
+                  - file_count
+                  - unhashed_file_count
+                  - invalid_file_count
+                  - detached_file_count
+                  - dead_hash_count
+                  - pages_size
+                  - pages_size_formatted
+                  - page_without_body_count
+                  - files_size
+                  - files_size_formatted
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/system/info/workers:
+    get:
+      description: Получение информации о воркерах в системе
+      summary: Текущее состояние воркеров системы
+      tags:
+        - parsing
+        - system
+      responses:
+        200:
+          description: Информация
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Информация о системе
+                properties:
+                  workers:
+                    type: array
+                    description: Данные об обработчиках
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Название обработчика
+                        in_queue:
+                          type: integer
+                          description: В очереди на обработку
+                        in_work:
+                          type: integer
+                          description: В обработке
+                        runners:
+                          type: integer
+                          description: Количество экземпляров обработчика (потоков)
+                      required:
+                        - name
+                        - in_queue
+                        - in_work
+                        - runners
         401:
           description: Пользователь не авторизован
           content:
@@ -3911,117 +4050,6 @@ paths:
 
 components:
   schemas:
-    SystemInfo:
-      type: object
-      description: Информация о системе
-      properties:
-        count:
-          type: integer
-          description: Количество книг
-        downloaded_count:
-          type: integer
-          description: Количество загруженных книг
-        verified_count:
-          type: integer
-          description: Количество верифицированных книг
-        rebuilded_count:
-          type: integer
-          description: Количество пересобранных книг
-        not_load_count:
-          type: integer
-          description: Количество не обработанных книг
-        deleted_count:
-          type: integer
-          description: Количество удаленных книг
-        page_count:
-          type: integer
-          description: Количество страниц
-        not_load_page_count:
-          type: integer
-          description: Количество не загруженных страниц
-        page_without_body_count:
-          type: integer
-          description: Количество страниц без тела (файла)
-        deleted_page_count:
-          type: integer
-          description: Количество удаленных страниц (которые не были очищены)
-        file_count:
-          type: integer
-          description: Количество файлов
-        unhashed_file_count:
-          type: integer
-          description: Количество файлов без рассчитанного хеша
-        invalid_file_count:
-          type: integer
-          description: Количество поврежденных файлов
-        detached_file_count:
-          type: integer
-          description: Количество неиспользуемых файлов (нет привязки к странице)
-        dead_hash_count:
-          type: integer
-          description: Количество мертвых хешей
-        pages_size:
-          type: integer
-          format: int64
-          description: Объем загруженных изображений в байтах
-        pages_size_formatted:
-          type: string
-          description: Объем загруженных изображений в человеко-читаемом формате
-        files_size:
-          type: integer
-          format: int64
-          description: Объем файлов в байтах
-        files_size_formatted:
-          type: string
-          description: Объем файлов в человеко-читаемом формате
-        monitor:
-          type: object
-          description: Данные системы мониторинга
-          properties:
-            workers:
-              type: array
-              description: Данные об обработчиках
-              items:
-                type: object
-                properties:
-                  name:
-                    type: string
-                    description: Название обработчика
-                  in_queue:
-                    type: integer
-                    description: В очереди на обработку
-                  in_work:
-                    type: integer
-                    description: В обработке
-                  runners:
-                    type: integer
-                    description: Количество экземпляров обработчика (потоков)
-                required:
-                  - name
-                  - in_queue
-                  - in_work
-                  - runners
-      required:
-        - count
-        - downloaded_count
-        - verified_count
-        - rebuilded_count
-        - not_load_count
-        - deleted_count
-        - page_count
-        - not_load_page_count
-        - deleted_page_count
-        - file_count
-        - unhashed_file_count
-        - invalid_file_count
-        - detached_file_count
-        - dead_hash_count
-        - pages_size
-        - pages_size_formatted
-        - page_without_body_count
-        - files_size
-        - files_size_formatted
-
     BookFlags:
       type: object
       description: Флаги книги

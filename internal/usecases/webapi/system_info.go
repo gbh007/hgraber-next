@@ -7,16 +7,15 @@ import (
 	"hgnext/internal/entities"
 )
 
-func (uc *UseCase) SystemInfo(ctx context.Context) (entities.SystemSizeInfoWithMonitor, error) {
+func (uc *UseCase) SystemSize(ctx context.Context) (entities.SystemSizeInfo, error) {
 	systemSize, err := uc.storage.SystemSize(ctx)
 	if err != nil {
-		return entities.SystemSizeInfoWithMonitor{}, fmt.Errorf("storage: %w", err)
+		return entities.SystemSizeInfo{}, fmt.Errorf("storage: %w", err)
 	}
 
-	workers := uc.workerManager.Info()
+	return systemSize, nil
+}
 
-	return entities.SystemSizeInfoWithMonitor{
-		SystemSizeInfo: systemSize,
-		Workers:        workers,
-	}, nil
+func (uc *UseCase) WorkersInfo(ctx context.Context) []entities.SystemWorkerStat {
+	return uc.workerManager.Info()
 }

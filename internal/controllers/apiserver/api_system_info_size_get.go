@@ -4,20 +4,19 @@ import (
 	"context"
 
 	"hgnext/internal/entities"
-	"hgnext/internal/pkg"
 	"hgnext/open_api/serverAPI"
 )
 
-func (c *Controller) APISystemInfoGet(ctx context.Context) (serverAPI.APISystemInfoGetRes, error) {
-	info, err := c.webAPIUseCases.SystemInfo(ctx)
+func (c *Controller) APISystemInfoSizeGet(ctx context.Context) (serverAPI.APISystemInfoSizeGetRes, error) {
+	info, err := c.webAPIUseCases.SystemSize(ctx)
 	if err != nil {
-		return &serverAPI.APISystemInfoGetInternalServerError{
+		return &serverAPI.APISystemInfoSizeGetInternalServerError{
 			InnerCode: WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.SystemInfo{
+	return &serverAPI.APISystemInfoSizeGetOK{
 		Count:           info.BookCount,
 		DownloadedCount: info.DownloadedBookCount,
 		VerifiedCount:   info.VerifiedBookCount,
@@ -41,16 +40,5 @@ func (c *Controller) APISystemInfoGet(ctx context.Context) (serverAPI.APISystemI
 		PagesSizeFormatted: entities.PrettySize(info.PageFileSizeByFSSum()),
 		FilesSize:          info.FileSizeByFSSum(),
 		FilesSizeFormatted: entities.PrettySize(info.FileSizeByFSSum()),
-
-		Monitor: serverAPI.NewOptSystemInfoMonitor(serverAPI.SystemInfoMonitor{
-			Workers: pkg.Map(info.Workers, func(w entities.SystemWorkerStat) serverAPI.SystemInfoMonitorWorkersItem {
-				return serverAPI.SystemInfoMonitorWorkersItem{
-					Name:    w.Name,
-					InQueue: w.InQueueCount,
-					InWork:  w.InWorkCount,
-					Runners: w.RunnersCount,
-				}
-			}),
-		}),
 	}, nil
 }

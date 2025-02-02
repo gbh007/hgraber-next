@@ -225,8 +225,12 @@ type APISystemImportArchivePostRes interface {
 	aPISystemImportArchivePostRes()
 }
 
-type APISystemInfoGetRes interface {
-	aPISystemInfoGetRes()
+type APISystemInfoSizeGetRes interface {
+	aPISystemInfoSizeGetRes()
+}
+
+type APISystemInfoWorkersGetRes interface {
+	aPISystemInfoWorkersGetRes()
 }
 
 type APISystemTaskCreatePostRes interface {

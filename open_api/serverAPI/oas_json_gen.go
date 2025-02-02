@@ -19302,17 +19302,17 @@ func (s *APISystemImportArchivePostUnauthorized) UnmarshalJSON(data []byte) erro
 	return s.Decode(d)
 }
 
-// Encode encodes APISystemInfoGetForbidden as json.
-func (s *APISystemInfoGetForbidden) Encode(e *jx.Encoder) {
+// Encode encodes APISystemInfoSizeGetForbidden as json.
+func (s *APISystemInfoSizeGetForbidden) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
 
 	unwrapped.Encode(e)
 }
 
-// Decode decodes APISystemInfoGetForbidden from json.
-func (s *APISystemInfoGetForbidden) Decode(d *jx.Decoder) error {
+// Decode decodes APISystemInfoSizeGetForbidden from json.
+func (s *APISystemInfoSizeGetForbidden) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APISystemInfoGetForbidden to nil")
+		return errors.New("invalid: unable to decode APISystemInfoSizeGetForbidden to nil")
 	}
 	var unwrapped ErrorResponse
 	if err := func() error {
@@ -19323,34 +19323,34 @@ func (s *APISystemInfoGetForbidden) Decode(d *jx.Decoder) error {
 	}(); err != nil {
 		return errors.Wrap(err, "alias")
 	}
-	*s = APISystemInfoGetForbidden(unwrapped)
+	*s = APISystemInfoSizeGetForbidden(unwrapped)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APISystemInfoGetForbidden) MarshalJSON() ([]byte, error) {
+func (s *APISystemInfoSizeGetForbidden) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APISystemInfoGetForbidden) UnmarshalJSON(data []byte) error {
+func (s *APISystemInfoSizeGetForbidden) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
-// Encode encodes APISystemInfoGetInternalServerError as json.
-func (s *APISystemInfoGetInternalServerError) Encode(e *jx.Encoder) {
+// Encode encodes APISystemInfoSizeGetInternalServerError as json.
+func (s *APISystemInfoSizeGetInternalServerError) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
 
 	unwrapped.Encode(e)
 }
 
-// Decode decodes APISystemInfoGetInternalServerError from json.
-func (s *APISystemInfoGetInternalServerError) Decode(d *jx.Decoder) error {
+// Decode decodes APISystemInfoSizeGetInternalServerError from json.
+func (s *APISystemInfoSizeGetInternalServerError) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APISystemInfoGetInternalServerError to nil")
+		return errors.New("invalid: unable to decode APISystemInfoSizeGetInternalServerError to nil")
 	}
 	var unwrapped ErrorResponse
 	if err := func() error {
@@ -19361,34 +19361,438 @@ func (s *APISystemInfoGetInternalServerError) Decode(d *jx.Decoder) error {
 	}(); err != nil {
 		return errors.Wrap(err, "alias")
 	}
-	*s = APISystemInfoGetInternalServerError(unwrapped)
+	*s = APISystemInfoSizeGetInternalServerError(unwrapped)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APISystemInfoGetInternalServerError) MarshalJSON() ([]byte, error) {
+func (s *APISystemInfoSizeGetInternalServerError) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APISystemInfoGetInternalServerError) UnmarshalJSON(data []byte) error {
+func (s *APISystemInfoSizeGetInternalServerError) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
-// Encode encodes APISystemInfoGetUnauthorized as json.
-func (s *APISystemInfoGetUnauthorized) Encode(e *jx.Encoder) {
+// Encode implements json.Marshaler.
+func (s *APISystemInfoSizeGetOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APISystemInfoSizeGetOK) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("count")
+		e.Int(s.Count)
+	}
+	{
+		e.FieldStart("downloaded_count")
+		e.Int(s.DownloadedCount)
+	}
+	{
+		e.FieldStart("verified_count")
+		e.Int(s.VerifiedCount)
+	}
+	{
+		e.FieldStart("rebuilded_count")
+		e.Int(s.RebuildedCount)
+	}
+	{
+		e.FieldStart("not_load_count")
+		e.Int(s.NotLoadCount)
+	}
+	{
+		e.FieldStart("deleted_count")
+		e.Int(s.DeletedCount)
+	}
+	{
+		e.FieldStart("page_count")
+		e.Int(s.PageCount)
+	}
+	{
+		e.FieldStart("not_load_page_count")
+		e.Int(s.NotLoadPageCount)
+	}
+	{
+		e.FieldStart("page_without_body_count")
+		e.Int(s.PageWithoutBodyCount)
+	}
+	{
+		e.FieldStart("deleted_page_count")
+		e.Int(s.DeletedPageCount)
+	}
+	{
+		e.FieldStart("file_count")
+		e.Int(s.FileCount)
+	}
+	{
+		e.FieldStart("unhashed_file_count")
+		e.Int(s.UnhashedFileCount)
+	}
+	{
+		e.FieldStart("invalid_file_count")
+		e.Int(s.InvalidFileCount)
+	}
+	{
+		e.FieldStart("detached_file_count")
+		e.Int(s.DetachedFileCount)
+	}
+	{
+		e.FieldStart("dead_hash_count")
+		e.Int(s.DeadHashCount)
+	}
+	{
+		e.FieldStart("pages_size")
+		e.Int64(s.PagesSize)
+	}
+	{
+		e.FieldStart("pages_size_formatted")
+		e.Str(s.PagesSizeFormatted)
+	}
+	{
+		e.FieldStart("files_size")
+		e.Int64(s.FilesSize)
+	}
+	{
+		e.FieldStart("files_size_formatted")
+		e.Str(s.FilesSizeFormatted)
+	}
+}
+
+var jsonFieldsNameOfAPISystemInfoSizeGetOK = [19]string{
+	0:  "count",
+	1:  "downloaded_count",
+	2:  "verified_count",
+	3:  "rebuilded_count",
+	4:  "not_load_count",
+	5:  "deleted_count",
+	6:  "page_count",
+	7:  "not_load_page_count",
+	8:  "page_without_body_count",
+	9:  "deleted_page_count",
+	10: "file_count",
+	11: "unhashed_file_count",
+	12: "invalid_file_count",
+	13: "detached_file_count",
+	14: "dead_hash_count",
+	15: "pages_size",
+	16: "pages_size_formatted",
+	17: "files_size",
+	18: "files_size_formatted",
+}
+
+// Decode decodes APISystemInfoSizeGetOK from json.
+func (s *APISystemInfoSizeGetOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APISystemInfoSizeGetOK to nil")
+	}
+	var requiredBitSet [3]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "count":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.Count = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"count\"")
+			}
+		case "downloaded_count":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int()
+				s.DownloadedCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"downloaded_count\"")
+			}
+		case "verified_count":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int()
+				s.VerifiedCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"verified_count\"")
+			}
+		case "rebuilded_count":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int()
+				s.RebuildedCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"rebuilded_count\"")
+			}
+		case "not_load_count":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int()
+				s.NotLoadCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"not_load_count\"")
+			}
+		case "deleted_count":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Int()
+				s.DeletedCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"deleted_count\"")
+			}
+		case "page_count":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int()
+				s.PageCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_count\"")
+			}
+		case "not_load_page_count":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int()
+				s.NotLoadPageCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"not_load_page_count\"")
+			}
+		case "page_without_body_count":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.PageWithoutBodyCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_without_body_count\"")
+			}
+		case "deleted_page_count":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int()
+				s.DeletedPageCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"deleted_page_count\"")
+			}
+		case "file_count":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int()
+				s.FileCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"file_count\"")
+			}
+		case "unhashed_file_count":
+			requiredBitSet[1] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int()
+				s.UnhashedFileCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"unhashed_file_count\"")
+			}
+		case "invalid_file_count":
+			requiredBitSet[1] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int()
+				s.InvalidFileCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"invalid_file_count\"")
+			}
+		case "detached_file_count":
+			requiredBitSet[1] |= 1 << 5
+			if err := func() error {
+				v, err := d.Int()
+				s.DetachedFileCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"detached_file_count\"")
+			}
+		case "dead_hash_count":
+			requiredBitSet[1] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int()
+				s.DeadHashCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"dead_hash_count\"")
+			}
+		case "pages_size":
+			requiredBitSet[1] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int64()
+				s.PagesSize = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"pages_size\"")
+			}
+		case "pages_size_formatted":
+			requiredBitSet[2] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.PagesSizeFormatted = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"pages_size_formatted\"")
+			}
+		case "files_size":
+			requiredBitSet[2] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int64()
+				s.FilesSize = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"files_size\"")
+			}
+		case "files_size_formatted":
+			requiredBitSet[2] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.FilesSizeFormatted = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"files_size_formatted\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APISystemInfoSizeGetOK")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [3]uint8{
+		0b11111111,
+		0b11111111,
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPISystemInfoSizeGetOK) {
+					name = jsonFieldsNameOfAPISystemInfoSizeGetOK[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APISystemInfoSizeGetOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APISystemInfoSizeGetOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APISystemInfoSizeGetUnauthorized as json.
+func (s *APISystemInfoSizeGetUnauthorized) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
 
 	unwrapped.Encode(e)
 }
 
-// Decode decodes APISystemInfoGetUnauthorized from json.
-func (s *APISystemInfoGetUnauthorized) Decode(d *jx.Decoder) error {
+// Decode decodes APISystemInfoSizeGetUnauthorized from json.
+func (s *APISystemInfoSizeGetUnauthorized) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APISystemInfoGetUnauthorized to nil")
+		return errors.New("invalid: unable to decode APISystemInfoSizeGetUnauthorized to nil")
 	}
 	var unwrapped ErrorResponse
 	if err := func() error {
@@ -19399,19 +19803,354 @@ func (s *APISystemInfoGetUnauthorized) Decode(d *jx.Decoder) error {
 	}(); err != nil {
 		return errors.Wrap(err, "alias")
 	}
-	*s = APISystemInfoGetUnauthorized(unwrapped)
+	*s = APISystemInfoSizeGetUnauthorized(unwrapped)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APISystemInfoGetUnauthorized) MarshalJSON() ([]byte, error) {
+func (s *APISystemInfoSizeGetUnauthorized) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APISystemInfoGetUnauthorized) UnmarshalJSON(data []byte) error {
+func (s *APISystemInfoSizeGetUnauthorized) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APISystemInfoWorkersGetForbidden as json.
+func (s *APISystemInfoWorkersGetForbidden) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APISystemInfoWorkersGetForbidden from json.
+func (s *APISystemInfoWorkersGetForbidden) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APISystemInfoWorkersGetForbidden to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APISystemInfoWorkersGetForbidden(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APISystemInfoWorkersGetForbidden) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APISystemInfoWorkersGetForbidden) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APISystemInfoWorkersGetInternalServerError as json.
+func (s *APISystemInfoWorkersGetInternalServerError) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APISystemInfoWorkersGetInternalServerError from json.
+func (s *APISystemInfoWorkersGetInternalServerError) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APISystemInfoWorkersGetInternalServerError to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APISystemInfoWorkersGetInternalServerError(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APISystemInfoWorkersGetInternalServerError) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APISystemInfoWorkersGetInternalServerError) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APISystemInfoWorkersGetOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APISystemInfoWorkersGetOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Workers != nil {
+			e.FieldStart("workers")
+			e.ArrStart()
+			for _, elem := range s.Workers {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfAPISystemInfoWorkersGetOK = [1]string{
+	0: "workers",
+}
+
+// Decode decodes APISystemInfoWorkersGetOK from json.
+func (s *APISystemInfoWorkersGetOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APISystemInfoWorkersGetOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "workers":
+			if err := func() error {
+				s.Workers = make([]APISystemInfoWorkersGetOKWorkersItem, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem APISystemInfoWorkersGetOKWorkersItem
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Workers = append(s.Workers, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"workers\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APISystemInfoWorkersGetOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APISystemInfoWorkersGetOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APISystemInfoWorkersGetOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APISystemInfoWorkersGetOKWorkersItem) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APISystemInfoWorkersGetOKWorkersItem) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+		e.FieldStart("in_queue")
+		e.Int(s.InQueue)
+	}
+	{
+		e.FieldStart("in_work")
+		e.Int(s.InWork)
+	}
+	{
+		e.FieldStart("runners")
+		e.Int(s.Runners)
+	}
+}
+
+var jsonFieldsNameOfAPISystemInfoWorkersGetOKWorkersItem = [4]string{
+	0: "name",
+	1: "in_queue",
+	2: "in_work",
+	3: "runners",
+}
+
+// Decode decodes APISystemInfoWorkersGetOKWorkersItem from json.
+func (s *APISystemInfoWorkersGetOKWorkersItem) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APISystemInfoWorkersGetOKWorkersItem to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "in_queue":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int()
+				s.InQueue = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"in_queue\"")
+			}
+		case "in_work":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int()
+				s.InWork = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"in_work\"")
+			}
+		case "runners":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int()
+				s.Runners = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"runners\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APISystemInfoWorkersGetOKWorkersItem")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00001111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPISystemInfoWorkersGetOKWorkersItem) {
+					name = jsonFieldsNameOfAPISystemInfoWorkersGetOKWorkersItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APISystemInfoWorkersGetOKWorkersItem) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APISystemInfoWorkersGetOKWorkersItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APISystemInfoWorkersGetUnauthorized as json.
+func (s *APISystemInfoWorkersGetUnauthorized) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APISystemInfoWorkersGetUnauthorized from json.
+func (s *APISystemInfoWorkersGetUnauthorized) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APISystemInfoWorkersGetUnauthorized to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APISystemInfoWorkersGetUnauthorized(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APISystemInfoWorkersGetUnauthorized) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APISystemInfoWorkersGetUnauthorized) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -24757,39 +25496,6 @@ func (s *OptString) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes SystemInfoMonitor as json.
-func (o OptSystemInfoMonitor) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes SystemInfoMonitor from json.
-func (o *OptSystemInfoMonitor) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptSystemInfoMonitor to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptSystemInfoMonitor) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptSystemInfoMonitor) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode encodes url.URL as json.
 func (o OptURI) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -24986,648 +25692,6 @@ func (s *PageSimple) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *PageSimple) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *SystemInfo) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *SystemInfo) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("count")
-		e.Int(s.Count)
-	}
-	{
-		e.FieldStart("downloaded_count")
-		e.Int(s.DownloadedCount)
-	}
-	{
-		e.FieldStart("verified_count")
-		e.Int(s.VerifiedCount)
-	}
-	{
-		e.FieldStart("rebuilded_count")
-		e.Int(s.RebuildedCount)
-	}
-	{
-		e.FieldStart("not_load_count")
-		e.Int(s.NotLoadCount)
-	}
-	{
-		e.FieldStart("deleted_count")
-		e.Int(s.DeletedCount)
-	}
-	{
-		e.FieldStart("page_count")
-		e.Int(s.PageCount)
-	}
-	{
-		e.FieldStart("not_load_page_count")
-		e.Int(s.NotLoadPageCount)
-	}
-	{
-		e.FieldStart("page_without_body_count")
-		e.Int(s.PageWithoutBodyCount)
-	}
-	{
-		e.FieldStart("deleted_page_count")
-		e.Int(s.DeletedPageCount)
-	}
-	{
-		e.FieldStart("file_count")
-		e.Int(s.FileCount)
-	}
-	{
-		e.FieldStart("unhashed_file_count")
-		e.Int(s.UnhashedFileCount)
-	}
-	{
-		e.FieldStart("invalid_file_count")
-		e.Int(s.InvalidFileCount)
-	}
-	{
-		e.FieldStart("detached_file_count")
-		e.Int(s.DetachedFileCount)
-	}
-	{
-		e.FieldStart("dead_hash_count")
-		e.Int(s.DeadHashCount)
-	}
-	{
-		e.FieldStart("pages_size")
-		e.Int64(s.PagesSize)
-	}
-	{
-		e.FieldStart("pages_size_formatted")
-		e.Str(s.PagesSizeFormatted)
-	}
-	{
-		e.FieldStart("files_size")
-		e.Int64(s.FilesSize)
-	}
-	{
-		e.FieldStart("files_size_formatted")
-		e.Str(s.FilesSizeFormatted)
-	}
-	{
-		if s.Monitor.Set {
-			e.FieldStart("monitor")
-			s.Monitor.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfSystemInfo = [20]string{
-	0:  "count",
-	1:  "downloaded_count",
-	2:  "verified_count",
-	3:  "rebuilded_count",
-	4:  "not_load_count",
-	5:  "deleted_count",
-	6:  "page_count",
-	7:  "not_load_page_count",
-	8:  "page_without_body_count",
-	9:  "deleted_page_count",
-	10: "file_count",
-	11: "unhashed_file_count",
-	12: "invalid_file_count",
-	13: "detached_file_count",
-	14: "dead_hash_count",
-	15: "pages_size",
-	16: "pages_size_formatted",
-	17: "files_size",
-	18: "files_size_formatted",
-	19: "monitor",
-}
-
-// Decode decodes SystemInfo from json.
-func (s *SystemInfo) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode SystemInfo to nil")
-	}
-	var requiredBitSet [3]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "count":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Int()
-				s.Count = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"count\"")
-			}
-		case "downloaded_count":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Int()
-				s.DownloadedCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"downloaded_count\"")
-			}
-		case "verified_count":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Int()
-				s.VerifiedCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"verified_count\"")
-			}
-		case "rebuilded_count":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				v, err := d.Int()
-				s.RebuildedCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"rebuilded_count\"")
-			}
-		case "not_load_count":
-			requiredBitSet[0] |= 1 << 4
-			if err := func() error {
-				v, err := d.Int()
-				s.NotLoadCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"not_load_count\"")
-			}
-		case "deleted_count":
-			requiredBitSet[0] |= 1 << 5
-			if err := func() error {
-				v, err := d.Int()
-				s.DeletedCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"deleted_count\"")
-			}
-		case "page_count":
-			requiredBitSet[0] |= 1 << 6
-			if err := func() error {
-				v, err := d.Int()
-				s.PageCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page_count\"")
-			}
-		case "not_load_page_count":
-			requiredBitSet[0] |= 1 << 7
-			if err := func() error {
-				v, err := d.Int()
-				s.NotLoadPageCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"not_load_page_count\"")
-			}
-		case "page_without_body_count":
-			requiredBitSet[1] |= 1 << 0
-			if err := func() error {
-				v, err := d.Int()
-				s.PageWithoutBodyCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page_without_body_count\"")
-			}
-		case "deleted_page_count":
-			requiredBitSet[1] |= 1 << 1
-			if err := func() error {
-				v, err := d.Int()
-				s.DeletedPageCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"deleted_page_count\"")
-			}
-		case "file_count":
-			requiredBitSet[1] |= 1 << 2
-			if err := func() error {
-				v, err := d.Int()
-				s.FileCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"file_count\"")
-			}
-		case "unhashed_file_count":
-			requiredBitSet[1] |= 1 << 3
-			if err := func() error {
-				v, err := d.Int()
-				s.UnhashedFileCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"unhashed_file_count\"")
-			}
-		case "invalid_file_count":
-			requiredBitSet[1] |= 1 << 4
-			if err := func() error {
-				v, err := d.Int()
-				s.InvalidFileCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"invalid_file_count\"")
-			}
-		case "detached_file_count":
-			requiredBitSet[1] |= 1 << 5
-			if err := func() error {
-				v, err := d.Int()
-				s.DetachedFileCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"detached_file_count\"")
-			}
-		case "dead_hash_count":
-			requiredBitSet[1] |= 1 << 6
-			if err := func() error {
-				v, err := d.Int()
-				s.DeadHashCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"dead_hash_count\"")
-			}
-		case "pages_size":
-			requiredBitSet[1] |= 1 << 7
-			if err := func() error {
-				v, err := d.Int64()
-				s.PagesSize = int64(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"pages_size\"")
-			}
-		case "pages_size_formatted":
-			requiredBitSet[2] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.PagesSizeFormatted = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"pages_size_formatted\"")
-			}
-		case "files_size":
-			requiredBitSet[2] |= 1 << 1
-			if err := func() error {
-				v, err := d.Int64()
-				s.FilesSize = int64(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"files_size\"")
-			}
-		case "files_size_formatted":
-			requiredBitSet[2] |= 1 << 2
-			if err := func() error {
-				v, err := d.Str()
-				s.FilesSizeFormatted = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"files_size_formatted\"")
-			}
-		case "monitor":
-			if err := func() error {
-				s.Monitor.Reset()
-				if err := s.Monitor.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"monitor\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode SystemInfo")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [3]uint8{
-		0b11111111,
-		0b11111111,
-		0b00000111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfSystemInfo) {
-					name = jsonFieldsNameOfSystemInfo[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *SystemInfo) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *SystemInfo) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *SystemInfoMonitor) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *SystemInfoMonitor) encodeFields(e *jx.Encoder) {
-	{
-		if s.Workers != nil {
-			e.FieldStart("workers")
-			e.ArrStart()
-			for _, elem := range s.Workers {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
-		}
-	}
-}
-
-var jsonFieldsNameOfSystemInfoMonitor = [1]string{
-	0: "workers",
-}
-
-// Decode decodes SystemInfoMonitor from json.
-func (s *SystemInfoMonitor) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode SystemInfoMonitor to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "workers":
-			if err := func() error {
-				s.Workers = make([]SystemInfoMonitorWorkersItem, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem SystemInfoMonitorWorkersItem
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Workers = append(s.Workers, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"workers\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode SystemInfoMonitor")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *SystemInfoMonitor) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *SystemInfoMonitor) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *SystemInfoMonitorWorkersItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *SystemInfoMonitorWorkersItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("name")
-		e.Str(s.Name)
-	}
-	{
-		e.FieldStart("in_queue")
-		e.Int(s.InQueue)
-	}
-	{
-		e.FieldStart("in_work")
-		e.Int(s.InWork)
-	}
-	{
-		e.FieldStart("runners")
-		e.Int(s.Runners)
-	}
-}
-
-var jsonFieldsNameOfSystemInfoMonitorWorkersItem = [4]string{
-	0: "name",
-	1: "in_queue",
-	2: "in_work",
-	3: "runners",
-}
-
-// Decode decodes SystemInfoMonitorWorkersItem from json.
-func (s *SystemInfoMonitorWorkersItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode SystemInfoMonitorWorkersItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "name":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Name = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
-		case "in_queue":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Int()
-				s.InQueue = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"in_queue\"")
-			}
-		case "in_work":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Int()
-				s.InWork = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"in_work\"")
-			}
-		case "runners":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				v, err := d.Int()
-				s.Runners = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"runners\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode SystemInfoMonitorWorkersItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00001111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfSystemInfoMonitorWorkersItem) {
-					name = jsonFieldsNameOfSystemInfoMonitorWorkersItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *SystemInfoMonitorWorkersItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *SystemInfoMonitorWorkersItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

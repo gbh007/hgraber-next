@@ -4494,17 +4494,335 @@ type APISystemImportArchivePostUnauthorized ErrorResponse
 
 func (*APISystemImportArchivePostUnauthorized) aPISystemImportArchivePostRes() {}
 
-type APISystemInfoGetForbidden ErrorResponse
+type APISystemInfoSizeGetForbidden ErrorResponse
 
-func (*APISystemInfoGetForbidden) aPISystemInfoGetRes() {}
+func (*APISystemInfoSizeGetForbidden) aPISystemInfoSizeGetRes() {}
 
-type APISystemInfoGetInternalServerError ErrorResponse
+type APISystemInfoSizeGetInternalServerError ErrorResponse
 
-func (*APISystemInfoGetInternalServerError) aPISystemInfoGetRes() {}
+func (*APISystemInfoSizeGetInternalServerError) aPISystemInfoSizeGetRes() {}
 
-type APISystemInfoGetUnauthorized ErrorResponse
+// Информация о системе.
+type APISystemInfoSizeGetOK struct {
+	// Количество книг.
+	Count int `json:"count"`
+	// Количество загруженных книг.
+	DownloadedCount int `json:"downloaded_count"`
+	// Количество верифицированных книг.
+	VerifiedCount int `json:"verified_count"`
+	// Количество пересобранных книг.
+	RebuildedCount int `json:"rebuilded_count"`
+	// Количество не обработанных книг.
+	NotLoadCount int `json:"not_load_count"`
+	// Количество удаленных книг.
+	DeletedCount int `json:"deleted_count"`
+	// Количество страниц.
+	PageCount int `json:"page_count"`
+	// Количество не загруженных страниц.
+	NotLoadPageCount int `json:"not_load_page_count"`
+	// Количество страниц без тела (файла).
+	PageWithoutBodyCount int `json:"page_without_body_count"`
+	// Количество удаленных страниц (которые не были
+	// очищены).
+	DeletedPageCount int `json:"deleted_page_count"`
+	// Количество файлов.
+	FileCount int `json:"file_count"`
+	// Количество файлов без рассчитанного хеша.
+	UnhashedFileCount int `json:"unhashed_file_count"`
+	// Количество поврежденных файлов.
+	InvalidFileCount int `json:"invalid_file_count"`
+	// Количество неиспользуемых файлов (нет привязки к
+	// странице).
+	DetachedFileCount int `json:"detached_file_count"`
+	// Количество мертвых хешей.
+	DeadHashCount int `json:"dead_hash_count"`
+	// Объем загруженных изображений в байтах.
+	PagesSize int64 `json:"pages_size"`
+	// Объем загруженных изображений в человеко-читаемом
+	// формате.
+	PagesSizeFormatted string `json:"pages_size_formatted"`
+	// Объем файлов в байтах.
+	FilesSize int64 `json:"files_size"`
+	// Объем файлов в человеко-читаемом формате.
+	FilesSizeFormatted string `json:"files_size_formatted"`
+}
 
-func (*APISystemInfoGetUnauthorized) aPISystemInfoGetRes() {}
+// GetCount returns the value of Count.
+func (s *APISystemInfoSizeGetOK) GetCount() int {
+	return s.Count
+}
+
+// GetDownloadedCount returns the value of DownloadedCount.
+func (s *APISystemInfoSizeGetOK) GetDownloadedCount() int {
+	return s.DownloadedCount
+}
+
+// GetVerifiedCount returns the value of VerifiedCount.
+func (s *APISystemInfoSizeGetOK) GetVerifiedCount() int {
+	return s.VerifiedCount
+}
+
+// GetRebuildedCount returns the value of RebuildedCount.
+func (s *APISystemInfoSizeGetOK) GetRebuildedCount() int {
+	return s.RebuildedCount
+}
+
+// GetNotLoadCount returns the value of NotLoadCount.
+func (s *APISystemInfoSizeGetOK) GetNotLoadCount() int {
+	return s.NotLoadCount
+}
+
+// GetDeletedCount returns the value of DeletedCount.
+func (s *APISystemInfoSizeGetOK) GetDeletedCount() int {
+	return s.DeletedCount
+}
+
+// GetPageCount returns the value of PageCount.
+func (s *APISystemInfoSizeGetOK) GetPageCount() int {
+	return s.PageCount
+}
+
+// GetNotLoadPageCount returns the value of NotLoadPageCount.
+func (s *APISystemInfoSizeGetOK) GetNotLoadPageCount() int {
+	return s.NotLoadPageCount
+}
+
+// GetPageWithoutBodyCount returns the value of PageWithoutBodyCount.
+func (s *APISystemInfoSizeGetOK) GetPageWithoutBodyCount() int {
+	return s.PageWithoutBodyCount
+}
+
+// GetDeletedPageCount returns the value of DeletedPageCount.
+func (s *APISystemInfoSizeGetOK) GetDeletedPageCount() int {
+	return s.DeletedPageCount
+}
+
+// GetFileCount returns the value of FileCount.
+func (s *APISystemInfoSizeGetOK) GetFileCount() int {
+	return s.FileCount
+}
+
+// GetUnhashedFileCount returns the value of UnhashedFileCount.
+func (s *APISystemInfoSizeGetOK) GetUnhashedFileCount() int {
+	return s.UnhashedFileCount
+}
+
+// GetInvalidFileCount returns the value of InvalidFileCount.
+func (s *APISystemInfoSizeGetOK) GetInvalidFileCount() int {
+	return s.InvalidFileCount
+}
+
+// GetDetachedFileCount returns the value of DetachedFileCount.
+func (s *APISystemInfoSizeGetOK) GetDetachedFileCount() int {
+	return s.DetachedFileCount
+}
+
+// GetDeadHashCount returns the value of DeadHashCount.
+func (s *APISystemInfoSizeGetOK) GetDeadHashCount() int {
+	return s.DeadHashCount
+}
+
+// GetPagesSize returns the value of PagesSize.
+func (s *APISystemInfoSizeGetOK) GetPagesSize() int64 {
+	return s.PagesSize
+}
+
+// GetPagesSizeFormatted returns the value of PagesSizeFormatted.
+func (s *APISystemInfoSizeGetOK) GetPagesSizeFormatted() string {
+	return s.PagesSizeFormatted
+}
+
+// GetFilesSize returns the value of FilesSize.
+func (s *APISystemInfoSizeGetOK) GetFilesSize() int64 {
+	return s.FilesSize
+}
+
+// GetFilesSizeFormatted returns the value of FilesSizeFormatted.
+func (s *APISystemInfoSizeGetOK) GetFilesSizeFormatted() string {
+	return s.FilesSizeFormatted
+}
+
+// SetCount sets the value of Count.
+func (s *APISystemInfoSizeGetOK) SetCount(val int) {
+	s.Count = val
+}
+
+// SetDownloadedCount sets the value of DownloadedCount.
+func (s *APISystemInfoSizeGetOK) SetDownloadedCount(val int) {
+	s.DownloadedCount = val
+}
+
+// SetVerifiedCount sets the value of VerifiedCount.
+func (s *APISystemInfoSizeGetOK) SetVerifiedCount(val int) {
+	s.VerifiedCount = val
+}
+
+// SetRebuildedCount sets the value of RebuildedCount.
+func (s *APISystemInfoSizeGetOK) SetRebuildedCount(val int) {
+	s.RebuildedCount = val
+}
+
+// SetNotLoadCount sets the value of NotLoadCount.
+func (s *APISystemInfoSizeGetOK) SetNotLoadCount(val int) {
+	s.NotLoadCount = val
+}
+
+// SetDeletedCount sets the value of DeletedCount.
+func (s *APISystemInfoSizeGetOK) SetDeletedCount(val int) {
+	s.DeletedCount = val
+}
+
+// SetPageCount sets the value of PageCount.
+func (s *APISystemInfoSizeGetOK) SetPageCount(val int) {
+	s.PageCount = val
+}
+
+// SetNotLoadPageCount sets the value of NotLoadPageCount.
+func (s *APISystemInfoSizeGetOK) SetNotLoadPageCount(val int) {
+	s.NotLoadPageCount = val
+}
+
+// SetPageWithoutBodyCount sets the value of PageWithoutBodyCount.
+func (s *APISystemInfoSizeGetOK) SetPageWithoutBodyCount(val int) {
+	s.PageWithoutBodyCount = val
+}
+
+// SetDeletedPageCount sets the value of DeletedPageCount.
+func (s *APISystemInfoSizeGetOK) SetDeletedPageCount(val int) {
+	s.DeletedPageCount = val
+}
+
+// SetFileCount sets the value of FileCount.
+func (s *APISystemInfoSizeGetOK) SetFileCount(val int) {
+	s.FileCount = val
+}
+
+// SetUnhashedFileCount sets the value of UnhashedFileCount.
+func (s *APISystemInfoSizeGetOK) SetUnhashedFileCount(val int) {
+	s.UnhashedFileCount = val
+}
+
+// SetInvalidFileCount sets the value of InvalidFileCount.
+func (s *APISystemInfoSizeGetOK) SetInvalidFileCount(val int) {
+	s.InvalidFileCount = val
+}
+
+// SetDetachedFileCount sets the value of DetachedFileCount.
+func (s *APISystemInfoSizeGetOK) SetDetachedFileCount(val int) {
+	s.DetachedFileCount = val
+}
+
+// SetDeadHashCount sets the value of DeadHashCount.
+func (s *APISystemInfoSizeGetOK) SetDeadHashCount(val int) {
+	s.DeadHashCount = val
+}
+
+// SetPagesSize sets the value of PagesSize.
+func (s *APISystemInfoSizeGetOK) SetPagesSize(val int64) {
+	s.PagesSize = val
+}
+
+// SetPagesSizeFormatted sets the value of PagesSizeFormatted.
+func (s *APISystemInfoSizeGetOK) SetPagesSizeFormatted(val string) {
+	s.PagesSizeFormatted = val
+}
+
+// SetFilesSize sets the value of FilesSize.
+func (s *APISystemInfoSizeGetOK) SetFilesSize(val int64) {
+	s.FilesSize = val
+}
+
+// SetFilesSizeFormatted sets the value of FilesSizeFormatted.
+func (s *APISystemInfoSizeGetOK) SetFilesSizeFormatted(val string) {
+	s.FilesSizeFormatted = val
+}
+
+func (*APISystemInfoSizeGetOK) aPISystemInfoSizeGetRes() {}
+
+type APISystemInfoSizeGetUnauthorized ErrorResponse
+
+func (*APISystemInfoSizeGetUnauthorized) aPISystemInfoSizeGetRes() {}
+
+type APISystemInfoWorkersGetForbidden ErrorResponse
+
+func (*APISystemInfoWorkersGetForbidden) aPISystemInfoWorkersGetRes() {}
+
+type APISystemInfoWorkersGetInternalServerError ErrorResponse
+
+func (*APISystemInfoWorkersGetInternalServerError) aPISystemInfoWorkersGetRes() {}
+
+// Информация о системе.
+type APISystemInfoWorkersGetOK struct {
+	// Данные об обработчиках.
+	Workers []APISystemInfoWorkersGetOKWorkersItem `json:"workers"`
+}
+
+// GetWorkers returns the value of Workers.
+func (s *APISystemInfoWorkersGetOK) GetWorkers() []APISystemInfoWorkersGetOKWorkersItem {
+	return s.Workers
+}
+
+// SetWorkers sets the value of Workers.
+func (s *APISystemInfoWorkersGetOK) SetWorkers(val []APISystemInfoWorkersGetOKWorkersItem) {
+	s.Workers = val
+}
+
+func (*APISystemInfoWorkersGetOK) aPISystemInfoWorkersGetRes() {}
+
+type APISystemInfoWorkersGetOKWorkersItem struct {
+	// Название обработчика.
+	Name string `json:"name"`
+	// В очереди на обработку.
+	InQueue int `json:"in_queue"`
+	// В обработке.
+	InWork int `json:"in_work"`
+	// Количество экземпляров обработчика (потоков).
+	Runners int `json:"runners"`
+}
+
+// GetName returns the value of Name.
+func (s *APISystemInfoWorkersGetOKWorkersItem) GetName() string {
+	return s.Name
+}
+
+// GetInQueue returns the value of InQueue.
+func (s *APISystemInfoWorkersGetOKWorkersItem) GetInQueue() int {
+	return s.InQueue
+}
+
+// GetInWork returns the value of InWork.
+func (s *APISystemInfoWorkersGetOKWorkersItem) GetInWork() int {
+	return s.InWork
+}
+
+// GetRunners returns the value of Runners.
+func (s *APISystemInfoWorkersGetOKWorkersItem) GetRunners() int {
+	return s.Runners
+}
+
+// SetName sets the value of Name.
+func (s *APISystemInfoWorkersGetOKWorkersItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetInQueue sets the value of InQueue.
+func (s *APISystemInfoWorkersGetOKWorkersItem) SetInQueue(val int) {
+	s.InQueue = val
+}
+
+// SetInWork sets the value of InWork.
+func (s *APISystemInfoWorkersGetOKWorkersItem) SetInWork(val int) {
+	s.InWork = val
+}
+
+// SetRunners sets the value of Runners.
+func (s *APISystemInfoWorkersGetOKWorkersItem) SetRunners(val int) {
+	s.Runners = val
+}
+
+type APISystemInfoWorkersGetUnauthorized ErrorResponse
+
+func (*APISystemInfoWorkersGetUnauthorized) aPISystemInfoWorkersGetRes() {}
 
 type APISystemTaskCreatePostBadRequest ErrorResponse
 
@@ -7120,52 +7438,6 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
-// NewOptSystemInfoMonitor returns new OptSystemInfoMonitor with value set to v.
-func NewOptSystemInfoMonitor(v SystemInfoMonitor) OptSystemInfoMonitor {
-	return OptSystemInfoMonitor{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptSystemInfoMonitor is optional SystemInfoMonitor.
-type OptSystemInfoMonitor struct {
-	Value SystemInfoMonitor
-	Set   bool
-}
-
-// IsSet returns true if OptSystemInfoMonitor was set.
-func (o OptSystemInfoMonitor) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptSystemInfoMonitor) Reset() {
-	var v SystemInfoMonitor
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptSystemInfoMonitor) SetTo(v SystemInfoMonitor) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptSystemInfoMonitor) Get() (v SystemInfoMonitor, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptSystemInfoMonitor) Or(d SystemInfoMonitor) SystemInfoMonitor {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptURI returns new OptURI with value set to v.
 func NewOptURI(v url.URL) OptURI {
 	return OptURI{
@@ -7297,321 +7569,4 @@ func (s *PageSimple) SetPreviewURL(val OptURI) {
 // SetHasDeadHash sets the value of HasDeadHash.
 func (s *PageSimple) SetHasDeadHash(val OptBool) {
 	s.HasDeadHash = val
-}
-
-// Информация о системе.
-// Ref: #/components/schemas/SystemInfo
-type SystemInfo struct {
-	// Количество книг.
-	Count int `json:"count"`
-	// Количество загруженных книг.
-	DownloadedCount int `json:"downloaded_count"`
-	// Количество верифицированных книг.
-	VerifiedCount int `json:"verified_count"`
-	// Количество пересобранных книг.
-	RebuildedCount int `json:"rebuilded_count"`
-	// Количество не обработанных книг.
-	NotLoadCount int `json:"not_load_count"`
-	// Количество удаленных книг.
-	DeletedCount int `json:"deleted_count"`
-	// Количество страниц.
-	PageCount int `json:"page_count"`
-	// Количество не загруженных страниц.
-	NotLoadPageCount int `json:"not_load_page_count"`
-	// Количество страниц без тела (файла).
-	PageWithoutBodyCount int `json:"page_without_body_count"`
-	// Количество удаленных страниц (которые не были
-	// очищены).
-	DeletedPageCount int `json:"deleted_page_count"`
-	// Количество файлов.
-	FileCount int `json:"file_count"`
-	// Количество файлов без рассчитанного хеша.
-	UnhashedFileCount int `json:"unhashed_file_count"`
-	// Количество поврежденных файлов.
-	InvalidFileCount int `json:"invalid_file_count"`
-	// Количество неиспользуемых файлов (нет привязки к
-	// странице).
-	DetachedFileCount int `json:"detached_file_count"`
-	// Количество мертвых хешей.
-	DeadHashCount int `json:"dead_hash_count"`
-	// Объем загруженных изображений в байтах.
-	PagesSize int64 `json:"pages_size"`
-	// Объем загруженных изображений в человеко-читаемом
-	// формате.
-	PagesSizeFormatted string `json:"pages_size_formatted"`
-	// Объем файлов в байтах.
-	FilesSize int64 `json:"files_size"`
-	// Объем файлов в человеко-читаемом формате.
-	FilesSizeFormatted string `json:"files_size_formatted"`
-	// Данные системы мониторинга.
-	Monitor OptSystemInfoMonitor `json:"monitor"`
-}
-
-// GetCount returns the value of Count.
-func (s *SystemInfo) GetCount() int {
-	return s.Count
-}
-
-// GetDownloadedCount returns the value of DownloadedCount.
-func (s *SystemInfo) GetDownloadedCount() int {
-	return s.DownloadedCount
-}
-
-// GetVerifiedCount returns the value of VerifiedCount.
-func (s *SystemInfo) GetVerifiedCount() int {
-	return s.VerifiedCount
-}
-
-// GetRebuildedCount returns the value of RebuildedCount.
-func (s *SystemInfo) GetRebuildedCount() int {
-	return s.RebuildedCount
-}
-
-// GetNotLoadCount returns the value of NotLoadCount.
-func (s *SystemInfo) GetNotLoadCount() int {
-	return s.NotLoadCount
-}
-
-// GetDeletedCount returns the value of DeletedCount.
-func (s *SystemInfo) GetDeletedCount() int {
-	return s.DeletedCount
-}
-
-// GetPageCount returns the value of PageCount.
-func (s *SystemInfo) GetPageCount() int {
-	return s.PageCount
-}
-
-// GetNotLoadPageCount returns the value of NotLoadPageCount.
-func (s *SystemInfo) GetNotLoadPageCount() int {
-	return s.NotLoadPageCount
-}
-
-// GetPageWithoutBodyCount returns the value of PageWithoutBodyCount.
-func (s *SystemInfo) GetPageWithoutBodyCount() int {
-	return s.PageWithoutBodyCount
-}
-
-// GetDeletedPageCount returns the value of DeletedPageCount.
-func (s *SystemInfo) GetDeletedPageCount() int {
-	return s.DeletedPageCount
-}
-
-// GetFileCount returns the value of FileCount.
-func (s *SystemInfo) GetFileCount() int {
-	return s.FileCount
-}
-
-// GetUnhashedFileCount returns the value of UnhashedFileCount.
-func (s *SystemInfo) GetUnhashedFileCount() int {
-	return s.UnhashedFileCount
-}
-
-// GetInvalidFileCount returns the value of InvalidFileCount.
-func (s *SystemInfo) GetInvalidFileCount() int {
-	return s.InvalidFileCount
-}
-
-// GetDetachedFileCount returns the value of DetachedFileCount.
-func (s *SystemInfo) GetDetachedFileCount() int {
-	return s.DetachedFileCount
-}
-
-// GetDeadHashCount returns the value of DeadHashCount.
-func (s *SystemInfo) GetDeadHashCount() int {
-	return s.DeadHashCount
-}
-
-// GetPagesSize returns the value of PagesSize.
-func (s *SystemInfo) GetPagesSize() int64 {
-	return s.PagesSize
-}
-
-// GetPagesSizeFormatted returns the value of PagesSizeFormatted.
-func (s *SystemInfo) GetPagesSizeFormatted() string {
-	return s.PagesSizeFormatted
-}
-
-// GetFilesSize returns the value of FilesSize.
-func (s *SystemInfo) GetFilesSize() int64 {
-	return s.FilesSize
-}
-
-// GetFilesSizeFormatted returns the value of FilesSizeFormatted.
-func (s *SystemInfo) GetFilesSizeFormatted() string {
-	return s.FilesSizeFormatted
-}
-
-// GetMonitor returns the value of Monitor.
-func (s *SystemInfo) GetMonitor() OptSystemInfoMonitor {
-	return s.Monitor
-}
-
-// SetCount sets the value of Count.
-func (s *SystemInfo) SetCount(val int) {
-	s.Count = val
-}
-
-// SetDownloadedCount sets the value of DownloadedCount.
-func (s *SystemInfo) SetDownloadedCount(val int) {
-	s.DownloadedCount = val
-}
-
-// SetVerifiedCount sets the value of VerifiedCount.
-func (s *SystemInfo) SetVerifiedCount(val int) {
-	s.VerifiedCount = val
-}
-
-// SetRebuildedCount sets the value of RebuildedCount.
-func (s *SystemInfo) SetRebuildedCount(val int) {
-	s.RebuildedCount = val
-}
-
-// SetNotLoadCount sets the value of NotLoadCount.
-func (s *SystemInfo) SetNotLoadCount(val int) {
-	s.NotLoadCount = val
-}
-
-// SetDeletedCount sets the value of DeletedCount.
-func (s *SystemInfo) SetDeletedCount(val int) {
-	s.DeletedCount = val
-}
-
-// SetPageCount sets the value of PageCount.
-func (s *SystemInfo) SetPageCount(val int) {
-	s.PageCount = val
-}
-
-// SetNotLoadPageCount sets the value of NotLoadPageCount.
-func (s *SystemInfo) SetNotLoadPageCount(val int) {
-	s.NotLoadPageCount = val
-}
-
-// SetPageWithoutBodyCount sets the value of PageWithoutBodyCount.
-func (s *SystemInfo) SetPageWithoutBodyCount(val int) {
-	s.PageWithoutBodyCount = val
-}
-
-// SetDeletedPageCount sets the value of DeletedPageCount.
-func (s *SystemInfo) SetDeletedPageCount(val int) {
-	s.DeletedPageCount = val
-}
-
-// SetFileCount sets the value of FileCount.
-func (s *SystemInfo) SetFileCount(val int) {
-	s.FileCount = val
-}
-
-// SetUnhashedFileCount sets the value of UnhashedFileCount.
-func (s *SystemInfo) SetUnhashedFileCount(val int) {
-	s.UnhashedFileCount = val
-}
-
-// SetInvalidFileCount sets the value of InvalidFileCount.
-func (s *SystemInfo) SetInvalidFileCount(val int) {
-	s.InvalidFileCount = val
-}
-
-// SetDetachedFileCount sets the value of DetachedFileCount.
-func (s *SystemInfo) SetDetachedFileCount(val int) {
-	s.DetachedFileCount = val
-}
-
-// SetDeadHashCount sets the value of DeadHashCount.
-func (s *SystemInfo) SetDeadHashCount(val int) {
-	s.DeadHashCount = val
-}
-
-// SetPagesSize sets the value of PagesSize.
-func (s *SystemInfo) SetPagesSize(val int64) {
-	s.PagesSize = val
-}
-
-// SetPagesSizeFormatted sets the value of PagesSizeFormatted.
-func (s *SystemInfo) SetPagesSizeFormatted(val string) {
-	s.PagesSizeFormatted = val
-}
-
-// SetFilesSize sets the value of FilesSize.
-func (s *SystemInfo) SetFilesSize(val int64) {
-	s.FilesSize = val
-}
-
-// SetFilesSizeFormatted sets the value of FilesSizeFormatted.
-func (s *SystemInfo) SetFilesSizeFormatted(val string) {
-	s.FilesSizeFormatted = val
-}
-
-// SetMonitor sets the value of Monitor.
-func (s *SystemInfo) SetMonitor(val OptSystemInfoMonitor) {
-	s.Monitor = val
-}
-
-func (*SystemInfo) aPISystemInfoGetRes() {}
-
-// Данные системы мониторинга.
-type SystemInfoMonitor struct {
-	// Данные об обработчиках.
-	Workers []SystemInfoMonitorWorkersItem `json:"workers"`
-}
-
-// GetWorkers returns the value of Workers.
-func (s *SystemInfoMonitor) GetWorkers() []SystemInfoMonitorWorkersItem {
-	return s.Workers
-}
-
-// SetWorkers sets the value of Workers.
-func (s *SystemInfoMonitor) SetWorkers(val []SystemInfoMonitorWorkersItem) {
-	s.Workers = val
-}
-
-type SystemInfoMonitorWorkersItem struct {
-	// Название обработчика.
-	Name string `json:"name"`
-	// В очереди на обработку.
-	InQueue int `json:"in_queue"`
-	// В обработке.
-	InWork int `json:"in_work"`
-	// Количество экземпляров обработчика (потоков).
-	Runners int `json:"runners"`
-}
-
-// GetName returns the value of Name.
-func (s *SystemInfoMonitorWorkersItem) GetName() string {
-	return s.Name
-}
-
-// GetInQueue returns the value of InQueue.
-func (s *SystemInfoMonitorWorkersItem) GetInQueue() int {
-	return s.InQueue
-}
-
-// GetInWork returns the value of InWork.
-func (s *SystemInfoMonitorWorkersItem) GetInWork() int {
-	return s.InWork
-}
-
-// GetRunners returns the value of Runners.
-func (s *SystemInfoMonitorWorkersItem) GetRunners() int {
-	return s.Runners
-}
-
-// SetName sets the value of Name.
-func (s *SystemInfoMonitorWorkersItem) SetName(val string) {
-	s.Name = val
-}
-
-// SetInQueue sets the value of InQueue.
-func (s *SystemInfoMonitorWorkersItem) SetInQueue(val int) {
-	s.InQueue = val
-}
-
-// SetInWork sets the value of InWork.
-func (s *SystemInfoMonitorWorkersItem) SetInWork(val int) {
-	s.InWork = val
-}
-
-// SetRunners sets the value of Runners.
-func (s *SystemInfoMonitorWorkersItem) SetRunners(val int) {
-	s.Runners = val
 }

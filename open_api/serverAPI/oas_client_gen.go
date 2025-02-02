@@ -367,12 +367,18 @@ type Invoker interface {
 	//
 	// POST /api/system/import/archive
 	APISystemImportArchivePost(ctx context.Context, request APISystemImportArchivePostReq) (APISystemImportArchivePostRes, error)
-	// APISystemInfoGet invokes GET /api/system/info operation.
+	// APISystemInfoSizeGet invokes GET /api/system/info/size operation.
 	//
 	// Получение общей информации о системе.
 	//
-	// GET /api/system/info
-	APISystemInfoGet(ctx context.Context) (APISystemInfoGetRes, error)
+	// GET /api/system/info/size
+	APISystemInfoSizeGet(ctx context.Context) (APISystemInfoSizeGetRes, error)
+	// APISystemInfoWorkersGet invokes GET /api/system/info/workers operation.
+	//
+	// Получение информации о воркерах в системе.
+	//
+	// GET /api/system/info/workers
+	APISystemInfoWorkersGet(ctx context.Context) (APISystemInfoWorkersGetRes, error)
 	// APISystemTaskCreatePost invokes POST /api/system/task/create operation.
 	//
 	// Создание и фоновый запуск задачи.
@@ -7164,20 +7170,20 @@ func (c *Client) sendAPISystemImportArchivePost(ctx context.Context, request API
 	return result, nil
 }
 
-// APISystemInfoGet invokes GET /api/system/info operation.
+// APISystemInfoSizeGet invokes GET /api/system/info/size operation.
 //
 // Получение общей информации о системе.
 //
-// GET /api/system/info
-func (c *Client) APISystemInfoGet(ctx context.Context) (APISystemInfoGetRes, error) {
-	res, err := c.sendAPISystemInfoGet(ctx)
+// GET /api/system/info/size
+func (c *Client) APISystemInfoSizeGet(ctx context.Context) (APISystemInfoSizeGetRes, error) {
+	res, err := c.sendAPISystemInfoSizeGet(ctx)
 	return res, err
 }
 
-func (c *Client) sendAPISystemInfoGet(ctx context.Context) (res APISystemInfoGetRes, err error) {
+func (c *Client) sendAPISystemInfoSizeGet(ctx context.Context) (res APISystemInfoSizeGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/system/info"),
+		semconv.HTTPRouteKey.String("/api/system/info/size"),
 	}
 
 	// Run stopwatch.
@@ -7192,7 +7198,7 @@ func (c *Client) sendAPISystemInfoGet(ctx context.Context) (res APISystemInfoGet
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APISystemInfoGetOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, APISystemInfoSizeGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -7210,7 +7216,7 @@ func (c *Client) sendAPISystemInfoGet(ctx context.Context) (res APISystemInfoGet
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/api/system/info"
+	pathParts[0] = "/api/system/info/size"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -7224,7 +7230,7 @@ func (c *Client) sendAPISystemInfoGet(ctx context.Context) (res APISystemInfoGet
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APISystemInfoGetOperation, r); {
+			switch err := c.securityHeaderAuth(ctx, APISystemInfoSizeGetOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -7235,7 +7241,7 @@ func (c *Client) sendAPISystemInfoGet(ctx context.Context) (res APISystemInfoGet
 		}
 		{
 			stage = "Security:Cookies"
-			switch err := c.securityCookies(ctx, APISystemInfoGetOperation, r); {
+			switch err := c.securityCookies(ctx, APISystemInfoSizeGetOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 1
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -7272,7 +7278,123 @@ func (c *Client) sendAPISystemInfoGet(ctx context.Context) (res APISystemInfoGet
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeAPISystemInfoGetResponse(resp)
+	result, err := decodeAPISystemInfoSizeGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APISystemInfoWorkersGet invokes GET /api/system/info/workers operation.
+//
+// Получение информации о воркерах в системе.
+//
+// GET /api/system/info/workers
+func (c *Client) APISystemInfoWorkersGet(ctx context.Context) (APISystemInfoWorkersGetRes, error) {
+	res, err := c.sendAPISystemInfoWorkersGet(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPISystemInfoWorkersGet(ctx context.Context) (res APISystemInfoWorkersGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/system/info/workers"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APISystemInfoWorkersGetOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/system/info/workers"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APISystemInfoWorkersGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, APISystemInfoWorkersGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPISystemInfoWorkersGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

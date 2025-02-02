@@ -352,12 +352,18 @@ type Handler interface {
 	//
 	// POST /api/system/import/archive
 	APISystemImportArchivePost(ctx context.Context, req APISystemImportArchivePostReq) (APISystemImportArchivePostRes, error)
-	// APISystemInfoGet implements GET /api/system/info operation.
+	// APISystemInfoSizeGet implements GET /api/system/info/size operation.
 	//
 	// Получение общей информации о системе.
 	//
-	// GET /api/system/info
-	APISystemInfoGet(ctx context.Context) (APISystemInfoGetRes, error)
+	// GET /api/system/info/size
+	APISystemInfoSizeGet(ctx context.Context) (APISystemInfoSizeGetRes, error)
+	// APISystemInfoWorkersGet implements GET /api/system/info/workers operation.
+	//
+	// Получение информации о воркерах в системе.
+	//
+	// GET /api/system/info/workers
+	APISystemInfoWorkersGet(ctx context.Context) (APISystemInfoWorkersGetRes, error)
 	// APISystemTaskCreatePost implements POST /api/system/task/create operation.
 	//
 	// Создание и фоновый запуск задачи.

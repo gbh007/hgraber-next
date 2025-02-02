@@ -1606,24 +1606,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
-					case 'n': // Prefix: "nfo"
+					case 'n': // Prefix: "nfo/"
 						origElem := elem
-						if l := len("nfo"); len(elem) >= l && elem[0:l] == "nfo" {
+						if l := len("nfo/"); len(elem) >= l && elem[0:l] == "nfo/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleAPISystemInfoGetRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET")
+							break
+						}
+						switch elem[0] {
+						case 's': // Prefix: "size"
+							origElem := elem
+							if l := len("size"); len(elem) >= l && elem[0:l] == "size" {
+								elem = elem[l:]
+							} else {
+								break
 							}
 
-							return
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleAPISystemInfoSizeGetRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'w': // Prefix: "workers"
+							origElem := elem
+							if l := len("workers"); len(elem) >= l && elem[0:l] == "workers" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleAPISystemInfoWorkersGetRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -3592,28 +3628,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
-					case 'n': // Prefix: "nfo"
+					case 'n': // Prefix: "nfo/"
 						origElem := elem
-						if l := len("nfo"); len(elem) >= l && elem[0:l] == "nfo" {
+						if l := len("nfo/"); len(elem) >= l && elem[0:l] == "nfo/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = APISystemInfoGetOperation
-								r.summary = "Текущее состояние системы"
-								r.operationID = ""
-								r.pathPattern = "/api/system/info"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
+							break
+						}
+						switch elem[0] {
+						case 's': // Prefix: "size"
+							origElem := elem
+							if l := len("size"); len(elem) >= l && elem[0:l] == "size" {
+								elem = elem[l:]
+							} else {
+								break
 							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = APISystemInfoSizeGetOperation
+									r.summary = "Текущее состояние системы"
+									r.operationID = ""
+									r.pathPattern = "/api/system/info/size"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'w': // Prefix: "workers"
+							origElem := elem
+							if l := len("workers"); len(elem) >= l && elem[0:l] == "workers" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = APISystemInfoWorkersGetOperation
+									r.summary = "Текущее состояние воркеров системы"
+									r.operationID = ""
+									r.pathPattern = "/api/system/info/workers"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
