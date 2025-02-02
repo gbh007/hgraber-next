@@ -27,14 +27,16 @@ func NewTasker(
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, task entities.RunnableTask) {
+		func(ctx context.Context, task entities.RunnableTask) error {
 			tr := new(entities.TaskResult)
 			useCases.SaveTaskResult(tr)
 
 			task.Run(ctx, tr)
+
+			return nil
 		},
-		func(ctx context.Context) []entities.RunnableTask {
-			return useCases.GetTask()
+		func(ctx context.Context) ([]entities.RunnableTask, error) {
+			return useCases.GetTask(), nil
 		},
 		cfg.GetCount(),
 		tracer,

@@ -8,6 +8,7 @@ import (
 
 	"hgnext/internal/controllers/internal/worker"
 	"hgnext/internal/entities"
+	"hgnext/internal/pkg"
 )
 
 type exportUnitUseCases interface {
@@ -27,19 +28,20 @@ func NewExporter(
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, book entities.BookFullWithAgent) {
+		func(ctx context.Context, book entities.BookFullWithAgent) error {
 			err := useCases.ExportArchive(ctx, book, true)
 			if err != nil {
-				logger.ErrorContext(
-					ctx, "fail export book",
-					slog.String("book_id", book.Book.ID.String()),
-					slog.String("agent_id", book.AgentID.String()),
-					slog.Any("error", err),
+				return pkg.WrapError(
+					err, "fail export book",
+					pkg.ErrorArgument("book_id", book.Book.ID),
+					pkg.ErrorArgument("agent_id", book.AgentID),
 				)
 			}
+
+			return nil
 		},
-		func(_ context.Context) []entities.BookFullWithAgent {
-			return useCases.ExportList()
+		func(_ context.Context) ([]entities.BookFullWithAgent, error) {
+			return useCases.ExportList(), nil
 		},
 		cfg.GetCount(),
 		tracer,

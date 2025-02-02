@@ -8,6 +8,7 @@ import (
 
 	"hgnext/internal/controllers/internal/worker"
 	"hgnext/internal/entities"
+	"hgnext/internal/pkg"
 )
 
 type hasherUnitUseCases interface {
@@ -27,27 +28,18 @@ func NewHasher(
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, file entities.File) {
+		func(ctx context.Context, file entities.File) error {
 			err := useCases.HandleFileHash(ctx, file)
 			if err != nil {
-				logger.ErrorContext(
-					ctx, "fail hash file",
-					slog.String("file_id", file.ID.String()),
-					slog.Any("error", err),
-				)
-			}
-		},
-		func(ctx context.Context) []entities.File {
-			files, err := useCases.UnHashedFiles(ctx)
-			if err != nil {
-				logger.ErrorContext(
-					ctx, "fail get files for hashing",
-					slog.Any("error", err),
+				return pkg.WrapError(
+					err, "fail hash file",
+					pkg.ErrorArgument("file_id", file.ID),
 				)
 			}
 
-			return files
+			return nil
 		},
+		useCases.UnHashedFiles,
 		cfg.GetCount(),
 		tracer,
 		metricProvider,

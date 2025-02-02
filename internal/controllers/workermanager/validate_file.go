@@ -8,6 +8,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"hgnext/internal/controllers/internal/worker"
+	"hgnext/internal/pkg"
 )
 
 type validateFileUnitUseCases interface {
@@ -27,18 +28,19 @@ func NewFileValidator(
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, fileID uuid.UUID) {
+		func(ctx context.Context, fileID uuid.UUID) error {
 			err := useCases.ValidateFile(ctx, fileID)
 			if err != nil {
-				logger.ErrorContext(
-					ctx, "fail validate file",
-					slog.String("id", fileID.String()),
-					slog.Any("error", err),
+				return pkg.WrapError(
+					err, "fail validate file",
+					pkg.ErrorArgument("file_id", fileID),
 				)
 			}
+
+			return nil
 		},
-		func(_ context.Context) []uuid.UUID {
-			return useCases.FileIDsToValidate()
+		func(_ context.Context) ([]uuid.UUID, error) {
+			return useCases.FileIDsToValidate(), nil
 		},
 		cfg.GetCount(),
 		tracer,

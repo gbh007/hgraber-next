@@ -9,6 +9,7 @@ import (
 
 	"hgnext/internal/controllers/internal/worker"
 	"hgnext/internal/entities"
+	"hgnext/internal/pkg"
 )
 
 type bookWorkerUnitUseCases interface {
@@ -28,27 +29,18 @@ func NewBookParser(
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, book entities.BookWithAgent) {
+		func(ctx context.Context, book entities.BookWithAgent) error {
 			err := useCases.ParseBook(ctx, book.AgentID, book.Book)
 			if err != nil {
-				logger.ErrorContext(
-					ctx, "fail parse book",
-					slog.String("book_id", book.ID.String()),
-					slog.Any("error", err),
-				)
-			}
-		},
-		func(ctx context.Context) []entities.BookWithAgent {
-			books, err := useCases.BooksToParse(ctx)
-			if err != nil {
-				logger.ErrorContext(
-					ctx, "fail get books for parse",
-					slog.Any("error", err),
+				return pkg.WrapError(
+					err, "fail parse book",
+					pkg.ErrorArgument("book_id", book.ID),
 				)
 			}
 
-			return books
+			return nil
 		},
+		useCases.BooksToParse,
 		cfg.GetCount(),
 		tracer,
 		metricProvider,

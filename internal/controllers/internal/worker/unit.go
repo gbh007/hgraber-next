@@ -2,6 +2,7 @@ package worker
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"runtime"
 	"strconv"
@@ -11,6 +12,8 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 )
+
+type workerHandlerFunc[T any] func(context.Context, T) error
 
 type UnitCallback struct {
 	StartHandleOne  func()
@@ -26,7 +29,7 @@ type Unit[T any] struct {
 
 	queue <-chan T
 
-	handler func(context.Context, T)
+	handler workerHandlerFunc[T]
 
 	logger         *slog.Logger
 	tracer         trace.Tracer
@@ -42,7 +45,7 @@ func NewUnit[T any](
 	name string,
 	number int32,
 	logger *slog.Logger,
-	handler func(context.Context, T),
+	handler workerHandlerFunc[T],
 	tracer trace.Tracer,
 	metricProvider metricProvider,
 	queue <-chan T,
@@ -70,16 +73,15 @@ func (w *Unit[T]) Name() string {
 	return w.name
 }
 
-func (w *Unit[T]) handleOne(ctx context.Context, value T) {
+func (w *Unit[T]) handleOne(ctx context.Context, value T) (err error) {
+	tStart := time.Now()
+	defer func() {
+		w.metricProvider.RegisterWorkerExecutionTaskTime(w.name, time.Since(tStart), err == nil)
+	}()
+
 	defer func() {
 		if p := recover(); p != nil {
-			w.logger.WarnContext(
-				ctx, "panic in worker unit detected",
-				slog.Any("panic", p),
-				slog.String("worker_name", w.name),
-				slog.Int("worker_unit", int(w.number)),
-				slog.Any("trace", stackTrace(3, 50)),
-			)
+			err = fmt.Errorf("panic detected: %v", p)
 		}
 	}()
 
@@ -94,14 +96,9 @@ func (w *Unit[T]) handleOne(ctx context.Context, value T) {
 	w.callback.StartHandleOne()
 	defer w.callback.FinishHandleOne()
 
-	tStart := time.Now()
-	defer func() {
-		w.metricProvider.RegisterWorkerExecutionTaskTime(w.name, time.Since(tStart))
-	}()
-
 	ctx = context.WithoutCancel(ctx)
 
-	w.handler(ctx, value)
+	return w.handler(ctx, value)
 }
 
 func (w *Unit[T]) Serve(ctx context.Context) {
@@ -133,7 +130,15 @@ func (w *Unit[T]) Serve(ctx context.Context) {
 
 		select {
 		case value := <-w.queue:
-			w.handleOne(ctx, value)
+			err := w.handleOne(ctx, value)
+			if err != nil {
+				w.logger.ErrorContext(
+					ctx, "worker fail task",
+					slog.String("worker_name", w.name),
+					slog.Int("worker_unit", int(w.number)),
+					slog.Any("error", err),
+				)
+			}
 		case <-ctx.Done():
 			return
 		}

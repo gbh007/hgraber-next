@@ -27,7 +27,7 @@ type workerConfig interface {
 }
 
 type metricProvider interface {
-	RegisterWorkerExecutionTaskTime(name string, d time.Duration)
+	RegisterWorkerExecutionTaskTime(name string, d time.Duration, success bool)
 }
 
 type Controller struct {

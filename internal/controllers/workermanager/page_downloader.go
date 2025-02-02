@@ -9,6 +9,7 @@ import (
 
 	"hgnext/internal/controllers/internal/worker"
 	"hgnext/internal/entities"
+	"hgnext/internal/pkg"
 )
 
 type pageWorkerUnitUseCases interface {
@@ -28,28 +29,19 @@ func NewPageDownloader(
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, page entities.PageForDownloadWithAgent) {
+		func(ctx context.Context, page entities.PageForDownloadWithAgent) error {
 			err := useCases.DownloadPage(ctx, page.AgentID, page.PageForDownload)
 			if err != nil {
-				logger.ErrorContext(
-					ctx, "fail download page",
-					slog.String("book_id", page.BookID.String()),
-					slog.Int("page_number", page.PageNumber),
-					slog.Any("error", err),
-				)
-			}
-		},
-		func(ctx context.Context) []entities.PageForDownloadWithAgent {
-			pages, err := useCases.PagesToDownload(ctx)
-			if err != nil {
-				logger.ErrorContext(
-					ctx, "fail get pages for download",
-					slog.Any("error", err),
+				return pkg.WrapError(
+					err, "fail download page",
+					pkg.ErrorArgument("book_id", page.BookID),
+					pkg.ErrorArgument("page_number", page.PageNumber),
 				)
 			}
 
-			return pages
+			return nil
 		},
+		useCases.PagesToDownload,
 		cfg.GetCount(),
 		tracer,
 		metricProvider,

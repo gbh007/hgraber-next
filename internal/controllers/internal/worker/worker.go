@@ -10,8 +10,10 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
+type workerTaskGetterFunc[T any] func(context.Context) ([]T, error)
+
 type metricProvider interface {
-	RegisterWorkerExecutionTaskTime(name string, d time.Duration)
+	RegisterWorkerExecutionTaskTime(name string, d time.Duration, success bool)
 }
 
 type Worker[T any] struct {
@@ -24,8 +26,8 @@ type Worker[T any] struct {
 
 	interval time.Duration
 
-	handler func(context.Context, T)
-	getter  func(context.Context) []T
+	handler workerHandlerFunc[T]
+	getter  workerTaskGetterFunc[T]
 
 	logger         *slog.Logger
 	tracer         trace.Tracer
@@ -42,8 +44,8 @@ func New[T any](
 	queueSize int,
 	interval time.Duration,
 	logger *slog.Logger,
-	handler func(context.Context, T),
-	getter func(context.Context) []T,
+	handler workerHandlerFunc[T],
+	getter workerTaskGetterFunc[T],
 	runnersCount int32,
 	tracer trace.Tracer,
 	metricProvider metricProvider,
@@ -154,26 +156,51 @@ handler:
 				continue
 			}
 
-			ctx, span := w.tracer.Start(
-				ctx, "worker-fetch/"+w.name,
-				trace.WithSpanKind(trace.SpanKindServer),
-			)
-
-			// TODO: тут может быть паника ее необходимо отловить
-			for _, data := range w.getter(ctx) {
-				select {
-				case <-ctx.Done():
-					span.End()
-					break handler
-
-				case w.queue <- data:
-				}
-			}
-
-			span.End()
+			w.fetch(ctx)
 		}
 	}
 
 	// Дожидаемся завершения всех подпроцессов
 	w.unitsWG.Wait()
+}
+
+func (w *Worker[T]) fetch(ctx context.Context) {
+	defer func() {
+		if p := recover(); p != nil {
+			w.logger.WarnContext(
+				ctx, "panic in worker fetch detected",
+				slog.Any("panic", p),
+				slog.String("worker_name", w.name),
+				slog.Any("trace", stackTrace(3, 50)),
+			)
+		}
+	}()
+
+	ctx, span := w.tracer.Start(
+		ctx, "worker-fetch/"+w.name,
+		trace.WithSpanKind(trace.SpanKindServer),
+	)
+
+	defer span.End()
+
+	data, err := w.getter(ctx)
+	if err != nil {
+		span.RecordError(err)
+		w.logger.ErrorContext(
+			ctx, "worker fetch",
+			slog.String("worker_name", w.name),
+			slog.Any("error", err),
+		)
+
+		return
+	}
+
+	for _, data := range data {
+		select {
+		case <-ctx.Done():
+			return
+
+		case w.queue <- data:
+		}
+	}
 }

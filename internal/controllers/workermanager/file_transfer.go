@@ -8,6 +8,7 @@ import (
 
 	"hgnext/internal/controllers/internal/worker"
 	"hgnext/internal/entities"
+	"hgnext/internal/pkg"
 )
 
 type fileTransferUnitUseCases interface {
@@ -27,19 +28,20 @@ func NewFileTransfer(
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, transfer entities.FileTransfer) {
+		func(ctx context.Context, transfer entities.FileTransfer) error {
 			err := useCases.TransferFile(ctx, transfer)
 			if err != nil {
-				logger.ErrorContext(
-					ctx, "fail transfer file",
-					slog.String("file_id", transfer.FileID.String()),
-					slog.String("fs_id", transfer.FSID.String()),
-					slog.Any("error", err),
+				return pkg.WrapError(
+					err, "fail transfer file",
+					pkg.ErrorArgument("file_id", transfer.FileID),
+					pkg.ErrorArgument("fs_id", transfer.FSID),
 				)
 			}
+
+			return nil
 		},
-		func(_ context.Context) []entities.FileTransfer {
-			return useCases.FileTransferList()
+		func(_ context.Context) ([]entities.FileTransfer, error) {
+			return useCases.FileTransferList(), nil
 		},
 		cfg.GetCount(),
 		tracer,
