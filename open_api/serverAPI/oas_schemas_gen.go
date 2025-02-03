@@ -1511,6 +1511,8 @@ type APIBookRebuildPostReq struct {
 	OldBook BookRaw `json:"old_book"`
 	// Список страниц из старой книги.
 	SelectedPages []int `json:"selected_pages"`
+	// Новый порядок страниц.
+	PageOrder []int `json:"page_order"`
 	// ID книги в которую надо добавить страницы.
 	MergeWithBook OptUUID                       `json:"merge_with_book"`
 	Flags         OptAPIBookRebuildPostReqFlags `json:"flags"`
@@ -1524,6 +1526,11 @@ func (s *APIBookRebuildPostReq) GetOldBook() BookRaw {
 // GetSelectedPages returns the value of SelectedPages.
 func (s *APIBookRebuildPostReq) GetSelectedPages() []int {
 	return s.SelectedPages
+}
+
+// GetPageOrder returns the value of PageOrder.
+func (s *APIBookRebuildPostReq) GetPageOrder() []int {
+	return s.PageOrder
 }
 
 // GetMergeWithBook returns the value of MergeWithBook.
@@ -1544,6 +1551,11 @@ func (s *APIBookRebuildPostReq) SetOldBook(val BookRaw) {
 // SetSelectedPages sets the value of SelectedPages.
 func (s *APIBookRebuildPostReq) SetSelectedPages(val []int) {
 	s.SelectedPages = val
+}
+
+// SetPageOrder sets the value of PageOrder.
+func (s *APIBookRebuildPostReq) SetPageOrder(val []int) {
+	s.PageOrder = val
 }
 
 // SetMergeWithBook sets the value of MergeWithBook.
@@ -1582,6 +1594,8 @@ type APIBookRebuildPostReqFlags struct {
 	// Устанавливает статус верификации ребилда в
 	// подтвержденный.
 	AutoVerify OptBool `json:"auto_verify"`
+	// Пересортировать страницы в указанном порядке.
+	PageReOrder OptBool `json:"page_re_order"`
 }
 
 // GetOnlyUnique returns the value of OnlyUnique.
@@ -1629,6 +1643,11 @@ func (s *APIBookRebuildPostReqFlags) GetAutoVerify() OptBool {
 	return s.AutoVerify
 }
 
+// GetPageReOrder returns the value of PageReOrder.
+func (s *APIBookRebuildPostReqFlags) GetPageReOrder() OptBool {
+	return s.PageReOrder
+}
+
 // SetOnlyUnique sets the value of OnlyUnique.
 func (s *APIBookRebuildPostReqFlags) SetOnlyUnique(val OptBool) {
 	s.OnlyUnique = val
@@ -1672,6 +1691,11 @@ func (s *APIBookRebuildPostReqFlags) SetMarkEmptyBookAsDeletedAfterRemovePages(v
 // SetAutoVerify sets the value of AutoVerify.
 func (s *APIBookRebuildPostReqFlags) SetAutoVerify(val OptBool) {
 	s.AutoVerify = val
+}
+
+// SetPageReOrder sets the value of PageReOrder.
+func (s *APIBookRebuildPostReqFlags) SetPageReOrder(val OptBool) {
+	s.PageReOrder = val
 }
 
 type APIBookRebuildPostUnauthorized ErrorResponse

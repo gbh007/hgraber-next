@@ -17,6 +17,7 @@ type RebuildBookRequest struct {
 	ModifiedOldBook BookContainer
 	SelectedPages   []int
 	MergeWithBook   uuid.UUID
+	PageOrder       []int
 
 	Flags RebuildBookRequestFlags
 }
@@ -30,6 +31,8 @@ type RebuildBookRequestFlags struct {
 	AutoVerify      bool
 
 	ExtractMode bool
+
+	PageReOrder bool
 
 	MarkUnusedPagesAsDeadHash              bool
 	MarkUnusedPagesAsDeleted               bool

@@ -13,6 +13,7 @@ func (c *Controller) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIB
 		ModifiedOldBook: convertBookRawToBookFull(&req.OldBook),
 		SelectedPages:   req.SelectedPages,
 		MergeWithBook:   req.MergeWithBook.Value,
+		PageOrder:       req.PageOrder,
 		Flags: entities.RebuildBookRequestFlags{
 			OnlyUniquePages:      req.Flags.Value.OnlyUnique.Value,
 			ExcludeDeadHashPages: req.Flags.Value.ExcludeDeadHashPages.Value,
@@ -22,6 +23,8 @@ func (c *Controller) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIB
 			AutoVerify:      req.Flags.Value.AutoVerify.Value,
 
 			ExtractMode: req.Flags.Value.ExtractMode.Value,
+
+			PageReOrder: req.Flags.Value.PageReOrder.Value,
 
 			MarkUnusedPagesAsDeadHash:              req.Flags.Value.MarkUnusedPagesAsDeadHash.Value,
 			MarkUnusedPagesAsDeleted:               req.Flags.Value.MarkUnusedPagesAsDeleted.Value,

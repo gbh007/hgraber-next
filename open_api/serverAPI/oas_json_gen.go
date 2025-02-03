@@ -6171,6 +6171,16 @@ func (s *APIBookRebuildPostReq) encodeFields(e *jx.Encoder) {
 		e.ArrEnd()
 	}
 	{
+		if s.PageOrder != nil {
+			e.FieldStart("page_order")
+			e.ArrStart()
+			for _, elem := range s.PageOrder {
+				e.Int(elem)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
 		if s.MergeWithBook.Set {
 			e.FieldStart("merge_with_book")
 			s.MergeWithBook.Encode(e)
@@ -6184,11 +6194,12 @@ func (s *APIBookRebuildPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIBookRebuildPostReq = [4]string{
+var jsonFieldsNameOfAPIBookRebuildPostReq = [5]string{
 	0: "old_book",
 	1: "selected_pages",
-	2: "merge_with_book",
-	3: "flags",
+	2: "page_order",
+	3: "merge_with_book",
+	4: "flags",
 }
 
 // Decode decodes APIBookRebuildPostReq from json.
@@ -6229,6 +6240,25 @@ func (s *APIBookRebuildPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"selected_pages\"")
+			}
+		case "page_order":
+			if err := func() error {
+				s.PageOrder = make([]int, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem int
+					v, err := d.Int()
+					elem = int(v)
+					if err != nil {
+						return err
+					}
+					s.PageOrder = append(s.PageOrder, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_order\"")
 			}
 		case "merge_with_book":
 			if err := func() error {
@@ -6369,9 +6399,15 @@ func (s *APIBookRebuildPostReqFlags) encodeFields(e *jx.Encoder) {
 			s.AutoVerify.Encode(e)
 		}
 	}
+	{
+		if s.PageReOrder.Set {
+			e.FieldStart("page_re_order")
+			s.PageReOrder.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIBookRebuildPostReqFlags = [9]string{
+var jsonFieldsNameOfAPIBookRebuildPostReqFlags = [10]string{
 	0: "only_unique",
 	1: "exclude_dead_hash_pages",
 	2: "only_1_copy",
@@ -6381,6 +6417,7 @@ var jsonFieldsNameOfAPIBookRebuildPostReqFlags = [9]string{
 	6: "mark_unused_pages_as_deleted",
 	7: "mark_empty_book_as_deleted_after_remove_pages",
 	8: "auto_verify",
+	9: "page_re_order",
 }
 
 // Decode decodes APIBookRebuildPostReqFlags from json.
@@ -6480,6 +6517,16 @@ func (s *APIBookRebuildPostReqFlags) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"auto_verify\"")
+			}
+		case "page_re_order":
+			if err := func() error {
+				s.PageReOrder.Reset()
+				if err := s.PageReOrder.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_re_order\"")
 			}
 		default:
 			return d.Skip()

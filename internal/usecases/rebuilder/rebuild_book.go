@@ -29,6 +29,20 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 		return uuid.Nil, fmt.Errorf("%w: %w", entities.ErrRebuildBookIncorrectRequest, entities.ErrRebuildBookEmptyPages)
 	}
 
+	newPageOrder := make(map[int]int, len(request.PageOrder))
+
+	if request.Flags.PageReOrder {
+		for i, pageNumber := range request.PageOrder {
+			newPageOrder[pageNumber] = i + 1
+		}
+
+		for _, pageNumber := range request.SelectedPages {
+			if _, ok := newPageOrder[pageNumber]; !ok {
+				return uuid.Nil, fmt.Errorf("%w: missing page %d in page order", entities.ErrRebuildBookIncorrectRequest, pageNumber)
+			}
+		}
+	}
+
 	isNewBook := request.MergeWithBook == uuid.Nil
 
 	bookToMerge, attributeToMerge, targetPageHashes, err := uc.rebuildBookGetTarget(ctx, request)
@@ -52,6 +66,7 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 		slices.Clone(request.SelectedPages),
 		&bookToMerge,
 		resources,
+		newPageOrder,
 	)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("rebuild: pages: %w", err)

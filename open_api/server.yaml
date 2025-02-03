@@ -1330,6 +1330,12 @@ paths:
                   items:
                     type: integer
                     minimum: 1
+                page_order:
+                  type: array
+                  description: Новый порядок страниц
+                  items:
+                    type: integer
+                    minimum: 1
                 merge_with_book:
                   type: string
                   format: uuid
@@ -1364,6 +1370,9 @@ paths:
                     auto_verify:
                       type: boolean
                       description: Устанавливает статус верификации ребилда в подтвержденный
+                    page_re_order:
+                      type: boolean
+                      description: Пересортировать страницы в указанном порядке
               required:
                 - old_book
                 - selected_pages

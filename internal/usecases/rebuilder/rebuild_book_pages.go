@@ -16,9 +16,17 @@ func (uc *UseCase) rebuildBookPages(
 	selectedPages []int,
 	bookToMerge *entities.Book,
 	resources rebuildPageResources,
+	newPageOrder map[int]int,
 ) (rebuildedPagesInfo, error) {
 	selectedPages = slices.Compact(selectedPages)
-	slices.Sort(selectedPages)
+
+	if len(newPageOrder) > 0 {
+		slices.SortFunc(selectedPages, func(a, b int) int {
+			return newPageOrder[a] - newPageOrder[b]
+		})
+	} else {
+		slices.Sort(selectedPages)
+	}
 
 	existsPageHashes := make(map[entities.FileHash]struct{}, len(selectedPages))
 
