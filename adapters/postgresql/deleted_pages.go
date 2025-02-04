@@ -9,10 +9,10 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (d *Database) DeletedPagesHashes(ctx context.Context) ([]entities.FileHash, error) {
+func (d *Database) DeletedPagesHashes(ctx context.Context) ([]core.FileHash, error) {
 	builder := squirrel.Select(
 		"md5_sum",
 		"sha256_sum",
@@ -45,10 +45,10 @@ func (d *Database) DeletedPagesHashes(ctx context.Context) ([]entities.FileHash,
 
 	defer rows.Close()
 
-	result := make([]entities.FileHash, 0, 100)
+	result := make([]core.FileHash, 0, 100)
 
 	for rows.Next() {
-		hash := entities.FileHash{}
+		hash := core.FileHash{}
 
 		err = rows.Scan(
 			&hash.Md5Sum,
@@ -65,7 +65,7 @@ func (d *Database) DeletedPagesHashes(ctx context.Context) ([]entities.FileHash,
 	return result, nil
 }
 
-func (d *Database) DeletedPages(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error) {
+func (d *Database) DeletedPages(ctx context.Context, bookID uuid.UUID) ([]core.PageWithHash, error) {
 	builder := squirrel.Select(model.DeletedPageToPageWithHashColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("deleted_pages").
@@ -81,7 +81,7 @@ func (d *Database) DeletedPages(ctx context.Context, bookID uuid.UUID) ([]entiti
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	out := make([]entities.PageWithHash, 0, 10)
+	out := make([]core.PageWithHash, 0, 10)
 
 	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
@@ -91,7 +91,7 @@ func (d *Database) DeletedPages(ctx context.Context, bookID uuid.UUID) ([]entiti
 	defer rows.Close()
 
 	for rows.Next() {
-		page := entities.PageWithHash{}
+		page := core.PageWithHash{}
 
 		err := rows.Scan(model.DeletedPageToPageWithHashScanner(&page))
 		if err != nil {
@@ -127,7 +127,7 @@ func (d *Database) RemoveDeletedPages(ctx context.Context, bookID uuid.UUID, pag
 	return nil
 }
 
-func (d *Database) RemoveDeletedPagesByHash(ctx context.Context, hash entities.FileHash) error {
+func (d *Database) RemoveDeletedPagesByHash(ctx context.Context, hash core.FileHash) error {
 	builder := squirrel.Delete("deleted_pages").
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
@@ -151,7 +151,7 @@ func (d *Database) RemoveDeletedPagesByHash(ctx context.Context, hash entities.F
 	return nil
 }
 
-func (d *Database) RemoveDeletedPagesByHashes(ctx context.Context, hashes []entities.FileHash) error {
+func (d *Database) RemoveDeletedPagesByHashes(ctx context.Context, hashes []core.FileHash) error {
 	batch := &pgx.Batch{}
 
 	resultCount := 0

@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (d *Database) MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error {
@@ -72,7 +72,7 @@ WHERE
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.BookNotFoundError
+		return core.BookNotFoundError
 	}
 
 	err = tx.Commit()
@@ -133,7 +133,7 @@ WHERE
 	return nil
 }
 
-func (d *Database) UpdateBookDeletion(ctx context.Context, book entities.Book) error {
+func (d *Database) UpdateBookDeletion(ctx context.Context, book core.Book) error {
 	builder := squirrel.Update("books").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(
@@ -159,7 +159,7 @@ func (d *Database) UpdateBookDeletion(ctx context.Context, book entities.Book) e
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.BookNotFoundError
+		return core.BookNotFoundError
 	}
 
 	return nil

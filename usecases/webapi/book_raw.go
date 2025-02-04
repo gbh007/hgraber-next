@@ -6,13 +6,13 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error) {
+func (uc *UseCase) BookRaw(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error) {
 	bookFull, err := uc.bookRequester.BookOriginFull(ctx, bookID)
 	if err != nil {
-		return entities.BookContainer{}, fmt.Errorf("book requester: %w", err)
+		return core.BookContainer{}, fmt.Errorf("book requester: %w", err)
 	}
 
 	return bookFull, nil

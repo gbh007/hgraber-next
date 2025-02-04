@@ -6,17 +6,17 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 func (uc *UseCase) TransferFSFiles(ctx context.Context, from, to uuid.UUID, onlyPreview bool) error {
-	filter := entities.FileFilter{
+	filter := core.FileFilter{
 		FSID: &from,
 	}
 
 	if onlyPreview {
-		p := entities.PageNumberForPreview
+		p := core.PageNumberForPreview
 		filter.PageNumber = &p
 	}
 
@@ -25,8 +25,8 @@ func (uc *UseCase) TransferFSFiles(ctx context.Context, from, to uuid.UUID, only
 		return err
 	}
 
-	uc.tmpStorage.AddToFileTransfer(pkg.Map(ids, func(fileID uuid.UUID) entities.FileTransfer {
-		return entities.FileTransfer{
+	uc.tmpStorage.AddToFileTransfer(pkg.Map(ids, func(fileID uuid.UUID) core.FileTransfer {
+		return core.FileTransfer{
 			FileID: fileID,
 			FSID:   to,
 		}
@@ -36,7 +36,7 @@ func (uc *UseCase) TransferFSFiles(ctx context.Context, from, to uuid.UUID, only
 }
 
 func (uc *UseCase) TransferFSFilesByBook(ctx context.Context, bookID, to uuid.UUID, pageNumber *int) error {
-	filter := entities.FileFilter{
+	filter := core.FileFilter{
 		BookID:     &bookID,
 		PageNumber: pageNumber,
 	}
@@ -46,8 +46,8 @@ func (uc *UseCase) TransferFSFilesByBook(ctx context.Context, bookID, to uuid.UU
 		return err
 	}
 
-	uc.tmpStorage.AddToFileTransfer(pkg.Map(ids, func(fileID uuid.UUID) entities.FileTransfer {
-		return entities.FileTransfer{
+	uc.tmpStorage.AddToFileTransfer(pkg.Map(ids, func(fileID uuid.UUID) core.FileTransfer {
+		return core.FileTransfer{
 			FileID: fileID,
 			FSID:   to,
 		}
@@ -56,7 +56,7 @@ func (uc *UseCase) TransferFSFilesByBook(ctx context.Context, bookID, to uuid.UU
 	return nil
 }
 
-func (uc *UseCase) TransferFile(ctx context.Context, transfer entities.FileTransfer) error {
+func (uc *UseCase) TransferFile(ctx context.Context, transfer core.FileTransfer) error {
 	file, err := uc.storage.File(ctx, transfer.FileID)
 	if err != nil {
 		return fmt.Errorf("storage: get file: %w", err)
@@ -96,6 +96,6 @@ func (uc *UseCase) TransferFile(ctx context.Context, transfer entities.FileTrans
 	return nil
 }
 
-func (uc *UseCase) FileTransferList() []entities.FileTransfer {
+func (uc *UseCase) FileTransferList() []core.FileTransfer {
 	return uc.tmpStorage.FileTransferList()
 }

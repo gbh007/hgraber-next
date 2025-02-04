@@ -6,14 +6,14 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) rebuildBookPrepareResources(
 	ctx context.Context,
-	flags entities.RebuildBookRequestFlags,
+	flags core.RebuildBookRequestFlags,
 	oldBookID uuid.UUID,
-	targetPageHashes map[entities.FileHash]struct{},
+	targetPageHashes map[core.FileHash]struct{},
 ) (
 	rebuildPageResources,
 	error,
@@ -28,10 +28,10 @@ func (uc *UseCase) rebuildBookPrepareResources(
 		return rebuildPageResources{}, fmt.Errorf("storage: get source pages: %w", err)
 	}
 
-	sourcePagesMap := make(map[int]entities.PageWithHash, len(sourcePages))
-	sourcePagesHashes := make(map[entities.FileHash]struct{}, len(sourcePages))
+	sourcePagesMap := make(map[int]core.PageWithHash, len(sourcePages))
+	sourcePagesHashes := make(map[core.FileHash]struct{}, len(sourcePages))
 	sourcePagesMD5Sums := make([]string, 0, len(sourcePages))
-	unusedSourceHashes := make(map[entities.FileHash]struct{}, len(sourcePages))
+	unusedSourceHashes := make(map[core.FileHash]struct{}, len(sourcePages))
 
 	for _, page := range sourcePages {
 		sourcePagesMap[page.PageNumber] = page
@@ -43,7 +43,7 @@ func (uc *UseCase) rebuildBookPrepareResources(
 		}
 	}
 
-	forbiddenHashes := make(map[entities.FileHash]struct{}, len(targetPageHashes)+len(sourcePagesHashes))
+	forbiddenHashes := make(map[core.FileHash]struct{}, len(targetPageHashes)+len(sourcePagesHashes))
 
 	if flags.ExcludeDeadHashPages {
 		deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, sourcePagesMD5Sums)

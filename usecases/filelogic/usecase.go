@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type fileStorage interface {
@@ -15,7 +15,7 @@ type fileStorage interface {
 }
 
 type storage interface {
-	GetUnHashedFiles(ctx context.Context) ([]entities.File, error)
+	GetUnHashedFiles(ctx context.Context) ([]core.File, error)
 	UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha256Sum string, size int64) error
 }
 

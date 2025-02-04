@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type Agent struct {
@@ -23,18 +23,18 @@ type Agent struct {
 	CreateAt      time.Time `db:"create_at"`
 }
 
-func (a Agent) ToEntity() (entities.Agent, error) {
+func (a Agent) ToEntity() (core.Agent, error) {
 	id, err := uuid.Parse(a.ID)
 	if err != nil {
-		return entities.Agent{}, fmt.Errorf("parse id: %w", err)
+		return core.Agent{}, fmt.Errorf("parse id: %w", err)
 	}
 
 	addr, err := url.Parse(a.Addr)
 	if err != nil {
-		return entities.Agent{}, fmt.Errorf("parse addr: %w", err)
+		return core.Agent{}, fmt.Errorf("parse addr: %w", err)
 	}
 
-	return entities.Agent{
+	return core.Agent{
 		ID:            id,
 		Name:          a.Name,
 		Addr:          *addr,

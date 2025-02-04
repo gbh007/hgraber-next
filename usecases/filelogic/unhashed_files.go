@@ -4,20 +4,20 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) UnHashedFiles(ctx context.Context) ([]entities.File, error) {
+func (uc *UseCase) UnHashedFiles(ctx context.Context) ([]core.File, error) {
 	return uc.storage.GetUnHashedFiles(ctx)
 }
 
-func (uc *UseCase) HandleFileHash(ctx context.Context, f entities.File) error {
+func (uc *UseCase) HandleFileHash(ctx context.Context, f core.File) error {
 	body, err := uc.fileStorage.Get(ctx, f.ID, &f.FSID)
 	if err != nil {
 		return fmt.Errorf("get file body: %w", err)
 	}
 
-	hash, err := entities.HashFile(body)
+	hash, err := core.HashFile(body)
 	if err != nil {
 		return fmt.Errorf("hash file: %w", err)
 	}

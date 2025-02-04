@@ -3,11 +3,11 @@ package external
 import (
 	"time"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func BookFromEntity(raw entities.BookContainer) Book {
+func BookFromEntity(raw core.BookContainer) Book {
 	labels := make(map[int][]Label, raw.Book.PageCount+1)
 
 	for _, l := range raw.Labels {
@@ -30,7 +30,7 @@ func BookFromEntity(raw entities.BookContainer) Book {
 				Values: values,
 			}
 		}),
-		Pages: pkg.Map(raw.Pages, func(p entities.Page) Page {
+		Pages: pkg.Map(raw.Pages, func(p core.Page) Page {
 			u := ""
 			if p.OriginURL != nil {
 				u = p.OriginURL.String()
@@ -61,7 +61,7 @@ func BookFromEntity(raw entities.BookContainer) Book {
 	return b
 }
 
-func Convert(raw entities.BookContainer) Info {
+func Convert(raw core.BookContainer) Info {
 	return Info{
 		Version: CurrentVersion,
 		Meta: Meta{

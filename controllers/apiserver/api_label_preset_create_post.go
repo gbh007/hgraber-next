@@ -3,12 +3,12 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APILabelPresetCreatePost(ctx context.Context, req *serverAPI.APILabelPresetCreatePostReq) (serverAPI.APILabelPresetCreatePostRes, error) {
-	err := c.webAPIUseCases.CreateLabelPreset(ctx, entities.BookLabelPreset{
+	err := c.webAPIUseCases.CreateLabelPreset(ctx, core.BookLabelPreset{
 		Name:        req.Name,
 		Values:      req.Values,
 		Description: req.Description.Value,

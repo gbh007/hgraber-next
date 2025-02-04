@@ -9,37 +9,38 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type storage interface {
 	GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error)
-	GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
+	GetBook(ctx context.Context, bookID uuid.UUID) (core.Book, error)
 
-	NewBook(ctx context.Context, book entities.Book) error
+	NewBook(ctx context.Context, book core.Book) error
 
-	UpdateBook(ctx context.Context, book entities.Book) error
+	UpdateBook(ctx context.Context, book core.Book) error
 	UpdateAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
 	UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
-	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error
+	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []core.Page) error
 
 	UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageNumber int, downloaded bool, fileID uuid.UUID) error
-	NewFile(ctx context.Context, file entities.File) error
+	NewFile(ctx context.Context, file core.File) error
 
-	NotDownloadedPages(ctx context.Context) ([]entities.PageForDownload, error)
-	UnprocessedBooks(ctx context.Context) ([]entities.Book, error)
+	NotDownloadedPages(ctx context.Context) ([]core.PageForDownload, error)
+	UnprocessedBooks(ctx context.Context) ([]core.Book, error)
 
-	Agents(ctx context.Context, filter entities.AgentFilter) ([]entities.Agent, error)
+	Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error)
 
-	PagesByURL(ctx context.Context, u url.URL) ([]entities.Page, error)
+	PagesByURL(ctx context.Context, u url.URL) ([]core.Page, error)
 }
 
 type agentSystem interface {
-	BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) (entities.AgentBookDetails, error)
-	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]entities.AgentBookCheckResult, error)
-	PageLoad(ctx context.Context, agentID uuid.UUID, url entities.AgentPageURL) (io.Reader, error)
-	PagesCheck(ctx context.Context, agentID uuid.UUID, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
-	BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]entities.AgentBookCheckResult, error)
+	BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) (agentmodel.AgentBookDetails, error)
+	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
+	PageLoad(ctx context.Context, agentID uuid.UUID, url agentmodel.AgentPageURL) (io.Reader, error)
+	PagesCheck(ctx context.Context, agentID uuid.UUID, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error)
+	BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]agentmodel.AgentBookCheckResult, error)
 }
 
 type fileStorage interface {
@@ -49,7 +50,7 @@ type fileStorage interface {
 }
 
 type bookRequester interface {
-	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error)
 }
 
 type UseCase struct {

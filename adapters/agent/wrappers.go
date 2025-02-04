@@ -7,19 +7,20 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (c *Client) BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) (entities.AgentBookDetails, error) {
+func (c *Client) BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) (agentmodel.AgentBookDetails, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
-		return entities.AgentBookDetails{}, err
+		return agentmodel.AgentBookDetails{}, err
 	}
 
 	return adapter.BookParse(ctx, url)
 }
 
-func (c *Client) BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]entities.AgentBookCheckResult, error) {
+func (c *Client) BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return nil, err
@@ -28,7 +29,7 @@ func (c *Client) BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.U
 	return adapter.BooksCheck(ctx, urls)
 }
 
-func (c *Client) BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]entities.AgentBookCheckResult, error) {
+func (c *Client) BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]agentmodel.AgentBookCheckResult, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return nil, err
@@ -37,7 +38,7 @@ func (c *Client) BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u ur
 	return adapter.BooksCheckMulti(ctx, u)
 }
 
-func (c *Client) ExportArchive(ctx context.Context, agentID uuid.UUID, data entities.AgentExportData) error {
+func (c *Client) ExportArchive(ctx context.Context, agentID uuid.UUID, data agentmodel.AgentExportData) error {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return err
@@ -46,7 +47,7 @@ func (c *Client) ExportArchive(ctx context.Context, agentID uuid.UUID, data enti
 	return adapter.ExportArchive(ctx, data)
 }
 
-func (c *Client) PageLoad(ctx context.Context, agentID uuid.UUID, url entities.AgentPageURL) (io.Reader, error) {
+func (c *Client) PageLoad(ctx context.Context, agentID uuid.UUID, url agentmodel.AgentPageURL) (io.Reader, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return nil, err
@@ -55,7 +56,7 @@ func (c *Client) PageLoad(ctx context.Context, agentID uuid.UUID, url entities.A
 	return adapter.PageLoad(ctx, url)
 }
 
-func (c *Client) PagesCheck(ctx context.Context, agentID uuid.UUID, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error) {
+func (c *Client) PagesCheck(ctx context.Context, agentID uuid.UUID, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return nil, err
@@ -64,10 +65,10 @@ func (c *Client) PagesCheck(ctx context.Context, agentID uuid.UUID, urls []entit
 	return adapter.PagesCheck(ctx, urls)
 }
 
-func (c *Client) Status(ctx context.Context, agentID uuid.UUID) (entities.AgentStatus, error) {
+func (c *Client) Status(ctx context.Context, agentID uuid.UUID) (core.AgentStatus, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
-		return entities.AgentStatus{}, err
+		return core.AgentStatus{}, err
 	}
 
 	return adapter.Status(ctx)

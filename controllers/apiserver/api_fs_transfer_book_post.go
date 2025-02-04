@@ -3,7 +3,7 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
@@ -11,7 +11,7 @@ func (c *Controller) APIFsTransferBookPost(ctx context.Context, req *serverAPI.A
 	var pageNumber *int
 
 	if req.OnlyPreviewPages.Value {
-		p := entities.PageNumberForPreview
+		p := core.PageNumberForPreview
 		pageNumber = &p
 	}
 

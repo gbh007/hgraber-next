@@ -3,7 +3,7 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -18,7 +18,7 @@ func (c *Controller) APILabelGetPost(ctx context.Context, req *serverAPI.APILabe
 	}
 
 	return &serverAPI.APILabelGetPostOK{
-		Labels: pkg.Map(labels, func(raw entities.BookLabel) serverAPI.APILabelGetPostOKLabelsItem {
+		Labels: pkg.Map(labels, func(raw core.BookLabel) serverAPI.APILabelGetPostOKLabelsItem {
 			return serverAPI.APILabelGetPostOKLabelsItem{
 				BookID:     raw.BookID,
 				PageNumber: raw.PageNumber,

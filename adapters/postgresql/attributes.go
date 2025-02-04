@@ -12,7 +12,7 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 // TODO: объединить с потребителем
@@ -33,7 +33,7 @@ func (d *Database) BookAttributes(ctx context.Context, bookID uuid.UUID) (map[st
 		return nil, fmt.Errorf("get attributes: %w", err)
 	}
 
-	out := make(map[string][]string, entities.PossibleAttributeCount)
+	out := make(map[string][]string, core.PossibleAttributeCount)
 
 	for _, attribute := range attributes {
 		out[attribute.Attr] = append(out[attribute.Attr], attribute.Value)
@@ -106,7 +106,7 @@ func (d *Database) DeleteBookAttributes(ctx context.Context, bookID uuid.UUID) e
 	return nil
 }
 
-func (d *Database) AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error) {
+func (d *Database) AttributesCount(ctx context.Context) ([]core.AttributeVariant, error) {
 	rows, err := d.pool.Query(ctx, `SELECT COUNT(*), attr, value FROM book_attributes GROUP BY attr, value;`)
 	if err != nil {
 		return nil, fmt.Errorf("get attributes count: %w", err)
@@ -114,7 +114,7 @@ func (d *Database) AttributesCount(ctx context.Context) ([]entities.AttributeVar
 
 	defer rows.Close()
 
-	result := make([]entities.AttributeVariant, 0, 100) // Берем изначальный запас емкости побольше
+	result := make([]core.AttributeVariant, 0, 100) // Берем изначальный запас емкости побольше
 
 	for rows.Next() {
 		var (
@@ -128,7 +128,7 @@ func (d *Database) AttributesCount(ctx context.Context) ([]entities.AttributeVar
 			return nil, fmt.Errorf("get attributes count: scan row: %w", err)
 		}
 
-		result = append(result, entities.AttributeVariant{
+		result = append(result, core.AttributeVariant{
 			Code:  code,
 			Value: value,
 			Count: count,
@@ -138,7 +138,7 @@ func (d *Database) AttributesCount(ctx context.Context) ([]entities.AttributeVar
 	return result, nil
 }
 
-func (d *Database) Attributes(ctx context.Context) ([]entities.Attribute, error) {
+func (d *Database) Attributes(ctx context.Context) ([]core.Attribute, error) {
 	builder := squirrel.Select(
 		"code",
 		"name",
@@ -164,10 +164,10 @@ func (d *Database) Attributes(ctx context.Context) ([]entities.Attribute, error)
 
 	defer rows.Close()
 
-	result := make([]entities.Attribute, 0, entities.PossibleAttributeCount)
+	result := make([]core.Attribute, 0, core.PossibleAttributeCount)
 
 	for rows.Next() {
-		attribute := entities.Attribute{}
+		attribute := core.Attribute{}
 		description := sql.NullString{}
 
 		err = rows.Scan(

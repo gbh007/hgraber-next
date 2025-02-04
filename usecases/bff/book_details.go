@@ -7,22 +7,23 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (entities.BFFBookDetails, error) {
+func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (bff.BookDetails, error) {
 	book, err := uc.storage.GetBook(ctx, bookID)
 	if err != nil {
-		return entities.BFFBookDetails{}, fmt.Errorf("storage: get book: %w", err)
+		return bff.BookDetails{}, fmt.Errorf("storage: get book: %w", err)
 	}
 
 	bookPages, err := uc.storage.BookPagesWithHash(ctx, bookID)
 	if err != nil {
-		return entities.BFFBookDetails{}, fmt.Errorf("storage: get pages: %w", err)
+		return bff.BookDetails{}, fmt.Errorf("storage: get pages: %w", err)
 	}
 
-	fileCounts := make(map[entities.FileHash]int, len(bookPages))
+	fileCounts := make(map[core.FileHash]int, len(bookPages))
 
 	md5Sums := make([]string, len(bookPages))
 	for i, page := range bookPages {
@@ -33,7 +34,7 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (entities.
 
 	pageDuplicates, err := uc.storage.BookPagesWithHashByMD5Sums(ctx, md5Sums)
 	if err != nil {
-		return entities.BFFBookDetails{}, fmt.Errorf("storage: get page duplicates: %w", err)
+		return bff.BookDetails{}, fmt.Errorf("storage: get page duplicates: %w", err)
 	}
 
 	for _, page := range pageDuplicates {
@@ -48,36 +49,36 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (entities.
 
 	deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, md5Sums)
 	if err != nil {
-		return entities.BFFBookDetails{}, fmt.Errorf("storage: get dead hashes: %w", err)
+		return bff.BookDetails{}, fmt.Errorf("storage: get dead hashes: %w", err)
 	}
 
-	existsDeadHashes := make(map[entities.FileHash]struct{}, len(deadHashes))
+	existsDeadHashes := make(map[core.FileHash]struct{}, len(deadHashes))
 
 	for _, hash := range deadHashes {
 		existsDeadHashes[hash.FileHash] = struct{}{}
 	}
 
-	result := entities.BFFBookDetails{
+	result := bff.BookDetails{
 		Book:  book,
-		Pages: make([]entities.BFFPreviewPage, 0, len(bookPages)),
+		Pages: make([]bff.PreviewPage, 0, len(bookPages)),
 	}
 
 	fsInfos, err := uc.storage.FileStorages(ctx)
 	if err != nil {
-		return entities.BFFBookDetails{}, fmt.Errorf("storage: get file storages: %w", err)
+		return bff.BookDetails{}, fmt.Errorf("storage: get file storages: %w", err)
 	}
 
-	fsDisposition := make(map[uuid.UUID]entities.SizeWithCount, len(fsInfos))
+	fsDisposition := make(map[uuid.UUID]core.SizeWithCount, len(fsInfos))
 
 	for _, page := range bookPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
-		preview := page.ToPreview()
-		preview.HasDeadHash = entities.NewStatusFlag(hasDeadHash)
+		preview := bff.PageWithHashToPreview(page)
+		preview.HasDeadHash = bff.NewStatusFlag(hasDeadHash)
 
 		result.Pages = append(result.Pages, preview)
 
-		if preview.PageNumber == entities.PageNumberForPreview {
+		if preview.PageNumber == core.PageNumberForPreview {
 			result.PreviewPage = preview
 		}
 
@@ -113,13 +114,13 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (entities.
 		fsDisposition[page.FSID] = fs
 	}
 
-	result.FSDisposition = make([]entities.BFFBookDetailsFSDisposition, 0, len(fsDisposition))
+	result.FSDisposition = make([]bff.BookDetailsFSDisposition, 0, len(fsDisposition))
 
 	for _, fs := range fsInfos {
 		v := fsDisposition[fs.ID]
 
 		if v.Count > 0 {
-			result.FSDisposition = append(result.FSDisposition, entities.BFFBookDetailsFSDisposition{
+			result.FSDisposition = append(result.FSDisposition, bff.BookDetailsFSDisposition{
 				ID:            fs.ID,
 				Name:          fs.Name,
 				SizeWithCount: v,
@@ -127,18 +128,18 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (entities.
 		}
 	}
 
-	slices.SortStableFunc(result.FSDisposition, func(a, b entities.BFFBookDetailsFSDisposition) int {
+	slices.SortStableFunc(result.FSDisposition, func(a, b bff.BookDetailsFSDisposition) int {
 		return int(b.Size) - int(a.Size)
 	})
 
 	attributes, err := uc.storage.BookAttributes(ctx, bookID)
 	if err != nil {
-		return entities.BFFBookDetails{}, fmt.Errorf("storage: get attributes: %w", err)
+		return bff.BookDetails{}, fmt.Errorf("storage: get attributes: %w", err)
 	}
 
 	attributesInfo, err := uc.storage.Attributes(ctx)
 	if err != nil {
-		return entities.BFFBookDetails{}, fmt.Errorf("storage: get attributes info: %w", err)
+		return bff.BookDetails{}, fmt.Errorf("storage: get attributes info: %w", err)
 	}
 
 	result.Attributes = convertBookAttributes(
@@ -149,22 +150,22 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (entities.
 	return result, nil
 }
 
-func convertAttributes(attributes []entities.Attribute) map[string]entities.Attribute {
-	return pkg.SliceToMap(attributes, func(attribute entities.Attribute) (string, entities.Attribute) {
+func convertAttributes(attributes []core.Attribute) map[string]core.Attribute {
+	return pkg.SliceToMap(attributes, func(attribute core.Attribute) (string, core.Attribute) {
 		return attribute.Code, attribute
 	})
 }
 
-func convertBookAttributes(attributes map[string]entities.Attribute, bookAttributes map[string][]string) []entities.AttributeToWeb {
-	result := pkg.MapToSlice(bookAttributes, func(code string, values []string) entities.AttributeToWeb {
-		return entities.AttributeToWeb{
+func convertBookAttributes(attributes map[string]core.Attribute, bookAttributes map[string][]string) []bff.AttributeToWeb {
+	result := pkg.MapToSlice(bookAttributes, func(code string, values []string) bff.AttributeToWeb {
+		return bff.AttributeToWeb{
 			Code:   code,
 			Name:   attributes[code].PluralName,
 			Values: values,
 		}
 	})
 
-	slices.SortStableFunc(result, func(a, b entities.AttributeToWeb) int {
+	slices.SortStableFunc(result, func(a, b bff.AttributeToWeb) int {
 		return attributes[a.Code].Order - attributes[b.Code].Order
 	})
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type bookRequest struct {
@@ -18,13 +18,13 @@ type bookRequest struct {
 }
 
 // FIXME: избавится от этого непотребства, вынести в отдельные методы получение списка книг и получение детальных данных по 1 книге.
-func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.BookContainer, error) {
+func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (core.BookContainer, error) {
 	b, err := uc.storage.GetBook(ctx, req.ID)
 	if err != nil {
-		return entities.BookContainer{}, fmt.Errorf("get book: %w", err)
+		return core.BookContainer{}, fmt.Errorf("get book: %w", err)
 	}
 
-	out := entities.BookContainer{
+	out := core.BookContainer{
 		Book: b,
 	}
 
@@ -32,7 +32,7 @@ func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.B
 	case req.IncludeOriginAttributes:
 		attributes, err := uc.storage.BookOriginAttributes(ctx, req.ID)
 		if err != nil {
-			return entities.BookContainer{}, fmt.Errorf("get attributes: %w", err)
+			return core.BookContainer{}, fmt.Errorf("get attributes: %w", err)
 		}
 
 		out.Attributes = attributes
@@ -40,7 +40,7 @@ func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.B
 	case req.IncludeAttributes:
 		attributes, err := uc.storage.BookAttributes(ctx, req.ID)
 		if err != nil {
-			return entities.BookContainer{}, fmt.Errorf("get attributes: %w", err)
+			return core.BookContainer{}, fmt.Errorf("get attributes: %w", err)
 		}
 
 		out.Attributes = attributes
@@ -49,7 +49,7 @@ func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.B
 	if req.IncludePages {
 		pages, err := uc.storage.BookPages(ctx, req.ID)
 		if err != nil {
-			return entities.BookContainer{}, fmt.Errorf("get pages: %w", err)
+			return core.BookContainer{}, fmt.Errorf("get pages: %w", err)
 		}
 
 		out.Pages = pages
@@ -58,7 +58,7 @@ func (uc *UseCase) requestBook(ctx context.Context, req bookRequest) (entities.B
 	if req.IncludeLabels {
 		labels, err := uc.storage.Labels(ctx, req.ID)
 		if err != nil {
-			return entities.BookContainer{}, fmt.Errorf("get labels: %w", err)
+			return core.BookContainer{}, fmt.Errorf("get labels: %w", err)
 		}
 
 		out.Labels = labels

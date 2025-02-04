@@ -6,13 +6,13 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) Agent(ctx context.Context, id uuid.UUID) (entities.Agent, error) {
+func (uc *UseCase) Agent(ctx context.Context, id uuid.UUID) (core.Agent, error) {
 	agent, err := uc.storage.Agent(ctx, id)
 	if err != nil {
-		return entities.Agent{}, fmt.Errorf("storage: get agent: %w", err)
+		return core.Agent{}, fmt.Errorf("storage: get agent: %w", err)
 	}
 
 	return agent, nil

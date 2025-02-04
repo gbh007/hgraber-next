@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) DeleteAllPageByHash(ctx context.Context, bookID uuid.UUID, pageNumber int, setDeadHash bool) error {
@@ -22,7 +22,7 @@ func (uc *UseCase) DeleteAllPageByHash(ctx context.Context, bookID uuid.UUID, pa
 	}
 
 	if setDeadHash {
-		err = uc.storage.SetDeadHash(ctx, entities.DeadHash{
+		err = uc.storage.SetDeadHash(ctx, core.DeadHash{
 			FileHash:  pageHash.FileHash,
 			CreatedAt: time.Now().UTC(),
 		})

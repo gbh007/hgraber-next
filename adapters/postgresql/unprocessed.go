@@ -5,11 +5,11 @@ import (
 	"fmt"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 // FIXME: добавить лимиты
-func (d *Database) NotDownloadedPages(ctx context.Context) ([]entities.PageForDownload, error) {
+func (d *Database) NotDownloadedPages(ctx context.Context) ([]core.PageForDownload, error) {
 	raw := make([]*model.PageForDownload, 0)
 
 	err := d.db.SelectContext(ctx, &raw, `SELECT p.book_id, b.origin_url AS book_url, p.origin_url AS image_url, p.page_number, p.ext from books AS b INNER JOIN pages AS p ON b.id = p.book_id WHERE downloaded = FALSE;`)
@@ -17,7 +17,7 @@ func (d *Database) NotDownloadedPages(ctx context.Context) ([]entities.PageForDo
 		return nil, fmt.Errorf("select: %w", err)
 	}
 
-	out := make([]entities.PageForDownload, len(raw))
+	out := make([]core.PageForDownload, len(raw))
 	for i, v := range raw {
 		out[i], err = v.ToEntity()
 		if err != nil {
@@ -29,7 +29,7 @@ func (d *Database) NotDownloadedPages(ctx context.Context) ([]entities.PageForDo
 }
 
 // FIXME: добавить лимиты
-func (d *Database) UnprocessedBooks(ctx context.Context) ([]entities.Book, error) {
+func (d *Database) UnprocessedBooks(ctx context.Context) ([]core.Book, error) {
 	raw := make([]*model.Book, 0)
 
 	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE AND is_rebuild = FALSE;`)
@@ -37,7 +37,7 @@ func (d *Database) UnprocessedBooks(ctx context.Context) ([]entities.Book, error
 		return nil, fmt.Errorf("select: %w", err)
 	}
 
-	out := make([]entities.Book, len(raw))
+	out := make([]core.Book, len(raw))
 	for i, v := range raw {
 		out[i], err = v.ToEntity()
 		if err != nil {
@@ -49,7 +49,7 @@ func (d *Database) UnprocessedBooks(ctx context.Context) ([]entities.Book, error
 }
 
 // FIXME: добавить лимиты
-func (d *Database) GetUnHashedFiles(ctx context.Context) ([]entities.File, error) {
+func (d *Database) GetUnHashedFiles(ctx context.Context) ([]core.File, error) {
 	raw := make([]*model.File, 0)
 
 	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM files WHERE md5_sum IS NULL OR sha256_sum IS NULL OR "size" IS NULL;`)
@@ -57,7 +57,7 @@ func (d *Database) GetUnHashedFiles(ctx context.Context) ([]entities.File, error
 		return nil, fmt.Errorf("exec: %w", err)
 	}
 
-	out := make([]entities.File, len(raw))
+	out := make([]core.File, len(raw))
 	for i, v := range raw {
 		out[i], err = v.ToEntity()
 		if err != nil {

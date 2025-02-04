@@ -7,13 +7,13 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/internal/worker"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 type exportUnitUseCases interface {
-	ExportList() []entities.BookFullWithAgent
-	ExportArchive(ctx context.Context, book entities.BookFullWithAgent, retry bool) error
+	ExportList() []core.BookFullWithAgent
+	ExportArchive(ctx context.Context, book core.BookFullWithAgent, retry bool) error
 }
 
 func NewExporter(
@@ -22,13 +22,13 @@ func NewExporter(
 	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
-) *worker.Worker[entities.BookFullWithAgent] {
-	return worker.New[entities.BookFullWithAgent](
+) *worker.Worker[core.BookFullWithAgent] {
+	return worker.New[core.BookFullWithAgent](
 		"export",
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, book entities.BookFullWithAgent) error {
+		func(ctx context.Context, book core.BookFullWithAgent) error {
 			err := useCases.ExportArchive(ctx, book, true)
 			if err != nil {
 				return pkg.WrapError(
@@ -40,7 +40,7 @@ func NewExporter(
 
 			return nil
 		},
-		func(_ context.Context) ([]entities.BookFullWithAgent, error) {
+		func(_ context.Context) ([]core.BookFullWithAgent, error) {
 			return useCases.ExportList(), nil
 		},
 		cfg.GetCount(),

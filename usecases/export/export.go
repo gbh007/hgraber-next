@@ -9,12 +9,13 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/external"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter entities.BookFilter, deleteAfter bool) error {
+func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter core.BookFilter, deleteAfter bool) error {
 	filter.OriginAttributes = true // FIXME: перенести это управление в запрос
 
 	books, err := uc.bookRequester.Books(ctx, filter)
@@ -23,8 +24,8 @@ func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter entitie
 	}
 
 	uc.tmpStorage.AddToExport(
-		pkg.Map(books, func(b entities.BookContainer) entities.BookFullWithAgent {
-			return entities.BookFullWithAgent{
+		pkg.Map(books, func(b core.BookContainer) core.BookFullWithAgent {
+			return core.BookFullWithAgent{
 				BookContainer:     b,
 				AgentID:           agentID,
 				DeleteAfterExport: deleteAfter,
@@ -35,21 +36,21 @@ func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter entitie
 	return nil
 }
 
-func (uc *UseCase) ExportList() []entities.BookFullWithAgent {
+func (uc *UseCase) ExportList() []core.BookFullWithAgent {
 	return uc.tmpStorage.ExportList()
 }
 
-func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWithAgent, retry bool) error {
+func (uc *UseCase) ExportArchive(ctx context.Context, book core.BookFullWithAgent, retry bool) error {
 	body, err := uc.newArchive(ctx, book.BookContainer)
 	if err != nil {
 		if retry {
-			uc.tmpStorage.AddToExport([]entities.BookFullWithAgent{book})
+			uc.tmpStorage.AddToExport([]core.BookFullWithAgent{book})
 		}
 
 		return fmt.Errorf("make archive %s: %w", book.Book.ID.String(), err)
 	}
 
-	err = uc.agentSystem.ExportArchive(ctx, book.AgentID, entities.AgentExportData{
+	err = uc.agentSystem.ExportArchive(ctx, book.AgentID, agentmodel.AgentExportData{
 		BookID:   book.Book.ID,
 		BookName: book.Book.Name,
 		BookURL:  book.Book.OriginURL,
@@ -57,7 +58,7 @@ func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWith
 	})
 	if err != nil {
 		if retry {
-			uc.tmpStorage.AddToExport([]entities.BookFullWithAgent{book})
+			uc.tmpStorage.AddToExport([]core.BookFullWithAgent{book})
 		}
 
 		return fmt.Errorf("export archive %s to agent: %w", book.Book.ID.String(), err)
@@ -67,7 +68,7 @@ func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWith
 		err = uc.storage.MarkBookAsDeleted(ctx, book.Book.ID)
 		if err != nil {
 			if retry {
-				uc.tmpStorage.AddToExport([]entities.BookFullWithAgent{book})
+				uc.tmpStorage.AddToExport([]core.BookFullWithAgent{book})
 			}
 
 			return fmt.Errorf("delete book after export %s: %w", book.Book.ID.String(), err)
@@ -77,21 +78,21 @@ func (uc *UseCase) ExportArchive(ctx context.Context, book entities.BookFullWith
 	return nil
 }
 
-func (uc *UseCase) ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, entities.BookContainer, error) {
+func (uc *UseCase) ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, core.BookContainer, error) {
 	book, err := uc.bookRequester.BookOriginFull(ctx, bookID)
 	if err != nil {
-		return nil, entities.BookContainer{}, fmt.Errorf("get book: %w", err)
+		return nil, core.BookContainer{}, fmt.Errorf("get book: %w", err)
 	}
 
 	body, err := uc.newArchive(ctx, book)
 	if err != nil {
-		return nil, entities.BookContainer{}, fmt.Errorf("archive book: %w", err)
+		return nil, core.BookContainer{}, fmt.Errorf("archive book: %w", err)
 	}
 
 	return body, book, nil
 }
 
-func (uc *UseCase) newArchive(ctx context.Context, book entities.BookContainer) (io.Reader, error) {
+func (uc *UseCase) newArchive(ctx context.Context, book core.BookContainer) (io.Reader, error) {
 	zipFile := &bytes.Buffer{}
 	zipWriter := zip.NewWriter(zipFile)
 

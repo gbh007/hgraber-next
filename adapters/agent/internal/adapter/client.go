@@ -10,7 +10,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
@@ -73,7 +73,7 @@ func (rt agentOfflineRT) RoundTrip(req *http.Request) (*http.Response, error) {
 	if errors.Is(err, syscall.ECONNREFUSED) ||
 		errors.Is(err, syscall.EHOSTDOWN) ||
 		errors.Is(err, syscall.EHOSTUNREACH) {
-		err = fmt.Errorf("%w: %w", entities.AgentAPIOffline, err)
+		err = fmt.Errorf("%w: %w", agentmodel.AgentAPIOffline, err)
 	}
 
 	return res, err

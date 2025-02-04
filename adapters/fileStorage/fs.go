@@ -8,7 +8,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/adapters/agentFS"
 	"github.com/gbh007/hgraber-next/adapters/localFiles"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (s *Storage) searchFS(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (uuid.UUID, error) {
@@ -51,7 +51,7 @@ func (s *Storage) getFS(ctx context.Context, fsID uuid.UUID, tryReconnect bool) 
 		return storage, nil
 	}
 
-	return rawFileStorageData{}, entities.MissingFSError
+	return rawFileStorageData{}, core.MissingFSError
 }
 
 func (s *Storage) FSChange(ctx context.Context, fsID uuid.UUID, deleted bool) error {
@@ -79,7 +79,7 @@ func (s *Storage) FSChange(ctx context.Context, fsID uuid.UUID, deleted bool) er
 	return nil
 }
 
-func (s *Storage) connect(_ context.Context, fs entities.FileStorageSystem) (rawFileStorageData, error) {
+func (s *Storage) connect(_ context.Context, fs core.FileStorageSystem) (rawFileStorageData, error) {
 	var (
 		err     error
 		storage rawFileStorage

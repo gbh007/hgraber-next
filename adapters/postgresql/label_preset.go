@@ -8,10 +8,10 @@ import (
 	"github.com/Masterminds/squirrel"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (d *Database) InsertLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error {
+func (d *Database) InsertLabelPreset(ctx context.Context, preset core.BookLabelPreset) error {
 	builder := squirrel.Insert("label_presets").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -36,7 +36,7 @@ func (d *Database) InsertLabelPreset(ctx context.Context, preset entities.BookLa
 	return nil
 }
 
-func (d *Database) UpdateLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error {
+func (d *Database) UpdateLabelPreset(ctx context.Context, preset core.BookLabelPreset) error {
 	builder := squirrel.Update("label_presets").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -85,7 +85,7 @@ func (d *Database) DeleteLabelPreset(ctx context.Context, name string) error {
 	return nil
 }
 
-func (d *Database) LabelPresets(ctx context.Context) ([]entities.BookLabelPreset, error) {
+func (d *Database) LabelPresets(ctx context.Context) ([]core.BookLabelPreset, error) {
 	builder := squirrel.Select(
 		"name",
 		"description",
@@ -110,11 +110,11 @@ func (d *Database) LabelPresets(ctx context.Context) ([]entities.BookLabelPreset
 
 	defer rows.Close()
 
-	result := make([]entities.BookLabelPreset, 0, 10)
+	result := make([]core.BookLabelPreset, 0, 10)
 
 	for rows.Next() {
 		var (
-			preset      entities.BookLabelPreset
+			preset      core.BookLabelPreset
 			updatedAt   sql.NullTime
 			description sql.NullString
 		)
@@ -139,7 +139,7 @@ func (d *Database) LabelPresets(ctx context.Context) ([]entities.BookLabelPreset
 	return result, nil
 }
 
-func (d *Database) LabelPreset(ctx context.Context, name string) (entities.BookLabelPreset, error) {
+func (d *Database) LabelPreset(ctx context.Context, name string) (core.BookLabelPreset, error) {
 	builder := squirrel.Select(
 		"name",
 		"description",
@@ -156,7 +156,7 @@ func (d *Database) LabelPreset(ctx context.Context, name string) (entities.BookL
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return entities.BookLabelPreset{}, fmt.Errorf("build query: %w", err)
+		return core.BookLabelPreset{}, fmt.Errorf("build query: %w", err)
 	}
 
 	d.squirrelDebugLog(ctx, query, args)
@@ -164,7 +164,7 @@ func (d *Database) LabelPreset(ctx context.Context, name string) (entities.BookL
 	row := d.pool.QueryRow(ctx, query, args...)
 
 	var (
-		preset      entities.BookLabelPreset
+		preset      core.BookLabelPreset
 		updatedAt   sql.NullTime
 		description sql.NullString
 	)
@@ -177,7 +177,7 @@ func (d *Database) LabelPreset(ctx context.Context, name string) (entities.BookL
 		&updatedAt,
 	)
 	if err != nil { // TODO: err no rows
-		return entities.BookLabelPreset{}, fmt.Errorf("scan row: %w", err)
+		return core.BookLabelPreset{}, fmt.Errorf("scan row: %w", err)
 	}
 
 	preset.Description = description.String

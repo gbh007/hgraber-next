@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func FileStorageColumns() []string {
@@ -26,7 +26,7 @@ func FileStorageColumns() []string {
 	}
 }
 
-func FileStorageScanner(fs *entities.FileStorageSystem) RowScanner {
+func FileStorageScanner(fs *core.FileStorageSystem) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			description sql.NullString

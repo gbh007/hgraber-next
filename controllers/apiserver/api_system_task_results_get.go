@@ -4,7 +4,7 @@ import (
 	"context"
 	"slices"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -18,7 +18,7 @@ func (c *Controller) APISystemTaskResultsGet(ctx context.Context) (serverAPI.API
 		}, nil
 	}
 
-	responseResults := pkg.Map(result, func(raw *entities.TaskResult) serverAPI.APISystemTaskResultsGetOKResultsItem {
+	responseResults := pkg.Map(result, func(raw *core.TaskResult) serverAPI.APISystemTaskResultsGetOKResultsItem {
 		return serverAPI.APISystemTaskResultsGetOKResultsItem{
 			Name:              raw.Name,
 			Error:             optString(raw.Error),
@@ -26,7 +26,7 @@ func (c *Controller) APISystemTaskResultsGet(ctx context.Context) (serverAPI.API
 			DurationFormatted: max(raw.Duration(), 0).String(),
 			StartedAt:         raw.StartedAt,
 			EndedAt:           raw.EndedAt,
-			Stages: pkg.Map(raw.Stages, func(rawStage *entities.TaskResultStage) serverAPI.APISystemTaskResultsGetOKResultsItemStagesItem {
+			Stages: pkg.Map(raw.Stages, func(rawStage *core.TaskResultStage) serverAPI.APISystemTaskResultsGetOKResultsItemStagesItem {
 				return serverAPI.APISystemTaskResultsGetOKResultsItemStagesItem{
 					Name:              rawStage.Name,
 					Error:             optString(rawStage.Error),

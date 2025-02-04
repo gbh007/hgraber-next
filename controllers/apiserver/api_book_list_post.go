@@ -3,7 +3,8 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -20,7 +21,7 @@ func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.BookFil
 	}
 
 	return &serverAPI.APIBookListPostOK{
-		Books: pkg.Map(bookList.Books, func(b entities.BFFBookShort) serverAPI.APIBookListPostOKBooksItem {
+		Books: pkg.Map(bookList.Books, func(b bff.BookShort) serverAPI.APIBookListPostOKBooksItem {
 			return serverAPI.APIBookListPostOKBooksItem{
 				Info: c.convertSimpleBook(b.Book, b.PreviewPage),
 				Tags: b.Tags,
@@ -37,8 +38,8 @@ func (c *Controller) APIBookListPost(ctx context.Context, req *serverAPI.BookFil
 	}, nil
 }
 
-func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
-	filter := entities.BookFilter{}
+func convertAPIBookFilter(req serverAPI.BookFilter) core.BookFilter {
+	filter := core.BookFilter{}
 
 	if req.Pagination.Value.Count.IsSet() {
 		filter.FillLimits(req.Pagination.Value.Page.Value, req.Pagination.Value.Count.Value)
@@ -49,15 +50,15 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 	if req.Sort.Value.Field.IsSet() {
 		switch req.Sort.Value.Field.Value {
 		case serverAPI.BookFilterSortFieldCreatedAt:
-			filter.OrderBy = entities.BookFilterOrderByCreated
+			filter.OrderBy = core.BookFilterOrderByCreated
 		case serverAPI.BookFilterSortFieldID:
-			filter.OrderBy = entities.BookFilterOrderByID
+			filter.OrderBy = core.BookFilterOrderByID
 		case serverAPI.BookFilterSortFieldName:
-			filter.OrderBy = entities.BookFilterOrderByName
+			filter.OrderBy = core.BookFilterOrderByName
 		case serverAPI.BookFilterSortFieldPageCount:
-			filter.OrderBy = entities.BookFilterOrderByPageCount
+			filter.OrderBy = core.BookFilterOrderByPageCount
 		default:
-			filter.OrderBy = entities.BookFilterOrderByCreated
+			filter.OrderBy = core.BookFilterOrderByCreated
 		}
 	}
 
@@ -89,10 +90,10 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 	filter.From = req.Filter.Value.CreatedAt.Value.From.Value
 	filter.To = req.Filter.Value.CreatedAt.Value.To.Value
 
-	filter.Fields.Attributes = make([]entities.BookFilterAttribute, 0, len(req.Filter.Value.Attributes))
+	filter.Fields.Attributes = make([]core.BookFilterAttribute, 0, len(req.Filter.Value.Attributes))
 
 	for _, attr := range req.Filter.Value.Attributes {
-		attrFilter := entities.BookFilterAttribute{
+		attrFilter := core.BookFilterAttribute{
 			Code:   attr.Code,
 			Values: attr.Values,
 			Count:  attr.Count.Value,
@@ -102,19 +103,19 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 
 		switch attr.Type {
 		case serverAPI.BookFilterFilterAttributesItemTypeLike:
-			attrFilter.Type = entities.BookFilterAttributeTypeLike
+			attrFilter.Type = core.BookFilterAttributeTypeLike
 
 		case serverAPI.BookFilterFilterAttributesItemTypeIn:
-			attrFilter.Type = entities.BookFilterAttributeTypeIn
+			attrFilter.Type = core.BookFilterAttributeTypeIn
 
 		case serverAPI.BookFilterFilterAttributesItemTypeCountEq:
-			attrFilter.Type = entities.BookFilterAttributeTypeCountEq
+			attrFilter.Type = core.BookFilterAttributeTypeCountEq
 
 		case serverAPI.BookFilterFilterAttributesItemTypeCountGt:
-			attrFilter.Type = entities.BookFilterAttributeTypeCountGt
+			attrFilter.Type = core.BookFilterAttributeTypeCountGt
 
 		case serverAPI.BookFilterFilterAttributesItemTypeCountLt:
-			attrFilter.Type = entities.BookFilterAttributeTypeCountLt
+			attrFilter.Type = core.BookFilterAttributeTypeCountLt
 
 		default:
 			continue // Скипаем неизвестный тип если появится.
@@ -123,10 +124,10 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 		filter.Fields.Attributes = append(filter.Fields.Attributes, attrFilter)
 	}
 
-	filter.Fields.Labels = make([]entities.BookFilterLabel, 0, len(req.Filter.Value.Labels))
+	filter.Fields.Labels = make([]core.BookFilterLabel, 0, len(req.Filter.Value.Labels))
 
 	for _, label := range req.Filter.Value.Labels {
-		labelFilter := entities.BookFilterLabel{
+		labelFilter := core.BookFilterLabel{
 			Name:   label.Name,
 			Values: label.Values,
 			Count:  label.Count.Value,
@@ -136,19 +137,19 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 
 		switch label.Type {
 		case serverAPI.BookFilterFilterLabelsItemTypeLike:
-			labelFilter.Type = entities.BookFilterLabelTypeLike
+			labelFilter.Type = core.BookFilterLabelTypeLike
 
 		case serverAPI.BookFilterFilterLabelsItemTypeIn:
-			labelFilter.Type = entities.BookFilterLabelTypeIn
+			labelFilter.Type = core.BookFilterLabelTypeIn
 
 		case serverAPI.BookFilterFilterLabelsItemTypeCountEq:
-			labelFilter.Type = entities.BookFilterLabelTypeCountEq
+			labelFilter.Type = core.BookFilterLabelTypeCountEq
 
 		case serverAPI.BookFilterFilterLabelsItemTypeCountGt:
-			labelFilter.Type = entities.BookFilterLabelTypeCountGt
+			labelFilter.Type = core.BookFilterLabelTypeCountGt
 
 		case serverAPI.BookFilterFilterLabelsItemTypeCountLt:
-			labelFilter.Type = entities.BookFilterLabelTypeCountLt
+			labelFilter.Type = core.BookFilterLabelTypeCountLt
 
 		default:
 			continue // Скипаем неизвестный тип если появится.
@@ -160,15 +161,15 @@ func convertAPIBookFilter(req serverAPI.BookFilter) entities.BookFilter {
 	return filter
 }
 
-func convertFlagSelector(raw serverAPI.BookFilterFlagSelector) entities.BookFilterShowType {
+func convertFlagSelector(raw serverAPI.BookFilterFlagSelector) core.BookFilterShowType {
 	switch raw {
 	case serverAPI.BookFilterFlagSelectorAll:
-		return entities.BookFilterShowTypeAll
+		return core.BookFilterShowTypeAll
 	case serverAPI.BookFilterFlagSelectorOnly:
-		return entities.BookFilterShowTypeOnly
+		return core.BookFilterShowTypeOnly
 	case serverAPI.BookFilterFlagSelectorExcept:
-		return entities.BookFilterShowTypeExcept
+		return core.BookFilterShowTypeExcept
 	}
 
-	return entities.BookFilterShowTypeAll
+	return core.BookFilterShowTypeAll
 }

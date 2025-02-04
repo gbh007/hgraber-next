@@ -5,18 +5,19 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) Agents(ctx context.Context, filter entities.AgentFilter, includeStatus bool) ([]entities.AgentWithStatus, error) {
+func (uc *UseCase) Agents(ctx context.Context, filter core.AgentFilter, includeStatus bool) ([]core.AgentWithStatus, error) {
 	agents, err := uc.storage.Agents(ctx, filter)
 	if err != nil {
 		return nil, fmt.Errorf("storage get agents: %w", err)
 	}
 
-	res := pkg.Map(agents, func(a entities.Agent) entities.AgentWithStatus {
-		return entities.AgentWithStatus{
+	res := pkg.Map(agents, func(a core.Agent) core.AgentWithStatus {
+		return core.AgentWithStatus{
 			Agent: a,
 		}
 	})
@@ -27,7 +28,7 @@ func (uc *UseCase) Agents(ctx context.Context, filter entities.AgentFilter, incl
 
 	for i, a := range res {
 		status, err := uc.agentSystemAdapter.Status(ctx, a.Agent.ID)
-		if errors.Is(err, entities.AgentAPIOffline) {
+		if errors.Is(err, agentmodel.AgentAPIOffline) {
 			res[i].IsOffline = true
 
 			continue

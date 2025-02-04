@@ -10,12 +10,12 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, error) {
-	return entities.RunnableTaskFunction(func(ctx context.Context, taskResult entities.TaskResultWriter) {
+func (uc *UseCase) DeduplicateFiles(_ context.Context) (core.RunnableTask, error) {
+	return core.RunnableTaskFunction(func(ctx context.Context, taskResult core.TaskResultWriter) {
 		defer taskResult.Finish()
 
 		taskResult.SetName("DeduplicateFiles")
@@ -33,7 +33,7 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 			return
 		}
 
-		storageMap := pkg.SliceToMap(storages, func(s entities.FileStorageSystem) (uuid.UUID, entities.FileStorageSystem) {
+		storageMap := pkg.SliceToMap(storages, func(s core.FileStorageSystem) (uuid.UUID, core.FileStorageSystem) {
 			return s.ID, s
 		})
 
@@ -55,7 +55,7 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 		taskResult.SetTotal(int64(len(files)))
 		span.AddEvent("transform data", trace.WithTimestamp(time.Now()))
 
-		fileMap := make(map[entities.FileHash][]entities.File)
+		fileMap := make(map[core.FileHash][]core.File)
 
 		for _, file := range files {
 			taskResult.IncProgress()
@@ -98,7 +98,7 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 			}
 
 			// Оставляем файл с наивысшим приоритетом его ФС для сохранения
-			slices.SortStableFunc(files, func(a, b entities.File) int {
+			slices.SortStableFunc(files, func(a, b core.File) int {
 				return storageMap[b.FSID].DeduplicatePriority - storageMap[a.FSID].DeduplicatePriority
 			})
 
@@ -128,7 +128,7 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (entities.RunnableTask, e
 
 		taskResult.SetResult(fmt.Sprintf(
 			"count: %d size: %d human size: %s",
-			count, size, entities.PrettySize(size),
+			count, size, core.PrettySize(size),
 		))
 	}), nil
 }

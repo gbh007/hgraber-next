@@ -9,10 +9,10 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (d *Database) DuplicatedFiles(ctx context.Context) ([]entities.File, error) {
+func (d *Database) DuplicatedFiles(ctx context.Context) ([]core.File, error) {
 	raw := make([]*model.File, 0)
 
 	// FIXME: условие дедупликации не учитывает размер
@@ -31,7 +31,7 @@ FROM (
 		return nil, fmt.Errorf("exec: %w", err)
 	}
 
-	out := make([]entities.File, len(raw))
+	out := make([]core.File, len(raw))
 	for i, v := range raw {
 		out[i], err = v.ToEntity()
 		if err != nil {
@@ -53,13 +53,13 @@ func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.FileNotFoundError
+		return core.FileNotFoundError
 	}
 
 	return nil
 }
 
-func (d *Database) NewFile(ctx context.Context, file entities.File) error {
+func (d *Database) NewFile(ctx context.Context, file core.File) error {
 	builder := squirrel.Insert("files").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -110,7 +110,7 @@ func (d *Database) ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UU
 	return nil
 }
 
-func (d *Database) DetachedFiles(ctx context.Context) ([]entities.File, error) {
+func (d *Database) DetachedFiles(ctx context.Context) ([]core.File, error) {
 	raw := make([]*model.File, 0)
 
 	err := d.db.SelectContext(ctx, &raw, `SELECT *
@@ -125,7 +125,7 @@ WHERE
 		return nil, fmt.Errorf("exec: %w", err)
 	}
 
-	out := make([]entities.File, len(raw))
+	out := make([]core.File, len(raw))
 	for i, v := range raw {
 		out[i], err = v.ToEntity()
 		if err != nil {
@@ -136,7 +136,7 @@ WHERE
 	return out, nil
 }
 
-func (d *Database) FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.File, error) {
+func (d *Database) FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]core.File, error) {
 	builder := squirrel.Select("*").
 		PlaceholderFormat(squirrel.Dollar).
 		From("files").
@@ -158,7 +158,7 @@ func (d *Database) FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]enti
 		return nil, fmt.Errorf("exec: %w", err)
 	}
 
-	out := make([]entities.File, len(raw))
+	out := make([]core.File, len(raw))
 	for i, v := range raw {
 		out[i], err = v.ToEntity()
 		if err != nil {
@@ -189,7 +189,7 @@ func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.FileNotFoundError
+		return core.FileNotFoundError
 	}
 
 	return nil
@@ -274,7 +274,7 @@ func (d *Database) UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid
 	return nil
 }
 
-func (d *Database) File(ctx context.Context, id uuid.UUID) (entities.File, error) {
+func (d *Database) File(ctx context.Context, id uuid.UUID) (core.File, error) {
 	builder := squirrel.Select("*").
 		PlaceholderFormat(squirrel.Dollar).
 		From("files").
@@ -285,7 +285,7 @@ func (d *Database) File(ctx context.Context, id uuid.UUID) (entities.File, error
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return entities.File{}, fmt.Errorf("build query: %w", err)
+		return core.File{}, fmt.Errorf("build query: %w", err)
 	}
 
 	d.squirrelDebugLog(ctx, query, args)
@@ -294,18 +294,18 @@ func (d *Database) File(ctx context.Context, id uuid.UUID) (entities.File, error
 
 	err = d.db.GetContext(ctx, &raw, query, args...)
 	if err != nil {
-		return entities.File{}, fmt.Errorf("exec: %w", err)
+		return core.File{}, fmt.Errorf("exec: %w", err)
 	}
 
 	out, err := raw.ToEntity()
 	if err != nil {
-		return entities.File{}, fmt.Errorf("convert: %w", err)
+		return core.File{}, fmt.Errorf("convert: %w", err)
 	}
 
 	return out, nil
 }
 
-func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (entities.FSFilesInfo, error) {
+func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (core.FSFilesInfo, error) {
 	builder := squirrel.Select(
 		"COUNT(*)",
 		"SUM(\"size\")",
@@ -337,7 +337,7 @@ func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidD
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return entities.FSFilesInfo{}, fmt.Errorf("build query: %w", err)
+		return core.FSFilesInfo{}, fmt.Errorf("build query: %w", err)
 	}
 
 	d.squirrelDebugLog(ctx, query, args)
@@ -348,16 +348,16 @@ func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidD
 
 	err = row.Scan(&count, &size)
 	if err != nil {
-		return entities.FSFilesInfo{}, fmt.Errorf("scan :%w", err)
+		return core.FSFilesInfo{}, fmt.Errorf("scan :%w", err)
 	}
 
-	return entities.FSFilesInfo{
+	return core.FSFilesInfo{
 		Count: count.Int64,
 		Size:  size.Int64,
 	}, nil
 }
 
-func (d *Database) FileIDsByFilter(ctx context.Context, filter entities.FileFilter) ([]uuid.UUID, error) {
+func (d *Database) FileIDsByFilter(ctx context.Context, filter core.FileFilter) ([]uuid.UUID, error) {
 	builder := squirrel.Select("id").
 		PlaceholderFormat(squirrel.Dollar).
 		From("files")

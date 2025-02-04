@@ -11,18 +11,18 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type infoProvider interface {
-	WorkersInfo(ctx context.Context) []entities.SystemWorkerStat
+	WorkersInfo(ctx context.Context) []core.SystemWorkerStat
 }
 
 type statisticProvider interface {
 	BooksCountByAuthor(ctx context.Context) (map[string]int64, error)
-	PageSizeByAuthor(ctx context.Context) (map[string]entities.SizeWithCount, error)
-	BookSizes(ctx context.Context) (map[uuid.UUID]entities.SizeWithCount, error)
-	SystemSize(ctx context.Context) (entities.SystemSizeInfo, error)
+	PageSizeByAuthor(ctx context.Context) (map[string]core.SizeWithCount, error)
+	BookSizes(ctx context.Context) (map[uuid.UUID]core.SizeWithCount, error)
+	SystemSize(ctx context.Context) (core.SystemSizeInfo, error)
 }
 
 type config interface {

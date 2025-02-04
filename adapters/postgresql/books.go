@@ -7,10 +7,10 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (d *Database) BookCount(ctx context.Context, filter entities.BookFilter) (int, error) {
+func (d *Database) BookCount(ctx context.Context, filter core.BookFilter) (int, error) {
 	var c int
 
 	query, args, err := d.buildBooksFilter(ctx, filter, true)
@@ -26,7 +26,7 @@ func (d *Database) BookCount(ctx context.Context, filter entities.BookFilter) (i
 	return c, nil
 }
 
-func (d *Database) BookIDs(ctx context.Context, filter entities.BookFilter) ([]uuid.UUID, error) {
+func (d *Database) BookIDs(ctx context.Context, filter core.BookFilter) ([]uuid.UUID, error) {
 	idsRaw := make([]string, 0)
 
 	query, args, err := d.buildBooksFilter(ctx, filter, false)
@@ -51,7 +51,7 @@ func (d *Database) BookIDs(ctx context.Context, filter entities.BookFilter) ([]u
 	return ids, nil
 }
 
-func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFilter, isCount bool) (string, []interface{}, error) {
+func (d *Database) buildBooksFilter(ctx context.Context, filter core.BookFilter, isCount bool) (string, []interface{}, error) {
 	var builder squirrel.SelectBuilder
 
 	if isCount {
@@ -86,24 +86,24 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 		}
 
 		switch filter.OrderBy {
-		case entities.BookFilterOrderByCreated:
+		case core.BookFilterOrderByCreated:
 			orderBy = []string{
 				"create_at" + orderBySuffix,
 				"id" + orderBySuffix,
 			}
 
-		case entities.BookFilterOrderByName:
+		case core.BookFilterOrderByName:
 			orderBy = []string{
 				"name" + orderBySuffix,
 				"id" + orderBySuffix,
 			}
 
-		case entities.BookFilterOrderByID:
+		case core.BookFilterOrderByID:
 			orderBy = []string{
 				"id" + orderBySuffix,
 			}
 
-		case entities.BookFilterOrderByPageCount:
+		case core.BookFilterOrderByPageCount:
 			orderBy = []string{
 				"page_count" + orderBySuffix,
 				"id" + orderBySuffix,
@@ -126,35 +126,35 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 	}
 
 	switch filter.ShowDeleted {
-	case entities.BookFilterShowTypeOnly:
+	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(squirrel.Eq{"deleted": true})
-	case entities.BookFilterShowTypeExcept:
+	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(squirrel.Eq{"deleted": false})
 	}
 
 	switch filter.ShowVerified {
-	case entities.BookFilterShowTypeOnly:
+	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(squirrel.Eq{"verified": true})
-	case entities.BookFilterShowTypeExcept:
+	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(squirrel.Eq{"verified": false})
 	}
 
 	switch filter.ShowRebuilded {
-	case entities.BookFilterShowTypeOnly:
+	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(squirrel.Eq{"is_rebuild": true})
-	case entities.BookFilterShowTypeExcept:
+	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(squirrel.Eq{"is_rebuild": false})
 	}
 
 	switch filter.ShowDownloaded {
-	case entities.BookFilterShowTypeOnly:
+	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(squirrel.And{
 			squirrel.Eq{"attributes_parsed": true},
 			squirrel.NotEq{"name": nil},
 			squirrel.NotEq{"page_count": nil},
 			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE downloaded = FALSE AND books.id = pages.book_id)`),
 		})
-	case entities.BookFilterShowTypeExcept:
+	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(squirrel.Or{
 			squirrel.Eq{"attributes_parsed": false},
 			squirrel.Eq{"name": nil},
@@ -164,24 +164,24 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 	}
 
 	switch filter.ShowWithoutPages {
-	case entities.BookFilterShowTypeOnly:
+	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(
 			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id)`),
 		)
-	case entities.BookFilterShowTypeExcept:
+	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(
 			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id)`),
 		)
 	}
 
 	switch filter.ShowWithoutPreview {
-	case entities.BookFilterShowTypeOnly:
+	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(
-			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, entities.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?``
+			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, core.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?``
 		)
-	case entities.BookFilterShowTypeExcept:
+	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(
-			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, entities.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?``
+			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, core.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?``
 		)
 	}
 
@@ -199,7 +199,7 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			Where(squirrel.Expr(`book_id = books.id`))
 
 		switch attrFilter.Type {
-		case entities.BookFilterAttributeTypeLike:
+		case core.BookFilterAttributeTypeLike:
 			if len(attrFilter.Values) == 0 {
 				continue
 			}
@@ -208,7 +208,7 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 				"value": "%" + attrFilter.Values[0] + "%",
 			})
 
-		case entities.BookFilterAttributeTypeIn:
+		case core.BookFilterAttributeTypeIn:
 			if len(attrFilter.Values) == 0 {
 				continue
 			}
@@ -217,7 +217,7 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 				"value": attrFilter.Values,
 			})
 
-		case entities.BookFilterAttributeTypeCountEq:
+		case core.BookFilterAttributeTypeCountEq:
 			if attrFilter.Count != 0 { // Случай когда нужно чтобы не было данных
 				subBuilder = subBuilder.Having(squirrel.Eq{
 					"COUNT(value)": attrFilter.Count,
@@ -225,13 +225,13 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 					GroupBy("attr")
 			}
 
-		case entities.BookFilterAttributeTypeCountGt:
+		case core.BookFilterAttributeTypeCountGt:
 			subBuilder = subBuilder.Having(squirrel.Gt{
 				"COUNT(value)": attrFilter.Count,
 			}).
 				GroupBy("attr")
 
-		case entities.BookFilterAttributeTypeCountLt:
+		case core.BookFilterAttributeTypeCountLt:
 			if attrFilter.Count != 1 { // Случай когда нужно чтобы не было данных
 				subBuilder = subBuilder.Having(squirrel.Lt{
 					"COUNT(value)": attrFilter.Count,
@@ -248,8 +248,8 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			return "", nil, fmt.Errorf("build attribute sub query: %w", err)
 		}
 
-		if (attrFilter.Count == 0 && attrFilter.Type == entities.BookFilterAttributeTypeCountEq) ||
-			(attrFilter.Count == 1 && attrFilter.Type == entities.BookFilterAttributeTypeCountLt) { // Случай когда нужно чтобы не было данных
+		if (attrFilter.Count == 0 && attrFilter.Type == core.BookFilterAttributeTypeCountEq) ||
+			(attrFilter.Count == 1 && attrFilter.Type == core.BookFilterAttributeTypeCountLt) { // Случай когда нужно чтобы не было данных
 			builder = builder.Where(squirrel.Expr(`NOT EXISTS (`+subQuery+`)`, subArgs...))
 		} else {
 			builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
@@ -266,7 +266,7 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			Where(squirrel.Expr(`book_id = books.id`))
 
 		switch labelFilter.Type {
-		case entities.BookFilterLabelTypeLike:
+		case core.BookFilterLabelTypeLike:
 			if len(labelFilter.Values) == 0 {
 				continue
 			}
@@ -275,7 +275,7 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 				"value": "%" + labelFilter.Values[0] + "%",
 			})
 
-		case entities.BookFilterLabelTypeIn:
+		case core.BookFilterLabelTypeIn:
 			if len(labelFilter.Values) == 0 {
 				continue
 			}
@@ -284,7 +284,7 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 				"value": labelFilter.Values,
 			})
 
-		case entities.BookFilterLabelTypeCountEq:
+		case core.BookFilterLabelTypeCountEq:
 			if labelFilter.Count != 0 { // Случай когда нужно чтобы не было данных
 				subBuilder = subBuilder.Having(squirrel.Eq{
 					"COUNT(value)": labelFilter.Count,
@@ -292,13 +292,13 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 					GroupBy("name")
 			}
 
-		case entities.BookFilterLabelTypeCountGt:
+		case core.BookFilterLabelTypeCountGt:
 			subBuilder = subBuilder.Having(squirrel.Gt{
 				"COUNT(value)": labelFilter.Count,
 			}).
 				GroupBy("name")
 
-		case entities.BookFilterLabelTypeCountLt:
+		case core.BookFilterLabelTypeCountLt:
 			if labelFilter.Count != 1 { // Случай когда нужно чтобы не было данных
 				subBuilder = subBuilder.Having(squirrel.Lt{
 					"COUNT(value)": labelFilter.Count,
@@ -315,8 +315,8 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter entities.BookFil
 			return "", nil, fmt.Errorf("build label sub query: %w", err)
 		}
 
-		if (labelFilter.Count == 0 && labelFilter.Type == entities.BookFilterLabelTypeCountEq) ||
-			(labelFilter.Count == 1 && labelFilter.Type == entities.BookFilterLabelTypeCountLt) { // Случай когда нужно чтобы не было данных
+		if (labelFilter.Count == 0 && labelFilter.Type == core.BookFilterLabelTypeCountEq) ||
+			(labelFilter.Count == 1 && labelFilter.Type == core.BookFilterLabelTypeCountLt) { // Случай когда нужно чтобы не было данных
 			builder = builder.Where(squirrel.Expr(`NOT EXISTS (`+subQuery+`)`, subArgs...))
 		} else {
 			builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))

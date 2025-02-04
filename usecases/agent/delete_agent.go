@@ -7,12 +7,12 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 	err := uc.agentSystemAdapter.DeleteAgent(id)
-	if err != nil && !errors.Is(err, entities.AgentNotFoundError) {
+	if err != nil && !errors.Is(err, core.AgentNotFoundError) {
 		return fmt.Errorf("agent system delete agent: %w", err)
 	}
 

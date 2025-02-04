@@ -1,12 +1,10 @@
-package entities
+package core
 
 import (
 	"net/url"
 	"time"
 
 	"github.com/google/uuid"
-
-	"github.com/gbh007/hgraber-next/pkg"
 )
 
 type Book struct {
@@ -55,29 +53,6 @@ func (b BookContainer) IsLoaded() bool {
 	return true
 }
 
-func (b BookContainer) ToAgentBookDetails() AgentBookDetails {
-	var u url.URL
-
-	if b.Book.OriginURL != nil {
-		u = *b.Book.OriginURL
-	}
-
-	return AgentBookDetails{
-		URL:       u,
-		Name:      b.Book.Name,
-		PageCount: b.Book.PageCount,
-		Attributes: pkg.MapToSlice(b.Attributes, func(code string, values []string) AgentBookDetailsAttributesItem {
-			return AgentBookDetailsAttributesItem{
-				Code:   code,
-				Values: values,
-			}
-		}),
-		Pages: pkg.Map(b.Pages, func(p Page) AgentBookDetailsPagesItem {
-			return p.ToAgentBookDetailsPagesItem()
-		}),
-	}
-}
-
 func (b BookContainer) Filename() string {
 	return b.Book.ID.String() + " " + EscapeBookFileName(b.Book.Name) + ".zip"
 }
@@ -107,10 +82,4 @@ type BookSize struct {
 	SharedCount                  int
 	DeadHashesCount              int
 	InnerDuplicateCount          int
-}
-
-// TODO: подумать что делать с такими моделями
-type BookWithPreviewPage struct {
-	Book
-	PreviewPage BFFPreviewPage
 }

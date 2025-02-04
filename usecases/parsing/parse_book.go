@@ -8,11 +8,12 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book entities.Book) error {
+func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.Book) error {
 	agentCtx, agentCancel := context.WithTimeout(ctx, uc.parseBookTimeout)
 	defer agentCancel()
 
@@ -41,8 +42,8 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book entiti
 		return fmt.Errorf("update attributes: %w", err)
 	}
 
-	err = uc.storage.UpdateBookPages(ctx, book.ID, pkg.Map(info.Pages, func(p entities.AgentBookDetailsPagesItem) entities.Page {
-		return entities.Page{
+	err = uc.storage.UpdateBookPages(ctx, book.ID, pkg.Map(info.Pages, func(p agentmodel.AgentBookDetailsPagesItem) core.Page {
+		return core.Page{
 			BookID:     book.ID,
 			PageNumber: p.PageNumber,
 			Ext:        path.Ext(p.Filename),

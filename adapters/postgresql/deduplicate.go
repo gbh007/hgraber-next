@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (d *Database) BookIDsByMD5(ctx context.Context, md5Sums []string) ([]uuid.UUID, error) {
@@ -54,7 +54,7 @@ func (d *Database) BookIDsByMD5(ctx context.Context, md5Sums []string) ([]uuid.U
 	return result, nil
 }
 
-func (d *Database) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error) {
+func (d *Database) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]core.PageWithHash, error) {
 	builder := squirrel.Select(model.PageWithHashColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("pages p").
@@ -71,7 +71,7 @@ func (d *Database) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]e
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	out := make([]entities.PageWithHash, 0, 10)
+	out := make([]core.PageWithHash, 0, 10)
 
 	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
@@ -81,7 +81,7 @@ func (d *Database) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]e
 	defer rows.Close()
 
 	for rows.Next() {
-		page := entities.PageWithHash{}
+		page := core.PageWithHash{}
 
 		err := rows.Scan(model.PageWithHashScanner(&page))
 		if err != nil {
@@ -94,7 +94,7 @@ func (d *Database) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]e
 	return out, nil
 }
 
-func (d *Database) BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageNumber int) (entities.PageWithHash, error) {
+func (d *Database) BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageNumber int) (core.PageWithHash, error) {
 	builder := squirrel.Select(model.PageWithHashColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("pages p").
@@ -107,28 +107,28 @@ func (d *Database) BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageN
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return entities.PageWithHash{}, fmt.Errorf("build query: %w", err)
+		return core.PageWithHash{}, fmt.Errorf("build query: %w", err)
 	}
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	page := entities.PageWithHash{}
+	page := core.PageWithHash{}
 	row := d.pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(model.PageWithHashScanner(&page))
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return entities.PageWithHash{}, entities.PageNotFoundError
+		return core.PageWithHash{}, core.PageNotFoundError
 	}
 
 	if err != nil {
-		return entities.PageWithHash{}, fmt.Errorf("exec query :%w", err)
+		return core.PageWithHash{}, fmt.Errorf("exec query :%w", err)
 	}
 
 	return page, nil
 }
 
-func (d *Database) BookPagesWithHashByHash(ctx context.Context, hash entities.FileHash) ([]entities.PageWithHash, error) {
+func (d *Database) BookPagesWithHashByHash(ctx context.Context, hash core.FileHash) ([]core.PageWithHash, error) {
 	builder := squirrel.Select(model.PageWithHashColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("pages p").
@@ -146,7 +146,7 @@ func (d *Database) BookPagesWithHashByHash(ctx context.Context, hash entities.Fi
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	out := make([]entities.PageWithHash, 0, 10)
+	out := make([]core.PageWithHash, 0, 10)
 
 	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
@@ -156,7 +156,7 @@ func (d *Database) BookPagesWithHashByHash(ctx context.Context, hash entities.Fi
 	defer rows.Close()
 
 	for rows.Next() {
-		page := entities.PageWithHash{}
+		page := core.PageWithHash{}
 
 		err := rows.Scan(model.PageWithHashScanner(&page))
 		if err != nil {
@@ -169,7 +169,7 @@ func (d *Database) BookPagesWithHashByHash(ctx context.Context, hash entities.Fi
 	return out, nil
 }
 
-func (d *Database) BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.PageWithHash, error) {
+func (d *Database) BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []string) ([]core.PageWithHash, error) {
 	builder := squirrel.Select(model.PageWithHashColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("pages p").
@@ -185,7 +185,7 @@ func (d *Database) BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []str
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	out := make([]entities.PageWithHash, 0, 10)
+	out := make([]core.PageWithHash, 0, 10)
 
 	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
@@ -195,7 +195,7 @@ func (d *Database) BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []str
 	defer rows.Close()
 
 	for rows.Next() {
-		page := entities.PageWithHash{}
+		page := core.PageWithHash{}
 
 		err := rows.Scan(model.PageWithHashScanner(&page))
 		if err != nil {
@@ -208,7 +208,7 @@ func (d *Database) BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []str
 	return out, nil
 }
 
-func (d *Database) BookPagesCountByHash(ctx context.Context, hash entities.FileHash) (int64, error) {
+func (d *Database) BookPagesCountByHash(ctx context.Context, hash core.FileHash) (int64, error) {
 	builder := squirrel.Select("COUNT(*)").
 		PlaceholderFormat(squirrel.Dollar).
 		From("pages p").

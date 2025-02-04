@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (d *Database) BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error) {
@@ -22,7 +22,7 @@ func (d *Database) BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (
 
 	defer rows.Close()
 
-	out := make(map[string][]string, entities.PossibleAttributeCount)
+	out := make(map[string][]string, core.PossibleAttributeCount)
 
 	for rows.Next() {
 		var (

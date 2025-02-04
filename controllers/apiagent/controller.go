@@ -11,15 +11,15 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
 type parsingUseCases interface {
-	CheckBooks(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error)
-	ParseBook(ctx context.Context, u url.URL) (entities.AgentBookDetails, error)
+	CheckBooks(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
+	ParseBook(ctx context.Context, u url.URL) (agentmodel.AgentBookDetails, error)
 	DownloadPage(ctx context.Context, bookURL, imageURL url.URL) (io.Reader, error)
-	CheckPages(ctx context.Context, pages []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
+	CheckPages(ctx context.Context, pages []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error)
 }
 
 type exportUseCases interface {

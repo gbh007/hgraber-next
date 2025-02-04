@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type File struct {
@@ -21,13 +21,13 @@ type File struct {
 	CreateAt    time.Time      `db:"create_at"`
 }
 
-func (f File) ToEntity() (entities.File, error) {
+func (f File) ToEntity() (core.File, error) {
 	id, err := uuid.Parse(f.ID)
 	if err != nil {
-		return entities.File{}, err
+		return core.File{}, err
 	}
 
-	return entities.File{
+	return core.File{
 		ID:          id,
 		Filename:    f.Filename,
 		Ext:         f.Ext,

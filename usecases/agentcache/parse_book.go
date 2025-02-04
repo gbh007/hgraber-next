@@ -4,14 +4,14 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 )
 
-func (uc *UseCase) ParseBook(ctx context.Context, u url.URL) (entities.AgentBookDetails, error) {
+func (uc *UseCase) ParseBook(ctx context.Context, u url.URL) (agentmodel.AgentBookDetails, error) {
 	book, err := uc.parseUseCases.BookByURL(ctx, u)
 	if err != nil {
-		return entities.AgentBookDetails{}, err
+		return agentmodel.AgentBookDetails{}, err
 	}
 
-	return book.ToAgentBookDetails(), nil
+	return agentmodel.BookContainerToAgentBookDetails(book), nil
 }

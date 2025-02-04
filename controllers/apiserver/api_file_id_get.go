@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
@@ -29,7 +29,7 @@ func (c *Controller) APIFileIDGet(ctx context.Context, params serverAPI.APIFileI
 	}
 
 	body, err := c.webAPIUseCases.File(ctx, fileID, fsID)
-	if errors.Is(err, entities.FileNotFoundError) {
+	if errors.Is(err, core.FileNotFoundError) {
 		return &serverAPI.APIFileIDGetNotFound{
 			InnerCode: WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),

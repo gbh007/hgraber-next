@@ -3,7 +3,7 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -22,7 +22,7 @@ func (c *Controller) APIFsListPost(ctx context.Context, req *serverAPI.APIFsList
 	}
 
 	return &serverAPI.APIFsListPostOK{
-		FileSystems: pkg.Map(storages, func(raw entities.FSWithStatus) serverAPI.APIFsListPostOKFileSystemsItem {
+		FileSystems: pkg.Map(storages, func(raw core.FSWithStatus) serverAPI.APIFsListPostOKFileSystemsItem {
 			return serverAPI.APIFsListPostOKFileSystemsItem{
 				Info:                convertFileSystemInfoToAPI(raw.Info),
 				IsLegacy:            raw.IsLegacy,
@@ -34,7 +34,7 @@ func (c *Controller) APIFsListPost(ctx context.Context, req *serverAPI.APIFsList
 					Set:   raw.AvailableSize > 0,
 				},
 				AvailableSizeFormatted: serverAPI.OptString{
-					Value: entities.PrettySize(raw.AvailableSize),
+					Value: core.PrettySize(raw.AvailableSize),
 					Set:   raw.AvailableSize > 0,
 				},
 			}

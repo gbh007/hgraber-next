@@ -8,13 +8,13 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/internal/worker"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 type bookWorkerUnitUseCases interface {
-	ParseBook(ctx context.Context, agentID uuid.UUID, book entities.Book) error
-	BooksToParse(ctx context.Context) ([]entities.BookWithAgent, error)
+	ParseBook(ctx context.Context, agentID uuid.UUID, book core.Book) error
+	BooksToParse(ctx context.Context) ([]core.BookWithAgent, error)
 }
 
 func NewBookParser(
@@ -23,13 +23,13 @@ func NewBookParser(
 	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
-) *worker.Worker[entities.BookWithAgent] {
-	return worker.New[entities.BookWithAgent](
+) *worker.Worker[core.BookWithAgent] {
+	return worker.New[core.BookWithAgent](
 		"book",
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, book entities.BookWithAgent) error {
+		func(ctx context.Context, book core.BookWithAgent) error {
 			err := useCases.ParseBook(ctx, book.AgentID, book.Book)
 			if err != nil {
 				return pkg.WrapError(

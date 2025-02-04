@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) UpdateAgent(ctx context.Context, agent entities.Agent) error {
+func (uc *UseCase) UpdateAgent(ctx context.Context, agent core.Agent) error {
 	// Установка нового агента идемпотента, поэтому вначале вызываем ее
 	err := uc.agentSystemAdapter.SetAgent(agent)
 	if err != nil {

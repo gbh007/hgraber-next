@@ -4,17 +4,17 @@ import (
 	"context"
 	"errors"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIBookRebuildPostReq) (serverAPI.APIBookRebuildPostRes, error) {
-	id, err := c.rebuilderUseCases.RebuildBook(ctx, entities.RebuildBookRequest{
+	id, err := c.rebuilderUseCases.RebuildBook(ctx, core.RebuildBookRequest{
 		ModifiedOldBook: convertBookRawToBookFull(&req.OldBook),
 		SelectedPages:   req.SelectedPages,
 		MergeWithBook:   req.MergeWithBook.Value,
 		PageOrder:       req.PageOrder,
-		Flags: entities.RebuildBookRequestFlags{
+		Flags: core.RebuildBookRequestFlags{
 			OnlyUniquePages:      req.Flags.Value.OnlyUnique.Value,
 			ExcludeDeadHashPages: req.Flags.Value.ExcludeDeadHashPages.Value,
 			Only1CopyPages:       req.Flags.Value.Only1Copy.Value,
@@ -32,7 +32,7 @@ func (c *Controller) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIB
 		},
 	})
 
-	if errors.Is(err, entities.BookNotFoundError) {
+	if errors.Is(err, core.BookNotFoundError) {
 		return &serverAPI.APIBookRebuildPostNotFound{
 			InnerCode: RebuilderUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),

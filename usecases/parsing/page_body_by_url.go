@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error) {
@@ -29,5 +29,5 @@ func (uc *UseCase) PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, err
 		return body, nil
 	}
 
-	return nil, entities.PageNotFoundError
+	return nil, core.PageNotFoundError
 }

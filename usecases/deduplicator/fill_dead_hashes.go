@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) FillDeadHashes(_ context.Context, withRemoveDeletedPages bool) (entities.RunnableTask, error) {
-	return entities.RunnableTaskFunction(func(ctx context.Context, taskResult entities.TaskResultWriter) {
+func (uc *UseCase) FillDeadHashes(_ context.Context, withRemoveDeletedPages bool) (core.RunnableTask, error) {
+	return core.RunnableTaskFunction(func(ctx context.Context, taskResult core.TaskResultWriter) {
 		defer taskResult.Finish()
 
 		if withRemoveDeletedPages {
@@ -34,8 +34,8 @@ func (uc *UseCase) FillDeadHashes(_ context.Context, withRemoveDeletedPages bool
 		taskResult.StartStage("search dead hashes")
 		taskResult.SetTotal(int64(len(deletedPagesHashes)))
 
-		deadHashes := make([]entities.DeadHash, 0, len(deletedPagesHashes))
-		deadHashesToRemoveFromDeletedPages := make([]entities.FileHash, 0, len(deletedPagesHashes))
+		deadHashes := make([]core.DeadHash, 0, len(deletedPagesHashes))
+		deadHashesToRemoveFromDeletedPages := make([]core.FileHash, 0, len(deletedPagesHashes))
 
 		for _, hash := range deletedPagesHashes {
 			taskResult.IncProgress()
@@ -51,7 +51,7 @@ func (uc *UseCase) FillDeadHashes(_ context.Context, withRemoveDeletedPages bool
 				continue
 			}
 
-			deadHashes = append(deadHashes, entities.DeadHash{
+			deadHashes = append(deadHashes, core.DeadHash{
 				FileHash:  hash,
 				CreatedAt: time.Now().UTC(),
 			})

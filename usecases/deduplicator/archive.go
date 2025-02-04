@@ -9,11 +9,11 @@ import (
 	"path"
 	"slices"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/external"
 )
 
-func (uc *UseCase) ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]entities.DeduplicateArchiveResult, error) {
+func (uc *UseCase) ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]core.DeduplicateArchiveResult, error) {
 	bodyRaw, err := io.ReadAll(archiveBody)
 	if err != nil {
 		return nil, fmt.Errorf("read archive body: %w", err)
@@ -24,19 +24,19 @@ func (uc *UseCase) ArchiveEntryPercentage(ctx context.Context, archiveBody io.Re
 		return nil, fmt.Errorf("create zip reader: %w", err)
 	}
 
-	archiveHashes := make([]entities.PageWithHash, 0, 30) // Точный размер заранее не определить
-	md5Sums := make([]string, 0, 30)                      // Точный размер заранее не определить
+	archiveHashes := make([]core.PageWithHash, 0, 30) // Точный размер заранее не определить
+	md5Sums := make([]string, 0, 30)                  // Точный размер заранее не определить
 
 	_, err = external.ReadArchive(ctx, zipReader, external.ReadArchiveOptions{
 		HandlePageBody: func(ctx context.Context, pageNumber int, filename string, body io.Reader) error {
-			hash, err := entities.HashFile(body)
+			hash, err := core.HashFile(body)
 			if err != nil {
 				return fmt.Errorf("hash page (%d): %w", pageNumber, err)
 			}
 
 			md5Sums = append(md5Sums, hash.Md5Sum)
-			archiveHashes = append(archiveHashes, entities.PageWithHash{
-				Page: entities.Page{
+			archiveHashes = append(archiveHashes, core.PageWithHash{
+				Page: core.Page{
 					PageNumber: pageNumber,
 					Ext:        path.Ext(filename),
 					Downloaded: true,
@@ -57,7 +57,7 @@ func (uc *UseCase) ArchiveEntryPercentage(ctx context.Context, archiveBody io.Re
 		return nil, fmt.Errorf("get books by md5 from storage: %w", err)
 	}
 
-	result := make([]entities.DeduplicateArchiveResult, 0, len(bookIDs))
+	result := make([]core.DeduplicateArchiveResult, 0, len(bookIDs))
 
 	for _, bookID := range bookIDs {
 		pages, err := uc.storage.BookPagesWithHash(ctx, bookID)
@@ -70,15 +70,15 @@ func (uc *UseCase) ArchiveEntryPercentage(ctx context.Context, archiveBody io.Re
 			return nil, fmt.Errorf("get book (%s) from storage: %w", bookID.String(), err)
 		}
 
-		result = append(result, entities.DeduplicateArchiveResult{
+		result = append(result, core.DeduplicateArchiveResult{
 			TargetBookID:           bookID,
 			OriginBookURL:          bookShort.OriginURL,
-			EntryPercentage:        entities.EntryPercentageForPages(archiveHashes, pages, nil), // FIXME: а стоит ли игнорировать мертвые хеши?
-			ReverseEntryPercentage: entities.EntryPercentageForPages(pages, archiveHashes, nil), // FIXME: а стоит ли игнорировать мертвые хеши?
+			EntryPercentage:        core.EntryPercentageForPages(archiveHashes, pages, nil), // FIXME: а стоит ли игнорировать мертвые хеши?
+			ReverseEntryPercentage: core.EntryPercentageForPages(pages, archiveHashes, nil), // FIXME: а стоит ли игнорировать мертвые хеши?
 		})
 	}
 
-	slices.SortFunc(result, func(a, b entities.DeduplicateArchiveResult) int {
+	slices.SortFunc(result, func(a, b core.DeduplicateArchiveResult) int {
 		if a.EntryPercentage > b.EntryPercentage {
 			return -1
 		}

@@ -7,12 +7,12 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/internal/worker"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type taskerDataProvider interface {
-	GetTask() []entities.RunnableTask
-	SaveTaskResult(result *entities.TaskResult)
+	GetTask() []core.RunnableTask
+	SaveTaskResult(result *core.TaskResult)
 }
 
 func NewTasker(
@@ -21,21 +21,21 @@ func NewTasker(
 	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
-) *worker.Worker[entities.RunnableTask] {
-	return worker.New[entities.RunnableTask](
+) *worker.Worker[core.RunnableTask] {
+	return worker.New[core.RunnableTask](
 		"task",
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, task entities.RunnableTask) error {
-			tr := new(entities.TaskResult)
+		func(ctx context.Context, task core.RunnableTask) error {
+			tr := new(core.TaskResult)
 			useCases.SaveTaskResult(tr)
 
 			task.Run(ctx, tr)
 
 			return nil
 		},
-		func(ctx context.Context) ([]entities.RunnableTask, error) {
+		func(ctx context.Context) ([]core.RunnableTask, error) {
 			return useCases.GetTask(), nil
 		},
 		cfg.GetCount(),

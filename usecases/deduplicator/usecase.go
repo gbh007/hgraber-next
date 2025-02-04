@@ -7,40 +7,40 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type storage interface {
-	DuplicatedFiles(ctx context.Context) ([]entities.File, error)
+	DuplicatedFiles(ctx context.Context) ([]core.File, error)
 	ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UUID) error
 
-	GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book, error)
+	GetBook(ctx context.Context, bookID uuid.UUID) (core.Book, error)
 	BookIDsByMD5(ctx context.Context, md5sums []string) ([]uuid.UUID, error)
 
-	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (entities.Page, error)
+	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (core.Page, error)
 	BookPagesCount(ctx context.Context, bookID uuid.UUID) (int, error)
-	BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageNumber int) (entities.PageWithHash, error)
-	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]entities.PageWithHash, error)
-	BookPagesWithHashByHash(ctx context.Context, hash entities.FileHash) ([]entities.PageWithHash, error)
-	BookPagesCountByHash(ctx context.Context, hash entities.FileHash) (int64, error)
-	BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.PageWithHash, error)
+	BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageNumber int) (core.PageWithHash, error)
+	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]core.PageWithHash, error)
+	BookPagesWithHashByHash(ctx context.Context, hash core.FileHash) ([]core.PageWithHash, error)
+	BookPagesCountByHash(ctx context.Context, hash core.FileHash) (int64, error)
+	BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []string) ([]core.PageWithHash, error)
 
-	DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.DeadHash, error)
-	SetDeadHash(ctx context.Context, hash entities.DeadHash) error
-	SetDeadHashes(ctx context.Context, hashes []entities.DeadHash) error
-	DeleteDeadHash(ctx context.Context, hash entities.DeadHash) error
-	DeleteDeadHashes(ctx context.Context, hashes []entities.DeadHash) error
+	DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]core.DeadHash, error)
+	SetDeadHash(ctx context.Context, hash core.DeadHash) error
+	SetDeadHashes(ctx context.Context, hashes []core.DeadHash) error
+	DeleteDeadHash(ctx context.Context, hash core.DeadHash) error
+	DeleteDeadHashes(ctx context.Context, hashes []core.DeadHash) error
 
-	DeletedPagesHashes(ctx context.Context) ([]entities.FileHash, error)
+	DeletedPagesHashes(ctx context.Context) ([]core.FileHash, error)
 	MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, pageNumber int) error
 	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
-	RemoveDeletedPagesByHashes(ctx context.Context, hashes []entities.FileHash) error
+	RemoveDeletedPagesByHashes(ctx context.Context, hashes []core.FileHash) error
 
 	BookAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
 	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
-	Attributes(ctx context.Context) ([]entities.Attribute, error)
+	Attributes(ctx context.Context) ([]core.Attribute, error)
 
-	FileStorages(ctx context.Context) ([]entities.FileStorageSystem, error)
+	FileStorages(ctx context.Context) ([]core.FileStorageSystem, error)
 }
 
 type UseCase struct {

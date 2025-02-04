@@ -11,20 +11,21 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (entities.FirstHandleMultipleResult, error) {
-	agents, err := uc.storage.Agents(ctx, entities.AgentFilter{
+func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (core.FirstHandleMultipleResult, error) {
+	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParse: true,
 	})
 	if err != nil {
-		return entities.FirstHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
+		return core.FirstHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
 	}
 
-	result := entities.FirstHandleMultipleResult{
-		Details: make([]entities.BookHandleResult, 0, len(urls)),
+	result := core.FirstHandleMultipleResult{
+		Details: make([]core.BookHandleResult, 0, len(urls)),
 	}
 
 	urlSet := pkg.SliceToSet(urls)
@@ -36,12 +37,12 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 	for _, u := range urls {
 		// Ссылки не могут содержать пробелы
 		if u.String() != strings.TrimSpace(u.String()) {
-			return entities.FirstHandleMultipleResult{}, fmt.Errorf("url (%s) have space", u.String())
+			return core.FirstHandleMultipleResult{}, fmt.Errorf("url (%s) have space", u.String())
 		}
 
 		ids, err := uc.storage.GetBookIDsByURL(ctx, u)
 		if err != nil {
-			return entities.FirstHandleMultipleResult{}, fmt.Errorf("url exists in storage check (%s): %w", u.String(), err)
+			return core.FirstHandleMultipleResult{}, fmt.Errorf("url exists in storage check (%s): %w", u.String(), err)
 		}
 
 		if len(ids) == 0 {
@@ -59,7 +60,7 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 
 		booksInfo, err := uc.agentSystem.BooksCheck(ctx, agent.ID, pkg.SetToSlice(urlSet))
 
-		if errors.Is(err, entities.AgentAPIOffline) {
+		if errors.Is(err, agentmodel.AgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),
@@ -93,7 +94,7 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 				if len(info.PossibleDuplicates) > 0 {
 					exists, err := uc.existsInStorage(ctx, info.PossibleDuplicates)
 					if err != nil {
-						return entities.FirstHandleMultipleResult{}, fmt.Errorf(
+						return core.FirstHandleMultipleResult{}, fmt.Errorf(
 							"agent (%s) check duplicates (%s): %w", agent.ID.String(), u.String(), err,
 						)
 					}
@@ -115,7 +116,7 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 					continue
 				}
 
-				book := entities.Book{
+				book := core.Book{
 					ID:        id,
 					OriginURL: &u,
 					CreateAt:  time.Now().UTC(),
@@ -128,7 +129,7 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 
 				err = uc.storage.NewBook(ctx, book)
 				if err != nil {
-					return entities.FirstHandleMultipleResult{}, fmt.Errorf(
+					return core.FirstHandleMultipleResult{}, fmt.Errorf(
 						"agent (%s) create (%s): %w", agent.ID.String(), u.String(), err,
 					)
 				}

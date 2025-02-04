@@ -7,10 +7,10 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) NewAgent(ctx context.Context, agent entities.Agent) error {
+func (uc *UseCase) NewAgent(ctx context.Context, agent core.Agent) error {
 	agent.ID = uuid.Must(uuid.NewV7())
 	agent.CreateAt = time.Now()
 

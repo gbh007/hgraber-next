@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) UpdateBook(ctx context.Context, book entities.BookContainer) error {
+func (uc *UseCase) UpdateBook(ctx context.Context, book core.BookContainer) error {
 	originBook, err := uc.storage.GetBook(ctx, book.Book.ID)
 	if err != nil {
 		return fmt.Errorf("storage: get book: %w", err)

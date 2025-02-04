@@ -7,28 +7,29 @@ import (
 	"log/slog"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) BooksToParse(ctx context.Context) ([]entities.BookWithAgent, error) {
+func (uc *UseCase) BooksToParse(ctx context.Context) ([]core.BookWithAgent, error) {
 	books, err := uc.storage.UnprocessedBooks(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("books from storage: %w", err)
 	}
 
 	if len(books) == 0 {
-		return []entities.BookWithAgent{}, nil
+		return []core.BookWithAgent{}, nil
 	}
 
-	agents, err := uc.storage.Agents(ctx, entities.AgentFilter{
+	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParse: true,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("get agents: %w", err)
 	}
 
-	books = pkg.SliceFilter(books, func(b entities.Book) bool {
+	books = pkg.SliceFilter(books, func(b core.Book) bool {
 		hasUrl := b.OriginURL != nil
 		if !hasUrl {
 			uc.logger.WarnContext(
@@ -40,9 +41,9 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]entities.BookWithAgent, 
 		return hasUrl
 	})
 
-	toParse := make([]entities.BookWithAgent, 0, len(books))
+	toParse := make([]core.BookWithAgent, 0, len(books))
 
-	urlMap := pkg.SliceToMap(books, func(b entities.Book) (url.URL, entities.Book) {
+	urlMap := pkg.SliceToMap(books, func(b core.Book) (url.URL, core.Book) {
 		return *b.OriginURL, b
 	})
 
@@ -51,11 +52,11 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]entities.BookWithAgent, 
 			break
 		}
 
-		booksInfo, err := uc.agentSystem.BooksCheck(ctx, agent.ID, pkg.MapToSlice(urlMap, func(_ url.URL, b entities.Book) url.URL {
+		booksInfo, err := uc.agentSystem.BooksCheck(ctx, agent.ID, pkg.MapToSlice(urlMap, func(_ url.URL, b core.Book) url.URL {
 			return *b.OriginURL
 		}))
 
-		if errors.Is(err, entities.AgentAPIOffline) {
+		if errors.Is(err, agentmodel.AgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),
@@ -85,7 +86,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]entities.BookWithAgent, 
 				continue
 			}
 
-			toParse = append(toParse, entities.BookWithAgent{
+			toParse = append(toParse, core.BookWithAgent{
 				Book:    book,
 				AgentID: agent.ID,
 			})

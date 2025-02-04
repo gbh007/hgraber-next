@@ -8,11 +8,11 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (d *Database) Agents(ctx context.Context, filter entities.AgentFilter) ([]entities.Agent, error) {
+func (d *Database) Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error) {
 	raw := make([]model.Agent, 0)
 
 	builder := squirrel.Select("*").
@@ -55,7 +55,7 @@ func (d *Database) Agents(ctx context.Context, filter entities.AgentFilter) ([]e
 		return nil, fmt.Errorf("storage: exec query: %w", err)
 	}
 
-	result, err := pkg.MapWithError(raw, func(a model.Agent) (entities.Agent, error) {
+	result, err := pkg.MapWithError(raw, func(a model.Agent) (core.Agent, error) {
 		return a.ToEntity()
 	})
 	if err != nil {
@@ -65,7 +65,7 @@ func (d *Database) Agents(ctx context.Context, filter entities.AgentFilter) ([]e
 	return result, nil
 }
 
-func (d *Database) Agent(ctx context.Context, id uuid.UUID) (entities.Agent, error) {
+func (d *Database) Agent(ctx context.Context, id uuid.UUID) (core.Agent, error) {
 	raw := model.Agent{}
 
 	builder := squirrel.Select("*").
@@ -78,25 +78,25 @@ func (d *Database) Agent(ctx context.Context, id uuid.UUID) (entities.Agent, err
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return entities.Agent{}, fmt.Errorf("storage: build query: %w", err)
+		return core.Agent{}, fmt.Errorf("storage: build query: %w", err)
 	}
 
 	d.squirrelDebugLog(ctx, query, args)
 
 	err = d.db.GetContext(ctx, &raw, query, args...)
 	if err != nil {
-		return entities.Agent{}, fmt.Errorf("storage: exec query: %w", err)
+		return core.Agent{}, fmt.Errorf("storage: exec query: %w", err)
 	}
 
 	result, err := raw.ToEntity()
 	if err != nil {
-		return entities.Agent{}, fmt.Errorf("storage: convert: %w", err)
+		return core.Agent{}, fmt.Errorf("storage: convert: %w", err)
 	}
 
 	return result, nil
 }
 
-func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
+func (d *Database) NewAgent(ctx context.Context, agent core.Agent) error {
 	builder := squirrel.Insert("agents").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -127,7 +127,7 @@ func (d *Database) NewAgent(ctx context.Context, agent entities.Agent) error {
 	return nil
 }
 
-func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error {
+func (d *Database) UpdateAgent(ctx context.Context, agent core.Agent) error {
 	builder := squirrel.Update("agents").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -157,7 +157,7 @@ func (d *Database) UpdateAgent(ctx context.Context, agent entities.Agent) error 
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.AgentNotFoundError
+		return core.AgentNotFoundError
 	}
 
 	return nil
@@ -183,7 +183,7 @@ func (d *Database) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.AgentNotFoundError
+		return core.AgentNotFoundError
 	}
 
 	return nil

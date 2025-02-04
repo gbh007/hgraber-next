@@ -6,10 +6,10 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (d *Database) InsertAttributeColor(ctx context.Context, color entities.AttributeColor) error {
+func (d *Database) InsertAttributeColor(ctx context.Context, color core.AttributeColor) error {
 	builder := squirrel.Insert("attribute_colors").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -35,7 +35,7 @@ func (d *Database) InsertAttributeColor(ctx context.Context, color entities.Attr
 	return nil
 }
 
-func (d *Database) UpdateAttributeColor(ctx context.Context, color entities.AttributeColor) error {
+func (d *Database) UpdateAttributeColor(ctx context.Context, color core.AttributeColor) error {
 	builder := squirrel.Update("attribute_colors").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -85,7 +85,7 @@ func (d *Database) DeleteAttributeColor(ctx context.Context, code, value string)
 	return nil
 }
 
-func (d *Database) AttributeColors(ctx context.Context) ([]entities.AttributeColor, error) {
+func (d *Database) AttributeColors(ctx context.Context) ([]core.AttributeColor, error) {
 	builder := squirrel.Select(
 		"attr",
 		"value",
@@ -110,10 +110,10 @@ func (d *Database) AttributeColors(ctx context.Context) ([]entities.AttributeCol
 
 	defer rows.Close()
 
-	result := make([]entities.AttributeColor, 0, 10)
+	result := make([]core.AttributeColor, 0, 10)
 
 	for rows.Next() {
-		color := entities.AttributeColor{}
+		color := core.AttributeColor{}
 
 		err = rows.Scan(
 			&color.Code,
@@ -132,7 +132,7 @@ func (d *Database) AttributeColors(ctx context.Context) ([]entities.AttributeCol
 	return result, nil
 }
 
-func (d *Database) AttributeColor(ctx context.Context, code, value string) (entities.AttributeColor, error) {
+func (d *Database) AttributeColor(ctx context.Context, code, value string) (core.AttributeColor, error) {
 	builder := squirrel.Select(
 		"attr",
 		"value",
@@ -150,14 +150,14 @@ func (d *Database) AttributeColor(ctx context.Context, code, value string) (enti
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return entities.AttributeColor{}, fmt.Errorf("build query: %w", err)
+		return core.AttributeColor{}, fmt.Errorf("build query: %w", err)
 	}
 
 	d.squirrelDebugLog(ctx, query, args)
 
 	row := d.pool.QueryRow(ctx, query, args...)
 
-	color := entities.AttributeColor{}
+	color := core.AttributeColor{}
 
 	err = row.Scan(
 		&color.Code,
@@ -167,7 +167,7 @@ func (d *Database) AttributeColor(ctx context.Context, code, value string) (enti
 		&color.CreatedAt,
 	)
 	if err != nil { // TODO: err no rows
-		return entities.AttributeColor{}, fmt.Errorf("scan row: %w", err)
+		return core.AttributeColor{}, fmt.Errorf("scan row: %w", err)
 	}
 
 	return color, nil

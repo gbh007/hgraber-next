@@ -3,7 +3,7 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -17,7 +17,7 @@ func (c *Controller) APISystemDeduplicateArchivePost(ctx context.Context, req se
 		}, nil
 	}
 
-	result := serverAPI.APISystemDeduplicateArchivePostOKApplicationJSON(pkg.Map(data, func(raw entities.DeduplicateArchiveResult) serverAPI.APISystemDeduplicateArchivePostOKItem {
+	result := serverAPI.APISystemDeduplicateArchivePostOKApplicationJSON(pkg.Map(data, func(raw core.DeduplicateArchiveResult) serverAPI.APISystemDeduplicateArchivePostOKItem {
 		return serverAPI.APISystemDeduplicateArchivePostOKItem{
 			BookID:                 raw.TargetBookID,
 			BookOriginURL:          optURL(raw.OriginBookURL),

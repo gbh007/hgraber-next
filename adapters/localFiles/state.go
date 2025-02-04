@@ -9,16 +9,16 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (entities.FSState, error) {
-	var state entities.FSState
+func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (core.FSState, error) {
+	var state core.FSState
 
 	if includeFileIDs || includeFileSizes {
 		entries, err := os.ReadDir(s.fsPath)
 		if err != nil {
-			return entities.FSState{}, fmt.Errorf("local fs: scan dir: %w", err)
+			return core.FSState{}, fmt.Errorf("local fs: scan dir: %w", err)
 		}
 
 		if includeFileIDs {
@@ -26,7 +26,7 @@ func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bo
 		}
 
 		if includeFileSizes {
-			state.Files = make([]entities.FSStateFile, 0, len(entries))
+			state.Files = make([]core.FSStateFile, 0, len(entries))
 		}
 
 		for _, e := range entries {
@@ -49,10 +49,10 @@ func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bo
 			if includeFileSizes {
 				stat, err := os.Stat(path.Join(s.fsPath, e.Name()))
 				if err != nil {
-					return entities.FSState{}, fmt.Errorf("get file (%s) stat: %w", e.Name(), err)
+					return core.FSState{}, fmt.Errorf("get file (%s) stat: %w", e.Name(), err)
 				}
 
-				state.Files = append(state.Files, entities.FSStateFile{
+				state.Files = append(state.Files, core.FSStateFile{
 					ID:        id,
 					Size:      stat.Size(),
 					CreatedAt: stat.ModTime(),

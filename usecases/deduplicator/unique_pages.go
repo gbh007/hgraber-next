@@ -7,16 +7,17 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.BFFPreviewPage, error) {
+func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]bff.PreviewPage, error) {
 	originBookPages, err := uc.storage.BookPagesWithHash(ctx, originBookID)
 	if err != nil {
 		return nil, fmt.Errorf("get book hashes storage: %w", err)
 	}
 
-	hashes := make(map[entities.FileHash]struct{}, len(originBookPages))
+	hashes := make(map[core.FileHash]struct{}, len(originBookPages))
 	md5Sums := make([]string, len(originBookPages))
 
 	for i, page := range originBookPages {
@@ -29,7 +30,7 @@ func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]e
 		return nil, fmt.Errorf("storage: get dead hashes: %w", err)
 	}
 
-	existsDeadHashes := make(map[entities.FileHash]struct{}, len(deadHashes))
+	existsDeadHashes := make(map[core.FileHash]struct{}, len(deadHashes))
 
 	for _, hash := range deadHashes {
 		existsDeadHashes[hash.FileHash] = struct{}{}
@@ -48,14 +49,14 @@ func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]e
 		delete(hashes, page.FileHash)
 	}
 
-	result := make([]entities.BFFPreviewPage, 0, len(hashes))
+	result := make([]bff.PreviewPage, 0, len(hashes))
 
 	for _, page := range originBookPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
 		if _, ok := hashes[page.FileHash]; ok {
-			preview := page.ToPreview()
-			preview.HasDeadHash = entities.NewStatusFlag(hasDeadHash)
+			preview := bff.PageWithHashToPreview(page)
+			preview.HasDeadHash = bff.NewStatusFlag(hasDeadHash)
 
 			result = append(result, preview)
 
@@ -63,7 +64,7 @@ func (uc *UseCase) UniquePages(ctx context.Context, originBookID uuid.UUID) ([]e
 		}
 	}
 
-	slices.SortFunc(result, func(a, b entities.BFFPreviewPage) int {
+	slices.SortFunc(result, func(a, b bff.PreviewPage) int {
 		return a.PageNumber - b.PageNumber
 	})
 

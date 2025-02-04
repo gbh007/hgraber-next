@@ -4,13 +4,13 @@ import (
 	"context"
 	"errors"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APIBookRawPost(ctx context.Context, req *serverAPI.APIBookRawPostReq) (serverAPI.APIBookRawPostRes, error) {
 	var (
-		book      entities.BookContainer
+		book      core.BookContainer
 		err       error
 		innerCode string
 	)
@@ -31,7 +31,7 @@ func (c *Controller) APIBookRawPost(ctx context.Context, req *serverAPI.APIBookR
 		}, nil
 	}
 
-	if errors.Is(err, entities.BookNotFoundError) {
+	if errors.Is(err, core.BookNotFoundError) {
 		return &serverAPI.APIBookRawPostNotFound{
 			InnerCode: innerCode,
 			Details:   serverAPI.NewOptString(err.Error()),

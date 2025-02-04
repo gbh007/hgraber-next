@@ -7,10 +7,11 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) DownloadPage(ctx context.Context, agentID uuid.UUID, page entities.PageForDownload) error {
+func (uc *UseCase) DownloadPage(ctx context.Context, agentID uuid.UUID, page core.PageForDownload) error {
 	if page.BookURL == nil || page.ImageURL == nil {
 		return fmt.Errorf("invalid page")
 	}
@@ -20,7 +21,7 @@ func (uc *UseCase) DownloadPage(ctx context.Context, agentID uuid.UUID, page ent
 		return fmt.Errorf("get fs id for download: %w", err)
 	}
 
-	body, err := uc.agentSystem.PageLoad(ctx, agentID, entities.AgentPageURL{
+	body, err := uc.agentSystem.PageLoad(ctx, agentID, agentmodel.AgentPageURL{
 		BookURL:  *page.BookURL,
 		ImageURL: *page.ImageURL,
 	})
@@ -35,7 +36,7 @@ func (uc *UseCase) DownloadPage(ctx context.Context, agentID uuid.UUID, page ent
 		return fmt.Errorf("store file (%s): %w", fileID.String(), err)
 	}
 
-	err = uc.storage.NewFile(ctx, entities.File{
+	err = uc.storage.NewFile(ctx, core.File{
 		ID:       fileID,
 		Filename: fmt.Sprintf("%d%s", page.PageNumber, page.Ext),
 		Ext:      page.Ext,

@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type BookLabel struct {
@@ -16,13 +16,13 @@ type BookLabel struct {
 	CreateAt   time.Time `db:"create_at"`
 }
 
-func (bl BookLabel) ToEntity() (entities.BookLabel, error) {
+func (bl BookLabel) ToEntity() (core.BookLabel, error) {
 	id, err := uuid.Parse(bl.BookID)
 	if err != nil {
-		return entities.BookLabel{}, err
+		return core.BookLabel{}, err
 	}
 
-	return entities.BookLabel{
+	return core.BookLabel{
 		BookID:     id,
 		PageNumber: bl.PageNumber,
 		Name:       bl.Name,

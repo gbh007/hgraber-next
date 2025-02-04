@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (s *Storage) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error) {
@@ -18,7 +18,7 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error) 
 	f, err := os.Open(filepath)
 
 	if os.IsNotExist(err) {
-		return nil, entities.FileNotFoundError
+		return nil, core.FileNotFoundError
 	}
 
 	if err != nil {

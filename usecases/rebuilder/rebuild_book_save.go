@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) rebuildBookSave(
 	ctx context.Context,
 	isNewBook bool,
-	bookToMerge entities.Book,
+	bookToMerge core.Book,
 	newAttributes map[string][]string,
-	newPages []entities.Page,
-	newLabels []entities.BookLabel,
+	newPages []core.Page,
+	newLabels []core.BookLabel,
 ) (returnErr error) {
 	var err error
 

@@ -13,29 +13,29 @@ import (
 
 	"github.com/gbh007/hgraber-next/adapters/agentFS"
 	"github.com/gbh007/hgraber-next/adapters/localFiles"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type agentController interface {
 	FSCreate(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID, body io.Reader) error
 	FSDelete(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) error
 	FSGet(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) (io.Reader, error)
-	FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (entities.FSState, error)
+	FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (core.FSState, error)
 
 	CreateHighwayToken(ctx context.Context, agentID uuid.UUID) (string, time.Time, error)
 }
 
 type dataStorage interface {
-	File(ctx context.Context, id uuid.UUID) (entities.File, error)
-	FileStorages(ctx context.Context) ([]entities.FileStorageSystem, error)
-	FileStorage(ctx context.Context, id uuid.UUID) (entities.FileStorageSystem, error)
+	File(ctx context.Context, id uuid.UUID) (core.File, error)
+	FileStorages(ctx context.Context) ([]core.FileStorageSystem, error)
+	FileStorage(ctx context.Context, id uuid.UUID) (core.FileStorageSystem, error)
 }
 
 type rawFileStorage interface {
 	Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
 	Delete(ctx context.Context, fileID uuid.UUID) error
 	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
-	State(ctx context.Context, includeFileIDs, includeFileSizes bool) (entities.FSState, error)
+	State(ctx context.Context, includeFileIDs, includeFileSizes bool) (core.FSState, error)
 }
 
 type rawFileStorageData struct {
@@ -152,16 +152,16 @@ func (s *Storage) FSIDForDownload(ctx context.Context) (uuid.UUID, error) {
 	}
 
 	if s.legacyFileStorage != nil {
-		storages = append(storages, entities.FileStorageSystem{
+		storages = append(storages, core.FileStorageSystem{
 			ID: uuid.Nil,
 		})
 	}
 
 	if len(storages) == 0 {
-		return uuid.Nil, entities.MissingFSError
+		return uuid.Nil, core.MissingFSError
 	}
 
-	slices.SortFunc(storages, func(a, b entities.FileStorageSystem) int {
+	slices.SortFunc(storages, func(a, b core.FileStorageSystem) int {
 		return b.DownloadPriority - a.DownloadPriority
 	})
 

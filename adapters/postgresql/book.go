@@ -11,10 +11,10 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (d *Database) NewBook(ctx context.Context, book entities.Book) error {
+func (d *Database) NewBook(ctx context.Context, book core.Book) error {
 	builder := squirrel.Insert("books").
 		PlaceholderFormat(squirrel.Dollar).SetMap(
 		map[string]interface{}{
@@ -45,7 +45,7 @@ func (d *Database) NewBook(ctx context.Context, book entities.Book) error {
 	return nil
 }
 
-func (d *Database) UpdateBook(ctx context.Context, book entities.Book) error {
+func (d *Database) UpdateBook(ctx context.Context, book core.Book) error {
 	builder := squirrel.Update("books").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(
@@ -76,7 +76,7 @@ func (d *Database) UpdateBook(ctx context.Context, book entities.Book) error {
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.BookNotFoundError
+		return core.BookNotFoundError
 	}
 
 	return nil
@@ -102,21 +102,21 @@ func (d *Database) GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUI
 	return ids, nil
 }
 
-func (d *Database) GetBook(ctx context.Context, bookID uuid.UUID) (entities.Book, error) {
+func (d *Database) GetBook(ctx context.Context, bookID uuid.UUID) (core.Book, error) {
 	raw := new(model.Book)
 
 	err := d.db.GetContext(ctx, raw, `SELECT * FROM books WHERE id = $1 LIMIT 1;`, bookID)
 	if errors.Is(err, sql.ErrNoRows) {
-		return entities.Book{}, fmt.Errorf("%w - %d", entities.BookNotFoundError, bookID)
+		return core.Book{}, fmt.Errorf("%w - %d", core.BookNotFoundError, bookID)
 	}
 
 	if err != nil {
-		return entities.Book{}, err
+		return core.Book{}, err
 	}
 
 	b, err := raw.ToEntity()
 	if err != nil {
-		return entities.Book{}, err
+		return core.Book{}, err
 	}
 
 	return b, nil
@@ -142,7 +142,7 @@ func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.BookNotFoundError
+		return core.BookNotFoundError
 	}
 
 	return nil
@@ -168,7 +168,7 @@ func (d *Database) DeleteBooks(ctx context.Context, ids []uuid.UUID) error {
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.BookNotFoundError
+		return core.BookNotFoundError
 	}
 
 	return nil

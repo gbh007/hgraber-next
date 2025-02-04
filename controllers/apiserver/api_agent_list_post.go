@@ -3,13 +3,13 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAgentListPostReq) (serverAPI.APIAgentListPostRes, error) {
-	agents, err := c.agentUseCases.Agents(ctx, entities.AgentFilter{
+	agents, err := c.agentUseCases.Agents(ctx, core.AgentFilter{
 		CanParse:      req.CanParse.Value,
 		CanExport:     req.CanExport.Value,
 		CanParseMulti: req.CanParseMulti.Value,
@@ -22,7 +22,7 @@ func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAge
 		}, nil
 	}
 
-	responseAgents := pkg.Map(agents, func(aws entities.AgentWithStatus) serverAPI.APIAgentListPostOKItem {
+	responseAgents := pkg.Map(agents, func(aws core.AgentWithStatus) serverAPI.APIAgentListPostOKItem {
 		status := serverAPI.OptAPIAgentListPostOKItemStatus{}
 
 		switch {
@@ -51,7 +51,7 @@ func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAge
 
 			status = serverAPI.NewOptAPIAgentListPostOKItemStatus(serverAPI.APIAgentListPostOKItemStatus{
 				StartAt: serverAPI.NewOptDateTime(aws.Status.StartAt),
-				Problems: pkg.Map(aws.Status.Problems, func(p entities.AgentStatusProblem) serverAPI.APIAgentListPostOKItemStatusProblemsItem {
+				Problems: pkg.Map(aws.Status.Problems, func(p core.AgentStatusProblem) serverAPI.APIAgentListPostOKItemStatusProblemsItem {
 					t := serverAPI.APIAgentListPostOKItemStatusProblemsItemTypeError
 
 					switch {

@@ -7,14 +7,14 @@ import (
 	"slices"
 	"time"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) rebuildBookPages(
 	_ context.Context,
-	flags entities.RebuildBookRequestFlags,
+	flags core.RebuildBookRequestFlags,
 	selectedPages []int,
-	bookToMerge *entities.Book,
+	bookToMerge *core.Book,
 	resources rebuildPageResources,
 	newPageOrder map[int]int,
 ) (rebuildedPagesInfo, error) {
@@ -28,15 +28,15 @@ func (uc *UseCase) rebuildBookPages(
 		slices.Sort(selectedPages)
 	}
 
-	existsPageHashes := make(map[entities.FileHash]struct{}, len(selectedPages))
+	existsPageHashes := make(map[core.FileHash]struct{}, len(selectedPages))
 
 	pagesRemap := make(map[int]int, len(selectedPages))
-	newPages := make([]entities.Page, 0, len(selectedPages))
+	newPages := make([]core.Page, 0, len(selectedPages))
 	sourcePageNumbers := make([]int, 0, len(selectedPages))
 
 	unusedSourceHashes := maps.Clone(resources.UnusedSourceHashes)
 	if unusedSourceHashes == nil {
-		unusedSourceHashes = make(map[entities.FileHash]struct{})
+		unusedSourceHashes = make(map[core.FileHash]struct{})
 	}
 
 	newPageNumberCounter := 0
@@ -44,7 +44,7 @@ func (uc *UseCase) rebuildBookPages(
 	for _, oldPageNumber := range selectedPages {
 		sourcePage, ok := resources.SourcePagesMap[oldPageNumber]
 		if !ok {
-			return rebuildedPagesInfo{}, fmt.Errorf("%w (%d)", entities.ErrRebuildBookMissingSourcePage, oldPageNumber)
+			return rebuildedPagesInfo{}, fmt.Errorf("%w (%d)", core.ErrRebuildBookMissingSourcePage, oldPageNumber)
 		}
 
 		if _, ok := resources.ForbiddenHashes[sourcePage.FileHash]; ok {

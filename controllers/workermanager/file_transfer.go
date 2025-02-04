@@ -7,13 +7,13 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/internal/worker"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 type fileTransferUnitUseCases interface {
-	TransferFile(ctx context.Context, transfer entities.FileTransfer) error
-	FileTransferList() []entities.FileTransfer
+	TransferFile(ctx context.Context, transfer core.FileTransfer) error
+	FileTransferList() []core.FileTransfer
 }
 
 func NewFileTransfer(
@@ -22,13 +22,13 @@ func NewFileTransfer(
 	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
-) *worker.Worker[entities.FileTransfer] {
-	return worker.New[entities.FileTransfer](
+) *worker.Worker[core.FileTransfer] {
+	return worker.New[core.FileTransfer](
 		"transfer_file",
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, transfer entities.FileTransfer) error {
+		func(ctx context.Context, transfer core.FileTransfer) error {
 			err := useCases.TransferFile(ctx, transfer)
 			if err != nil {
 				return pkg.WrapError(
@@ -40,7 +40,7 @@ func NewFileTransfer(
 
 			return nil
 		},
-		func(_ context.Context) ([]entities.FileTransfer, error) {
+		func(_ context.Context) ([]core.FileTransfer, error) {
 			return useCases.FileTransferList(), nil
 		},
 		cfg.GetCount(),

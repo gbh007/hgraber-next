@@ -5,7 +5,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
@@ -32,7 +32,7 @@ func (c *Controller) APIPageBodyPost(ctx context.Context, req *serverAPI.APIPage
 		}, nil
 	}
 
-	if errors.Is(err, entities.PageNotFoundError) || errors.Is(err, entities.FileNotFoundError) {
+	if errors.Is(err, core.PageNotFoundError) || errors.Is(err, core.FileNotFoundError) {
 		return &serverAPI.APIPageBodyPostNotFound{
 			InnerCode: innerCode,
 			Details:   serverAPI.NewOptString(err.Error()),

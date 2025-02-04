@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) DeleteBookDeadHashedPages(ctx context.Context, bookID uuid.UUID) error {
@@ -25,7 +25,7 @@ func (uc *UseCase) DeleteBookDeadHashedPages(ctx context.Context, bookID uuid.UU
 		return fmt.Errorf("storage: get dead hashes: %w", err)
 	}
 
-	existsDeadHashes := make(map[entities.FileHash]struct{}, len(deadHashes))
+	existsDeadHashes := make(map[core.FileHash]struct{}, len(deadHashes))
 
 	for _, hash := range deadHashes {
 		existsDeadHashes[hash.FileHash] = struct{}{}

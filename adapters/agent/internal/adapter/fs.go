@@ -8,7 +8,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -28,22 +29,22 @@ func (a *FSAdapter) Create(ctx context.Context, fileID uuid.UUID, body io.Reader
 		return nil
 
 	case *agentAPI.APIFsCreatePostConflict:
-		return fmt.Errorf("%w: %s", entities.AgentAPIConflict, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIConflict, typedRes.Details.Value)
 
 	case *agentAPI.APIFsCreatePostBadRequest:
-		return fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentAPI.APIFsCreatePostUnauthorized:
-		return fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentAPI.APIFsCreatePostForbidden:
-		return fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentAPI.APIFsCreatePostInternalServerError:
-		return fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return entities.AgentAPIUnknownResponse
+		return agentmodel.AgentAPIUnknownResponse
 	}
 }
 
@@ -58,22 +59,22 @@ func (a *FSAdapter) Delete(ctx context.Context, fileID uuid.UUID) error {
 		return nil
 
 	case *agentAPI.APIFsDeletePostNotFound:
-		return fmt.Errorf("%w: %s", entities.FileNotFoundError, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", core.FileNotFoundError, typedRes.Details.Value)
 
 	case *agentAPI.APIFsDeletePostBadRequest:
-		return fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentAPI.APIFsDeletePostUnauthorized:
-		return fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentAPI.APIFsDeletePostForbidden:
-		return fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentAPI.APIFsDeletePostInternalServerError:
-		return fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return entities.AgentAPIUnknownResponse
+		return agentmodel.AgentAPIUnknownResponse
 	}
 }
 
@@ -88,40 +89,40 @@ func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error
 		return typedRes.Data, nil
 
 	case *agentAPI.APIFsGetGetNotFound:
-		return nil, fmt.Errorf("%w: %s", entities.FileNotFoundError, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", core.FileNotFoundError, typedRes.Details.Value)
 
 	case *agentAPI.APIFsGetGetBadRequest:
-		return nil, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentAPI.APIFsGetGetUnauthorized:
-		return nil, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentAPI.APIFsGetGetForbidden:
-		return nil, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentAPI.APIFsGetGetInternalServerError:
-		return nil, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return nil, entities.AgentAPIUnknownResponse
+		return nil, agentmodel.AgentAPIUnknownResponse
 	}
 }
 
-func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (entities.FSState, error) {
+func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (core.FSState, error) {
 	res, err := a.rawClient.APIFsInfoPost(ctx, &agentAPI.APIFsInfoPostReq{
 		IncludeFileIds:   agentAPI.NewOptBool(includeFileIDs),
 		IncludeFileSizes: agentAPI.NewOptBool(includeFileSizes),
 	})
 	if err != nil {
-		return entities.FSState{}, err
+		return core.FSState{}, err
 	}
 
 	switch typedRes := res.(type) {
 	case *agentAPI.APIFsInfoPostOK:
-		return entities.FSState{
+		return core.FSState{
 			FileIDs: typedRes.FileIds,
-			Files: pkg.Map(typedRes.Files, func(raw agentAPI.APIFsInfoPostOKFilesItem) entities.FSStateFile {
-				return entities.FSStateFile{
+			Files: pkg.Map(typedRes.Files, func(raw agentAPI.APIFsInfoPostOKFilesItem) core.FSStateFile {
+				return core.FSStateFile{
 					ID:        raw.ID,
 					Size:      raw.Size,
 					CreatedAt: raw.CreatedAt,
@@ -133,19 +134,19 @@ func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes 
 		}, nil
 
 	case *agentAPI.APIFsInfoPostBadRequest:
-		return entities.FSState{}, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
+		return core.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentAPI.APIFsInfoPostUnauthorized:
-		return entities.FSState{}, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
+		return core.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentAPI.APIFsInfoPostForbidden:
-		return entities.FSState{}, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
+		return core.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentAPI.APIFsInfoPostInternalServerError:
-		return entities.FSState{}, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
+		return core.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return entities.FSState{}, entities.AgentAPIUnknownResponse
+		return core.FSState{}, agentmodel.AgentAPIUnknownResponse
 	}
 }
 
@@ -160,18 +161,18 @@ func (a *FSAdapter) CreateHighwayToken(ctx context.Context) (string, time.Time, 
 		return typedRes.Token, typedRes.ValidUntil, nil
 
 	case *agentAPI.APIHighwayTokenCreatePostBadRequest:
-		return "", time.Time{}, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
+		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentAPI.APIHighwayTokenCreatePostUnauthorized:
-		return "", time.Time{}, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
+		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentAPI.APIHighwayTokenCreatePostForbidden:
-		return "", time.Time{}, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
+		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentAPI.APIHighwayTokenCreatePostInternalServerError:
-		return "", time.Time{}, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
+		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return "", time.Time{}, entities.AgentAPIUnknownResponse
+		return "", time.Time{}, agentmodel.AgentAPIUnknownResponse
 	}
 }

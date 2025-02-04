@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (s *Storage) HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error) {
@@ -52,7 +52,7 @@ func (s *Storage) refreshHighwayToken(ctx context.Context, fsID uuid.UUID) (stri
 	s.storageMapMutex.RUnlock()
 
 	if !ok {
-		return "", entities.MissingFSError
+		return "", core.MissingFSError
 	}
 
 	if storage.AgentID == uuid.Nil {

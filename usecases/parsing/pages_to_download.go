@@ -6,28 +6,29 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownloadWithAgent, error) {
+func (uc *UseCase) PagesToDownload(ctx context.Context) ([]core.PageForDownloadWithAgent, error) {
 	pages, err := uc.storage.NotDownloadedPages(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("pages from storage: %w", err)
 	}
 
 	if len(pages) == 0 {
-		return []entities.PageForDownloadWithAgent{}, nil
+		return []core.PageForDownloadWithAgent{}, nil
 	}
 
-	agents, err := uc.storage.Agents(ctx, entities.AgentFilter{
+	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParse: true,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("get agents: %w", err)
 	}
 
-	pages = pkg.SliceFilter(pages, func(b entities.PageForDownload) bool {
+	pages = pkg.SliceFilter(pages, func(b core.PageForDownload) bool {
 		hasUrl := b.BookURL != nil && b.ImageURL != nil
 		if !hasUrl {
 			uc.logger.WarnContext(
@@ -40,10 +41,10 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownl
 		return hasUrl
 	})
 
-	toDownload := make([]entities.PageForDownloadWithAgent, 0, len(pages))
+	toDownload := make([]core.PageForDownloadWithAgent, 0, len(pages))
 
-	urlMap := pkg.SliceToMap(pages, func(p entities.PageForDownload) (entities.AgentPageURL, entities.PageForDownload) {
-		return entities.AgentPageURL{
+	urlMap := pkg.SliceToMap(pages, func(p core.PageForDownload) (agentmodel.AgentPageURL, core.PageForDownload) {
+		return agentmodel.AgentPageURL{
 			BookURL:  *p.BookURL,
 			ImageURL: *p.ImageURL,
 		}, p
@@ -56,12 +57,12 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownl
 
 		pagesInfo, err := uc.agentSystem.PagesCheck(
 			ctx, agent.ID,
-			pkg.MapToSlice(urlMap, func(u entities.AgentPageURL, _ entities.PageForDownload) entities.AgentPageURL {
+			pkg.MapToSlice(urlMap, func(u agentmodel.AgentPageURL, _ core.PageForDownload) agentmodel.AgentPageURL {
 				return u
 			}),
 		)
 
-		if errors.Is(err, entities.AgentAPIOffline) {
+		if errors.Is(err, agentmodel.AgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),
@@ -86,7 +87,7 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownl
 				continue
 			}
 
-			u := entities.AgentPageURL{
+			u := agentmodel.AgentPageURL{
 				BookURL:  info.BookURL,
 				ImageURL: info.ImageURL,
 			}
@@ -96,7 +97,7 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]entities.PageForDownl
 				continue
 			}
 
-			toDownload = append(toDownload, entities.PageForDownloadWithAgent{
+			toDownload = append(toDownload, core.PageForDownloadWithAgent{
 				PageForDownload: page,
 				AgentID:         agent.ID,
 			})

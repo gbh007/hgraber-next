@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 )
 
-func (uc *UseCase) BooksExists(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error) {
-	result := make([]entities.AgentBookCheckResult, 0, len(urls))
+func (uc *UseCase) BooksExists(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error) {
+	result := make([]agentmodel.AgentBookCheckResult, 0, len(urls))
 
 urlLoop:
 	for _, u := range urls {
@@ -26,7 +26,7 @@ urlLoop:
 
 			// Только загруженные книги считаем доступными.
 			if book.IsLoaded() {
-				result = append(result, entities.AgentBookCheckResult{
+				result = append(result, agentmodel.AgentBookCheckResult{
 					URL:        u,
 					IsPossible: true,
 				})
@@ -35,7 +35,7 @@ urlLoop:
 			}
 		}
 
-		result = append(result, entities.AgentBookCheckResult{
+		result = append(result, agentmodel.AgentBookCheckResult{
 			URL:           u,
 			IsUnsupported: true,
 		})

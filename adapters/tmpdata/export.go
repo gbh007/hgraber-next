@@ -1,13 +1,13 @@
 package tmpdata
 
 import (
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (s *Storage) AddToExport(books []entities.BookFullWithAgent) {
+func (s *Storage) AddToExport(books []core.BookFullWithAgent) {
 	s.toExport.Push(books)
 }
 
-func (s *Storage) ExportList() []entities.BookFullWithAgent {
+func (s *Storage) ExportList() []core.BookFullWithAgent {
 	return s.toExport.Pop()
 }

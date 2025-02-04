@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func WriteArchiveAdapter(
@@ -16,7 +16,7 @@ func WriteArchiveAdapter(
 	files interface {
 		Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 	},
-	book entities.BookContainer,
+	book core.BookContainer,
 ) error {
 	return WriteArchive(
 		ctx,

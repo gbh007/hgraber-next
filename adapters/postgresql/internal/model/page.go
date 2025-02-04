@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 // FIXME: проверить работу UUID
@@ -22,10 +22,10 @@ type Page struct {
 	FileID     sql.NullString `db:"file_id"`
 }
 
-func (p Page) ToEntity() (entities.Page, error) {
+func (p Page) ToEntity() (core.Page, error) {
 	bookID, err := uuid.Parse(p.BookID)
 	if err != nil {
-		return entities.Page{}, err
+		return core.Page{}, err
 	}
 
 	fileID := uuid.Nil
@@ -33,7 +33,7 @@ func (p Page) ToEntity() (entities.Page, error) {
 	if p.FileID.Valid {
 		fileID, err = uuid.Parse(p.FileID.String)
 		if err != nil {
-			return entities.Page{}, err
+			return core.Page{}, err
 		}
 	}
 
@@ -42,11 +42,11 @@ func (p Page) ToEntity() (entities.Page, error) {
 	if p.OriginURL.Valid {
 		originURL, err = url.Parse(p.OriginURL.String)
 		if err != nil {
-			return entities.Page{}, err
+			return core.Page{}, err
 		}
 	}
 
-	return entities.Page{
+	return core.Page{
 		BookID:     bookID,
 		PageNumber: p.PageNumber,
 		Ext:        p.Ext,
@@ -66,10 +66,10 @@ type PageForDownload struct {
 	ImageURL   sql.NullString `db:"image_url"`
 }
 
-func (p PageForDownload) ToEntity() (entities.PageForDownload, error) {
+func (p PageForDownload) ToEntity() (core.PageForDownload, error) {
 	bookID, err := uuid.Parse(p.BookID)
 	if err != nil {
-		return entities.PageForDownload{}, err
+		return core.PageForDownload{}, err
 	}
 
 	var bookURL *url.URL
@@ -77,7 +77,7 @@ func (p PageForDownload) ToEntity() (entities.PageForDownload, error) {
 	if p.BookURL.Valid {
 		bookURL, err = url.Parse(p.BookURL.String)
 		if err != nil {
-			return entities.PageForDownload{}, err
+			return core.PageForDownload{}, err
 		}
 	}
 
@@ -86,11 +86,11 @@ func (p PageForDownload) ToEntity() (entities.PageForDownload, error) {
 	if p.ImageURL.Valid {
 		imageURL, err = url.Parse(p.ImageURL.String)
 		if err != nil {
-			return entities.PageForDownload{}, err
+			return core.PageForDownload{}, err
 		}
 	}
 
-	return entities.PageForDownload{
+	return core.PageForDownload{
 		BookID:     bookID,
 		PageNumber: p.PageNumber,
 		Ext:        p.Ext,

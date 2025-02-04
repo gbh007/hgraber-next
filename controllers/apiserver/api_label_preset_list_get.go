@@ -3,7 +3,7 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -18,7 +18,7 @@ func (c *Controller) APILabelPresetListGet(ctx context.Context) (serverAPI.APILa
 	}
 
 	return &serverAPI.APILabelPresetListGetOK{
-		Presets: pkg.Map(presets, func(raw entities.BookLabelPreset) serverAPI.APILabelPresetListGetOKPresetsItem {
+		Presets: pkg.Map(presets, func(raw core.BookLabelPreset) serverAPI.APILabelPresetListGetOKPresetsItem {
 			return serverAPI.APILabelPresetListGetOKPresetsItem{
 				Name:        raw.Name,
 				Description: optString(raw.Description),

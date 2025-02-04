@@ -8,13 +8,13 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/internal/worker"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 type pageWorkerUnitUseCases interface {
-	DownloadPage(ctx context.Context, agentID uuid.UUID, page entities.PageForDownload) error
-	PagesToDownload(ctx context.Context) ([]entities.PageForDownloadWithAgent, error)
+	DownloadPage(ctx context.Context, agentID uuid.UUID, page core.PageForDownload) error
+	PagesToDownload(ctx context.Context) ([]core.PageForDownloadWithAgent, error)
 }
 
 func NewPageDownloader(
@@ -23,13 +23,13 @@ func NewPageDownloader(
 	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
-) *worker.Worker[entities.PageForDownloadWithAgent] {
-	return worker.New[entities.PageForDownloadWithAgent](
+) *worker.Worker[core.PageForDownloadWithAgent] {
+	return worker.New[core.PageForDownloadWithAgent](
 		"page",
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, page entities.PageForDownloadWithAgent) error {
+		func(ctx context.Context, page core.PageForDownloadWithAgent) error {
 			err := useCases.DownloadPage(ctx, page.AgentID, page.PageForDownload)
 			if err != nil {
 				return pkg.WrapError(

@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (s *Storage) Delete(ctx context.Context, fileID uuid.UUID) error {
@@ -16,7 +16,7 @@ func (s *Storage) Delete(ctx context.Context, fileID uuid.UUID) error {
 
 	err := os.Remove(filepath)
 	if errors.Is(err, os.ErrNotExist) {
-		return fmt.Errorf("local fs: %w", entities.FileNotFoundError)
+		return fmt.Errorf("local fs: %w", core.FileNotFoundError)
 	}
 
 	if err != nil {

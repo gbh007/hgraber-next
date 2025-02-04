@@ -5,25 +5,25 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) BookByURL(ctx context.Context, u url.URL) (entities.BookContainer, error) {
+func (uc *UseCase) BookByURL(ctx context.Context, u url.URL) (core.BookContainer, error) {
 	ids, err := uc.storage.GetBookIDsByURL(ctx, u)
 	if err != nil {
-		return entities.BookContainer{}, fmt.Errorf("get books by url: %w", err)
+		return core.BookContainer{}, fmt.Errorf("get books by url: %w", err)
 	}
 
 	if len(ids) == 0 {
-		return entities.BookContainer{}, entities.BookNotFoundError
+		return core.BookContainer{}, core.BookNotFoundError
 	}
 
-	firstBook := entities.BookContainer{}
+	firstBook := core.BookContainer{}
 
 	for i, id := range ids {
 		book, err := uc.bookRequester.BookOriginFull(ctx, id)
 		if err != nil {
-			return entities.BookContainer{}, fmt.Errorf("get book by id (%s): %w", id.String(), err)
+			return core.BookContainer{}, fmt.Errorf("get book by id (%s): %w", id.String(), err)
 		}
 
 		// Предпочитаем отдавать загруженную книгу

@@ -6,20 +6,20 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type agentSystemAdapter interface {
-	SetAgent(agent entities.Agent) error
+	SetAgent(agent core.Agent) error
 	DeleteAgent(id uuid.UUID) error
-	Status(ctx context.Context, agentID uuid.UUID) (entities.AgentStatus, error)
+	Status(ctx context.Context, agentID uuid.UUID) (core.AgentStatus, error)
 }
 
 type storage interface {
-	Agents(ctx context.Context, filter entities.AgentFilter) ([]entities.Agent, error)
-	Agent(ctx context.Context, id uuid.UUID) (entities.Agent, error)
-	NewAgent(ctx context.Context, agent entities.Agent) error
-	UpdateAgent(ctx context.Context, agent entities.Agent) error
+	Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error)
+	Agent(ctx context.Context, id uuid.UUID) (core.Agent, error)
+	NewAgent(ctx context.Context, agent core.Agent) error
+	UpdateAgent(ctx context.Context, agent core.Agent) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
 }
 

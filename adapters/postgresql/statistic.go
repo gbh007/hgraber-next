@@ -8,7 +8,7 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (d *Database) BooksCountByAuthor(ctx context.Context) (map[string]int64, error) {
@@ -53,7 +53,7 @@ func (d *Database) BooksCountByAuthor(ctx context.Context) (map[string]int64, er
 	return out, nil
 }
 
-func (d *Database) PageSizeByAuthor(ctx context.Context) (map[string]entities.SizeWithCount, error) {
+func (d *Database) PageSizeByAuthor(ctx context.Context) (map[string]core.SizeWithCount, error) {
 	builder := squirrel.Select("COUNT(*)", "ba.value", "SUM(f.size)").
 		PlaceholderFormat(squirrel.Dollar).
 		From("book_attributes ba").
@@ -71,7 +71,7 @@ func (d *Database) PageSizeByAuthor(ctx context.Context) (map[string]entities.Si
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	out := make(map[string]entities.SizeWithCount, 100)
+	out := make(map[string]core.SizeWithCount, 100)
 
 	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
@@ -92,7 +92,7 @@ func (d *Database) PageSizeByAuthor(ctx context.Context) (map[string]entities.Si
 			return nil, fmt.Errorf("scan: %w", err)
 		}
 
-		out[name] = entities.SizeWithCount{
+		out[name] = core.SizeWithCount{
 			Count: count.Int64,
 			Size:  size.Int64,
 		}
@@ -101,7 +101,7 @@ func (d *Database) PageSizeByAuthor(ctx context.Context) (map[string]entities.Si
 	return out, nil
 }
 
-func (d *Database) BookSizes(ctx context.Context) (map[uuid.UUID]entities.SizeWithCount, error) {
+func (d *Database) BookSizes(ctx context.Context) (map[uuid.UUID]core.SizeWithCount, error) {
 	builder := squirrel.Select("COUNT(*)", "p.book_id", "SUM(f.size)").
 		PlaceholderFormat(squirrel.Dollar).
 		From("pages p").
@@ -115,7 +115,7 @@ func (d *Database) BookSizes(ctx context.Context) (map[uuid.UUID]entities.SizeWi
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	out := make(map[uuid.UUID]entities.SizeWithCount, 100)
+	out := make(map[uuid.UUID]core.SizeWithCount, 100)
 
 	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
@@ -136,7 +136,7 @@ func (d *Database) BookSizes(ctx context.Context) (map[uuid.UUID]entities.SizeWi
 			return nil, fmt.Errorf("scan: %w", err)
 		}
 
-		out[bookID] = entities.SizeWithCount{
+		out[bookID] = core.SizeWithCount{
 			Count: count.Int64,
 			Size:  size.Int64,
 		}

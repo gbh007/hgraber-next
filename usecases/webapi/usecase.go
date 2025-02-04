@@ -8,41 +8,42 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type storage interface {
-	SystemSize(ctx context.Context) (entities.SystemSizeInfo, error)
-	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (entities.Page, error)
+	SystemSize(ctx context.Context) (core.SystemSizeInfo, error)
+	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (core.Page, error)
 
 	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool, verifiedAt time.Time) error
 	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
 
-	AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error)
-	Attributes(ctx context.Context) ([]entities.Attribute, error)
+	AttributesCount(ctx context.Context) ([]core.AttributeVariant, error)
+	Attributes(ctx context.Context) ([]core.Attribute, error)
 
-	SetLabel(ctx context.Context, label entities.BookLabel) error
-	DeleteLabel(ctx context.Context, label entities.BookLabel) error
-	Labels(ctx context.Context, bookID uuid.UUID) ([]entities.BookLabel, error)
-	InsertLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error
-	UpdateLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error
+	SetLabel(ctx context.Context, label core.BookLabel) error
+	DeleteLabel(ctx context.Context, label core.BookLabel) error
+	Labels(ctx context.Context, bookID uuid.UUID) ([]core.BookLabel, error)
+	InsertLabelPreset(ctx context.Context, preset core.BookLabelPreset) error
+	UpdateLabelPreset(ctx context.Context, preset core.BookLabelPreset) error
 	DeleteLabelPreset(ctx context.Context, name string) error
-	LabelPresets(ctx context.Context) ([]entities.BookLabelPreset, error)
-	LabelPreset(ctx context.Context, name string) (entities.BookLabelPreset, error)
+	LabelPresets(ctx context.Context) ([]core.BookLabelPreset, error)
+	LabelPreset(ctx context.Context, name string) (core.BookLabelPreset, error)
 
-	InsertAttributeColor(ctx context.Context, color entities.AttributeColor) error
-	UpdateAttributeColor(ctx context.Context, color entities.AttributeColor) error
+	InsertAttributeColor(ctx context.Context, color core.AttributeColor) error
+	UpdateAttributeColor(ctx context.Context, color core.AttributeColor) error
 	DeleteAttributeColor(ctx context.Context, code, value string) error
-	AttributeColors(ctx context.Context) ([]entities.AttributeColor, error)
-	AttributeColor(ctx context.Context, code, value string) (entities.AttributeColor, error)
+	AttributeColors(ctx context.Context) ([]core.AttributeColor, error)
+	AttributeColor(ctx context.Context, code, value string) (core.AttributeColor, error)
 }
 
 type bookRequester interface {
-	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error)
 }
 
 type workerManager interface {
-	Info() []entities.SystemWorkerStat
+	Info() []core.SystemWorkerStat
 
 	SetRunnerCount(ctx context.Context, counts map[string]int)
 }
@@ -52,8 +53,8 @@ type fileStorage interface {
 }
 
 type deduplicator interface {
-	BookAttributesCompare(ctx context.Context, originID, targetID uuid.UUID, useOrigin bool) (entities.BookAttributesCompareResult, error)
-	BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (entities.BookPagesCompareResult, error)
+	BookAttributesCompare(ctx context.Context, originID, targetID uuid.UUID, useOrigin bool) (bff.BookAttributesCompareResult, error)
+	BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (bff.BookPagesCompareResult, error)
 }
 
 type UseCase struct {

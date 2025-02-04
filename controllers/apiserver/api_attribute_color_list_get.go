@@ -3,7 +3,7 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -18,7 +18,7 @@ func (c *Controller) APIAttributeColorListGet(ctx context.Context) (serverAPI.AP
 	}
 
 	return &serverAPI.APIAttributeColorListGetOK{
-		Colors: pkg.Map(colors, func(raw entities.AttributeColor) serverAPI.AttributeColor {
+		Colors: pkg.Map(colors, func(raw core.AttributeColor) serverAPI.AttributeColor {
 			return serverAPI.AttributeColor(raw)
 		}),
 	}, nil

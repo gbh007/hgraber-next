@@ -3,7 +3,7 @@ package apiagent
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -18,7 +18,7 @@ func (c *Controller) APIParsingBookCheckPost(ctx context.Context, req *agentAPI.
 	}
 
 	return &agentAPI.BooksCheckResult{
-		Result: pkg.Map(result, func(v entities.AgentBookCheckResult) agentAPI.BooksCheckResultResultItem {
+		Result: pkg.Map(result, func(v agentmodel.AgentBookCheckResult) agentAPI.BooksCheckResultResultItem {
 			switch {
 			case v.IsPossible:
 				return agentAPI.BooksCheckResultResultItem{

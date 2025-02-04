@@ -7,21 +7,21 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) rebuildBookCleanSource(
 	ctx context.Context,
-	flags entities.RebuildBookRequestFlags,
+	flags core.RebuildBookRequestFlags,
 	sourceBookID uuid.UUID,
-	unusedSourceHashes map[entities.FileHash]struct{},
+	unusedSourceHashes map[core.FileHash]struct{},
 	usedSourcePageNumbers []int,
 ) error {
 	if flags.MarkUnusedPagesAsDeadHash && len(unusedSourceHashes) > 0 {
-		deadHashes := make([]entities.DeadHash, 0, len(unusedSourceHashes))
+		deadHashes := make([]core.DeadHash, 0, len(unusedSourceHashes))
 
 		for hash := range unusedSourceHashes {
-			deadHashes = append(deadHashes, entities.DeadHash{
+			deadHashes = append(deadHashes, core.DeadHash{
 				FileHash:  hash,
 				CreatedAt: time.Now().UTC(),
 			})

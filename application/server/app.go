@@ -17,7 +17,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiagent"
 	"github.com/gbh007/hgraber-next/controllers/apiserver"
 	"github.com/gbh007/hgraber-next/controllers/workermanager"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/metrics"
 	agentUC "github.com/gbh007/hgraber-next/usecases/agent"
 	"github.com/gbh007/hgraber-next/usecases/agentcache"
@@ -85,7 +85,7 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	agents, err := storage.Agents(ctx, entities.AgentFilter{})
+	agents, err := storage.Agents(ctx, core.AgentFilter{})
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail load agents from storage",

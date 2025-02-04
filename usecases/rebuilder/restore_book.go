@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages bool) error {
@@ -21,7 +21,7 @@ func (uc *UseCase) RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages 
 		md5Sums = append(md5Sums, page.Md5Sum)
 	}
 
-	fileIDs := make(map[entities.FileHash]uuid.UUID, len(md5Sums))
+	fileIDs := make(map[core.FileHash]uuid.UUID, len(md5Sums))
 
 	if len(md5Sums) > 0 {
 		files, err := uc.storage.FilesByMD5Sums(ctx, md5Sums)
@@ -34,7 +34,7 @@ func (uc *UseCase) RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages 
 		}
 	}
 
-	pageToRestore := make([]entities.Page, 0, min(len(deletedPages), len(fileIDs)))
+	pageToRestore := make([]core.Page, 0, min(len(deletedPages), len(fileIDs)))
 	pageNumbersToRestore := make([]int, 0, min(len(deletedPages), len(fileIDs)))
 
 	for _, page := range deletedPages {
@@ -77,7 +77,7 @@ func (uc *UseCase) RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages 
 		}
 	}
 
-	err = uc.storage.UpdateBookDeletion(ctx, entities.Book{
+	err = uc.storage.UpdateBookDeletion(ctx, core.Book{
 		ID:      bookID,
 		Deleted: false,
 	})

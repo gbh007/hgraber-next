@@ -7,10 +7,11 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]entities.DeduplicateBookResult, error) {
+func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]bff.DeduplicateBookResult, error) {
 	bookHashes, err := uc.storage.BookPagesWithHash(ctx, originBookID)
 	if err != nil {
 		return nil, fmt.Errorf("get book hashes storage: %w", err)
@@ -30,14 +31,14 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 	bookHandled := make(map[uuid.UUID]struct{}, len(bookIDs))
 	bookHandled[originBookID] = struct{}{}
 
-	result := make([]entities.DeduplicateBookResult, 0, len(bookIDs))
+	result := make([]bff.DeduplicateBookResult, 0, len(bookIDs))
 
 	deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, md5Sums)
 	if err != nil {
 		return nil, fmt.Errorf("storage: get dead hashes: %w", err)
 	}
 
-	existsDeadHashes := make(map[entities.FileHash]struct{}, len(deadHashes))
+	existsDeadHashes := make(map[core.FileHash]struct{}, len(deadHashes))
 
 	for _, hash := range deadHashes {
 		existsDeadHashes[hash.FileHash] = struct{}{}
@@ -60,27 +61,27 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 			return nil, fmt.Errorf("get book (%s) from storage: %w", bookID.String(), err)
 		}
 
-		var previewPage entities.BFFPreviewPage
+		var previewPage bff.PreviewPage
 
 		for _, page := range pages {
-			if page.PageNumber == entities.PageNumberForPreview {
-				previewPage = page.ToPreview()
+			if page.PageNumber == core.PageNumberForPreview {
+				previewPage = bff.PageWithHashToPreview(page)
 				_, ok := existsDeadHashes[page.FileHash]
-				previewPage.HasDeadHash = entities.NewStatusFlag(ok)
+				previewPage.HasDeadHash = bff.NewStatusFlag(ok)
 			}
 		}
 
-		deduplicateResult := entities.DeduplicateBookResult{ // TODO: подумать над оптимизациями
+		deduplicateResult := bff.DeduplicateBookResult{ // TODO: подумать над оптимизациями
 			TargetBook:             bookShort,
 			PreviewPage:            previewPage,
-			EntryPercentage:        entities.EntryPercentageForPages(bookHashes, pages, nil),
-			ReverseEntryPercentage: entities.EntryPercentageForPages(pages, bookHashes, nil),
+			EntryPercentage:        core.EntryPercentageForPages(bookHashes, pages, nil),
+			ReverseEntryPercentage: core.EntryPercentageForPages(pages, bookHashes, nil),
 
-			EntryPercentageWithoutDeadHashes:        entities.EntryPercentageForPages(bookHashes, pages, existsDeadHashes),
-			ReverseEntryPercentageWithoutDeadHashes: entities.EntryPercentageForPages(pages, bookHashes, existsDeadHashes),
+			EntryPercentageWithoutDeadHashes:        core.EntryPercentageForPages(bookHashes, pages, existsDeadHashes),
+			ReverseEntryPercentageWithoutDeadHashes: core.EntryPercentageForPages(pages, bookHashes, existsDeadHashes),
 		}
 
-		bookHashMap := make(map[entities.FileHash]struct{}, len(bookHashes))
+		bookHashMap := make(map[core.FileHash]struct{}, len(bookHashes))
 
 		for _, page := range bookHashes {
 			bookHashMap[page.FileHash] = struct{}{}
@@ -108,7 +109,7 @@ func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID u
 		result = append(result, deduplicateResult)
 	}
 
-	slices.SortFunc(result, func(a, b entities.DeduplicateBookResult) int {
+	slices.SortFunc(result, func(a, b bff.DeduplicateBookResult) int {
 		aPercent := max(a.EntryPercentage, a.ReverseEntryPercentage)
 		bPercent := max(b.EntryPercentage, b.ReverseEntryPercentage)
 

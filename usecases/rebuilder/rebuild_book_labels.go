@@ -4,23 +4,23 @@ import (
 	"context"
 	"time"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) rebuildBookLabels(
 	_ context.Context,
-	bookToMerge entities.Book,
-	sourceBook entities.Book,
-	flags entities.RebuildBookRequestFlags,
-	labelsFromRequest []entities.BookLabel,
+	bookToMerge core.Book,
+	sourceBook core.Book,
+	flags core.RebuildBookRequestFlags,
+	labelsFromRequest []core.BookLabel,
 	pagesInfo rebuildedPagesInfo,
-) ([]entities.BookLabel, error) {
+) ([]core.BookLabel, error) {
 	type labelInBookKey struct {
 		Name       string
 		PageNumber int
 	}
 
-	newLabels := make([]entities.BookLabel, 0, len(labelsFromRequest))
+	newLabels := make([]core.BookLabel, 0, len(labelsFromRequest))
 	existsNewLabels := make(map[labelInBookKey]struct{}, len(labelsFromRequest))
 
 	for _, label := range labelsFromRequest {
@@ -51,17 +51,17 @@ func (uc *UseCase) rebuildBookLabels(
 		}
 
 		_, hasOriginID := existsNewLabels[labelInBookKey{
-			Name:       entities.LabelNameRebuildOriginID,
+			Name:       core.LabelNameRebuildOriginID,
 			PageNumber: newPageNumber,
 		}]
 
 		_, hasOriginName := existsNewLabels[labelInBookKey{
-			Name:       entities.LabelNameRebuildOriginName,
+			Name:       core.LabelNameRebuildOriginName,
 			PageNumber: newPageNumber,
 		}]
 
 		_, hasOriginURL := existsNewLabels[labelInBookKey{
-			Name:       entities.LabelNameRebuildOriginURL,
+			Name:       core.LabelNameRebuildOriginURL,
 			PageNumber: newPageNumber,
 		}]
 
@@ -69,46 +69,46 @@ func (uc *UseCase) rebuildBookLabels(
 			continue
 		}
 
-		newLabels = append(newLabels, entities.BookLabel{
+		newLabels = append(newLabels, core.BookLabel{
 			BookID:     bookToMerge.ID,
 			PageNumber: newPageNumber,
-			Name:       entities.LabelNameRebuildOriginID,
+			Name:       core.LabelNameRebuildOriginID,
 			Value:      sourceBook.ID.String(),
 			CreateAt:   time.Now().UTC(),
 		})
 
 		if sourceBook.Name != "" {
-			newLabels = append(newLabels, entities.BookLabel{
+			newLabels = append(newLabels, core.BookLabel{
 				BookID:     bookToMerge.ID,
 				PageNumber: newPageNumber,
-				Name:       entities.LabelNameRebuildOriginName,
+				Name:       core.LabelNameRebuildOriginName,
 				Value:      sourceBook.Name,
 				CreateAt:   time.Now().UTC(),
 			})
 		}
 
 		if sourceBook.OriginURL != nil {
-			newLabels = append(newLabels, entities.BookLabel{
+			newLabels = append(newLabels, core.BookLabel{
 				BookID:     bookToMerge.ID,
 				PageNumber: newPageNumber,
-				Name:       entities.LabelNameRebuildOriginURL,
+				Name:       core.LabelNameRebuildOriginURL,
 				Value:      sourceBook.OriginURL.String(),
 				CreateAt:   time.Now().UTC(),
 			})
 		}
 
 		existsNewLabels[labelInBookKey{
-			Name:       entities.LabelNameRebuildOriginID,
+			Name:       core.LabelNameRebuildOriginID,
 			PageNumber: newPageNumber,
 		}] = struct{}{}
 
 		existsNewLabels[labelInBookKey{
-			Name:       entities.LabelNameRebuildOriginName,
+			Name:       core.LabelNameRebuildOriginName,
 			PageNumber: newPageNumber,
 		}] = struct{}{}
 
 		existsNewLabels[labelInBookKey{
-			Name:       entities.LabelNameRebuildOriginURL,
+			Name:       core.LabelNameRebuildOriginURL,
 			PageNumber: newPageNumber,
 		}] = struct{}{}
 	}

@@ -7,11 +7,11 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type storage interface {
-	DetachedFiles(ctx context.Context) ([]entities.File, error)
+	DetachedFiles(ctx context.Context) ([]core.File, error)
 	DeleteFile(ctx context.Context, id uuid.UUID) error
 	FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error)
 
@@ -23,7 +23,7 @@ type storage interface {
 
 type fileStorage interface {
 	Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) error
-	State(ctx context.Context, includeFileIDs, includeFileSizes bool, fsID uuid.UUID) (entities.FSState, error)
+	State(ctx context.Context, includeFileIDs, includeFileSizes bool, fsID uuid.UUID) (core.FSState, error)
 }
 
 type UseCase struct {

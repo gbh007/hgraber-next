@@ -3,7 +3,7 @@ package apiagent
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -21,13 +21,13 @@ func (c *Controller) APIParsingBookPost(ctx context.Context, req *agentAPI.APIPa
 		URL:       details.URL,
 		Name:      details.Name,
 		PageCount: details.PageCount,
-		Attributes: pkg.Map(details.Attributes, func(attr entities.AgentBookDetailsAttributesItem) agentAPI.BookDetailsAttributesItem {
+		Attributes: pkg.Map(details.Attributes, func(attr agentmodel.AgentBookDetailsAttributesItem) agentAPI.BookDetailsAttributesItem {
 			return agentAPI.BookDetailsAttributesItem{
 				Code:   agentAPI.BookDetailsAttributesItemCode(attr.Code),
 				Values: attr.Values,
 			}
 		}),
-		Pages: pkg.Map(details.Pages, func(p entities.AgentBookDetailsPagesItem) agentAPI.BookDetailsPagesItem {
+		Pages: pkg.Map(details.Pages, func(p agentmodel.AgentBookDetailsPagesItem) agentAPI.BookDetailsPagesItem {
 			return agentAPI.BookDetailsPagesItem{
 				PageNumber: p.PageNumber,
 				URL:        p.URL,

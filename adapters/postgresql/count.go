@@ -8,17 +8,17 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, error) {
-	systemSize := entities.SystemSizeInfo{
-		FileCountByFS:         make(map[uuid.UUID]int64, entities.ApproximateFSCount),
-		UnhashedFileCountByFS: make(map[uuid.UUID]int64, entities.ApproximateFSCount),
-		InvalidFileCountByFS:  make(map[uuid.UUID]int64, entities.ApproximateFSCount),
-		DetachedFileCountByFS: make(map[uuid.UUID]int64, entities.ApproximateFSCount),
-		PageFileSizeByFS:      make(map[uuid.UUID]int64, entities.ApproximateFSCount),
-		FileSizeByFS:          make(map[uuid.UUID]int64, entities.ApproximateFSCount),
+func (d *Database) SystemSize(ctx context.Context) (core.SystemSizeInfo, error) {
+	systemSize := core.SystemSizeInfo{
+		FileCountByFS:         make(map[uuid.UUID]int64, core.ApproximateFSCount),
+		UnhashedFileCountByFS: make(map[uuid.UUID]int64, core.ApproximateFSCount),
+		InvalidFileCountByFS:  make(map[uuid.UUID]int64, core.ApproximateFSCount),
+		DetachedFileCountByFS: make(map[uuid.UUID]int64, core.ApproximateFSCount),
+		PageFileSizeByFS:      make(map[uuid.UUID]int64, core.ApproximateFSCount),
+		FileSizeByFS:          make(map[uuid.UUID]int64, core.ApproximateFSCount),
 	}
 	batch := &pgx.Batch{}
 
@@ -251,7 +251,7 @@ func (d *Database) SystemSize(ctx context.Context) (entities.SystemSizeInfo, err
 
 	err := batchResult.Close()
 	if err != nil {
-		return entities.SystemSizeInfo{}, err
+		return core.SystemSizeInfo{}, err
 	}
 
 	return systemSize, nil

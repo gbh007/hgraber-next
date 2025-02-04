@@ -7,13 +7,13 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error {
 	if fsID == uuid.Nil {
 		if s.legacyFileStorage == nil {
-			return fmt.Errorf("%w: legacy", entities.MissingFSError)
+			return fmt.Errorf("%w: legacy", core.MissingFSError)
 		}
 
 		return s.legacyFileStorage.FS.Create(ctx, fileID, body)
@@ -35,7 +35,7 @@ func (s *Storage) Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID)
 
 	if targetFSID == uuid.Nil {
 		if s.legacyFileStorage == nil {
-			return fmt.Errorf("%w: legacy", entities.MissingFSError)
+			return fmt.Errorf("%w: legacy", core.MissingFSError)
 		}
 
 		return s.legacyFileStorage.FS.Delete(ctx, fileID)
@@ -57,7 +57,7 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (i
 
 	if targetFSID == uuid.Nil {
 		if s.legacyFileStorage == nil {
-			return nil, fmt.Errorf("%w: legacy", entities.MissingFSError)
+			return nil, fmt.Errorf("%w: legacy", core.MissingFSError)
 		}
 
 		return s.legacyFileStorage.FS.Get(ctx, fileID)
@@ -71,10 +71,10 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (i
 	return storage.FS.Get(ctx, fileID)
 }
 
-func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (entities.FSState, error) {
+func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (core.FSState, error) {
 	if fsID == uuid.Nil {
 		if s.legacyFileStorage == nil {
-			return entities.FSState{}, fmt.Errorf("%w: legacy", entities.MissingFSError)
+			return core.FSState{}, fmt.Errorf("%w: legacy", core.MissingFSError)
 		}
 
 		return s.legacyFileStorage.FS.State(ctx, includeFileIDs, includeFileSizes)
@@ -82,7 +82,7 @@ func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSiz
 
 	storage, err := s.getFS(ctx, fsID, s.tryReconnect)
 	if err != nil {
-		return entities.FSState{}, fmt.Errorf("get fs: %w", err)
+		return core.FSState{}, fmt.Errorf("get fs: %w", err)
 	}
 
 	return storage.FS.State(ctx, includeFileIDs, includeFileSizes)

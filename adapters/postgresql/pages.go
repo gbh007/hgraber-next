@@ -12,10 +12,10 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (entities.Page, error) {
+func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (core.Page, error) {
 	raw := new(model.Page)
 
 	err := d.db.GetContext(
@@ -24,16 +24,16 @@ func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (e
 		id.String(), pageNumber,
 	)
 	if errors.Is(err, sql.ErrNoRows) {
-		return entities.Page{}, entities.PageNotFoundError
+		return core.Page{}, core.PageNotFoundError
 	}
 
 	if err != nil {
-		return entities.Page{}, fmt.Errorf("get page from db: %w", err)
+		return core.Page{}, fmt.Errorf("get page from db: %w", err)
 	}
 
 	p, err := raw.ToEntity()
 	if err != nil {
-		return entities.Page{}, fmt.Errorf("convert page: %w", err)
+		return core.Page{}, fmt.Errorf("convert page: %w", err)
 	}
 
 	return p, nil
@@ -50,14 +50,14 @@ func (d *Database) UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageN
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.PageNotFoundError
+		return core.PageNotFoundError
 	}
 
 	return nil
 }
 
 // FIXME: отрефакторить на squirel
-func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error {
+func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []core.Page) error {
 	tx, err := d.db.BeginTxx(ctx, nil)
 	if err != nil {
 		return err
@@ -98,7 +98,7 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []en
 }
 
 // FIXME: отрефакторить на squirel
-func (d *Database) NewBookPages(ctx context.Context, pages []entities.Page) error {
+func (d *Database) NewBookPages(ctx context.Context, pages []core.Page) error {
 	tx, err := d.db.BeginTxx(ctx, nil)
 	if err != nil {
 		return err
@@ -139,13 +139,13 @@ func (d *Database) bookPages(ctx context.Context, bookID uuid.UUID) ([]*model.Pa
 	return raw, nil
 }
 
-func (d *Database) BookPages(ctx context.Context, bookID uuid.UUID) ([]entities.Page, error) {
+func (d *Database) BookPages(ctx context.Context, bookID uuid.UUID) ([]core.Page, error) {
 	pages, err := d.bookPages(ctx, bookID)
 	if err != nil {
 		return nil, fmt.Errorf("get pages :%w", err)
 	}
 
-	out := make([]entities.Page, 0, len(pages))
+	out := make([]core.Page, 0, len(pages))
 
 	for _, pageRaw := range pages {
 		page, err := pageRaw.ToEntity()
@@ -159,7 +159,7 @@ func (d *Database) BookPages(ctx context.Context, bookID uuid.UUID) ([]entities.
 	return out, nil
 }
 
-func (d *Database) PagesByURL(ctx context.Context, u url.URL) ([]entities.Page, error) {
+func (d *Database) PagesByURL(ctx context.Context, u url.URL) ([]core.Page, error) {
 	raw := make([]*model.Page, 0)
 
 	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM pages WHERE origin_url = $1 ORDER BY book_id, page_number;`, u.String())
@@ -167,7 +167,7 @@ func (d *Database) PagesByURL(ctx context.Context, u url.URL) ([]entities.Page, 
 		return nil, fmt.Errorf("get pages :%w", err)
 	}
 
-	out := make([]entities.Page, 0, len(raw))
+	out := make([]core.Page, 0, len(raw))
 
 	for _, pageRaw := range raw {
 		page, err := pageRaw.ToEntity()

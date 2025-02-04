@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) MarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID) error {
@@ -16,10 +16,10 @@ func (uc *UseCase) MarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID
 		return fmt.Errorf("storage: get pages: %w", err)
 	}
 
-	deadHashes := make([]entities.DeadHash, 0, len(pages))
+	deadHashes := make([]core.DeadHash, 0, len(pages))
 
 	for _, page := range pages {
-		deadHashes = append(deadHashes, entities.DeadHash{
+		deadHashes = append(deadHashes, core.DeadHash{
 			FileHash:  page.FileHash,
 			CreatedAt: time.Now().UTC(),
 		})
@@ -39,10 +39,10 @@ func (uc *UseCase) UnMarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UU
 		return fmt.Errorf("storage: get pages: %w", err)
 	}
 
-	deadHashes := make([]entities.DeadHash, 0, len(pages))
+	deadHashes := make([]core.DeadHash, 0, len(pages))
 
 	for _, page := range pages {
-		deadHashes = append(deadHashes, entities.DeadHash{
+		deadHashes = append(deadHashes, core.DeadHash{
 			FileHash:  page.FileHash,
 			CreatedAt: time.Now().UTC(),
 		})
@@ -63,14 +63,14 @@ func (uc *UseCase) RemoveBookPagesWithDeadHash(ctx context.Context, bookID uuid.
 	}
 
 	md5Sums := make([]string, len(masterPages))
-	masterPageHashes := make(map[entities.FileHash]struct{}, len(masterPages))
-	deadHashes := make([]entities.DeadHash, 0, len(masterPages))
+	masterPageHashes := make(map[core.FileHash]struct{}, len(masterPages))
+	deadHashes := make([]core.DeadHash, 0, len(masterPages))
 
 	for _, page := range masterPages {
 		masterPageHashes[page.FileHash] = struct{}{}
 
 		md5Sums = append(md5Sums, page.Md5Sum)
-		deadHashes = append(deadHashes, entities.DeadHash{
+		deadHashes = append(deadHashes, core.DeadHash{
 			FileHash:  page.FileHash,
 			CreatedAt: time.Now().UTC(),
 		})

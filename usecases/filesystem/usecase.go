@@ -8,40 +8,40 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type storage interface {
-	FileStorage(ctx context.Context, id uuid.UUID) (entities.FileStorageSystem, error)
-	NewFileStorage(ctx context.Context, fs entities.FileStorageSystem) error
-	UpdateFileStorage(ctx context.Context, fs entities.FileStorageSystem) error
+	FileStorage(ctx context.Context, id uuid.UUID) (core.FileStorageSystem, error)
+	NewFileStorage(ctx context.Context, fs core.FileStorageSystem) error
+	UpdateFileStorage(ctx context.Context, fs core.FileStorageSystem) error
 	DeleteFileStorage(ctx context.Context, id uuid.UUID) error
-	FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (entities.FSFilesInfo, error)
+	FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (core.FSFilesInfo, error)
 
-	File(ctx context.Context, id uuid.UUID) (entities.File, error)
+	File(ctx context.Context, id uuid.UUID) (core.File, error)
 	UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid.UUID) error
 	FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error)
 	UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, invalidData bool) error
 
-	FileIDsByFilter(ctx context.Context, filter entities.FileFilter) ([]uuid.UUID, error)
+	FileIDsByFilter(ctx context.Context, filter core.FileFilter) ([]uuid.UUID, error)
 }
 
 type fileStorage interface {
-	FSList(ctx context.Context) ([]entities.FSWithStatus, error)
+	FSList(ctx context.Context) ([]core.FSWithStatus, error)
 	FSChange(ctx context.Context, fsID uuid.UUID, deleted bool) error
 	Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 	Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error
 	Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) error
 	HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error)
-	State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (entities.FSState, error)
+	State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (core.FSState, error)
 }
 
 type tmpStorage interface {
 	AddToValidate(ids []uuid.UUID)
 	ValidateList() []uuid.UUID
 
-	AddToFileTransfer(transfers []entities.FileTransfer)
-	FileTransferList() []entities.FileTransfer
+	AddToFileTransfer(transfers []core.FileTransfer)
+	FileTransferList() []core.FileTransfer
 }
 
 type UseCase struct {

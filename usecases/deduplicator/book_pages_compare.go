@@ -7,39 +7,40 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (entities.BookPagesCompareResult, error) {
+func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (bff.BookPagesCompareResult, error) {
 	originBook, err := uc.storage.GetBook(ctx, originID)
 	if err != nil {
-		return entities.BookPagesCompareResult{}, fmt.Errorf("storage: get book (%s): %w", originID.String(), err)
+		return bff.BookPagesCompareResult{}, fmt.Errorf("storage: get book (%s): %w", originID.String(), err)
 	}
 
 	targetBook, err := uc.storage.GetBook(ctx, targetID)
 	if err != nil {
-		return entities.BookPagesCompareResult{}, fmt.Errorf("storage: get book (%s): %w", targetID.String(), err)
+		return bff.BookPagesCompareResult{}, fmt.Errorf("storage: get book (%s): %w", targetID.String(), err)
 	}
 
 	originPages, err := uc.storage.BookPagesWithHash(ctx, originID)
 	if err != nil {
-		return entities.BookPagesCompareResult{}, fmt.Errorf("storage: get pages (%s): %w", originID.String(), err)
+		return bff.BookPagesCompareResult{}, fmt.Errorf("storage: get pages (%s): %w", originID.String(), err)
 	}
 
 	targetPages, err := uc.storage.BookPagesWithHash(ctx, targetID)
 	if err != nil {
-		return entities.BookPagesCompareResult{}, fmt.Errorf("storage: get pages (%s): %w", targetID.String(), err)
+		return bff.BookPagesCompareResult{}, fmt.Errorf("storage: get pages (%s): %w", targetID.String(), err)
 	}
 
-	result := entities.BookPagesCompareResult{
+	result := bff.BookPagesCompareResult{
 		OriginBook:  originBook,
 		TargetBook:  targetBook,
-		OriginPages: make([]entities.BFFPreviewPage, 0, len(originPages)),
-		BothPages:   make([]entities.BFFPreviewPage, 0, max(len(originPages), len(targetPages))),
-		TargetPages: make([]entities.BFFPreviewPage, 0, len(targetPages)),
+		OriginPages: make([]bff.PreviewPage, 0, len(originPages)),
+		BothPages:   make([]bff.PreviewPage, 0, max(len(originPages), len(targetPages))),
+		TargetPages: make([]bff.PreviewPage, 0, len(targetPages)),
 	}
 
-	hashes := make(map[entities.FileHash]int, len(originPages))
+	hashes := make(map[core.FileHash]int, len(originPages))
 	md5Sums := make([]string, 0, len(originPages)+len(targetPages))
 
 	for _, page := range originPages {
@@ -60,28 +61,28 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 
 	deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, md5Sums)
 	if err != nil {
-		return entities.BookPagesCompareResult{}, fmt.Errorf("storage: get dead hashes: %w", err)
+		return bff.BookPagesCompareResult{}, fmt.Errorf("storage: get dead hashes: %w", err)
 	}
 
-	existsDeadHashes := make(map[entities.FileHash]struct{}, len(deadHashes))
+	existsDeadHashes := make(map[core.FileHash]struct{}, len(deadHashes))
 
 	for _, hash := range deadHashes {
 		existsDeadHashes[hash.FileHash] = struct{}{}
 	}
 
-	result.EntryPercentage = entities.EntryPercentageForPages(originPages, targetPages, nil)
-	result.ReverseEntryPercentage = entities.EntryPercentageForPages(targetPages, originPages, nil)
+	result.EntryPercentage = core.EntryPercentageForPages(originPages, targetPages, nil)
+	result.ReverseEntryPercentage = core.EntryPercentageForPages(targetPages, originPages, nil)
 
-	result.EntryPercentageWithoutDeadHashes = entities.EntryPercentageForPages(originPages, targetPages, existsDeadHashes)
-	result.ReverseEntryPercentageWithoutDeadHashes = entities.EntryPercentageForPages(targetPages, originPages, existsDeadHashes)
+	result.EntryPercentageWithoutDeadHashes = core.EntryPercentageForPages(originPages, targetPages, existsDeadHashes)
+	result.ReverseEntryPercentageWithoutDeadHashes = core.EntryPercentageForPages(targetPages, originPages, existsDeadHashes)
 
 	for _, page := range originPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
-		preview := page.ToPreview()
-		preview.HasDeadHash = entities.NewStatusFlag(hasDeadHash)
+		preview := bff.PageWithHashToPreview(page)
+		preview.HasDeadHash = bff.NewStatusFlag(hasDeadHash)
 
-		if page.PageNumber == entities.PageNumberForPreview {
+		if page.PageNumber == core.PageNumberForPreview {
 			result.OriginPreviewPage = preview
 		}
 
@@ -95,10 +96,10 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 	for _, page := range targetPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]
 
-		preview := page.ToPreview()
-		preview.HasDeadHash = entities.NewStatusFlag(hasDeadHash)
+		preview := bff.PageWithHashToPreview(page)
+		preview.HasDeadHash = bff.NewStatusFlag(hasDeadHash)
 
-		if page.PageNumber == entities.PageNumberForPreview {
+		if page.PageNumber == core.PageNumberForPreview {
 			result.TargetPreviewPage = preview
 		}
 
@@ -107,7 +108,7 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 		}
 	}
 
-	pageSortFunc := func(a, b entities.BFFPreviewPage) int {
+	pageSortFunc := func(a, b bff.PreviewPage) int {
 		return a.PageNumber - b.PageNumber
 	}
 

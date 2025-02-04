@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) PageBody(ctx context.Context, bookID uuid.UUID, pageNumber int) (io.Reader, error) {
@@ -17,7 +17,7 @@ func (uc *UseCase) PageBody(ctx context.Context, bookID uuid.UUID, pageNumber in
 	}
 
 	if !page.IsLoaded() {
-		return nil, fmt.Errorf("missing page body: %w", entities.FileNotFoundError)
+		return nil, fmt.Errorf("missing page body: %w", core.FileNotFoundError)
 	}
 
 	body, err := uc.fileStorage.Get(ctx, page.FileID, nil)

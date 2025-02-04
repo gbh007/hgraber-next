@@ -6,24 +6,24 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type storage interface {
-	SaveTask(task entities.RunnableTask)
-	GetTaskResults() []*entities.TaskResult
+	SaveTask(task core.RunnableTask)
+	GetTaskResults() []*core.TaskResult
 }
 
 type deduplicator interface {
-	DeduplicateFiles(ctx context.Context) (entities.RunnableTask, error)
-	FillDeadHashes(ctx context.Context, withRemoveDeletedPages bool) (entities.RunnableTask, error)
+	DeduplicateFiles(ctx context.Context) (core.RunnableTask, error)
+	FillDeadHashes(ctx context.Context, withRemoveDeletedPages bool) (core.RunnableTask, error)
 }
 
 type cleanuper interface {
-	RemoveDetachedFiles(ctx context.Context) (entities.RunnableTask, error)
-	RemoveFilesInStoragesMismatch(ctx context.Context, fsID uuid.UUID) (entities.RunnableTask, error)
-	CleanDeletedPages(ctx context.Context) (entities.RunnableTask, error)
-	CleanDeletedRebuilds(ctx context.Context) (entities.RunnableTask, error)
+	RemoveDetachedFiles(ctx context.Context) (core.RunnableTask, error)
+	RemoveFilesInStoragesMismatch(ctx context.Context, fsID uuid.UUID) (core.RunnableTask, error)
+	CleanDeletedPages(ctx context.Context) (core.RunnableTask, error)
+	CleanDeletedRebuilds(ctx context.Context) (core.RunnableTask, error)
 }
 
 type UseCase struct {
@@ -48,24 +48,24 @@ func New(
 	}
 }
 
-func (uc *UseCase) RunTask(ctx context.Context, code entities.TaskCode) error {
+func (uc *UseCase) RunTask(ctx context.Context, code core.TaskCode) error {
 	var (
-		task entities.RunnableTask
+		task core.RunnableTask
 		err  error
 	)
 
 	switch code {
-	case entities.DeduplicateFilesTaskCode:
+	case core.DeduplicateFilesTaskCode:
 		task, err = uc.deduplicator.DeduplicateFiles(ctx)
-	case entities.RemoveDetachedFilesTaskCode:
+	case core.RemoveDetachedFilesTaskCode:
 		task, err = uc.cleanuper.RemoveDetachedFiles(ctx)
-	case entities.FillDeadHashesTaskCode:
+	case core.FillDeadHashesTaskCode:
 		task, err = uc.deduplicator.FillDeadHashes(ctx, false)
-	case entities.FillDeadHashesAndRemoveDeletedPagesTaskCode:
+	case core.FillDeadHashesAndRemoveDeletedPagesTaskCode:
 		task, err = uc.deduplicator.FillDeadHashes(ctx, true)
-	case entities.CleanDeletedPagesTaskCode:
+	case core.CleanDeletedPagesTaskCode:
 		task, err = uc.cleanuper.CleanDeletedPages(ctx)
-	case entities.CleanDeletedRebuildsTaskCode:
+	case core.CleanDeletedRebuildsTaskCode:
 		task, err = uc.cleanuper.CleanDeletedRebuilds(ctx)
 	}
 
@@ -80,7 +80,7 @@ func (uc *UseCase) RunTask(ctx context.Context, code entities.TaskCode) error {
 	return nil
 }
 
-func (uc *UseCase) TaskResults(ctx context.Context) ([]*entities.TaskResult, error) {
+func (uc *UseCase) TaskResults(ctx context.Context) ([]*core.TaskResult, error) {
 	return uc.storage.GetTaskResults(), nil
 }
 

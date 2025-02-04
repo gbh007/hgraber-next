@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type Book struct {
@@ -24,10 +24,10 @@ type Book struct {
 	IsRebuild        bool           `db:"is_rebuild"`
 }
 
-func (b Book) ToEntity() (entities.Book, error) {
+func (b Book) ToEntity() (core.Book, error) {
 	id, err := uuid.Parse(b.ID)
 	if err != nil {
-		return entities.Book{}, err
+		return core.Book{}, err
 	}
 
 	var originURL *url.URL
@@ -35,11 +35,11 @@ func (b Book) ToEntity() (entities.Book, error) {
 	if b.OriginURL.Valid {
 		originURL, err = url.Parse(b.OriginURL.String)
 		if err != nil {
-			return entities.Book{}, err
+			return core.Book{}, err
 		}
 	}
 
-	return entities.Book{
+	return core.Book{
 		ID:               id,
 		Name:             b.Name.String,
 		OriginURL:        originURL,

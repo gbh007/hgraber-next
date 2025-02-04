@@ -7,13 +7,13 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/internal/worker"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 type hasherUnitUseCases interface {
-	UnHashedFiles(ctx context.Context) ([]entities.File, error)
-	HandleFileHash(ctx context.Context, f entities.File) error
+	UnHashedFiles(ctx context.Context) ([]core.File, error)
+	HandleFileHash(ctx context.Context, f core.File) error
 }
 
 func NewHasher(
@@ -22,13 +22,13 @@ func NewHasher(
 	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
-) *worker.Worker[entities.File] {
-	return worker.New[entities.File](
+) *worker.Worker[core.File] {
+	return worker.New[core.File](
 		"file_hash",
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, file entities.File) error {
+		func(ctx context.Context, file core.File) error {
 			err := useCases.HandleFileHash(ctx, file)
 			if err != nil {
 				return pkg.WrapError(

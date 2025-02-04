@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (d *Database) VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool, verifiedAt time.Time) error {
@@ -22,7 +22,7 @@ func (d *Database) VerifyBook(ctx context.Context, bookID uuid.UUID, verified bo
 	}
 
 	if !d.isApply(ctx, res) {
-		return entities.BookNotFoundError
+		return core.BookNotFoundError
 	}
 
 	return nil

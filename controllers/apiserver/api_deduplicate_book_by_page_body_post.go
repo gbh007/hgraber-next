@@ -3,7 +3,8 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -18,7 +19,7 @@ func (c *Controller) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *
 	}
 
 	return &serverAPI.APIDeduplicateBookByPageBodyPostOK{
-		Result: pkg.Map(data, func(raw entities.DeduplicateBookResult) serverAPI.APIDeduplicateBookByPageBodyPostOKResultItem {
+		Result: pkg.Map(data, func(raw bff.DeduplicateBookResult) serverAPI.APIDeduplicateBookByPageBodyPostOKResultItem {
 			return serverAPI.APIDeduplicateBookByPageBodyPostOKResultItem{
 				Book:                                 c.convertSimpleBook(raw.TargetBook, raw.PreviewPage),
 				OriginCoveredTarget:                  raw.EntryPercentage,
@@ -32,12 +33,12 @@ func (c *Controller) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *
 				SharedPageCount:                  raw.SharedPages,
 				SharedPageCountWithoutDeadHashes: raw.SharedPagesWithoutDeadHashes,
 
-				TargetSizeFormatted:                  entities.PrettySize(raw.TargetSize.Size),
-				SharedSizeFormatted:                  entities.PrettySize(raw.SharedSize),
-				SharedSizeWithoutDeadHashesFormatted: entities.PrettySize(raw.SharedSizeWithoutDeadHashes),
+				TargetSizeFormatted:                  core.PrettySize(raw.TargetSize.Size),
+				SharedSizeFormatted:                  core.PrettySize(raw.SharedSize),
+				SharedSizeWithoutDeadHashesFormatted: core.PrettySize(raw.SharedSizeWithoutDeadHashes),
 
 				TargetAvgPageSize:          raw.TargetSize.Avg(),
-				TargetAvgPageSizeFormatted: entities.PrettySize(raw.TargetSize.Avg()),
+				TargetAvgPageSizeFormatted: core.PrettySize(raw.TargetSize.Avg()),
 				TargetPageCount:            int(raw.TargetSize.Count),
 			}
 		}),

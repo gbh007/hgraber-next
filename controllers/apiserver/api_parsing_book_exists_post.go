@@ -3,7 +3,7 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -18,7 +18,7 @@ func (c *Controller) APIParsingBookExistsPost(ctx context.Context, req *serverAP
 	}
 
 	return &serverAPI.APIParsingBookExistsPostOK{
-		Result: pkg.Map(result, func(v entities.AgentBookCheckResult) serverAPI.APIParsingBookExistsPostOKResultItem {
+		Result: pkg.Map(result, func(v agentmodel.AgentBookCheckResult) serverAPI.APIParsingBookExistsPostOKResultItem {
 			switch {
 			case v.IsPossible:
 				return serverAPI.APIParsingBookExistsPostOKResultItem{

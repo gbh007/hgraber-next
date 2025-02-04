@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (uc *UseCase) ValidateFS(ctx context.Context, fsID uuid.UUID) error {
@@ -36,10 +36,10 @@ func (uc *UseCase) ValidateFile(ctx context.Context, fileID uuid.UUID) error {
 	return nil
 }
 
-func (uc *UseCase) validateFileBody(ctx context.Context, fileID uuid.UUID, hash entities.FileHash, fsID uuid.UUID) error {
+func (uc *UseCase) validateFileBody(ctx context.Context, fileID uuid.UUID, hash core.FileHash, fsID uuid.UUID) error {
 	body, err := uc.fileStorage.Get(ctx, fileID, &fsID)
 
-	if errors.Is(err, entities.FileNotFoundError) {
+	if errors.Is(err, core.FileNotFoundError) {
 		uc.logger.DebugContext(
 			ctx, "missing file in fs",
 			slog.String("id", fileID.String()),
@@ -55,7 +55,7 @@ func (uc *UseCase) validateFileBody(ctx context.Context, fileID uuid.UUID, hash 
 		return fmt.Errorf("file storage: get file body: %w", err)
 	}
 
-	newHash, err := entities.HashFile(body)
+	newHash, err := core.HashFile(body)
 	if err != nil {
 		return fmt.Errorf("hash file: %w", err)
 	}

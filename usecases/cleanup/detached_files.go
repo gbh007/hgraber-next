@@ -8,11 +8,11 @@ import (
 
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) RemoveDetachedFiles(_ context.Context) (entities.RunnableTask, error) {
-	return entities.RunnableTaskFunction(func(ctx context.Context, taskResult entities.TaskResultWriter) {
+func (uc *UseCase) RemoveDetachedFiles(_ context.Context) (core.RunnableTask, error) {
+	return core.RunnableTaskFunction(func(ctx context.Context, taskResult core.TaskResultWriter) {
 		defer taskResult.Finish()
 
 		taskResult.SetName("RemoveDetachedFiles")
@@ -78,7 +78,7 @@ func (uc *UseCase) RemoveDetachedFiles(_ context.Context) (entities.RunnableTask
 
 		taskResult.SetResult(fmt.Sprintf(
 			"count: %d size: %d human size: %s",
-			count, size, entities.PrettySize(size),
+			count, size, core.PrettySize(size),
 		))
 	}), nil
 }

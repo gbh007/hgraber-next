@@ -10,73 +10,75 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 type parseUseCases interface {
-	NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (entities.FirstHandleMultipleResult, error)
+	NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (core.FirstHandleMultipleResult, error)
 
-	BooksExists(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error)
-	PagesExists(ctx context.Context, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
-	BookByURL(ctx context.Context, u url.URL) (entities.BookContainer, error)
+	BooksExists(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
+	PagesExists(ctx context.Context, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error)
+	BookByURL(ctx context.Context, u url.URL) (core.BookContainer, error)
 	PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error)
 
-	NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (entities.MultiHandleMultipleResult, error)
+	NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (core.MultiHandleMultipleResult, error)
 }
 
 type webAPIUseCases interface {
-	SystemSize(ctx context.Context) (entities.SystemSizeInfo, error)
-	WorkersInfo(ctx context.Context) []entities.SystemWorkerStat
+	SystemSize(ctx context.Context) (core.SystemSizeInfo, error)
+	WorkersInfo(ctx context.Context) []core.SystemWorkerStat
 
 	File(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 	PageBody(ctx context.Context, bookID uuid.UUID, pageNumber int) (io.Reader, error)
 
-	BookRaw(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
+	BookRaw(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error)
 
 	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool) error
 	DeleteBook(ctx context.Context, bookID uuid.UUID) error
 
 	SetWorkerConfig(ctx context.Context, counts map[string]int)
 
-	AttributesCount(ctx context.Context) ([]entities.AttributeVariant, error)
-	CreateAttributeColor(ctx context.Context, color entities.AttributeColor) error
-	UpdateAttributeColor(ctx context.Context, color entities.AttributeColor) error
+	AttributesCount(ctx context.Context) ([]core.AttributeVariant, error)
+	CreateAttributeColor(ctx context.Context, color core.AttributeColor) error
+	UpdateAttributeColor(ctx context.Context, color core.AttributeColor) error
 	DeleteAttributeColor(ctx context.Context, code, value string) error
-	AttributeColors(ctx context.Context) ([]entities.AttributeColor, error)
-	AttributeColor(ctx context.Context, code, value string) (entities.AttributeColor, error)
+	AttributeColors(ctx context.Context) ([]core.AttributeColor, error)
+	AttributeColor(ctx context.Context, code, value string) (core.AttributeColor, error)
 
-	SetLabel(ctx context.Context, label entities.BookLabel) error
-	DeleteLabel(ctx context.Context, label entities.BookLabel) error
-	Labels(ctx context.Context, bookID uuid.UUID) ([]entities.BookLabel, error)
-	CreateLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error
-	UpdateLabelPreset(ctx context.Context, preset entities.BookLabelPreset) error
+	SetLabel(ctx context.Context, label core.BookLabel) error
+	DeleteLabel(ctx context.Context, label core.BookLabel) error
+	Labels(ctx context.Context, bookID uuid.UUID) ([]core.BookLabel, error)
+	CreateLabelPreset(ctx context.Context, preset core.BookLabelPreset) error
+	UpdateLabelPreset(ctx context.Context, preset core.BookLabelPreset) error
 	DeleteLabelPreset(ctx context.Context, name string) error
-	LabelPresets(ctx context.Context) ([]entities.BookLabelPreset, error)
-	LabelPreset(ctx context.Context, name string) (entities.BookLabelPreset, error)
+	LabelPresets(ctx context.Context) ([]core.BookLabelPreset, error)
+	LabelPreset(ctx context.Context, name string) (core.BookLabelPreset, error)
 
-	BookCompare(ctx context.Context, originID, targetID uuid.UUID) (entities.BookCompareResultToWeb, error)
+	BookCompare(ctx context.Context, originID, targetID uuid.UUID) (bff.BookCompareResult, error)
 }
 
 type agentUseCases interface {
-	NewAgent(ctx context.Context, agent entities.Agent) error
+	NewAgent(ctx context.Context, agent core.Agent) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
-	Agents(ctx context.Context, filter entities.AgentFilter, includeStatus bool) ([]entities.AgentWithStatus, error)
-	UpdateAgent(ctx context.Context, agent entities.Agent) error
-	Agent(ctx context.Context, id uuid.UUID) (entities.Agent, error)
+	Agents(ctx context.Context, filter core.AgentFilter, includeStatus bool) ([]core.AgentWithStatus, error)
+	UpdateAgent(ctx context.Context, agent core.Agent) error
+	Agent(ctx context.Context, id uuid.UUID) (core.Agent, error)
 }
 
 type exportUseCases interface {
-	Export(ctx context.Context, agentID uuid.UUID, filter entities.BookFilter, deleteAfter bool) error
-	ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, entities.BookContainer, error)
+	Export(ctx context.Context, agentID uuid.UUID, filter core.BookFilter, deleteAfter bool) error
+	ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, core.BookContainer, error)
 	ImportArchive(ctx context.Context, body io.Reader, deduplicate bool, autoVerify bool) (uuid.UUID, error)
 }
 
 type deduplicateUseCases interface {
-	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]entities.DeduplicateArchiveResult, error)
-	BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]entities.DeduplicateBookResult, error)
-	UniquePages(ctx context.Context, originBookID uuid.UUID) ([]entities.BFFPreviewPage, error)
-	BooksByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) ([]entities.BookWithPreviewPage, error)
+	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]core.DeduplicateArchiveResult, error)
+	BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]bff.DeduplicateBookResult, error)
+	UniquePages(ctx context.Context, originBookID uuid.UUID) ([]bff.PreviewPage, error)
+	BooksByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) ([]bff.BookWithPreviewPage, error)
 
 	CreateDeadHashByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) error
 	DeleteDeadHashByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) error
@@ -89,22 +91,22 @@ type deduplicateUseCases interface {
 }
 
 type taskUseCases interface {
-	RunTask(ctx context.Context, code entities.TaskCode) error
-	TaskResults(ctx context.Context) ([]*entities.TaskResult, error)
+	RunTask(ctx context.Context, code core.TaskCode) error
+	TaskResults(ctx context.Context) ([]*core.TaskResult, error)
 	RemoveFilesInFSMismatch(ctx context.Context, fsID uuid.UUID) error
 }
 
 type rebuilderUseCases interface {
-	UpdateBook(ctx context.Context, book entities.BookContainer) error
-	RebuildBook(ctx context.Context, request entities.RebuildBookRequest) (uuid.UUID, error)
+	UpdateBook(ctx context.Context, book core.BookContainer) error
+	RebuildBook(ctx context.Context, request core.RebuildBookRequest) (uuid.UUID, error)
 	RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages bool) error
 }
 
 type fsUseCases interface {
-	FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]entities.FSWithStatus, error)
-	FileStorage(ctx context.Context, id uuid.UUID) (entities.FileStorageSystem, error)
-	NewFileStorage(ctx context.Context, fs entities.FileStorageSystem) (uuid.UUID, error)
-	UpdateFileStorage(ctx context.Context, fs entities.FileStorageSystem) error
+	FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]core.FSWithStatus, error)
+	FileStorage(ctx context.Context, id uuid.UUID) (core.FileStorageSystem, error)
+	NewFileStorage(ctx context.Context, fs core.FileStorageSystem) (uuid.UUID, error)
+	UpdateFileStorage(ctx context.Context, fs core.FileStorageSystem) error
 	DeleteFileStorage(ctx context.Context, id uuid.UUID) error
 	ValidateFS(ctx context.Context, fsID uuid.UUID) error
 	TransferFSFiles(ctx context.Context, from, to uuid.UUID, onlyPreview bool) error
@@ -114,8 +116,8 @@ type fsUseCases interface {
 }
 
 type bffUseCases interface {
-	BookDetails(ctx context.Context, bookID uuid.UUID) (entities.BFFBookDetails, error)
-	BookList(ctx context.Context, filter entities.BookFilter) (entities.BFFBookList, error)
+	BookDetails(ctx context.Context, bookID uuid.UUID) (bff.BookDetails, error)
+	BookList(ctx context.Context, filter core.BookFilter) (bff.BookList, error)
 }
 
 type config interface {

@@ -7,11 +7,11 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (d *Database) SetDeadHash(ctx context.Context, hash entities.DeadHash) error {
+func (d *Database) SetDeadHash(ctx context.Context, hash core.DeadHash) error {
 	builder := squirrel.Insert("dead_hashes").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -36,7 +36,7 @@ func (d *Database) SetDeadHash(ctx context.Context, hash entities.DeadHash) erro
 
 	return nil
 }
-func (d *Database) SetDeadHashes(ctx context.Context, hashes []entities.DeadHash) error {
+func (d *Database) SetDeadHashes(ctx context.Context, hashes []core.DeadHash) error {
 	batches := pkg.Batching(hashes, 5000)
 
 	for _, batch := range batches {
@@ -74,7 +74,7 @@ func (d *Database) SetDeadHashes(ctx context.Context, hashes []entities.DeadHash
 	return nil
 }
 
-func (d *Database) DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]entities.DeadHash, error) {
+func (d *Database) DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]core.DeadHash, error) {
 	builder := squirrel.Select(
 		"md5_sum",
 		"sha256_sum",
@@ -101,10 +101,10 @@ func (d *Database) DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([
 
 	defer rows.Close()
 
-	result := make([]entities.DeadHash, 0, len(md5Sums))
+	result := make([]core.DeadHash, 0, len(md5Sums))
 
 	for rows.Next() {
-		hash := entities.DeadHash{}
+		hash := core.DeadHash{}
 
 		err = rows.Scan(
 			&hash.Md5Sum,
@@ -122,7 +122,7 @@ func (d *Database) DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([
 	return result, nil
 }
 
-func (d *Database) DeleteDeadHash(ctx context.Context, hash entities.DeadHash) error {
+func (d *Database) DeleteDeadHash(ctx context.Context, hash core.DeadHash) error {
 	builder := squirrel.Delete("dead_hashes").
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
@@ -146,7 +146,7 @@ func (d *Database) DeleteDeadHash(ctx context.Context, hash entities.DeadHash) e
 	return nil
 }
 
-func (d *Database) DeleteDeadHashes(ctx context.Context, hashes []entities.DeadHash) error {
+func (d *Database) DeleteDeadHashes(ctx context.Context, hashes []core.DeadHash) error {
 	batch := &pgx.Batch{}
 
 	resultCount := 0

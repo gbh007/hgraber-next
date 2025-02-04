@@ -1,4 +1,4 @@
-package entities
+package core
 
 import (
 	"net/url"
@@ -8,6 +8,8 @@ import (
 
 	"github.com/google/uuid"
 )
+
+const PageNumberForPreview int = 1
 
 type Page struct {
 	BookID     uuid.UUID
@@ -32,20 +34,6 @@ func (p Page) Filename() string {
 	return strconv.Itoa(p.PageNumber) + "." + p.Ext
 }
 
-func (p Page) ToAgentBookDetailsPagesItem() AgentBookDetailsPagesItem {
-	var u url.URL
-
-	if p.OriginURL != nil {
-		u = *p.OriginURL
-	}
-
-	return AgentBookDetailsPagesItem{
-		PageNumber: p.PageNumber,
-		URL:        u,
-		Filename:   p.Filename(),
-	}
-}
-
 type PageForDownload struct {
 	BookID     uuid.UUID
 	PageNumber int
@@ -63,14 +51,4 @@ type PageWithHash struct {
 	Page
 	FileHash
 	FSID uuid.UUID
-}
-
-func (p PageWithHash) ToPreview() BFFPreviewPage {
-	return BFFPreviewPage{
-		PageNumber: p.PageNumber,
-		Ext:        p.Ext,
-		Downloaded: p.Downloaded,
-		FileID:     p.FileID,
-		FSID:       p.FSID,
-	}
 }

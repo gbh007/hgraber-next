@@ -10,20 +10,21 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (entities.MultiHandleMultipleResult, error) {
-	agents, err := uc.storage.Agents(ctx, entities.AgentFilter{
+func (uc *UseCase) NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (core.MultiHandleMultipleResult, error) {
+	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParseMulti: true,
 	})
 	if err != nil {
-		return entities.MultiHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
+		return core.MultiHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
 	}
 
-	result := entities.MultiHandleMultipleResult{
-		Details: entities.FirstHandleMultipleResult{
-			Details: make([]entities.BookHandleResult, 0, len(urls)*100),
+	result := core.MultiHandleMultipleResult{
+		Details: core.FirstHandleMultipleResult{
+			Details: make([]core.BookHandleResult, 0, len(urls)*100),
 		},
 	}
 
@@ -33,7 +34,7 @@ urlLoop:
 		for _, agent := range agents {
 			booksInfo, err := uc.agentSystem.BooksCheckMultiple(ctx, agent.ID, multiUrl)
 
-			if errors.Is(err, entities.AgentAPIOffline) {
+			if errors.Is(err, agentmodel.AgentAPIOffline) {
 				uc.logger.DebugContext(
 					ctx, "agent api offline",
 					slog.String("agent_id", agent.ID.String()),
@@ -74,7 +75,7 @@ urlLoop:
 
 					exists, err := uc.existsInStorage(ctx, urlsToCheck)
 					if err != nil {
-						return entities.MultiHandleMultipleResult{}, fmt.Errorf(
+						return core.MultiHandleMultipleResult{}, fmt.Errorf(
 							"agent (%s) check duplicates (%s): %w", agent.ID.String(), u.String(), err,
 						)
 					}
@@ -90,7 +91,7 @@ urlLoop:
 			}
 
 			for _, u := range newUrls {
-				book := entities.Book{
+				book := core.Book{
 					ID:        uuid.Must(uuid.NewV7()),
 					OriginURL: &u,
 					CreateAt:  time.Now(),
@@ -103,7 +104,7 @@ urlLoop:
 
 				err = uc.storage.NewBook(ctx, book)
 				if err != nil {
-					return entities.MultiHandleMultipleResult{}, fmt.Errorf(
+					return core.MultiHandleMultipleResult{}, fmt.Errorf(
 						"agent (%s) create (%s): %w", agent.ID.String(), u.String(), err,
 					)
 				}

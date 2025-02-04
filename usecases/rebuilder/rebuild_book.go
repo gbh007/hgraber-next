@@ -7,26 +7,26 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type rebuildPageResources struct {
-	SourceBook         entities.Book
-	SourcePagesMap     map[int]entities.PageWithHash
-	ForbiddenHashes    map[entities.FileHash]struct{}
-	UnusedSourceHashes map[entities.FileHash]struct{}
+	SourceBook         core.Book
+	SourcePagesMap     map[int]core.PageWithHash
+	ForbiddenHashes    map[core.FileHash]struct{}
+	UnusedSourceHashes map[core.FileHash]struct{}
 }
 
 type rebuildedPagesInfo struct {
 	PagesRemap         map[int]int
 	SourcePageNumbers  []int
-	NewPages           []entities.Page
-	UnusedSourceHashes map[entities.FileHash]struct{}
+	NewPages           []core.Page
+	UnusedSourceHashes map[core.FileHash]struct{}
 }
 
-func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBookRequest) (_ uuid.UUID, returnErr error) {
+func (uc *UseCase) RebuildBook(ctx context.Context, request core.RebuildBookRequest) (_ uuid.UUID, returnErr error) {
 	if len(request.SelectedPages) == 0 {
-		return uuid.Nil, fmt.Errorf("%w: %w", entities.ErrRebuildBookIncorrectRequest, entities.ErrRebuildBookEmptyPages)
+		return uuid.Nil, fmt.Errorf("%w: %w", core.ErrRebuildBookIncorrectRequest, core.ErrRebuildBookEmptyPages)
 	}
 
 	newPageOrder := make(map[int]int, len(request.PageOrder))
@@ -38,7 +38,7 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 
 		for _, pageNumber := range request.SelectedPages {
 			if _, ok := newPageOrder[pageNumber]; !ok {
-				return uuid.Nil, fmt.Errorf("%w: missing page %d in page order", entities.ErrRebuildBookIncorrectRequest, pageNumber)
+				return uuid.Nil, fmt.Errorf("%w: missing page %d in page order", core.ErrRebuildBookIncorrectRequest, pageNumber)
 			}
 		}
 	}
@@ -73,11 +73,11 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request entities.RebuildBook
 	}
 
 	if isNewBook && len(pagesInfo.NewPages) == 0 {
-		return uuid.Nil, fmt.Errorf("%w: after deduplicate for new book", entities.ErrRebuildBookEmptyPages)
+		return uuid.Nil, fmt.Errorf("%w: after deduplicate for new book", core.ErrRebuildBookEmptyPages)
 	}
 
 	bookToMerge.AttributesParsed = true
-	newAttributes := entities.MergeAttributeMap(attributeToMerge, request.ModifiedOldBook.Attributes)
+	newAttributes := core.MergeAttributeMap(attributeToMerge, request.ModifiedOldBook.Attributes)
 
 	newLabels, err := uc.rebuildBookLabels(
 		ctx,

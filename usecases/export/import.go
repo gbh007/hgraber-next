@@ -12,7 +12,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/external"
 )
 
@@ -59,7 +59,7 @@ func (uc *UseCase) ImportArchive(
 	)
 
 	if errors.Is(err, external.ErrBookInfoNotFound) {
-		return uuid.Nil, fmt.Errorf("missing book info: %w", entities.BookNotFoundError)
+		return uuid.Nil, fmt.Errorf("missing book info: %w", core.BookNotFoundError)
 	}
 
 	book, err := external.BookToEntity(info.Data)
@@ -140,7 +140,7 @@ func (uc *UseCase) ImportArchive(
 	for i, p := range book.Pages {
 		fileID, hasFile := pageData[p.PageNumber]
 		if hasFile {
-			err = uc.storage.NewFile(ctx, entities.File{
+			err = uc.storage.NewFile(ctx, core.File{
 				ID:       fileID,
 				Filename: fmt.Sprintf("%d%s", p.PageNumber, p.Ext),
 				Ext:      p.Ext,

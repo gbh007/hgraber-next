@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/agent/internal/adapter"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type Client struct {
@@ -17,7 +17,7 @@ type Client struct {
 	agentTimeout time.Duration
 }
 
-func New(agents []entities.Agent, agentTimeout time.Duration) (*Client, error) {
+func New(agents []core.Agent, agentTimeout time.Duration) (*Client, error) {
 	client := &Client{
 		agents:       make(map[uuid.UUID]*adapter.Adapter, len(agents)),
 		agentMutex:   &sync.RWMutex{},
@@ -34,7 +34,7 @@ func New(agents []entities.Agent, agentTimeout time.Duration) (*Client, error) {
 	return client, nil
 }
 
-func (c *Client) SetAgent(agent entities.Agent) error {
+func (c *Client) SetAgent(agent core.Agent) error {
 	c.agentMutex.Lock()
 	defer c.agentMutex.Unlock()
 
@@ -55,7 +55,7 @@ func (c *Client) DeleteAgent(id uuid.UUID) error {
 
 	_, ok := c.agents[id]
 	if !ok {
-		return entities.AgentNotFoundError
+		return core.AgentNotFoundError
 	}
 
 	delete(c.agents, id)
@@ -69,7 +69,7 @@ func (c *Client) getAdapter(id uuid.UUID) (*adapter.Adapter, error) {
 
 	a, ok := c.agents[id]
 	if !ok || a == nil {
-		return nil, entities.AgentNotFoundError
+		return nil, core.AgentNotFoundError
 	}
 
 	return a, nil

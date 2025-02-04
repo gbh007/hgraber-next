@@ -12,11 +12,11 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (d *Database) SetLabel(ctx context.Context, label entities.BookLabel) error {
+func (d *Database) SetLabel(ctx context.Context, label core.BookLabel) error {
 	builder := squirrel.Insert("book_labels").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -43,7 +43,7 @@ func (d *Database) SetLabel(ctx context.Context, label entities.BookLabel) error
 	return nil
 }
 
-func (d *Database) DeleteLabel(ctx context.Context, label entities.BookLabel) error {
+func (d *Database) DeleteLabel(ctx context.Context, label core.BookLabel) error {
 	builder := squirrel.Delete("book_labels").
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
@@ -89,7 +89,7 @@ func (d *Database) DeleteBookLabels(ctx context.Context, bookID uuid.UUID) error
 	return nil
 }
 
-func (d *Database) Labels(ctx context.Context, bookID uuid.UUID) ([]entities.BookLabel, error) {
+func (d *Database) Labels(ctx context.Context, bookID uuid.UUID) ([]core.BookLabel, error) {
 	raw := make([]model.BookLabel, 0)
 
 	builder := squirrel.Select("*").
@@ -111,7 +111,7 @@ func (d *Database) Labels(ctx context.Context, bookID uuid.UUID) ([]entities.Boo
 		return nil, fmt.Errorf("exec query: %w", err)
 	}
 
-	result, err := pkg.MapWithError(raw, func(a model.BookLabel) (entities.BookLabel, error) {
+	result, err := pkg.MapWithError(raw, func(a model.BookLabel) (core.BookLabel, error) {
 		return a.ToEntity()
 	})
 	if err != nil {
@@ -121,7 +121,7 @@ func (d *Database) Labels(ctx context.Context, bookID uuid.UUID) ([]entities.Boo
 	return result, nil
 }
 
-func (d *Database) ReplaceLabels(ctx context.Context, bookID uuid.UUID, labels []entities.BookLabel) error {
+func (d *Database) ReplaceLabels(ctx context.Context, bookID uuid.UUID, labels []core.BookLabel) error {
 	builder := squirrel.Insert("book_labels").
 		PlaceholderFormat(squirrel.Dollar).
 		Columns(
@@ -183,7 +183,7 @@ func (d *Database) ReplaceLabels(ctx context.Context, bookID uuid.UUID, labels [
 	return nil
 }
 
-func (d *Database) SetLabels(ctx context.Context, labels []entities.BookLabel) error {
+func (d *Database) SetLabels(ctx context.Context, labels []core.BookLabel) error {
 	builder := squirrel.Insert("book_labels").
 		PlaceholderFormat(squirrel.Dollar).
 		Columns(

@@ -8,7 +8,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type fileStorage interface {
@@ -18,12 +19,12 @@ type fileStorage interface {
 }
 
 type storage interface {
-	NewBook(ctx context.Context, book entities.Book) error
-	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []entities.Page) error
-	SetLabel(ctx context.Context, label entities.BookLabel) error
+	NewBook(ctx context.Context, book core.Book) error
+	UpdateBookPages(ctx context.Context, id uuid.UUID, pages []core.Page) error
+	SetLabel(ctx context.Context, label core.BookLabel) error
 	UpdateAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
 	UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
-	NewFile(ctx context.Context, file entities.File) error
+	NewFile(ctx context.Context, file core.File) error
 
 	DeleteBook(ctx context.Context, id uuid.UUID) error
 
@@ -33,17 +34,17 @@ type storage interface {
 }
 
 type agentSystem interface {
-	ExportArchive(ctx context.Context, agentID uuid.UUID, data entities.AgentExportData) error
+	ExportArchive(ctx context.Context, agentID uuid.UUID, data agentmodel.AgentExportData) error
 }
 
 type tmpStorage interface {
-	AddToExport(books []entities.BookFullWithAgent)
-	ExportList() []entities.BookFullWithAgent
+	AddToExport(books []core.BookFullWithAgent)
+	ExportList() []core.BookFullWithAgent
 }
 
 type bookRequester interface {
-	Books(ctx context.Context, filter entities.BookFilter) ([]entities.BookContainer, error)
-	BookOriginFull(ctx context.Context, bookID uuid.UUID) (entities.BookContainer, error)
+	Books(ctx context.Context, filter core.BookFilter) ([]core.BookContainer, error)
+	BookOriginFull(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error)
 }
 
 type UseCase struct {

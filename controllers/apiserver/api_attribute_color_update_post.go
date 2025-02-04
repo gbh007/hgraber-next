@@ -3,12 +3,12 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APIAttributeColorUpdatePost(ctx context.Context, req *serverAPI.AttributeColor) (serverAPI.APIAttributeColorUpdatePostRes, error) {
-	err := c.webAPIUseCases.UpdateAttributeColor(ctx, entities.AttributeColor(*req))
+	err := c.webAPIUseCases.UpdateAttributeColor(ctx, core.AttributeColor(*req))
 	if err != nil {
 		return &serverAPI.APIAttributeColorUpdatePostInternalServerError{
 			InnerCode: WebAPIUseCaseCode,

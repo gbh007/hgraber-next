@@ -5,33 +5,33 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (a *Adapter) BookParse(ctx context.Context, url url.URL) (entities.AgentBookDetails, error) {
+func (a *Adapter) BookParse(ctx context.Context, url url.URL) (agentmodel.AgentBookDetails, error) {
 	res, err := a.rawClient.APIParsingBookPost(ctx, &agentAPI.APIParsingBookPostReq{
 		URL: url,
 	})
 	if err != nil {
-		return entities.AgentBookDetails{}, err
+		return agentmodel.AgentBookDetails{}, err
 	}
 
 	switch typedRes := res.(type) {
 	case *agentAPI.BookDetails:
-		result := entities.AgentBookDetails{
+		result := agentmodel.AgentBookDetails{
 			URL:       typedRes.URL,
 			Name:      typedRes.Name,
 			PageCount: typedRes.PageCount,
-			Attributes: pkg.Map(typedRes.Attributes, func(a agentAPI.BookDetailsAttributesItem) entities.AgentBookDetailsAttributesItem {
-				return entities.AgentBookDetailsAttributesItem{
+			Attributes: pkg.Map(typedRes.Attributes, func(a agentAPI.BookDetailsAttributesItem) agentmodel.AgentBookDetailsAttributesItem {
+				return agentmodel.AgentBookDetailsAttributesItem{
 					Code:   string(a.Code),
 					Values: a.Values,
 				}
 			}),
-			Pages: pkg.Map(typedRes.Pages, func(p agentAPI.BookDetailsPagesItem) entities.AgentBookDetailsPagesItem {
-				return entities.AgentBookDetailsPagesItem{
+			Pages: pkg.Map(typedRes.Pages, func(p agentAPI.BookDetailsPagesItem) agentmodel.AgentBookDetailsPagesItem {
+				return agentmodel.AgentBookDetailsPagesItem{
 					PageNumber: p.PageNumber,
 					URL:        p.URL,
 					Filename:   p.Filename,
@@ -42,18 +42,18 @@ func (a *Adapter) BookParse(ctx context.Context, url url.URL) (entities.AgentBoo
 		return result, nil
 
 	case *agentAPI.APIParsingBookPostBadRequest:
-		return entities.AgentBookDetails{}, fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
+		return agentmodel.AgentBookDetails{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentAPI.APIParsingBookPostUnauthorized:
-		return entities.AgentBookDetails{}, fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
+		return agentmodel.AgentBookDetails{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentAPI.APIParsingBookPostForbidden:
-		return entities.AgentBookDetails{}, fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
+		return agentmodel.AgentBookDetails{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentAPI.APIParsingBookPostInternalServerError:
-		return entities.AgentBookDetails{}, fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
+		return agentmodel.AgentBookDetails{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return entities.AgentBookDetails{}, entities.AgentAPIUnknownResponse
+		return agentmodel.AgentBookDetails{}, agentmodel.AgentAPIUnknownResponse
 	}
 }

@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
-func (a *Adapter) ExportArchive(ctx context.Context, data entities.AgentExportData) error {
+func (a *Adapter) ExportArchive(ctx context.Context, data agentmodel.AgentExportData) error {
 	res, err := a.rawClient.APIExportArchivePost(
 		ctx,
 		agentAPI.APIExportArchivePostReq{
@@ -30,19 +30,19 @@ func (a *Adapter) ExportArchive(ctx context.Context, data entities.AgentExportDa
 		return nil
 
 	case *agentAPI.APIExportArchivePostBadRequest:
-		return fmt.Errorf("%w: %s", entities.AgentAPIBadRequest, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentAPI.APIExportArchivePostUnauthorized:
-		return fmt.Errorf("%w: %s", entities.AgentAPIUnauthorized, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentAPI.APIExportArchivePostForbidden:
-		return fmt.Errorf("%w: %s", entities.AgentAPIForbidden, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentAPI.APIExportArchivePostInternalServerError:
-		return fmt.Errorf("%w: %s", entities.AgentAPIInternalError, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return entities.AgentAPIUnknownResponse
+		return agentmodel.AgentAPIUnknownResponse
 	}
 }
 

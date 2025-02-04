@@ -3,7 +3,7 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
@@ -37,8 +37,8 @@ func (c *Controller) APISystemInfoSizeGet(ctx context.Context) (serverAPI.APISys
 		DeadHashCount: info.DeadHashCount,
 
 		PagesSize:          info.PageFileSizeByFSSum(),
-		PagesSizeFormatted: entities.PrettySize(info.PageFileSizeByFSSum()),
+		PagesSizeFormatted: core.PrettySize(info.PageFileSizeByFSSum()),
 		FilesSize:          info.FileSizeByFSSum(),
-		FilesSizeFormatted: entities.PrettySize(info.FileSizeByFSSum()),
+		FilesSizeFormatted: core.PrettySize(info.FileSizeByFSSum()),
 	}, nil
 }

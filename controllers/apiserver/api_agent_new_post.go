@@ -3,12 +3,12 @@ package apiserver
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APIAgentNewPost(ctx context.Context, req *serverAPI.APIAgentNewPostReq) (serverAPI.APIAgentNewPostRes, error) {
-	err := c.agentUseCases.NewAgent(ctx, entities.Agent{
+	err := c.agentUseCases.NewAgent(ctx, core.Agent{
 		Name:          req.Name,
 		Addr:          req.Addr,
 		Token:         req.Token,

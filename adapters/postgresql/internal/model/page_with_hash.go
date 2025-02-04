@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func PageWithHashColumns() []string {
@@ -28,7 +28,7 @@ func PageWithHashColumns() []string {
 	}
 }
 
-func PageWithHashScanner(p *entities.PageWithHash) RowScanner {
+func PageWithHashScanner(p *core.PageWithHash) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			originURL sql.NullString

@@ -8,7 +8,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type DeletedPage struct {
@@ -40,7 +40,7 @@ func DeletedPageToPageWithHashColumns() []string {
 	}
 }
 
-func DeletedPageToPageWithHashScanner(p *entities.PageWithHash) RowScanner {
+func DeletedPageToPageWithHashScanner(p *core.PageWithHash) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			originURL sql.NullString

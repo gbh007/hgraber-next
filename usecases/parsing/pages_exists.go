@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 )
 
-func (uc *UseCase) PagesExists(ctx context.Context, urls []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error) {
-	result := make([]entities.AgentPageCheckResult, 0, len(urls))
+func (uc *UseCase) PagesExists(ctx context.Context, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error) {
+	result := make([]agentmodel.AgentPageCheckResult, 0, len(urls))
 
 urlLoop:
 	for _, u := range urls {
@@ -19,7 +19,7 @@ urlLoop:
 
 		for _, p := range pages {
 			if p.IsLoaded() {
-				result = append(result, entities.AgentPageCheckResult{
+				result = append(result, agentmodel.AgentPageCheckResult{
 					BookURL:    u.BookURL,
 					ImageURL:   u.ImageURL,
 					IsPossible: true,
@@ -29,7 +29,7 @@ urlLoop:
 			}
 		}
 
-		result = append(result, entities.AgentPageCheckResult{
+		result = append(result, agentmodel.AgentPageCheckResult{
 			BookURL:       u.BookURL,
 			ImageURL:      u.ImageURL,
 			IsUnsupported: true,

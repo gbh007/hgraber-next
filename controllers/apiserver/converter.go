@@ -8,7 +8,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/entities"
+	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -87,7 +88,7 @@ func (c *Controller) getFileURL(fileID uuid.UUID, ext string, fsID uuid.UUID) ur
 	return u
 }
 
-func (c *Controller) getPagePreview(p entities.BFFPreviewPage) serverAPI.OptURI {
+func (c *Controller) getPagePreview(p bff.PreviewPage) serverAPI.OptURI {
 	previewURL := serverAPI.OptURI{}
 
 	if p.Downloaded {
@@ -101,7 +102,7 @@ func (c *Controller) getPagePreview(p entities.BFFPreviewPage) serverAPI.OptURI 
 	return previewURL
 }
 
-func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.BFFPreviewPage) serverAPI.BookSimple {
+func (c *Controller) convertSimpleBook(book core.Book, previewPage bff.PreviewPage) serverAPI.BookSimple {
 	return serverAPI.BookSimple{
 		ID:         book.ID,
 		CreatedAt:  book.CreateAt,
@@ -119,7 +120,7 @@ func (c *Controller) convertSimpleBook(book entities.Book, previewPage entities.
 	}
 }
 
-func (c *Controller) convertPreviewPage(page entities.BFFPreviewPage) serverAPI.PageSimple {
+func (c *Controller) convertPreviewPage(page bff.PreviewPage) serverAPI.PageSimple {
 	return serverAPI.PageSimple{
 		PageNumber:  page.PageNumber,
 		PreviewURL:  c.getPagePreview(page),
@@ -127,7 +128,7 @@ func (c *Controller) convertPreviewPage(page entities.BFFPreviewPage) serverAPI.
 	}
 }
 
-func convertBookAttribute(a entities.AttributeToWeb) serverAPI.BookAttribute {
+func convertBookAttribute(a bff.AttributeToWeb) serverAPI.BookAttribute {
 	return serverAPI.BookAttribute{
 		Code:   a.Code,
 		Name:   a.Name,
@@ -135,7 +136,7 @@ func convertBookAttribute(a entities.AttributeToWeb) serverAPI.BookAttribute {
 	}
 }
 
-func convertBookFullToBookRaw(book entities.BookContainer) *serverAPI.BookRaw {
+func convertBookFullToBookRaw(book core.BookContainer) *serverAPI.BookRaw {
 	return &serverAPI.BookRaw{
 		ID:        book.Book.ID,
 		CreateAt:  book.Book.CreateAt,
@@ -148,7 +149,7 @@ func convertBookFullToBookRaw(book entities.BookContainer) *serverAPI.BookRaw {
 				Values: values,
 			}
 		}),
-		Pages: pkg.Map(book.Pages, func(p entities.Page) serverAPI.BookRawPagesItem {
+		Pages: pkg.Map(book.Pages, func(p core.Page) serverAPI.BookRawPagesItem {
 			return serverAPI.BookRawPagesItem{
 				PageNumber: p.PageNumber,
 				OriginURL:  optURL(p.OriginURL),
@@ -158,7 +159,7 @@ func convertBookFullToBookRaw(book entities.BookContainer) *serverAPI.BookRaw {
 				LoadAt:     optTime(p.LoadAt),
 			}
 		}),
-		Labels: pkg.Map(book.Labels, func(l entities.BookLabel) serverAPI.BookRawLabelsItem {
+		Labels: pkg.Map(book.Labels, func(l core.BookLabel) serverAPI.BookRawLabelsItem {
 			return serverAPI.BookRawLabelsItem{
 				PageNumber: l.PageNumber,
 				Name:       l.Name,
@@ -169,13 +170,13 @@ func convertBookFullToBookRaw(book entities.BookContainer) *serverAPI.BookRaw {
 	}
 }
 
-func convertBookRawToBookFull(book *serverAPI.BookRaw) entities.BookContainer {
+func convertBookRawToBookFull(book *serverAPI.BookRaw) core.BookContainer {
 	if book == nil {
-		return entities.BookContainer{}
+		return core.BookContainer{}
 	}
 
-	return entities.BookContainer{
-		Book: entities.Book{
+	return core.BookContainer{
+		Book: core.Book{
 			ID:        book.ID,
 			Name:      book.Name,
 			OriginURL: urlFromOpt(book.OriginURL),
@@ -183,8 +184,8 @@ func convertBookRawToBookFull(book *serverAPI.BookRaw) entities.BookContainer {
 			CreateAt:  book.CreateAt,
 			// FIXME: нет ряд полей, возможно стоит расширить api
 		},
-		Pages: pkg.Map(book.Pages, func(raw serverAPI.BookRawPagesItem) entities.Page {
-			return entities.Page{
+		Pages: pkg.Map(book.Pages, func(raw serverAPI.BookRawPagesItem) core.Page {
+			return core.Page{
 				BookID:     book.ID,
 				PageNumber: raw.PageNumber,
 				Ext:        raw.Ext,
@@ -198,8 +199,8 @@ func convertBookRawToBookFull(book *serverAPI.BookRaw) entities.BookContainer {
 		Attributes: pkg.SliceToMap(book.Attributes, func(raw serverAPI.BookRawAttributesItem) (string, []string) {
 			return raw.Code, raw.Values
 		}),
-		Labels: pkg.Map(book.Labels, func(raw serverAPI.BookRawLabelsItem) entities.BookLabel {
-			return entities.BookLabel{
+		Labels: pkg.Map(book.Labels, func(raw serverAPI.BookRawLabelsItem) core.BookLabel {
+			return core.BookLabel{
 				BookID:     book.ID,
 				PageNumber: raw.PageNumber,
 				Name:       raw.Name,
@@ -210,7 +211,7 @@ func convertBookRawToBookFull(book *serverAPI.BookRaw) entities.BookContainer {
 	}
 }
 
-func convertAgentToAPI(raw entities.Agent) serverAPI.Agent {
+func convertAgentToAPI(raw core.Agent) serverAPI.Agent {
 	return serverAPI.Agent{
 		ID:            raw.ID,
 		Name:          raw.Name,
@@ -225,8 +226,8 @@ func convertAgentToAPI(raw entities.Agent) serverAPI.Agent {
 	}
 }
 
-func convertFileSystemInfoFromAPI(raw *serverAPI.FileSystemInfo) entities.FileStorageSystem {
-	return entities.FileStorageSystem{
+func convertFileSystemInfoFromAPI(raw *serverAPI.FileSystemInfo) core.FileStorageSystem {
+	return core.FileStorageSystem{
 		ID:                  raw.ID,
 		Name:                raw.Name,
 		Description:         raw.Description.Value,
@@ -240,7 +241,7 @@ func convertFileSystemInfoFromAPI(raw *serverAPI.FileSystemInfo) entities.FileSt
 	}
 }
 
-func convertFileSystemInfoToAPI(raw entities.FileStorageSystem) serverAPI.FileSystemInfo {
+func convertFileSystemInfoToAPI(raw core.FileStorageSystem) serverAPI.FileSystemInfo {
 	return serverAPI.FileSystemInfo{
 		ID:                  raw.ID,
 		Name:                raw.Name,
@@ -255,14 +256,14 @@ func convertFileSystemInfoToAPI(raw entities.FileStorageSystem) serverAPI.FileSy
 	}
 }
 
-func convertStatusFlagToAPI(f entities.StatusFlag) serverAPI.OptBool {
+func convertStatusFlagToAPI(f bff.StatusFlag) serverAPI.OptBool {
 	return serverAPI.OptBool{
-		Value: f == entities.TrueStatusFlag,
-		Set:   f != entities.UnknownStatusFlag,
+		Value: f == bff.TrueStatusFlag,
+		Set:   f != bff.UnknownStatusFlag,
 	}
 }
 
-func convertFSDBFilesInfoToAPI(raw *entities.FSFilesInfo) serverAPI.OptFSDBFilesInfo {
+func convertFSDBFilesInfoToAPI(raw *core.FSFilesInfo) serverAPI.OptFSDBFilesInfo {
 	if raw == nil {
 		return serverAPI.OptFSDBFilesInfo{}
 	}
@@ -270,6 +271,6 @@ func convertFSDBFilesInfoToAPI(raw *entities.FSFilesInfo) serverAPI.OptFSDBFiles
 	return serverAPI.NewOptFSDBFilesInfo(serverAPI.FSDBFilesInfo{
 		Count:         raw.Count,
 		Size:          raw.Size,
-		SizeFormatted: entities.PrettySize(raw.Size),
+		SizeFormatted: core.PrettySize(raw.Size),
 	})
 }
