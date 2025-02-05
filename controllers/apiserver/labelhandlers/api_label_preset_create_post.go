@@ -1,4 +1,4 @@
-package apiserver
+package labelhandlers
 
 import (
 	"context"
@@ -8,18 +8,18 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APILabelPresetUpdatePost(ctx context.Context, req *serverAPI.APILabelPresetUpdatePostReq) (serverAPI.APILabelPresetUpdatePostRes, error) {
-	err := c.webAPIUseCases.UpdateLabelPreset(ctx, core.BookLabelPreset{
+func (c *LabelHandlersController) APILabelPresetCreatePost(ctx context.Context, req *serverAPI.APILabelPresetCreatePostReq) (serverAPI.APILabelPresetCreatePostRes, error) {
+	err := c.webAPIUseCases.CreateLabelPreset(ctx, core.BookLabelPreset{
 		Name:        req.Name,
 		Values:      req.Values,
 		Description: req.Description.Value,
 	})
 	if err != nil {
-		return &serverAPI.APILabelPresetUpdatePostInternalServerError{
+		return &serverAPI.APILabelPresetCreatePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APILabelPresetUpdatePostNoContent{}, nil
+	return &serverAPI.APILabelPresetCreatePostNoContent{}, nil
 }

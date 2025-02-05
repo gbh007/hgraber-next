@@ -1,4 +1,4 @@
-package apiserver
+package labelhandlers
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APILabelPresetGetPost(ctx context.Context, req *serverAPI.APILabelPresetGetPostReq) (serverAPI.APILabelPresetGetPostRes, error) {
+func (c *LabelHandlersController) APILabelPresetGetPost(ctx context.Context, req *serverAPI.APILabelPresetGetPostReq) (serverAPI.APILabelPresetGetPostRes, error) {
 	raw, err := c.webAPIUseCases.LabelPreset(ctx, req.Name)
 	if err != nil {
 		return &serverAPI.APILabelPresetGetPostInternalServerError{

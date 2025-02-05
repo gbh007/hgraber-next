@@ -1,4 +1,4 @@
-package apiserver
+package labelhandlers
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APILabelSetPost(ctx context.Context, req *serverAPI.APILabelSetPostReq) (serverAPI.APILabelSetPostRes, error) {
+func (c *LabelHandlersController) APILabelSetPost(ctx context.Context, req *serverAPI.APILabelSetPostReq) (serverAPI.APILabelSetPostRes, error) {
 	err := c.webAPIUseCases.SetLabel(ctx, core.BookLabel{
 		BookID:     req.BookID,
 		PageNumber: req.PageNumber.Value,
