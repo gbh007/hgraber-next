@@ -12,6 +12,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/agenthandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
+	"github.com/gbh007/hgraber-next/controllers/apiserver/attributehandlers"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -131,6 +132,7 @@ type config interface {
 
 type Controller struct {
 	*agenthandlers.AgentHandlersController
+	*attributehandlers.AttributeHandlersController
 
 	logger    *slog.Logger
 	tracer    trace.Tracer
@@ -188,6 +190,13 @@ func New(
 			tracer,
 			agentUseCases,
 			exportUseCases,
+			debug,
+			ac,
+		),
+		AttributeHandlersController: attributehandlers.New(
+			logger,
+			tracer,
+			webAPIUseCases,
 			debug,
 			ac,
 		),

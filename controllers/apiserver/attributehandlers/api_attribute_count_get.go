@@ -1,4 +1,4 @@
-package apiserver
+package attributehandlers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APIAttributeCountGet(ctx context.Context) (serverAPI.APIAttributeCountGetRes, error) {
+func (c *AttributeHandlersController) APIAttributeCountGet(ctx context.Context) (serverAPI.APIAttributeCountGetRes, error) {
 	attributes, err := c.webAPIUseCases.AttributesCount(ctx)
 	if err != nil {
 		return &serverAPI.APIAttributeCountGetInternalServerError{

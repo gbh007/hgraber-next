@@ -1,4 +1,4 @@
-package apiserver
+package attributehandlers
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIAttributeColorUpdatePost(ctx context.Context, req *serverAPI.AttributeColor) (serverAPI.APIAttributeColorUpdatePostRes, error) {
+func (c *AttributeHandlersController) APIAttributeColorUpdatePost(ctx context.Context, req *serverAPI.AttributeColor) (serverAPI.APIAttributeColorUpdatePostRes, error) {
 	err := c.webAPIUseCases.UpdateAttributeColor(ctx, core.AttributeColor(*req))
 	if err != nil {
 		return &serverAPI.APIAttributeColorUpdatePostInternalServerError{
