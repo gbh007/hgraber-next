@@ -1,4 +1,4 @@
-package apiserver
+package fshandlers
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIFsUpdatePost(ctx context.Context, req *serverAPI.FileSystemInfo) (serverAPI.APIFsUpdatePostRes, error) {
+func (c *FSHandlersController) APIFsUpdatePost(ctx context.Context, req *serverAPI.FileSystemInfo) (serverAPI.APIFsUpdatePostRes, error) {
 	err := c.fsUseCases.UpdateFileStorage(ctx, apiservercore.ConvertFileSystemInfoFromAPI(req))
 	if err != nil {
 		return &serverAPI.APIFsUpdatePostInternalServerError{

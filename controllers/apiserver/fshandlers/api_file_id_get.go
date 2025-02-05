@@ -1,4 +1,4 @@
-package apiserver
+package fshandlers
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIFileIDGet(ctx context.Context, params serverAPI.APIFileIDGetParams) (serverAPI.APIFileIDGetRes, error) {
+func (c *FSHandlersController) APIFileIDGet(ctx context.Context, params serverAPI.APIFileIDGetParams) (serverAPI.APIFileIDGetRes, error) {
 	fileID, err := uuid.Parse(strings.TrimSuffix(params.ID, path.Ext(params.ID)))
 	if err != nil {
 		return &serverAPI.APIFileIDGetBadRequest{

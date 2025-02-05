@@ -1,4 +1,4 @@
-package apiserver
+package fshandlers
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIFsTransferBookPost(ctx context.Context, req *serverAPI.APIFsTransferBookPostReq) (serverAPI.APIFsTransferBookPostRes, error) {
+func (c *FSHandlersController) APIFsTransferBookPost(ctx context.Context, req *serverAPI.APIFsTransferBookPostReq) (serverAPI.APIFsTransferBookPostRes, error) {
 	var pageNumber *int
 
 	if req.OnlyPreviewPages.Value {

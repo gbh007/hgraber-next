@@ -1,4 +1,4 @@
-package apiserver
+package fshandlers
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIFsValidatePost(ctx context.Context, req *serverAPI.APIFsValidatePostReq) (serverAPI.APIFsValidatePostRes, error) {
+func (c *FSHandlersController) APIFsValidatePost(ctx context.Context, req *serverAPI.APIFsValidatePostReq) (serverAPI.APIFsValidatePostRes, error) {
 	err := c.fsUseCases.ValidateFS(ctx, req.ID)
 	if err != nil {
 		return &serverAPI.APIFsValidatePostInternalServerError{

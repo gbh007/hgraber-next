@@ -1,4 +1,4 @@
-package apiserver
+package fshandlers
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIFsTransferPost(ctx context.Context, req *serverAPI.APIFsTransferPostReq) (serverAPI.APIFsTransferPostRes, error) {
+func (c *FSHandlersController) APIFsTransferPost(ctx context.Context, req *serverAPI.APIFsTransferPostReq) (serverAPI.APIFsTransferPostRes, error) {
 	err := c.fsUseCases.TransferFSFiles(ctx, req.From, req.To, req.OnlyPreviewPages.Value)
 	if err != nil {
 		return &serverAPI.APIFsTransferPostInternalServerError{

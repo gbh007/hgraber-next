@@ -1,4 +1,4 @@
-package apiserver
+package fshandlers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APIFsListPost(ctx context.Context, req *serverAPI.APIFsListPostReq) (serverAPI.APIFsListPostRes, error) {
+func (c *FSHandlersController) APIFsListPost(ctx context.Context, req *serverAPI.APIFsListPostReq) (serverAPI.APIFsListPostRes, error) {
 	storages, err := c.fsUseCases.FileStoragesWithStatus(
 		ctx,
 		req.IncludeDbFileSize.Value,

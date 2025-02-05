@@ -15,6 +15,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/attributehandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/bookhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/deduplicatehandlers"
+	"github.com/gbh007/hgraber-next/controllers/apiserver/fshandlers"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -137,6 +138,7 @@ type Controller struct {
 	*attributehandlers.AttributeHandlersController
 	*bookhandlers.BookHandlersController
 	*deduplicatehandlers.DeduplicateHandlersController
+	*fshandlers.FSHandlersController
 
 	logger    *slog.Logger
 	tracer    trace.Tracer
@@ -220,6 +222,16 @@ func New(
 			tracer,
 			webAPIUseCases,
 			deduplicateUseCases,
+			debug,
+			ac,
+		),
+		FSHandlersController: fshandlers.New(
+			logger,
+			tracer,
+			parseUseCases,
+			webAPIUseCases,
+			taskUseCases,
+			fsUseCases,
 			debug,
 			ac,
 		),

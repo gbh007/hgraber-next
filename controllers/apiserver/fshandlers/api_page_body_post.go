@@ -1,4 +1,4 @@
-package apiserver
+package fshandlers
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIPageBodyPost(ctx context.Context, req *serverAPI.APIPageBodyPostReq) (serverAPI.APIPageBodyPostRes, error) {
+func (c *FSHandlersController) APIPageBodyPost(ctx context.Context, req *serverAPI.APIPageBodyPostReq) (serverAPI.APIPageBodyPostRes, error) {
 	var (
 		body      io.Reader
 		err       error

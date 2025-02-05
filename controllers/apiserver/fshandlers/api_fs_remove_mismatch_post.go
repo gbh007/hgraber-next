@@ -1,4 +1,4 @@
-package apiserver
+package fshandlers
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIFsRemoveMismatchPost(ctx context.Context, req *serverAPI.APIFsRemoveMismatchPostReq) (serverAPI.APIFsRemoveMismatchPostRes, error) {
+func (c *FSHandlersController) APIFsRemoveMismatchPost(ctx context.Context, req *serverAPI.APIFsRemoveMismatchPostReq) (serverAPI.APIFsRemoveMismatchPostRes, error) {
 	err := c.taskUseCases.RemoveFilesInFSMismatch(ctx, req.ID)
 	if err != nil {
 		return &serverAPI.APIFsRemoveMismatchPostInternalServerError{
