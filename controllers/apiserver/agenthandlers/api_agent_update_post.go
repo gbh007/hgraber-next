@@ -1,4 +1,4 @@
-package apiserver
+package agenthandlers
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIAgentUpdatePost(ctx context.Context, req *serverAPI.Agent) (serverAPI.APIAgentUpdatePostRes, error) {
+func (c *AgentHandlersController) APIAgentUpdatePost(ctx context.Context, req *serverAPI.Agent) (serverAPI.APIAgentUpdatePostRes, error) {
 	err := c.agentUseCases.UpdateAgent(ctx, core.Agent{
 		ID:            req.ID,
 		Name:          req.Name,

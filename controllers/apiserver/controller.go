@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/agenthandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/bff"
@@ -129,6 +130,8 @@ type config interface {
 }
 
 type Controller struct {
+	*agenthandlers.AgentHandlersController
+
 	logger    *slog.Logger
 	tracer    trace.Tracer
 	debug     bool
@@ -180,6 +183,15 @@ func New(
 	}
 
 	c := &Controller{
+		AgentHandlersController: agenthandlers.New(
+			logger,
+			tracer,
+			agentUseCases,
+			exportUseCases,
+			debug,
+			ac,
+		),
+
 		logger:              logger,
 		tracer:              tracer,
 		serverAddr:          config.GetAddr(),

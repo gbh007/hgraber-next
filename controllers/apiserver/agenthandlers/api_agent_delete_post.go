@@ -1,4 +1,4 @@
-package apiserver
+package agenthandlers
 
 import (
 	"context"
@@ -9,24 +9,22 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIAgentGetPost(ctx context.Context, req *serverAPI.APIAgentGetPostReq) (serverAPI.APIAgentGetPostRes, error) {
-	agent, err := c.agentUseCases.Agent(ctx, req.ID)
+func (c *AgentHandlersController) APIAgentDeletePost(ctx context.Context, req *serverAPI.APIAgentDeletePostReq) (serverAPI.APIAgentDeletePostRes, error) {
+	err := c.agentUseCases.DeleteAgent(ctx, req.ID)
 
 	if errors.Is(err, core.AgentNotFoundError) {
-		return &serverAPI.APIAgentGetPostNotFound{
+		return &serverAPI.APIAgentDeletePostNotFound{
 			InnerCode: apiservercore.AgentUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIAgentGetPostInternalServerError{
+		return &serverAPI.APIAgentDeletePostInternalServerError{
 			InnerCode: apiservercore.AgentUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	result := apiservercore.ConvertAgentToAPI(agent)
-
-	return &result, nil
+	return &serverAPI.APIAgentDeletePostNoContent{}, nil
 }

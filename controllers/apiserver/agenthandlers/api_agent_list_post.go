@@ -1,4 +1,4 @@
-package apiserver
+package agenthandlers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAgentListPostReq) (serverAPI.APIAgentListPostRes, error) {
+func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *serverAPI.APIAgentListPostReq) (serverAPI.APIAgentListPostRes, error) {
 	agents, err := c.agentUseCases.Agents(ctx, core.AgentFilter{
 		CanParse:      req.CanParse.Value,
 		CanExport:     req.CanExport.Value,
