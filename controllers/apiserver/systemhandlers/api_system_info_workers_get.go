@@ -1,4 +1,4 @@
-package apiserver
+package systemhandlers
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APISystemInfoWorkersGet(ctx context.Context) (serverAPI.APISystemInfoWorkersGetRes, error) {
+func (c *SystemHandlersController) APISystemInfoWorkersGet(ctx context.Context) (serverAPI.APISystemInfoWorkersGetRes, error) {
 	workers := c.webAPIUseCases.WorkersInfo(ctx)
 
 	return &serverAPI.APISystemInfoWorkersGetOK{

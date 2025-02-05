@@ -1,4 +1,4 @@
-package apiserver
+package systemhandlers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APISystemHandlePost(ctx context.Context, req *serverAPI.APISystemHandlePostReq) (serverAPI.APISystemHandlePostRes, error) {
+func (c *SystemHandlersController) APISystemHandlePost(ctx context.Context, req *serverAPI.APISystemHandlePostReq) (serverAPI.APISystemHandlePostRes, error) {
 	if req.IsMulti.Value {
 		result, err := c.parseUseCases.NewBooksMulti(ctx, req.Urls, req.AutoVerify.Value)
 		if err != nil {

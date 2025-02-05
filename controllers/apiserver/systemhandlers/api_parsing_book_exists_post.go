@@ -1,4 +1,4 @@
-package apiserver
+package systemhandlers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APIParsingBookExistsPost(ctx context.Context, req *serverAPI.APIParsingBookExistsPostReq) (serverAPI.APIParsingBookExistsPostRes, error) {
+func (c *SystemHandlersController) APIParsingBookExistsPost(ctx context.Context, req *serverAPI.APIParsingBookExistsPostReq) (serverAPI.APIParsingBookExistsPostRes, error) {
 	result, err := c.parseUseCases.BooksExists(ctx, req.Urls)
 	if err != nil {
 		return &serverAPI.APIParsingBookExistsPostInternalServerError{

@@ -1,4 +1,4 @@
-package apiserver
+package systemhandlers
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APISystemInfoSizeGet(ctx context.Context) (serverAPI.APISystemInfoSizeGetRes, error) {
+func (c *SystemHandlersController) APISystemInfoSizeGet(ctx context.Context) (serverAPI.APISystemInfoSizeGetRes, error) {
 	info, err := c.webAPIUseCases.SystemSize(ctx)
 	if err != nil {
 		return &serverAPI.APISystemInfoSizeGetInternalServerError{

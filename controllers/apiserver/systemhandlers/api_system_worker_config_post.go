@@ -1,4 +1,4 @@
-package apiserver
+package systemhandlers
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APISystemWorkerConfigPost(ctx context.Context, req *serverAPI.APISystemWorkerConfigPostReq) (serverAPI.APISystemWorkerConfigPostRes, error) {
+func (c *SystemHandlersController) APISystemWorkerConfigPost(ctx context.Context, req *serverAPI.APISystemWorkerConfigPostReq) (serverAPI.APISystemWorkerConfigPostRes, error) {
 	counts := make(map[string]int, len(req.RunnersCount))
 
 	for _, runnerCount := range req.RunnersCount {

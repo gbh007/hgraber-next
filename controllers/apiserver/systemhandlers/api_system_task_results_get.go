@@ -1,4 +1,4 @@
-package apiserver
+package systemhandlers
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APISystemTaskResultsGet(ctx context.Context) (serverAPI.APISystemTaskResultsGetRes, error) {
+func (c *SystemHandlersController) APISystemTaskResultsGet(ctx context.Context) (serverAPI.APISystemTaskResultsGetRes, error) {
 	result, err := c.taskUseCases.TaskResults(ctx)
 	if err != nil {
 		return &serverAPI.APISystemTaskResultsGetInternalServerError{

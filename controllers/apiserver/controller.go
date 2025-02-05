@@ -17,6 +17,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/deduplicatehandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/fshandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/labelhandlers"
+	"github.com/gbh007/hgraber-next/controllers/apiserver/systemhandlers"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -141,23 +142,12 @@ type Controller struct {
 	*deduplicatehandlers.DeduplicateHandlersController
 	*fshandlers.FSHandlersController
 	*labelhandlers.LabelHandlersController
+	*systemhandlers.SystemHandlersController
 
 	logger    *slog.Logger
 	tracer    trace.Tracer
 	debug     bool
 	staticDir string
-
-	apiCore *apiservercore.Controller
-
-	parseUseCases       ParseUseCases
-	webAPIUseCases      WebAPIUseCases
-	agentUseCases       AgentUseCases
-	exportUseCases      ExportUseCases
-	deduplicateUseCases DeduplicateUseCases
-	taskUseCases        TaskUseCases
-	rebuilderUseCases   ReBuilderUseCases
-	fsUseCases          FSUseCases
-	bffUseCases         BFFUseCases
 
 	ogenServer *serverAPI.Server
 
@@ -244,24 +234,24 @@ func New(
 			debug,
 			ac,
 		),
+		SystemHandlersController: systemhandlers.New(
+			logger,
+			tracer,
+			parseUseCases,
+			webAPIUseCases,
+			exportUseCases,
+			deduplicateUseCases,
+			taskUseCases,
+			debug,
+			ac,
+		),
 
-		logger:              logger,
-		tracer:              tracer,
-		serverAddr:          config.GetAddr(),
-		parseUseCases:       parseUseCases,
-		webAPIUseCases:      webAPIUseCases,
-		agentUseCases:       agentUseCases,
-		exportUseCases:      exportUseCases,
-		deduplicateUseCases: deduplicateUseCases,
-		taskUseCases:        taskUseCases,
-		rebuilderUseCases:   rebuilderUseCases,
-		fsUseCases:          fsUseCases,
-		bffUseCases:         bffUseCases,
-		debug:               debug,
-		staticDir:           config.GetStaticDir(),
-		token:               config.GetToken(),
-
-		apiCore: ac,
+		logger:     logger,
+		tracer:     tracer,
+		serverAddr: config.GetAddr(),
+		debug:      debug,
+		staticDir:  config.GetStaticDir(),
+		token:      config.GetToken(),
 	}
 
 	ogenServer, err := serverAPI.NewServer(

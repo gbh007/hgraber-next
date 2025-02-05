@@ -1,4 +1,4 @@
-package apiserver
+package systemhandlers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APIParsingPageExistsPost(ctx context.Context, req *serverAPI.APIParsingPageExistsPostReq) (serverAPI.APIParsingPageExistsPostRes, error) {
+func (c *SystemHandlersController) APIParsingPageExistsPost(ctx context.Context, req *serverAPI.APIParsingPageExistsPostReq) (serverAPI.APIParsingPageExistsPostRes, error) {
 	result, err := c.parseUseCases.PagesExists(ctx, pkg.Map(req.Urls, func(u serverAPI.APIParsingPageExistsPostReqUrlsItem) agentmodel.AgentPageURL {
 		return agentmodel.AgentPageURL{
 			BookURL:  u.BookURL,

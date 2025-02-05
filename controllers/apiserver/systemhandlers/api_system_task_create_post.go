@@ -1,4 +1,4 @@
-package apiserver
+package systemhandlers
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APISystemTaskCreatePost(ctx context.Context, req *serverAPI.APISystemTaskCreatePostReq) (serverAPI.APISystemTaskCreatePostRes, error) {
+func (c *SystemHandlersController) APISystemTaskCreatePost(ctx context.Context, req *serverAPI.APISystemTaskCreatePostReq) (serverAPI.APISystemTaskCreatePostRes, error) {
 	var code core.TaskCode
 
 	switch req.Code {

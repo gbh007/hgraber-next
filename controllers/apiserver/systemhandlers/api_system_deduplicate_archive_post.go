@@ -1,4 +1,4 @@
-package apiserver
+package systemhandlers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APISystemDeduplicateArchivePost(ctx context.Context, req serverAPI.APISystemDeduplicateArchivePostReq) (serverAPI.APISystemDeduplicateArchivePostRes, error) {
+func (c *SystemHandlersController) APISystemDeduplicateArchivePost(ctx context.Context, req serverAPI.APISystemDeduplicateArchivePostReq) (serverAPI.APISystemDeduplicateArchivePostRes, error) {
 	data, err := c.deduplicateUseCases.ArchiveEntryPercentage(ctx, req.Data)
 	if err != nil {
 		return &serverAPI.APISystemDeduplicateArchivePostInternalServerError{
