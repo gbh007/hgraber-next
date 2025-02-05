@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
@@ -17,7 +18,7 @@ func (c *Controller) APIParsingPageExistsPost(ctx context.Context, req *serverAP
 	}))
 	if err != nil {
 		return &serverAPI.APIParsingPageExistsPostInternalServerError{
-			InnerCode: ParseUseCaseCode,
+			InnerCode: apiservercore.ParseUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}

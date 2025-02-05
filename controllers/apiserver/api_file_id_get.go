@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
@@ -17,7 +18,7 @@ func (c *Controller) APIFileIDGet(ctx context.Context, params serverAPI.APIFileI
 	fileID, err := uuid.Parse(strings.TrimSuffix(params.ID, path.Ext(params.ID)))
 	if err != nil {
 		return &serverAPI.APIFileIDGetBadRequest{
-			InnerCode: ValidationCode,
+			InnerCode: apiservercore.ValidationCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
@@ -31,14 +32,14 @@ func (c *Controller) APIFileIDGet(ctx context.Context, params serverAPI.APIFileI
 	body, err := c.webAPIUseCases.File(ctx, fileID, fsID)
 	if errors.Is(err, core.FileNotFoundError) {
 		return &serverAPI.APIFileIDGetNotFound{
-			InnerCode: WebAPIUseCaseCode,
+			InnerCode: apiservercore.WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
 		return &serverAPI.APIFileIDGetInternalServerError{
-			InnerCode: WebAPIUseCaseCode,
+			InnerCode: apiservercore.WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}

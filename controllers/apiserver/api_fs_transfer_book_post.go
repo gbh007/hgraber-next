@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
@@ -22,7 +23,7 @@ func (c *Controller) APIFsTransferBookPost(ctx context.Context, req *serverAPI.A
 	err := c.fsUseCases.TransferFSFilesByBook(ctx, req.BookID, req.To, pageNumber)
 	if err != nil {
 		return &serverAPI.APIFsTransferBookPostInternalServerError{
-			InnerCode: FSUseCaseCode,
+			InnerCode: apiservercore.FSUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}

@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
@@ -13,7 +14,7 @@ func (c *Controller) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *
 	data, err := c.deduplicateUseCases.BookByPageEntryPercentage(ctx, req.BookID)
 	if err != nil {
 		return &serverAPI.APIDeduplicateBookByPageBodyPostInternalServerError{
-			InnerCode: DeduplicateUseCaseCode,
+			InnerCode: apiservercore.DeduplicateUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
@@ -21,7 +22,7 @@ func (c *Controller) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *
 	return &serverAPI.APIDeduplicateBookByPageBodyPostOK{
 		Result: pkg.Map(data, func(raw bff.DeduplicateBookResult) serverAPI.APIDeduplicateBookByPageBodyPostOKResultItem {
 			return serverAPI.APIDeduplicateBookByPageBodyPostOKResultItem{
-				Book:                                 c.convertSimpleBook(raw.TargetBook, raw.PreviewPage),
+				Book:                                 c.apiCore.ConvertSimpleBook(raw.TargetBook, raw.PreviewPage),
 				OriginCoveredTarget:                  raw.EntryPercentage,
 				TargetCoveredOrigin:                  raw.ReverseEntryPercentage,
 				OriginCoveredTargetWithoutDeadHashes: raw.EntryPercentageWithoutDeadHashes,

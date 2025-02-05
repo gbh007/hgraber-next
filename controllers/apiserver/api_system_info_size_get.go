@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
@@ -11,7 +12,7 @@ func (c *Controller) APISystemInfoSizeGet(ctx context.Context) (serverAPI.APISys
 	info, err := c.webAPIUseCases.SystemSize(ctx)
 	if err != nil {
 		return &serverAPI.APISystemInfoSizeGetInternalServerError{
-			InnerCode: WebAPIUseCaseCode,
+			InnerCode: apiservercore.WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}

@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
@@ -10,7 +11,7 @@ func (c *Controller) APIFsTransferPost(ctx context.Context, req *serverAPI.APIFs
 	err := c.fsUseCases.TransferFSFiles(ctx, req.From, req.To, req.OnlyPreviewPages.Value)
 	if err != nil {
 		return &serverAPI.APIFsTransferPostInternalServerError{
-			InnerCode: FSUseCaseCode,
+			InnerCode: apiservercore.FSUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}

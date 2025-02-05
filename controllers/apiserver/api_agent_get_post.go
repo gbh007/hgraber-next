@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
@@ -13,19 +14,19 @@ func (c *Controller) APIAgentGetPost(ctx context.Context, req *serverAPI.APIAgen
 
 	if errors.Is(err, core.AgentNotFoundError) {
 		return &serverAPI.APIAgentGetPostNotFound{
-			InnerCode: AgentUseCaseCode,
+			InnerCode: apiservercore.AgentUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
 		return &serverAPI.APIAgentGetPostInternalServerError{
-			InnerCode: AgentUseCaseCode,
+			InnerCode: apiservercore.AgentUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	result := convertAgentToAPI(agent)
+	result := apiservercore.ConvertAgentToAPI(agent)
 
 	return &result, nil
 }

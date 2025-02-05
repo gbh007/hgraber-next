@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
@@ -13,7 +14,7 @@ func (c *Controller) APISystemHandlePost(ctx context.Context, req *serverAPI.API
 		result, err := c.parseUseCases.NewBooksMulti(ctx, req.Urls, req.AutoVerify.Value)
 		if err != nil {
 			return &serverAPI.APISystemHandlePostInternalServerError{
-				InnerCode: ParseUseCaseCode,
+				InnerCode: apiservercore.ParseUseCaseCode,
 				Details:   serverAPI.NewOptString(err.Error()),
 			}, nil
 		}
@@ -31,7 +32,7 @@ func (c *Controller) APISystemHandlePost(ctx context.Context, req *serverAPI.API
 	result, err := c.parseUseCases.NewBooks(ctx, req.Urls, req.AutoVerify.Value)
 	if err != nil {
 		return &serverAPI.APISystemHandlePostInternalServerError{
-			InnerCode: ParseUseCaseCode,
+			InnerCode: apiservercore.ParseUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}

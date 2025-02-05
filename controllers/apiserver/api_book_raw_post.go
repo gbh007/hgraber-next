@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
@@ -17,16 +18,16 @@ func (c *Controller) APIBookRawPost(ctx context.Context, req *serverAPI.APIBookR
 
 	switch {
 	case req.ID.IsSet():
-		innerCode = WebAPIUseCaseCode
+		innerCode = apiservercore.WebAPIUseCaseCode
 		book, err = c.webAPIUseCases.BookRaw(ctx, req.ID.Value)
 
 	case req.URL.IsSet():
-		innerCode = ParseUseCaseCode
+		innerCode = apiservercore.ParseUseCaseCode
 		book, err = c.parseUseCases.BookByURL(ctx, req.URL.Value)
 
 	default:
 		return &serverAPI.APIBookRawPostBadRequest{
-			InnerCode: ValidationCode,
+			InnerCode: apiservercore.ValidationCode,
 			Details:   serverAPI.NewOptString("id and url is empty"),
 		}, nil
 	}
@@ -45,5 +46,5 @@ func (c *Controller) APIBookRawPost(ctx context.Context, req *serverAPI.APIBookR
 		}, nil
 	}
 
-	return convertBookFullToBookRaw(book), nil
+	return apiservercore.ConvertBookFullToBookRaw(book), nil
 }

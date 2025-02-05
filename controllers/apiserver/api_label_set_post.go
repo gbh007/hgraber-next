@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
@@ -16,7 +17,7 @@ func (c *Controller) APILabelSetPost(ctx context.Context, req *serverAPI.APILabe
 	})
 	if err != nil {
 		return &serverAPI.APILabelSetPostInternalServerError{
-			InnerCode: WebAPIUseCaseCode,
+			InnerCode: apiservercore.WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}

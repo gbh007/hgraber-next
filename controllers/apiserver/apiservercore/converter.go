@@ -1,4 +1,4 @@
-package apiserver
+package apiservercore
 
 import (
 	"context"
@@ -14,47 +14,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func optURL(u *url.URL) serverAPI.OptURI {
-	if u == nil {
-		return serverAPI.OptURI{}
-	}
-
-	return serverAPI.NewOptURI(*u)
-}
-
-func urlFromOpt(u serverAPI.OptURI) *url.URL {
-	if !u.Set {
-		return nil
-	}
-
-	return &u.Value
-}
-
-func optTime(t time.Time) serverAPI.OptDateTime {
-	if t.IsZero() {
-		return serverAPI.OptDateTime{}
-	}
-
-	return serverAPI.NewOptDateTime(t)
-}
-
-func optString(s string) serverAPI.OptString {
-	if s == "" {
-		return serverAPI.OptString{}
-	}
-
-	return serverAPI.NewOptString(s)
-}
-
-func optUUID(u uuid.UUID) serverAPI.OptUUID {
-	if u == uuid.Nil {
-		return serverAPI.OptUUID{}
-	}
-
-	return serverAPI.NewOptUUID(u)
-}
-
-func (c *Controller) getFileURL(fileID uuid.UUID, ext string, fsID uuid.UUID) url.URL {
+func (c *Controller) GetFileURL(fileID uuid.UUID, ext string, fsID uuid.UUID) url.URL {
 	if c.fsUseCases != nil {
 		// FIXME: подумать над местом получше,
 		// или более явным пробросом контекста,
@@ -88,11 +48,11 @@ func (c *Controller) getFileURL(fileID uuid.UUID, ext string, fsID uuid.UUID) ur
 	return u
 }
 
-func (c *Controller) getPagePreview(p bff.PreviewPage) serverAPI.OptURI {
+func (c *Controller) ConvertPreviewPageUrl(p bff.PreviewPage) serverAPI.OptURI {
 	previewURL := serverAPI.OptURI{}
 
 	if p.Downloaded {
-		previewURL = serverAPI.NewOptURI(c.getFileURL(
+		previewURL = serverAPI.NewOptURI(c.GetFileURL(
 			p.FileID,
 			p.Ext,
 			p.FSID,
@@ -102,14 +62,14 @@ func (c *Controller) getPagePreview(p bff.PreviewPage) serverAPI.OptURI {
 	return previewURL
 }
 
-func (c *Controller) convertSimpleBook(book core.Book, previewPage bff.PreviewPage) serverAPI.BookSimple {
+func (c *Controller) ConvertSimpleBook(book core.Book, previewPage bff.PreviewPage) serverAPI.BookSimple {
 	return serverAPI.BookSimple{
 		ID:         book.ID,
 		CreatedAt:  book.CreateAt,
-		OriginURL:  optURL(book.OriginURL),
+		OriginURL:  OptURL(book.OriginURL),
 		Name:       book.Name,
 		PageCount:  book.PageCount,
-		PreviewURL: c.getPagePreview(previewPage),
+		PreviewURL: c.ConvertPreviewPageUrl(previewPage),
 		Flags: serverAPI.BookFlags{
 			ParsedName: book.ParsedName(),
 			ParsedPage: book.PageCount > 0, // FIXME: не самый надежный метод, мб стоит придумать что-то другое
@@ -120,15 +80,15 @@ func (c *Controller) convertSimpleBook(book core.Book, previewPage bff.PreviewPa
 	}
 }
 
-func (c *Controller) convertPreviewPage(page bff.PreviewPage) serverAPI.PageSimple {
+func (c *Controller) ConvertPreviewPage(page bff.PreviewPage) serverAPI.PageSimple {
 	return serverAPI.PageSimple{
 		PageNumber:  page.PageNumber,
-		PreviewURL:  c.getPagePreview(page),
-		HasDeadHash: convertStatusFlagToAPI(page.HasDeadHash),
+		PreviewURL:  c.ConvertPreviewPageUrl(page),
+		HasDeadHash: ConvertStatusFlagToAPI(page.HasDeadHash),
 	}
 }
 
-func convertBookAttribute(a bff.AttributeToWeb) serverAPI.BookAttribute {
+func ConvertBookAttribute(a bff.AttributeToWeb) serverAPI.BookAttribute {
 	return serverAPI.BookAttribute{
 		Code:   a.Code,
 		Name:   a.Name,
@@ -136,11 +96,11 @@ func convertBookAttribute(a bff.AttributeToWeb) serverAPI.BookAttribute {
 	}
 }
 
-func convertBookFullToBookRaw(book core.BookContainer) *serverAPI.BookRaw {
+func ConvertBookFullToBookRaw(book core.BookContainer) *serverAPI.BookRaw {
 	return &serverAPI.BookRaw{
 		ID:        book.Book.ID,
 		CreateAt:  book.Book.CreateAt,
-		OriginURL: optURL(book.Book.OriginURL),
+		OriginURL: OptURL(book.Book.OriginURL),
 		Name:      book.Book.Name,
 		PageCount: book.Book.PageCount,
 		Attributes: pkg.MapToSlice(book.Attributes, func(code string, values []string) serverAPI.BookRawAttributesItem {
@@ -152,11 +112,11 @@ func convertBookFullToBookRaw(book core.BookContainer) *serverAPI.BookRaw {
 		Pages: pkg.Map(book.Pages, func(p core.Page) serverAPI.BookRawPagesItem {
 			return serverAPI.BookRawPagesItem{
 				PageNumber: p.PageNumber,
-				OriginURL:  optURL(p.OriginURL),
+				OriginURL:  OptURL(p.OriginURL),
 				Ext:        p.Ext,
 				CreateAt:   p.CreateAt,
 				Downloaded: p.Downloaded,
-				LoadAt:     optTime(p.LoadAt),
+				LoadAt:     OptTime(p.LoadAt),
 			}
 		}),
 		Labels: pkg.Map(book.Labels, func(l core.BookLabel) serverAPI.BookRawLabelsItem {
@@ -170,7 +130,7 @@ func convertBookFullToBookRaw(book core.BookContainer) *serverAPI.BookRaw {
 	}
 }
 
-func convertBookRawToBookFull(book *serverAPI.BookRaw) core.BookContainer {
+func ConvertBookRawToBookFull(book *serverAPI.BookRaw) core.BookContainer {
 	if book == nil {
 		return core.BookContainer{}
 	}
@@ -179,7 +139,7 @@ func convertBookRawToBookFull(book *serverAPI.BookRaw) core.BookContainer {
 		Book: core.Book{
 			ID:        book.ID,
 			Name:      book.Name,
-			OriginURL: urlFromOpt(book.OriginURL),
+			OriginURL: UrlFromOpt(book.OriginURL),
 			PageCount: book.PageCount,
 			CreateAt:  book.CreateAt,
 			// FIXME: нет ряд полей, возможно стоит расширить api
@@ -189,7 +149,7 @@ func convertBookRawToBookFull(book *serverAPI.BookRaw) core.BookContainer {
 				BookID:     book.ID,
 				PageNumber: raw.PageNumber,
 				Ext:        raw.Ext,
-				OriginURL:  urlFromOpt(raw.OriginURL),
+				OriginURL:  UrlFromOpt(raw.OriginURL),
 				CreateAt:   raw.CreateAt,
 				Downloaded: raw.Downloaded,
 				LoadAt:     raw.LoadAt.Value,
@@ -211,7 +171,7 @@ func convertBookRawToBookFull(book *serverAPI.BookRaw) core.BookContainer {
 	}
 }
 
-func convertAgentToAPI(raw core.Agent) serverAPI.Agent {
+func ConvertAgentToAPI(raw core.Agent) serverAPI.Agent {
 	return serverAPI.Agent{
 		ID:            raw.ID,
 		Name:          raw.Name,
@@ -226,7 +186,7 @@ func convertAgentToAPI(raw core.Agent) serverAPI.Agent {
 	}
 }
 
-func convertFileSystemInfoFromAPI(raw *serverAPI.FileSystemInfo) core.FileStorageSystem {
+func ConvertFileSystemInfoFromAPI(raw *serverAPI.FileSystemInfo) core.FileStorageSystem {
 	return core.FileStorageSystem{
 		ID:                  raw.ID,
 		Name:                raw.Name,
@@ -236,34 +196,34 @@ func convertFileSystemInfoFromAPI(raw *serverAPI.FileSystemInfo) core.FileStorag
 		DownloadPriority:    raw.DownloadPriority,
 		DeduplicatePriority: raw.DeduplicatePriority,
 		HighwayEnabled:      raw.HighwayEnabled,
-		HighwayAddr:         urlFromOpt(raw.HighwayAddr),
+		HighwayAddr:         UrlFromOpt(raw.HighwayAddr),
 		CreatedAt:           raw.CreatedAt,
 	}
 }
 
-func convertFileSystemInfoToAPI(raw core.FileStorageSystem) serverAPI.FileSystemInfo {
+func ConvertFileSystemInfoToAPI(raw core.FileStorageSystem) serverAPI.FileSystemInfo {
 	return serverAPI.FileSystemInfo{
 		ID:                  raw.ID,
 		Name:                raw.Name,
-		Description:         optString(raw.Description),
-		AgentID:             optUUID(raw.AgentID),
-		Path:                optString(raw.Path),
+		Description:         OptString(raw.Description),
+		AgentID:             OptUUID(raw.AgentID),
+		Path:                OptString(raw.Path),
 		DownloadPriority:    raw.DownloadPriority,
 		DeduplicatePriority: raw.DeduplicatePriority,
 		HighwayEnabled:      raw.HighwayEnabled,
-		HighwayAddr:         optURL(raw.HighwayAddr),
+		HighwayAddr:         OptURL(raw.HighwayAddr),
 		CreatedAt:           raw.CreatedAt,
 	}
 }
 
-func convertStatusFlagToAPI(f bff.StatusFlag) serverAPI.OptBool {
+func ConvertStatusFlagToAPI(f bff.StatusFlag) serverAPI.OptBool {
 	return serverAPI.OptBool{
 		Value: f == bff.TrueStatusFlag,
 		Set:   f != bff.UnknownStatusFlag,
 	}
 }
 
-func convertFSDBFilesInfoToAPI(raw *core.FSFilesInfo) serverAPI.OptFSDBFilesInfo {
+func ConvertFSDBFilesInfoToAPI(raw *core.FSFilesInfo) serverAPI.OptFSDBFilesInfo {
 	if raw == nil {
 		return serverAPI.OptFSDBFilesInfo{}
 	}

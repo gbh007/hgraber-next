@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
@@ -12,7 +13,7 @@ func (c *Controller) APISystemDeduplicateArchivePost(ctx context.Context, req se
 	data, err := c.deduplicateUseCases.ArchiveEntryPercentage(ctx, req.Data)
 	if err != nil {
 		return &serverAPI.APISystemDeduplicateArchivePostInternalServerError{
-			InnerCode: DeduplicateUseCaseCode,
+			InnerCode: apiservercore.DeduplicateUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
@@ -20,7 +21,7 @@ func (c *Controller) APISystemDeduplicateArchivePost(ctx context.Context, req se
 	result := serverAPI.APISystemDeduplicateArchivePostOKApplicationJSON(pkg.Map(data, func(raw core.DeduplicateArchiveResult) serverAPI.APISystemDeduplicateArchivePostOKItem {
 		return serverAPI.APISystemDeduplicateArchivePostOKItem{
 			BookID:                 raw.TargetBookID,
-			BookOriginURL:          optURL(raw.OriginBookURL),
+			BookOriginURL:          apiservercore.OptURL(raw.OriginBookURL),
 			EntryPercentage:        raw.EntryPercentage,
 			ReverseEntryPercentage: raw.ReverseEntryPercentage,
 		}

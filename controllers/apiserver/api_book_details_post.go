@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
@@ -14,23 +15,23 @@ func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIB
 	book, err := c.bffUseCases.BookDetails(ctx, req.ID)
 	if errors.Is(err, core.BookNotFoundError) {
 		return &serverAPI.APIBookDetailsPostNotFound{
-			InnerCode: BFFUseCaseCode,
+			InnerCode: apiservercore.BFFUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
 		return &serverAPI.APIBookDetailsPostInternalServerError{
-			InnerCode: BFFUseCaseCode,
+			InnerCode: apiservercore.BFFUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	return &serverAPI.APIBookDetailsPostOK{
-		Info:              c.convertSimpleBook(book.Book, book.PreviewPage),
+		Info:              c.apiCore.ConvertSimpleBook(book.Book, book.PreviewPage),
 		PageLoadedPercent: book.PageDownloadPercent(),
-		Attributes:        pkg.Map(book.Attributes, convertBookAttribute),
-		Pages:             pkg.Map(book.Pages, c.convertPreviewPage),
+		Attributes:        pkg.Map(book.Attributes, apiservercore.ConvertBookAttribute),
+		Pages:             pkg.Map(book.Pages, c.apiCore.ConvertPreviewPage),
 		Size: serverAPI.OptAPIBookDetailsPostOKSize{
 			Value: serverAPI.APIBookDetailsPostOKSize{
 				Unique:                           book.Size.Unique,

@@ -10,13 +10,14 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-type parseUseCases interface {
+type ParseUseCases interface {
 	NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (core.FirstHandleMultipleResult, error)
 
 	BooksExists(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
@@ -27,7 +28,7 @@ type parseUseCases interface {
 	NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (core.MultiHandleMultipleResult, error)
 }
 
-type webAPIUseCases interface {
+type WebAPIUseCases interface {
 	SystemSize(ctx context.Context) (core.SystemSizeInfo, error)
 	WorkersInfo(ctx context.Context) []core.SystemWorkerStat
 
@@ -60,7 +61,7 @@ type webAPIUseCases interface {
 	BookCompare(ctx context.Context, originID, targetID uuid.UUID) (bff.BookCompareResult, error)
 }
 
-type agentUseCases interface {
+type AgentUseCases interface {
 	NewAgent(ctx context.Context, agent core.Agent) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
 	Agents(ctx context.Context, filter core.AgentFilter, includeStatus bool) ([]core.AgentWithStatus, error)
@@ -68,13 +69,13 @@ type agentUseCases interface {
 	Agent(ctx context.Context, id uuid.UUID) (core.Agent, error)
 }
 
-type exportUseCases interface {
+type ExportUseCases interface {
 	Export(ctx context.Context, agentID uuid.UUID, filter core.BookFilter, deleteAfter bool) error
 	ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, core.BookContainer, error)
 	ImportArchive(ctx context.Context, body io.Reader, deduplicate bool, autoVerify bool) (uuid.UUID, error)
 }
 
-type deduplicateUseCases interface {
+type DeduplicateUseCases interface {
 	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]core.DeduplicateArchiveResult, error)
 	BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]bff.DeduplicateBookResult, error)
 	UniquePages(ctx context.Context, originBookID uuid.UUID) ([]bff.PreviewPage, error)
@@ -90,19 +91,19 @@ type deduplicateUseCases interface {
 	DeleteBookDeadHashedPages(ctx context.Context, bookID uuid.UUID) error
 }
 
-type taskUseCases interface {
+type TaskUseCases interface {
 	RunTask(ctx context.Context, code core.TaskCode) error
 	TaskResults(ctx context.Context) ([]*core.TaskResult, error)
 	RemoveFilesInFSMismatch(ctx context.Context, fsID uuid.UUID) error
 }
 
-type rebuilderUseCases interface {
+type ReBuilderUseCases interface {
 	UpdateBook(ctx context.Context, book core.BookContainer) error
 	RebuildBook(ctx context.Context, request core.RebuildBookRequest) (uuid.UUID, error)
 	RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages bool) error
 }
 
-type fsUseCases interface {
+type FSUseCases interface {
 	FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]core.FSWithStatus, error)
 	FileStorage(ctx context.Context, id uuid.UUID) (core.FileStorageSystem, error)
 	NewFileStorage(ctx context.Context, fs core.FileStorageSystem) (uuid.UUID, error)
@@ -115,7 +116,7 @@ type fsUseCases interface {
 	HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error)
 }
 
-type bffUseCases interface {
+type BFFUseCases interface {
 	BookDetails(ctx context.Context, bookID uuid.UUID) (bff.BookDetails, error)
 	BookList(ctx context.Context, filter core.BookFilter) (bff.BookList, error)
 }
@@ -133,63 +134,69 @@ type Controller struct {
 	debug     bool
 	staticDir string
 
-	parseUseCases       parseUseCases
-	webAPIUseCases      webAPIUseCases
-	agentUseCases       agentUseCases
-	exportUseCases      exportUseCases
-	deduplicateUseCases deduplicateUseCases
-	taskUseCases        taskUseCases
-	rebuilderUseCases   rebuilderUseCases
-	fsUseCases          fsUseCases
-	bffUseCases         bffUseCases
+	apiCore *apiservercore.Controller
+
+	parseUseCases       ParseUseCases
+	webAPIUseCases      WebAPIUseCases
+	agentUseCases       AgentUseCases
+	exportUseCases      ExportUseCases
+	deduplicateUseCases DeduplicateUseCases
+	taskUseCases        TaskUseCases
+	rebuilderUseCases   ReBuilderUseCases
+	fsUseCases          FSUseCases
+	bffUseCases         BFFUseCases
 
 	ogenServer *serverAPI.Server
 
 	serverAddr string
 
-	externalServerScheme       string
-	externalServerHostWithPort string
-	token                      string
+	token string
 }
 
 func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	config config,
-	parseUseCases parseUseCases,
-	webAPIUseCases webAPIUseCases,
-	agentUseCases agentUseCases,
-	exportUseCases exportUseCases,
-	deduplicateUseCases deduplicateUseCases,
-	taskUseCases taskUseCases,
-	rebuilderUseCases rebuilderUseCases,
-	fsUseCases fsUseCases,
-	bffUseCases bffUseCases,
+	parseUseCases ParseUseCases,
+	webAPIUseCases WebAPIUseCases,
+	agentUseCases AgentUseCases,
+	exportUseCases ExportUseCases,
+	deduplicateUseCases DeduplicateUseCases,
+	taskUseCases TaskUseCases,
+	rebuilderUseCases ReBuilderUseCases,
+	fsUseCases FSUseCases,
+	bffUseCases BFFUseCases,
 	debug bool,
 ) (*Controller, error) {
-	u, err := url.Parse(config.GetExternalAddr())
+	ac, err := apiservercore.New(
+		logger,
+		tracer,
+		config,
+		fsUseCases,
+		debug,
+	)
 	if err != nil {
-		return nil, fmt.Errorf("parse external server addr: %w", err)
+		return nil, fmt.Errorf("init core handlers: %w", err)
 	}
 
 	c := &Controller{
-		logger:                     logger,
-		tracer:                     tracer,
-		serverAddr:                 config.GetAddr(),
-		externalServerScheme:       u.Scheme,
-		externalServerHostWithPort: u.Host,
-		parseUseCases:              parseUseCases,
-		webAPIUseCases:             webAPIUseCases,
-		agentUseCases:              agentUseCases,
-		exportUseCases:             exportUseCases,
-		deduplicateUseCases:        deduplicateUseCases,
-		taskUseCases:               taskUseCases,
-		rebuilderUseCases:          rebuilderUseCases,
-		fsUseCases:                 fsUseCases,
-		bffUseCases:                bffUseCases,
-		debug:                      debug,
-		staticDir:                  config.GetStaticDir(),
-		token:                      config.GetToken(),
+		logger:              logger,
+		tracer:              tracer,
+		serverAddr:          config.GetAddr(),
+		parseUseCases:       parseUseCases,
+		webAPIUseCases:      webAPIUseCases,
+		agentUseCases:       agentUseCases,
+		exportUseCases:      exportUseCases,
+		deduplicateUseCases: deduplicateUseCases,
+		taskUseCases:        taskUseCases,
+		rebuilderUseCases:   rebuilderUseCases,
+		fsUseCases:          fsUseCases,
+		bffUseCases:         bffUseCases,
+		debug:               debug,
+		staticDir:           config.GetStaticDir(),
+		token:               config.GetToken(),
+
+		apiCore: ac,
 	}
 
 	ogenServer, err := serverAPI.NewServer(

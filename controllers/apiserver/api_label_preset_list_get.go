@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
@@ -12,7 +13,7 @@ func (c *Controller) APILabelPresetListGet(ctx context.Context) (serverAPI.APILa
 	presets, err := c.webAPIUseCases.LabelPresets(ctx)
 	if err != nil {
 		return &serverAPI.APILabelPresetListGetInternalServerError{
-			InnerCode: WebAPIUseCaseCode,
+			InnerCode: apiservercore.WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
@@ -21,10 +22,10 @@ func (c *Controller) APILabelPresetListGet(ctx context.Context) (serverAPI.APILa
 		Presets: pkg.Map(presets, func(raw core.BookLabelPreset) serverAPI.APILabelPresetListGetOKPresetsItem {
 			return serverAPI.APILabelPresetListGetOKPresetsItem{
 				Name:        raw.Name,
-				Description: optString(raw.Description),
+				Description: apiservercore.OptString(raw.Description),
 				Values:      raw.Values,
 				CreatedAt:   raw.CreatedAt,
-				UpdatedAt:   optTime(raw.UpdatedAt),
+				UpdatedAt:   apiservercore.OptTime(raw.UpdatedAt),
 			}
 		}),
 	}, nil

@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 	"github.com/gbh007/hgraber-next/pkg"
@@ -17,7 +18,7 @@ func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAge
 	}, req.IncludeStatus.Value)
 	if err != nil {
 		return &serverAPI.APIAgentListPostInternalServerError{
-			InnerCode: AgentUseCaseCode,
+			InnerCode: apiservercore.AgentUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
@@ -72,7 +73,7 @@ func (c *Controller) APIAgentListPost(ctx context.Context, req *serverAPI.APIAge
 
 		return serverAPI.APIAgentListPostOKItem{
 			Status: status,
-			Info:   convertAgentToAPI(aws.Agent),
+			Info:   apiservercore.ConvertAgentToAPI(aws.Agent),
 		}
 	})
 

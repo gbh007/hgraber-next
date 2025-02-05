@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
@@ -10,7 +11,7 @@ func (c *Controller) APIDeduplicateDeleteAllPagesByBookPost(ctx context.Context,
 	err := c.deduplicateUseCases.RemoveBookPagesWithDeadHash(ctx, req.BookID, req.MarkAsDeletedEmptyBook.Value)
 	if err != nil {
 		return &serverAPI.APIDeduplicateDeleteAllPagesByBookPostInternalServerError{
-			InnerCode: DeduplicateUseCaseCode,
+			InnerCode: apiservercore.DeduplicateUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}

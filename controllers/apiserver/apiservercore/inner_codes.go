@@ -1,4 +1,4 @@
-package apiserver
+package apiservercore
 
 const (
 	ParseUseCaseCode       = "parse_uc"

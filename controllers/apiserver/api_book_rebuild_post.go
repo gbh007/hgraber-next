@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
 func (c *Controller) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIBookRebuildPostReq) (serverAPI.APIBookRebuildPostRes, error) {
 	id, err := c.rebuilderUseCases.RebuildBook(ctx, core.RebuildBookRequest{
-		ModifiedOldBook: convertBookRawToBookFull(&req.OldBook),
+		ModifiedOldBook: apiservercore.ConvertBookRawToBookFull(&req.OldBook),
 		SelectedPages:   req.SelectedPages,
 		MergeWithBook:   req.MergeWithBook.Value,
 		PageOrder:       req.PageOrder,
@@ -34,14 +35,14 @@ func (c *Controller) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIB
 
 	if errors.Is(err, core.BookNotFoundError) {
 		return &serverAPI.APIBookRebuildPostNotFound{
-			InnerCode: RebuilderUseCaseCode,
+			InnerCode: apiservercore.RebuilderUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
 		return &serverAPI.APIBookRebuildPostInternalServerError{
-			InnerCode: RebuilderUseCaseCode,
+			InnerCode: apiservercore.RebuilderUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}

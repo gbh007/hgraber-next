@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
@@ -18,16 +19,16 @@ func (c *Controller) APIPageBodyPost(ctx context.Context, req *serverAPI.APIPage
 
 	switch {
 	case req.ID.IsSet() && req.PageNumber.IsSet():
-		innerCode = WebAPIUseCaseCode
+		innerCode = apiservercore.WebAPIUseCaseCode
 		body, err = c.webAPIUseCases.PageBody(ctx, req.ID.Value, req.PageNumber.Value)
 
 	case req.URL.IsSet():
-		innerCode = ParseUseCaseCode
+		innerCode = apiservercore.ParseUseCaseCode
 		body, err = c.parseUseCases.PageBodyByURL(ctx, req.URL.Value)
 
 	default:
 		return &serverAPI.APIPageBodyPostBadRequest{
-			InnerCode: ValidationCode,
+			InnerCode: apiservercore.ValidationCode,
 			Details:   serverAPI.NewOptString("id/page number and url is empty"),
 		}, nil
 	}
