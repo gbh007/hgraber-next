@@ -6,10 +6,10 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookRawPost(ctx context.Context, req *serverAPI.APIBookRawPostReq) (serverAPI.APIBookRawPostRes, error) {
+func (c *BookHandlersController) APIBookRawPost(ctx context.Context, req *serverapi.APIBookRawPostReq) (serverapi.APIBookRawPostRes, error) {
 	var (
 		book      core.BookContainer
 		err       error
@@ -26,23 +26,23 @@ func (c *BookHandlersController) APIBookRawPost(ctx context.Context, req *server
 		book, err = c.parseUseCases.BookByURL(ctx, req.URL.Value)
 
 	default:
-		return &serverAPI.APIBookRawPostBadRequest{
+		return &serverapi.APIBookRawPostBadRequest{
 			InnerCode: apiservercore.ValidationCode,
-			Details:   serverAPI.NewOptString("id and url is empty"),
+			Details:   serverapi.NewOptString("id and url is empty"),
 		}, nil
 	}
 
 	if errors.Is(err, core.BookNotFoundError) {
-		return &serverAPI.APIBookRawPostNotFound{
+		return &serverapi.APIBookRawPostNotFound{
 			InnerCode: innerCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIBookRawPostInternalServerError{
+		return &serverapi.APIBookRawPostInternalServerError{
 			InnerCode: innerCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 

@@ -7,10 +7,10 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIPageBodyPost(ctx context.Context, req *serverAPI.APIPageBodyPostReq) (serverAPI.APIPageBodyPostRes, error) {
+func (c *FSHandlersController) APIPageBodyPost(ctx context.Context, req *serverapi.APIPageBodyPostReq) (serverapi.APIPageBodyPostRes, error) {
 	var (
 		body      io.Reader
 		err       error
@@ -27,27 +27,27 @@ func (c *FSHandlersController) APIPageBodyPost(ctx context.Context, req *serverA
 		body, err = c.parseUseCases.PageBodyByURL(ctx, req.URL.Value)
 
 	default:
-		return &serverAPI.APIPageBodyPostBadRequest{
+		return &serverapi.APIPageBodyPostBadRequest{
 			InnerCode: apiservercore.ValidationCode,
-			Details:   serverAPI.NewOptString("id/page number and url is empty"),
+			Details:   serverapi.NewOptString("id/page number and url is empty"),
 		}, nil
 	}
 
 	if errors.Is(err, core.PageNotFoundError) || errors.Is(err, core.FileNotFoundError) {
-		return &serverAPI.APIPageBodyPostNotFound{
+		return &serverapi.APIPageBodyPostNotFound{
 			InnerCode: innerCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIPageBodyPostInternalServerError{
+		return &serverapi.APIPageBodyPostInternalServerError{
 			InnerCode: innerCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIPageBodyPostOK{
+	return &serverapi.APIPageBodyPostOK{
 		Data: body,
 	}, nil
 }

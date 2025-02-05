@@ -5,21 +5,21 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *SystemHandlersController) APISystemHandlePost(ctx context.Context, req *serverAPI.APISystemHandlePostReq) (serverAPI.APISystemHandlePostRes, error) {
+func (c *SystemHandlersController) APISystemHandlePost(ctx context.Context, req *serverapi.APISystemHandlePostReq) (serverapi.APISystemHandlePostRes, error) {
 	if req.IsMulti.Value {
 		result, err := c.parseUseCases.NewBooksMulti(ctx, req.Urls, req.AutoVerify.Value)
 		if err != nil {
-			return &serverAPI.APISystemHandlePostInternalServerError{
+			return &serverapi.APISystemHandlePostInternalServerError{
 				InnerCode: apiservercore.ParseUseCaseCode,
-				Details:   serverAPI.NewOptString(err.Error()),
+				Details:   serverapi.NewOptString(err.Error()),
 			}, nil
 		}
 
-		return &serverAPI.APISystemHandlePostOK{
+		return &serverapi.APISystemHandlePostOK{
 			TotalCount:     result.Details.TotalCount,
 			LoadedCount:    result.Details.LoadedCount,
 			DuplicateCount: result.Details.DuplicateCount,
@@ -31,13 +31,13 @@ func (c *SystemHandlersController) APISystemHandlePost(ctx context.Context, req 
 
 	result, err := c.parseUseCases.NewBooks(ctx, req.Urls, req.AutoVerify.Value)
 	if err != nil {
-		return &serverAPI.APISystemHandlePostInternalServerError{
+		return &serverapi.APISystemHandlePostInternalServerError{
 			InnerCode: apiservercore.ParseUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APISystemHandlePostOK{
+	return &serverapi.APISystemHandlePostOK{
 		TotalCount:     result.TotalCount,
 		LoadedCount:    result.LoadedCount,
 		DuplicateCount: result.DuplicateCount,
@@ -47,14 +47,14 @@ func (c *SystemHandlersController) APISystemHandlePost(ctx context.Context, req 
 	}, nil
 }
 
-func convertAPISystemHandlePostOKDetails(raw []core.BookHandleResult) []serverAPI.APISystemHandlePostOKDetailsItem {
-	return pkg.Map(raw, func(b core.BookHandleResult) serverAPI.APISystemHandlePostOKDetailsItem {
-		return serverAPI.APISystemHandlePostOKDetailsItem{
+func convertAPISystemHandlePostOKDetails(raw []core.BookHandleResult) []serverapi.APISystemHandlePostOKDetailsItem {
+	return pkg.Map(raw, func(b core.BookHandleResult) serverapi.APISystemHandlePostOKDetailsItem {
+		return serverapi.APISystemHandlePostOKDetailsItem{
 			URL:         b.URL,
 			IsDuplicate: b.IsDuplicate,
 			// DuplicateID: , // FIXME: заполнять
 			IsHandled:   b.IsHandled,
-			ErrorReason: serverAPI.NewOptString(b.ErrorReason),
+			ErrorReason: serverapi.NewOptString(b.ErrorReason),
 		}
 	})
 }

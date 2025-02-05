@@ -6,29 +6,29 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookArchiveIDGet(ctx context.Context, params serverAPI.APIBookArchiveIDGetParams) (serverAPI.APIBookArchiveIDGetRes, error) {
+func (c *BookHandlersController) APIBookArchiveIDGet(ctx context.Context, params serverapi.APIBookArchiveIDGetParams) (serverapi.APIBookArchiveIDGetRes, error) {
 	body, book, err := c.exportUseCases.ExportBook(ctx, params.ID)
 	if errors.Is(err, core.BookNotFoundError) {
-		return &serverAPI.APIBookArchiveIDGetNotFound{
+		return &serverapi.APIBookArchiveIDGetNotFound{
 			InnerCode: apiservercore.ExportUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIBookArchiveIDGetInternalServerError{
+		return &serverapi.APIBookArchiveIDGetInternalServerError{
 			InnerCode: apiservercore.ExportUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIBookArchiveIDGetOKHeaders{
-		ContentDisposition: serverAPI.NewOptString("attachment; filename=\"" + book.Filename() + "\""),
+	return &serverapi.APIBookArchiveIDGetOKHeaders{
+		ContentDisposition: serverapi.NewOptString("attachment; filename=\"" + book.Filename() + "\""),
 		ContentType:        "application/zip",
-		Response: serverAPI.APIBookArchiveIDGetOK{
+		Response: serverapi.APIBookArchiveIDGetOK{
 			Data: body,
 		},
 	}, nil

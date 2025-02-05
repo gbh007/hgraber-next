@@ -10,11 +10,10 @@ import (
 	"runtime"
 	"strconv"
 
+	"github.com/gbh007/hgraber-next/openapi/agentapi"
 	"github.com/ogen-go/ogen/middleware"
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/validate"
-
-	"github.com/gbh007/hgraber-next/open_api/agentAPI"
 )
 
 func methodNotAllowed(w http.ResponseWriter, r *http.Request, allowed string) {
@@ -31,9 +30,9 @@ func methodNotAllowed(w http.ResponseWriter, r *http.Request, allowed string) {
 	w.WriteHeader(http.StatusMethodNotAllowed)
 
 	// TODO: не игнорировать ошибку
-	_ = json.NewEncoder(w).Encode(agentAPI.ErrorResponse{
+	_ = json.NewEncoder(w).Encode(agentapi.ErrorResponse{
 		InnerCode: "method not allowed",
-		Details:   agentAPI.NewOptString("method not allowed, allowed methods " + allowed),
+		Details:   agentapi.NewOptString("method not allowed, allowed methods " + allowed),
 	})
 }
 
@@ -43,9 +42,9 @@ func methodNotFound(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != http.MethodOptions {
 		// TODO: не игнорировать ошибку
-		_ = json.NewEncoder(w).Encode(agentAPI.ErrorResponse{
+		_ = json.NewEncoder(w).Encode(agentapi.ErrorResponse{
 			InnerCode: "method not found",
-			Details:   agentAPI.NewOptString("method not found"),
+			Details:   agentapi.NewOptString("method not found"),
 		})
 	}
 }
@@ -111,9 +110,9 @@ func methodErrorHandler(ctx context.Context, w http.ResponseWriter, r *http.Requ
 	}
 
 	// TODO: не игнорировать ошибку
-	_ = json.NewEncoder(w).Encode(agentAPI.ErrorResponse{
+	_ = json.NewEncoder(w).Encode(agentapi.ErrorResponse{
 		InnerCode: errorCode,
-		Details:   agentAPI.NewOptString(errorDescription),
+		Details:   agentapi.NewOptString(errorDescription),
 	})
 }
 

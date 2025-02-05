@@ -5,22 +5,22 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *AttributeHandlersController) APIAttributeCountGet(ctx context.Context) (serverAPI.APIAttributeCountGetRes, error) {
+func (c *AttributeHandlersController) APIAttributeCountGet(ctx context.Context) (serverapi.APIAttributeCountGetRes, error) {
 	attributes, err := c.webAPIUseCases.AttributesCount(ctx)
 	if err != nil {
-		return &serverAPI.APIAttributeCountGetInternalServerError{
+		return &serverapi.APIAttributeCountGetInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIAttributeCountGetOK{
-		Attributes: pkg.Map(attributes, func(raw core.AttributeVariant) serverAPI.APIAttributeCountGetOKAttributesItem {
-			return serverAPI.APIAttributeCountGetOKAttributesItem{
+	return &serverapi.APIAttributeCountGetOK{
+		Attributes: pkg.Map(attributes, func(raw core.AttributeVariant) serverapi.APIAttributeCountGetOKAttributesItem {
+			return serverapi.APIAttributeCountGetOKAttributesItem{
 				Code:  raw.Code,
 				Value: raw.Value,
 				Count: raw.Count,

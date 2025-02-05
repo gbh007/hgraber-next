@@ -11,15 +11,15 @@ import (
 	"go.opentelemetry.io/otel/propagation"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
-	"github.com/gbh007/hgraber-next/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
 type Adapter struct {
-	rawClient *agentAPI.Client
+	rawClient *agentapi.Client
 }
 
 type FSAdapter struct {
-	rawClient *agentAPI.Client
+	rawClient *agentapi.Client
 }
 
 // TODO: возможно стоит вынести инициализацию HTTP клиента наружу
@@ -29,12 +29,12 @@ func New(baseURL string, token string, agentTimeout time.Duration) (*Adapter, er
 		Timeout:   agentTimeout,
 	}
 
-	rawClient, err := agentAPI.NewClient(
+	rawClient, err := agentapi.NewClient(
 		baseURL,
 		securitySource{
 			token: token,
 		},
-		agentAPI.WithClient(&httpClient),
+		agentapi.WithClient(&httpClient),
 	)
 	if err != nil {
 		return nil, err

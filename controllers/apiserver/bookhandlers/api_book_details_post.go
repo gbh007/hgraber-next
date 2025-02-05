@@ -7,33 +7,33 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *BookHandlersController) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIBookDetailsPostReq) (serverAPI.APIBookDetailsPostRes, error) {
+func (c *BookHandlersController) APIBookDetailsPost(ctx context.Context, req *serverapi.APIBookDetailsPostReq) (serverapi.APIBookDetailsPostRes, error) {
 	book, err := c.bffUseCases.BookDetails(ctx, req.ID)
 	if errors.Is(err, core.BookNotFoundError) {
-		return &serverAPI.APIBookDetailsPostNotFound{
+		return &serverapi.APIBookDetailsPostNotFound{
 			InnerCode: apiservercore.BFFUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIBookDetailsPostInternalServerError{
+		return &serverapi.APIBookDetailsPostInternalServerError{
 			InnerCode: apiservercore.BFFUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIBookDetailsPostOK{
+	return &serverapi.APIBookDetailsPostOK{
 		Info:              c.apiCore.ConvertSimpleBook(book.Book, book.PreviewPage),
 		PageLoadedPercent: book.PageDownloadPercent(),
 		Attributes:        pkg.Map(book.Attributes, apiservercore.ConvertBookAttribute),
 		Pages:             pkg.Map(book.Pages, c.apiCore.ConvertPreviewPage),
-		Size: serverAPI.OptAPIBookDetailsPostOKSize{
-			Value: serverAPI.APIBookDetailsPostOKSize{
+		Size: serverapi.OptAPIBookDetailsPostOKSize{
+			Value: serverapi.APIBookDetailsPostOKSize{
 				Unique:                           book.Size.Unique,
 				UniqueWithoutDeadHashes:          book.Size.UniqueWithoutDeadHashes,
 				Shared:                           book.Size.Shared,
@@ -54,11 +54,11 @@ func (c *BookHandlersController) APIBookDetailsPost(ctx context.Context, req *se
 			},
 			Set: book.Size.Total > 0,
 		},
-		FsDisposition: pkg.Map(book.FSDisposition, func(raw bff.BookDetailsFSDisposition) serverAPI.APIBookDetailsPostOKFsDispositionItem {
-			return serverAPI.APIBookDetailsPostOKFsDispositionItem{
+		FsDisposition: pkg.Map(book.FSDisposition, func(raw bff.BookDetailsFSDisposition) serverapi.APIBookDetailsPostOKFsDispositionItem {
+			return serverapi.APIBookDetailsPostOKFsDispositionItem{
 				ID:   raw.ID,
 				Name: raw.Name,
-				Files: serverAPI.FSDBFilesInfo{
+				Files: serverapi.FSDBFilesInfo{
 					Count:         raw.Count,
 					Size:          raw.Size,
 					SizeFormatted: core.PrettySize(raw.Size),

@@ -6,11 +6,11 @@ import (
 	"io"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
-	"github.com/gbh007/hgraber-next/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
 func (a *Adapter) PageLoad(ctx context.Context, url agentmodel.AgentPageURL) (io.Reader, error) {
-	res, err := a.rawClient.APIParsingPagePost(ctx, &agentAPI.APIParsingPagePostReq{
+	res, err := a.rawClient.APIParsingPagePost(ctx, &agentapi.APIParsingPagePostReq{
 		BookURL:  url.BookURL,
 		ImageURL: url.ImageURL,
 	})
@@ -19,19 +19,19 @@ func (a *Adapter) PageLoad(ctx context.Context, url agentmodel.AgentPageURL) (io
 	}
 
 	switch typedRes := res.(type) {
-	case *agentAPI.APIParsingPagePostOK:
+	case *agentapi.APIParsingPagePostOK:
 		return typedRes.Data, nil
 
-	case *agentAPI.APIParsingPagePostBadRequest:
+	case *agentapi.APIParsingPagePostBadRequest:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *agentAPI.APIParsingPagePostUnauthorized:
+	case *agentapi.APIParsingPagePostUnauthorized:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *agentAPI.APIParsingPagePostForbidden:
+	case *agentapi.APIParsingPagePostForbidden:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *agentAPI.APIParsingPagePostInternalServerError:
+	case *agentapi.APIParsingPagePostInternalServerError:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:

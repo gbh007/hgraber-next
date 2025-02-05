@@ -4,17 +4,17 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsValidatePost(ctx context.Context, req *serverAPI.APIFsValidatePostReq) (serverAPI.APIFsValidatePostRes, error) {
+func (c *FSHandlersController) APIFsValidatePost(ctx context.Context, req *serverapi.APIFsValidatePostReq) (serverapi.APIFsValidatePostRes, error) {
 	err := c.fsUseCases.ValidateFS(ctx, req.ID)
 	if err != nil {
-		return &serverAPI.APIFsValidatePostInternalServerError{
+		return &serverapi.APIFsValidatePostInternalServerError{
 			InnerCode: apiservercore.FSUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIFsValidatePostNoContent{}, nil
+	return &serverapi.APIFsValidatePostNoContent{}, nil
 }

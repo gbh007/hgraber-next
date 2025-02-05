@@ -6,23 +6,23 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AgentHandlersController) APIAgentGetPost(ctx context.Context, req *serverAPI.APIAgentGetPostReq) (serverAPI.APIAgentGetPostRes, error) {
+func (c *AgentHandlersController) APIAgentGetPost(ctx context.Context, req *serverapi.APIAgentGetPostReq) (serverapi.APIAgentGetPostRes, error) {
 	agent, err := c.agentUseCases.Agent(ctx, req.ID)
 
 	if errors.Is(err, core.AgentNotFoundError) {
-		return &serverAPI.APIAgentGetPostNotFound{
+		return &serverapi.APIAgentGetPostNotFound{
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIAgentGetPostInternalServerError{
+		return &serverapi.APIAgentGetPostInternalServerError{
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 

@@ -4,17 +4,17 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookRestorePost(ctx context.Context, req *serverAPI.APIBookRestorePostReq) (serverAPI.APIBookRestorePostRes, error) {
+func (c *BookHandlersController) APIBookRestorePost(ctx context.Context, req *serverapi.APIBookRestorePostReq) (serverapi.APIBookRestorePostRes, error) {
 	err := c.rebuilderUseCases.RestoreBook(ctx, req.BookID, req.OnlyPages.Value)
 	if err != nil {
-		return &serverAPI.APIBookRestorePostInternalServerError{
+		return &serverapi.APIBookRestorePostInternalServerError{
 			InnerCode: apiservercore.RebuilderUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIBookRestorePostNoContent{}, nil
+	return &serverapi.APIBookRestorePostNoContent{}, nil
 }

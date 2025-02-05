@@ -5,11 +5,11 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *serverAPI.APIAgentListPostReq) (serverAPI.APIAgentListPostRes, error) {
+func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *serverapi.APIAgentListPostReq) (serverapi.APIAgentListPostRes, error) {
 	agents, err := c.agentUseCases.Agents(ctx, core.AgentFilter{
 		CanParse:      req.CanParse.Value,
 		CanExport:     req.CanExport.Value,
@@ -17,52 +17,52 @@ func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *ser
 		HasFS:         req.HasFs.Value,
 	}, req.IncludeStatus.Value)
 	if err != nil {
-		return &serverAPI.APIAgentListPostInternalServerError{
+		return &serverapi.APIAgentListPostInternalServerError{
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	responseAgents := pkg.Map(agents, func(aws core.AgentWithStatus) serverAPI.APIAgentListPostOKItem {
-		status := serverAPI.OptAPIAgentListPostOKItemStatus{}
+	responseAgents := pkg.Map(agents, func(aws core.AgentWithStatus) serverapi.APIAgentListPostOKItem {
+		status := serverapi.OptAPIAgentListPostOKItemStatus{}
 
 		switch {
 		case aws.StatusError != "":
-			status = serverAPI.NewOptAPIAgentListPostOKItemStatus(serverAPI.APIAgentListPostOKItemStatus{
-				CheckStatusError: serverAPI.NewOptString(aws.StatusError),
-				Status:           serverAPI.APIAgentListPostOKItemStatusStatusUnknown,
+			status = serverapi.NewOptAPIAgentListPostOKItemStatus(serverapi.APIAgentListPostOKItemStatus{
+				CheckStatusError: serverapi.NewOptString(aws.StatusError),
+				Status:           serverapi.APIAgentListPostOKItemStatusStatusUnknown,
 			})
 
 		case aws.IsOffline:
-			status = serverAPI.NewOptAPIAgentListPostOKItemStatus(serverAPI.APIAgentListPostOKItemStatus{
-				Status: serverAPI.APIAgentListPostOKItemStatusStatusOffline,
+			status = serverapi.NewOptAPIAgentListPostOKItemStatus(serverapi.APIAgentListPostOKItemStatus{
+				Status: serverapi.APIAgentListPostOKItemStatusStatusOffline,
 			})
 
 		case !aws.Status.StartAt.IsZero():
-			t := serverAPI.APIAgentListPostOKItemStatusStatusUnknown
+			t := serverapi.APIAgentListPostOKItemStatusStatusUnknown
 
 			switch {
 			case aws.Status.IsOK:
-				t = serverAPI.APIAgentListPostOKItemStatusStatusOk
+				t = serverapi.APIAgentListPostOKItemStatusStatusOk
 			case aws.Status.IsWarning:
-				t = serverAPI.APIAgentListPostOKItemStatusStatusWarning
+				t = serverapi.APIAgentListPostOKItemStatusStatusWarning
 			case aws.Status.IsError:
-				t = serverAPI.APIAgentListPostOKItemStatusStatusError
+				t = serverapi.APIAgentListPostOKItemStatusStatusError
 			}
 
-			status = serverAPI.NewOptAPIAgentListPostOKItemStatus(serverAPI.APIAgentListPostOKItemStatus{
-				StartAt: serverAPI.NewOptDateTime(aws.Status.StartAt),
-				Problems: pkg.Map(aws.Status.Problems, func(p core.AgentStatusProblem) serverAPI.APIAgentListPostOKItemStatusProblemsItem {
-					t := serverAPI.APIAgentListPostOKItemStatusProblemsItemTypeError
+			status = serverapi.NewOptAPIAgentListPostOKItemStatus(serverapi.APIAgentListPostOKItemStatus{
+				StartAt: serverapi.NewOptDateTime(aws.Status.StartAt),
+				Problems: pkg.Map(aws.Status.Problems, func(p core.AgentStatusProblem) serverapi.APIAgentListPostOKItemStatusProblemsItem {
+					t := serverapi.APIAgentListPostOKItemStatusProblemsItemTypeError
 
 					switch {
 					case p.IsInfo:
-						t = serverAPI.APIAgentListPostOKItemStatusProblemsItemTypeInfo
+						t = serverapi.APIAgentListPostOKItemStatusProblemsItemTypeInfo
 					case p.IsWarning:
-						t = serverAPI.APIAgentListPostOKItemStatusProblemsItemTypeWarning
+						t = serverapi.APIAgentListPostOKItemStatusProblemsItemTypeWarning
 					}
 
-					return serverAPI.APIAgentListPostOKItemStatusProblemsItem{
+					return serverapi.APIAgentListPostOKItemStatusProblemsItem{
 						Type:    t,
 						Details: p.Details,
 					}
@@ -71,13 +71,13 @@ func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *ser
 			})
 		}
 
-		return serverAPI.APIAgentListPostOKItem{
+		return serverapi.APIAgentListPostOKItem{
 			Status: status,
 			Info:   apiservercore.ConvertAgentToAPI(aws.Agent),
 		}
 	})
 
-	res := serverAPI.APIAgentListPostOKApplicationJSON(responseAgents)
+	res := serverapi.APIAgentListPostOKApplicationJSON(responseAgents)
 
 	return &res, nil
 }

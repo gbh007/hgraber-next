@@ -5,10 +5,10 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AgentHandlersController) APIAgentUpdatePost(ctx context.Context, req *serverAPI.Agent) (serverAPI.APIAgentUpdatePostRes, error) {
+func (c *AgentHandlersController) APIAgentUpdatePost(ctx context.Context, req *serverapi.Agent) (serverapi.APIAgentUpdatePostRes, error) {
 	err := c.agentUseCases.UpdateAgent(ctx, core.Agent{
 		ID:            req.ID,
 		Name:          req.Name,
@@ -22,11 +22,11 @@ func (c *AgentHandlersController) APIAgentUpdatePost(ctx context.Context, req *s
 		CreateAt:      req.CreatedAt,
 	})
 	if err != nil {
-		return &serverAPI.APIAgentUpdatePostInternalServerError{
+		return &serverapi.APIAgentUpdatePostInternalServerError{
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIAgentUpdatePostNoContent{}, nil
+	return &serverapi.APIAgentUpdatePostNoContent{}, nil
 }

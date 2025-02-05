@@ -4,20 +4,20 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *DeduplicateHandlersController) APIDeduplicateComparePost(ctx context.Context, req *serverAPI.APIDeduplicateComparePostReq) (serverAPI.APIDeduplicateComparePostRes, error) {
+func (c *DeduplicateHandlersController) APIDeduplicateComparePost(ctx context.Context, req *serverapi.APIDeduplicateComparePostReq) (serverapi.APIDeduplicateComparePostRes, error) {
 	data, err := c.webAPIUseCases.BookCompare(ctx, req.OriginBookID, req.TargetBookID)
 	if err != nil {
-		return &serverAPI.APIDeduplicateComparePostInternalServerError{
+		return &serverapi.APIDeduplicateComparePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIDeduplicateComparePostOK{
+	return &serverapi.APIDeduplicateComparePostOK{
 		Origin: c.apiCore.ConvertSimpleBook(data.OriginBook, data.OriginPreviewPage),
 		Target: c.apiCore.ConvertSimpleBook(data.TargetBook, data.TargetPreviewPage),
 

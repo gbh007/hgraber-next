@@ -4,17 +4,17 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *LabelHandlersController) APILabelPresetDeletePost(ctx context.Context, req *serverAPI.APILabelPresetDeletePostReq) (serverAPI.APILabelPresetDeletePostRes, error) {
+func (c *LabelHandlersController) APILabelPresetDeletePost(ctx context.Context, req *serverapi.APILabelPresetDeletePostReq) (serverapi.APILabelPresetDeletePostRes, error) {
 	err := c.webAPIUseCases.DeleteLabelPreset(ctx, req.Name)
 	if err != nil {
-		return &serverAPI.APILabelPresetDeletePostInternalServerError{
+		return &serverapi.APILabelPresetDeletePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APILabelPresetDeletePostNoContent{}, nil
+	return &serverapi.APILabelPresetDeletePostNoContent{}, nil
 }

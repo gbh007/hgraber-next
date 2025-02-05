@@ -5,12 +5,12 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
 var errorAccessForbidden = errors.New("access forbidden")
 
-func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string, t serverAPI.HeaderAuth) (context.Context, error) {
+func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string, t serverapi.HeaderAuth) (context.Context, error) {
 	if c.token == "" {
 		return ctx, nil
 	}
@@ -22,7 +22,7 @@ func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string,
 	return ctx, nil
 }
 
-func (c *Controller) HandleCookies(ctx context.Context, operationName string, t serverAPI.Cookies) (context.Context, error) {
+func (c *Controller) HandleCookies(ctx context.Context, operationName string, t serverapi.Cookies) (context.Context, error) {
 	if c.token == "" {
 		return ctx, nil
 	}
@@ -34,7 +34,7 @@ func (c *Controller) HandleCookies(ctx context.Context, operationName string, t 
 	return ctx, nil
 }
 
-func (c *Controller) APIUserLoginPost(ctx context.Context, req *serverAPI.APIUserLoginPostReq) (serverAPI.APIUserLoginPostRes, error) {
+func (c *Controller) APIUserLoginPost(ctx context.Context, req *serverapi.APIUserLoginPostReq) (serverapi.APIUserLoginPostRes, error) {
 	cookie := http.Cookie{
 		Name:     "X-HG-Token",
 		Value:    req.Token,
@@ -42,7 +42,7 @@ func (c *Controller) APIUserLoginPost(ctx context.Context, req *serverAPI.APIUse
 		HttpOnly: true,
 	}
 
-	return &serverAPI.APIUserLoginPostNoContent{
-		SetCookie: serverAPI.NewOptString(cookie.String()),
+	return &serverapi.APIUserLoginPostNoContent{
+		SetCookie: serverapi.NewOptString(cookie.String()),
 	}, nil
 }

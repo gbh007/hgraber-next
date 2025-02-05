@@ -6,7 +6,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/openapi/agentapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
@@ -17,32 +17,32 @@ func (a *Adapter) Status(ctx context.Context) (core.AgentStatus, error) {
 	}
 
 	switch typedRes := res.(type) {
-	case *agentAPI.APICoreStatusGetOK:
+	case *agentapi.APICoreStatusGetOK:
 		return core.AgentStatus{
 			StartAt:   typedRes.StartAt,
-			IsOK:      typedRes.Status == agentAPI.APICoreStatusGetOKStatusOk,
-			IsWarning: typedRes.Status == agentAPI.APICoreStatusGetOKStatusWarning,
-			IsError:   typedRes.Status == agentAPI.APICoreStatusGetOKStatusError,
-			Problems: pkg.Map(typedRes.Problems, func(p agentAPI.APICoreStatusGetOKProblemsItem) core.AgentStatusProblem {
+			IsOK:      typedRes.Status == agentapi.APICoreStatusGetOKStatusOk,
+			IsWarning: typedRes.Status == agentapi.APICoreStatusGetOKStatusWarning,
+			IsError:   typedRes.Status == agentapi.APICoreStatusGetOKStatusError,
+			Problems: pkg.Map(typedRes.Problems, func(p agentapi.APICoreStatusGetOKProblemsItem) core.AgentStatusProblem {
 				return core.AgentStatusProblem{
-					IsInfo:    p.Type == agentAPI.APICoreStatusGetOKProblemsItemTypeInfo,
-					IsWarning: p.Type == agentAPI.APICoreStatusGetOKProblemsItemTypeWarning,
-					IsError:   p.Type == agentAPI.APICoreStatusGetOKProblemsItemTypeError,
+					IsInfo:    p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeInfo,
+					IsWarning: p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeWarning,
+					IsError:   p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeError,
 					Details:   p.Details,
 				}
 			}),
 		}, nil
 
-	case *agentAPI.APICoreStatusGetBadRequest:
+	case *agentapi.APICoreStatusGetBadRequest:
 		return core.AgentStatus{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *agentAPI.APICoreStatusGetUnauthorized:
+	case *agentapi.APICoreStatusGetUnauthorized:
 		return core.AgentStatus{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *agentAPI.APICoreStatusGetForbidden:
+	case *agentapi.APICoreStatusGetForbidden:
 		return core.AgentStatus{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *agentAPI.APICoreStatusGetInternalServerError:
+	case *agentapi.APICoreStatusGetInternalServerError:
 		return core.AgentStatus{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:

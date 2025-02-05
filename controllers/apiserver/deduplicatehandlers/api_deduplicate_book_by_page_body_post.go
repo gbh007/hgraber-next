@@ -6,22 +6,22 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *DeduplicateHandlersController) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *serverAPI.APIDeduplicateBookByPageBodyPostReq) (serverAPI.APIDeduplicateBookByPageBodyPostRes, error) {
+func (c *DeduplicateHandlersController) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *serverapi.APIDeduplicateBookByPageBodyPostReq) (serverapi.APIDeduplicateBookByPageBodyPostRes, error) {
 	data, err := c.deduplicateUseCases.BookByPageEntryPercentage(ctx, req.BookID)
 	if err != nil {
-		return &serverAPI.APIDeduplicateBookByPageBodyPostInternalServerError{
+		return &serverapi.APIDeduplicateBookByPageBodyPostInternalServerError{
 			InnerCode: apiservercore.DeduplicateUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIDeduplicateBookByPageBodyPostOK{
-		Result: pkg.Map(data, func(raw bff.DeduplicateBookResult) serverAPI.APIDeduplicateBookByPageBodyPostOKResultItem {
-			return serverAPI.APIDeduplicateBookByPageBodyPostOKResultItem{
+	return &serverapi.APIDeduplicateBookByPageBodyPostOK{
+		Result: pkg.Map(data, func(raw bff.DeduplicateBookResult) serverapi.APIDeduplicateBookByPageBodyPostOKResultItem {
+			return serverapi.APIDeduplicateBookByPageBodyPostOKResultItem{
 				Book:                                 c.apiCore.ConvertSimpleBook(raw.TargetBook, raw.PreviewPage),
 				OriginCoveredTarget:                  raw.EntryPercentage,
 				TargetCoveredOrigin:                  raw.ReverseEntryPercentage,

@@ -5,14 +5,14 @@ import (
 	"fmt"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
-	"github.com/gbh007/hgraber-next/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/openapi/agentapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 func (a *Adapter) PagesCheck(ctx context.Context, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error) {
-	res, err := a.rawClient.APIParsingPageCheckPost(ctx, &agentAPI.APIParsingPageCheckPostReq{
-		Urls: pkg.Map(urls, func(u agentmodel.AgentPageURL) agentAPI.APIParsingPageCheckPostReqUrlsItem {
-			return agentAPI.APIParsingPageCheckPostReqUrlsItem{
+	res, err := a.rawClient.APIParsingPageCheckPost(ctx, &agentapi.APIParsingPageCheckPostReq{
+		Urls: pkg.Map(urls, func(u agentmodel.AgentPageURL) agentapi.APIParsingPageCheckPostReqUrlsItem {
+			return agentapi.APIParsingPageCheckPostReqUrlsItem{
 				BookURL:  u.BookURL,
 				ImageURL: u.ImageURL,
 			}
@@ -25,28 +25,28 @@ func (a *Adapter) PagesCheck(ctx context.Context, urls []agentmodel.AgentPageURL
 	var result []agentmodel.AgentPageCheckResult
 
 	switch typedRes := res.(type) {
-	case *agentAPI.APIParsingPageCheckPostOK:
-		result = pkg.Map(typedRes.Result, func(v agentAPI.APIParsingPageCheckPostOKResultItem) agentmodel.AgentPageCheckResult {
+	case *agentapi.APIParsingPageCheckPostOK:
+		result = pkg.Map(typedRes.Result, func(v agentapi.APIParsingPageCheckPostOKResultItem) agentmodel.AgentPageCheckResult {
 			return agentmodel.AgentPageCheckResult{
 				BookURL:       v.BookURL,
 				ImageURL:      v.ImageURL,
-				IsUnsupported: v.Result == agentAPI.APIParsingPageCheckPostOKResultItemResultUnsupported,
-				IsPossible:    v.Result == agentAPI.APIParsingPageCheckPostOKResultItemResultOk,
-				HasError:      v.Result == agentAPI.APIParsingPageCheckPostOKResultItemResultError,
+				IsUnsupported: v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultUnsupported,
+				IsPossible:    v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultOk,
+				HasError:      v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultError,
 				ErrorReason:   v.ErrorDetails.Value,
 			}
 		})
 
-	case *agentAPI.APIParsingPageCheckPostBadRequest:
+	case *agentapi.APIParsingPageCheckPostBadRequest:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *agentAPI.APIParsingPageCheckPostUnauthorized:
+	case *agentapi.APIParsingPageCheckPostUnauthorized:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *agentAPI.APIParsingPageCheckPostForbidden:
+	case *agentapi.APIParsingPageCheckPostForbidden:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *agentAPI.APIParsingPageCheckPostInternalServerError:
+	case *agentapi.APIParsingPageCheckPostInternalServerError:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:

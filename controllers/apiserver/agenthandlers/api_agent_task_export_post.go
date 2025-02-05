@@ -4,17 +4,17 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AgentHandlersController) APIAgentTaskExportPost(ctx context.Context, req *serverAPI.APIAgentTaskExportPostReq) (serverAPI.APIAgentTaskExportPostRes, error) {
+func (c *AgentHandlersController) APIAgentTaskExportPost(ctx context.Context, req *serverapi.APIAgentTaskExportPostReq) (serverapi.APIAgentTaskExportPostRes, error) {
 	err := c.exportUseCases.Export(ctx, req.Exporter, apiservercore.ConvertAPIBookFilter(req.BookFilter), req.DeleteAfter.Value)
 	if err != nil {
-		return &serverAPI.APIAgentTaskExportPostInternalServerError{
+		return &serverapi.APIAgentTaskExportPostInternalServerError{
 			InnerCode: apiservercore.ExportUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIAgentTaskExportPostNoContent{}, nil
+	return &serverapi.APIAgentTaskExportPostNoContent{}, nil
 }

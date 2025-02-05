@@ -3,19 +3,19 @@ package apiagent
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIParsingPagePost(ctx context.Context, req *agentAPI.APIParsingPagePostReq) (agentAPI.APIParsingPagePostRes, error) {
+func (c *Controller) APIParsingPagePost(ctx context.Context, req *agentapi.APIParsingPagePostReq) (agentapi.APIParsingPagePostRes, error) {
 	body, err := c.parsingUseCases.DownloadPage(ctx, req.BookURL, req.ImageURL)
 	if err != nil {
-		return &agentAPI.APIParsingPagePostInternalServerError{
+		return &agentapi.APIParsingPagePostInternalServerError{
 			InnerCode: ParseUseCaseCode,
-			Details:   agentAPI.NewOptString(err.Error()),
+			Details:   agentapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &agentAPI.APIParsingPagePostOK{
+	return &agentapi.APIParsingPagePostOK{
 		Data: body,
 	}, nil
 }

@@ -5,19 +5,19 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *SystemHandlersController) APISystemInfoSizeGet(ctx context.Context) (serverAPI.APISystemInfoSizeGetRes, error) {
+func (c *SystemHandlersController) APISystemInfoSizeGet(ctx context.Context) (serverapi.APISystemInfoSizeGetRes, error) {
 	info, err := c.webAPIUseCases.SystemSize(ctx)
 	if err != nil {
-		return &serverAPI.APISystemInfoSizeGetInternalServerError{
+		return &serverapi.APISystemInfoSizeGetInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APISystemInfoSizeGetOK{
+	return &serverapi.APISystemInfoSizeGetOK{
 		Count:           info.BookCount,
 		DownloadedCount: info.DownloadedBookCount,
 		VerifiedCount:   info.VerifiedBookCount,

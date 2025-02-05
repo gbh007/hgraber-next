@@ -4,17 +4,17 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *DeduplicateHandlersController) APIDeduplicateDeleteAllPagesByBookPost(ctx context.Context, req *serverAPI.APIDeduplicateDeleteAllPagesByBookPostReq) (serverAPI.APIDeduplicateDeleteAllPagesByBookPostRes, error) {
+func (c *DeduplicateHandlersController) APIDeduplicateDeleteAllPagesByBookPost(ctx context.Context, req *serverapi.APIDeduplicateDeleteAllPagesByBookPostReq) (serverapi.APIDeduplicateDeleteAllPagesByBookPostRes, error) {
 	err := c.deduplicateUseCases.RemoveBookPagesWithDeadHash(ctx, req.BookID, req.MarkAsDeletedEmptyBook.Value)
 	if err != nil {
-		return &serverAPI.APIDeduplicateDeleteAllPagesByBookPostInternalServerError{
+		return &serverapi.APIDeduplicateDeleteAllPagesByBookPostInternalServerError{
 			InnerCode: apiservercore.DeduplicateUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIDeduplicateDeleteAllPagesByBookPostNoContent{}, nil
+	return &serverapi.APIDeduplicateDeleteAllPagesByBookPostNoContent{}, nil
 }

@@ -4,19 +4,19 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *LabelHandlersController) APILabelPresetGetPost(ctx context.Context, req *serverAPI.APILabelPresetGetPostReq) (serverAPI.APILabelPresetGetPostRes, error) {
+func (c *LabelHandlersController) APILabelPresetGetPost(ctx context.Context, req *serverapi.APILabelPresetGetPostReq) (serverapi.APILabelPresetGetPostRes, error) {
 	raw, err := c.webAPIUseCases.LabelPreset(ctx, req.Name)
 	if err != nil {
-		return &serverAPI.APILabelPresetGetPostInternalServerError{
+		return &serverapi.APILabelPresetGetPostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APILabelPresetGetPostOK{
+	return &serverapi.APILabelPresetGetPostOK{
 		Name:        raw.Name,
 		Description: apiservercore.OptString(raw.Description),
 		Values:      raw.Values,

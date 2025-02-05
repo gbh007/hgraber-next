@@ -5,55 +5,55 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *SystemHandlersController) APIParsingPageExistsPost(ctx context.Context, req *serverAPI.APIParsingPageExistsPostReq) (serverAPI.APIParsingPageExistsPostRes, error) {
-	result, err := c.parseUseCases.PagesExists(ctx, pkg.Map(req.Urls, func(u serverAPI.APIParsingPageExistsPostReqUrlsItem) agentmodel.AgentPageURL {
+func (c *SystemHandlersController) APIParsingPageExistsPost(ctx context.Context, req *serverapi.APIParsingPageExistsPostReq) (serverapi.APIParsingPageExistsPostRes, error) {
+	result, err := c.parseUseCases.PagesExists(ctx, pkg.Map(req.Urls, func(u serverapi.APIParsingPageExistsPostReqUrlsItem) agentmodel.AgentPageURL {
 		return agentmodel.AgentPageURL{
 			BookURL:  u.BookURL,
 			ImageURL: u.ImageURL,
 		}
 	}))
 	if err != nil {
-		return &serverAPI.APIParsingPageExistsPostInternalServerError{
+		return &serverapi.APIParsingPageExistsPostInternalServerError{
 			InnerCode: apiservercore.ParseUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIParsingPageExistsPostOK{
-		Result: pkg.Map(result, func(v agentmodel.AgentPageCheckResult) serverAPI.APIParsingPageExistsPostOKResultItem {
+	return &serverapi.APIParsingPageExistsPostOK{
+		Result: pkg.Map(result, func(v agentmodel.AgentPageCheckResult) serverapi.APIParsingPageExistsPostOKResultItem {
 			switch {
 			case v.IsPossible:
-				return serverAPI.APIParsingPageExistsPostOKResultItem{
+				return serverapi.APIParsingPageExistsPostOKResultItem{
 					BookURL:  v.BookURL,
 					ImageURL: v.ImageURL,
-					Result:   serverAPI.APIParsingPageExistsPostOKResultItemResultOk,
+					Result:   serverapi.APIParsingPageExistsPostOKResultItemResultOk,
 				}
 
 			case v.IsUnsupported:
-				return serverAPI.APIParsingPageExistsPostOKResultItem{
+				return serverapi.APIParsingPageExistsPostOKResultItem{
 					BookURL:  v.BookURL,
 					ImageURL: v.ImageURL,
-					Result:   serverAPI.APIParsingPageExistsPostOKResultItemResultUnsupported,
+					Result:   serverapi.APIParsingPageExistsPostOKResultItemResultUnsupported,
 				}
 
 			case v.HasError:
-				return serverAPI.APIParsingPageExistsPostOKResultItem{
+				return serverapi.APIParsingPageExistsPostOKResultItem{
 					BookURL:      v.BookURL,
 					ImageURL:     v.ImageURL,
-					Result:       serverAPI.APIParsingPageExistsPostOKResultItemResultError,
-					ErrorDetails: serverAPI.NewOptString(v.ErrorReason),
+					Result:       serverapi.APIParsingPageExistsPostOKResultItemResultError,
+					ErrorDetails: serverapi.NewOptString(v.ErrorReason),
 				}
 
 			default:
-				return serverAPI.APIParsingPageExistsPostOKResultItem{
+				return serverapi.APIParsingPageExistsPostOKResultItem{
 					BookURL:      v.BookURL,
 					ImageURL:     v.ImageURL,
-					Result:       serverAPI.APIParsingPageExistsPostOKResultItemResultError,
-					ErrorDetails: serverAPI.NewOptString("unknown result state"),
+					Result:       serverapi.APIParsingPageExistsPostOKResultItemResultError,
+					ErrorDetails: serverapi.NewOptString("unknown result state"),
 				}
 			}
 		}),

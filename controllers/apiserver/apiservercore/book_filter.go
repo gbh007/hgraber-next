@@ -2,10 +2,10 @@ package apiservercore
 
 import (
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func ConvertAPIBookFilter(req serverAPI.BookFilter) core.BookFilter {
+func ConvertAPIBookFilter(req serverapi.BookFilter) core.BookFilter {
 	filter := core.BookFilter{}
 
 	if req.Pagination.Value.Count.IsSet() {
@@ -16,13 +16,13 @@ func ConvertAPIBookFilter(req serverAPI.BookFilter) core.BookFilter {
 
 	if req.Sort.Value.Field.IsSet() {
 		switch req.Sort.Value.Field.Value {
-		case serverAPI.BookFilterSortFieldCreatedAt:
+		case serverapi.BookFilterSortFieldCreatedAt:
 			filter.OrderBy = core.BookFilterOrderByCreated
-		case serverAPI.BookFilterSortFieldID:
+		case serverapi.BookFilterSortFieldID:
 			filter.OrderBy = core.BookFilterOrderByID
-		case serverAPI.BookFilterSortFieldName:
+		case serverapi.BookFilterSortFieldName:
 			filter.OrderBy = core.BookFilterOrderByName
-		case serverAPI.BookFilterSortFieldPageCount:
+		case serverapi.BookFilterSortFieldPageCount:
 			filter.OrderBy = core.BookFilterOrderByPageCount
 		default:
 			filter.OrderBy = core.BookFilterOrderByCreated
@@ -69,19 +69,19 @@ func ConvertAPIBookFilter(req serverAPI.BookFilter) core.BookFilter {
 		// TODO: добавить больше скипов из-за некорректных сочетаний значений.
 
 		switch attr.Type {
-		case serverAPI.BookFilterFilterAttributesItemTypeLike:
+		case serverapi.BookFilterFilterAttributesItemTypeLike:
 			attrFilter.Type = core.BookFilterAttributeTypeLike
 
-		case serverAPI.BookFilterFilterAttributesItemTypeIn:
+		case serverapi.BookFilterFilterAttributesItemTypeIn:
 			attrFilter.Type = core.BookFilterAttributeTypeIn
 
-		case serverAPI.BookFilterFilterAttributesItemTypeCountEq:
+		case serverapi.BookFilterFilterAttributesItemTypeCountEq:
 			attrFilter.Type = core.BookFilterAttributeTypeCountEq
 
-		case serverAPI.BookFilterFilterAttributesItemTypeCountGt:
+		case serverapi.BookFilterFilterAttributesItemTypeCountGt:
 			attrFilter.Type = core.BookFilterAttributeTypeCountGt
 
-		case serverAPI.BookFilterFilterAttributesItemTypeCountLt:
+		case serverapi.BookFilterFilterAttributesItemTypeCountLt:
 			attrFilter.Type = core.BookFilterAttributeTypeCountLt
 
 		default:
@@ -103,19 +103,19 @@ func ConvertAPIBookFilter(req serverAPI.BookFilter) core.BookFilter {
 		// TODO: добавить больше скипов из-за некорректных сочетаний значений.
 
 		switch label.Type {
-		case serverAPI.BookFilterFilterLabelsItemTypeLike:
+		case serverapi.BookFilterFilterLabelsItemTypeLike:
 			labelFilter.Type = core.BookFilterLabelTypeLike
 
-		case serverAPI.BookFilterFilterLabelsItemTypeIn:
+		case serverapi.BookFilterFilterLabelsItemTypeIn:
 			labelFilter.Type = core.BookFilterLabelTypeIn
 
-		case serverAPI.BookFilterFilterLabelsItemTypeCountEq:
+		case serverapi.BookFilterFilterLabelsItemTypeCountEq:
 			labelFilter.Type = core.BookFilterLabelTypeCountEq
 
-		case serverAPI.BookFilterFilterLabelsItemTypeCountGt:
+		case serverapi.BookFilterFilterLabelsItemTypeCountGt:
 			labelFilter.Type = core.BookFilterLabelTypeCountGt
 
-		case serverAPI.BookFilterFilterLabelsItemTypeCountLt:
+		case serverapi.BookFilterFilterLabelsItemTypeCountLt:
 			labelFilter.Type = core.BookFilterLabelTypeCountLt
 
 		default:
@@ -128,13 +128,13 @@ func ConvertAPIBookFilter(req serverAPI.BookFilter) core.BookFilter {
 	return filter
 }
 
-func ConvertFlagSelector(raw serverAPI.BookFilterFlagSelector) core.BookFilterShowType {
+func ConvertFlagSelector(raw serverapi.BookFilterFlagSelector) core.BookFilterShowType {
 	switch raw {
-	case serverAPI.BookFilterFlagSelectorAll:
+	case serverapi.BookFilterFlagSelectorAll:
 		return core.BookFilterShowTypeAll
-	case serverAPI.BookFilterFlagSelectorOnly:
+	case serverapi.BookFilterFlagSelectorOnly:
 		return core.BookFilterShowTypeOnly
-	case serverAPI.BookFilterFlagSelectorExcept:
+	case serverapi.BookFilterFlagSelectorExcept:
 		return core.BookFilterShowTypeExcept
 	}
 

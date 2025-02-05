@@ -5,21 +5,21 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *LabelHandlersController) APILabelDeletePost(ctx context.Context, req *serverAPI.APILabelDeletePostReq) (serverAPI.APILabelDeletePostRes, error) {
+func (c *LabelHandlersController) APILabelDeletePost(ctx context.Context, req *serverapi.APILabelDeletePostReq) (serverapi.APILabelDeletePostRes, error) {
 	err := c.webAPIUseCases.DeleteLabel(ctx, core.BookLabel{
 		BookID:     req.BookID,
 		PageNumber: req.PageNumber.Value,
 		Name:       req.Name,
 	})
 	if err != nil {
-		return &serverAPI.APILabelDeletePostInternalServerError{
+		return &serverapi.APILabelDeletePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APILabelDeletePostNoContent{}, nil
+	return &serverapi.APILabelDeletePostNoContent{}, nil
 }

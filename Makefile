@@ -11,8 +11,8 @@ OGEN = github.com/ogen-go/ogen/cmd/ogen@v1.8.1
 
 .PHONY: generate
 generate:
-	go run $(OGEN) --target open_api/agentAPI -package agentAPI --clean open_api/agent.yaml
-	go run $(OGEN) --target open_api/serverAPI -package serverAPI --clean open_api/server.yaml
+	go run $(OGEN) --target openapi/agentapi -package agentapi --clean openapi/agent.yaml
+	go run $(OGEN) --target openapi/serverapi -package serverapi --clean openapi/server.yaml
 
 create_build_dir:
 	mkdir -p ./_build

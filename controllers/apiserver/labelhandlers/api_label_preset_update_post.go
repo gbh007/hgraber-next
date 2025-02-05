@@ -5,21 +5,21 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *LabelHandlersController) APILabelPresetUpdatePost(ctx context.Context, req *serverAPI.APILabelPresetUpdatePostReq) (serverAPI.APILabelPresetUpdatePostRes, error) {
+func (c *LabelHandlersController) APILabelPresetUpdatePost(ctx context.Context, req *serverapi.APILabelPresetUpdatePostReq) (serverapi.APILabelPresetUpdatePostRes, error) {
 	err := c.webAPIUseCases.UpdateLabelPreset(ctx, core.BookLabelPreset{
 		Name:        req.Name,
 		Values:      req.Values,
 		Description: req.Description.Value,
 	})
 	if err != nil {
-		return &serverAPI.APILabelPresetUpdatePostInternalServerError{
+		return &serverapi.APILabelPresetUpdatePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APILabelPresetUpdatePostNoContent{}, nil
+	return &serverapi.APILabelPresetUpdatePostNoContent{}, nil
 }

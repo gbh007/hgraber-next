@@ -5,10 +5,10 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *SystemHandlersController) APISystemTaskCreatePost(ctx context.Context, req *serverAPI.APISystemTaskCreatePostReq) (serverAPI.APISystemTaskCreatePostRes, error) {
+func (c *SystemHandlersController) APISystemTaskCreatePost(ctx context.Context, req *serverapi.APISystemTaskCreatePostReq) (serverapi.APISystemTaskCreatePostRes, error) {
 	var code core.TaskCode
 
 	switch req.Code {
@@ -31,11 +31,11 @@ func (c *SystemHandlersController) APISystemTaskCreatePost(ctx context.Context, 
 
 	err := c.taskUseCases.RunTask(ctx, code)
 	if err != nil {
-		return &serverAPI.APISystemTaskCreatePostInternalServerError{
+		return &serverapi.APISystemTaskCreatePostInternalServerError{
 			InnerCode: apiservercore.TaskerUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APISystemTaskCreatePostNoContent{}, nil
+	return &serverapi.APISystemTaskCreatePostNoContent{}, nil
 }

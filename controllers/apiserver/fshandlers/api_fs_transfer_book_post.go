@@ -5,10 +5,10 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsTransferBookPost(ctx context.Context, req *serverAPI.APIFsTransferBookPostReq) (serverAPI.APIFsTransferBookPostRes, error) {
+func (c *FSHandlersController) APIFsTransferBookPost(ctx context.Context, req *serverapi.APIFsTransferBookPostReq) (serverapi.APIFsTransferBookPostRes, error) {
 	var pageNumber *int
 
 	if req.OnlyPreviewPages.Value {
@@ -22,11 +22,11 @@ func (c *FSHandlersController) APIFsTransferBookPost(ctx context.Context, req *s
 
 	err := c.fsUseCases.TransferFSFilesByBook(ctx, req.BookID, req.To, pageNumber)
 	if err != nil {
-		return &serverAPI.APIFsTransferBookPostInternalServerError{
+		return &serverapi.APIFsTransferBookPostInternalServerError{
 			InnerCode: apiservercore.FSUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIFsTransferBookPostNoContent{}, nil
+	return &serverapi.APIFsTransferBookPostNoContent{}, nil
 }

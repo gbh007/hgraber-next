@@ -6,11 +6,11 @@ import (
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
-	"github.com/gbh007/hgraber-next/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
 func (a *Adapter) BooksCheckMulti(ctx context.Context, u url.URL) ([]agentmodel.AgentBookCheckResult, error) {
-	res, err := a.rawClient.APIParsingBookMultiPost(ctx, &agentAPI.APIParsingBookMultiPostReq{
+	res, err := a.rawClient.APIParsingBookMultiPost(ctx, &agentapi.APIParsingBookMultiPostReq{
 		URL: u,
 	})
 	if err != nil {
@@ -18,19 +18,19 @@ func (a *Adapter) BooksCheckMulti(ctx context.Context, u url.URL) ([]agentmodel.
 	}
 
 	switch typedRes := res.(type) {
-	case *agentAPI.BooksCheckResult:
+	case *agentapi.BooksCheckResult:
 		return convertBooksCheckResult(typedRes), nil
 
-	case *agentAPI.APIParsingBookMultiPostBadRequest:
+	case *agentapi.APIParsingBookMultiPostBadRequest:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *agentAPI.APIParsingBookMultiPostUnauthorized:
+	case *agentapi.APIParsingBookMultiPostUnauthorized:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *agentAPI.APIParsingBookMultiPostForbidden:
+	case *agentapi.APIParsingBookMultiPostForbidden:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *agentAPI.APIParsingBookMultiPostInternalServerError:
+	case *agentapi.APIParsingBookMultiPostInternalServerError:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:

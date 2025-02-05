@@ -6,25 +6,25 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookDeletePost(ctx context.Context, req *serverAPI.APIBookDeletePostReq) (serverAPI.APIBookDeletePostRes, error) {
+func (c *BookHandlersController) APIBookDeletePost(ctx context.Context, req *serverapi.APIBookDeletePostReq) (serverapi.APIBookDeletePostRes, error) {
 	err := c.webAPIUseCases.DeleteBook(ctx, req.ID)
 
 	if errors.Is(err, core.BookNotFoundError) {
-		return &serverAPI.APIBookDeletePostNotFound{
+		return &serverapi.APIBookDeletePostNotFound{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIBookDeletePostInternalServerError{
+		return &serverapi.APIBookDeletePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIBookDeletePostNoContent{}, nil
+	return &serverapi.APIBookDeletePostNoContent{}, nil
 }

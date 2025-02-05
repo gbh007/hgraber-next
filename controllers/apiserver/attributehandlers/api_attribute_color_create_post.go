@@ -5,17 +5,17 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AttributeHandlersController) APIAttributeColorCreatePost(ctx context.Context, req *serverAPI.AttributeColor) (serverAPI.APIAttributeColorCreatePostRes, error) {
+func (c *AttributeHandlersController) APIAttributeColorCreatePost(ctx context.Context, req *serverapi.AttributeColor) (serverapi.APIAttributeColorCreatePostRes, error) {
 	err := c.webAPIUseCases.CreateAttributeColor(ctx, core.AttributeColor(*req))
 	if err != nil {
-		return &serverAPI.APIAttributeColorCreatePostInternalServerError{
+		return &serverapi.APIAttributeColorCreatePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIAttributeColorCreatePostNoContent{}, nil
+	return &serverapi.APIAttributeColorCreatePostNoContent{}, nil
 }

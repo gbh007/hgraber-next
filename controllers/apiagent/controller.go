@@ -12,7 +12,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
-	"github.com/gbh007/hgraber-next/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
 type parsingUseCases interface {
@@ -33,7 +33,7 @@ type Controller struct {
 	addr    string
 	debug   bool
 
-	ogenServer *agentAPI.Server
+	ogenServer *agentapi.Server
 
 	parsingUseCases parsingUseCases
 	exportUseCases  exportUseCases
@@ -63,12 +63,12 @@ func New(
 		exportUseCases:  exportUseCases,
 	}
 
-	ogenServer, err := agentAPI.NewServer(
+	ogenServer, err := agentapi.NewServer(
 		c, c,
-		agentAPI.WithErrorHandler(methodErrorHandler),
-		agentAPI.WithMethodNotAllowed(methodNotAllowed),
-		agentAPI.WithNotFound(methodNotFound),
-		agentAPI.WithMiddleware(c.simplePanicRecover),
+		agentapi.WithErrorHandler(methodErrorHandler),
+		agentapi.WithMethodNotAllowed(methodNotAllowed),
+		agentapi.WithNotFound(methodNotFound),
+		agentapi.WithMiddleware(c.simplePanicRecover),
 	)
 	if err != nil {
 		return nil, err
@@ -81,7 +81,7 @@ func New(
 
 var errorAccessForbidden = errors.New("access forbidden")
 
-func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string, t agentAPI.HeaderAuth) (context.Context, error) {
+func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string, t agentapi.HeaderAuth) (context.Context, error) {
 	if c.token == "" {
 		return ctx, nil
 	}

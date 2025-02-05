@@ -11,15 +11,15 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFileIDGet(ctx context.Context, params serverAPI.APIFileIDGetParams) (serverAPI.APIFileIDGetRes, error) {
+func (c *FSHandlersController) APIFileIDGet(ctx context.Context, params serverapi.APIFileIDGetParams) (serverapi.APIFileIDGetRes, error) {
 	fileID, err := uuid.Parse(strings.TrimSuffix(params.ID, path.Ext(params.ID)))
 	if err != nil {
-		return &serverAPI.APIFileIDGetBadRequest{
+		return &serverapi.APIFileIDGetBadRequest{
 			InnerCode: apiservercore.ValidationCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
@@ -31,16 +31,16 @@ func (c *FSHandlersController) APIFileIDGet(ctx context.Context, params serverAP
 
 	body, err := c.webAPIUseCases.File(ctx, fileID, fsID)
 	if errors.Is(err, core.FileNotFoundError) {
-		return &serverAPI.APIFileIDGetNotFound{
+		return &serverapi.APIFileIDGetNotFound{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIFileIDGetInternalServerError{
+		return &serverapi.APIFileIDGetInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
@@ -51,9 +51,9 @@ func (c *FSHandlersController) APIFileIDGet(ctx context.Context, params serverAP
 		contentType = "application/octet-stream"
 	}
 
-	return &serverAPI.APIFileIDGetOKHeaders{
+	return &serverapi.APIFileIDGetOKHeaders{
 		ContentType: contentType,
-		Response: serverAPI.APIFileIDGetOK{
+		Response: serverapi.APIFileIDGetOK{
 			Data: body,
 		},
 	}, nil

@@ -4,17 +4,17 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsDeletePost(ctx context.Context, req *serverAPI.APIFsDeletePostReq) (serverAPI.APIFsDeletePostRes, error) {
+func (c *FSHandlersController) APIFsDeletePost(ctx context.Context, req *serverapi.APIFsDeletePostReq) (serverapi.APIFsDeletePostRes, error) {
 	err := c.fsUseCases.DeleteFileStorage(ctx, req.ID)
 	if err != nil {
-		return &serverAPI.APIFsDeletePostInternalServerError{
+		return &serverapi.APIFsDeletePostInternalServerError{
 			InnerCode: apiservercore.FSUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIFsDeletePostNoContent{}, nil
+	return &serverapi.APIFsDeletePostNoContent{}, nil
 }

@@ -5,10 +5,10 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *LabelHandlersController) APILabelSetPost(ctx context.Context, req *serverAPI.APILabelSetPostReq) (serverAPI.APILabelSetPostRes, error) {
+func (c *LabelHandlersController) APILabelSetPost(ctx context.Context, req *serverapi.APILabelSetPostReq) (serverapi.APILabelSetPostRes, error) {
 	err := c.webAPIUseCases.SetLabel(ctx, core.BookLabel{
 		BookID:     req.BookID,
 		PageNumber: req.PageNumber.Value,
@@ -16,11 +16,11 @@ func (c *LabelHandlersController) APILabelSetPost(ctx context.Context, req *serv
 		Value:      req.Value,
 	})
 	if err != nil {
-		return &serverAPI.APILabelSetPostInternalServerError{
+		return &serverapi.APILabelSetPostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APILabelSetPostNoContent{}, nil
+	return &serverapi.APILabelSetPostNoContent{}, nil
 }

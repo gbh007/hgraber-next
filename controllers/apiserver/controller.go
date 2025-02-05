@@ -14,7 +14,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/fshandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/labelhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/systemhandlers"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
 type ParseUseCases interface {
@@ -85,7 +85,7 @@ type Controller struct {
 	tracer trace.Tracer
 	debug  bool
 
-	ogenServer *serverAPI.Server
+	ogenServer *serverapi.Server
 
 	staticDir  string
 	serverAddr string
@@ -190,12 +190,12 @@ func New(
 		token:      config.GetToken(),
 	}
 
-	ogenServer, err := serverAPI.NewServer(
+	ogenServer, err := serverapi.NewServer(
 		c, c,
-		serverAPI.WithErrorHandler(methodErrorHandler),
-		serverAPI.WithMethodNotAllowed(methodNotAllowed),
-		serverAPI.WithNotFound(methodNotFound),
-		serverAPI.WithMiddleware(c.simplePanicRecover),
+		serverapi.WithErrorHandler(methodErrorHandler),
+		serverapi.WithMethodNotAllowed(methodNotAllowed),
+		serverapi.WithNotFound(methodNotFound),
+		serverapi.WithMiddleware(c.simplePanicRecover),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("create ogen server: %w", err)

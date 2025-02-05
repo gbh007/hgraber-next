@@ -6,16 +6,16 @@ import (
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
-	"github.com/gbh007/hgraber-next/open_api/agentAPI"
+	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
 func (a *Adapter) ExportArchive(ctx context.Context, data agentmodel.AgentExportData) error {
 	res, err := a.rawClient.APIExportArchivePost(
 		ctx,
-		agentAPI.APIExportArchivePostReq{
+		agentapi.APIExportArchivePostReq{
 			Data: data.Body,
 		},
-		agentAPI.APIExportArchivePostParams{
+		agentapi.APIExportArchivePostParams{
 			BookID:   data.BookID,
 			BookName: data.BookName,
 			BookURL:  optURL(data.BookURL),
@@ -26,19 +26,19 @@ func (a *Adapter) ExportArchive(ctx context.Context, data agentmodel.AgentExport
 	}
 
 	switch typedRes := res.(type) {
-	case *agentAPI.APIExportArchivePostNoContent:
+	case *agentapi.APIExportArchivePostNoContent:
 		return nil
 
-	case *agentAPI.APIExportArchivePostBadRequest:
+	case *agentapi.APIExportArchivePostBadRequest:
 		return fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *agentAPI.APIExportArchivePostUnauthorized:
+	case *agentapi.APIExportArchivePostUnauthorized:
 		return fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *agentAPI.APIExportArchivePostForbidden:
+	case *agentapi.APIExportArchivePostForbidden:
 		return fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *agentAPI.APIExportArchivePostInternalServerError:
+	case *agentapi.APIExportArchivePostInternalServerError:
 		return fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
@@ -46,10 +46,10 @@ func (a *Adapter) ExportArchive(ctx context.Context, data agentmodel.AgentExport
 	}
 }
 
-func optURL(u *url.URL) agentAPI.OptURI {
+func optURL(u *url.URL) agentapi.OptURI {
 	if u == nil {
-		return agentAPI.OptURI{}
+		return agentapi.OptURI{}
 	}
 
-	return agentAPI.NewOptURI(*u)
+	return agentapi.NewOptURI(*u)
 }

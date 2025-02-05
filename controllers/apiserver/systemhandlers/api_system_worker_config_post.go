@@ -3,10 +3,10 @@ package systemhandlers
 import (
 	"context"
 
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *SystemHandlersController) APISystemWorkerConfigPost(ctx context.Context, req *serverAPI.APISystemWorkerConfigPostReq) (serverAPI.APISystemWorkerConfigPostRes, error) {
+func (c *SystemHandlersController) APISystemWorkerConfigPost(ctx context.Context, req *serverapi.APISystemWorkerConfigPostReq) (serverapi.APISystemWorkerConfigPostRes, error) {
 	counts := make(map[string]int, len(req.RunnersCount))
 
 	for _, runnerCount := range req.RunnersCount {
@@ -15,5 +15,5 @@ func (c *SystemHandlersController) APISystemWorkerConfigPost(ctx context.Context
 
 	c.webAPIUseCases.SetWorkerConfig(ctx, counts)
 
-	return &serverAPI.APISystemWorkerConfigPostNoContent{}, nil
+	return &serverapi.APISystemWorkerConfigPostNoContent{}, nil
 }

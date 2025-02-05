@@ -4,15 +4,15 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsGetPost(ctx context.Context, req *serverAPI.APIFsGetPostReq) (serverAPI.APIFsGetPostRes, error) {
+func (c *FSHandlersController) APIFsGetPost(ctx context.Context, req *serverapi.APIFsGetPostReq) (serverapi.APIFsGetPostRes, error) {
 	fs, err := c.fsUseCases.FileStorage(ctx, req.ID)
 	if err != nil {
-		return &serverAPI.APIFsGetPostInternalServerError{
+		return &serverapi.APIFsGetPostInternalServerError{
 			InnerCode: apiservercore.FSUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 

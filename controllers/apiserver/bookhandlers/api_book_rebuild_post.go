@@ -6,10 +6,10 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookRebuildPost(ctx context.Context, req *serverAPI.APIBookRebuildPostReq) (serverAPI.APIBookRebuildPostRes, error) {
+func (c *BookHandlersController) APIBookRebuildPost(ctx context.Context, req *serverapi.APIBookRebuildPostReq) (serverapi.APIBookRebuildPostRes, error) {
 	id, err := c.rebuilderUseCases.RebuildBook(ctx, core.RebuildBookRequest{
 		ModifiedOldBook: apiservercore.ConvertBookRawToBookFull(&req.OldBook),
 		SelectedPages:   req.SelectedPages,
@@ -34,20 +34,20 @@ func (c *BookHandlersController) APIBookRebuildPost(ctx context.Context, req *se
 	})
 
 	if errors.Is(err, core.BookNotFoundError) {
-		return &serverAPI.APIBookRebuildPostNotFound{
+		return &serverapi.APIBookRebuildPostNotFound{
 			InnerCode: apiservercore.RebuilderUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIBookRebuildPostInternalServerError{
+		return &serverapi.APIBookRebuildPostInternalServerError{
 			InnerCode: apiservercore.RebuilderUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIBookRebuildPostOK{
+	return &serverapi.APIBookRebuildPostOK{
 		ID: id,
 	}, nil
 }

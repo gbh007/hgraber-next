@@ -6,25 +6,25 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AgentHandlersController) APIAgentDeletePost(ctx context.Context, req *serverAPI.APIAgentDeletePostReq) (serverAPI.APIAgentDeletePostRes, error) {
+func (c *AgentHandlersController) APIAgentDeletePost(ctx context.Context, req *serverapi.APIAgentDeletePostReq) (serverapi.APIAgentDeletePostRes, error) {
 	err := c.agentUseCases.DeleteAgent(ctx, req.ID)
 
 	if errors.Is(err, core.AgentNotFoundError) {
-		return &serverAPI.APIAgentDeletePostNotFound{
+		return &serverapi.APIAgentDeletePostNotFound{
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIAgentDeletePostInternalServerError{
+		return &serverapi.APIAgentDeletePostInternalServerError{
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIAgentDeletePostNoContent{}, nil
+	return &serverapi.APIAgentDeletePostNoContent{}, nil
 }

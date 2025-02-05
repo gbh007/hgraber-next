@@ -6,18 +6,18 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func OptURL(u *url.URL) serverAPI.OptURI {
+func OptURL(u *url.URL) serverapi.OptURI {
 	if u == nil {
-		return serverAPI.OptURI{}
+		return serverapi.OptURI{}
 	}
 
-	return serverAPI.NewOptURI(*u)
+	return serverapi.NewOptURI(*u)
 }
 
-func UrlFromOpt(u serverAPI.OptURI) *url.URL {
+func UrlFromOpt(u serverapi.OptURI) *url.URL {
 	if !u.Set {
 		return nil
 	}
@@ -25,26 +25,26 @@ func UrlFromOpt(u serverAPI.OptURI) *url.URL {
 	return &u.Value
 }
 
-func OptTime(t time.Time) serverAPI.OptDateTime {
+func OptTime(t time.Time) serverapi.OptDateTime {
 	if t.IsZero() {
-		return serverAPI.OptDateTime{}
+		return serverapi.OptDateTime{}
 	}
 
-	return serverAPI.NewOptDateTime(t)
+	return serverapi.NewOptDateTime(t)
 }
 
-func OptString(s string) serverAPI.OptString {
+func OptString(s string) serverapi.OptString {
 	if s == "" {
-		return serverAPI.OptString{}
+		return serverapi.OptString{}
 	}
 
-	return serverAPI.NewOptString(s)
+	return serverapi.NewOptString(s)
 }
 
-func OptUUID(u uuid.UUID) serverAPI.OptUUID {
+func OptUUID(u uuid.UUID) serverapi.OptUUID {
 	if u == uuid.Nil {
-		return serverAPI.OptUUID{}
+		return serverapi.OptUUID{}
 	}
 
-	return serverAPI.NewOptUUID(u)
+	return serverapi.NewOptUUID(u)
 }

@@ -6,25 +6,25 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookVerifyPost(ctx context.Context, req *serverAPI.APIBookVerifyPostReq) (serverAPI.APIBookVerifyPostRes, error) {
+func (c *BookHandlersController) APIBookVerifyPost(ctx context.Context, req *serverapi.APIBookVerifyPostReq) (serverapi.APIBookVerifyPostRes, error) {
 	err := c.webAPIUseCases.VerifyBook(ctx, req.ID, req.VerifyStatus)
 
 	if errors.Is(err, core.BookNotFoundError) {
-		return &serverAPI.APIBookVerifyPostNotFound{
+		return &serverapi.APIBookVerifyPostNotFound{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIBookVerifyPostInternalServerError{
+		return &serverapi.APIBookVerifyPostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIBookVerifyPostNoContent{}, nil
+	return &serverapi.APIBookVerifyPostNoContent{}, nil
 }

@@ -5,47 +5,47 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *SystemHandlersController) APIParsingBookExistsPost(ctx context.Context, req *serverAPI.APIParsingBookExistsPostReq) (serverAPI.APIParsingBookExistsPostRes, error) {
+func (c *SystemHandlersController) APIParsingBookExistsPost(ctx context.Context, req *serverapi.APIParsingBookExistsPostReq) (serverapi.APIParsingBookExistsPostRes, error) {
 	result, err := c.parseUseCases.BooksExists(ctx, req.Urls)
 	if err != nil {
-		return &serverAPI.APIParsingBookExistsPostInternalServerError{
+		return &serverapi.APIParsingBookExistsPostInternalServerError{
 			InnerCode: apiservercore.ParseUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIParsingBookExistsPostOK{
-		Result: pkg.Map(result, func(v agentmodel.AgentBookCheckResult) serverAPI.APIParsingBookExistsPostOKResultItem {
+	return &serverapi.APIParsingBookExistsPostOK{
+		Result: pkg.Map(result, func(v agentmodel.AgentBookCheckResult) serverapi.APIParsingBookExistsPostOKResultItem {
 			switch {
 			case v.IsPossible:
-				return serverAPI.APIParsingBookExistsPostOKResultItem{
+				return serverapi.APIParsingBookExistsPostOKResultItem{
 					URL:                v.URL,
-					Result:             serverAPI.APIParsingBookExistsPostOKResultItemResultOk,
+					Result:             serverapi.APIParsingBookExistsPostOKResultItemResultOk,
 					PossibleDuplicates: v.PossibleDuplicates,
 				}
 
 			case v.IsUnsupported:
-				return serverAPI.APIParsingBookExistsPostOKResultItem{
+				return serverapi.APIParsingBookExistsPostOKResultItem{
 					URL:    v.URL,
-					Result: serverAPI.APIParsingBookExistsPostOKResultItemResultUnsupported,
+					Result: serverapi.APIParsingBookExistsPostOKResultItemResultUnsupported,
 				}
 
 			case v.HasError:
-				return serverAPI.APIParsingBookExistsPostOKResultItem{
+				return serverapi.APIParsingBookExistsPostOKResultItem{
 					URL:          v.URL,
-					Result:       serverAPI.APIParsingBookExistsPostOKResultItemResultError,
-					ErrorDetails: serverAPI.NewOptString(v.ErrorReason),
+					Result:       serverapi.APIParsingBookExistsPostOKResultItemResultError,
+					ErrorDetails: serverapi.NewOptString(v.ErrorReason),
 				}
 
 			default:
-				return serverAPI.APIParsingBookExistsPostOKResultItem{
+				return serverapi.APIParsingBookExistsPostOKResultItem{
 					URL:          v.URL,
-					Result:       serverAPI.APIParsingBookExistsPostOKResultItemResultError,
-					ErrorDetails: serverAPI.NewOptString("unknown result state"),
+					Result:       serverapi.APIParsingBookExistsPostOKResultItemResultError,
+					ErrorDetails: serverapi.NewOptString("unknown result state"),
 				}
 			}
 		}),

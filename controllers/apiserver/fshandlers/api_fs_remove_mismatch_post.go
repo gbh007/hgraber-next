@@ -4,17 +4,17 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsRemoveMismatchPost(ctx context.Context, req *serverAPI.APIFsRemoveMismatchPostReq) (serverAPI.APIFsRemoveMismatchPostRes, error) {
+func (c *FSHandlersController) APIFsRemoveMismatchPost(ctx context.Context, req *serverapi.APIFsRemoveMismatchPostReq) (serverapi.APIFsRemoveMismatchPostRes, error) {
 	err := c.taskUseCases.RemoveFilesInFSMismatch(ctx, req.ID)
 	if err != nil {
-		return &serverAPI.APIFsRemoveMismatchPostInternalServerError{
+		return &serverapi.APIFsRemoveMismatchPostInternalServerError{
 			InnerCode: apiservercore.TaskerUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIFsRemoveMismatchPostNoContent{}, nil
+	return &serverapi.APIFsRemoveMismatchPostNoContent{}, nil
 }

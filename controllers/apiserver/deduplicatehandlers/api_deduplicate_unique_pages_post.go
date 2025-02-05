@@ -4,20 +4,20 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/open_api/serverAPI"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *DeduplicateHandlersController) APIDeduplicateUniquePagesPost(ctx context.Context, req *serverAPI.APIDeduplicateUniquePagesPostReq) (serverAPI.APIDeduplicateUniquePagesPostRes, error) {
+func (c *DeduplicateHandlersController) APIDeduplicateUniquePagesPost(ctx context.Context, req *serverapi.APIDeduplicateUniquePagesPostReq) (serverapi.APIDeduplicateUniquePagesPostRes, error) {
 	data, err := c.deduplicateUseCases.UniquePages(ctx, req.BookID)
 	if err != nil {
-		return &serverAPI.APIDeduplicateUniquePagesPostInternalServerError{
+		return &serverapi.APIDeduplicateUniquePagesPostInternalServerError{
 			InnerCode: apiservercore.DeduplicateUseCaseCode,
-			Details:   serverAPI.NewOptString(err.Error()),
+			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIDeduplicateUniquePagesPostOK{
+	return &serverapi.APIDeduplicateUniquePagesPostOK{
 		Pages: pkg.Map(data, c.apiCore.ConvertPreviewPage),
 	}, nil
 }
