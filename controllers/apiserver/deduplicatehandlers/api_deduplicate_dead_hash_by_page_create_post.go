@@ -1,4 +1,4 @@
-package apiserver
+package deduplicatehandlers
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIDeduplicateDeadHashByPageCreatePost(ctx context.Context, req *serverAPI.APIDeduplicateDeadHashByPageCreatePostReq) (serverAPI.APIDeduplicateDeadHashByPageCreatePostRes, error) {
+func (c *DeduplicateHandlersController) APIDeduplicateDeadHashByPageCreatePost(ctx context.Context, req *serverAPI.APIDeduplicateDeadHashByPageCreatePostReq) (serverAPI.APIDeduplicateDeadHashByPageCreatePostRes, error) {
 	err := c.deduplicateUseCases.CreateDeadHashByPage(ctx, req.BookID, req.PageNumber)
 	if err != nil {
 		return &serverAPI.APIDeduplicateDeadHashByPageCreatePostInternalServerError{

@@ -1,4 +1,4 @@
-package apiserver
+package deduplicatehandlers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APIDeduplicateBooksByPagePost(ctx context.Context, req *serverAPI.APIDeduplicateBooksByPagePostReq) (serverAPI.APIDeduplicateBooksByPagePostRes, error) {
+func (c *DeduplicateHandlersController) APIDeduplicateBooksByPagePost(ctx context.Context, req *serverAPI.APIDeduplicateBooksByPagePostReq) (serverAPI.APIDeduplicateBooksByPagePostRes, error) {
 	data, err := c.deduplicateUseCases.BooksByPage(ctx, req.BookID, req.PageNumber)
 	if err != nil {
 		return &serverAPI.APIDeduplicateBooksByPagePostInternalServerError{

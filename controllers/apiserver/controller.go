@@ -14,6 +14,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/attributehandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/bookhandlers"
+	"github.com/gbh007/hgraber-next/controllers/apiserver/deduplicatehandlers"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -135,6 +136,7 @@ type Controller struct {
 	*agenthandlers.AgentHandlersController
 	*attributehandlers.AttributeHandlersController
 	*bookhandlers.BookHandlersController
+	*deduplicatehandlers.DeduplicateHandlersController
 
 	logger    *slog.Logger
 	tracer    trace.Tracer
@@ -210,6 +212,14 @@ func New(
 			exportUseCases,
 			rebuilderUseCases,
 			bffUseCases,
+			debug,
+			ac,
+		),
+		DeduplicateHandlersController: deduplicatehandlers.New(
+			logger,
+			tracer,
+			webAPIUseCases,
+			deduplicateUseCases,
 			debug,
 			ac,
 		),
