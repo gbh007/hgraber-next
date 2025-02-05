@@ -1,4 +1,4 @@
-package apiserver
+package bookhandlers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIBookRawPost(ctx context.Context, req *serverAPI.APIBookRawPostReq) (serverAPI.APIBookRawPostRes, error) {
+func (c *BookHandlersController) APIBookRawPost(ctx context.Context, req *serverAPI.APIBookRawPostReq) (serverAPI.APIBookRawPostRes, error) {
 	var (
 		book      core.BookContainer
 		err       error

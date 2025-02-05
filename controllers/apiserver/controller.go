@@ -13,6 +13,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/agenthandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/attributehandlers"
+	"github.com/gbh007/hgraber-next/controllers/apiserver/bookhandlers"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -133,6 +134,7 @@ type config interface {
 type Controller struct {
 	*agenthandlers.AgentHandlersController
 	*attributehandlers.AttributeHandlersController
+	*bookhandlers.BookHandlersController
 
 	logger    *slog.Logger
 	tracer    trace.Tracer
@@ -197,6 +199,17 @@ func New(
 			logger,
 			tracer,
 			webAPIUseCases,
+			debug,
+			ac,
+		),
+		BookHandlersController: bookhandlers.New(
+			logger,
+			tracer,
+			parseUseCases,
+			webAPIUseCases,
+			exportUseCases,
+			rebuilderUseCases,
+			bffUseCases,
 			debug,
 			ac,
 		),

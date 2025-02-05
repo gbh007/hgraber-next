@@ -1,4 +1,4 @@
-package apiserver
+package bookhandlers
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIBookUpdatePost(ctx context.Context, req *serverAPI.BookRaw) (serverAPI.APIBookUpdatePostRes, error) {
+func (c *BookHandlersController) APIBookUpdatePost(ctx context.Context, req *serverAPI.BookRaw) (serverAPI.APIBookUpdatePostRes, error) {
 	err := c.rebuilderUseCases.UpdateBook(ctx, apiservercore.ConvertBookRawToBookFull(req))
 
 	if errors.Is(err, core.BookNotFoundError) {

@@ -1,4 +1,4 @@
-package apiserver
+package bookhandlers
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIBookDetailsPostReq) (serverAPI.APIBookDetailsPostRes, error) {
+func (c *BookHandlersController) APIBookDetailsPost(ctx context.Context, req *serverAPI.APIBookDetailsPostReq) (serverAPI.APIBookDetailsPostRes, error) {
 	book, err := c.bffUseCases.BookDetails(ctx, req.ID)
 	if errors.Is(err, core.BookNotFoundError) {
 		return &serverAPI.APIBookDetailsPostNotFound{

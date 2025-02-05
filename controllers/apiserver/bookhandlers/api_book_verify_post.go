@@ -1,4 +1,4 @@
-package apiserver
+package bookhandlers
 
 import (
 	"context"
@@ -9,22 +9,22 @@ import (
 	"github.com/gbh007/hgraber-next/open_api/serverAPI"
 )
 
-func (c *Controller) APIBookDeletePost(ctx context.Context, req *serverAPI.APIBookDeletePostReq) (serverAPI.APIBookDeletePostRes, error) {
-	err := c.webAPIUseCases.DeleteBook(ctx, req.ID)
+func (c *BookHandlersController) APIBookVerifyPost(ctx context.Context, req *serverAPI.APIBookVerifyPostReq) (serverAPI.APIBookVerifyPostRes, error) {
+	err := c.webAPIUseCases.VerifyBook(ctx, req.ID, req.VerifyStatus)
 
 	if errors.Is(err, core.BookNotFoundError) {
-		return &serverAPI.APIBookDeletePostNotFound{
+		return &serverAPI.APIBookVerifyPostNotFound{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverAPI.APIBookDeletePostInternalServerError{
+		return &serverAPI.APIBookVerifyPostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
 			Details:   serverAPI.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverAPI.APIBookDeletePostNoContent{}, nil
+	return &serverAPI.APIBookVerifyPostNoContent{}, nil
 }
