@@ -38,6 +38,10 @@ type rawFileStorage interface {
 	State(ctx context.Context, includeFileIDs, includeFileSizes bool) (core.FSState, error)
 }
 
+type metricProvider interface {
+	RegisterFSActionTime(action string, fsID *uuid.UUID, d time.Duration)
+}
+
 type rawFileStorageData struct {
 	FS      rawFileStorage
 	AgentID uuid.UUID
@@ -55,6 +59,7 @@ type Storage struct {
 	logger          *slog.Logger
 	agentController agentController
 	dataStorage     dataStorage
+	metricProvider  metricProvider
 
 	tryReconnect bool
 
@@ -68,12 +73,14 @@ func New(
 	logger *slog.Logger,
 	agentController agentController,
 	dataStorage dataStorage,
+	metricProvider metricProvider,
 	tryReconnect bool,
 ) *Storage {
 	return &Storage{
 		logger:          logger,
 		agentController: agentController,
 		dataStorage:     dataStorage,
+		metricProvider:  metricProvider,
 
 		tryReconnect: tryReconnect,
 

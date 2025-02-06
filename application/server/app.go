@@ -44,6 +44,8 @@ func Serve() {
 	)
 	defer cancel()
 
+	metricProvider := metrics.MetricProvider{}
+
 	cfg, err := parseConfig()
 	if err != nil {
 		// Поскольку на этот момент нет ни логгера ни вообще ничего то выкидываем панику.
@@ -109,6 +111,7 @@ func Serve() {
 		logger,
 		agentSystem,
 		storage,
+		metricProvider,
 		cfg.FileStorage.TryReconnect,
 	)
 
@@ -142,8 +145,6 @@ func Serve() {
 	rebuilderUseCases := rebuilder.New(logger, tracer, storage)
 	fsUseCases := filesystem.New(logger, storage, fileStorageAdapter, tmpStorage)
 	bffUseCases := bff.New(logger, storage)
-
-	metricProvider := metrics.MetricProvider{}
 
 	workersController := workermanager.New(
 		logger,

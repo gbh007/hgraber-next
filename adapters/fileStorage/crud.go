@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -11,6 +12,11 @@ import (
 )
 
 func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error {
+	startAt := time.Now()
+	defer func() {
+		s.metricProvider.RegisterFSActionTime("create", &fsID, time.Since(startAt))
+	}()
+
 	if fsID == uuid.Nil {
 		if s.legacyFileStorage == nil {
 			return fmt.Errorf("%w: legacy", core.MissingFSError)
@@ -32,6 +38,11 @@ func (s *Storage) Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID)
 	if err != nil {
 		return fmt.Errorf("search fs id: %w", err)
 	}
+
+	startAt := time.Now()
+	defer func() {
+		s.metricProvider.RegisterFSActionTime("delete", &targetFSID, time.Since(startAt))
+	}()
 
 	if targetFSID == uuid.Nil {
 		if s.legacyFileStorage == nil {
@@ -55,6 +66,11 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (i
 		return nil, fmt.Errorf("search fs id: %w", err)
 	}
 
+	startAt := time.Now()
+	defer func() {
+		s.metricProvider.RegisterFSActionTime("get", &targetFSID, time.Since(startAt))
+	}()
+
 	if targetFSID == uuid.Nil {
 		if s.legacyFileStorage == nil {
 			return nil, fmt.Errorf("%w: legacy", core.MissingFSError)
@@ -72,6 +88,11 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (i
 }
 
 func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (core.FSState, error) {
+	startAt := time.Now()
+	defer func() {
+		s.metricProvider.RegisterFSActionTime("state", &fsID, time.Since(startAt))
+	}()
+
 	if fsID == uuid.Nil {
 		if s.legacyFileStorage == nil {
 			return core.FSState{}, fmt.Errorf("%w: legacy", core.MissingFSError)

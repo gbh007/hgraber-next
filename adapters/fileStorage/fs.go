@@ -3,6 +3,7 @@ package fileStorage
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -12,6 +13,11 @@ import (
 )
 
 func (s *Storage) searchFS(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (uuid.UUID, error) {
+	startAt := time.Now()
+	defer func() {
+		s.metricProvider.RegisterFSActionTime("search_fs", fsID, time.Since(startAt))
+	}()
+
 	if fsID != nil {
 		return *fsID, nil
 	}
@@ -25,6 +31,11 @@ func (s *Storage) searchFS(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUI
 }
 
 func (s *Storage) getFS(ctx context.Context, fsID uuid.UUID, tryReconnect bool) (rawFileStorageData, error) {
+	startAt := time.Now()
+	defer func() {
+		s.metricProvider.RegisterFSActionTime("get_fs", &fsID, time.Since(startAt))
+	}()
+
 	s.storageMapMutex.RLock()
 	storage, ok := s.storageMap[fsID]
 	s.storageMapMutex.RUnlock()
@@ -55,6 +66,11 @@ func (s *Storage) getFS(ctx context.Context, fsID uuid.UUID, tryReconnect bool) 
 }
 
 func (s *Storage) FSChange(ctx context.Context, fsID uuid.UUID, deleted bool) error {
+	startAt := time.Now()
+	defer func() {
+		s.metricProvider.RegisterFSActionTime("change_fs", &fsID, time.Since(startAt))
+	}()
+
 	s.storageMapMutex.Lock()
 	defer s.storageMapMutex.Unlock()
 

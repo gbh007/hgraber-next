@@ -12,6 +12,11 @@ import (
 )
 
 func (s *Storage) HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error) {
+	startAt := time.Now()
+	defer func() {
+		s.metricProvider.RegisterFSActionTime("highway", &fsID, time.Since(startAt))
+	}()
+
 	if fsID == uuid.Nil { // Легаси система не поддерживает highway
 		return url.URL{}, false, nil
 	}
