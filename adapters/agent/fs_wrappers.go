@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
 func (c *Client) FSCreate(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID, body io.Reader) error {
@@ -37,10 +37,10 @@ func (c *Client) FSGet(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID)
 	return adapter.ToFS().Get(ctx, fileID)
 }
 
-func (c *Client) FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (core.FSState, error) {
+func (c *Client) FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (fsmodel.FSState, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
-		return core.FSState{}, err
+		return fsmodel.FSState{}, err
 	}
 
 	return adapter.ToFS().State(ctx, includeFileIDs, includeFileSizes)

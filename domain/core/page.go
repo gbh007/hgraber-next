@@ -42,11 +42,6 @@ type PageForDownload struct {
 	ImageURL   *url.URL
 }
 
-type PageForDownloadWithAgent struct {
-	PageForDownload
-	AgentID uuid.UUID
-}
-
 type PageWithHash struct {
 	Page
 	FileHash

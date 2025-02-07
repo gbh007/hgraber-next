@@ -9,12 +9,12 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UUID) (core.RunnableTask, error) {
-	return core.RunnableTaskFunction(func(ctx context.Context, taskResult core.TaskResultWriter) {
+func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UUID) (systemmodel.RunnableTask, error) {
+	return systemmodel.RunnableTaskFunction(func(ctx context.Context, taskResult systemmodel.TaskResultWriter) {
 		defer taskResult.Finish()
 
 		taskResult.SetName("RemoveFilesInStoragesMismatch")

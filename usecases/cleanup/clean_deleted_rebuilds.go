@@ -5,11 +5,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
-func (uc *UseCase) CleanDeletedRebuilds(_ context.Context) (core.RunnableTask, error) {
-	return core.RunnableTaskFunction(func(ctx context.Context, taskResult core.TaskResultWriter) {
+func (uc *UseCase) CleanDeletedRebuilds(_ context.Context) (systemmodel.RunnableTask, error) {
+	return systemmodel.RunnableTaskFunction(func(ctx context.Context, taskResult systemmodel.TaskResultWriter) {
 		defer taskResult.Finish()
 
 		taskResult.SetName("CleanDeletedRebuilds")

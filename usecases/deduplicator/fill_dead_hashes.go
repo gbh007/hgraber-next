@@ -6,10 +6,11 @@ import (
 	"time"
 
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
-func (uc *UseCase) FillDeadHashes(_ context.Context, withRemoveDeletedPages bool) (core.RunnableTask, error) {
-	return core.RunnableTaskFunction(func(ctx context.Context, taskResult core.TaskResultWriter) {
+func (uc *UseCase) FillDeadHashes(_ context.Context, withRemoveDeletedPages bool) (systemmodel.RunnableTask, error) {
+	return systemmodel.RunnableTaskFunction(func(ctx context.Context, taskResult systemmodel.TaskResultWriter) {
 		defer taskResult.Finish()
 
 		if withRemoveDeletedPages {

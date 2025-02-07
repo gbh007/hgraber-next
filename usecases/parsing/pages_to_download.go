@@ -8,17 +8,18 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) PagesToDownload(ctx context.Context) ([]core.PageForDownloadWithAgent, error) {
+func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownloadWithAgent, error) {
 	pages, err := uc.storage.NotDownloadedPages(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("pages from storage: %w", err)
 	}
 
 	if len(pages) == 0 {
-		return []core.PageForDownloadWithAgent{}, nil
+		return []parsing.PageForDownloadWithAgent{}, nil
 	}
 
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
@@ -41,7 +42,7 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]core.PageForDownloadW
 		return hasUrl
 	})
 
-	toDownload := make([]core.PageForDownloadWithAgent, 0, len(pages))
+	toDownload := make([]parsing.PageForDownloadWithAgent, 0, len(pages))
 
 	urlMap := pkg.SliceToMap(pages, func(p core.PageForDownload) (agentmodel.AgentPageURL, core.PageForDownload) {
 		return agentmodel.AgentPageURL{
@@ -97,7 +98,7 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]core.PageForDownloadW
 				continue
 			}
 
-			toDownload = append(toDownload, core.PageForDownloadWithAgent{
+			toDownload = append(toDownload, parsing.PageForDownloadWithAgent{
 				PageForDownload: page,
 				AgentID:         agent.ID,
 			})

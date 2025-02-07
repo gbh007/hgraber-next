@@ -4,29 +4,29 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
 func (c *SystemHandlersController) APISystemTaskCreatePost(ctx context.Context, req *serverapi.APISystemTaskCreatePostReq) (serverapi.APISystemTaskCreatePostRes, error) {
-	var code core.TaskCode
+	var code systemmodel.TaskCode
 
 	switch req.Code {
 	case "deduplicate_files":
-		code = core.DeduplicateFilesTaskCode
+		code = systemmodel.DeduplicateFilesTaskCode
 	case "remove_detached_files":
-		code = core.RemoveDetachedFilesTaskCode
+		code = systemmodel.RemoveDetachedFilesTaskCode
 	// FIXME: удалить если не будет дальнейших модификаций
 	// case "remove_mismatch_files":
 	// 	code = entities.RemoveFilesInStoragesMismatchTaskCode
 	case "fill_dead_hashes":
-		code = core.FillDeadHashesTaskCode
+		code = systemmodel.FillDeadHashesTaskCode
 	case "fill_dead_hashes_with_remove_deleted_pages":
-		code = core.FillDeadHashesAndRemoveDeletedPagesTaskCode
+		code = systemmodel.FillDeadHashesAndRemoveDeletedPagesTaskCode
 	case "clean_deleted_pages":
-		code = core.CleanDeletedPagesTaskCode
+		code = systemmodel.CleanDeletedPagesTaskCode
 	case "clean_deleted_rebuilds":
-		code = core.CleanDeletedRebuildsTaskCode
+		code = systemmodel.CleanDeletedRebuildsTaskCode
 	}
 
 	err := c.taskUseCases.RunTask(ctx, code)

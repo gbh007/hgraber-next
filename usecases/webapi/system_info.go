@@ -4,18 +4,18 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
-func (uc *UseCase) SystemSize(ctx context.Context) (core.SystemSizeInfo, error) {
+func (uc *UseCase) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, error) {
 	systemSize, err := uc.storage.SystemSize(ctx)
 	if err != nil {
-		return core.SystemSizeInfo{}, fmt.Errorf("storage: %w", err)
+		return systemmodel.SystemSizeInfo{}, fmt.Errorf("storage: %w", err)
 	}
 
 	return systemSize, nil
 }
 
-func (uc *UseCase) WorkersInfo(ctx context.Context) []core.SystemWorkerStat {
+func (uc *UseCase) WorkersInfo(ctx context.Context) []systemmodel.SystemWorkerStat {
 	return uc.workerManager.Info()
 }

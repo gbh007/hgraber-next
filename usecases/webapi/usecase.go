@@ -10,10 +10,11 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
 type storage interface {
-	SystemSize(ctx context.Context) (core.SystemSizeInfo, error)
+	SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, error)
 	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (core.Page, error)
 
 	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool, verifiedAt time.Time) error
@@ -43,7 +44,7 @@ type bookRequester interface {
 }
 
 type workerManager interface {
-	Info() []core.SystemWorkerStat
+	Info() []systemmodel.SystemWorkerStat
 
 	SetRunnerCount(ctx context.Context, counts map[string]int)
 }

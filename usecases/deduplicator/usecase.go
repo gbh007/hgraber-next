@@ -8,6 +8,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
 type storage interface {
@@ -40,7 +41,7 @@ type storage interface {
 	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
 	Attributes(ctx context.Context) ([]core.Attribute, error)
 
-	FileStorages(ctx context.Context) ([]core.FileStorageSystem, error)
+	FileStorages(ctx context.Context) ([]fsmodel.FileStorageSystem, error)
 }
 
 type UseCase struct {

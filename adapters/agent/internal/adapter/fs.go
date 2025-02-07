@@ -10,6 +10,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -108,21 +109,21 @@ func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error
 	}
 }
 
-func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (core.FSState, error) {
+func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (fsmodel.FSState, error) {
 	res, err := a.rawClient.APIFsInfoPost(ctx, &agentapi.APIFsInfoPostReq{
 		IncludeFileIds:   agentapi.NewOptBool(includeFileIDs),
 		IncludeFileSizes: agentapi.NewOptBool(includeFileSizes),
 	})
 	if err != nil {
-		return core.FSState{}, err
+		return fsmodel.FSState{}, err
 	}
 
 	switch typedRes := res.(type) {
 	case *agentapi.APIFsInfoPostOK:
-		return core.FSState{
+		return fsmodel.FSState{
 			FileIDs: typedRes.FileIds,
-			Files: pkg.Map(typedRes.Files, func(raw agentapi.APIFsInfoPostOKFilesItem) core.FSStateFile {
-				return core.FSStateFile{
+			Files: pkg.Map(typedRes.Files, func(raw agentapi.APIFsInfoPostOKFilesItem) fsmodel.FSStateFile {
+				return fsmodel.FSStateFile{
 					ID:        raw.ID,
 					Size:      raw.Size,
 					CreatedAt: raw.CreatedAt,
@@ -134,19 +135,19 @@ func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes 
 		}, nil
 
 	case *agentapi.APIFsInfoPostBadRequest:
-		return core.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIFsInfoPostUnauthorized:
-		return core.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIFsInfoPostForbidden:
-		return core.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIFsInfoPostInternalServerError:
-		return core.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return core.FSState{}, agentmodel.AgentAPIUnknownResponse
+		return fsmodel.FSState{}, agentmodel.AgentAPIUnknownResponse
 	}
 }
 

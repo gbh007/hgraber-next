@@ -1,4 +1,4 @@
-package core
+package systemmodel
 
 import "github.com/google/uuid"
 

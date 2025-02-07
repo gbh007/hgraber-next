@@ -1,4 +1,4 @@
-package core
+package fsmodel
 
 import (
 	"net/url"
@@ -63,4 +63,10 @@ type FSStateFile struct {
 	ID        uuid.UUID
 	Size      int64
 	CreatedAt time.Time
+}
+
+type FileFilter struct {
+	FSID       *uuid.UUID
+	BookID     *uuid.UUID
+	PageNumber *int
 }

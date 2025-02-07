@@ -11,11 +11,13 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) DeduplicateFiles(_ context.Context) (core.RunnableTask, error) {
-	return core.RunnableTaskFunction(func(ctx context.Context, taskResult core.TaskResultWriter) {
+func (uc *UseCase) DeduplicateFiles(_ context.Context) (systemmodel.RunnableTask, error) {
+	return systemmodel.RunnableTaskFunction(func(ctx context.Context, taskResult systemmodel.TaskResultWriter) {
 		defer taskResult.Finish()
 
 		taskResult.SetName("DeduplicateFiles")
@@ -33,7 +35,7 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (core.RunnableTask, error
 			return
 		}
 
-		storageMap := pkg.SliceToMap(storages, func(s core.FileStorageSystem) (uuid.UUID, core.FileStorageSystem) {
+		storageMap := pkg.SliceToMap(storages, func(s fsmodel.FileStorageSystem) (uuid.UUID, fsmodel.FileStorageSystem) {
 			return s.ID, s
 		})
 

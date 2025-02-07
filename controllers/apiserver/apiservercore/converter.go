@@ -10,6 +10,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -186,8 +187,8 @@ func ConvertAgentToAPI(raw core.Agent) serverapi.Agent {
 	}
 }
 
-func ConvertFileSystemInfoFromAPI(raw *serverapi.FileSystemInfo) core.FileStorageSystem {
-	return core.FileStorageSystem{
+func ConvertFileSystemInfoFromAPI(raw *serverapi.FileSystemInfo) fsmodel.FileStorageSystem {
+	return fsmodel.FileStorageSystem{
 		ID:                  raw.ID,
 		Name:                raw.Name,
 		Description:         raw.Description.Value,
@@ -201,7 +202,7 @@ func ConvertFileSystemInfoFromAPI(raw *serverapi.FileSystemInfo) core.FileStorag
 	}
 }
 
-func ConvertFileSystemInfoToAPI(raw core.FileStorageSystem) serverapi.FileSystemInfo {
+func ConvertFileSystemInfoToAPI(raw fsmodel.FileStorageSystem) serverapi.FileSystemInfo {
 	return serverapi.FileSystemInfo{
 		ID:                  raw.ID,
 		Name:                raw.Name,
@@ -223,7 +224,7 @@ func ConvertStatusFlagToAPI(f bff.StatusFlag) serverapi.OptBool {
 	}
 }
 
-func ConvertFSDBFilesInfoToAPI(raw *core.FSFilesInfo) serverapi.OptFSDBFilesInfo {
+func ConvertFSDBFilesInfoToAPI(raw *fsmodel.FSFilesInfo) serverapi.OptFSDBFilesInfo {
 	if raw == nil {
 		return serverapi.OptFSDBFilesInfo{}
 	}

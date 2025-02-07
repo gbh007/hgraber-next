@@ -12,17 +12,18 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
 type infoProvider interface {
-	WorkersInfo(ctx context.Context) []core.SystemWorkerStat
+	WorkersInfo(ctx context.Context) []systemmodel.SystemWorkerStat
 }
 
 type statisticProvider interface {
 	BooksCountByAuthor(ctx context.Context) (map[string]int64, error)
 	PageSizeByAuthor(ctx context.Context) (map[string]core.SizeWithCount, error)
 	BookSizes(ctx context.Context) (map[uuid.UUID]core.SizeWithCount, error)
-	SystemSize(ctx context.Context) (core.SystemSizeInfo, error)
+	SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, error)
 }
 
 type config interface {

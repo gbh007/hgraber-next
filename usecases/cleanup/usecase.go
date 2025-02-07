@@ -8,6 +8,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
 type storage interface {
@@ -23,7 +24,7 @@ type storage interface {
 
 type fileStorage interface {
 	Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) error
-	State(ctx context.Context, includeFileIDs, includeFileSizes bool, fsID uuid.UUID) (core.FSState, error)
+	State(ctx context.Context, includeFileIDs, includeFileSizes bool, fsID uuid.UUID) (fsmodel.FSState, error)
 }
 
 type UseCase struct {

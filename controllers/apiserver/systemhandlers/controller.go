@@ -12,19 +12,21 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/parsing"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
 type ParseUseCases interface {
-	NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (core.FirstHandleMultipleResult, error)
-	NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (core.MultiHandleMultipleResult, error)
+	NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (parsing.FirstHandleMultipleResult, error)
+	NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (parsing.MultiHandleMultipleResult, error)
 
 	BooksExists(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
 	PagesExists(ctx context.Context, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error)
 }
 
 type WebAPIUseCases interface {
-	SystemSize(ctx context.Context) (core.SystemSizeInfo, error)
-	WorkersInfo(ctx context.Context) []core.SystemWorkerStat
+	SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, error)
+	WorkersInfo(ctx context.Context) []systemmodel.SystemWorkerStat
 	SetWorkerConfig(ctx context.Context, counts map[string]int)
 }
 
@@ -37,8 +39,8 @@ type DeduplicateUseCases interface {
 }
 
 type TaskUseCases interface {
-	RunTask(ctx context.Context, code core.TaskCode) error
-	TaskResults(ctx context.Context) ([]*core.TaskResult, error)
+	RunTask(ctx context.Context, code systemmodel.TaskCode) error
+	TaskResults(ctx context.Context) ([]*systemmodel.TaskResult, error)
 }
 
 type SystemHandlersController struct {

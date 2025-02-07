@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -47,8 +47,8 @@ func (c *SystemHandlersController) APISystemHandlePost(ctx context.Context, req 
 	}, nil
 }
 
-func convertAPISystemHandlePostOKDetails(raw []core.BookHandleResult) []serverapi.APISystemHandlePostOKDetailsItem {
-	return pkg.Map(raw, func(b core.BookHandleResult) serverapi.APISystemHandlePostOKDetailsItem {
+func convertAPISystemHandlePostOKDetails(raw []parsing.BookHandleResult) []serverapi.APISystemHandlePostOKDetailsItem {
+	return pkg.Map(raw, func(b parsing.BookHandleResult) serverapi.APISystemHandlePostOKDetailsItem {
 		return serverapi.APISystemHandlePostOKDetailsItem{
 			URL:         b.URL,
 			IsDuplicate: b.IsDuplicate,

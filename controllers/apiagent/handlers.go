@@ -10,10 +10,11 @@ import (
 	"runtime"
 	"strconv"
 
-	"github.com/gbh007/hgraber-next/openapi/agentapi"
 	"github.com/ogen-go/ogen/middleware"
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/validate"
+
+	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
 func methodNotAllowed(w http.ResponseWriter, r *http.Request, allowed string) {

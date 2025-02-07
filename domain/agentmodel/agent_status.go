@@ -1,6 +1,10 @@
-package core
+package agentmodel
 
-import "time"
+import (
+	"time"
+
+	"github.com/gbh007/hgraber-next/domain/core"
+)
 
 type AgentStatus struct {
 	StartAt   time.Time
@@ -18,7 +22,7 @@ type AgentStatusProblem struct {
 }
 
 type AgentWithStatus struct {
-	Agent       Agent
+	Agent       core.Agent
 	Status      AgentStatus
 	IsOffline   bool
 	StatusError string

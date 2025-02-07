@@ -61,9 +61,3 @@ func (s SizeWithCount) Avg() int64 {
 
 	return s.Size / s.Count
 }
-
-type FileFilter struct {
-	FSID       *uuid.UUID
-	BookID     *uuid.UUID
-	PageNumber *int
-}

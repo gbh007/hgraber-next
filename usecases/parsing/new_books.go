@@ -13,19 +13,20 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (core.FirstHandleMultipleResult, error) {
+func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (parsing.FirstHandleMultipleResult, error) {
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParse: true,
 	})
 	if err != nil {
-		return core.FirstHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
+		return parsing.FirstHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
 	}
 
-	result := core.FirstHandleMultipleResult{
-		Details: make([]core.BookHandleResult, 0, len(urls)),
+	result := parsing.FirstHandleMultipleResult{
+		Details: make([]parsing.BookHandleResult, 0, len(urls)),
 	}
 
 	urlSet := pkg.SliceToSet(urls)
@@ -37,12 +38,12 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 	for _, u := range urls {
 		// Ссылки не могут содержать пробелы
 		if u.String() != strings.TrimSpace(u.String()) {
-			return core.FirstHandleMultipleResult{}, fmt.Errorf("url (%s) have space", u.String())
+			return parsing.FirstHandleMultipleResult{}, fmt.Errorf("url (%s) have space", u.String())
 		}
 
 		ids, err := uc.storage.GetBookIDsByURL(ctx, u)
 		if err != nil {
-			return core.FirstHandleMultipleResult{}, fmt.Errorf("url exists in storage check (%s): %w", u.String(), err)
+			return parsing.FirstHandleMultipleResult{}, fmt.Errorf("url exists in storage check (%s): %w", u.String(), err)
 		}
 
 		if len(ids) == 0 {
@@ -94,7 +95,7 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 				if len(info.PossibleDuplicates) > 0 {
 					exists, err := uc.existsInStorage(ctx, info.PossibleDuplicates)
 					if err != nil {
-						return core.FirstHandleMultipleResult{}, fmt.Errorf(
+						return parsing.FirstHandleMultipleResult{}, fmt.Errorf(
 							"agent (%s) check duplicates (%s): %w", agent.ID.String(), u.String(), err,
 						)
 					}
@@ -129,7 +130,7 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 
 				err = uc.storage.NewBook(ctx, book)
 				if err != nil {
-					return core.FirstHandleMultipleResult{}, fmt.Errorf(
+					return parsing.FirstHandleMultipleResult{}, fmt.Errorf(
 						"agent (%s) create (%s): %w", agent.ID.String(), u.String(), err,
 					)
 				}

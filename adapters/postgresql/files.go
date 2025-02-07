@@ -10,6 +10,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
 func (d *Database) DuplicatedFiles(ctx context.Context) ([]core.File, error) {
@@ -305,7 +306,7 @@ func (d *Database) File(ctx context.Context, id uuid.UUID) (core.File, error) {
 	return out, nil
 }
 
-func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (core.FSFilesInfo, error) {
+func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (fsmodel.FSFilesInfo, error) {
 	builder := squirrel.Select(
 		"COUNT(*)",
 		"SUM(\"size\")",
@@ -337,7 +338,7 @@ func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidD
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return core.FSFilesInfo{}, fmt.Errorf("build query: %w", err)
+		return fsmodel.FSFilesInfo{}, fmt.Errorf("build query: %w", err)
 	}
 
 	d.squirrelDebugLog(ctx, query, args)
@@ -348,16 +349,16 @@ func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidD
 
 	err = row.Scan(&count, &size)
 	if err != nil {
-		return core.FSFilesInfo{}, fmt.Errorf("scan :%w", err)
+		return fsmodel.FSFilesInfo{}, fmt.Errorf("scan :%w", err)
 	}
 
-	return core.FSFilesInfo{
+	return fsmodel.FSFilesInfo{
 		Count: count.Int64,
 		Size:  size.Int64,
 	}, nil
 }
 
-func (d *Database) FileIDsByFilter(ctx context.Context, filter core.FileFilter) ([]uuid.UUID, error) {
+func (d *Database) FileIDsByFilter(ctx context.Context, filter fsmodel.FileFilter) ([]uuid.UUID, error) {
 	builder := squirrel.Select("id").
 		PlaceholderFormat(squirrel.Dollar).
 		From("files")

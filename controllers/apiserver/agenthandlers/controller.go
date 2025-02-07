@@ -8,13 +8,14 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type AgentUseCases interface {
 	NewAgent(ctx context.Context, agent core.Agent) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
-	Agents(ctx context.Context, filter core.AgentFilter, includeStatus bool) ([]core.AgentWithStatus, error)
+	Agents(ctx context.Context, filter core.AgentFilter, includeStatus bool) ([]agentmodel.AgentWithStatus, error)
 	UpdateAgent(ctx context.Context, agent core.Agent) error
 	Agent(ctx context.Context, id uuid.UUID) (core.Agent, error)
 }

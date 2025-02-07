@@ -5,6 +5,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -23,7 +24,7 @@ func (c *FSHandlersController) APIFsListPost(ctx context.Context, req *serverapi
 	}
 
 	return &serverapi.APIFsListPostOK{
-		FileSystems: pkg.Map(storages, func(raw core.FSWithStatus) serverapi.APIFsListPostOKFileSystemsItem {
+		FileSystems: pkg.Map(storages, func(raw fsmodel.FSWithStatus) serverapi.APIFsListPostOKFileSystemsItem {
 			return serverapi.APIFsListPostOKFileSystemsItem{
 				Info:                apiservercore.ConvertFileSystemInfoToAPI(raw.Info),
 				IsLegacy:            raw.IsLegacy,

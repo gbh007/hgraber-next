@@ -8,14 +8,14 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
 type agentController interface {
 	FSCreate(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID, body io.Reader) error
 	FSDelete(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) error
 	FSGet(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) (io.Reader, error)
-	FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (core.FSState, error)
+	FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (fsmodel.FSState, error)
 }
 
 type Storage struct {
@@ -64,10 +64,10 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error) 
 	return body, nil
 }
 
-func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (core.FSState, error) {
+func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (fsmodel.FSState, error) {
 	state, err := s.agentController.FSState(ctx, s.agentID, includeFileIDs, includeFileSizes)
 	if err != nil {
-		return core.FSState{}, fmt.Errorf("agent fs: %w", err)
+		return fsmodel.FSState{}, fmt.Errorf("agent fs: %w", err)
 	}
 
 	return state, nil

@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
 func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error {
@@ -87,7 +88,7 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (i
 	return storage.FS.Get(ctx, fileID)
 }
 
-func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (core.FSState, error) {
+func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (fsmodel.FSState, error) {
 	startAt := time.Now()
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("state", &fsID, time.Since(startAt))
@@ -95,7 +96,7 @@ func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSiz
 
 	if fsID == uuid.Nil {
 		if s.legacyFileStorage == nil {
-			return core.FSState{}, fmt.Errorf("%w: legacy", core.MissingFSError)
+			return fsmodel.FSState{}, fmt.Errorf("%w: legacy", core.MissingFSError)
 		}
 
 		return s.legacyFileStorage.FS.State(ctx, includeFileIDs, includeFileSizes)
@@ -103,7 +104,7 @@ func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSiz
 
 	storage, err := s.getFS(ctx, fsID, s.tryReconnect)
 	if err != nil {
-		return core.FSState{}, fmt.Errorf("get fs: %w", err)
+		return fsmodel.FSState{}, fmt.Errorf("get fs: %w", err)
 	}
 
 	return storage.FS.State(ctx, includeFileIDs, includeFileSizes)

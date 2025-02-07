@@ -12,19 +12,20 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
-func (uc *UseCase) NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (core.MultiHandleMultipleResult, error) {
+func (uc *UseCase) NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (parsing.MultiHandleMultipleResult, error) {
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParseMulti: true,
 	})
 	if err != nil {
-		return core.MultiHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
+		return parsing.MultiHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
 	}
 
-	result := core.MultiHandleMultipleResult{
-		Details: core.FirstHandleMultipleResult{
-			Details: make([]core.BookHandleResult, 0, len(urls)*100),
+	result := parsing.MultiHandleMultipleResult{
+		Details: parsing.FirstHandleMultipleResult{
+			Details: make([]parsing.BookHandleResult, 0, len(urls)*100),
 		},
 	}
 
@@ -75,7 +76,7 @@ urlLoop:
 
 					exists, err := uc.existsInStorage(ctx, urlsToCheck)
 					if err != nil {
-						return core.MultiHandleMultipleResult{}, fmt.Errorf(
+						return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
 							"agent (%s) check duplicates (%s): %w", agent.ID.String(), u.String(), err,
 						)
 					}
@@ -104,7 +105,7 @@ urlLoop:
 
 				err = uc.storage.NewBook(ctx, book)
 				if err != nil {
-					return core.MultiHandleMultipleResult{}, fmt.Errorf(
+					return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
 						"agent (%s) create (%s): %w", agent.ID.String(), u.String(), err,
 					)
 				}

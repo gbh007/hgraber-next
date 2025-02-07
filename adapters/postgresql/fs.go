@@ -8,10 +8,10 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
-func (d *Database) FileStorages(ctx context.Context) ([]core.FileStorageSystem, error) {
+func (d *Database) FileStorages(ctx context.Context) ([]fsmodel.FileStorageSystem, error) {
 	builder := squirrel.Select(model.FileStorageColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("file_storages")
@@ -23,7 +23,7 @@ func (d *Database) FileStorages(ctx context.Context) ([]core.FileStorageSystem, 
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	out := make([]core.FileStorageSystem, 0, 10)
+	out := make([]fsmodel.FileStorageSystem, 0, 10)
 
 	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
@@ -33,7 +33,7 @@ func (d *Database) FileStorages(ctx context.Context) ([]core.FileStorageSystem, 
 	defer rows.Close()
 
 	for rows.Next() {
-		fs := core.FileStorageSystem{}
+		fs := fsmodel.FileStorageSystem{}
 
 		err := rows.Scan(model.FileStorageScanner(&fs))
 		if err != nil {
@@ -46,7 +46,7 @@ func (d *Database) FileStorages(ctx context.Context) ([]core.FileStorageSystem, 
 	return out, nil
 }
 
-func (d *Database) FileStorage(ctx context.Context, id uuid.UUID) (core.FileStorageSystem, error) {
+func (d *Database) FileStorage(ctx context.Context, id uuid.UUID) (fsmodel.FileStorageSystem, error) {
 	builder := squirrel.Select(model.FileStorageColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("file_storages").
@@ -57,24 +57,24 @@ func (d *Database) FileStorage(ctx context.Context, id uuid.UUID) (core.FileStor
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return core.FileStorageSystem{}, fmt.Errorf("build query: %w", err)
+		return fsmodel.FileStorageSystem{}, fmt.Errorf("build query: %w", err)
 	}
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	fs := core.FileStorageSystem{}
+	fs := fsmodel.FileStorageSystem{}
 
 	row := d.pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(model.FileStorageScanner(&fs))
 	if err != nil {
-		return core.FileStorageSystem{}, fmt.Errorf("scan: %w", err)
+		return fsmodel.FileStorageSystem{}, fmt.Errorf("scan: %w", err)
 	}
 
 	return fs, nil
 }
 
-func (d *Database) NewFileStorage(ctx context.Context, fs core.FileStorageSystem) error {
+func (d *Database) NewFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) error {
 	builder := squirrel.Insert("file_storages").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -105,7 +105,7 @@ func (d *Database) NewFileStorage(ctx context.Context, fs core.FileStorageSystem
 	return nil
 }
 
-func (d *Database) UpdateFileStorage(ctx context.Context, fs core.FileStorageSystem) error {
+func (d *Database) UpdateFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) error {
 	builder := squirrel.Update("file_storages").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{

@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
 type storage interface {
@@ -28,7 +29,7 @@ type storage interface {
 
 	Attributes(ctx context.Context) ([]core.Attribute, error)
 
-	FileStorages(ctx context.Context) ([]core.FileStorageSystem, error)
+	FileStorages(ctx context.Context) ([]fsmodel.FileStorageSystem, error)
 }
 
 type UseCase struct {

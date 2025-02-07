@@ -8,7 +8,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
-	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (c *Client) BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) (agentmodel.AgentBookDetails, error) {
@@ -65,10 +64,10 @@ func (c *Client) PagesCheck(ctx context.Context, agentID uuid.UUID, urls []agent
 	return adapter.PagesCheck(ctx, urls)
 }
 
-func (c *Client) Status(ctx context.Context, agentID uuid.UUID) (core.AgentStatus, error) {
+func (c *Client) Status(ctx context.Context, agentID uuid.UUID) (agentmodel.AgentStatus, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
-		return core.AgentStatus{}, err
+		return agentmodel.AgentStatus{}, err
 	}
 
 	return adapter.Status(ctx)

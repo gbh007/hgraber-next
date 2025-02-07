@@ -10,7 +10,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
 type ParseUseCases interface {
@@ -27,10 +27,10 @@ type TaskUseCases interface {
 }
 
 type FSUseCases interface {
-	FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]core.FSWithStatus, error)
-	FileStorage(ctx context.Context, id uuid.UUID) (core.FileStorageSystem, error)
-	NewFileStorage(ctx context.Context, fs core.FileStorageSystem) (uuid.UUID, error)
-	UpdateFileStorage(ctx context.Context, fs core.FileStorageSystem) error
+	FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]fsmodel.FSWithStatus, error)
+	FileStorage(ctx context.Context, id uuid.UUID) (fsmodel.FileStorageSystem, error)
+	NewFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) (uuid.UUID, error)
+	UpdateFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) error
 	DeleteFileStorage(ctx context.Context, id uuid.UUID) error
 	ValidateFS(ctx context.Context, fsID uuid.UUID) error
 	TransferFSFiles(ctx context.Context, from, to uuid.UUID, onlyPreview bool) error

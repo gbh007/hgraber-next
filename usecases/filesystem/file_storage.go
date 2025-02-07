@@ -8,10 +8,10 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
-func (uc *UseCase) FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]core.FSWithStatus, error) {
+func (uc *UseCase) FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]fsmodel.FSWithStatus, error) {
 	storages, err := uc.fileStorage.FSList(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("file storage: get fs list: %w", err)
@@ -53,18 +53,18 @@ func (uc *UseCase) FileStoragesWithStatus(ctx context.Context, includeDBInfo, in
 		}
 	}
 
-	slices.SortStableFunc(storages, func(a, b core.FSWithStatus) int {
+	slices.SortStableFunc(storages, func(a, b fsmodel.FSWithStatus) int {
 		return a.Info.CreatedAt.Compare(b.Info.CreatedAt)
 	})
 
 	return storages, nil
 }
 
-func (uc *UseCase) FileStorage(ctx context.Context, id uuid.UUID) (core.FileStorageSystem, error) {
+func (uc *UseCase) FileStorage(ctx context.Context, id uuid.UUID) (fsmodel.FileStorageSystem, error) {
 	return uc.storage.FileStorage(ctx, id)
 }
 
-func (uc *UseCase) NewFileStorage(ctx context.Context, fs core.FileStorageSystem) (uuid.UUID, error) {
+func (uc *UseCase) NewFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) (uuid.UUID, error) {
 	fs.ID = uuid.Must(uuid.NewV7())
 	fs.CreatedAt = time.Now().UTC()
 
@@ -81,7 +81,7 @@ func (uc *UseCase) NewFileStorage(ctx context.Context, fs core.FileStorageSystem
 	return fs.ID, nil
 }
 
-func (uc *UseCase) UpdateFileStorage(ctx context.Context, fs core.FileStorageSystem) error {
+func (uc *UseCase) UpdateFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) error {
 	err := uc.storage.UpdateFileStorage(ctx, fs)
 	if err != nil {
 		return fmt.Errorf("storage: %w", err)

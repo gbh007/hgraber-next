@@ -7,11 +7,11 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
 type workerInfoProvider interface {
-	WorkersInfo(ctx context.Context) []core.SystemWorkerStat
+	WorkersInfo(ctx context.Context) []systemmodel.SystemWorkerStat
 }
 
 var (

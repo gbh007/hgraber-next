@@ -9,12 +9,13 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/internal/worker"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 type pageWorkerUnitUseCases interface {
 	DownloadPage(ctx context.Context, agentID uuid.UUID, page core.PageForDownload) error
-	PagesToDownload(ctx context.Context) ([]core.PageForDownloadWithAgent, error)
+	PagesToDownload(ctx context.Context) ([]parsing.PageForDownloadWithAgent, error)
 }
 
 func NewPageDownloader(
@@ -23,13 +24,13 @@ func NewPageDownloader(
 	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
-) *worker.Worker[core.PageForDownloadWithAgent] {
-	return worker.New[core.PageForDownloadWithAgent](
+) *worker.Worker[parsing.PageForDownloadWithAgent] {
+	return worker.New[parsing.PageForDownloadWithAgent](
 		"page",
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, page core.PageForDownloadWithAgent) error {
+		func(ctx context.Context, page parsing.PageForDownloadWithAgent) error {
 			err := useCases.DownloadPage(ctx, page.AgentID, page.PageForDownload)
 			if err != nil {
 				return pkg.WrapError(

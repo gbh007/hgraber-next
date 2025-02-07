@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
@@ -23,7 +24,7 @@ func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *ser
 		}, nil
 	}
 
-	responseAgents := pkg.Map(agents, func(aws core.AgentWithStatus) serverapi.APIAgentListPostOKItem {
+	responseAgents := pkg.Map(agents, func(aws agentmodel.AgentWithStatus) serverapi.APIAgentListPostOKItem {
 		status := serverapi.OptAPIAgentListPostOKItemStatus{}
 
 		switch {
@@ -52,7 +53,7 @@ func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *ser
 
 			status = serverapi.NewOptAPIAgentListPostOKItemStatus(serverapi.APIAgentListPostOKItemStatus{
 				StartAt: serverapi.NewOptDateTime(aws.Status.StartAt),
-				Problems: pkg.Map(aws.Status.Problems, func(p core.AgentStatusProblem) serverapi.APIAgentListPostOKItemStatusProblemsItem {
+				Problems: pkg.Map(aws.Status.Problems, func(p agentmodel.AgentStatusProblem) serverapi.APIAgentListPostOKItemStatusProblemsItem {
 					t := serverapi.APIAgentListPostOKItemStatusProblemsItemTypeError
 
 					switch {
