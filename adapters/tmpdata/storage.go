@@ -3,14 +3,14 @@ package tmpdata
 import (
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 type Storage struct {
-	toExport       *pkg.DataQueue[core.BookFullWithAgent]
+	toExport       *pkg.DataQueue[agentmodel.BookFullWithAgent]
 	toRun          *pkg.DataQueue[systemmodel.RunnableTask]
 	taskResult     *dataList[*systemmodel.TaskResult]
 	toValidate     *pkg.DataQueue[uuid.UUID]
@@ -19,7 +19,7 @@ type Storage struct {
 
 func New() *Storage {
 	return &Storage{
-		toExport:       pkg.NewDataQueue[core.BookFullWithAgent](100),
+		toExport:       pkg.NewDataQueue[agentmodel.BookFullWithAgent](100),
 		toRun:          pkg.NewDataQueue[systemmodel.RunnableTask](10),
 		taskResult:     newDataList[*systemmodel.TaskResult](50),
 		toValidate:     pkg.NewDataQueue[uuid.UUID](1000),

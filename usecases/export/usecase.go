@@ -38,8 +38,8 @@ type agentSystem interface {
 }
 
 type tmpStorage interface {
-	AddToExport(books []core.BookFullWithAgent)
-	ExportList() []core.BookFullWithAgent
+	AddToExport(books []agentmodel.BookFullWithAgent)
+	ExportList() []agentmodel.BookFullWithAgent
 }
 
 type bookRequester interface {

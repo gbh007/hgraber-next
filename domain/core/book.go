@@ -57,18 +57,6 @@ func (b BookContainer) Filename() string {
 	return b.Book.ID.String() + " " + EscapeBookFileName(b.Book.Name) + ".zip"
 }
 
-type BookWithAgent struct {
-	Book
-	AgentID uuid.UUID
-}
-
-type BookFullWithAgent struct {
-	BookContainer
-	AgentID uuid.UUID
-
-	DeleteAfterExport bool
-}
-
 type BookSize struct {
 	Unique                  int64
 	UniqueWithoutDeadHashes int64

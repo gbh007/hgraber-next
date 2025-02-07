@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 const ApproximateFSCount = 10
@@ -32,17 +34,11 @@ type FSWithStatus struct {
 	// Признак того что это устаревшее хранилище через конфиг
 	IsLegacy bool
 
-	DBFile         *FSFilesInfo
-	DBInvalidFile  *FSFilesInfo
-	DBDetachedFile *FSFilesInfo
+	DBFile         *core.SizeWithCount
+	DBInvalidFile  *core.SizeWithCount
+	DBDetachedFile *core.SizeWithCount
 
 	AvailableSize int64
-}
-
-// FIXME: слить с моделью SizeWithCount
-type FSFilesInfo struct {
-	Count int64
-	Size  int64
 }
 
 type FileTransfer struct {

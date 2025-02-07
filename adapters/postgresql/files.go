@@ -306,7 +306,7 @@ func (d *Database) File(ctx context.Context, id uuid.UUID) (core.File, error) {
 	return out, nil
 }
 
-func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (fsmodel.FSFilesInfo, error) {
+func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (core.SizeWithCount, error) {
 	builder := squirrel.Select(
 		"COUNT(*)",
 		"SUM(\"size\")",
@@ -338,7 +338,7 @@ func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidD
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return fsmodel.FSFilesInfo{}, fmt.Errorf("build query: %w", err)
+		return core.SizeWithCount{}, fmt.Errorf("build query: %w", err)
 	}
 
 	d.squirrelDebugLog(ctx, query, args)
@@ -349,10 +349,10 @@ func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidD
 
 	err = row.Scan(&count, &size)
 	if err != nil {
-		return fsmodel.FSFilesInfo{}, fmt.Errorf("scan :%w", err)
+		return core.SizeWithCount{}, fmt.Errorf("scan :%w", err)
 	}
 
-	return fsmodel.FSFilesInfo{
+	return core.SizeWithCount{
 		Count: count.Int64,
 		Size:  size.Int64,
 	}, nil

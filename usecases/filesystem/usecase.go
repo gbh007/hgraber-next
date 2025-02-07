@@ -17,7 +17,7 @@ type storage interface {
 	NewFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) error
 	UpdateFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) error
 	DeleteFileStorage(ctx context.Context, id uuid.UUID) error
-	FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (fsmodel.FSFilesInfo, error)
+	FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (core.SizeWithCount, error)
 
 	File(ctx context.Context, id uuid.UUID) (core.File, error)
 	UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid.UUID) error

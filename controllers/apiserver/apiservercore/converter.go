@@ -224,7 +224,7 @@ func ConvertStatusFlagToAPI(f bff.StatusFlag) serverapi.OptBool {
 	}
 }
 
-func ConvertFSDBFilesInfoToAPI(raw *fsmodel.FSFilesInfo) serverapi.OptFSDBFilesInfo {
+func ConvertFSDBFilesInfoToAPI(raw *core.SizeWithCount) serverapi.OptFSDBFilesInfo {
 	if raw == nil {
 		return serverapi.OptFSDBFilesInfo{}
 	}

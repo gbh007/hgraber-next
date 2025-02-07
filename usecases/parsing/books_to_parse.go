@@ -12,14 +12,14 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) BooksToParse(ctx context.Context) ([]core.BookWithAgent, error) {
+func (uc *UseCase) BooksToParse(ctx context.Context) ([]agentmodel.BookWithAgent, error) {
 	books, err := uc.storage.UnprocessedBooks(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("books from storage: %w", err)
 	}
 
 	if len(books) == 0 {
-		return []core.BookWithAgent{}, nil
+		return []agentmodel.BookWithAgent{}, nil
 	}
 
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
@@ -41,7 +41,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]core.BookWithAgent, erro
 		return hasUrl
 	})
 
-	toParse := make([]core.BookWithAgent, 0, len(books))
+	toParse := make([]agentmodel.BookWithAgent, 0, len(books))
 
 	urlMap := pkg.SliceToMap(books, func(b core.Book) (url.URL, core.Book) {
 		return *b.OriginURL, b
@@ -86,7 +86,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]core.BookWithAgent, erro
 				continue
 			}
 
-			toParse = append(toParse, core.BookWithAgent{
+			toParse = append(toParse, agentmodel.BookWithAgent{
 				Book:    book,
 				AgentID: agent.ID,
 			})
