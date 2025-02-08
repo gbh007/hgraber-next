@@ -68,3 +68,43 @@
   - Агент C
     - Имеет локальную файловую систему C
     - Умеет парсить сайт D и E
+
+## Пример настройка логов и метрик (Grafana stack)
+
+Docker compose
+
+```yaml
+services:
+  main:
+    container_name: hgraber-next-main
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+```
+
+Prometheus
+
+```yaml
+scrape_configs:
+  - job_name: hgraber-next
+    static_configs:
+      - targets:
+          - localhost:8080
+        labels:
+          service_name: hgraber-next-main
+```
+
+Promtail
+
+```yaml
+scrape_configs:
+  - job_name: hgraber-next
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: hgraber-next
+          __path__: <path to logs>
+          service_name: hgraber-next-main
+```
