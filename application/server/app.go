@@ -181,7 +181,6 @@ func Serve() {
 		rebuilderUseCases,
 		fsUseCases,
 		bffUseCases,
-		cfg.Application.Debug.APIServer,
 	)
 	if err != nil {
 		logger.ErrorContext(
@@ -198,14 +197,12 @@ func Serve() {
 		agentCacheUseCase := agentcache.New(logger, parsingUseCases)
 
 		apiAgentController, err := apiagent.New(
+			cfg.AgentServer,
 			time.Now(),
 			logger,
 			tracer,
 			agentCacheUseCase,
 			exportUseCases,
-			cfg.AgentServer.Addr,
-			cfg.Application.Debug.APIAgent,
-			cfg.AgentServer.Token,
 		)
 		if err != nil {
 			logger.ErrorContext(

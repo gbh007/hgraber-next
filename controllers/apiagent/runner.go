@@ -3,6 +3,7 @@ package apiagent
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -18,8 +19,9 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	done := make(chan struct{})
 
 	server := &http.Server{
-		Handler: otelPropagation(c.logIO(cors(c.ogenServer))),
-		Addr:    c.addr,
+		Handler:  otelPropagation(c.logIO(cors(c.ogenServer))),
+		Addr:     c.addr,
+		ErrorLog: slog.NewLogLogger(c.logger.Handler(), slog.LevelError),
 	}
 
 	go func() {

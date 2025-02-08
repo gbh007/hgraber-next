@@ -75,7 +75,7 @@ func stackTrace(skip, count int) []string {
 	return result
 }
 
-func methodErrorHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, err error) {
+func (c *Controller) methodErrorHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, err error) {
 	var (
 		httpCode         int    = http.StatusInternalServerError
 		errorCode        string = "internal error"
@@ -84,6 +84,13 @@ func methodErrorHandler(ctx context.Context, w http.ResponseWriter, r *http.Requ
 
 	if err != nil {
 		errorDescription = err.Error()
+	}
+
+	if c.logErrorHandler {
+		c.logger.ErrorContext(
+			ctx, "handle api agent server error",
+			slog.Any("error", err),
+		)
 	}
 
 	validateError := new(validate.Error)

@@ -27,11 +27,12 @@ type exportUseCases interface {
 }
 
 type Controller struct {
-	startAt time.Time
-	logger  *slog.Logger
-	tracer  trace.Tracer
-	addr    string
-	debug   bool
+	startAt         time.Time
+	logger          *slog.Logger
+	tracer          trace.Tracer
+	addr            string
+	debug           bool
+	logErrorHandler bool
 
 	ogenServer *agentapi.Server
 
@@ -41,23 +42,29 @@ type Controller struct {
 	token string
 }
 
+type config interface {
+	GetAddr() string
+	GetToken() string
+	GetLogErrorHandler() bool
+	GetDebug() bool
+}
+
 func New(
+	config config,
 	startAt time.Time,
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	parsingUseCases parsingUseCases,
 	exportUseCases exportUseCases,
-	addr string,
-	debug bool,
-	token string,
 ) (*Controller, error) {
 	c := &Controller{
-		startAt: startAt,
-		logger:  logger,
-		tracer:  tracer,
-		addr:    addr,
-		debug:   debug,
-		token:   token,
+		startAt:         startAt,
+		logger:          logger,
+		tracer:          tracer,
+		addr:            config.GetAddr(),
+		debug:           config.GetDebug(),
+		logErrorHandler: config.GetLogErrorHandler(),
+		token:           config.GetToken(),
 
 		parsingUseCases: parsingUseCases,
 		exportUseCases:  exportUseCases,
@@ -65,7 +72,7 @@ func New(
 
 	ogenServer, err := agentapi.NewServer(
 		c, c,
-		agentapi.WithErrorHandler(methodErrorHandler),
+		agentapi.WithErrorHandler(c.methodErrorHandler),
 		agentapi.WithMethodNotAllowed(methodNotAllowed),
 		agentapi.WithNotFound(methodNotFound),
 		agentapi.WithMiddleware(c.simplePanicRecover),

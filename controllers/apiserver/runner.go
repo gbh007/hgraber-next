@@ -3,6 +3,7 @@ package apiserver
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -28,8 +29,9 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	mux.Handle("/api/", otelPropagation(c.logIO(cors(c.ogenServer))))
 
 	server := &http.Server{
-		Handler: mux,
-		Addr:    c.serverAddr,
+		Handler:  mux,
+		Addr:     c.serverAddr,
+		ErrorLog: slog.NewLogLogger(c.logger.Handler(), slog.LevelError),
 	}
 
 	go func() {

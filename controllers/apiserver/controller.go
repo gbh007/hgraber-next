@@ -70,6 +70,8 @@ type config interface {
 	GetExternalAddr() string
 	GetStaticDir() string
 	GetToken() string
+	GetLogErrorHandler() bool
+	GetDebug() bool
 }
 
 type Controller struct {
@@ -81,9 +83,10 @@ type Controller struct {
 	*labelhandlers.LabelHandlersController
 	*systemhandlers.SystemHandlersController
 
-	logger *slog.Logger
-	tracer trace.Tracer
-	debug  bool
+	logger          *slog.Logger
+	tracer          trace.Tracer
+	debug           bool
+	logErrorHandler bool
 
 	ogenServer *serverapi.Server
 
@@ -105,14 +108,13 @@ func New(
 	rebuilderUseCases ReBuilderUseCases,
 	fsUseCases FSUseCases,
 	bffUseCases BFFUseCases,
-	debug bool,
 ) (*Controller, error) {
 	ac, err := apiservercore.New(
 		logger,
 		tracer,
 		config,
 		fsUseCases,
-		debug,
+		config.GetDebug(),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("init core handlers: %w", err)
@@ -124,14 +126,14 @@ func New(
 			tracer,
 			agentUseCases,
 			exportUseCases,
-			debug,
+			config.GetDebug(),
 			ac,
 		),
 		AttributeHandlersController: attributehandlers.New(
 			logger,
 			tracer,
 			webAPIUseCases,
-			debug,
+			config.GetDebug(),
 			ac,
 		),
 		BookHandlersController: bookhandlers.New(
@@ -142,7 +144,7 @@ func New(
 			exportUseCases,
 			rebuilderUseCases,
 			bffUseCases,
-			debug,
+			config.GetDebug(),
 			ac,
 		),
 		DeduplicateHandlersController: deduplicatehandlers.New(
@@ -150,7 +152,7 @@ func New(
 			tracer,
 			webAPIUseCases,
 			deduplicateUseCases,
-			debug,
+			config.GetDebug(),
 			ac,
 		),
 		FSHandlersController: fshandlers.New(
@@ -160,14 +162,14 @@ func New(
 			webAPIUseCases,
 			taskUseCases,
 			fsUseCases,
-			debug,
+			config.GetDebug(),
 			ac,
 		),
 		LabelHandlersController: labelhandlers.New(
 			logger,
 			tracer,
 			webAPIUseCases,
-			debug,
+			config.GetDebug(),
 			ac,
 		),
 		SystemHandlersController: systemhandlers.New(
@@ -178,21 +180,22 @@ func New(
 			exportUseCases,
 			deduplicateUseCases,
 			taskUseCases,
-			debug,
+			config.GetDebug(),
 			ac,
 		),
 
-		logger:     logger,
-		tracer:     tracer,
-		serverAddr: config.GetAddr(),
-		debug:      debug,
-		staticDir:  config.GetStaticDir(),
-		token:      config.GetToken(),
+		logger:          logger,
+		tracer:          tracer,
+		serverAddr:      config.GetAddr(),
+		debug:           config.GetDebug(),
+		logErrorHandler: config.GetLogErrorHandler(),
+		staticDir:       config.GetStaticDir(),
+		token:           config.GetToken(),
 	}
 
 	ogenServer, err := serverapi.NewServer(
 		c, c,
-		serverapi.WithErrorHandler(methodErrorHandler),
+		serverapi.WithErrorHandler(c.methodErrorHandler),
 		serverapi.WithMethodNotAllowed(methodNotAllowed),
 		serverapi.WithNotFound(methodNotFound),
 		serverapi.WithMiddleware(c.simplePanicRecover),

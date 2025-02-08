@@ -18,18 +18,14 @@ func ApplicationDefault() Application {
 }
 
 type ApplicationDebug struct {
-	Logs      bool `yaml:"logs" envconfig:"LOGS"`
-	DB        bool `yaml:"db" envconfig:"DB"`
-	APIServer bool `yaml:"api_server" envconfig:"API_SERVER"`
-	APIAgent  bool `yaml:"api_agent" envconfig:"API_AGENT"`
+	Logs bool `yaml:"logs" envconfig:"LOGS"`
+	DB   bool `yaml:"db" envconfig:"DB"`
 }
 
 func ApplicationDebugDefault() ApplicationDebug {
 	return ApplicationDebug{
-		Logs:      false,
-		DB:        false,
-		APIServer: false,
-		APIAgent:  false,
+		Logs: false,
+		DB:   false,
 	}
 }
 

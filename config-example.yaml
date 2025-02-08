@@ -2,13 +2,12 @@ application:
   debug:
     logs: true
     db: false
-    api_server: false
-    api_agent: false
   metric:
     scrape_period:
       main_info: 10s
       book_statistic: 1h0m0s
   service_name: hgraber-next-local-test
+  trace_endpoint: ""
 parsing:
   parse_book_timeout: 5m
   agent_timeout: 10m
@@ -53,6 +52,10 @@ api:
   external_addr: http://localhost:8080
   static_dir: internal/controllers/apiserver/internal/static
   token: local-next
+  log_error_handler: false
+  debug: false
 agent_server:
   addr: 127.0.0.1:8085
   token: local-cache
+  log_error_handler: false
+  debug: false
