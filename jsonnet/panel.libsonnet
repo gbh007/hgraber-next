@@ -18,220 +18,219 @@ local heatmapDefaultColor() =
   + panel.heatmap.options.color.withMode('scheme');
 
 {
+  utils: {
+    autoWX(arr, count=2):
+      local mutator(i, e) =
+        e
+        + panel.timeSeries.gridPos.withW(24 / count)
+        + panel.timeSeries.gridPos.withX(24 * (i % count) / count);
+
+      std.mapWithIndex(mutator, arr),
+    setH(arr, h):
+      local mutator(e) = e + panel.timeSeries.gridPos.withH(h);
+      std.map(mutator, arr),
+    setY(arr, y):
+      local mutator(e) = e + panel.timeSeries.gridPos.withY(y);
+      std.map(mutator, arr),
+    makeRow(arr, h=9, y=0, onRow=std.length(arr)):
+      self.setY(
+        self.setH(
+          self.autoWX(arr, onRow),
+          h,
+        ),
+        y,
+      ),
+    makeBlock(arr, h=9, onRow=2):
+      self.setH(
+        self.autoWX(arr, onRow),
+        h,
+      ),
+  },
   core: {
-    statRow(y, h): [
-      panel.stat.new('Book count')
-      + panel.stat.queryOptions.withTargets([
-        prometheus.new(
+    statRow(y, h):
+      $.utils.makeRow([
+        panel.stat.new('Book count')
+        + panel.stat.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(hgraber_next_server_book_total{%s}) by (type)' % config.label.filter.service,
+          )
+          + prometheus.withLegendFormat('{{type}}')
+          + prometheus.withInstant(),
+        ])
+        + panel.stat.standardOptions.withUnit('short')
+        + panel.stat.standardOptions.thresholds.withSteps([greenSteps()])
+        + panel.stat.queryOptions.withDatasource(
+          config.datasource.metrics.type,
           config.datasource.metrics.uid,
-          'sum(hgraber_next_server_book_total{%s}) by (type)' % config.label.filter.service,
-        )
-        + prometheus.withLegendFormat('{{type}}')
-        + prometheus.withInstant(),
-      ])
-      + panel.stat.standardOptions.withUnit('short')
-      + panel.stat.standardOptions.thresholds.withSteps([greenSteps()])
-      + panel.stat.gridPos.withH(h)
-      + panel.stat.gridPos.withW(12)
-      + panel.stat.gridPos.withX(0)
-      + panel.stat.gridPos.withY(y)
-      + panel.stat.queryOptions.withDatasource(
-        config.datasource.metrics.type,
-        config.datasource.metrics.uid,
-      ),
-      panel.stat.new('File size')
-      + panel.stat.queryOptions.withTargets([
-        prometheus.new(
+        ),
+        panel.stat.new('File size')
+        + panel.stat.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(hgraber_next_server_file_bytes{type="fs",%s})' % config.label.filter.service,
+          )
+          + prometheus.withLegendFormat('На диске')
+          + prometheus.withInstant(),
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(hgraber_next_server_file_bytes{type="page",%s})' % config.label.filter.service,
+          )
+          + prometheus.withLegendFormat('В страницах')
+          + prometheus.withInstant(),
+        ])
+        + panel.stat.standardOptions.withUnit('bytes')
+        + panel.stat.standardOptions.thresholds.withSteps([greenSteps()])
+        + panel.stat.queryOptions.withDatasource(
+          config.datasource.metrics.type,
           config.datasource.metrics.uid,
-          'sum(hgraber_next_server_file_bytes{type="fs",%s})' % config.label.filter.service,
-        )
-        + prometheus.withLegendFormat('На диске')
-        + prometheus.withInstant(),
-        prometheus.new(
+        ),
+      ], h, y),
+    deltaRow(y, h):
+      $.utils.makeRow([
+        panel.barChart.new('Book delta count at $%s' % config.variable.delta.name)
+        + panel.barChart.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(delta(hgraber_next_server_book_total{%s}[$%s])) by (type)' % [
+              config.label.filter.service,
+              config.variable.delta.name,
+            ],
+          )
+          + prometheus.withLegendFormat('{{type}}')
+          + prometheus.withInstant(),
+        ])
+        + panel.barChart.queryOptions.withDatasource(
+          config.datasource.metrics.type,
           config.datasource.metrics.uid,
-          'sum(hgraber_next_server_file_bytes{type="page",%s})' % config.label.filter.service,
-        )
-        + prometheus.withLegendFormat('В страницах')
-        + prometheus.withInstant(),
-      ])
-      + panel.stat.standardOptions.withUnit('bytes')
-      + panel.stat.standardOptions.thresholds.withSteps([greenSteps()])
-      + panel.stat.gridPos.withH(h)
-      + panel.stat.gridPos.withW(12)
-      + panel.stat.gridPos.withX(12)
-      + panel.stat.gridPos.withY(y)
-      + panel.stat.queryOptions.withDatasource(
-        config.datasource.metrics.type,
-        config.datasource.metrics.uid,
-      ),
-    ],
-    deltaRow(y, h): [
-      panel.barChart.new('Book delta count at $%s' % config.variable.delta.name)
-      + panel.barChart.queryOptions.withTargets([
-        prometheus.new(
+        ),
+        panel.barChart.new('Page delta count at $%s' % config.variable.delta.name)
+        + panel.barChart.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(delta(hgraber_next_server_page_total{%s}[$%s])) by (type)' % [
+              config.label.filter.service,
+              config.variable.delta.name,
+            ],
+          )
+          + prometheus.withLegendFormat('{{type}}')
+          + prometheus.withInstant(),
+        ])
+        + panel.barChart.queryOptions.withDatasource(
+          config.datasource.metrics.type,
           config.datasource.metrics.uid,
-          'sum(delta(hgraber_next_server_book_total{%s}[$%s])) by (type)' % [
-            config.label.filter.service,
-            config.variable.delta.name,
-          ],
-        )
-        + prometheus.withLegendFormat('{{type}}')
-        + prometheus.withInstant(),
-      ])
-      + panel.barChart.gridPos.withH(h)
-      + panel.barChart.gridPos.withW(6)
-      + panel.barChart.gridPos.withX(0)
-      + panel.barChart.gridPos.withY(y)
-      + panel.barChart.queryOptions.withDatasource(
-        config.datasource.metrics.type,
-        config.datasource.metrics.uid,
-      ),
-      panel.barChart.new('Page delta count at $%s' % config.variable.delta.name)
-      + panel.barChart.queryOptions.withTargets([
-        prometheus.new(
+        ),
+        panel.barChart.new('File delta count at $%s' % config.variable.delta.name)
+        + panel.barChart.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(delta(hgraber_next_server_file_total{%s}[$%s])) by (type)' % [
+              config.label.filter.service,
+              config.variable.delta.name,
+            ],
+          )
+          + prometheus.withLegendFormat('{{type}}')
+          + prometheus.withInstant(),
+        ])
+        + panel.barChart.queryOptions.withDatasource(
+          config.datasource.metrics.type,
           config.datasource.metrics.uid,
-          'sum(delta(hgraber_next_server_page_total{%s}[$%s])) by (type)' % [
-            config.label.filter.service,
-            config.variable.delta.name,
-          ],
-        )
-        + prometheus.withLegendFormat('{{type}}')
-        + prometheus.withInstant(),
-      ])
-      + panel.barChart.gridPos.withH(h)
-      + panel.barChart.gridPos.withW(6)
-      + panel.barChart.gridPos.withX(6)
-      + panel.barChart.gridPos.withY(y)
-      + panel.barChart.queryOptions.withDatasource(
-        config.datasource.metrics.type,
-        config.datasource.metrics.uid,
-      ),
-      panel.barChart.new('File delta count at $%s' % config.variable.delta.name)
-      + panel.barChart.queryOptions.withTargets([
-        prometheus.new(
+        ),
+        panel.barChart.new('File delta size at $%s' % config.variable.delta.name)
+        + panel.barChart.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(delta(hgraber_next_server_file_bytes{type="fs", %s}[$%s]))' % [
+              config.label.filter.service,
+              config.variable.delta.name,
+            ],
+          )
+          + prometheus.withLegendFormat('На диске')
+          + prometheus.withInstant(),
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(delta(hgraber_next_server_file_bytes{type="page", %s}[$%s]))' % [
+              config.label.filter.service,
+              config.variable.delta.name,
+            ],
+          )
+          + prometheus.withLegendFormat('В страницах')
+          + prometheus.withInstant(),
+        ])
+        + panel.stat.standardOptions.withUnit('bytes')
+        + panel.barChart.queryOptions.withDatasource(
+          config.datasource.metrics.type,
           config.datasource.metrics.uid,
-          'sum(delta(hgraber_next_server_file_total{%s}[$%s])) by (type)' % [
-            config.label.filter.service,
-            config.variable.delta.name,
-          ],
-        )
-        + prometheus.withLegendFormat('{{type}}')
-        + prometheus.withInstant(),
-      ])
-      + panel.barChart.gridPos.withH(h)
-      + panel.barChart.gridPos.withW(6)
-      + panel.barChart.gridPos.withX(12)
-      + panel.barChart.gridPos.withY(y)
-      + panel.barChart.queryOptions.withDatasource(
-        config.datasource.metrics.type,
-        config.datasource.metrics.uid,
-      ),
-      panel.barChart.new('File delta size at $%s' % config.variable.delta.name)
-      + panel.barChart.queryOptions.withTargets([
-        prometheus.new(
+        ),
+      ], h, y),
+    fsRow(y, h):
+      $.utils.makeRow([
+        panel.timeSeries.new('FS latency')
+        + panel.timeSeries.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            |||
+              sum(rate(hgraber_next_server_fs_action_seconds_sum{%s}[$__rate_interval])) by (action, fs_id)
+              /
+              sum(rate(hgraber_next_server_fs_action_seconds_count{%s}[$__rate_interval])) by (action, fs_id)
+            |||
+            % [
+              config.label.filter.service,
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('server/{{action}} -> {{fs_id}}'),
+          prometheus.new(
+            config.datasource.metrics.uid,
+            |||
+              sum(rate(hgraber_next_agent_fs_action_seconds_sum{%s}[$__rate_interval])) by (action)
+              /
+              sum(rate(hgraber_next_agent_fs_action_seconds_count{%s}[$__rate_interval])) by (action)
+            |||
+            % [
+              config.label.filter.service,
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('agent/{{action}}'),
+        ])
+        + panel.timeSeries.standardOptions.withUnit('s')
+        + simpleTSLegend()
+        + panel.timeSeries.queryOptions.withDatasource(
+          config.datasource.metrics.type,
           config.datasource.metrics.uid,
-          'sum(delta(hgraber_next_server_file_bytes{type="fs", %s}[$%s]))' % [
-            config.label.filter.service,
-            config.variable.delta.name,
-          ],
-        )
-        + prometheus.withLegendFormat('На диске')
-        + prometheus.withInstant(),
-        prometheus.new(
+        ),
+        panel.timeSeries.new('FS RPS')
+        + panel.timeSeries.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(rate(hgraber_next_server_fs_action_seconds_count{%s}[$__rate_interval])) by (action, fs_id)' % [
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('server/{{action}} -> {{fs_id}}'),
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(rate(hgraber_next_agent_fs_action_seconds_count{%s}[$__rate_interval])) by (action)' % [
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('agent/{{action}}'),
+        ])
+        + panel.timeSeries.standardOptions.withUnit('reqps')
+        + simpleTSLegend()
+        + panel.timeSeries.queryOptions.withDatasource(
+          config.datasource.metrics.type,
           config.datasource.metrics.uid,
-          'sum(delta(hgraber_next_server_file_bytes{type="page", %s}[$%s]))' % [
-            config.label.filter.service,
-            config.variable.delta.name,
-          ],
-        )
-        + prometheus.withLegendFormat('В страницах')
-        + prometheus.withInstant(),
-      ])
-      + panel.stat.standardOptions.withUnit('bytes')
-      + panel.barChart.gridPos.withH(h)
-      + panel.barChart.gridPos.withW(6)
-      + panel.barChart.gridPos.withX(18)
-      + panel.barChart.gridPos.withY(y)
-      + panel.barChart.queryOptions.withDatasource(
-        config.datasource.metrics.type,
-        config.datasource.metrics.uid,
-      ),
-    ],
-    fsRow(y, h): [
-      panel.timeSeries.new('FS latency')
-      + panel.timeSeries.queryOptions.withTargets([
-        prometheus.new(
-          config.datasource.metrics.uid,
-          |||
-            sum(rate(hgraber_next_server_fs_action_seconds_sum{%s}[$__rate_interval])) by (action, fs_id)
-            /
-            sum(rate(hgraber_next_server_fs_action_seconds_count{%s}[$__rate_interval])) by (action, fs_id)
-          |||
-          % [
-            config.label.filter.service,
-            config.label.filter.service,
-          ],
-        )
-        + prometheus.withLegendFormat('server/{{action}} -> {{fs_id}}'),
-        prometheus.new(
-          config.datasource.metrics.uid,
-          |||
-            sum(rate(hgraber_next_agent_fs_action_seconds_sum{%s}[$__rate_interval])) by (action)
-            /
-            sum(rate(hgraber_next_agent_fs_action_seconds_count{%s}[$__rate_interval])) by (action)
-          |||
-          % [
-            config.label.filter.service,
-            config.label.filter.service,
-          ],
-        )
-        + prometheus.withLegendFormat('agent/{{action}}'),
-      ])
-      + panel.timeSeries.standardOptions.withUnit('s')
-      + simpleTSLegend()
-      + panel.timeSeries.gridPos.withH(h)
-      + panel.timeSeries.gridPos.withW(12)
-      + panel.timeSeries.gridPos.withX(0)
-      + panel.timeSeries.gridPos.withY(y)
-      + panel.timeSeries.queryOptions.withDatasource(
-        config.datasource.metrics.type,
-        config.datasource.metrics.uid,
-      ),
-      panel.timeSeries.new('FS RPS')
-      + panel.timeSeries.queryOptions.withTargets([
-        prometheus.new(
-          config.datasource.metrics.uid,
-          'sum(rate(hgraber_next_server_fs_action_seconds_count{%s}[$__rate_interval])) by (action, fs_id)' % [
-            config.label.filter.service,
-          ],
-        )
-        + prometheus.withLegendFormat('server/{{action}} -> {{fs_id}}'),
-        prometheus.new(
-          config.datasource.metrics.uid,
-          'sum(rate(hgraber_next_agent_fs_action_seconds_count{%s}[$__rate_interval])) by (action)' % [
-            config.label.filter.service,
-          ],
-        )
-        + prometheus.withLegendFormat('agent/{{action}}'),
-      ])
-      + panel.timeSeries.standardOptions.withUnit('reqps')
-      + simpleTSLegend()
-      + panel.timeSeries.gridPos.withH(h)
-      + panel.timeSeries.gridPos.withW(12)
-      + panel.timeSeries.gridPos.withX(12)
-      + panel.timeSeries.gridPos.withY(y)
-      + panel.timeSeries.queryOptions.withDatasource(
-        config.datasource.metrics.type,
-        config.datasource.metrics.uid,
-      ),
-    ],
+        ),
+      ], h, y),
   },
   booksAndPages(y):
     [
       panel.row.new('Books and pages')
       + panel.row.gridPos.withY(y)
       + panel.row.withCollapsed()
-      + panel.row.withPanels([
+      + panel.row.withPanels($.utils.makeBlock([
         panel.timeSeries.new('Book delta count')
         + panel.timeSeries.queryOptions.withTargets([
           prometheus.new(
@@ -243,9 +242,6 @@ local heatmapDefaultColor() =
           + prometheus.withLegendFormat('{{type}}'),
         ])
         + simpleTSLegend()
-        + panel.timeSeries.gridPos.withW(12)
-        + panel.timeSeries.gridPos.withH(9)
-        + panel.timeSeries.gridPos.withX(0)
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -261,9 +257,6 @@ local heatmapDefaultColor() =
           + prometheus.withLegendFormat('{{type}}'),
         ])
         + simpleTSLegend()
-        + panel.timeSeries.gridPos.withW(12)
-        + panel.timeSeries.gridPos.withH(9)
-        + panel.timeSeries.gridPos.withX(12)
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -279,9 +272,6 @@ local heatmapDefaultColor() =
           + prometheus.withLegendFormat('{{type}} -> {{fs_id}}'),
         ])
         + simpleTSLegend()
-        + panel.timeSeries.gridPos.withW(12)
-        + panel.timeSeries.gridPos.withH(9)
-        + panel.timeSeries.gridPos.withX(0)
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -298,9 +288,6 @@ local heatmapDefaultColor() =
         ])
         + simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('bytes')
-        + panel.timeSeries.gridPos.withW(12)
-        + panel.timeSeries.gridPos.withH(9)
-        + panel.timeSeries.gridPos.withX(12)
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -316,9 +303,6 @@ local heatmapDefaultColor() =
           + prometheus.withLegendFormat('{{type}}'),
         ])
         + simpleTSLegend()
-        + panel.timeSeries.gridPos.withW(12)
-        + panel.timeSeries.gridPos.withH(9)
-        + panel.timeSeries.gridPos.withX(0)
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -334,9 +318,6 @@ local heatmapDefaultColor() =
           + prometheus.withLegendFormat('{{type}}'),
         ])
         + simpleTSLegend()
-        + panel.timeSeries.gridPos.withW(12)
-        + panel.timeSeries.gridPos.withH(9)
-        + panel.timeSeries.gridPos.withX(12)
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -352,9 +333,6 @@ local heatmapDefaultColor() =
           + prometheus.withLegendFormat('{{type}} -> {{fs_id}}'),
         ])
         + simpleTSLegend()
-        + panel.timeSeries.gridPos.withW(12)
-        + panel.timeSeries.gridPos.withH(9)
-        + panel.timeSeries.gridPos.withX(0)
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -371,18 +349,14 @@ local heatmapDefaultColor() =
         ])
         + simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('bytes')
-        + panel.timeSeries.gridPos.withW(12)
-        + panel.timeSeries.gridPos.withH(9)
-        + panel.timeSeries.gridPos.withX(12)
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
-
-      ]),
+      ])),
     ],
   statistic(y):
-    local simpleHM(title, metric, yUnit, xPos) =
+    local simpleHM(title, metric, yUnit) =
       panel.heatmap.new(title)
       + panel.heatmap.queryOptions.withTargets([
         prometheus.new(
@@ -400,9 +374,6 @@ local heatmapDefaultColor() =
       + heatmapDefaultColor()
       + panel.heatmap.options.filterValues.withLe(1)
       + panel.heatmap.options.yAxis.withUnit(yUnit)
-      + panel.heatmap.gridPos.withH(9)
-      + panel.heatmap.gridPos.withW(8)
-      + panel.heatmap.gridPos.withX(xPos)
       + panel.heatmap.queryOptions.withDatasource(
         config.datasource.metrics.type,
         config.datasource.metrics.uid,
@@ -411,44 +382,38 @@ local heatmapDefaultColor() =
       panel.row.new('Statistic')
       + panel.row.gridPos.withY(y)
       + panel.row.withCollapsed()
-      + panel.row.withPanels([
+      + panel.row.withPanels($.utils.makeBlock([
         simpleHM(
           'Book sizes',
           'hgraber_next_server_statistic_book_size_bucket',
           'bytes',
-          0,
         ),
         simpleHM(
           'Page sizes',
           'hgraber_next_server_statistic_page_size_bucket',
           'bytes',
-          8,
         ),
         simpleHM(
           'Page in book',
           'hgraber_next_server_statistic_page_in_book_bucket',
           'short',
-          16,
         ),
         simpleHM(
           'Page sizes by authors',
           'hgraber_next_server_statistic_pages_size_by_author_bucket',
           'bytes',
-          0,
         ),
         simpleHM(
           'Book by authors',
           'hgraber_next_server_statistic_books_by_author_bucket',
           'short',
-          8,
         ),
         simpleHM(
           'Page by authors',
           'hgraber_next_server_statistic_pages_by_author_bucket',
           'short',
-          16,
         ),
-      ]),
+      ], onRow=3)),
     ],
   logs(y, h):
     [
