@@ -18,37 +18,9 @@ local heatmapDefaultColor() =
   + panel.heatmap.options.color.withMode('scheme');
 
 {
-  utils: {
-    autoWX(arr, count=2):
-      local mutator(i, e) =
-        e
-        + panel.timeSeries.gridPos.withW(24 / count)
-        + panel.timeSeries.gridPos.withX(24 * (i % count) / count);
-
-      std.mapWithIndex(mutator, arr),
-    setH(arr, h):
-      local mutator(e) = e + panel.timeSeries.gridPos.withH(h);
-      std.map(mutator, arr),
-    setY(arr, y):
-      local mutator(e) = e + panel.timeSeries.gridPos.withY(y);
-      std.map(mutator, arr),
-    makeRow(arr, h=9, y=0, onRow=std.length(arr)):
-      self.setY(
-        self.setH(
-          self.autoWX(arr, onRow),
-          h,
-        ),
-        y,
-      ),
-    makeBlock(arr, h=9, onRow=2):
-      self.setH(
-        self.autoWX(arr, onRow),
-        h,
-      ),
-  },
   core: {
     statRow(y, h):
-      $.utils.makeRow([
+      grafonnet.util.grid.wrapPanels([
         panel.stat.new('Book count')
         + panel.stat.queryOptions.withTargets([
           prometheus.new(
@@ -85,9 +57,9 @@ local heatmapDefaultColor() =
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
-      ], h, y),
+      ], 12, h, y),
     deltaRow(y, h):
-      $.utils.makeRow([
+      grafonnet.util.grid.wrapPanels([
         panel.barChart.new('Book delta count at $%s' % config.variable.delta.name)
         + panel.barChart.queryOptions.withTargets([
           prometheus.new(
@@ -162,9 +134,9 @@ local heatmapDefaultColor() =
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
-      ], h, y),
+      ], 6, h, y),
     fsRow(y, h):
-      $.utils.makeRow([
+      grafonnet.util.grid.wrapPanels([
         panel.timeSeries.new('FS latency')
         + panel.timeSeries.queryOptions.withTargets([
           prometheus.new(
@@ -223,14 +195,14 @@ local heatmapDefaultColor() =
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
-      ], h, y),
+      ], 12, h, y),
   },
   booksAndPages(y):
     [
       panel.row.new('Books and pages')
       + panel.row.gridPos.withY(y)
       + panel.row.withCollapsed()
-      + panel.row.withPanels($.utils.makeBlock([
+      + panel.row.withPanels(grafonnet.util.grid.wrapPanels([
         panel.timeSeries.new('Book delta count')
         + panel.timeSeries.queryOptions.withTargets([
           prometheus.new(
@@ -353,7 +325,7 @@ local heatmapDefaultColor() =
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
-      ])),
+      ], 12, 9, y + 1)),
     ],
   statistic(y):
     local simpleHM(title, metric, yUnit) =
@@ -382,7 +354,7 @@ local heatmapDefaultColor() =
       panel.row.new('Statistic')
       + panel.row.gridPos.withY(y)
       + panel.row.withCollapsed()
-      + panel.row.withPanels($.utils.makeBlock([
+      + panel.row.withPanels(grafonnet.util.grid.wrapPanels([
         simpleHM(
           'Book sizes',
           'hgraber_next_server_statistic_book_size_bucket',
@@ -413,7 +385,7 @@ local heatmapDefaultColor() =
           'hgraber_next_server_statistic_pages_by_author_bucket',
           'short',
         ),
-      ], onRow=3)),
+      ], 8, 9, y + 1)),
     ],
   logs(y, h):
     [
@@ -441,7 +413,7 @@ local heatmapDefaultColor() =
       panel.row.new('Workers and agents')
       + panel.row.gridPos.withY(y)
       + panel.row.withCollapsed()
-      + panel.row.withPanels($.utils.makeBlock([
+      + panel.row.withPanels(grafonnet.util.grid.wrapPanels([
         panel.timeSeries.new('Agent parsing avg latency')
         + panel.timeSeries.queryOptions.withTargets([
           prometheus.new(
@@ -531,14 +503,14 @@ local heatmapDefaultColor() =
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
-      ])),
+      ], 12, 9, y + 1)),
     ],
   other(y):
     [
       panel.row.new('Other')
       + panel.row.gridPos.withY(y)
       + panel.row.withCollapsed()
-      + panel.row.withPanels($.utils.makeBlock([
+      + panel.row.withPanels(grafonnet.util.grid.wrapPanels([
         panel.timeSeries.new('FS Compression')
         + panel.timeSeries.queryOptions.withTargets([
           prometheus.new(
@@ -577,7 +549,7 @@ local heatmapDefaultColor() =
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
-      ])),
+      ], 12, 9, y + 1)),
     ],
   panels:
     [
