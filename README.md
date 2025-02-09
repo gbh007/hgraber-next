@@ -71,6 +71,10 @@
 
 ## Пример настройка логов и метрик (Grafana stack)
 
+Генерация борды (`jsonnet/dashboard.json`) с кастомной конфигурацией
+
+> HG_SERVICES="a,b,c" make jsonnet-custom
+
 Docker compose
 
 ```yaml

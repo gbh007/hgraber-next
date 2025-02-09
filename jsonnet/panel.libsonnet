@@ -57,7 +57,30 @@ local heatmapDefaultColor() =
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
-      ], 12, h, y),
+        panel.stat.new('FS Compression')
+        + panel.stat.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            |||
+              1 - 
+              sum(hgraber_next_server_file_bytes{type="fs", %s}) by (fs_id)
+              /
+              sum(hgraber_next_server_file_bytes{type="page", %s}) by (fs_id)
+            ||| % [
+              config.label.filter.service,
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('{{fs_id}}')
+          + prometheus.withInstant(),
+        ])
+        + panel.stat.standardOptions.withUnit('percentunit')
+        + panel.stat.standardOptions.thresholds.withSteps([greenSteps()])
+        + panel.stat.queryOptions.withDatasource(
+          config.datasource.metrics.type,
+          config.datasource.metrics.uid,
+        ),
+      ], 8, h, y),
     deltaRow(y, h):
       grafonnet.util.grid.wrapPanels([
         panel.barChart.new('Book delta count at $%s' % config.variable.delta.name)
@@ -556,7 +579,7 @@ local heatmapDefaultColor() =
       panel.row.new('Simple info'),
     ]
     + self.core.statRow(1, 3)
-    + self.core.deltaRow(4, 9)
+    + self.core.deltaRow(4, 6)
     + self.core.fsRow(13, 9)
     + self.logs(22, 10)
     + self.booksAndPages(32)

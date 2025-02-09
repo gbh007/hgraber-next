@@ -66,7 +66,7 @@
          },
          "gridPos": {
             "h": 3,
-            "w": 12,
+            "w": 8,
             "x": 0,
             "y": 1
          },
@@ -106,8 +106,8 @@
          },
          "gridPos": {
             "h": 3,
-            "w": 12,
-            "x": 12,
+            "w": 8,
+            "x": 8,
             "y": 1
          },
          "id": 3,
@@ -140,13 +140,53 @@
             "type": "prometheus",
             "uid": "${metrics}"
          },
+         "fieldConfig": {
+            "defaults": {
+               "thresholds": {
+                  "steps": [
+                     {
+                        "color": "green",
+                        "value": null
+                     }
+                  ]
+               },
+               "unit": "percentunit"
+            }
+         },
          "gridPos": {
-            "h": 9,
+            "h": 3,
+            "w": 8,
+            "x": 16,
+            "y": 1
+         },
+         "id": 4,
+         "pluginVersion": "v11.4.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "expr": "1 - \nsum(hgraber_next_server_file_bytes{type=\"fs\", service_name=~\"$service_name\"}) by (fs_id)\n/\nsum(hgraber_next_server_file_bytes{type=\"page\", service_name=~\"$service_name\"}) by (fs_id)\n",
+               "instant": true,
+               "legendFormat": "{{fs_id}}"
+            }
+         ],
+         "title": "FS Compression",
+         "type": "stat"
+      },
+      {
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${metrics}"
+         },
+         "gridPos": {
+            "h": 6,
             "w": 6,
             "x": 0,
             "y": 4
          },
-         "id": 4,
+         "id": 5,
          "pluginVersion": "v11.4.0",
          "targets": [
             {
@@ -168,12 +208,12 @@
             "uid": "${metrics}"
          },
          "gridPos": {
-            "h": 9,
+            "h": 6,
             "w": 6,
             "x": 6,
             "y": 4
          },
-         "id": 5,
+         "id": 6,
          "pluginVersion": "v11.4.0",
          "targets": [
             {
@@ -195,12 +235,12 @@
             "uid": "${metrics}"
          },
          "gridPos": {
-            "h": 9,
+            "h": 6,
             "w": 6,
             "x": 12,
             "y": 4
          },
-         "id": 6,
+         "id": 7,
          "pluginVersion": "v11.4.0",
          "targets": [
             {
@@ -227,12 +267,12 @@
             }
          },
          "gridPos": {
-            "h": 9,
+            "h": 6,
             "w": 6,
             "x": 18,
             "y": 4
          },
-         "id": 7,
+         "id": 8,
          "pluginVersion": "v11.4.0",
          "targets": [
             {
@@ -273,7 +313,7 @@
             "x": 0,
             "y": 13
          },
-         "id": 8,
+         "id": 9,
          "options": {
             "legend": {
                "calcs": [
@@ -324,7 +364,7 @@
             "x": 12,
             "y": 13
          },
-         "id": 9,
+         "id": 10,
          "options": {
             "legend": {
                "calcs": [
@@ -367,7 +407,7 @@
             "x": 0,
             "y": 22
          },
-         "id": 10,
+         "id": 11,
          "title": "Logs",
          "type": "row"
       },
@@ -382,7 +422,7 @@
             "x": 0,
             "y": 23
          },
-         "id": 11,
+         "id": 12,
          "options": {
             "sortOrder": "Descending"
          },
@@ -407,7 +447,7 @@
             "x": 0,
             "y": 32
          },
-         "id": 12,
+         "id": 13,
          "panels": [
             {
                "datasource": {
@@ -420,7 +460,7 @@
                   "x": 0,
                   "y": 33
                },
-               "id": 13,
+               "id": 14,
                "options": {
                   "legend": {
                      "calcs": [
@@ -458,7 +498,7 @@
                   "x": 12,
                   "y": 33
                },
-               "id": 14,
+               "id": 15,
                "options": {
                   "legend": {
                      "calcs": [
@@ -496,7 +536,7 @@
                   "x": 0,
                   "y": 42
                },
-               "id": 15,
+               "id": 16,
                "options": {
                   "legend": {
                      "calcs": [
@@ -539,7 +579,7 @@
                   "x": 12,
                   "y": 42
                },
-               "id": 16,
+               "id": 17,
                "options": {
                   "legend": {
                      "calcs": [
@@ -577,7 +617,7 @@
                   "x": 0,
                   "y": 51
                },
-               "id": 17,
+               "id": 18,
                "options": {
                   "legend": {
                      "calcs": [
@@ -615,7 +655,7 @@
                   "x": 12,
                   "y": 51
                },
-               "id": 18,
+               "id": 19,
                "options": {
                   "legend": {
                      "calcs": [
@@ -653,7 +693,7 @@
                   "x": 0,
                   "y": 60
                },
-               "id": 19,
+               "id": 20,
                "options": {
                   "legend": {
                      "calcs": [
@@ -696,7 +736,7 @@
                   "x": 12,
                   "y": 60
                },
-               "id": 20,
+               "id": 21,
                "options": {
                   "legend": {
                      "calcs": [
@@ -735,7 +775,7 @@
             "x": 0,
             "y": 33
          },
-         "id": 21,
+         "id": 22,
          "panels": [
             {
                "datasource": {
@@ -748,7 +788,7 @@
                   "x": 0,
                   "y": 34
                },
-               "id": 22,
+               "id": 23,
                "options": {
                   "cellValues": {
                      "unit": "short"
@@ -792,7 +832,7 @@
                   "x": 8,
                   "y": 34
                },
-               "id": 23,
+               "id": 24,
                "options": {
                   "cellValues": {
                      "unit": "short"
@@ -836,7 +876,7 @@
                   "x": 16,
                   "y": 34
                },
-               "id": 24,
+               "id": 25,
                "options": {
                   "cellValues": {
                      "unit": "short"
@@ -880,7 +920,7 @@
                   "x": 0,
                   "y": 43
                },
-               "id": 25,
+               "id": 26,
                "options": {
                   "cellValues": {
                      "unit": "short"
@@ -924,7 +964,7 @@
                   "x": 8,
                   "y": 43
                },
-               "id": 26,
+               "id": 27,
                "options": {
                   "cellValues": {
                      "unit": "short"
@@ -968,7 +1008,7 @@
                   "x": 16,
                   "y": 43
                },
-               "id": 27,
+               "id": 28,
                "options": {
                   "cellValues": {
                      "unit": "short"
@@ -1013,7 +1053,7 @@
             "x": 0,
             "y": 34
          },
-         "id": 28,
+         "id": 29,
          "panels": [
             {
                "datasource": {
@@ -1031,7 +1071,7 @@
                   "x": 0,
                   "y": 35
                },
-               "id": 29,
+               "id": 30,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1074,7 +1114,7 @@
                   "x": 12,
                   "y": 35
                },
-               "id": 30,
+               "id": 31,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1117,7 +1157,7 @@
                   "x": 0,
                   "y": 44
                },
-               "id": 31,
+               "id": 32,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1160,7 +1200,7 @@
                   "x": 12,
                   "y": 44
                },
-               "id": 32,
+               "id": 33,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1198,7 +1238,7 @@
                   "x": 0,
                   "y": 53
                },
-               "id": 33,
+               "id": 34,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1237,7 +1277,7 @@
             "x": 0,
             "y": 35
          },
-         "id": 34,
+         "id": 35,
          "panels": [
             {
                "datasource": {
@@ -1255,7 +1295,7 @@
                   "x": 0,
                   "y": 36
                },
-               "id": 35,
+               "id": 36,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1298,7 +1338,7 @@
                   "x": 12,
                   "y": 36
                },
-               "id": 36,
+               "id": 37,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1348,6 +1388,11 @@
             "type": "datasource"
          },
          {
+            "current": {
+               "selected": false,
+               "text": [ ],
+               "value": [ ]
+            },
             "datasource": {
                "type": "prometheus",
                "uid": "${metrics}"

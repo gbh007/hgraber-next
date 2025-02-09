@@ -20,6 +20,7 @@ local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main
     )
     + variable.query.withDatasource(config.datasource.metrics.type, config.datasource.metrics.uid)
     + variable.query.selectionOptions.withMulti()
+    + variable.query.generalOptions.withCurrent(config.variable.serviceName.current)
     + variable.query.refresh.onTime(),
   delta():
     variable.interval.new(config.variable.delta.name, config.variable.delta.values)

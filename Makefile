@@ -42,3 +42,11 @@ build: create_build_dir
 	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build $(LDFLAGS) -trimpath -o ./_build/server-linux-arm64  ./cmd/server
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -trimpath -o ./_build/server-linux-amd64  ./cmd/server
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build $(LDFLAGS) -trimpath -o ./_build/server-windows-amd64.exe  ./cmd/server
+
+.PHONY: jsonnet-build
+jsonnet-build:
+	cd jsonnet && make build
+
+.PHONY: jsonnet-custom
+jsonnet-custom:
+	cd jsonnet && make custom

@@ -19,6 +19,7 @@
     },
     serviceName: {
       name: 'service_name',
+      current: if std.extVar('services') != '' then std.split(std.extVar('services'), ',') else [],
     },
     delta: {
       name: 'deltaInterval',
