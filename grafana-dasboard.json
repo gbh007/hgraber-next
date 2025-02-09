@@ -6,13 +6,27 @@
                "type": "loki",
                "uid": "${logs}"
             },
-            "enable": true,
+            "enable": false,
             "expr": "{service_name=~\"$service_name\"} |= `application start`",
-            "iconColor": "super-light-blue",
-            "name": "app started",
+            "iconColor": "super-light-purple",
+            "name": "app started (logs)",
             "tagKeys": "{{host}}",
             "textFormat": "started",
             "titleFormat": "{{service_name}}"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${metrics}"
+            },
+            "enable": true,
+            "expr": "hgraber_next_agent_version_info{service_name=~\"$service_name\"} * 1000 or hgraber_next_server_version_info{service_name=~\"$service_name\"} * 1000",
+            "iconColor": "super-light-blue",
+            "name": "app started (metrics)",
+            "tagKeys": "{{host}}",
+            "textFormat": "started",
+            "titleFormat": "{{service_name}}",
+            "useValueForTime": "on"
          }
       ]
    },

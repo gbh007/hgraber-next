@@ -24,13 +24,30 @@ grafonnet.dashboard.new(config.dashboard.title)
       type: config.datasource.logs.type,
       uid: config.datasource.logs.uid,
     },
-    enable: true,
+    enable: false,
     expr: '{%s} |= `application start`' % config.label.filter.service,
-    iconColor: 'super-light-blue',
-    name: 'app started',
+    iconColor: 'super-light-purple',
+    name: 'app started (logs)',
     tagKeys: '{{host}}',
     textFormat: 'started',
     titleFormat: '{{%s}}' % config.variable.serviceName.name,
+  },
+  {
+    datasource: {
+      type: config.datasource.metrics.type,
+      uid: config.datasource.metrics.uid,
+    },
+    enable: true,
+    expr: 'hgraber_next_agent_version_info{%s} * 1000 or hgraber_next_server_version_info{%s} * 1000' % [
+      config.label.filter.service,
+      config.label.filter.service,
+    ],
+    iconColor: 'super-light-blue',
+    name: 'app started (metrics)',
+    tagKeys: '{{host}}',
+    textFormat: 'started',
+    titleFormat: '{{%s}}' % config.variable.serviceName.name,
+    useValueForTime: 'on',
   },
   // FIXME: генерировать полностью с помощью либы.
   // + grafonnet.dashboard.annotation.list.withName('app started')
