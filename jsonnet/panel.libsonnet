@@ -436,6 +436,103 @@ local heatmapDefaultColor() =
         config.datasource.logs.uid,
       ),
     ],
+  workersAndAgents(y):
+    [
+      panel.row.new('Workers and agents')
+      + panel.row.gridPos.withY(y)
+      + panel.row.withCollapsed()
+      + panel.row.withPanels($.utils.makeBlock([
+        panel.timeSeries.new('Agent parsing avg latency')
+        + panel.timeSeries.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            |||
+              sum(rate(hgraber_next_agent_parser_action_seconds_sum{%s}[$__rate_interval])) by (action, parser_name)
+              /
+              sum(rate(hgraber_next_agent_parser_action_seconds_count{%s}[$__rate_interval])) by (action, parser_name)
+            ||| % [
+              config.label.filter.service,
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('{{parser_name}} -> {{action}}'),
+        ])
+        + simpleTSLegend()
+        + panel.timeSeries.standardOptions.withUnit('s')
+        + panel.timeSeries.queryOptions.withDatasource(
+          config.datasource.metrics.type,
+          config.datasource.metrics.uid,
+        ),
+        panel.timeSeries.new('Agent parsing RPS')
+        + panel.timeSeries.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(rate(hgraber_next_agent_parser_action_seconds_count{%s}[$__rate_interval])) by (action, parser_name)' % [
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('{{parser_name}} -> {{action}}'),
+        ])
+        + simpleTSLegend()
+        + panel.timeSeries.standardOptions.withUnit('reqps')
+        + panel.timeSeries.queryOptions.withDatasource(
+          config.datasource.metrics.type,
+          config.datasource.metrics.uid,
+        ),
+        panel.timeSeries.new('Worker avg latency')
+        + panel.timeSeries.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            |||
+              sum(rate(hgraber_next_server_worker_execution_task_seconds_sum{%s}[$__rate_interval])) by (worker_name)
+              /
+              sum(rate(hgraber_next_server_worker_execution_task_seconds_count{%s}[$__rate_interval])) by (worker_name)
+            ||| % [
+              config.label.filter.service,
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('{{worker_name}}'),
+        ])
+        + simpleTSLegend()
+        + panel.timeSeries.standardOptions.withUnit('s')
+        + panel.timeSeries.queryOptions.withDatasource(
+          config.datasource.metrics.type,
+          config.datasource.metrics.uid,
+        ),
+        panel.timeSeries.new('Worker RPS')
+        + panel.timeSeries.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(rate(hgraber_next_server_worker_execution_task_seconds_count{%s}[$__rate_interval])) by (worker_name)' % [
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('{{worker_name}}'),
+        ])
+        + simpleTSLegend()
+        + panel.timeSeries.standardOptions.withUnit('reqps')
+        + panel.timeSeries.queryOptions.withDatasource(
+          config.datasource.metrics.type,
+          config.datasource.metrics.uid,
+        ),
+        panel.timeSeries.new('Workers stat')
+        + panel.timeSeries.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(hgraber_next_server_worker_total{%s}) by (worker_name, counter)' % [
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('{{worker_name}} -> {{counter}}'),
+        ])
+        + simpleTSLegend()
+        + panel.timeSeries.queryOptions.withDatasource(
+          config.datasource.metrics.type,
+          config.datasource.metrics.uid,
+        ),
+      ])),
+    ],
   panels:
     [
       panel.row.new('Simple info'),
@@ -445,5 +542,6 @@ local heatmapDefaultColor() =
     + self.core.fsRow(13, 9)
     + self.logs(22, 10)
     + self.booksAndPages(32)
-    + self.statistic(33),
+    + self.statistic(33)
+    + self.workersAndAgents(34),
 }
