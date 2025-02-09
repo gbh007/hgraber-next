@@ -18,6 +18,28 @@ grafonnet.dashboard.new(config.dashboard.title)
   + grafonnet.dashboard.link.dashboards.options.withAsDropdown()
   + grafonnet.dashboard.link.dashboards.options.withKeepTime(),
 ])
++ grafonnet.dashboard.withAnnotations([
+  {
+    datasource: {
+      type: config.datasource.logs.type,
+      uid: config.datasource.logs.uid,
+    },
+    enable: true,
+    expr: '{%s} |= `application start`' % config.label.filter.service,
+    iconColor: 'super-light-blue',
+    name: 'app started',
+    tagKeys: '{{host}}',
+    textFormat: 'started',
+    titleFormat: '{{%s}}' % config.variable.serviceName.name,
+  },
+  // FIXME: генерировать полностью с помощью либы.
+  // + grafonnet.dashboard.annotation.list.withName('app started')
+  // + grafonnet.dashboard.annotation.list.withEnable()
+  // + grafonnet.dashboard.annotation.list.datasource.withType(config.datasource.logs.type)
+  // + grafonnet.dashboard.annotation.list.datasource.withUid(config.datasource.logs.uid)
+  // + grafonnet.dashboard.annotation.list.withExpr('{%s} |= `application start`' % config.label.filter.service)
+  // + grafonnet.dashboard.annotation.list.withIconColor('super-light-blue'),
+])
 + grafonnet.dashboard.withPanels(panel.panels)
 + grafonnet.dashboard.withVariables([
   variable.logs(),
