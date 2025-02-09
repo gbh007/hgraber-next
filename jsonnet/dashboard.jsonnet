@@ -18,7 +18,7 @@ grafonnet.dashboard.new(config.dashboard.title)
   + grafonnet.dashboard.link.dashboards.options.withAsDropdown()
   + grafonnet.dashboard.link.dashboards.options.withKeepTime(),
 ])
-+ grafonnet.dashboard.withPanels(panel.pannels)
++ grafonnet.dashboard.withPanels(panel.panels)
 + grafonnet.dashboard.withVariables([
   variable.logs(),
   variable.metrics(),
