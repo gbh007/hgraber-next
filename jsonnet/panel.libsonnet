@@ -12,6 +12,10 @@ local simpleTSLegend() =
   + panel.timeSeries.options.legend.withCalcs(['mean', 'lastNotNull'])
   + panel.timeSeries.options.legend.withSortBy('Mean')
   + panel.timeSeries.options.legend.withSortDesc();
+local heatmapDefaultColor() =
+  panel.heatmap.options.color.withFill('semi-dark-blue')
+  + panel.heatmap.options.color.withScheme('Blues')
+  + panel.heatmap.options.color.withMode('scheme');
 
 {
   core: {
@@ -377,6 +381,75 @@ local simpleTSLegend() =
 
       ]),
     ],
+  statistic(y):
+    local simpleHM(title, metric, yUnit, xPos) =
+      panel.heatmap.new(title)
+      + panel.heatmap.queryOptions.withTargets([
+        prometheus.new(
+          config.datasource.metrics.uid,
+          'sum(%s{%s}) by (le)' % [
+            metric,
+            config.label.filter.service,
+          ],
+        )
+        + prometheus.withFormat('heatmap')
+        + prometheus.withInterval('$%s' % config.variable.delta.name)
+        + prometheus.withLegendFormat('__auto'),
+      ])
+      + panel.heatmap.options.cellValues.withUnit('short')
+      + heatmapDefaultColor()
+      + panel.heatmap.options.filterValues.withLe(1)
+      + panel.heatmap.options.yAxis.withUnit(yUnit)
+      + panel.heatmap.gridPos.withH(9)
+      + panel.heatmap.gridPos.withW(8)
+      + panel.heatmap.gridPos.withX(xPos)
+      + panel.heatmap.queryOptions.withDatasource(
+        config.datasource.metrics.type,
+        config.datasource.metrics.uid,
+      );
+    [
+      panel.row.new('Statistic')
+      + panel.row.gridPos.withY(y)
+      + panel.row.withCollapsed()
+      + panel.row.withPanels([
+        simpleHM(
+          'Book sizes',
+          'hgraber_next_server_statistic_book_size_bucket',
+          'bytes',
+          0,
+        ),
+        simpleHM(
+          'Page sizes',
+          'hgraber_next_server_statistic_page_size_bucket',
+          'bytes',
+          8,
+        ),
+        simpleHM(
+          'Page in book',
+          'hgraber_next_server_statistic_page_in_book_bucket',
+          'short',
+          16,
+        ),
+        simpleHM(
+          'Page sizes by authors',
+          'hgraber_next_server_statistic_pages_size_by_author_bucket',
+          'bytes',
+          0,
+        ),
+        simpleHM(
+          'Book by authors',
+          'hgraber_next_server_statistic_books_by_author_bucket',
+          'short',
+          8,
+        ),
+        simpleHM(
+          'Page by authors',
+          'hgraber_next_server_statistic_pages_by_author_bucket',
+          'short',
+          16,
+        ),
+      ]),
+    ],
   logs(y, h):
     [
       panel.row.new('Logs')
@@ -406,5 +479,6 @@ local simpleTSLegend() =
     + self.core.deltaRow(4, 9)
     + self.core.fsRow(13, 9)
     + self.logs(22, 10)
-    + self.booksAndPages(32),
+    + self.booksAndPages(32)
+    + self.statistic(33),
 }
