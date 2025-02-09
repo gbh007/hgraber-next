@@ -533,6 +533,52 @@ local heatmapDefaultColor() =
         ),
       ])),
     ],
+  other(y):
+    [
+      panel.row.new('Other')
+      + panel.row.gridPos.withY(y)
+      + panel.row.withCollapsed()
+      + panel.row.withPanels($.utils.makeBlock([
+        panel.timeSeries.new('FS Compression')
+        + panel.timeSeries.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            |||
+              1 - 
+              sum(hgraber_next_server_file_bytes{type="fs", %s}) by (fs_id)
+              /
+              sum(hgraber_next_server_file_bytes{type="page", %s}) by (fs_id)
+            ||| % [
+              config.label.filter.service,
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('{{fs_id}}'),
+        ])
+        + simpleTSLegend()
+        + panel.timeSeries.standardOptions.withUnit('percentunit')
+        + panel.timeSeries.queryOptions.withDatasource(
+          config.datasource.metrics.type,
+          config.datasource.metrics.uid,
+        ),
+        panel.timeSeries.new('Metric info collect time')
+        + panel.timeSeries.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(hgraber_next_server_info_scrape_duration_seconds{%s}) by (scrape_name)' % [
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('{{scrape_name}}'),
+        ])
+        + simpleTSLegend()
+        + panel.timeSeries.standardOptions.withUnit('s')
+        + panel.timeSeries.queryOptions.withDatasource(
+          config.datasource.metrics.type,
+          config.datasource.metrics.uid,
+        ),
+      ])),
+    ],
   panels:
     [
       panel.row.new('Simple info'),
@@ -543,5 +589,6 @@ local heatmapDefaultColor() =
     + self.logs(22, 10)
     + self.booksAndPages(32)
     + self.statistic(33)
-    + self.workersAndAgents(34),
+    + self.workersAndAgents(34)
+    + self.other(35),
 }
