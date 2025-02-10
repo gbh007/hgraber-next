@@ -36,6 +36,21 @@ local heatmapDefaultColor() =
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
+        panel.stat.new('Page count')
+        + panel.stat.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(hgraber_next_server_page_total{%s}) by (type)' % config.label.filter.service,
+          )
+          + prometheus.withLegendFormat('{{type}}')
+          + prometheus.withInstant(),
+        ])
+        + panel.stat.standardOptions.withUnit('short')
+        + panel.stat.standardOptions.thresholds.withSteps([greenSteps()])
+        + panel.stat.queryOptions.withDatasource(
+          config.datasource.metrics.type,
+          config.datasource.metrics.uid,
+        ),
         panel.stat.new('File size')
         + panel.stat.queryOptions.withTargets([
           prometheus.new(
@@ -80,7 +95,7 @@ local heatmapDefaultColor() =
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
-      ], 8, h, y),
+      ], 6, h, y),
     deltaRow(y, h):
       grafonnet.util.grid.wrapPanels([
         panel.barChart.new('Book delta count at $%s' % config.variable.delta.name)
