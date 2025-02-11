@@ -23,9 +23,10 @@ func (c *SystemHandlersController) APIParsingBookExistsPost(ctx context.Context,
 			switch {
 			case v.IsPossible:
 				return serverapi.APIParsingBookExistsPostOKResultItem{
-					URL:                v.URL,
-					Result:             serverapi.APIParsingBookExistsPostOKResultItemResultOk,
-					PossibleDuplicates: v.PossibleDuplicates,
+					URL:    v.URL,
+					Result: serverapi.APIParsingBookExistsPostOKResultItemResultOk,
+					// FIXME: попробовать оживить.
+					// PossibleDuplicates: v.PossibleDuplicates,
 				}
 
 			case v.IsUnsupported:

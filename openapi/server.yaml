@@ -137,7 +137,6 @@ paths:
       description: Получение общей информации о системе
       summary: Текущее состояние системы
       tags:
-        - parsing
         - system
       responses:
         200:
@@ -251,7 +250,6 @@ paths:
       description: Получение информации о воркерах в системе
       summary: Текущее состояние воркеров системы
       tags:
-        - parsing
         - system
       responses:
         200:
@@ -1789,7 +1787,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/system/handle:
+  /api/parsing/handle:
     post:
       description: Обработка ссылок на новые книги
       summary: Обработка ссылок на новые книги
@@ -1812,6 +1810,9 @@ paths:
                   type: boolean
                   description: Режим обработки мульти ссылок (на тома книг)
                 auto_verify:
+                  type: boolean
+                  description: Пометить книги подтвержденными
+                read_only_mode:
                   type: boolean
                   description: Пометить книги подтвержденными
               required:
@@ -1855,13 +1856,19 @@ paths:
                         is_duplicate:
                           type: boolean
                           description: Эта дубликат другой книги
-                        duplicate_id:
-                          type: string
-                          format: uuid
-                          description: ID книги в системе которую дублирует текущая
+                        duplicate_ids:
+                          type: array
+                          description: ID книг в системе которую дублирует текущая
+                          items:
+                            type: string
+                            format: uuid
                         is_handled:
                           type: boolean
                           description: Книга успешно обработана и добавлена в систему
+                        id:
+                          type: string
+                          format: uuid
+                          description: ID новой книги
                         error_reason:
                           type: string
                           description: Описание ошибки которое произошло во время обработки

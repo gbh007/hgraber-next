@@ -1492,6 +1492,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
+					case 'h': // Prefix: "handle"
+						origElem := elem
+						if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIParsingHandlePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					case 'p': // Prefix: "page/exists"
 						origElem := elem
 						if l := len("page/exists"); len(elem) >= l && elem[0:l] == "page/exists" {
@@ -1544,27 +1565,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						switch r.Method {
 						case "POST":
 							s.handleAPISystemDeduplicateArchivePostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				case 'h': // Prefix: "handle"
-					origElem := elem
-					if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPISystemHandlePostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "POST")
 						}
@@ -3498,6 +3498,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
+					case 'h': // Prefix: "handle"
+						origElem := elem
+						if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIParsingHandlePostOperation
+								r.summary = "Обработка ссылок на новые книги"
+								r.operationID = ""
+								r.pathPattern = "/api/parsing/handle"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					case 'p': // Prefix: "page/exists"
 						origElem := elem
 						if l := len("page/exists"); len(elem) >= l && elem[0:l] == "page/exists" {
@@ -3557,31 +3582,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.summary = "Проверка наличия данных в системе из архива"
 							r.operationID = ""
 							r.pathPattern = "/api/system/deduplicate/archive"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				case 'h': // Prefix: "handle"
-					origElem := elem
-					if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APISystemHandlePostOperation
-							r.summary = "Обработка ссылок на новые книги"
-							r.operationID = ""
-							r.pathPattern = "/api/system/handle"
 							r.args = args
 							r.count = 0
 							return r, true

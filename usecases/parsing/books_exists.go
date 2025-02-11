@@ -8,6 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 )
 
+// FIXME: тут вообще по факту не модели агента должны быть
 func (uc *UseCase) BooksExists(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error) {
 	result := make([]agentmodel.AgentBookCheckResult, 0, len(urls))
 

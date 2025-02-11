@@ -328,6 +328,12 @@ type Handler interface {
 	//
 	// POST /api/parsing/book/exists
 	APIParsingBookExistsPost(ctx context.Context, req *APIParsingBookExistsPostReq) (APIParsingBookExistsPostRes, error)
+	// APIParsingHandlePost implements POST /api/parsing/handle operation.
+	//
+	// Обработка ссылок на новые книги.
+	//
+	// POST /api/parsing/handle
+	APIParsingHandlePost(ctx context.Context, req *APIParsingHandlePostReq) (APIParsingHandlePostRes, error)
 	// APIParsingPageExistsPost implements POST /api/parsing/page/exists operation.
 	//
 	// Проверка наличия ссылок для страниц.
@@ -340,12 +346,6 @@ type Handler interface {
 	//
 	// POST /api/system/deduplicate/archive
 	APISystemDeduplicateArchivePost(ctx context.Context, req APISystemDeduplicateArchivePostReq) (APISystemDeduplicateArchivePostRes, error)
-	// APISystemHandlePost implements POST /api/system/handle operation.
-	//
-	// Обработка ссылок на новые книги.
-	//
-	// POST /api/system/handle
-	APISystemHandlePost(ctx context.Context, req *APISystemHandlePostReq) (APISystemHandlePostRes, error)
 	// APISystemImportArchivePost implements POST /api/system/import/archive operation.
 	//
 	// Импорт новой книги через архив.

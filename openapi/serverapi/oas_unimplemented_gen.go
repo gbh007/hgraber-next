@@ -489,6 +489,15 @@ func (UnimplementedHandler) APIParsingBookExistsPost(ctx context.Context, req *A
 	return r, ht.ErrNotImplemented
 }
 
+// APIParsingHandlePost implements POST /api/parsing/handle operation.
+//
+// Обработка ссылок на новые книги.
+//
+// POST /api/parsing/handle
+func (UnimplementedHandler) APIParsingHandlePost(ctx context.Context, req *APIParsingHandlePostReq) (r APIParsingHandlePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIParsingPageExistsPost implements POST /api/parsing/page/exists operation.
 //
 // Проверка наличия ссылок для страниц.
@@ -504,15 +513,6 @@ func (UnimplementedHandler) APIParsingPageExistsPost(ctx context.Context, req *A
 //
 // POST /api/system/deduplicate/archive
 func (UnimplementedHandler) APISystemDeduplicateArchivePost(ctx context.Context, req APISystemDeduplicateArchivePostReq) (r APISystemDeduplicateArchivePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APISystemHandlePost implements POST /api/system/handle operation.
-//
-// Обработка ссылок на новые книги.
-//
-// POST /api/system/handle
-func (UnimplementedHandler) APISystemHandlePost(ctx context.Context, req *APISystemHandlePostReq) (r APISystemHandlePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

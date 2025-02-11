@@ -15,13 +15,20 @@ import (
 	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
-func (uc *UseCase) NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (parsing.MultiHandleMultipleResult, error) {
+func (uc *UseCase) NewBooksMulti(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.MultiHandleMultipleResult, error) {
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParseMulti: true,
 	})
 	if err != nil {
 		return parsing.MultiHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
 	}
+
+	mirrors, err := uc.storage.Mirrors(ctx)
+	if err != nil {
+		return parsing.MultiHandleMultipleResult{}, fmt.Errorf("get mirrors: %w", err)
+	}
+
+	mirrorCalculator := parsing.NewUrlCloner(mirrors)
 
 	result := parsing.MultiHandleMultipleResult{
 		Details: parsing.FirstHandleMultipleResult{
@@ -71,18 +78,25 @@ urlLoop:
 
 				case info.IsPossible:
 					u := info.URL
-					urlsToCheck := []url.URL{u}
-					urlsToCheck = append(urlsToCheck, info.PossibleDuplicates...)
 
-					exists, err := uc.existsInStorage(ctx, urlsToCheck)
+					urlsToCheck, err := mirrorCalculator.GetClones(u)
+					if err != nil {
+						return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
+							"agent (%s) calc duplicates (%s): %w", agent.ID.String(), u.String(), err,
+						)
+					}
+
+					urlsToCheck = append(urlsToCheck, u)
+
+					ids, err := uc.existsInStorage(ctx, urlsToCheck)
 					if err != nil {
 						return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
 							"agent (%s) check duplicates (%s): %w", agent.ID.String(), u.String(), err,
 						)
 					}
 
-					if exists {
-						result.Details.RegisterDuplicate(u)
+					if len(ids) > 0 {
+						result.Details.RegisterDuplicate(u, ids)
 
 						continue
 					}
@@ -98,19 +112,21 @@ urlLoop:
 					CreateAt:  time.Now(),
 				}
 
-				if autoVerify {
+				if flags.AutoVerify {
 					book.Verified = true
 					book.VerifiedAt = time.Now().UTC()
 				}
 
-				err = uc.storage.NewBook(ctx, book)
-				if err != nil {
-					return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
-						"agent (%s) create (%s): %w", agent.ID.String(), u.String(), err,
-					)
+				if !flags.ReadOnly {
+					err = uc.storage.NewBook(ctx, book)
+					if err != nil {
+						return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
+							"agent (%s) create (%s): %w", agent.ID.String(), u.String(), err,
+						)
+					}
 				}
 
-				result.Details.RegisterHandled(u)
+				result.Details.RegisterHandled(u, book.ID)
 			}
 
 			result.RegisterHandled(multiUrl)

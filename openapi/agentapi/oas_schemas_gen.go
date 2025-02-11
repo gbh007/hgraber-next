@@ -1159,9 +1159,6 @@ type BooksCheckResultResultItem struct {
 	Result BooksCheckResultResultItemResult `json:"result"`
 	// Данные об ошибке во время обработки.
 	ErrorDetails OptString `json:"error_details"`
-	// Список возможных ссылок дубликатов (зеркала внешних
-	// систем и т.п.).
-	PossibleDuplicates []url.URL `json:"possible_duplicates"`
 }
 
 // GetURL returns the value of URL.
@@ -1179,11 +1176,6 @@ func (s *BooksCheckResultResultItem) GetErrorDetails() OptString {
 	return s.ErrorDetails
 }
 
-// GetPossibleDuplicates returns the value of PossibleDuplicates.
-func (s *BooksCheckResultResultItem) GetPossibleDuplicates() []url.URL {
-	return s.PossibleDuplicates
-}
-
 // SetURL sets the value of URL.
 func (s *BooksCheckResultResultItem) SetURL(val url.URL) {
 	s.URL = val
@@ -1197,11 +1189,6 @@ func (s *BooksCheckResultResultItem) SetResult(val BooksCheckResultResultItemRes
 // SetErrorDetails sets the value of ErrorDetails.
 func (s *BooksCheckResultResultItem) SetErrorDetails(val OptString) {
 	s.ErrorDetails = val
-}
-
-// SetPossibleDuplicates sets the value of PossibleDuplicates.
-func (s *BooksCheckResultResultItem) SetPossibleDuplicates(val []url.URL) {
-	s.PossibleDuplicates = val
 }
 
 // Результат проверки.

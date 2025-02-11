@@ -209,16 +209,16 @@ type APIParsingBookExistsPostRes interface {
 	aPIParsingBookExistsPostRes()
 }
 
+type APIParsingHandlePostRes interface {
+	aPIParsingHandlePostRes()
+}
+
 type APIParsingPageExistsPostRes interface {
 	aPIParsingPageExistsPostRes()
 }
 
 type APISystemDeduplicateArchivePostRes interface {
 	aPISystemDeduplicateArchivePostRes()
-}
-
-type APISystemHandlePostRes interface {
-	aPISystemHandlePostRes()
 }
 
 type APISystemImportArchivePostRes interface {

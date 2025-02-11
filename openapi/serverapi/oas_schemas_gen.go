@@ -4076,6 +4076,225 @@ type APIParsingBookExistsPostUnauthorized ErrorResponse
 
 func (*APIParsingBookExistsPostUnauthorized) aPIParsingBookExistsPostRes() {}
 
+type APIParsingHandlePostBadRequest ErrorResponse
+
+func (*APIParsingHandlePostBadRequest) aPIParsingHandlePostRes() {}
+
+type APIParsingHandlePostForbidden ErrorResponse
+
+func (*APIParsingHandlePostForbidden) aPIParsingHandlePostRes() {}
+
+type APIParsingHandlePostInternalServerError ErrorResponse
+
+func (*APIParsingHandlePostInternalServerError) aPIParsingHandlePostRes() {}
+
+type APIParsingHandlePostOK struct {
+	// Общее количество обработанных.
+	TotalCount int `json:"total_count"`
+	// Количество загруженных (успешно обработанных).
+	LoadedCount int `json:"loaded_count"`
+	// Количество дубликатов (пропущенных).
+	DuplicateCount int `json:"duplicate_count"`
+	// Количество неудачных обработок.
+	ErrorCount int `json:"error_count"`
+	// Не обработанные ссылки.
+	NotHandled []url.URL `json:"not_handled"`
+	// Подробности результата обработки.
+	Details []APIParsingHandlePostOKDetailsItem `json:"details"`
+}
+
+// GetTotalCount returns the value of TotalCount.
+func (s *APIParsingHandlePostOK) GetTotalCount() int {
+	return s.TotalCount
+}
+
+// GetLoadedCount returns the value of LoadedCount.
+func (s *APIParsingHandlePostOK) GetLoadedCount() int {
+	return s.LoadedCount
+}
+
+// GetDuplicateCount returns the value of DuplicateCount.
+func (s *APIParsingHandlePostOK) GetDuplicateCount() int {
+	return s.DuplicateCount
+}
+
+// GetErrorCount returns the value of ErrorCount.
+func (s *APIParsingHandlePostOK) GetErrorCount() int {
+	return s.ErrorCount
+}
+
+// GetNotHandled returns the value of NotHandled.
+func (s *APIParsingHandlePostOK) GetNotHandled() []url.URL {
+	return s.NotHandled
+}
+
+// GetDetails returns the value of Details.
+func (s *APIParsingHandlePostOK) GetDetails() []APIParsingHandlePostOKDetailsItem {
+	return s.Details
+}
+
+// SetTotalCount sets the value of TotalCount.
+func (s *APIParsingHandlePostOK) SetTotalCount(val int) {
+	s.TotalCount = val
+}
+
+// SetLoadedCount sets the value of LoadedCount.
+func (s *APIParsingHandlePostOK) SetLoadedCount(val int) {
+	s.LoadedCount = val
+}
+
+// SetDuplicateCount sets the value of DuplicateCount.
+func (s *APIParsingHandlePostOK) SetDuplicateCount(val int) {
+	s.DuplicateCount = val
+}
+
+// SetErrorCount sets the value of ErrorCount.
+func (s *APIParsingHandlePostOK) SetErrorCount(val int) {
+	s.ErrorCount = val
+}
+
+// SetNotHandled sets the value of NotHandled.
+func (s *APIParsingHandlePostOK) SetNotHandled(val []url.URL) {
+	s.NotHandled = val
+}
+
+// SetDetails sets the value of Details.
+func (s *APIParsingHandlePostOK) SetDetails(val []APIParsingHandlePostOKDetailsItem) {
+	s.Details = val
+}
+
+func (*APIParsingHandlePostOK) aPIParsingHandlePostRes() {}
+
+type APIParsingHandlePostOKDetailsItem struct {
+	// Изначальная ссылка.
+	URL url.URL `json:"url"`
+	// Эта дубликат другой книги.
+	IsDuplicate bool `json:"is_duplicate"`
+	// ID книг в системе которую дублирует текущая.
+	DuplicateIds []uuid.UUID `json:"duplicate_ids"`
+	// Книга успешно обработана и добавлена в систему.
+	IsHandled bool `json:"is_handled"`
+	// ID новой книги.
+	ID OptUUID `json:"id"`
+	// Описание ошибки которое произошло во время обработки.
+	ErrorReason OptString `json:"error_reason"`
+}
+
+// GetURL returns the value of URL.
+func (s *APIParsingHandlePostOKDetailsItem) GetURL() url.URL {
+	return s.URL
+}
+
+// GetIsDuplicate returns the value of IsDuplicate.
+func (s *APIParsingHandlePostOKDetailsItem) GetIsDuplicate() bool {
+	return s.IsDuplicate
+}
+
+// GetDuplicateIds returns the value of DuplicateIds.
+func (s *APIParsingHandlePostOKDetailsItem) GetDuplicateIds() []uuid.UUID {
+	return s.DuplicateIds
+}
+
+// GetIsHandled returns the value of IsHandled.
+func (s *APIParsingHandlePostOKDetailsItem) GetIsHandled() bool {
+	return s.IsHandled
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingHandlePostOKDetailsItem) GetID() OptUUID {
+	return s.ID
+}
+
+// GetErrorReason returns the value of ErrorReason.
+func (s *APIParsingHandlePostOKDetailsItem) GetErrorReason() OptString {
+	return s.ErrorReason
+}
+
+// SetURL sets the value of URL.
+func (s *APIParsingHandlePostOKDetailsItem) SetURL(val url.URL) {
+	s.URL = val
+}
+
+// SetIsDuplicate sets the value of IsDuplicate.
+func (s *APIParsingHandlePostOKDetailsItem) SetIsDuplicate(val bool) {
+	s.IsDuplicate = val
+}
+
+// SetDuplicateIds sets the value of DuplicateIds.
+func (s *APIParsingHandlePostOKDetailsItem) SetDuplicateIds(val []uuid.UUID) {
+	s.DuplicateIds = val
+}
+
+// SetIsHandled sets the value of IsHandled.
+func (s *APIParsingHandlePostOKDetailsItem) SetIsHandled(val bool) {
+	s.IsHandled = val
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingHandlePostOKDetailsItem) SetID(val OptUUID) {
+	s.ID = val
+}
+
+// SetErrorReason sets the value of ErrorReason.
+func (s *APIParsingHandlePostOKDetailsItem) SetErrorReason(val OptString) {
+	s.ErrorReason = val
+}
+
+type APIParsingHandlePostReq struct {
+	// Ссылки на внешние системы.
+	Urls []url.URL `json:"urls"`
+	// Режим обработки мульти ссылок (на тома книг).
+	IsMulti OptBool `json:"is_multi"`
+	// Пометить книги подтвержденными.
+	AutoVerify OptBool `json:"auto_verify"`
+	// Пометить книги подтвержденными.
+	ReadOnlyMode OptBool `json:"read_only_mode"`
+}
+
+// GetUrls returns the value of Urls.
+func (s *APIParsingHandlePostReq) GetUrls() []url.URL {
+	return s.Urls
+}
+
+// GetIsMulti returns the value of IsMulti.
+func (s *APIParsingHandlePostReq) GetIsMulti() OptBool {
+	return s.IsMulti
+}
+
+// GetAutoVerify returns the value of AutoVerify.
+func (s *APIParsingHandlePostReq) GetAutoVerify() OptBool {
+	return s.AutoVerify
+}
+
+// GetReadOnlyMode returns the value of ReadOnlyMode.
+func (s *APIParsingHandlePostReq) GetReadOnlyMode() OptBool {
+	return s.ReadOnlyMode
+}
+
+// SetUrls sets the value of Urls.
+func (s *APIParsingHandlePostReq) SetUrls(val []url.URL) {
+	s.Urls = val
+}
+
+// SetIsMulti sets the value of IsMulti.
+func (s *APIParsingHandlePostReq) SetIsMulti(val OptBool) {
+	s.IsMulti = val
+}
+
+// SetAutoVerify sets the value of AutoVerify.
+func (s *APIParsingHandlePostReq) SetAutoVerify(val OptBool) {
+	s.AutoVerify = val
+}
+
+// SetReadOnlyMode sets the value of ReadOnlyMode.
+func (s *APIParsingHandlePostReq) SetReadOnlyMode(val OptBool) {
+	s.ReadOnlyMode = val
+}
+
+type APIParsingHandlePostUnauthorized ErrorResponse
+
+func (*APIParsingHandlePostUnauthorized) aPIParsingHandlePostRes() {}
+
 type APIParsingPageExistsPostBadRequest ErrorResponse
 
 func (*APIParsingPageExistsPostBadRequest) aPIParsingPageExistsPostRes() {}
@@ -4335,201 +4554,6 @@ func (s APISystemDeduplicateArchivePostReq) Read(p []byte) (n int, err error) {
 type APISystemDeduplicateArchivePostUnauthorized ErrorResponse
 
 func (*APISystemDeduplicateArchivePostUnauthorized) aPISystemDeduplicateArchivePostRes() {}
-
-type APISystemHandlePostBadRequest ErrorResponse
-
-func (*APISystemHandlePostBadRequest) aPISystemHandlePostRes() {}
-
-type APISystemHandlePostForbidden ErrorResponse
-
-func (*APISystemHandlePostForbidden) aPISystemHandlePostRes() {}
-
-type APISystemHandlePostInternalServerError ErrorResponse
-
-func (*APISystemHandlePostInternalServerError) aPISystemHandlePostRes() {}
-
-type APISystemHandlePostOK struct {
-	// Общее количество обработанных.
-	TotalCount int `json:"total_count"`
-	// Количество загруженных (успешно обработанных).
-	LoadedCount int `json:"loaded_count"`
-	// Количество дубликатов (пропущенных).
-	DuplicateCount int `json:"duplicate_count"`
-	// Количество неудачных обработок.
-	ErrorCount int `json:"error_count"`
-	// Не обработанные ссылки.
-	NotHandled []url.URL `json:"not_handled"`
-	// Подробности результата обработки.
-	Details []APISystemHandlePostOKDetailsItem `json:"details"`
-}
-
-// GetTotalCount returns the value of TotalCount.
-func (s *APISystemHandlePostOK) GetTotalCount() int {
-	return s.TotalCount
-}
-
-// GetLoadedCount returns the value of LoadedCount.
-func (s *APISystemHandlePostOK) GetLoadedCount() int {
-	return s.LoadedCount
-}
-
-// GetDuplicateCount returns the value of DuplicateCount.
-func (s *APISystemHandlePostOK) GetDuplicateCount() int {
-	return s.DuplicateCount
-}
-
-// GetErrorCount returns the value of ErrorCount.
-func (s *APISystemHandlePostOK) GetErrorCount() int {
-	return s.ErrorCount
-}
-
-// GetNotHandled returns the value of NotHandled.
-func (s *APISystemHandlePostOK) GetNotHandled() []url.URL {
-	return s.NotHandled
-}
-
-// GetDetails returns the value of Details.
-func (s *APISystemHandlePostOK) GetDetails() []APISystemHandlePostOKDetailsItem {
-	return s.Details
-}
-
-// SetTotalCount sets the value of TotalCount.
-func (s *APISystemHandlePostOK) SetTotalCount(val int) {
-	s.TotalCount = val
-}
-
-// SetLoadedCount sets the value of LoadedCount.
-func (s *APISystemHandlePostOK) SetLoadedCount(val int) {
-	s.LoadedCount = val
-}
-
-// SetDuplicateCount sets the value of DuplicateCount.
-func (s *APISystemHandlePostOK) SetDuplicateCount(val int) {
-	s.DuplicateCount = val
-}
-
-// SetErrorCount sets the value of ErrorCount.
-func (s *APISystemHandlePostOK) SetErrorCount(val int) {
-	s.ErrorCount = val
-}
-
-// SetNotHandled sets the value of NotHandled.
-func (s *APISystemHandlePostOK) SetNotHandled(val []url.URL) {
-	s.NotHandled = val
-}
-
-// SetDetails sets the value of Details.
-func (s *APISystemHandlePostOK) SetDetails(val []APISystemHandlePostOKDetailsItem) {
-	s.Details = val
-}
-
-func (*APISystemHandlePostOK) aPISystemHandlePostRes() {}
-
-type APISystemHandlePostOKDetailsItem struct {
-	// Изначальная ссылка.
-	URL url.URL `json:"url"`
-	// Эта дубликат другой книги.
-	IsDuplicate bool `json:"is_duplicate"`
-	// ID книги в системе которую дублирует текущая.
-	DuplicateID OptUUID `json:"duplicate_id"`
-	// Книга успешно обработана и добавлена в систему.
-	IsHandled bool `json:"is_handled"`
-	// Описание ошибки которое произошло во время обработки.
-	ErrorReason OptString `json:"error_reason"`
-}
-
-// GetURL returns the value of URL.
-func (s *APISystemHandlePostOKDetailsItem) GetURL() url.URL {
-	return s.URL
-}
-
-// GetIsDuplicate returns the value of IsDuplicate.
-func (s *APISystemHandlePostOKDetailsItem) GetIsDuplicate() bool {
-	return s.IsDuplicate
-}
-
-// GetDuplicateID returns the value of DuplicateID.
-func (s *APISystemHandlePostOKDetailsItem) GetDuplicateID() OptUUID {
-	return s.DuplicateID
-}
-
-// GetIsHandled returns the value of IsHandled.
-func (s *APISystemHandlePostOKDetailsItem) GetIsHandled() bool {
-	return s.IsHandled
-}
-
-// GetErrorReason returns the value of ErrorReason.
-func (s *APISystemHandlePostOKDetailsItem) GetErrorReason() OptString {
-	return s.ErrorReason
-}
-
-// SetURL sets the value of URL.
-func (s *APISystemHandlePostOKDetailsItem) SetURL(val url.URL) {
-	s.URL = val
-}
-
-// SetIsDuplicate sets the value of IsDuplicate.
-func (s *APISystemHandlePostOKDetailsItem) SetIsDuplicate(val bool) {
-	s.IsDuplicate = val
-}
-
-// SetDuplicateID sets the value of DuplicateID.
-func (s *APISystemHandlePostOKDetailsItem) SetDuplicateID(val OptUUID) {
-	s.DuplicateID = val
-}
-
-// SetIsHandled sets the value of IsHandled.
-func (s *APISystemHandlePostOKDetailsItem) SetIsHandled(val bool) {
-	s.IsHandled = val
-}
-
-// SetErrorReason sets the value of ErrorReason.
-func (s *APISystemHandlePostOKDetailsItem) SetErrorReason(val OptString) {
-	s.ErrorReason = val
-}
-
-type APISystemHandlePostReq struct {
-	// Ссылки на внешние системы.
-	Urls []url.URL `json:"urls"`
-	// Режим обработки мульти ссылок (на тома книг).
-	IsMulti OptBool `json:"is_multi"`
-	// Пометить книги подтвержденными.
-	AutoVerify OptBool `json:"auto_verify"`
-}
-
-// GetUrls returns the value of Urls.
-func (s *APISystemHandlePostReq) GetUrls() []url.URL {
-	return s.Urls
-}
-
-// GetIsMulti returns the value of IsMulti.
-func (s *APISystemHandlePostReq) GetIsMulti() OptBool {
-	return s.IsMulti
-}
-
-// GetAutoVerify returns the value of AutoVerify.
-func (s *APISystemHandlePostReq) GetAutoVerify() OptBool {
-	return s.AutoVerify
-}
-
-// SetUrls sets the value of Urls.
-func (s *APISystemHandlePostReq) SetUrls(val []url.URL) {
-	s.Urls = val
-}
-
-// SetIsMulti sets the value of IsMulti.
-func (s *APISystemHandlePostReq) SetIsMulti(val OptBool) {
-	s.IsMulti = val
-}
-
-// SetAutoVerify sets the value of AutoVerify.
-func (s *APISystemHandlePostReq) SetAutoVerify(val OptBool) {
-	s.AutoVerify = val
-}
-
-type APISystemHandlePostUnauthorized ErrorResponse
-
-func (*APISystemHandlePostUnauthorized) aPISystemHandlePostRes() {}
 
 type APISystemImportArchivePostBadRequest ErrorResponse
 
