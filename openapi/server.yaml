@@ -137,7 +137,6 @@ paths:
       description: Получение общей информации о системе
       summary: Текущее состояние системы
       tags:
-        - parsing
         - system
       responses:
         200:
@@ -251,7 +250,6 @@ paths:
       description: Получение информации о воркерах в системе
       summary: Текущее состояние воркеров системы
       tags:
-        - parsing
         - system
       responses:
         200:
@@ -1789,7 +1787,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/system/handle:
+  /api/parsing/handle:
     post:
       description: Обработка ссылок на новые книги
       summary: Обработка ссылок на новые книги
@@ -1812,6 +1810,9 @@ paths:
                   type: boolean
                   description: Режим обработки мульти ссылок (на тома книг)
                 auto_verify:
+                  type: boolean
+                  description: Пометить книги подтвержденными
+                read_only_mode:
                   type: boolean
                   description: Пометить книги подтвержденными
               required:
@@ -1855,13 +1856,19 @@ paths:
                         is_duplicate:
                           type: boolean
                           description: Эта дубликат другой книги
-                        duplicate_id:
-                          type: string
-                          format: uuid
-                          description: ID книги в системе которую дублирует текущая
+                        duplicate_ids:
+                          type: array
+                          description: ID книг в системе которую дублирует текущая
+                          items:
+                            type: string
+                            format: uuid
                         is_handled:
                           type: boolean
                           description: Книга успешно обработана и добавлена в систему
+                        id:
+                          type: string
+                          format: uuid
+                          description: ID новой книги
                         error_reason:
                           type: string
                           description: Описание ошибки которое произошло во время обработки
@@ -2063,6 +2070,309 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         401:
           description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/mirror/create:
+    post:
+      description: Создание данных зеркала
+      summary: Создание данных зеркала
+      tags:
+        - parsing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Название зеркала
+                description:
+                  type: string
+                  description: Описание зеркала
+                prefixes:
+                  type: array
+                  description: Префиксы зеркала (включая оригинальный)
+                  items:
+                    type: string
+              required:
+                - name
+                - prefixes
+      responses:
+        204:
+          description: Успешное создание
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/mirror/update:
+    post:
+      description: Обновления зеркала
+      summary: Обновления зеркала
+      tags:
+        - parsing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID зеркала
+                name:
+                  type: string
+                  description: Название зеркала
+                description:
+                  type: string
+                  description: Описание зеркала
+                prefixes:
+                  type: array
+                  description: Префиксы зеркала (включая оригинальный)
+                  items:
+                    type: string
+              required:
+                - id
+                - name
+                - prefixes
+      responses:
+        204:
+          description: Успешное обновление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/mirror/delete:
+    post:
+      description: Удаление зеркала
+      summary: Удаление зеркала
+      tags:
+        - parsing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID зеркала
+              required:
+                - id
+      responses:
+        204:
+          description: Успешное удаление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/mirror/get:
+    post:
+      description: Получение данных зеркала
+      summary: Получение данных зеркала
+      tags:
+        - parsing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID зеркала
+              required:
+                - id
+      responses:
+        200:
+          description: Информация о зеркале
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID зеркала
+                  name:
+                    type: string
+                    description: Название зеркала
+                  description:
+                    type: string
+                    description: Описание зеркала
+                  prefixes:
+                    type: array
+                    description: Префиксы зеркала (включая оригинальный)
+                    items:
+                      type: string
+                required:
+                  - id
+                  - name
+                  - prefixes
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/parsing/mirror/list:
+    get:
+      description: Зеркала
+      summary: Зеркала
+      tags:
+        - parsing
+      responses:
+        200:
+          description: Информация о зеркалах
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mirrors:
+                    description: Список зеркал
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: ID зеркала
+                        name:
+                          type: string
+                          description: Название зеркала
+                        description:
+                          type: string
+                          description: Описание зеркала
+                        prefixes:
+                          type: array
+                          description: Префиксы зеркала (включая оригинальный)
+                          items:
+                            type: string
+                      required:
+                        - id
+                        - name
+                        - prefixes
+        401:
+          description: Пользователь не авторизован
           content:
             application/json:
               schema:

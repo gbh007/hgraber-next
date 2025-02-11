@@ -22,9 +22,8 @@ func (c *Controller) APIParsingBookCheckPost(ctx context.Context, req *agentapi.
 			switch {
 			case v.IsPossible:
 				return agentapi.BooksCheckResultResultItem{
-					URL:                v.URL,
-					Result:             agentapi.BooksCheckResultResultItemResultOk,
-					PossibleDuplicates: v.PossibleDuplicates,
+					URL:    v.URL,
+					Result: agentapi.BooksCheckResultResultItemResultOk,
 				}
 
 			case v.IsUnsupported:

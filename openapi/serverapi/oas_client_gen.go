@@ -343,6 +343,42 @@ type Invoker interface {
 	//
 	// POST /api/parsing/book/exists
 	APIParsingBookExistsPost(ctx context.Context, request *APIParsingBookExistsPostReq) (APIParsingBookExistsPostRes, error)
+	// APIParsingHandlePost invokes POST /api/parsing/handle operation.
+	//
+	// Обработка ссылок на новые книги.
+	//
+	// POST /api/parsing/handle
+	APIParsingHandlePost(ctx context.Context, request *APIParsingHandlePostReq) (APIParsingHandlePostRes, error)
+	// APIParsingMirrorCreatePost invokes POST /api/parsing/mirror/create operation.
+	//
+	// Создание данных зеркала.
+	//
+	// POST /api/parsing/mirror/create
+	APIParsingMirrorCreatePost(ctx context.Context, request *APIParsingMirrorCreatePostReq) (APIParsingMirrorCreatePostRes, error)
+	// APIParsingMirrorDeletePost invokes POST /api/parsing/mirror/delete operation.
+	//
+	// Удаление зеркала.
+	//
+	// POST /api/parsing/mirror/delete
+	APIParsingMirrorDeletePost(ctx context.Context, request *APIParsingMirrorDeletePostReq) (APIParsingMirrorDeletePostRes, error)
+	// APIParsingMirrorGetPost invokes POST /api/parsing/mirror/get operation.
+	//
+	// Получение данных зеркала.
+	//
+	// POST /api/parsing/mirror/get
+	APIParsingMirrorGetPost(ctx context.Context, request *APIParsingMirrorGetPostReq) (APIParsingMirrorGetPostRes, error)
+	// APIParsingMirrorListGet invokes GET /api/parsing/mirror/list operation.
+	//
+	// Зеркала.
+	//
+	// GET /api/parsing/mirror/list
+	APIParsingMirrorListGet(ctx context.Context) (APIParsingMirrorListGetRes, error)
+	// APIParsingMirrorUpdatePost invokes POST /api/parsing/mirror/update operation.
+	//
+	// Обновления зеркала.
+	//
+	// POST /api/parsing/mirror/update
+	APIParsingMirrorUpdatePost(ctx context.Context, request *APIParsingMirrorUpdatePostReq) (APIParsingMirrorUpdatePostRes, error)
 	// APIParsingPageExistsPost invokes POST /api/parsing/page/exists operation.
 	//
 	// Проверка наличия ссылок для страниц.
@@ -355,12 +391,6 @@ type Invoker interface {
 	//
 	// POST /api/system/deduplicate/archive
 	APISystemDeduplicateArchivePost(ctx context.Context, request APISystemDeduplicateArchivePostReq) (APISystemDeduplicateArchivePostRes, error)
-	// APISystemHandlePost invokes POST /api/system/handle operation.
-	//
-	// Обработка ссылок на новые книги.
-	//
-	// POST /api/system/handle
-	APISystemHandlePost(ctx context.Context, request *APISystemHandlePostReq) (APISystemHandlePostRes, error)
 	// APISystemImportArchivePost invokes POST /api/system/import/archive operation.
 	//
 	// Импорт новой книги через архив.
@@ -6694,6 +6724,717 @@ func (c *Client) sendAPIParsingBookExistsPost(ctx context.Context, request *APIP
 	return result, nil
 }
 
+// APIParsingHandlePost invokes POST /api/parsing/handle operation.
+//
+// Обработка ссылок на новые книги.
+//
+// POST /api/parsing/handle
+func (c *Client) APIParsingHandlePost(ctx context.Context, request *APIParsingHandlePostReq) (APIParsingHandlePostRes, error) {
+	res, err := c.sendAPIParsingHandlePost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIParsingHandlePost(ctx context.Context, request *APIParsingHandlePostReq) (res APIParsingHandlePostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/parsing/handle"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingHandlePostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/parsing/handle"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIParsingHandlePostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIParsingHandlePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, APIParsingHandlePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIParsingHandlePostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIParsingMirrorCreatePost invokes POST /api/parsing/mirror/create operation.
+//
+// Создание данных зеркала.
+//
+// POST /api/parsing/mirror/create
+func (c *Client) APIParsingMirrorCreatePost(ctx context.Context, request *APIParsingMirrorCreatePostReq) (APIParsingMirrorCreatePostRes, error) {
+	res, err := c.sendAPIParsingMirrorCreatePost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIParsingMirrorCreatePost(ctx context.Context, request *APIParsingMirrorCreatePostReq) (res APIParsingMirrorCreatePostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/parsing/mirror/create"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingMirrorCreatePostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/parsing/mirror/create"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIParsingMirrorCreatePostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIParsingMirrorCreatePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, APIParsingMirrorCreatePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIParsingMirrorCreatePostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIParsingMirrorDeletePost invokes POST /api/parsing/mirror/delete operation.
+//
+// Удаление зеркала.
+//
+// POST /api/parsing/mirror/delete
+func (c *Client) APIParsingMirrorDeletePost(ctx context.Context, request *APIParsingMirrorDeletePostReq) (APIParsingMirrorDeletePostRes, error) {
+	res, err := c.sendAPIParsingMirrorDeletePost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIParsingMirrorDeletePost(ctx context.Context, request *APIParsingMirrorDeletePostReq) (res APIParsingMirrorDeletePostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/parsing/mirror/delete"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingMirrorDeletePostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/parsing/mirror/delete"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIParsingMirrorDeletePostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIParsingMirrorDeletePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, APIParsingMirrorDeletePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIParsingMirrorDeletePostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIParsingMirrorGetPost invokes POST /api/parsing/mirror/get operation.
+//
+// Получение данных зеркала.
+//
+// POST /api/parsing/mirror/get
+func (c *Client) APIParsingMirrorGetPost(ctx context.Context, request *APIParsingMirrorGetPostReq) (APIParsingMirrorGetPostRes, error) {
+	res, err := c.sendAPIParsingMirrorGetPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIParsingMirrorGetPost(ctx context.Context, request *APIParsingMirrorGetPostReq) (res APIParsingMirrorGetPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/parsing/mirror/get"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingMirrorGetPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/parsing/mirror/get"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIParsingMirrorGetPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIParsingMirrorGetPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, APIParsingMirrorGetPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIParsingMirrorGetPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIParsingMirrorListGet invokes GET /api/parsing/mirror/list operation.
+//
+// Зеркала.
+//
+// GET /api/parsing/mirror/list
+func (c *Client) APIParsingMirrorListGet(ctx context.Context) (APIParsingMirrorListGetRes, error) {
+	res, err := c.sendAPIParsingMirrorListGet(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIParsingMirrorListGet(ctx context.Context) (res APIParsingMirrorListGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/parsing/mirror/list"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingMirrorListGetOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/parsing/mirror/list"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIParsingMirrorListGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, APIParsingMirrorListGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIParsingMirrorListGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIParsingMirrorUpdatePost invokes POST /api/parsing/mirror/update operation.
+//
+// Обновления зеркала.
+//
+// POST /api/parsing/mirror/update
+func (c *Client) APIParsingMirrorUpdatePost(ctx context.Context, request *APIParsingMirrorUpdatePostReq) (APIParsingMirrorUpdatePostRes, error) {
+	res, err := c.sendAPIParsingMirrorUpdatePost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIParsingMirrorUpdatePost(ctx context.Context, request *APIParsingMirrorUpdatePostReq) (res APIParsingMirrorUpdatePostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/parsing/mirror/update"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIParsingMirrorUpdatePostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/parsing/mirror/update"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIParsingMirrorUpdatePostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIParsingMirrorUpdatePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, APIParsingMirrorUpdatePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIParsingMirrorUpdatePostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // APIParsingPageExistsPost invokes POST /api/parsing/page/exists operation.
 //
 // Проверка наличия ссылок для страниц.
@@ -6925,125 +7666,6 @@ func (c *Client) sendAPISystemDeduplicateArchivePost(ctx context.Context, reques
 
 	stage = "DecodeResponse"
 	result, err := decodeAPISystemDeduplicateArchivePostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APISystemHandlePost invokes POST /api/system/handle operation.
-//
-// Обработка ссылок на новые книги.
-//
-// POST /api/system/handle
-func (c *Client) APISystemHandlePost(ctx context.Context, request *APISystemHandlePostReq) (APISystemHandlePostRes, error) {
-	res, err := c.sendAPISystemHandlePost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPISystemHandlePost(ctx context.Context, request *APISystemHandlePostReq) (res APISystemHandlePostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/system/handle"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APISystemHandlePostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/system/handle"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPISystemHandlePostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APISystemHandlePostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"HeaderAuth\"")
-			}
-		}
-		{
-			stage = "Security:Cookies"
-			switch err := c.securityCookies(ctx, APISystemHandlePostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 1
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Cookies\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-				{0b00000010},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPISystemHandlePostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

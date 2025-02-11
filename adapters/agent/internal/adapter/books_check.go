@@ -42,12 +42,11 @@ func (a *Adapter) BooksCheck(ctx context.Context, urls []url.URL) ([]agentmodel.
 func convertBooksCheckResult(checkResult *agentapi.BooksCheckResult) []agentmodel.AgentBookCheckResult {
 	return pkg.Map(checkResult.Result, func(v agentapi.BooksCheckResultResultItem) agentmodel.AgentBookCheckResult {
 		return agentmodel.AgentBookCheckResult{
-			URL:                v.URL,
-			IsUnsupported:      v.Result == agentapi.BooksCheckResultResultItemResultUnsupported,
-			IsPossible:         v.Result == agentapi.BooksCheckResultResultItemResultOk,
-			HasError:           v.Result == agentapi.BooksCheckResultResultItemResultError,
-			PossibleDuplicates: v.PossibleDuplicates,
-			ErrorReason:        v.ErrorDetails.Value,
+			URL:           v.URL,
+			IsUnsupported: v.Result == agentapi.BooksCheckResultResultItemResultUnsupported,
+			IsPossible:    v.Result == agentapi.BooksCheckResultResultItemResultOk,
+			HasError:      v.Result == agentapi.BooksCheckResultResultItemResultError,
+			ErrorReason:   v.ErrorDetails.Value,
 		}
 	})
 }

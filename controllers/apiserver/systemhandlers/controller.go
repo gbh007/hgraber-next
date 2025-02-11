@@ -17,11 +17,17 @@ import (
 )
 
 type ParseUseCases interface {
-	NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (parsing.FirstHandleMultipleResult, error)
-	NewBooksMulti(ctx context.Context, urls []url.URL, autoVerify bool) (parsing.MultiHandleMultipleResult, error)
+	NewBooks(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.FirstHandleMultipleResult, error)
+	NewBooksMulti(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.MultiHandleMultipleResult, error)
 
 	BooksExists(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
 	PagesExists(ctx context.Context, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error)
+
+	NewMirror(ctx context.Context, mirror parsing.URLMirror) error
+	UpdateMirror(ctx context.Context, mirror parsing.URLMirror) error
+	DeleteMirror(ctx context.Context, id uuid.UUID) error
+	Mirrors(ctx context.Context) ([]parsing.URLMirror, error)
+	Mirror(ctx context.Context, id uuid.UUID) (parsing.URLMirror, error)
 }
 
 type WebAPIUseCases interface {

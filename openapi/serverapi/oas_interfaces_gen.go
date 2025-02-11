@@ -209,16 +209,36 @@ type APIParsingBookExistsPostRes interface {
 	aPIParsingBookExistsPostRes()
 }
 
+type APIParsingHandlePostRes interface {
+	aPIParsingHandlePostRes()
+}
+
+type APIParsingMirrorCreatePostRes interface {
+	aPIParsingMirrorCreatePostRes()
+}
+
+type APIParsingMirrorDeletePostRes interface {
+	aPIParsingMirrorDeletePostRes()
+}
+
+type APIParsingMirrorGetPostRes interface {
+	aPIParsingMirrorGetPostRes()
+}
+
+type APIParsingMirrorListGetRes interface {
+	aPIParsingMirrorListGetRes()
+}
+
+type APIParsingMirrorUpdatePostRes interface {
+	aPIParsingMirrorUpdatePostRes()
+}
+
 type APIParsingPageExistsPostRes interface {
 	aPIParsingPageExistsPostRes()
 }
 
 type APISystemDeduplicateArchivePostRes interface {
 	aPISystemDeduplicateArchivePostRes()
-}
-
-type APISystemHandlePostRes interface {
-	aPISystemHandlePostRes()
 }
 
 type APISystemImportArchivePostRes interface {

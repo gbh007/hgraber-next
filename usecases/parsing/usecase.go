@@ -11,6 +11,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
 type storage interface {
@@ -33,6 +34,12 @@ type storage interface {
 	Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error)
 
 	PagesByURL(ctx context.Context, u url.URL) ([]core.Page, error)
+
+	NewMirror(ctx context.Context, mirror parsing.URLMirror) error
+	UpdateMirror(ctx context.Context, mirror parsing.URLMirror) error
+	DeleteMirror(ctx context.Context, id uuid.UUID) error
+	Mirrors(ctx context.Context) ([]parsing.URLMirror, error)
+	Mirror(ctx context.Context, id uuid.UUID) (parsing.URLMirror, error)
 }
 
 type agentSystem interface {

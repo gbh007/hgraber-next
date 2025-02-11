@@ -30,12 +30,11 @@ type AgentBookDetailsPagesItem struct {
 }
 
 type AgentBookCheckResult struct {
-	URL                url.URL
-	IsUnsupported      bool
-	IsPossible         bool
-	HasError           bool
-	PossibleDuplicates []url.URL
-	ErrorReason        string
+	URL           url.URL
+	IsUnsupported bool
+	IsPossible    bool
+	HasError      bool
+	ErrorReason   string
 }
 
 type AgentPageURL struct {

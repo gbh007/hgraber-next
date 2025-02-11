@@ -13,6 +13,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 	"github.com/gbh007/hgraber-next/external"
 )
 
@@ -68,14 +69,36 @@ func (uc *UseCase) ImportArchive(
 	}
 
 	if deduplicate && book.Book.OriginURL != nil {
-		ids, err := uc.storage.GetBookIDsByURL(ctx, *book.Book.OriginURL)
+		mirrors, err := uc.storage.Mirrors(ctx)
 		if err != nil {
-			return uuid.Nil, fmt.Errorf("check existing in storage: %w", err)
+			return uuid.Nil, fmt.Errorf("get mirrors: %w", err)
 		}
 
-		// Если есть совпадение, возвращаем первое.
-		if len(ids) > 0 {
-			return ids[0], nil
+		mirrorCalculator := parsing.NewUrlCloner(mirrors)
+
+		duplicates, err := mirrorCalculator.GetClones(*book.Book.OriginURL)
+		if err != nil {
+			return uuid.Nil, fmt.Errorf("calc duplicates: %w", err)
+		}
+
+		duplicates = append(duplicates, *book.Book.OriginURL)
+
+		for _, u := range duplicates {
+			ids, err := uc.storage.GetBookIDsByURL(ctx, u)
+			if err != nil {
+				return uuid.Nil, fmt.Errorf("check existing %s in storage: %w", u.String(), err)
+			}
+
+			// Если есть совпадение, возвращаем первое.
+			if len(ids) > 0 {
+				uc.logger.DebugContext(
+					ctx, "import archive, found duplicate",
+					slog.String("url", book.Book.OriginURL.String()),
+					slog.String("id", ids[0].String()),
+				)
+
+				return ids[0], nil
+			}
 		}
 	}
 

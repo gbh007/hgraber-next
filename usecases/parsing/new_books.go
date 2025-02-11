@@ -17,13 +17,20 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool) (parsing.FirstHandleMultipleResult, error) {
+func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.FirstHandleMultipleResult, error) {
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParse: true,
 	})
 	if err != nil {
 		return parsing.FirstHandleMultipleResult{}, fmt.Errorf("get agents for parse: %w", err)
 	}
+
+	mirrors, err := uc.storage.Mirrors(ctx)
+	if err != nil {
+		return parsing.FirstHandleMultipleResult{}, fmt.Errorf("get mirrors: %w", err)
+	}
+
+	mirrorCalculator := parsing.NewUrlCloner(mirrors)
 
 	result := parsing.FirstHandleMultipleResult{
 		Details: make([]parsing.BookHandleResult, 0, len(urls)),
@@ -41,16 +48,27 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 			return parsing.FirstHandleMultipleResult{}, fmt.Errorf("url (%s) have space", u.String())
 		}
 
-		ids, err := uc.storage.GetBookIDsByURL(ctx, u)
+		duplicates, err := mirrorCalculator.GetClones(u)
 		if err != nil {
-			return parsing.FirstHandleMultipleResult{}, fmt.Errorf("url exists in storage check (%s): %w", u.String(), err)
+			return parsing.FirstHandleMultipleResult{}, fmt.Errorf(
+				"calc duplicates (%s): %w", u.String(), err,
+			)
+		}
+
+		duplicates = append(duplicates, u)
+
+		ids, err := uc.existsInStorage(ctx, duplicates)
+		if err != nil {
+			return parsing.FirstHandleMultipleResult{}, fmt.Errorf(
+				"check duplicates (%s): %w", u.String(), err,
+			)
 		}
 
 		if len(ids) == 0 {
 			continue
 		}
 
-		result.RegisterDuplicate(u)
+		result.RegisterDuplicate(u, ids)
 		delete(urlSet, u)
 	}
 
@@ -92,21 +110,6 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 				result.RegisterError(u, info.ErrorReason)
 
 			case info.IsPossible:
-				if len(info.PossibleDuplicates) > 0 {
-					exists, err := uc.existsInStorage(ctx, info.PossibleDuplicates)
-					if err != nil {
-						return parsing.FirstHandleMultipleResult{}, fmt.Errorf(
-							"agent (%s) check duplicates (%s): %w", agent.ID.String(), u.String(), err,
-						)
-					}
-
-					if exists {
-						result.RegisterDuplicate(u)
-
-						break
-					}
-				}
-
 				id, ok := bookIDsByURL[u]
 				if !ok {
 					uc.logger.WarnContext(
@@ -123,19 +126,21 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 					CreateAt:  time.Now().UTC(),
 				}
 
-				if autoVerify {
+				if flags.AutoVerify {
 					book.Verified = true
 					book.VerifiedAt = time.Now().UTC()
 				}
 
-				err = uc.storage.NewBook(ctx, book)
-				if err != nil {
-					return parsing.FirstHandleMultipleResult{}, fmt.Errorf(
-						"agent (%s) create (%s): %w", agent.ID.String(), u.String(), err,
-					)
+				if !flags.ReadOnly {
+					err = uc.storage.NewBook(ctx, book)
+					if err != nil {
+						return parsing.FirstHandleMultipleResult{}, fmt.Errorf(
+							"agent (%s) create (%s): %w", agent.ID.String(), u.String(), err,
+						)
+					}
 				}
 
-				result.RegisterHandled(u)
+				result.RegisterHandled(u, id)
 			}
 
 			delete(urlSet, u)
@@ -158,18 +163,18 @@ func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, autoVerify bool
 	return result, nil
 }
 
-func (uc *UseCase) existsInStorage(ctx context.Context, urls []url.URL) (bool, error) {
+func (uc *UseCase) existsInStorage(ctx context.Context, urls []url.URL) ([]uuid.UUID, error) {
 	for _, u := range urls {
 		// FIXME: нужно сделать более оптимальный метод
 		ids, err := uc.storage.GetBookIDsByURL(ctx, u)
 		if err != nil {
-			return false, fmt.Errorf("check exists by (%s): %w", u.String(), err)
+			return nil, fmt.Errorf("check exists by (%s): %w", u.String(), err)
 		}
 
 		if len(ids) > 0 {
-			return true, nil
+			return ids, nil
 		}
 	}
 
-	return false, nil
+	return []uuid.UUID{}, nil
 }

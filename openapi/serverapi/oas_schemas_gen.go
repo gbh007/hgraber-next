@@ -4076,6 +4076,565 @@ type APIParsingBookExistsPostUnauthorized ErrorResponse
 
 func (*APIParsingBookExistsPostUnauthorized) aPIParsingBookExistsPostRes() {}
 
+type APIParsingHandlePostBadRequest ErrorResponse
+
+func (*APIParsingHandlePostBadRequest) aPIParsingHandlePostRes() {}
+
+type APIParsingHandlePostForbidden ErrorResponse
+
+func (*APIParsingHandlePostForbidden) aPIParsingHandlePostRes() {}
+
+type APIParsingHandlePostInternalServerError ErrorResponse
+
+func (*APIParsingHandlePostInternalServerError) aPIParsingHandlePostRes() {}
+
+type APIParsingHandlePostOK struct {
+	// Общее количество обработанных.
+	TotalCount int `json:"total_count"`
+	// Количество загруженных (успешно обработанных).
+	LoadedCount int `json:"loaded_count"`
+	// Количество дубликатов (пропущенных).
+	DuplicateCount int `json:"duplicate_count"`
+	// Количество неудачных обработок.
+	ErrorCount int `json:"error_count"`
+	// Не обработанные ссылки.
+	NotHandled []url.URL `json:"not_handled"`
+	// Подробности результата обработки.
+	Details []APIParsingHandlePostOKDetailsItem `json:"details"`
+}
+
+// GetTotalCount returns the value of TotalCount.
+func (s *APIParsingHandlePostOK) GetTotalCount() int {
+	return s.TotalCount
+}
+
+// GetLoadedCount returns the value of LoadedCount.
+func (s *APIParsingHandlePostOK) GetLoadedCount() int {
+	return s.LoadedCount
+}
+
+// GetDuplicateCount returns the value of DuplicateCount.
+func (s *APIParsingHandlePostOK) GetDuplicateCount() int {
+	return s.DuplicateCount
+}
+
+// GetErrorCount returns the value of ErrorCount.
+func (s *APIParsingHandlePostOK) GetErrorCount() int {
+	return s.ErrorCount
+}
+
+// GetNotHandled returns the value of NotHandled.
+func (s *APIParsingHandlePostOK) GetNotHandled() []url.URL {
+	return s.NotHandled
+}
+
+// GetDetails returns the value of Details.
+func (s *APIParsingHandlePostOK) GetDetails() []APIParsingHandlePostOKDetailsItem {
+	return s.Details
+}
+
+// SetTotalCount sets the value of TotalCount.
+func (s *APIParsingHandlePostOK) SetTotalCount(val int) {
+	s.TotalCount = val
+}
+
+// SetLoadedCount sets the value of LoadedCount.
+func (s *APIParsingHandlePostOK) SetLoadedCount(val int) {
+	s.LoadedCount = val
+}
+
+// SetDuplicateCount sets the value of DuplicateCount.
+func (s *APIParsingHandlePostOK) SetDuplicateCount(val int) {
+	s.DuplicateCount = val
+}
+
+// SetErrorCount sets the value of ErrorCount.
+func (s *APIParsingHandlePostOK) SetErrorCount(val int) {
+	s.ErrorCount = val
+}
+
+// SetNotHandled sets the value of NotHandled.
+func (s *APIParsingHandlePostOK) SetNotHandled(val []url.URL) {
+	s.NotHandled = val
+}
+
+// SetDetails sets the value of Details.
+func (s *APIParsingHandlePostOK) SetDetails(val []APIParsingHandlePostOKDetailsItem) {
+	s.Details = val
+}
+
+func (*APIParsingHandlePostOK) aPIParsingHandlePostRes() {}
+
+type APIParsingHandlePostOKDetailsItem struct {
+	// Изначальная ссылка.
+	URL url.URL `json:"url"`
+	// Эта дубликат другой книги.
+	IsDuplicate bool `json:"is_duplicate"`
+	// ID книг в системе которую дублирует текущая.
+	DuplicateIds []uuid.UUID `json:"duplicate_ids"`
+	// Книга успешно обработана и добавлена в систему.
+	IsHandled bool `json:"is_handled"`
+	// ID новой книги.
+	ID OptUUID `json:"id"`
+	// Описание ошибки которое произошло во время обработки.
+	ErrorReason OptString `json:"error_reason"`
+}
+
+// GetURL returns the value of URL.
+func (s *APIParsingHandlePostOKDetailsItem) GetURL() url.URL {
+	return s.URL
+}
+
+// GetIsDuplicate returns the value of IsDuplicate.
+func (s *APIParsingHandlePostOKDetailsItem) GetIsDuplicate() bool {
+	return s.IsDuplicate
+}
+
+// GetDuplicateIds returns the value of DuplicateIds.
+func (s *APIParsingHandlePostOKDetailsItem) GetDuplicateIds() []uuid.UUID {
+	return s.DuplicateIds
+}
+
+// GetIsHandled returns the value of IsHandled.
+func (s *APIParsingHandlePostOKDetailsItem) GetIsHandled() bool {
+	return s.IsHandled
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingHandlePostOKDetailsItem) GetID() OptUUID {
+	return s.ID
+}
+
+// GetErrorReason returns the value of ErrorReason.
+func (s *APIParsingHandlePostOKDetailsItem) GetErrorReason() OptString {
+	return s.ErrorReason
+}
+
+// SetURL sets the value of URL.
+func (s *APIParsingHandlePostOKDetailsItem) SetURL(val url.URL) {
+	s.URL = val
+}
+
+// SetIsDuplicate sets the value of IsDuplicate.
+func (s *APIParsingHandlePostOKDetailsItem) SetIsDuplicate(val bool) {
+	s.IsDuplicate = val
+}
+
+// SetDuplicateIds sets the value of DuplicateIds.
+func (s *APIParsingHandlePostOKDetailsItem) SetDuplicateIds(val []uuid.UUID) {
+	s.DuplicateIds = val
+}
+
+// SetIsHandled sets the value of IsHandled.
+func (s *APIParsingHandlePostOKDetailsItem) SetIsHandled(val bool) {
+	s.IsHandled = val
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingHandlePostOKDetailsItem) SetID(val OptUUID) {
+	s.ID = val
+}
+
+// SetErrorReason sets the value of ErrorReason.
+func (s *APIParsingHandlePostOKDetailsItem) SetErrorReason(val OptString) {
+	s.ErrorReason = val
+}
+
+type APIParsingHandlePostReq struct {
+	// Ссылки на внешние системы.
+	Urls []url.URL `json:"urls"`
+	// Режим обработки мульти ссылок (на тома книг).
+	IsMulti OptBool `json:"is_multi"`
+	// Пометить книги подтвержденными.
+	AutoVerify OptBool `json:"auto_verify"`
+	// Пометить книги подтвержденными.
+	ReadOnlyMode OptBool `json:"read_only_mode"`
+}
+
+// GetUrls returns the value of Urls.
+func (s *APIParsingHandlePostReq) GetUrls() []url.URL {
+	return s.Urls
+}
+
+// GetIsMulti returns the value of IsMulti.
+func (s *APIParsingHandlePostReq) GetIsMulti() OptBool {
+	return s.IsMulti
+}
+
+// GetAutoVerify returns the value of AutoVerify.
+func (s *APIParsingHandlePostReq) GetAutoVerify() OptBool {
+	return s.AutoVerify
+}
+
+// GetReadOnlyMode returns the value of ReadOnlyMode.
+func (s *APIParsingHandlePostReq) GetReadOnlyMode() OptBool {
+	return s.ReadOnlyMode
+}
+
+// SetUrls sets the value of Urls.
+func (s *APIParsingHandlePostReq) SetUrls(val []url.URL) {
+	s.Urls = val
+}
+
+// SetIsMulti sets the value of IsMulti.
+func (s *APIParsingHandlePostReq) SetIsMulti(val OptBool) {
+	s.IsMulti = val
+}
+
+// SetAutoVerify sets the value of AutoVerify.
+func (s *APIParsingHandlePostReq) SetAutoVerify(val OptBool) {
+	s.AutoVerify = val
+}
+
+// SetReadOnlyMode sets the value of ReadOnlyMode.
+func (s *APIParsingHandlePostReq) SetReadOnlyMode(val OptBool) {
+	s.ReadOnlyMode = val
+}
+
+type APIParsingHandlePostUnauthorized ErrorResponse
+
+func (*APIParsingHandlePostUnauthorized) aPIParsingHandlePostRes() {}
+
+type APIParsingMirrorCreatePostBadRequest ErrorResponse
+
+func (*APIParsingMirrorCreatePostBadRequest) aPIParsingMirrorCreatePostRes() {}
+
+type APIParsingMirrorCreatePostForbidden ErrorResponse
+
+func (*APIParsingMirrorCreatePostForbidden) aPIParsingMirrorCreatePostRes() {}
+
+type APIParsingMirrorCreatePostInternalServerError ErrorResponse
+
+func (*APIParsingMirrorCreatePostInternalServerError) aPIParsingMirrorCreatePostRes() {}
+
+// APIParsingMirrorCreatePostNoContent is response for APIParsingMirrorCreatePost operation.
+type APIParsingMirrorCreatePostNoContent struct{}
+
+func (*APIParsingMirrorCreatePostNoContent) aPIParsingMirrorCreatePostRes() {}
+
+type APIParsingMirrorCreatePostReq struct {
+	// Название зеркала.
+	Name string `json:"name"`
+	// Описание зеркала.
+	Description OptString `json:"description"`
+	// Префиксы зеркала (включая оригинальный).
+	Prefixes []string `json:"prefixes"`
+}
+
+// GetName returns the value of Name.
+func (s *APIParsingMirrorCreatePostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIParsingMirrorCreatePostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetPrefixes returns the value of Prefixes.
+func (s *APIParsingMirrorCreatePostReq) GetPrefixes() []string {
+	return s.Prefixes
+}
+
+// SetName sets the value of Name.
+func (s *APIParsingMirrorCreatePostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIParsingMirrorCreatePostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetPrefixes sets the value of Prefixes.
+func (s *APIParsingMirrorCreatePostReq) SetPrefixes(val []string) {
+	s.Prefixes = val
+}
+
+type APIParsingMirrorCreatePostUnauthorized ErrorResponse
+
+func (*APIParsingMirrorCreatePostUnauthorized) aPIParsingMirrorCreatePostRes() {}
+
+type APIParsingMirrorDeletePostBadRequest ErrorResponse
+
+func (*APIParsingMirrorDeletePostBadRequest) aPIParsingMirrorDeletePostRes() {}
+
+type APIParsingMirrorDeletePostForbidden ErrorResponse
+
+func (*APIParsingMirrorDeletePostForbidden) aPIParsingMirrorDeletePostRes() {}
+
+type APIParsingMirrorDeletePostInternalServerError ErrorResponse
+
+func (*APIParsingMirrorDeletePostInternalServerError) aPIParsingMirrorDeletePostRes() {}
+
+// APIParsingMirrorDeletePostNoContent is response for APIParsingMirrorDeletePost operation.
+type APIParsingMirrorDeletePostNoContent struct{}
+
+func (*APIParsingMirrorDeletePostNoContent) aPIParsingMirrorDeletePostRes() {}
+
+type APIParsingMirrorDeletePostNotFound ErrorResponse
+
+func (*APIParsingMirrorDeletePostNotFound) aPIParsingMirrorDeletePostRes() {}
+
+type APIParsingMirrorDeletePostReq struct {
+	// ID зеркала.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingMirrorDeletePostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingMirrorDeletePostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIParsingMirrorDeletePostUnauthorized ErrorResponse
+
+func (*APIParsingMirrorDeletePostUnauthorized) aPIParsingMirrorDeletePostRes() {}
+
+type APIParsingMirrorGetPostForbidden ErrorResponse
+
+func (*APIParsingMirrorGetPostForbidden) aPIParsingMirrorGetPostRes() {}
+
+type APIParsingMirrorGetPostInternalServerError ErrorResponse
+
+func (*APIParsingMirrorGetPostInternalServerError) aPIParsingMirrorGetPostRes() {}
+
+type APIParsingMirrorGetPostNotFound ErrorResponse
+
+func (*APIParsingMirrorGetPostNotFound) aPIParsingMirrorGetPostRes() {}
+
+type APIParsingMirrorGetPostOK struct {
+	// ID зеркала.
+	ID uuid.UUID `json:"id"`
+	// Название зеркала.
+	Name string `json:"name"`
+	// Описание зеркала.
+	Description OptString `json:"description"`
+	// Префиксы зеркала (включая оригинальный).
+	Prefixes []string `json:"prefixes"`
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingMirrorGetPostOK) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIParsingMirrorGetPostOK) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIParsingMirrorGetPostOK) GetDescription() OptString {
+	return s.Description
+}
+
+// GetPrefixes returns the value of Prefixes.
+func (s *APIParsingMirrorGetPostOK) GetPrefixes() []string {
+	return s.Prefixes
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingMirrorGetPostOK) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIParsingMirrorGetPostOK) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIParsingMirrorGetPostOK) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetPrefixes sets the value of Prefixes.
+func (s *APIParsingMirrorGetPostOK) SetPrefixes(val []string) {
+	s.Prefixes = val
+}
+
+func (*APIParsingMirrorGetPostOK) aPIParsingMirrorGetPostRes() {}
+
+type APIParsingMirrorGetPostReq struct {
+	// ID зеркала.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingMirrorGetPostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingMirrorGetPostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIParsingMirrorGetPostUnauthorized ErrorResponse
+
+func (*APIParsingMirrorGetPostUnauthorized) aPIParsingMirrorGetPostRes() {}
+
+type APIParsingMirrorListGetForbidden ErrorResponse
+
+func (*APIParsingMirrorListGetForbidden) aPIParsingMirrorListGetRes() {}
+
+type APIParsingMirrorListGetInternalServerError ErrorResponse
+
+func (*APIParsingMirrorListGetInternalServerError) aPIParsingMirrorListGetRes() {}
+
+type APIParsingMirrorListGetOK struct {
+	// Список зеркал.
+	Mirrors []APIParsingMirrorListGetOKMirrorsItem `json:"mirrors"`
+}
+
+// GetMirrors returns the value of Mirrors.
+func (s *APIParsingMirrorListGetOK) GetMirrors() []APIParsingMirrorListGetOKMirrorsItem {
+	return s.Mirrors
+}
+
+// SetMirrors sets the value of Mirrors.
+func (s *APIParsingMirrorListGetOK) SetMirrors(val []APIParsingMirrorListGetOKMirrorsItem) {
+	s.Mirrors = val
+}
+
+func (*APIParsingMirrorListGetOK) aPIParsingMirrorListGetRes() {}
+
+type APIParsingMirrorListGetOKMirrorsItem struct {
+	// ID зеркала.
+	ID uuid.UUID `json:"id"`
+	// Название зеркала.
+	Name string `json:"name"`
+	// Описание зеркала.
+	Description OptString `json:"description"`
+	// Префиксы зеркала (включая оригинальный).
+	Prefixes []string `json:"prefixes"`
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingMirrorListGetOKMirrorsItem) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIParsingMirrorListGetOKMirrorsItem) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIParsingMirrorListGetOKMirrorsItem) GetDescription() OptString {
+	return s.Description
+}
+
+// GetPrefixes returns the value of Prefixes.
+func (s *APIParsingMirrorListGetOKMirrorsItem) GetPrefixes() []string {
+	return s.Prefixes
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingMirrorListGetOKMirrorsItem) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIParsingMirrorListGetOKMirrorsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIParsingMirrorListGetOKMirrorsItem) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetPrefixes sets the value of Prefixes.
+func (s *APIParsingMirrorListGetOKMirrorsItem) SetPrefixes(val []string) {
+	s.Prefixes = val
+}
+
+type APIParsingMirrorListGetUnauthorized ErrorResponse
+
+func (*APIParsingMirrorListGetUnauthorized) aPIParsingMirrorListGetRes() {}
+
+type APIParsingMirrorUpdatePostBadRequest ErrorResponse
+
+func (*APIParsingMirrorUpdatePostBadRequest) aPIParsingMirrorUpdatePostRes() {}
+
+type APIParsingMirrorUpdatePostForbidden ErrorResponse
+
+func (*APIParsingMirrorUpdatePostForbidden) aPIParsingMirrorUpdatePostRes() {}
+
+type APIParsingMirrorUpdatePostInternalServerError ErrorResponse
+
+func (*APIParsingMirrorUpdatePostInternalServerError) aPIParsingMirrorUpdatePostRes() {}
+
+// APIParsingMirrorUpdatePostNoContent is response for APIParsingMirrorUpdatePost operation.
+type APIParsingMirrorUpdatePostNoContent struct{}
+
+func (*APIParsingMirrorUpdatePostNoContent) aPIParsingMirrorUpdatePostRes() {}
+
+type APIParsingMirrorUpdatePostNotFound ErrorResponse
+
+func (*APIParsingMirrorUpdatePostNotFound) aPIParsingMirrorUpdatePostRes() {}
+
+type APIParsingMirrorUpdatePostReq struct {
+	// ID зеркала.
+	ID uuid.UUID `json:"id"`
+	// Название зеркала.
+	Name string `json:"name"`
+	// Описание зеркала.
+	Description OptString `json:"description"`
+	// Префиксы зеркала (включая оригинальный).
+	Prefixes []string `json:"prefixes"`
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingMirrorUpdatePostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIParsingMirrorUpdatePostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIParsingMirrorUpdatePostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetPrefixes returns the value of Prefixes.
+func (s *APIParsingMirrorUpdatePostReq) GetPrefixes() []string {
+	return s.Prefixes
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingMirrorUpdatePostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIParsingMirrorUpdatePostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIParsingMirrorUpdatePostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetPrefixes sets the value of Prefixes.
+func (s *APIParsingMirrorUpdatePostReq) SetPrefixes(val []string) {
+	s.Prefixes = val
+}
+
+type APIParsingMirrorUpdatePostUnauthorized ErrorResponse
+
+func (*APIParsingMirrorUpdatePostUnauthorized) aPIParsingMirrorUpdatePostRes() {}
+
 type APIParsingPageExistsPostBadRequest ErrorResponse
 
 func (*APIParsingPageExistsPostBadRequest) aPIParsingPageExistsPostRes() {}
@@ -4335,201 +4894,6 @@ func (s APISystemDeduplicateArchivePostReq) Read(p []byte) (n int, err error) {
 type APISystemDeduplicateArchivePostUnauthorized ErrorResponse
 
 func (*APISystemDeduplicateArchivePostUnauthorized) aPISystemDeduplicateArchivePostRes() {}
-
-type APISystemHandlePostBadRequest ErrorResponse
-
-func (*APISystemHandlePostBadRequest) aPISystemHandlePostRes() {}
-
-type APISystemHandlePostForbidden ErrorResponse
-
-func (*APISystemHandlePostForbidden) aPISystemHandlePostRes() {}
-
-type APISystemHandlePostInternalServerError ErrorResponse
-
-func (*APISystemHandlePostInternalServerError) aPISystemHandlePostRes() {}
-
-type APISystemHandlePostOK struct {
-	// Общее количество обработанных.
-	TotalCount int `json:"total_count"`
-	// Количество загруженных (успешно обработанных).
-	LoadedCount int `json:"loaded_count"`
-	// Количество дубликатов (пропущенных).
-	DuplicateCount int `json:"duplicate_count"`
-	// Количество неудачных обработок.
-	ErrorCount int `json:"error_count"`
-	// Не обработанные ссылки.
-	NotHandled []url.URL `json:"not_handled"`
-	// Подробности результата обработки.
-	Details []APISystemHandlePostOKDetailsItem `json:"details"`
-}
-
-// GetTotalCount returns the value of TotalCount.
-func (s *APISystemHandlePostOK) GetTotalCount() int {
-	return s.TotalCount
-}
-
-// GetLoadedCount returns the value of LoadedCount.
-func (s *APISystemHandlePostOK) GetLoadedCount() int {
-	return s.LoadedCount
-}
-
-// GetDuplicateCount returns the value of DuplicateCount.
-func (s *APISystemHandlePostOK) GetDuplicateCount() int {
-	return s.DuplicateCount
-}
-
-// GetErrorCount returns the value of ErrorCount.
-func (s *APISystemHandlePostOK) GetErrorCount() int {
-	return s.ErrorCount
-}
-
-// GetNotHandled returns the value of NotHandled.
-func (s *APISystemHandlePostOK) GetNotHandled() []url.URL {
-	return s.NotHandled
-}
-
-// GetDetails returns the value of Details.
-func (s *APISystemHandlePostOK) GetDetails() []APISystemHandlePostOKDetailsItem {
-	return s.Details
-}
-
-// SetTotalCount sets the value of TotalCount.
-func (s *APISystemHandlePostOK) SetTotalCount(val int) {
-	s.TotalCount = val
-}
-
-// SetLoadedCount sets the value of LoadedCount.
-func (s *APISystemHandlePostOK) SetLoadedCount(val int) {
-	s.LoadedCount = val
-}
-
-// SetDuplicateCount sets the value of DuplicateCount.
-func (s *APISystemHandlePostOK) SetDuplicateCount(val int) {
-	s.DuplicateCount = val
-}
-
-// SetErrorCount sets the value of ErrorCount.
-func (s *APISystemHandlePostOK) SetErrorCount(val int) {
-	s.ErrorCount = val
-}
-
-// SetNotHandled sets the value of NotHandled.
-func (s *APISystemHandlePostOK) SetNotHandled(val []url.URL) {
-	s.NotHandled = val
-}
-
-// SetDetails sets the value of Details.
-func (s *APISystemHandlePostOK) SetDetails(val []APISystemHandlePostOKDetailsItem) {
-	s.Details = val
-}
-
-func (*APISystemHandlePostOK) aPISystemHandlePostRes() {}
-
-type APISystemHandlePostOKDetailsItem struct {
-	// Изначальная ссылка.
-	URL url.URL `json:"url"`
-	// Эта дубликат другой книги.
-	IsDuplicate bool `json:"is_duplicate"`
-	// ID книги в системе которую дублирует текущая.
-	DuplicateID OptUUID `json:"duplicate_id"`
-	// Книга успешно обработана и добавлена в систему.
-	IsHandled bool `json:"is_handled"`
-	// Описание ошибки которое произошло во время обработки.
-	ErrorReason OptString `json:"error_reason"`
-}
-
-// GetURL returns the value of URL.
-func (s *APISystemHandlePostOKDetailsItem) GetURL() url.URL {
-	return s.URL
-}
-
-// GetIsDuplicate returns the value of IsDuplicate.
-func (s *APISystemHandlePostOKDetailsItem) GetIsDuplicate() bool {
-	return s.IsDuplicate
-}
-
-// GetDuplicateID returns the value of DuplicateID.
-func (s *APISystemHandlePostOKDetailsItem) GetDuplicateID() OptUUID {
-	return s.DuplicateID
-}
-
-// GetIsHandled returns the value of IsHandled.
-func (s *APISystemHandlePostOKDetailsItem) GetIsHandled() bool {
-	return s.IsHandled
-}
-
-// GetErrorReason returns the value of ErrorReason.
-func (s *APISystemHandlePostOKDetailsItem) GetErrorReason() OptString {
-	return s.ErrorReason
-}
-
-// SetURL sets the value of URL.
-func (s *APISystemHandlePostOKDetailsItem) SetURL(val url.URL) {
-	s.URL = val
-}
-
-// SetIsDuplicate sets the value of IsDuplicate.
-func (s *APISystemHandlePostOKDetailsItem) SetIsDuplicate(val bool) {
-	s.IsDuplicate = val
-}
-
-// SetDuplicateID sets the value of DuplicateID.
-func (s *APISystemHandlePostOKDetailsItem) SetDuplicateID(val OptUUID) {
-	s.DuplicateID = val
-}
-
-// SetIsHandled sets the value of IsHandled.
-func (s *APISystemHandlePostOKDetailsItem) SetIsHandled(val bool) {
-	s.IsHandled = val
-}
-
-// SetErrorReason sets the value of ErrorReason.
-func (s *APISystemHandlePostOKDetailsItem) SetErrorReason(val OptString) {
-	s.ErrorReason = val
-}
-
-type APISystemHandlePostReq struct {
-	// Ссылки на внешние системы.
-	Urls []url.URL `json:"urls"`
-	// Режим обработки мульти ссылок (на тома книг).
-	IsMulti OptBool `json:"is_multi"`
-	// Пометить книги подтвержденными.
-	AutoVerify OptBool `json:"auto_verify"`
-}
-
-// GetUrls returns the value of Urls.
-func (s *APISystemHandlePostReq) GetUrls() []url.URL {
-	return s.Urls
-}
-
-// GetIsMulti returns the value of IsMulti.
-func (s *APISystemHandlePostReq) GetIsMulti() OptBool {
-	return s.IsMulti
-}
-
-// GetAutoVerify returns the value of AutoVerify.
-func (s *APISystemHandlePostReq) GetAutoVerify() OptBool {
-	return s.AutoVerify
-}
-
-// SetUrls sets the value of Urls.
-func (s *APISystemHandlePostReq) SetUrls(val []url.URL) {
-	s.Urls = val
-}
-
-// SetIsMulti sets the value of IsMulti.
-func (s *APISystemHandlePostReq) SetIsMulti(val OptBool) {
-	s.IsMulti = val
-}
-
-// SetAutoVerify sets the value of AutoVerify.
-func (s *APISystemHandlePostReq) SetAutoVerify(val OptBool) {
-	s.AutoVerify = val
-}
-
-type APISystemHandlePostUnauthorized ErrorResponse
-
-func (*APISystemHandlePostUnauthorized) aPISystemHandlePostRes() {}
 
 type APISystemImportArchivePostBadRequest ErrorResponse
 

@@ -4592,23 +4592,12 @@ func (s *BooksCheckResultResultItem) encodeFields(e *jx.Encoder) {
 			s.ErrorDetails.Encode(e)
 		}
 	}
-	{
-		if s.PossibleDuplicates != nil {
-			e.FieldStart("possible_duplicates")
-			e.ArrStart()
-			for _, elem := range s.PossibleDuplicates {
-				json.EncodeURI(e, elem)
-			}
-			e.ArrEnd()
-		}
-	}
 }
 
-var jsonFieldsNameOfBooksCheckResultResultItem = [4]string{
+var jsonFieldsNameOfBooksCheckResultResultItem = [3]string{
 	0: "url",
 	1: "result",
 	2: "error_details",
-	3: "possible_duplicates",
 }
 
 // Decode decodes BooksCheckResultResultItem from json.
@@ -4651,25 +4640,6 @@ func (s *BooksCheckResultResultItem) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"error_details\"")
-			}
-		case "possible_duplicates":
-			if err := func() error {
-				s.PossibleDuplicates = make([]url.URL, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem url.URL
-					v, err := json.DecodeURI(d)
-					elem = v
-					if err != nil {
-						return err
-					}
-					s.PossibleDuplicates = append(s.PossibleDuplicates, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"possible_duplicates\"")
 			}
 		default:
 			return d.Skip()
