@@ -10,6 +10,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
 type fileStorage interface {
@@ -31,6 +32,8 @@ type storage interface {
 	GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error)
 
 	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
+
+	Mirrors(ctx context.Context) ([]parsing.URLMirror, error)
 }
 
 type agentSystem interface {
