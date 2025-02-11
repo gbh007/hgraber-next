@@ -498,6 +498,51 @@ func (UnimplementedHandler) APIParsingHandlePost(ctx context.Context, req *APIPa
 	return r, ht.ErrNotImplemented
 }
 
+// APIParsingMirrorCreatePost implements POST /api/parsing/mirror/create operation.
+//
+// Создание данных зеркала.
+//
+// POST /api/parsing/mirror/create
+func (UnimplementedHandler) APIParsingMirrorCreatePost(ctx context.Context, req *APIParsingMirrorCreatePostReq) (r APIParsingMirrorCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIParsingMirrorDeletePost implements POST /api/parsing/mirror/delete operation.
+//
+// Удаление зеркала.
+//
+// POST /api/parsing/mirror/delete
+func (UnimplementedHandler) APIParsingMirrorDeletePost(ctx context.Context, req *APIParsingMirrorDeletePostReq) (r APIParsingMirrorDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIParsingMirrorGetPost implements POST /api/parsing/mirror/get operation.
+//
+// Получение данных зеркала.
+//
+// POST /api/parsing/mirror/get
+func (UnimplementedHandler) APIParsingMirrorGetPost(ctx context.Context, req *APIParsingMirrorGetPostReq) (r APIParsingMirrorGetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIParsingMirrorListGet implements GET /api/parsing/mirror/list operation.
+//
+// Зеркала.
+//
+// GET /api/parsing/mirror/list
+func (UnimplementedHandler) APIParsingMirrorListGet(ctx context.Context) (r APIParsingMirrorListGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIParsingMirrorUpdatePost implements POST /api/parsing/mirror/update operation.
+//
+// Обновления зеркала.
+//
+// POST /api/parsing/mirror/update
+func (UnimplementedHandler) APIParsingMirrorUpdatePost(ctx context.Context, req *APIParsingMirrorUpdatePostReq) (r APIParsingMirrorUpdatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIParsingPageExistsPost implements POST /api/parsing/page/exists operation.
 //
 // Проверка наличия ссылок для страниц.

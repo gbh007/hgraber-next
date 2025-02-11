@@ -4295,6 +4295,346 @@ type APIParsingHandlePostUnauthorized ErrorResponse
 
 func (*APIParsingHandlePostUnauthorized) aPIParsingHandlePostRes() {}
 
+type APIParsingMirrorCreatePostBadRequest ErrorResponse
+
+func (*APIParsingMirrorCreatePostBadRequest) aPIParsingMirrorCreatePostRes() {}
+
+type APIParsingMirrorCreatePostForbidden ErrorResponse
+
+func (*APIParsingMirrorCreatePostForbidden) aPIParsingMirrorCreatePostRes() {}
+
+type APIParsingMirrorCreatePostInternalServerError ErrorResponse
+
+func (*APIParsingMirrorCreatePostInternalServerError) aPIParsingMirrorCreatePostRes() {}
+
+// APIParsingMirrorCreatePostNoContent is response for APIParsingMirrorCreatePost operation.
+type APIParsingMirrorCreatePostNoContent struct{}
+
+func (*APIParsingMirrorCreatePostNoContent) aPIParsingMirrorCreatePostRes() {}
+
+type APIParsingMirrorCreatePostReq struct {
+	// Название зеркала.
+	Name string `json:"name"`
+	// Описание зеркала.
+	Description OptString `json:"description"`
+	// Префиксы зеркала (включая оригинальный).
+	Prefixes []string `json:"prefixes"`
+}
+
+// GetName returns the value of Name.
+func (s *APIParsingMirrorCreatePostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIParsingMirrorCreatePostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetPrefixes returns the value of Prefixes.
+func (s *APIParsingMirrorCreatePostReq) GetPrefixes() []string {
+	return s.Prefixes
+}
+
+// SetName sets the value of Name.
+func (s *APIParsingMirrorCreatePostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIParsingMirrorCreatePostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetPrefixes sets the value of Prefixes.
+func (s *APIParsingMirrorCreatePostReq) SetPrefixes(val []string) {
+	s.Prefixes = val
+}
+
+type APIParsingMirrorCreatePostUnauthorized ErrorResponse
+
+func (*APIParsingMirrorCreatePostUnauthorized) aPIParsingMirrorCreatePostRes() {}
+
+type APIParsingMirrorDeletePostBadRequest ErrorResponse
+
+func (*APIParsingMirrorDeletePostBadRequest) aPIParsingMirrorDeletePostRes() {}
+
+type APIParsingMirrorDeletePostForbidden ErrorResponse
+
+func (*APIParsingMirrorDeletePostForbidden) aPIParsingMirrorDeletePostRes() {}
+
+type APIParsingMirrorDeletePostInternalServerError ErrorResponse
+
+func (*APIParsingMirrorDeletePostInternalServerError) aPIParsingMirrorDeletePostRes() {}
+
+// APIParsingMirrorDeletePostNoContent is response for APIParsingMirrorDeletePost operation.
+type APIParsingMirrorDeletePostNoContent struct{}
+
+func (*APIParsingMirrorDeletePostNoContent) aPIParsingMirrorDeletePostRes() {}
+
+type APIParsingMirrorDeletePostNotFound ErrorResponse
+
+func (*APIParsingMirrorDeletePostNotFound) aPIParsingMirrorDeletePostRes() {}
+
+type APIParsingMirrorDeletePostReq struct {
+	// ID зеркала.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingMirrorDeletePostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingMirrorDeletePostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIParsingMirrorDeletePostUnauthorized ErrorResponse
+
+func (*APIParsingMirrorDeletePostUnauthorized) aPIParsingMirrorDeletePostRes() {}
+
+type APIParsingMirrorGetPostForbidden ErrorResponse
+
+func (*APIParsingMirrorGetPostForbidden) aPIParsingMirrorGetPostRes() {}
+
+type APIParsingMirrorGetPostInternalServerError ErrorResponse
+
+func (*APIParsingMirrorGetPostInternalServerError) aPIParsingMirrorGetPostRes() {}
+
+type APIParsingMirrorGetPostNotFound ErrorResponse
+
+func (*APIParsingMirrorGetPostNotFound) aPIParsingMirrorGetPostRes() {}
+
+type APIParsingMirrorGetPostOK struct {
+	// ID зеркала.
+	ID uuid.UUID `json:"id"`
+	// Название зеркала.
+	Name string `json:"name"`
+	// Описание зеркала.
+	Description OptString `json:"description"`
+	// Префиксы зеркала (включая оригинальный).
+	Prefixes []string `json:"prefixes"`
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingMirrorGetPostOK) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIParsingMirrorGetPostOK) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIParsingMirrorGetPostOK) GetDescription() OptString {
+	return s.Description
+}
+
+// GetPrefixes returns the value of Prefixes.
+func (s *APIParsingMirrorGetPostOK) GetPrefixes() []string {
+	return s.Prefixes
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingMirrorGetPostOK) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIParsingMirrorGetPostOK) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIParsingMirrorGetPostOK) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetPrefixes sets the value of Prefixes.
+func (s *APIParsingMirrorGetPostOK) SetPrefixes(val []string) {
+	s.Prefixes = val
+}
+
+func (*APIParsingMirrorGetPostOK) aPIParsingMirrorGetPostRes() {}
+
+type APIParsingMirrorGetPostReq struct {
+	// ID зеркала.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingMirrorGetPostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingMirrorGetPostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type APIParsingMirrorGetPostUnauthorized ErrorResponse
+
+func (*APIParsingMirrorGetPostUnauthorized) aPIParsingMirrorGetPostRes() {}
+
+type APIParsingMirrorListGetForbidden ErrorResponse
+
+func (*APIParsingMirrorListGetForbidden) aPIParsingMirrorListGetRes() {}
+
+type APIParsingMirrorListGetInternalServerError ErrorResponse
+
+func (*APIParsingMirrorListGetInternalServerError) aPIParsingMirrorListGetRes() {}
+
+type APIParsingMirrorListGetOK struct {
+	// Список зеркал.
+	Mirrors []APIParsingMirrorListGetOKMirrorsItem `json:"mirrors"`
+}
+
+// GetMirrors returns the value of Mirrors.
+func (s *APIParsingMirrorListGetOK) GetMirrors() []APIParsingMirrorListGetOKMirrorsItem {
+	return s.Mirrors
+}
+
+// SetMirrors sets the value of Mirrors.
+func (s *APIParsingMirrorListGetOK) SetMirrors(val []APIParsingMirrorListGetOKMirrorsItem) {
+	s.Mirrors = val
+}
+
+func (*APIParsingMirrorListGetOK) aPIParsingMirrorListGetRes() {}
+
+type APIParsingMirrorListGetOKMirrorsItem struct {
+	// ID зеркала.
+	ID uuid.UUID `json:"id"`
+	// Название зеркала.
+	Name string `json:"name"`
+	// Описание зеркала.
+	Description OptString `json:"description"`
+	// Префиксы зеркала (включая оригинальный).
+	Prefixes []string `json:"prefixes"`
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingMirrorListGetOKMirrorsItem) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIParsingMirrorListGetOKMirrorsItem) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIParsingMirrorListGetOKMirrorsItem) GetDescription() OptString {
+	return s.Description
+}
+
+// GetPrefixes returns the value of Prefixes.
+func (s *APIParsingMirrorListGetOKMirrorsItem) GetPrefixes() []string {
+	return s.Prefixes
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingMirrorListGetOKMirrorsItem) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIParsingMirrorListGetOKMirrorsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIParsingMirrorListGetOKMirrorsItem) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetPrefixes sets the value of Prefixes.
+func (s *APIParsingMirrorListGetOKMirrorsItem) SetPrefixes(val []string) {
+	s.Prefixes = val
+}
+
+type APIParsingMirrorListGetUnauthorized ErrorResponse
+
+func (*APIParsingMirrorListGetUnauthorized) aPIParsingMirrorListGetRes() {}
+
+type APIParsingMirrorUpdatePostBadRequest ErrorResponse
+
+func (*APIParsingMirrorUpdatePostBadRequest) aPIParsingMirrorUpdatePostRes() {}
+
+type APIParsingMirrorUpdatePostForbidden ErrorResponse
+
+func (*APIParsingMirrorUpdatePostForbidden) aPIParsingMirrorUpdatePostRes() {}
+
+type APIParsingMirrorUpdatePostInternalServerError ErrorResponse
+
+func (*APIParsingMirrorUpdatePostInternalServerError) aPIParsingMirrorUpdatePostRes() {}
+
+// APIParsingMirrorUpdatePostNoContent is response for APIParsingMirrorUpdatePost operation.
+type APIParsingMirrorUpdatePostNoContent struct{}
+
+func (*APIParsingMirrorUpdatePostNoContent) aPIParsingMirrorUpdatePostRes() {}
+
+type APIParsingMirrorUpdatePostNotFound ErrorResponse
+
+func (*APIParsingMirrorUpdatePostNotFound) aPIParsingMirrorUpdatePostRes() {}
+
+type APIParsingMirrorUpdatePostReq struct {
+	// ID зеркала.
+	ID uuid.UUID `json:"id"`
+	// Название зеркала.
+	Name string `json:"name"`
+	// Описание зеркала.
+	Description OptString `json:"description"`
+	// Префиксы зеркала (включая оригинальный).
+	Prefixes []string `json:"prefixes"`
+}
+
+// GetID returns the value of ID.
+func (s *APIParsingMirrorUpdatePostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIParsingMirrorUpdatePostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIParsingMirrorUpdatePostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetPrefixes returns the value of Prefixes.
+func (s *APIParsingMirrorUpdatePostReq) GetPrefixes() []string {
+	return s.Prefixes
+}
+
+// SetID sets the value of ID.
+func (s *APIParsingMirrorUpdatePostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIParsingMirrorUpdatePostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIParsingMirrorUpdatePostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetPrefixes sets the value of Prefixes.
+func (s *APIParsingMirrorUpdatePostReq) SetPrefixes(val []string) {
+	s.Prefixes = val
+}
+
+type APIParsingMirrorUpdatePostUnauthorized ErrorResponse
+
+func (*APIParsingMirrorUpdatePostUnauthorized) aPIParsingMirrorUpdatePostRes() {}
+
 type APIParsingPageExistsPostBadRequest ErrorResponse
 
 func (*APIParsingPageExistsPostBadRequest) aPIParsingPageExistsPostRes() {}

@@ -683,6 +683,62 @@ func encodeAPIParsingHandlePostRequest(
 	return nil
 }
 
+func encodeAPIParsingMirrorCreatePostRequest(
+	req *APIParsingMirrorCreatePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIParsingMirrorDeletePostRequest(
+	req *APIParsingMirrorDeletePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIParsingMirrorGetPostRequest(
+	req *APIParsingMirrorGetPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIParsingMirrorUpdatePostRequest(
+	req *APIParsingMirrorUpdatePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIParsingPageExistsPostRequest(
 	req *APIParsingPageExistsPostReq,
 	r *http.Request,

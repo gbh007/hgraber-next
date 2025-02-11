@@ -334,6 +334,36 @@ type Handler interface {
 	//
 	// POST /api/parsing/handle
 	APIParsingHandlePost(ctx context.Context, req *APIParsingHandlePostReq) (APIParsingHandlePostRes, error)
+	// APIParsingMirrorCreatePost implements POST /api/parsing/mirror/create operation.
+	//
+	// Создание данных зеркала.
+	//
+	// POST /api/parsing/mirror/create
+	APIParsingMirrorCreatePost(ctx context.Context, req *APIParsingMirrorCreatePostReq) (APIParsingMirrorCreatePostRes, error)
+	// APIParsingMirrorDeletePost implements POST /api/parsing/mirror/delete operation.
+	//
+	// Удаление зеркала.
+	//
+	// POST /api/parsing/mirror/delete
+	APIParsingMirrorDeletePost(ctx context.Context, req *APIParsingMirrorDeletePostReq) (APIParsingMirrorDeletePostRes, error)
+	// APIParsingMirrorGetPost implements POST /api/parsing/mirror/get operation.
+	//
+	// Получение данных зеркала.
+	//
+	// POST /api/parsing/mirror/get
+	APIParsingMirrorGetPost(ctx context.Context, req *APIParsingMirrorGetPostReq) (APIParsingMirrorGetPostRes, error)
+	// APIParsingMirrorListGet implements GET /api/parsing/mirror/list operation.
+	//
+	// Зеркала.
+	//
+	// GET /api/parsing/mirror/list
+	APIParsingMirrorListGet(ctx context.Context) (APIParsingMirrorListGetRes, error)
+	// APIParsingMirrorUpdatePost implements POST /api/parsing/mirror/update operation.
+	//
+	// Обновления зеркала.
+	//
+	// POST /api/parsing/mirror/update
+	APIParsingMirrorUpdatePost(ctx context.Context, req *APIParsingMirrorUpdatePostReq) (APIParsingMirrorUpdatePostRes, error)
 	// APIParsingPageExistsPost implements POST /api/parsing/page/exists operation.
 	//
 	// Проверка наличия ссылок для страниц.
