@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Controller) APIParsingPagePost(ctx context.Context, req *agentapi.APIParsingPagePostReq) (agentapi.APIParsingPagePostRes, error) {
-	body, err := c.parsingUseCases.DownloadPage(ctx, req.BookURL, req.ImageURL)
+	body, err := c.parsingUseCases.PageBodyByURL(ctx, req.ImageURL)
 	if err != nil {
 		return &agentapi.APIParsingPagePostInternalServerError{
 			InnerCode: ParseUseCaseCode,

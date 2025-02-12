@@ -655,20 +655,6 @@ func encodeAPIPageBodyPostRequest(
 	return nil
 }
 
-func encodeAPIParsingBookExistsPostRequest(
-	req *APIParsingBookExistsPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
 func encodeAPIParsingHandlePostRequest(
 	req *APIParsingHandlePostReq,
 	r *http.Request,
@@ -727,20 +713,6 @@ func encodeAPIParsingMirrorGetPostRequest(
 
 func encodeAPIParsingMirrorUpdatePostRequest(
 	req *APIParsingMirrorUpdatePostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeAPIParsingPageExistsPostRequest(
-	req *APIParsingPageExistsPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

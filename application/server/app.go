@@ -20,7 +20,6 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/metrics"
 	agentUC "github.com/gbh007/hgraber-next/usecases/agent"
-	"github.com/gbh007/hgraber-next/usecases/agentcache"
 	"github.com/gbh007/hgraber-next/usecases/bff"
 	"github.com/gbh007/hgraber-next/usecases/bookrequester"
 	"github.com/gbh007/hgraber-next/usecases/cleanup"
@@ -194,14 +193,12 @@ func Serve() {
 	asyncController.RegisterRunner(apiController)
 
 	if cfg.AgentServer.Addr != "" {
-		agentCacheUseCase := agentcache.New(logger, parsingUseCases)
-
 		apiAgentController, err := apiagent.New(
 			cfg.AgentServer,
 			time.Now(),
 			logger,
 			tracer,
-			agentCacheUseCase,
+			parsingUseCases,
 			exportUseCases,
 		)
 		if err != nil {

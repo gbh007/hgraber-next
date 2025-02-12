@@ -9,7 +9,7 @@ import (
 )
 
 func (c *Controller) APIParsingPageCheckPost(ctx context.Context, req *agentapi.APIParsingPageCheckPostReq) (agentapi.APIParsingPageCheckPostRes, error) {
-	result, err := c.parsingUseCases.CheckPages(ctx, pkg.Map(req.Urls, func(u agentapi.APIParsingPageCheckPostReqUrlsItem) agentmodel.AgentPageURL {
+	result, err := c.parsingUseCases.PagesExists(ctx, pkg.Map(req.Urls, func(u agentapi.APIParsingPageCheckPostReqUrlsItem) agentmodel.AgentPageURL {
 		return agentmodel.AgentPageURL{
 			BookURL:  u.BookURL,
 			ImageURL: u.ImageURL,

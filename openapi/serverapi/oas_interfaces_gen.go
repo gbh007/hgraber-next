@@ -205,10 +205,6 @@ type APIPageBodyPostRes interface {
 	aPIPageBodyPostRes()
 }
 
-type APIParsingBookExistsPostRes interface {
-	aPIParsingBookExistsPostRes()
-}
-
 type APIParsingHandlePostRes interface {
 	aPIParsingHandlePostRes()
 }
@@ -231,10 +227,6 @@ type APIParsingMirrorListGetRes interface {
 
 type APIParsingMirrorUpdatePostRes interface {
 	aPIParsingMirrorUpdatePostRes()
-}
-
-type APIParsingPageExistsPostRes interface {
-	aPIParsingPageExistsPostRes()
 }
 
 type APISystemDeduplicateArchivePostRes interface {

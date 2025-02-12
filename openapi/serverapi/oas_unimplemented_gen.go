@@ -480,15 +480,6 @@ func (UnimplementedHandler) APIPageBodyPost(ctx context.Context, req *APIPageBod
 	return r, ht.ErrNotImplemented
 }
 
-// APIParsingBookExistsPost implements POST /api/parsing/book/exists operation.
-//
-// Проверка наличия ссылок на книги.
-//
-// POST /api/parsing/book/exists
-func (UnimplementedHandler) APIParsingBookExistsPost(ctx context.Context, req *APIParsingBookExistsPostReq) (r APIParsingBookExistsPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // APIParsingHandlePost implements POST /api/parsing/handle operation.
 //
 // Обработка ссылок на новые книги.
@@ -540,15 +531,6 @@ func (UnimplementedHandler) APIParsingMirrorListGet(ctx context.Context) (r APIP
 //
 // POST /api/parsing/mirror/update
 func (UnimplementedHandler) APIParsingMirrorUpdatePost(ctx context.Context, req *APIParsingMirrorUpdatePostReq) (r APIParsingMirrorUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIParsingPageExistsPost implements POST /api/parsing/page/exists operation.
-//
-// Проверка наличия ссылок для страниц.
-//
-// POST /api/parsing/page/exists
-func (UnimplementedHandler) APIParsingPageExistsPost(ctx context.Context, req *APIParsingPageExistsPostReq) (r APIParsingPageExistsPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

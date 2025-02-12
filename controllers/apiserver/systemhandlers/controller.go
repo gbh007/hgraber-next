@@ -10,7 +10,6 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/parsing"
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
@@ -19,9 +18,6 @@ import (
 type ParseUseCases interface {
 	NewBooks(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.FirstHandleMultipleResult, error)
 	NewBooksMulti(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.MultiHandleMultipleResult, error)
-
-	BooksExists(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
-	PagesExists(ctx context.Context, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error)
 
 	NewMirror(ctx context.Context, mirror parsing.URLMirror) error
 	UpdateMirror(ctx context.Context, mirror parsing.URLMirror) error

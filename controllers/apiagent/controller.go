@@ -12,14 +12,15 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
 type parsingUseCases interface {
-	CheckBooks(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
-	ParseBook(ctx context.Context, u url.URL) (agentmodel.AgentBookDetails, error)
-	DownloadPage(ctx context.Context, bookURL, imageURL url.URL) (io.Reader, error)
-	CheckPages(ctx context.Context, pages []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error)
+	BooksExists(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
+	PagesExists(ctx context.Context, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error)
+	BookByURL(ctx context.Context, u url.URL) (core.BookContainer, error)
+	PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error)
 }
 
 type exportUseCases interface {

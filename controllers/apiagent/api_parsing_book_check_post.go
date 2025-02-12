@@ -9,7 +9,7 @@ import (
 )
 
 func (c *Controller) APIParsingBookCheckPost(ctx context.Context, req *agentapi.APIParsingBookCheckPostReq) (agentapi.APIParsingBookCheckPostRes, error) {
-	result, err := c.parsingUseCases.CheckBooks(ctx, req.Urls)
+	result, err := c.parsingUseCases.BooksExists(ctx, req.Urls)
 	if err != nil {
 		return &agentapi.APIParsingBookCheckPostInternalServerError{
 			InnerCode: ParseUseCaseCode,

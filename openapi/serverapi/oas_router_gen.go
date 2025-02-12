@@ -1471,27 +1471,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
-					case 'b': // Prefix: "book/exists"
-						origElem := elem
-						if l := len("book/exists"); len(elem) >= l && elem[0:l] == "book/exists" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIParsingBookExistsPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-						elem = origElem
 					case 'h': // Prefix: "handle"
 						origElem := elem
 						if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
@@ -1630,27 +1609,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							elem = origElem
-						}
-
-						elem = origElem
-					case 'p': // Prefix: "page/exists"
-						origElem := elem
-						if l := len("page/exists"); len(elem) >= l && elem[0:l] == "page/exists" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIParsingPageExistsPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
 						}
 
 						elem = origElem
@@ -3593,31 +3551,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
-					case 'b': // Prefix: "book/exists"
-						origElem := elem
-						if l := len("book/exists"); len(elem) >= l && elem[0:l] == "book/exists" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIParsingBookExistsPostOperation
-								r.summary = "Проверка наличия ссылок на книги"
-								r.operationID = ""
-								r.pathPattern = "/api/parsing/book/exists"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
 					case 'h': // Prefix: "handle"
 						origElem := elem
 						if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
@@ -3780,31 +3713,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 
 							elem = origElem
-						}
-
-						elem = origElem
-					case 'p': // Prefix: "page/exists"
-						origElem := elem
-						if l := len("page/exists"); len(elem) >= l && elem[0:l] == "page/exists" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIParsingPageExistsPostOperation
-								r.summary = "Проверка наличия ссылок для страниц"
-								r.operationID = ""
-								r.pathPattern = "/api/parsing/page/exists"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
 						}
 
 						elem = origElem
