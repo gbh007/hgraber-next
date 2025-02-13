@@ -10,7 +10,7 @@ import (
 )
 
 type Storage struct {
-	toExport       *pkg.DataQueue[agentmodel.BookFullWithAgent]
+	toExport       *pkg.DataQueue[agentmodel.BookToExport]
 	toRun          *pkg.DataQueue[systemmodel.RunnableTask]
 	taskResult     *dataList[*systemmodel.TaskResult]
 	toValidate     *pkg.DataQueue[uuid.UUID]
@@ -19,7 +19,7 @@ type Storage struct {
 
 func New() *Storage {
 	return &Storage{
-		toExport:       pkg.NewDataQueue[agentmodel.BookFullWithAgent](100),
+		toExport:       pkg.NewDataQueue[agentmodel.BookToExport](100),
 		toRun:          pkg.NewDataQueue[systemmodel.RunnableTask](10),
 		taskResult:     newDataList[*systemmodel.TaskResult](50),
 		toValidate:     pkg.NewDataQueue[uuid.UUID](1000),

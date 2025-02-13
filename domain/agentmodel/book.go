@@ -11,9 +11,9 @@ type BookWithAgent struct {
 	AgentID uuid.UUID
 }
 
-type BookFullWithAgent struct {
-	core.BookContainer
+type BookToExport struct {
 	AgentID uuid.UUID
+	BookID  uuid.UUID
 
 	DeleteAfterExport bool
 }

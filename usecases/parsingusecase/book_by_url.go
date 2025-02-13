@@ -21,7 +21,7 @@ func (uc *UseCase) BookByURL(ctx context.Context, u url.URL) (core.BookContainer
 	firstBook := core.BookContainer{}
 
 	for i, id := range ids {
-		book, err := uc.bookRequester.BookOriginFull(ctx, id)
+		book, err := uc.bookAdapter.BookRaw(ctx, id)
 		if err != nil {
 			return core.BookContainer{}, fmt.Errorf("get book by id (%s): %w", id.String(), err)
 		}

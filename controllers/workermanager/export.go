@@ -12,8 +12,8 @@ import (
 )
 
 type exportUnitUseCases interface {
-	ExportList() []agentmodel.BookFullWithAgent
-	ExportArchive(ctx context.Context, book agentmodel.BookFullWithAgent, retry bool) error
+	ExportList() []agentmodel.BookToExport
+	ExportArchive(ctx context.Context, book agentmodel.BookToExport, retry bool) error
 }
 
 func NewExporter(
@@ -22,25 +22,25 @@ func NewExporter(
 	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
-) *worker.Worker[agentmodel.BookFullWithAgent] {
-	return worker.New[agentmodel.BookFullWithAgent](
+) *worker.Worker[agentmodel.BookToExport] {
+	return worker.New[agentmodel.BookToExport](
 		"export",
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, book agentmodel.BookFullWithAgent) error {
-			err := useCases.ExportArchive(ctx, book, true)
+		func(ctx context.Context, toExport agentmodel.BookToExport) error {
+			err := useCases.ExportArchive(ctx, toExport, true)
 			if err != nil {
 				return pkg.WrapError(
 					err, "fail export book",
-					pkg.ErrorArgument("book_id", book.Book.ID),
-					pkg.ErrorArgument("agent_id", book.AgentID),
+					pkg.ErrorArgument("book_id", toExport.BookID),
+					pkg.ErrorArgument("agent_id", toExport.AgentID),
 				)
 			}
 
 			return nil
 		},
-		func(_ context.Context) ([]agentmodel.BookFullWithAgent, error) {
+		func(_ context.Context) ([]agentmodel.BookToExport, error) {
 			return useCases.ExportList(), nil
 		},
 		cfg.GetCount(),

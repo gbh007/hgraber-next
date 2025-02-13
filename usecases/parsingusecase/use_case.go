@@ -56,17 +56,17 @@ type fileStorage interface {
 	Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
 }
 
-type bookRequester interface {
-	BookOriginFull(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error)
+type bookAdapter interface {
+	BookRaw(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error)
 }
 
 type UseCase struct {
 	logger *slog.Logger
 
-	storage       storage
-	agentSystem   agentSystem
-	fileStorage   fileStorage
-	bookRequester bookRequester
+	storage     storage
+	agentSystem agentSystem
+	fileStorage fileStorage
+	bookAdapter bookAdapter
 
 	parseBookTimeout time.Duration
 }
@@ -76,7 +76,7 @@ func New(
 	storage storage,
 	agentSystem agentSystem,
 	fileStorage fileStorage,
-	bookRequester bookRequester,
+	bookAdapter bookAdapter,
 	parseBookTimeout time.Duration,
 ) *UseCase {
 	return &UseCase{
@@ -85,6 +85,6 @@ func New(
 		agentSystem:      agentSystem,
 		fileStorage:      fileStorage,
 		parseBookTimeout: parseBookTimeout,
-		bookRequester:    bookRequester,
+		bookAdapter:      bookAdapter,
 	}
 }

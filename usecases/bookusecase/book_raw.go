@@ -10,10 +10,29 @@ import (
 )
 
 func (uc *UseCase) BookRaw(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error) {
-	bookFull, err := uc.bookRequester.BookOriginFull(ctx, bookID)
+	b, err := uc.storage.GetBook(ctx, bookID)
 	if err != nil {
-		return core.BookContainer{}, fmt.Errorf("book requester: %w", err)
+		return core.BookContainer{}, fmt.Errorf("get book: %w", err)
 	}
 
-	return bookFull, nil
+	out := core.BookContainer{
+		Book: b,
+	}
+
+	out.Attributes, err = uc.storage.BookOriginAttributes(ctx, bookID)
+	if err != nil {
+		return core.BookContainer{}, fmt.Errorf("get attributes: %w", err)
+	}
+
+	out.Pages, err = uc.storage.BookPages(ctx, bookID)
+	if err != nil {
+		return core.BookContainer{}, fmt.Errorf("get pages: %w", err)
+	}
+
+	out.Labels, err = uc.storage.Labels(ctx, bookID)
+	if err != nil {
+		return core.BookContainer{}, fmt.Errorf("get labels: %w", err)
+	}
+
+	return out, nil
 }

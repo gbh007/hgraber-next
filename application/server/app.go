@@ -22,7 +22,6 @@ import (
 	"github.com/gbh007/hgraber-next/usecases/agentusecase"
 	"github.com/gbh007/hgraber-next/usecases/attributeusecase"
 	"github.com/gbh007/hgraber-next/usecases/bffusecase"
-	"github.com/gbh007/hgraber-next/usecases/bookrequesterusecase"
 	"github.com/gbh007/hgraber-next/usecases/bookusecase"
 	"github.com/gbh007/hgraber-next/usecases/cleanupusecase"
 	"github.com/gbh007/hgraber-next/usecases/deduplicatorusecase"
@@ -135,17 +134,16 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	bookRequestUseCases := bookrequesterusecase.New(logger, storage)
-	parsingUseCases := parsingusecase.New(logger, storage, agentSystem, fileStorageAdapter, bookRequestUseCases, cfg.Parsing.ParseBookTimeout)
-	exportUseCases := exportusecase.New(logger, storage, fileStorageAdapter, agentSystem, tmpStorage, bookRequestUseCases)
+	bookUseCases := bookusecase.New(logger, storage)
+	parsingUseCases := parsingusecase.New(logger, storage, agentSystem, fileStorageAdapter, bookUseCases, cfg.Parsing.ParseBookTimeout)
+	exportUseCases := exportusecase.New(logger, storage, fileStorageAdapter, agentSystem, tmpStorage, bookUseCases)
 	deduplicateUseCases := deduplicatorusecase.New(logger, storage, tracer)
 	cleanupUseCases := cleanupusecase.New(logger, tracer, storage, fileStorageAdapter)
-	rebuilderUseCases := rebuilderusecase.New(logger, tracer, storage)
+	reBuilderUseCases := rebuilderusecase.New(logger, tracer, storage)
 	fsUseCases := filesystemusecase.New(logger, storage, fileStorageAdapter, tmpStorage)
 	bffUseCases := bffusecase.New(logger, storage, deduplicateUseCases)
 	attributeUseCases := attributeusecase.New(logger, storage)
 	labelUseCases := labelusecase.New(logger, storage)
-	bookUseCases := bookusecase.New(logger, storage, bookRequestUseCases)
 
 	workersController := workermanager.New(
 		logger,
@@ -172,7 +170,7 @@ func Serve() {
 		exportUseCases,
 		deduplicateUseCases,
 		systemUseCases,
-		rebuilderUseCases,
+		reBuilderUseCases,
 		fsUseCases,
 		bffUseCases,
 		attributeUseCases,

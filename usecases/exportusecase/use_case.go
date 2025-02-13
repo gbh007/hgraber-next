@@ -34,6 +34,8 @@ type storage interface {
 	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
 
 	Mirrors(ctx context.Context) ([]parsing.URLMirror, error)
+
+	BookIDs(ctx context.Context, filter core.BookFilter) ([]uuid.UUID, error)
 }
 
 type agentSystem interface {
@@ -41,23 +43,22 @@ type agentSystem interface {
 }
 
 type tmpStorage interface {
-	AddToExport(books []agentmodel.BookFullWithAgent)
-	ExportList() []agentmodel.BookFullWithAgent
+	AddToExport(books []agentmodel.BookToExport)
+	ExportList() []agentmodel.BookToExport
 }
 
-type bookRequester interface {
-	Books(ctx context.Context, filter core.BookFilter) ([]core.BookContainer, error)
-	BookOriginFull(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error)
+type bookAdapter interface {
+	BookRaw(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error)
 }
 
 type UseCase struct {
 	logger *slog.Logger
 
-	storage       storage
-	fileStorage   fileStorage
-	agentSystem   agentSystem
-	tmpStorage    tmpStorage
-	bookRequester bookRequester
+	storage     storage
+	fileStorage fileStorage
+	agentSystem agentSystem
+	tmpStorage  tmpStorage
+	bookAdapter bookAdapter
 }
 
 func New(
@@ -66,14 +67,14 @@ func New(
 	fileStorage fileStorage,
 	agentSystem agentSystem,
 	tmpStorage tmpStorage,
-	bookRequester bookRequester,
+	bookAdapter bookAdapter,
 ) *UseCase {
 	return &UseCase{
-		logger:        logger,
-		storage:       storage,
-		fileStorage:   fileStorage,
-		agentSystem:   agentSystem,
-		tmpStorage:    tmpStorage,
-		bookRequester: bookRequester,
+		logger:      logger,
+		storage:     storage,
+		fileStorage: fileStorage,
+		agentSystem: agentSystem,
+		tmpStorage:  tmpStorage,
+		bookAdapter: bookAdapter,
 	}
 }

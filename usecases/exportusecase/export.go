@@ -18,16 +18,16 @@ import (
 func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter core.BookFilter, deleteAfter bool) error {
 	filter.OriginAttributes = true // FIXME: перенести это управление в запрос
 
-	books, err := uc.bookRequester.Books(ctx, filter)
+	books, err := uc.storage.BookIDs(ctx, filter)
 	if err != nil {
 		return fmt.Errorf("get books from requester: %w", err)
 	}
 
 	uc.tmpStorage.AddToExport(
-		pkg.Map(books, func(b core.BookContainer) agentmodel.BookFullWithAgent {
-			return agentmodel.BookFullWithAgent{
-				BookContainer:     b,
+		pkg.Map(books, func(bookID uuid.UUID) agentmodel.BookToExport {
+			return agentmodel.BookToExport{
 				AgentID:           agentID,
+				BookID:            bookID,
 				DeleteAfterExport: deleteAfter,
 			}
 		}),
@@ -36,42 +36,51 @@ func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter core.Bo
 	return nil
 }
 
-func (uc *UseCase) ExportList() []agentmodel.BookFullWithAgent {
+func (uc *UseCase) ExportList() []agentmodel.BookToExport {
 	return uc.tmpStorage.ExportList()
 }
 
-func (uc *UseCase) ExportArchive(ctx context.Context, book agentmodel.BookFullWithAgent, retry bool) error {
-	body, err := uc.newArchive(ctx, book.BookContainer)
+func (uc *UseCase) ExportArchive(ctx context.Context, toExport agentmodel.BookToExport, retry bool) error {
+	bookContainer, err := uc.bookAdapter.BookRaw(ctx, toExport.BookID)
 	if err != nil {
 		if retry {
-			uc.tmpStorage.AddToExport([]agentmodel.BookFullWithAgent{book})
+			uc.tmpStorage.AddToExport([]agentmodel.BookToExport{toExport})
 		}
 
-		return fmt.Errorf("make archive %s: %w", book.Book.ID.String(), err)
+		return fmt.Errorf("get book container %s: %w", toExport.BookID.String(), err)
 	}
 
-	err = uc.agentSystem.ExportArchive(ctx, book.AgentID, agentmodel.AgentExportData{
-		BookID:   book.Book.ID,
-		BookName: book.Book.Name,
-		BookURL:  book.Book.OriginURL,
+	body, err := uc.newArchive(ctx, bookContainer)
+	if err != nil {
+		if retry {
+			uc.tmpStorage.AddToExport([]agentmodel.BookToExport{toExport})
+		}
+
+		return fmt.Errorf("make archive %s: %w", toExport.BookID.String(), err)
+	}
+
+	err = uc.agentSystem.ExportArchive(ctx, toExport.AgentID, agentmodel.AgentExportData{
+		BookID:   bookContainer.Book.ID,
+		BookName: bookContainer.Book.Name,
+		BookURL:  bookContainer.Book.OriginURL,
 		Body:     body,
 	})
 	if err != nil {
 		if retry {
-			uc.tmpStorage.AddToExport([]agentmodel.BookFullWithAgent{book})
+			uc.tmpStorage.AddToExport([]agentmodel.BookToExport{toExport})
 		}
 
-		return fmt.Errorf("export archive %s to agent: %w", book.Book.ID.String(), err)
+		return fmt.Errorf("export archive %s to agent: %w", toExport.BookID.String(), err)
 	}
 
-	if book.DeleteAfterExport {
-		err = uc.storage.MarkBookAsDeleted(ctx, book.Book.ID)
+	if toExport.DeleteAfterExport {
+		err = uc.storage.MarkBookAsDeleted(ctx, toExport.BookID)
 		if err != nil {
 			if retry {
-				uc.tmpStorage.AddToExport([]agentmodel.BookFullWithAgent{book})
+				uc.tmpStorage.AddToExport([]agentmodel.BookToExport{toExport})
 			}
 
-			return fmt.Errorf("delete book after export %s: %w", book.Book.ID.String(), err)
+			return fmt.Errorf("delete book after export %s: %w", toExport.BookID.String(), err)
 		}
 	}
 
@@ -79,7 +88,7 @@ func (uc *UseCase) ExportArchive(ctx context.Context, book agentmodel.BookFullWi
 }
 
 func (uc *UseCase) ExportBook(ctx context.Context, bookID uuid.UUID) (io.Reader, core.BookContainer, error) {
-	book, err := uc.bookRequester.BookOriginFull(ctx, bookID)
+	book, err := uc.bookAdapter.BookRaw(ctx, bookID)
 	if err != nil {
 		return nil, core.BookContainer{}, fmt.Errorf("get book: %w", err)
 	}
