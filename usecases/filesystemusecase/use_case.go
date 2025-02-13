@@ -27,6 +27,9 @@ type storage interface {
 	FileIDsByFilter(ctx context.Context, filter fsmodel.FileFilter) ([]uuid.UUID, error)
 
 	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (core.Page, error)
+
+	GetUnHashedFiles(ctx context.Context) ([]core.File, error)
+	UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha256Sum string, size int64) error
 }
 
 type fileStorage interface {

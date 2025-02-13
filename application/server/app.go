@@ -27,7 +27,6 @@ import (
 	"github.com/gbh007/hgraber-next/usecases/cleanupusecase"
 	"github.com/gbh007/hgraber-next/usecases/deduplicatorusecase"
 	"github.com/gbh007/hgraber-next/usecases/exportusecase"
-	"github.com/gbh007/hgraber-next/usecases/filelogicusecase"
 	"github.com/gbh007/hgraber-next/usecases/filesystemusecase"
 	"github.com/gbh007/hgraber-next/usecases/labelusecase"
 	"github.com/gbh007/hgraber-next/usecases/parsingusecase"
@@ -138,7 +137,6 @@ func Serve() {
 
 	bookRequestUseCases := bookrequesterusecase.New(logger, storage)
 	parsingUseCases := parsingusecase.New(logger, storage, agentSystem, fileStorageAdapter, bookRequestUseCases, cfg.Parsing.ParseBookTimeout)
-	fileUseCases := filelogicusecase.New(logger, storage, fileStorageAdapter)
 	exportUseCases := exportusecase.New(logger, storage, fileStorageAdapter, agentSystem, tmpStorage, bookRequestUseCases)
 	deduplicateUseCases := deduplicatorusecase.New(logger, storage, tracer)
 	cleanupUseCases := cleanupusecase.New(logger, tracer, storage, fileStorageAdapter)
@@ -153,7 +151,7 @@ func Serve() {
 		logger,
 		workermanager.NewBookParser(parsingUseCases, logger, tracer, cfg.Workers.Book, metricProvider),
 		workermanager.NewPageDownloader(parsingUseCases, logger, tracer, cfg.Workers.Page, metricProvider),
-		workermanager.NewHasher(fileUseCases, logger, tracer, cfg.Workers.Hasher, metricProvider),
+		workermanager.NewHasher(fsUseCases, logger, tracer, cfg.Workers.Hasher, metricProvider),
 		workermanager.NewExporter(exportUseCases, logger, tracer, cfg.Workers.Exporter, metricProvider),
 		workermanager.NewTasker(tmpStorage, logger, tracer, cfg.Workers.Tasker, metricProvider),
 		workermanager.NewFileValidator(fsUseCases, logger, tracer, cfg.Workers.FileValidator, metricProvider),
