@@ -9,7 +9,7 @@ import (
 )
 
 func (c *AttributeHandlersController) APIAttributeColorCreatePost(ctx context.Context, req *serverapi.AttributeColor) (serverapi.APIAttributeColorCreatePostRes, error) {
-	err := c.webAPIUseCases.CreateAttributeColor(ctx, core.AttributeColor(*req))
+	err := c.attributeUseCases.CreateAttributeColor(ctx, core.AttributeColor(*req))
 	if err != nil {
 		return &serverapi.APIAttributeColorCreatePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

@@ -9,7 +9,7 @@ import (
 )
 
 func (c *SystemHandlersController) APISystemInfoSizeGet(ctx context.Context) (serverapi.APISystemInfoSizeGetRes, error) {
-	info, err := c.webAPIUseCases.SystemSize(ctx)
+	info, err := c.systemUseCases.SystemSize(ctx)
 	if err != nil {
 		return &serverapi.APISystemInfoSizeGetInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

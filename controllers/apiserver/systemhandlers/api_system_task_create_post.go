@@ -29,7 +29,7 @@ func (c *SystemHandlersController) APISystemTaskCreatePost(ctx context.Context, 
 		code = systemmodel.CleanDeletedRebuildsTaskCode
 	}
 
-	err := c.taskUseCases.RunTask(ctx, code)
+	err := c.systemUseCases.RunTask(ctx, code)
 	if err != nil {
 		return &serverapi.APISystemTaskCreatePostInternalServerError{
 			InnerCode: apiservercore.TaskerUseCaseCode,

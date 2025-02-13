@@ -10,7 +10,7 @@ import (
 )
 
 func (c *LabelHandlersController) APILabelGetPost(ctx context.Context, req *serverapi.APILabelGetPostReq) (serverapi.APILabelGetPostRes, error) {
-	labels, err := c.webAPIUseCases.Labels(ctx, req.BookID)
+	labels, err := c.labelUseCases.Labels(ctx, req.BookID)
 	if err != nil {
 		return &serverapi.APILabelGetPostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

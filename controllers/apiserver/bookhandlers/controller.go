@@ -18,7 +18,7 @@ type ParseUseCases interface {
 	BookByURL(ctx context.Context, u url.URL) (core.BookContainer, error)
 }
 
-type WebAPIUseCases interface {
+type BookUseCases interface {
 	BookRaw(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error)
 	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool) error
 	DeleteBook(ctx context.Context, bookID uuid.UUID) error
@@ -47,7 +47,7 @@ type BookHandlersController struct {
 	apiCore *apiservercore.Controller
 
 	parseUseCases     ParseUseCases
-	webAPIUseCases    WebAPIUseCases
+	bookUseCases      BookUseCases
 	exportUseCases    ExportUseCases
 	rebuilderUseCases ReBuilderUseCases
 	bffUseCases       BFFUseCases
@@ -57,7 +57,7 @@ func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	parseUseCases ParseUseCases,
-	webAPIUseCases WebAPIUseCases,
+	bookUseCases BookUseCases,
 	exportUseCases ExportUseCases,
 	rebuilderUseCases ReBuilderUseCases,
 	bffUseCases BFFUseCases,
@@ -68,7 +68,7 @@ func New(
 		logger:            logger,
 		tracer:            tracer,
 		parseUseCases:     parseUseCases,
-		webAPIUseCases:    webAPIUseCases,
+		bookUseCases:      bookUseCases,
 		exportUseCases:    exportUseCases,
 		rebuilderUseCases: rebuilderUseCases,
 		bffUseCases:       bffUseCases,

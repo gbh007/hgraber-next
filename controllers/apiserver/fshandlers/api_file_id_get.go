@@ -29,7 +29,7 @@ func (c *FSHandlersController) APIFileIDGet(ctx context.Context, params serverap
 		fsID = &params.Fsid.Value
 	}
 
-	body, err := c.webAPIUseCases.File(ctx, fileID, fsID)
+	body, err := c.fsUseCases.File(ctx, fileID, fsID)
 	if errors.Is(err, core.FileNotFoundError) {
 		return &serverapi.APIFileIDGetNotFound{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

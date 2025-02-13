@@ -9,7 +9,7 @@ import (
 )
 
 func (c *LabelHandlersController) APILabelDeletePost(ctx context.Context, req *serverapi.APILabelDeletePostReq) (serverapi.APILabelDeletePostRes, error) {
-	err := c.webAPIUseCases.DeleteLabel(ctx, core.BookLabel{
+	err := c.labelUseCases.DeleteLabel(ctx, core.BookLabel{
 		BookID:     req.BookID,
 		PageNumber: req.PageNumber.Value,
 		Name:       req.Name,

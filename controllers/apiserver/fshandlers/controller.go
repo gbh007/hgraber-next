@@ -17,12 +17,7 @@ type ParseUseCases interface {
 	PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error)
 }
 
-type WebAPIUseCases interface {
-	File(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
-	PageBody(ctx context.Context, bookID uuid.UUID, pageNumber int) (io.Reader, error)
-}
-
-type TaskUseCases interface {
+type SystemUseCases interface {
 	RemoveFilesInFSMismatch(ctx context.Context, fsID uuid.UUID) error
 }
 
@@ -35,6 +30,9 @@ type FSUseCases interface {
 	ValidateFS(ctx context.Context, fsID uuid.UUID) error
 	TransferFSFiles(ctx context.Context, from, to uuid.UUID, onlyPreview bool) error
 	TransferFSFilesByBook(ctx context.Context, bookID, to uuid.UUID, pageNumber *int) error
+
+	File(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error)
+	PageBody(ctx context.Context, bookID uuid.UUID, pageNumber int) (io.Reader, error)
 }
 
 type FSHandlersController struct {
@@ -45,8 +43,7 @@ type FSHandlersController struct {
 	apiCore *apiservercore.Controller
 
 	parseUseCases  ParseUseCases
-	webAPIUseCases WebAPIUseCases
-	taskUseCases   TaskUseCases
+	systemUseCases SystemUseCases
 	fsUseCases     FSUseCases
 }
 
@@ -54,8 +51,7 @@ func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	parseUseCases ParseUseCases,
-	webAPIUseCases WebAPIUseCases,
-	taskUseCases TaskUseCases,
+	systemUseCases SystemUseCases,
 	fsUseCases FSUseCases,
 	debug bool,
 	ac *apiservercore.Controller,
@@ -64,8 +60,7 @@ func New(
 		logger:         logger,
 		tracer:         tracer,
 		parseUseCases:  parseUseCases,
-		webAPIUseCases: webAPIUseCases,
-		taskUseCases:   taskUseCases,
+		systemUseCases: systemUseCases,
 		fsUseCases:     fsUseCases,
 		debug:          debug,
 		apiCore:        ac,

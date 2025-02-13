@@ -8,7 +8,7 @@ import (
 )
 
 func (c *FSHandlersController) APIFsRemoveMismatchPost(ctx context.Context, req *serverapi.APIFsRemoveMismatchPostReq) (serverapi.APIFsRemoveMismatchPostRes, error) {
-	err := c.taskUseCases.RemoveFilesInFSMismatch(ctx, req.ID)
+	err := c.systemUseCases.RemoveFilesInFSMismatch(ctx, req.ID)
 	if err != nil {
 		return &serverapi.APIFsRemoveMismatchPostInternalServerError{
 			InnerCode: apiservercore.TaskerUseCaseCode,

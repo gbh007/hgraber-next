@@ -10,7 +10,7 @@ import (
 )
 
 func (c *LabelHandlersController) APILabelPresetListGet(ctx context.Context) (serverapi.APILabelPresetListGetRes, error) {
-	presets, err := c.webAPIUseCases.LabelPresets(ctx)
+	presets, err := c.labelUseCases.LabelPresets(ctx)
 	if err != nil {
 		return &serverapi.APILabelPresetListGetInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

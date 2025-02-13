@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
@@ -32,18 +33,26 @@ type storage interface {
 	FileStorages(ctx context.Context) ([]fsmodel.FileStorageSystem, error)
 }
 
+type deduplicator interface {
+	BookAttributesCompare(ctx context.Context, originID, targetID uuid.UUID, useOrigin bool) (bff.BookAttributesCompareResult, error)
+	BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (bff.BookPagesCompareResult, error)
+}
+
 type UseCase struct {
 	logger *slog.Logger
 
-	storage storage
+	storage      storage
+	deduplicator deduplicator
 }
 
 func New(
 	logger *slog.Logger,
 	storage storage,
+	deduplicator deduplicator,
 ) *UseCase {
 	return &UseCase{
-		logger:  logger,
-		storage: storage,
+		logger:       logger,
+		storage:      storage,
+		deduplicator: deduplicator,
 	}
 }

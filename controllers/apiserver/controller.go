@@ -23,13 +23,12 @@ type ParseUseCases interface {
 	systemhandlers.ParseUseCases
 }
 
-type WebAPIUseCases interface {
-	attributehandlers.WebAPIUseCases
-	bookhandlers.WebAPIUseCases
-	deduplicatehandlers.WebAPIUseCases
-	fshandlers.WebAPIUseCases
-	labelhandlers.WebAPIUseCases
-	systemhandlers.WebAPIUseCases
+type BookUseCases interface {
+	bookhandlers.BookUseCases
+}
+
+type LabelUseCases interface {
+	labelhandlers.LabelUseCases
 }
 
 type AgentUseCases interface {
@@ -47,9 +46,9 @@ type DeduplicateUseCases interface {
 	systemhandlers.DeduplicateUseCases
 }
 
-type TaskUseCases interface {
-	fshandlers.TaskUseCases
-	systemhandlers.TaskUseCases
+type SystemUseCases interface {
+	fshandlers.SystemUseCases
+	systemhandlers.SystemUseCases
 }
 
 type ReBuilderUseCases interface {
@@ -63,6 +62,11 @@ type FSUseCases interface {
 
 type BFFUseCases interface {
 	bookhandlers.BFFUseCases
+	deduplicatehandlers.BFFUseCases
+}
+
+type AttributeUseCases interface {
+	attributehandlers.AttributeUseCases
 }
 
 type config interface {
@@ -100,14 +104,16 @@ func New(
 	tracer trace.Tracer,
 	config config,
 	parseUseCases ParseUseCases,
-	webAPIUseCases WebAPIUseCases,
 	agentUseCases AgentUseCases,
 	exportUseCases ExportUseCases,
 	deduplicateUseCases DeduplicateUseCases,
-	taskUseCases TaskUseCases,
-	rebuilderUseCases ReBuilderUseCases,
+	systemUseCases SystemUseCases,
+	reBuilderUseCases ReBuilderUseCases,
 	fsUseCases FSUseCases,
 	bffUseCases BFFUseCases,
+	attributeUseCases AttributeUseCases,
+	labelUseCases LabelUseCases,
+	bookUseCases BookUseCases,
 ) (*Controller, error) {
 	ac, err := apiservercore.New(
 		logger,
@@ -132,7 +138,7 @@ func New(
 		AttributeHandlersController: attributehandlers.New(
 			logger,
 			tracer,
-			webAPIUseCases,
+			attributeUseCases,
 			config.GetDebug(),
 			ac,
 		),
@@ -140,9 +146,9 @@ func New(
 			logger,
 			tracer,
 			parseUseCases,
-			webAPIUseCases,
+			bookUseCases,
 			exportUseCases,
-			rebuilderUseCases,
+			reBuilderUseCases,
 			bffUseCases,
 			config.GetDebug(),
 			ac,
@@ -150,7 +156,7 @@ func New(
 		DeduplicateHandlersController: deduplicatehandlers.New(
 			logger,
 			tracer,
-			webAPIUseCases,
+			bffUseCases,
 			deduplicateUseCases,
 			config.GetDebug(),
 			ac,
@@ -159,8 +165,7 @@ func New(
 			logger,
 			tracer,
 			parseUseCases,
-			webAPIUseCases,
-			taskUseCases,
+			systemUseCases,
 			fsUseCases,
 			config.GetDebug(),
 			ac,
@@ -168,7 +173,7 @@ func New(
 		LabelHandlersController: labelhandlers.New(
 			logger,
 			tracer,
-			webAPIUseCases,
+			labelUseCases,
 			config.GetDebug(),
 			ac,
 		),
@@ -176,10 +181,9 @@ func New(
 			logger,
 			tracer,
 			parseUseCases,
-			webAPIUseCases,
 			exportUseCases,
 			deduplicateUseCases,
-			taskUseCases,
+			systemUseCases,
 			config.GetDebug(),
 			ac,
 		),

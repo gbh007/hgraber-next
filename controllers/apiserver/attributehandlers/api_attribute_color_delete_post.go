@@ -8,7 +8,7 @@ import (
 )
 
 func (c *AttributeHandlersController) APIAttributeColorDeletePost(ctx context.Context, req *serverapi.APIAttributeColorDeletePostReq) (serverapi.APIAttributeColorDeletePostRes, error) {
-	err := c.webAPIUseCases.DeleteAttributeColor(ctx, req.Code, req.Value)
+	err := c.attributeUseCases.DeleteAttributeColor(ctx, req.Code, req.Value)
 	if err != nil {
 		return &serverapi.APIAttributeColorDeletePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

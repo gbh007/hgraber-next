@@ -9,7 +9,7 @@ import (
 )
 
 func (c *SystemHandlersController) APISystemInfoWorkersGet(ctx context.Context) (serverapi.APISystemInfoWorkersGetRes, error) {
-	workers := c.webAPIUseCases.WorkersInfo(ctx)
+	workers := c.systemUseCases.WorkersInfo(ctx)
 
 	return &serverapi.APISystemInfoWorkersGetOK{
 		Workers: pkg.Map(workers, func(w systemmodel.SystemWorkerStat) serverapi.APISystemInfoWorkersGetOKWorkersItem {

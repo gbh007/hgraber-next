@@ -10,7 +10,7 @@ import (
 )
 
 func (c *AttributeHandlersController) APIAttributeColorListGet(ctx context.Context) (serverapi.APIAttributeColorListGetRes, error) {
-	colors, err := c.webAPIUseCases.AttributeColors(ctx)
+	colors, err := c.attributeUseCases.AttributeColors(ctx)
 	if err != nil {
 		return &serverapi.APIAttributeColorListGetInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

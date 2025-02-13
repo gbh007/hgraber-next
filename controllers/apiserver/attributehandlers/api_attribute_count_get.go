@@ -10,7 +10,7 @@ import (
 )
 
 func (c *AttributeHandlersController) APIAttributeCountGet(ctx context.Context) (serverapi.APIAttributeCountGetRes, error) {
-	attributes, err := c.webAPIUseCases.AttributesCount(ctx)
+	attributes, err := c.attributeUseCases.AttributesCount(ctx)
 	if err != nil {
 		return &serverapi.APIAttributeCountGetInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

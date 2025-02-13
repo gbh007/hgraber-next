@@ -10,7 +10,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-type WebAPIUseCases interface {
+type AttributeUseCases interface {
 	AttributesCount(ctx context.Context) ([]core.AttributeVariant, error)
 	CreateAttributeColor(ctx context.Context, color core.AttributeColor) error
 	UpdateAttributeColor(ctx context.Context, color core.AttributeColor) error
@@ -26,22 +26,22 @@ type AttributeHandlersController struct {
 
 	apiCore *apiservercore.Controller
 
-	webAPIUseCases WebAPIUseCases
+	attributeUseCases AttributeUseCases
 }
 
 func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
-	webAPIUseCases WebAPIUseCases,
+	attributeUseCases AttributeUseCases,
 	debug bool,
 	ac *apiservercore.Controller,
 ) *AttributeHandlersController {
 	c := &AttributeHandlersController{
-		logger:         logger,
-		tracer:         tracer,
-		webAPIUseCases: webAPIUseCases,
-		debug:          debug,
-		apiCore:        ac,
+		logger:            logger,
+		tracer:            tracer,
+		attributeUseCases: attributeUseCases,
+		debug:             debug,
+		apiCore:           ac,
 	}
 
 	return c

@@ -9,7 +9,7 @@ import (
 )
 
 func (c *DeduplicateHandlersController) APIDeduplicateComparePost(ctx context.Context, req *serverapi.APIDeduplicateComparePostReq) (serverapi.APIDeduplicateComparePostRes, error) {
-	data, err := c.webAPIUseCases.BookCompare(ctx, req.OriginBookID, req.TargetBookID)
+	data, err := c.bffUseCases.BookCompare(ctx, req.OriginBookID, req.TargetBookID)
 	if err != nil {
 		return &serverapi.APIDeduplicateComparePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

@@ -10,7 +10,7 @@ import (
 )
 
 func (c *BookHandlersController) APIBookVerifyPost(ctx context.Context, req *serverapi.APIBookVerifyPostReq) (serverapi.APIBookVerifyPostRes, error) {
-	err := c.webAPIUseCases.VerifyBook(ctx, req.ID, req.VerifyStatus)
+	err := c.bookUseCases.VerifyBook(ctx, req.ID, req.VerifyStatus)
 
 	if errors.Is(err, core.BookNotFoundError) {
 		return &serverapi.APIBookVerifyPostNotFound{

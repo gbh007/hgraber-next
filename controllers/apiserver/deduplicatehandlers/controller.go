@@ -11,7 +11,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/bff"
 )
 
-type WebAPIUseCases interface {
+type BFFUseCases interface {
 	BookCompare(ctx context.Context, originID, targetID uuid.UUID) (bff.BookCompareResult, error)
 }
 
@@ -37,14 +37,14 @@ type DeduplicateHandlersController struct {
 
 	apiCore *apiservercore.Controller
 
-	webAPIUseCases      WebAPIUseCases
+	bffUseCases         BFFUseCases
 	deduplicateUseCases DeduplicateUseCases
 }
 
 func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
-	webAPIUseCases WebAPIUseCases,
+	bffUseCases BFFUseCases,
 	deduplicateUseCases DeduplicateUseCases,
 	debug bool,
 	ac *apiservercore.Controller,
@@ -52,7 +52,7 @@ func New(
 	c := &DeduplicateHandlersController{
 		logger:              logger,
 		tracer:              tracer,
-		webAPIUseCases:      webAPIUseCases,
+		bffUseCases:         bffUseCases,
 		deduplicateUseCases: deduplicateUseCases,
 		debug:               debug,
 		apiCore:             ac,

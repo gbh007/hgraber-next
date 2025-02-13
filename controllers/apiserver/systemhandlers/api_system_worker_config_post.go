@@ -13,7 +13,7 @@ func (c *SystemHandlersController) APISystemWorkerConfigPost(ctx context.Context
 		counts[runnerCount.Name] = runnerCount.Count
 	}
 
-	c.webAPIUseCases.SetWorkerConfig(ctx, counts)
+	c.systemUseCases.SetWorkerConfig(ctx, counts)
 
 	return &serverapi.APISystemWorkerConfigPostNoContent{}, nil
 }

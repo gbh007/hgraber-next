@@ -20,17 +20,19 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/metrics"
 	agentUC "github.com/gbh007/hgraber-next/usecases/agent"
+	"github.com/gbh007/hgraber-next/usecases/attributehandler"
 	"github.com/gbh007/hgraber-next/usecases/bff"
+	"github.com/gbh007/hgraber-next/usecases/bookhandle"
 	"github.com/gbh007/hgraber-next/usecases/bookrequester"
 	"github.com/gbh007/hgraber-next/usecases/cleanup"
 	"github.com/gbh007/hgraber-next/usecases/deduplicator"
 	"github.com/gbh007/hgraber-next/usecases/export"
 	"github.com/gbh007/hgraber-next/usecases/filelogic"
 	"github.com/gbh007/hgraber-next/usecases/filesystem"
+	"github.com/gbh007/hgraber-next/usecases/labelhandler"
 	"github.com/gbh007/hgraber-next/usecases/parsing"
 	"github.com/gbh007/hgraber-next/usecases/rebuilder"
-	"github.com/gbh007/hgraber-next/usecases/taskhandler"
-	"github.com/gbh007/hgraber-next/usecases/webapi"
+	"github.com/gbh007/hgraber-next/usecases/systemhandler"
 )
 
 func Serve() {
@@ -140,10 +142,12 @@ func Serve() {
 	exportUseCases := export.New(logger, storage, fileStorageAdapter, agentSystem, tmpStorage, bookRequestUseCases)
 	deduplicateUseCases := deduplicator.New(logger, storage, tracer)
 	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorageAdapter)
-	taskUseCases := taskhandler.New(logger, tmpStorage, deduplicateUseCases, cleanupUseCases)
 	rebuilderUseCases := rebuilder.New(logger, tracer, storage)
 	fsUseCases := filesystem.New(logger, storage, fileStorageAdapter, tmpStorage)
-	bffUseCases := bff.New(logger, storage)
+	bffUseCases := bff.New(logger, storage, deduplicateUseCases)
+	attributeUseCases := attributehandler.New(logger, storage)
+	labelUseCases := labelhandler.New(logger, storage)
+	bookUseCases := bookhandle.New(logger, storage, bookRequestUseCases)
 
 	workersController := workermanager.New(
 		logger,
@@ -157,14 +161,8 @@ func Serve() {
 	)
 	asyncController.RegisterRunner(workersController)
 
-	webAPIUseCases := webapi.New(
-		logger,
-		workersController,
-		storage,
-		fileStorageAdapter,
-		bookRequestUseCases,
-		deduplicateUseCases,
-	)
+	systemUseCases := systemhandler.New(logger, storage, tmpStorage, deduplicateUseCases, cleanupUseCases, workersController)
+
 	agentUseCases := agentUC.New(logger, agentSystem, storage)
 
 	apiController, err := apiserver.New(
@@ -172,14 +170,16 @@ func Serve() {
 		tracer,
 		cfg.API,
 		parsingUseCases,
-		webAPIUseCases,
 		agentUseCases,
 		exportUseCases,
 		deduplicateUseCases,
-		taskUseCases,
+		systemUseCases,
 		rebuilderUseCases,
 		fsUseCases,
 		bffUseCases,
+		attributeUseCases,
+		labelUseCases,
+		bookUseCases,
 	)
 	if err != nil {
 		logger.ErrorContext(
@@ -216,7 +216,7 @@ func Serve() {
 	if cfg.Application.Metric.Enabled() {
 		infoCollector, err := metrics.NewSystemInfoCollector(
 			logger,
-			webAPIUseCases,
+			systemUseCases,
 			storage,
 			cfg.Application.Metric,
 		)

@@ -9,7 +9,7 @@ import (
 )
 
 func (c *LabelHandlersController) APILabelPresetCreatePost(ctx context.Context, req *serverapi.APILabelPresetCreatePostReq) (serverapi.APILabelPresetCreatePostRes, error) {
-	err := c.webAPIUseCases.CreateLabelPreset(ctx, core.BookLabelPreset{
+	err := c.labelUseCases.CreateLabelPreset(ctx, core.BookLabelPreset{
 		Name:        req.Name,
 		Values:      req.Values,
 		Description: req.Description.Value,

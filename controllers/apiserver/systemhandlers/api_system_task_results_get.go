@@ -11,7 +11,7 @@ import (
 )
 
 func (c *SystemHandlersController) APISystemTaskResultsGet(ctx context.Context) (serverapi.APISystemTaskResultsGetRes, error) {
-	result, err := c.taskUseCases.TaskResults(ctx)
+	result, err := c.systemUseCases.TaskResults(ctx)
 	if err != nil {
 		return &serverapi.APISystemTaskResultsGetInternalServerError{
 			InnerCode: apiservercore.TaskerUseCaseCode,

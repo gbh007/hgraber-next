@@ -26,12 +26,6 @@ type ParseUseCases interface {
 	Mirror(ctx context.Context, id uuid.UUID) (parsing.URLMirror, error)
 }
 
-type WebAPIUseCases interface {
-	SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, error)
-	WorkersInfo(ctx context.Context) []systemmodel.SystemWorkerStat
-	SetWorkerConfig(ctx context.Context, counts map[string]int)
-}
-
 type ExportUseCases interface {
 	ImportArchive(ctx context.Context, body io.Reader, deduplicate bool, autoVerify bool) (uuid.UUID, error)
 }
@@ -40,9 +34,12 @@ type DeduplicateUseCases interface {
 	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]core.DeduplicateArchiveResult, error)
 }
 
-type TaskUseCases interface {
+type SystemUseCases interface {
 	RunTask(ctx context.Context, code systemmodel.TaskCode) error
 	TaskResults(ctx context.Context) ([]*systemmodel.TaskResult, error)
+	SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, error)
+	WorkersInfo(ctx context.Context) []systemmodel.SystemWorkerStat
+	SetWorkerConfig(ctx context.Context, counts map[string]int)
 }
 
 type SystemHandlersController struct {
@@ -53,20 +50,18 @@ type SystemHandlersController struct {
 	apiCore *apiservercore.Controller
 
 	parseUseCases       ParseUseCases
-	webAPIUseCases      WebAPIUseCases
 	exportUseCases      ExportUseCases
 	deduplicateUseCases DeduplicateUseCases
-	taskUseCases        TaskUseCases
+	systemUseCases      SystemUseCases
 }
 
 func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	parseUseCases ParseUseCases,
-	webAPIUseCases WebAPIUseCases,
 	exportUseCases ExportUseCases,
 	deduplicateUseCases DeduplicateUseCases,
-	taskUseCases TaskUseCases,
+	systemUseCases SystemUseCases,
 	debug bool,
 	ac *apiservercore.Controller,
 ) *SystemHandlersController {
@@ -74,10 +69,9 @@ func New(
 		logger:              logger,
 		tracer:              tracer,
 		parseUseCases:       parseUseCases,
-		webAPIUseCases:      webAPIUseCases,
 		exportUseCases:      exportUseCases,
 		deduplicateUseCases: deduplicateUseCases,
-		taskUseCases:        taskUseCases,
+		systemUseCases:      systemUseCases,
 		debug:               debug,
 		apiCore:             ac,
 	}

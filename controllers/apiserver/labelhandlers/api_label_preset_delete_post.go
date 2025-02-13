@@ -8,7 +8,7 @@ import (
 )
 
 func (c *LabelHandlersController) APILabelPresetDeletePost(ctx context.Context, req *serverapi.APILabelPresetDeletePostReq) (serverapi.APILabelPresetDeletePostRes, error) {
-	err := c.webAPIUseCases.DeleteLabelPreset(ctx, req.Name)
+	err := c.labelUseCases.DeleteLabelPreset(ctx, req.Name)
 	if err != nil {
 		return &serverapi.APILabelPresetDeletePostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

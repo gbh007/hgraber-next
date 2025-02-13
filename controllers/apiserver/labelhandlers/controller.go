@@ -11,7 +11,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-type WebAPIUseCases interface {
+type LabelUseCases interface {
 	SetLabel(ctx context.Context, label core.BookLabel) error
 	DeleteLabel(ctx context.Context, label core.BookLabel) error
 	Labels(ctx context.Context, bookID uuid.UUID) ([]core.BookLabel, error)
@@ -29,22 +29,22 @@ type LabelHandlersController struct {
 
 	apiCore *apiservercore.Controller
 
-	webAPIUseCases WebAPIUseCases
+	labelUseCases LabelUseCases
 }
 
 func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
-	webAPIUseCases WebAPIUseCases,
+	labelUseCases LabelUseCases,
 	debug bool,
 	ac *apiservercore.Controller,
 ) *LabelHandlersController {
 	c := &LabelHandlersController{
-		logger:         logger,
-		tracer:         tracer,
-		webAPIUseCases: webAPIUseCases,
-		debug:          debug,
-		apiCore:        ac,
+		logger:        logger,
+		tracer:        tracer,
+		labelUseCases: labelUseCases,
+		debug:         debug,
+		apiCore:       ac,
 	}
 
 	return c

@@ -10,7 +10,7 @@ import (
 )
 
 func (c *BookHandlersController) APIBookDeletePost(ctx context.Context, req *serverapi.APIBookDeletePostReq) (serverapi.APIBookDeletePostRes, error) {
-	err := c.webAPIUseCases.DeleteBook(ctx, req.ID)
+	err := c.bookUseCases.DeleteBook(ctx, req.ID)
 
 	if errors.Is(err, core.BookNotFoundError) {
 		return &serverapi.APIBookDeletePostNotFound{

@@ -20,7 +20,7 @@ func (c *FSHandlersController) APIPageBodyPost(ctx context.Context, req *servera
 	switch {
 	case req.ID.IsSet() && req.PageNumber.IsSet():
 		innerCode = apiservercore.WebAPIUseCaseCode
-		body, err = c.webAPIUseCases.PageBody(ctx, req.ID.Value, req.PageNumber.Value)
+		body, err = c.fsUseCases.PageBody(ctx, req.ID.Value, req.PageNumber.Value)
 
 	case req.URL.IsSet():
 		innerCode = apiservercore.ParseUseCaseCode

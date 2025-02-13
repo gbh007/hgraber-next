@@ -8,7 +8,7 @@ import (
 )
 
 func (c *LabelHandlersController) APILabelPresetGetPost(ctx context.Context, req *serverapi.APILabelPresetGetPostReq) (serverapi.APILabelPresetGetPostRes, error) {
-	raw, err := c.webAPIUseCases.LabelPreset(ctx, req.Name)
+	raw, err := c.labelUseCases.LabelPreset(ctx, req.Name)
 	if err != nil {
 		return &serverapi.APILabelPresetGetPostInternalServerError{
 			InnerCode: apiservercore.WebAPIUseCaseCode,

@@ -19,7 +19,7 @@ func (c *BookHandlersController) APIBookRawPost(ctx context.Context, req *server
 	switch {
 	case req.ID.IsSet():
 		innerCode = apiservercore.WebAPIUseCaseCode
-		book, err = c.webAPIUseCases.BookRaw(ctx, req.ID.Value)
+		book, err = c.bookUseCases.BookRaw(ctx, req.ID.Value)
 
 	case req.URL.IsSet():
 		innerCode = apiservercore.ParseUseCaseCode
