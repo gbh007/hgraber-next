@@ -19,20 +19,20 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/workermanager"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/metrics"
-	agentUC "github.com/gbh007/hgraber-next/usecases/agent"
-	"github.com/gbh007/hgraber-next/usecases/attributehandler"
-	"github.com/gbh007/hgraber-next/usecases/bff"
-	"github.com/gbh007/hgraber-next/usecases/bookhandle"
-	"github.com/gbh007/hgraber-next/usecases/bookrequester"
-	"github.com/gbh007/hgraber-next/usecases/cleanup"
-	"github.com/gbh007/hgraber-next/usecases/deduplicator"
-	"github.com/gbh007/hgraber-next/usecases/export"
-	"github.com/gbh007/hgraber-next/usecases/filelogic"
-	"github.com/gbh007/hgraber-next/usecases/filesystem"
-	"github.com/gbh007/hgraber-next/usecases/labelhandler"
-	"github.com/gbh007/hgraber-next/usecases/parsing"
-	"github.com/gbh007/hgraber-next/usecases/rebuilder"
-	"github.com/gbh007/hgraber-next/usecases/systemhandler"
+	"github.com/gbh007/hgraber-next/usecases/agentusecase"
+	"github.com/gbh007/hgraber-next/usecases/attributeusecase"
+	"github.com/gbh007/hgraber-next/usecases/bffusecase"
+	"github.com/gbh007/hgraber-next/usecases/bookrequesterusecase"
+	"github.com/gbh007/hgraber-next/usecases/bookusecase"
+	"github.com/gbh007/hgraber-next/usecases/cleanupusecase"
+	"github.com/gbh007/hgraber-next/usecases/deduplicatorusecase"
+	"github.com/gbh007/hgraber-next/usecases/exportusecase"
+	"github.com/gbh007/hgraber-next/usecases/filelogicusecase"
+	"github.com/gbh007/hgraber-next/usecases/filesystemusecase"
+	"github.com/gbh007/hgraber-next/usecases/labelusecase"
+	"github.com/gbh007/hgraber-next/usecases/parsingusecase"
+	"github.com/gbh007/hgraber-next/usecases/rebuilderusecase"
+	"github.com/gbh007/hgraber-next/usecases/systemusecase"
 )
 
 func Serve() {
@@ -136,18 +136,18 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	bookRequestUseCases := bookrequester.New(logger, storage)
-	parsingUseCases := parsing.New(logger, storage, agentSystem, fileStorageAdapter, bookRequestUseCases, cfg.Parsing.ParseBookTimeout)
-	fileUseCases := filelogic.New(logger, storage, fileStorageAdapter)
-	exportUseCases := export.New(logger, storage, fileStorageAdapter, agentSystem, tmpStorage, bookRequestUseCases)
-	deduplicateUseCases := deduplicator.New(logger, storage, tracer)
-	cleanupUseCases := cleanup.New(logger, tracer, storage, fileStorageAdapter)
-	rebuilderUseCases := rebuilder.New(logger, tracer, storage)
-	fsUseCases := filesystem.New(logger, storage, fileStorageAdapter, tmpStorage)
-	bffUseCases := bff.New(logger, storage, deduplicateUseCases)
-	attributeUseCases := attributehandler.New(logger, storage)
-	labelUseCases := labelhandler.New(logger, storage)
-	bookUseCases := bookhandle.New(logger, storage, bookRequestUseCases)
+	bookRequestUseCases := bookrequesterusecase.New(logger, storage)
+	parsingUseCases := parsingusecase.New(logger, storage, agentSystem, fileStorageAdapter, bookRequestUseCases, cfg.Parsing.ParseBookTimeout)
+	fileUseCases := filelogicusecase.New(logger, storage, fileStorageAdapter)
+	exportUseCases := exportusecase.New(logger, storage, fileStorageAdapter, agentSystem, tmpStorage, bookRequestUseCases)
+	deduplicateUseCases := deduplicatorusecase.New(logger, storage, tracer)
+	cleanupUseCases := cleanupusecase.New(logger, tracer, storage, fileStorageAdapter)
+	rebuilderUseCases := rebuilderusecase.New(logger, tracer, storage)
+	fsUseCases := filesystemusecase.New(logger, storage, fileStorageAdapter, tmpStorage)
+	bffUseCases := bffusecase.New(logger, storage, deduplicateUseCases)
+	attributeUseCases := attributeusecase.New(logger, storage)
+	labelUseCases := labelusecase.New(logger, storage)
+	bookUseCases := bookusecase.New(logger, storage, bookRequestUseCases)
 
 	workersController := workermanager.New(
 		logger,
@@ -161,9 +161,9 @@ func Serve() {
 	)
 	asyncController.RegisterRunner(workersController)
 
-	systemUseCases := systemhandler.New(logger, storage, tmpStorage, deduplicateUseCases, cleanupUseCases, workersController)
+	systemUseCases := systemusecase.New(logger, storage, tmpStorage, deduplicateUseCases, cleanupUseCases, workersController)
 
-	agentUseCases := agentUC.New(logger, agentSystem, storage)
+	agentUseCases := agentusecase.New(logger, agentSystem, storage)
 
 	apiController, err := apiserver.New(
 		logger,
