@@ -22,15 +22,6 @@ func (UnimplementedHandler) APICoreStatusGet(ctx context.Context) (r APICoreStat
 	return r, ht.ErrNotImplemented
 }
 
-// APIExportArchivePost implements POST /api/export/archive operation.
-//
-// Загрузка архива.
-//
-// POST /api/export/archive
-func (UnimplementedHandler) APIExportArchivePost(ctx context.Context, req APIExportArchivePostReq, params APIExportArchivePostParams) (r APIExportArchivePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // APIFsCreatePost implements POST /api/fs/create operation.
 //
 // Создание нового файла.
@@ -82,6 +73,15 @@ func (UnimplementedHandler) APIHighwayFileIDExtGet(ctx context.Context, params A
 //
 // POST /api/highway/token/create
 func (UnimplementedHandler) APIHighwayTokenCreatePost(ctx context.Context) (r APIHighwayTokenCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIImportArchivePost implements POST /api/import/archive operation.
+//
+// Загрузка архива.
+//
+// POST /api/import/archive
+func (UnimplementedHandler) APIImportArchivePost(ctx context.Context, req APIImportArchivePostReq, params APIImportArchivePostParams) (r APIImportArchivePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

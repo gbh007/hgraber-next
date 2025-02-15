@@ -7,13 +7,13 @@ type OperationName = string
 
 const (
 	APICoreStatusGetOperation          OperationName = "APICoreStatusGet"
-	APIExportArchivePostOperation      OperationName = "APIExportArchivePost"
 	APIFsCreatePostOperation           OperationName = "APIFsCreatePost"
 	APIFsDeletePostOperation           OperationName = "APIFsDeletePost"
 	APIFsGetGetOperation               OperationName = "APIFsGetGet"
 	APIFsInfoPostOperation             OperationName = "APIFsInfoPost"
 	APIHighwayFileIDExtGetOperation    OperationName = "APIHighwayFileIDExtGet"
 	APIHighwayTokenCreatePostOperation OperationName = "APIHighwayTokenCreatePost"
+	APIImportArchivePostOperation      OperationName = "APIImportArchivePost"
 	APIParsingBookCheckPostOperation   OperationName = "APIParsingBookCheckPost"
 	APIParsingBookMultiPostOperation   OperationName = "APIParsingBookMultiPost"
 	APIParsingBookPostOperation        OperationName = "APIParsingBookPost"

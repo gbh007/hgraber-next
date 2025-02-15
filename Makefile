@@ -7,7 +7,7 @@ MOD_NAME = github.com/gbh007/hgraber-next
 LDFLAGS = -ldflags "-X '$(MOD_NAME)/version.Version=$(TAG)' -X '$(MOD_NAME)/version.Commit=$(COMMIT)' -X '$(MOD_NAME)/version.BuildAt=$(BUILD_TIME)' -X '$(MOD_NAME)/version.Branch=$(BRANCH)'"
 
 
-OGEN = github.com/ogen-go/ogen/cmd/ogen@v1.8.1
+OGEN = github.com/ogen-go/ogen/cmd/ogen@v1.10.0
 
 .PHONY: generate
 generate:

@@ -16,155 +16,6 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// APIExportArchivePostParams is parameters of POST /api/export/archive operation.
-type APIExportArchivePostParams struct {
-	// ID книги в системе.
-	BookID uuid.UUID
-	// URL книги в системе.
-	BookURL OptURI
-	// Название книги.
-	BookName string
-}
-
-func unpackAPIExportArchivePostParams(packed middleware.Parameters) (params APIExportArchivePostParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "book-id",
-			In:   "header",
-		}
-		params.BookID = packed[key].(uuid.UUID)
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "book-url",
-			In:   "header",
-		}
-		if v, ok := packed[key]; ok {
-			params.BookURL = v.(OptURI)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "book-name",
-			In:   "header",
-		}
-		params.BookName = packed[key].(string)
-	}
-	return params
-}
-
-func decodeAPIExportArchivePostParams(args [0]string, argsEscaped bool, r *http.Request) (params APIExportArchivePostParams, _ error) {
-	h := uri.NewHeaderDecoder(r.Header)
-	// Decode header: book-id.
-	if err := func() error {
-		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "book-id",
-			Explode: false,
-		}
-		if err := h.HasParam(cfg); err == nil {
-			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToUUID(val)
-				if err != nil {
-					return err
-				}
-
-				params.BookID = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "book-id",
-			In:   "header",
-			Err:  err,
-		}
-	}
-	// Decode header: book-url.
-	if err := func() error {
-		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "book-url",
-			Explode: false,
-		}
-		if err := h.HasParam(cfg); err == nil {
-			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotBookURLVal url.URL
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToURL(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotBookURLVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.BookURL.SetTo(paramsDotBookURLVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "book-url",
-			In:   "header",
-			Err:  err,
-		}
-	}
-	// Decode header: book-name.
-	if err := func() error {
-		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "book-name",
-			Explode: false,
-		}
-		if err := h.HasParam(cfg); err == nil {
-			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.BookName = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "book-name",
-			In:   "header",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
 // APIFsCreatePostParams is parameters of POST /api/fs/create operation.
 type APIFsCreatePostParams struct {
 	// ID файла в системе.
@@ -439,6 +290,155 @@ func decodeAPIHighwayFileIDExtGetParams(args [2]string, argsEscaped bool, r *htt
 		return params, &ogenerrors.DecodeParamError{
 			Name: "token",
 			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// APIImportArchivePostParams is parameters of POST /api/import/archive operation.
+type APIImportArchivePostParams struct {
+	// ID книги в системе.
+	BookID uuid.UUID
+	// URL книги в системе.
+	BookURL OptURI
+	// Название книги.
+	BookName string
+}
+
+func unpackAPIImportArchivePostParams(packed middleware.Parameters) (params APIImportArchivePostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "book-id",
+			In:   "header",
+		}
+		params.BookID = packed[key].(uuid.UUID)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "book-url",
+			In:   "header",
+		}
+		if v, ok := packed[key]; ok {
+			params.BookURL = v.(OptURI)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "book-name",
+			In:   "header",
+		}
+		params.BookName = packed[key].(string)
+	}
+	return params
+}
+
+func decodeAPIImportArchivePostParams(args [0]string, argsEscaped bool, r *http.Request) (params APIImportArchivePostParams, _ error) {
+	h := uri.NewHeaderDecoder(r.Header)
+	// Decode header: book-id.
+	if err := func() error {
+		cfg := uri.HeaderParameterDecodingConfig{
+			Name:    "book-id",
+			Explode: false,
+		}
+		if err := h.HasParam(cfg); err == nil {
+			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.BookID = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "book-id",
+			In:   "header",
+			Err:  err,
+		}
+	}
+	// Decode header: book-url.
+	if err := func() error {
+		cfg := uri.HeaderParameterDecodingConfig{
+			Name:    "book-url",
+			Explode: false,
+		}
+		if err := h.HasParam(cfg); err == nil {
+			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotBookURLVal url.URL
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToURL(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotBookURLVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.BookURL.SetTo(paramsDotBookURLVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "book-url",
+			In:   "header",
+			Err:  err,
+		}
+	}
+	// Decode header: book-name.
+	if err := func() error {
+		cfg := uri.HeaderParameterDecodingConfig{
+			Name:    "book-name",
+			Explode: false,
+		}
+		if err := h.HasParam(cfg); err == nil {
+			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.BookName = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "book-name",
+			In:   "header",
 			Err:  err,
 		}
 	}

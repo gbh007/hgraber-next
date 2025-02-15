@@ -193,41 +193,6 @@ type APICoreStatusGetUnauthorized ErrorResponse
 
 func (*APICoreStatusGetUnauthorized) aPICoreStatusGetRes() {}
 
-type APIExportArchivePostBadRequest ErrorResponse
-
-func (*APIExportArchivePostBadRequest) aPIExportArchivePostRes() {}
-
-type APIExportArchivePostForbidden ErrorResponse
-
-func (*APIExportArchivePostForbidden) aPIExportArchivePostRes() {}
-
-type APIExportArchivePostInternalServerError ErrorResponse
-
-func (*APIExportArchivePostInternalServerError) aPIExportArchivePostRes() {}
-
-// APIExportArchivePostNoContent is response for APIExportArchivePost operation.
-type APIExportArchivePostNoContent struct{}
-
-func (*APIExportArchivePostNoContent) aPIExportArchivePostRes() {}
-
-type APIExportArchivePostReq struct {
-	Data io.Reader
-}
-
-// Read reads data from the Data reader.
-//
-// Kept to satisfy the io.Reader interface.
-func (s APIExportArchivePostReq) Read(p []byte) (n int, err error) {
-	if s.Data == nil {
-		return 0, io.EOF
-	}
-	return s.Data.Read(p)
-}
-
-type APIExportArchivePostUnauthorized ErrorResponse
-
-func (*APIExportArchivePostUnauthorized) aPIExportArchivePostRes() {}
-
 type APIFsCreatePostBadRequest ErrorResponse
 
 func (*APIFsCreatePostBadRequest) aPIFsCreatePostRes() {}
@@ -595,6 +560,41 @@ func (*APIHighwayTokenCreatePostOK) aPIHighwayTokenCreatePostRes() {}
 type APIHighwayTokenCreatePostUnauthorized ErrorResponse
 
 func (*APIHighwayTokenCreatePostUnauthorized) aPIHighwayTokenCreatePostRes() {}
+
+type APIImportArchivePostBadRequest ErrorResponse
+
+func (*APIImportArchivePostBadRequest) aPIImportArchivePostRes() {}
+
+type APIImportArchivePostForbidden ErrorResponse
+
+func (*APIImportArchivePostForbidden) aPIImportArchivePostRes() {}
+
+type APIImportArchivePostInternalServerError ErrorResponse
+
+func (*APIImportArchivePostInternalServerError) aPIImportArchivePostRes() {}
+
+// APIImportArchivePostNoContent is response for APIImportArchivePost operation.
+type APIImportArchivePostNoContent struct{}
+
+func (*APIImportArchivePostNoContent) aPIImportArchivePostRes() {}
+
+type APIImportArchivePostReq struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APIImportArchivePostReq) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+type APIImportArchivePostUnauthorized ErrorResponse
+
+func (*APIImportArchivePostUnauthorized) aPIImportArchivePostRes() {}
 
 type APIParsingBookCheckPostBadRequest ErrorResponse
 

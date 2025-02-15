@@ -10,12 +10,12 @@ import (
 )
 
 func (a *Adapter) ExportArchive(ctx context.Context, data agentmodel.AgentExportData) error {
-	res, err := a.rawClient.APIExportArchivePost(
+	res, err := a.rawClient.APIImportArchivePost(
 		ctx,
-		agentapi.APIExportArchivePostReq{
+		agentapi.APIImportArchivePostReq{
 			Data: data.Body,
 		},
-		agentapi.APIExportArchivePostParams{
+		agentapi.APIImportArchivePostParams{
 			BookID:   data.BookID,
 			BookName: data.BookName,
 			BookURL:  optURL(data.BookURL),
@@ -26,19 +26,19 @@ func (a *Adapter) ExportArchive(ctx context.Context, data agentmodel.AgentExport
 	}
 
 	switch typedRes := res.(type) {
-	case *agentapi.APIExportArchivePostNoContent:
+	case *agentapi.APIImportArchivePostNoContent:
 		return nil
 
-	case *agentapi.APIExportArchivePostBadRequest:
+	case *agentapi.APIImportArchivePostBadRequest:
 		return fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
 
-	case *agentapi.APIExportArchivePostUnauthorized:
+	case *agentapi.APIImportArchivePostUnauthorized:
 		return fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
 
-	case *agentapi.APIExportArchivePostForbidden:
+	case *agentapi.APIImportArchivePostForbidden:
 		return fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
 
-	case *agentapi.APIExportArchivePostInternalServerError:
+	case *agentapi.APIImportArchivePostInternalServerError:
 		return fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
 
 	default:

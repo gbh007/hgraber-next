@@ -5,10 +5,6 @@ type APICoreStatusGetRes interface {
 	aPICoreStatusGetRes()
 }
 
-type APIExportArchivePostRes interface {
-	aPIExportArchivePostRes()
-}
-
 type APIFsCreatePostRes interface {
 	aPIFsCreatePostRes()
 }
@@ -31,6 +27,10 @@ type APIHighwayFileIDExtGetRes interface {
 
 type APIHighwayTokenCreatePostRes interface {
 	aPIHighwayTokenCreatePostRes()
+}
+
+type APIImportArchivePostRes interface {
+	aPIImportArchivePostRes()
 }
 
 type APIParsingBookCheckPostRes interface {

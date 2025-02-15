@@ -82,27 +82,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'e': // Prefix: "export/archive"
-				origElem := elem
-				if l := len("export/archive"); len(elem) >= l && elem[0:l] == "export/archive" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleAPIExportArchivePostRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
-					}
-
-					return
-				}
-
-				elem = origElem
 			case 'f': // Prefix: "fs/"
 				origElem := elem
 				if l := len("fs/"); len(elem) >= l && elem[0:l] == "fs/" {
@@ -288,6 +267,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				}
+
+				elem = origElem
+			case 'i': // Prefix: "import/archive"
+				origElem := elem
+				if l := len("import/archive"); len(elem) >= l && elem[0:l] == "import/archive" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleAPIImportArchivePostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
+					}
+
+					return
 				}
 
 				elem = origElem
@@ -548,31 +548,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 'e': // Prefix: "export/archive"
-				origElem := elem
-				if l := len("export/archive"); len(elem) >= l && elem[0:l] == "export/archive" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "POST":
-						r.name = APIExportArchivePostOperation
-						r.summary = "Загрузка архива"
-						r.operationID = ""
-						r.pathPattern = "/api/export/archive"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
-				}
-
-				elem = origElem
 			case 'f': // Prefix: "fs/"
 				origElem := elem
 				if l := len("fs/"); len(elem) >= l && elem[0:l] == "fs/" {
@@ -779,6 +754,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
+				}
+
+				elem = origElem
+			case 'i': // Prefix: "import/archive"
+				origElem := elem
+				if l := len("import/archive"); len(elem) >= l && elem[0:l] == "import/archive" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = APIImportArchivePostOperation
+						r.summary = "Загрузка архива"
+						r.operationID = ""
+						r.pathPattern = "/api/import/archive"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 
 				elem = origElem

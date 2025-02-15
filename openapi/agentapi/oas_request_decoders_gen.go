@@ -15,40 +15,6 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeAPIExportArchivePostRequest(r *http.Request) (
-	req APIExportArchivePostReq,
-	close func() error,
-	rerr error,
-) {
-	var closers []func() error
-	close = func() error {
-		var merr error
-		// Close in reverse order, to match defer behavior.
-		for i := len(closers) - 1; i >= 0; i-- {
-			c := closers[i]
-			merr = multierr.Append(merr, c())
-		}
-		return merr
-	}
-	defer func() {
-		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
-		}
-	}()
-	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
-	if err != nil {
-		return req, close, errors.Wrap(err, "parse media type")
-	}
-	switch {
-	case ct == "application/octet-stream":
-		reader := r.Body
-		request := APIExportArchivePostReq{Data: reader}
-		return request, close, nil
-	default:
-		return req, close, validate.InvalidContentType(ct)
-	}
-}
-
 func (s *Server) decodeAPIFsCreatePostRequest(r *http.Request) (
 	req APIFsCreatePostReq,
 	close func() error,
@@ -204,6 +170,40 @@ func (s *Server) decodeAPIFsInfoPostRequest(r *http.Request) (
 			return req, close, err
 		}
 		return &request, close, nil
+	default:
+		return req, close, validate.InvalidContentType(ct)
+	}
+}
+
+func (s *Server) decodeAPIImportArchivePostRequest(r *http.Request) (
+	req APIImportArchivePostReq,
+	close func() error,
+	rerr error,
+) {
+	var closers []func() error
+	close = func() error {
+		var merr error
+		// Close in reverse order, to match defer behavior.
+		for i := len(closers) - 1; i >= 0; i-- {
+			c := closers[i]
+			merr = multierr.Append(merr, c())
+		}
+		return merr
+	}
+	defer func() {
+		if rerr != nil {
+			rerr = multierr.Append(rerr, close())
+		}
+	}()
+	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if err != nil {
+		return req, close, errors.Wrap(err, "parse media type")
+	}
+	switch {
+	case ct == "application/octet-stream":
+		reader := r.Body
+		request := APIImportArchivePostReq{Data: reader}
+		return request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}

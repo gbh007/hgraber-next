@@ -14,12 +14,6 @@ type Handler interface {
 	//
 	// GET /api/core/status
 	APICoreStatusGet(ctx context.Context) (APICoreStatusGetRes, error)
-	// APIExportArchivePost implements POST /api/export/archive operation.
-	//
-	// Загрузка архива.
-	//
-	// POST /api/export/archive
-	APIExportArchivePost(ctx context.Context, req APIExportArchivePostReq, params APIExportArchivePostParams) (APIExportArchivePostRes, error)
 	// APIFsCreatePost implements POST /api/fs/create operation.
 	//
 	// Создание нового файла.
@@ -56,6 +50,12 @@ type Handler interface {
 	//
 	// POST /api/highway/token/create
 	APIHighwayTokenCreatePost(ctx context.Context) (APIHighwayTokenCreatePostRes, error)
+	// APIImportArchivePost implements POST /api/import/archive operation.
+	//
+	// Загрузка архива.
+	//
+	// POST /api/import/archive
+	APIImportArchivePost(ctx context.Context, req APIImportArchivePostReq, params APIImportArchivePostParams) (APIImportArchivePostRes, error)
 	// APIParsingBookCheckPost implements POST /api/parsing/book/check operation.
 	//
 	// Предварительная проверка ссылок на новые книги.
