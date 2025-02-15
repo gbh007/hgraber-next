@@ -53,6 +53,20 @@ func Serve() {
 
 	logger := initLogger(cfg)
 
+	if cfg.Application.Pyroscope.Endpoint != "" {
+		profiler, err := initPyroscope(logger, cfg)
+		if err != nil {
+			logger.ErrorContext(
+				ctx, "fail init pyroscope",
+				slog.Any("error", err),
+			)
+
+			os.Exit(1)
+		}
+
+		defer profiler.Stop() //nolint:errcheck // будет исправлено позднее
+	}
+
 	if cfg.Application.TraceEndpoint != "" {
 		err := initTrace(ctx, cfg.Application.TraceEndpoint, cfg.Application.ServiceName)
 		if err != nil {

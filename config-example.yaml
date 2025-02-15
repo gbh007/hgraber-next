@@ -8,6 +8,10 @@ application:
       book_statistic: 1h0m0s
   service_name: hgraber-next-local-test
   trace_endpoint: ""
+  pyroscope:
+    endpoint: ""
+    debug: false
+    rate: 5
 parsing:
   parse_book_timeout: 5m
   agent_timeout: 10m
