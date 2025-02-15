@@ -8,7 +8,6 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
@@ -17,14 +16,6 @@ func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader, 
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("create", &fsID, time.Since(startAt))
 	}()
-
-	if fsID == uuid.Nil {
-		if s.legacyFileStorage == nil {
-			return fmt.Errorf("%w: legacy", core.MissingFSError)
-		}
-
-		return s.legacyFileStorage.FS.Create(ctx, fileID, body)
-	}
 
 	storage, err := s.getFS(ctx, fsID, s.tryReconnect)
 	if err != nil {
@@ -45,14 +36,6 @@ func (s *Storage) Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID)
 		s.metricProvider.RegisterFSActionTime("delete", &targetFSID, time.Since(startAt))
 	}()
 
-	if targetFSID == uuid.Nil {
-		if s.legacyFileStorage == nil {
-			return fmt.Errorf("%w: legacy", core.MissingFSError)
-		}
-
-		return s.legacyFileStorage.FS.Delete(ctx, fileID)
-	}
-
 	storage, err := s.getFS(ctx, targetFSID, s.tryReconnect)
 	if err != nil {
 		return fmt.Errorf("get fs: %w", err)
@@ -72,14 +55,6 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (i
 		s.metricProvider.RegisterFSActionTime("get", &targetFSID, time.Since(startAt))
 	}()
 
-	if targetFSID == uuid.Nil {
-		if s.legacyFileStorage == nil {
-			return nil, fmt.Errorf("%w: legacy", core.MissingFSError)
-		}
-
-		return s.legacyFileStorage.FS.Get(ctx, fileID)
-	}
-
 	storage, err := s.getFS(ctx, targetFSID, s.tryReconnect)
 	if err != nil {
 		return nil, fmt.Errorf("get fs: %w", err)
@@ -93,14 +68,6 @@ func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSiz
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("state", &fsID, time.Since(startAt))
 	}()
-
-	if fsID == uuid.Nil {
-		if s.legacyFileStorage == nil {
-			return fsmodel.FSState{}, fmt.Errorf("%w: legacy", core.MissingFSError)
-		}
-
-		return s.legacyFileStorage.FS.State(ctx, includeFileIDs, includeFileSizes)
-	}
 
 	storage, err := s.getFS(ctx, fsID, s.tryReconnect)
 	if err != nil {

@@ -128,16 +128,6 @@ func Serve() {
 		cfg.FileStorage.TryReconnect,
 	)
 
-	err = fileStorageAdapter.InitLegacy(ctx, cfg.Storage.FSAgentID, cfg.Storage.FilePath, false)
-	if err != nil {
-		logger.ErrorContext(
-			ctx, "fail init legacy file system",
-			slog.Any("error", err),
-		)
-
-		os.Exit(1)
-	}
-
 	err = fileStorageAdapter.Init(ctx, true)
 	if err != nil {
 		logger.ErrorContext(

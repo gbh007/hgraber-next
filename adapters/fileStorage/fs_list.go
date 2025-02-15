@@ -21,19 +21,5 @@ func (s *Storage) FSList(ctx context.Context) ([]fsmodel.FSWithStatus, error) {
 		})
 	}
 
-	if s.legacyFileStorage != nil {
-		ls := fsmodel.FSWithStatus{
-			Info: fsmodel.FileStorageSystem{
-				Name:        "legacy storage",
-				Description: "Устаревшее хранилище, крайне рекомендуется перейти на множественные файловые системы",
-				AgentID:     s.legacyFileStorage.AgentID,
-				Path:        s.legacyFileStorage.Path,
-			},
-			IsLegacy: true,
-		}
-
-		result = append(result, ls)
-	}
-
 	return result, nil
 }

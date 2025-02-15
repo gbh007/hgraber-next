@@ -17,10 +17,6 @@ func (s *Storage) HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext stri
 		s.metricProvider.RegisterFSActionTime("highway", &fsID, time.Since(startAt))
 	}()
 
-	if fsID == uuid.Nil { // Легаси система не поддерживает highway
-		return url.URL{}, false, nil
-	}
-
 	info, err := s.getFS(ctx, fsID, s.tryReconnect)
 	if err != nil {
 		return url.URL{}, false, fmt.Errorf("get fs for highway url: %w", err)

@@ -11,8 +11,6 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/adapters/agentFS"
-	"github.com/gbh007/hgraber-next/adapters/localFiles"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
@@ -64,8 +62,6 @@ type Storage struct {
 
 	tryReconnect bool
 
-	legacyFileStorage *rawFileStorageData
-
 	storageMap      map[uuid.UUID]rawFileStorageData
 	storageMapMutex *sync.RWMutex
 }
@@ -88,44 +84,6 @@ func New(
 		storageMap:      make(map[uuid.UUID]rawFileStorageData, 10),
 		storageMapMutex: &sync.RWMutex{},
 	}
-}
-
-func (s *Storage) InitLegacy(ctx context.Context, fsAgentID uuid.UUID, filePath string, missingError bool) error {
-	switch {
-	case fsAgentID != uuid.Nil:
-		storage := agentFS.New(fsAgentID, s.logger, s.agentController)
-
-		s.legacyFileStorage = &rawFileStorageData{
-			FS:      storage,
-			AgentID: fsAgentID,
-		}
-
-		s.logger.DebugContext(
-			ctx, "use agent file storage",
-			slog.String("agent_id", fsAgentID.String()),
-		)
-
-	case filePath != "":
-		storage, err := localFiles.New(filePath, s.logger)
-		if err != nil {
-			return fmt.Errorf("fail init local file storage: %w", err)
-		}
-
-		s.legacyFileStorage = &rawFileStorageData{
-			FS:   storage,
-			Path: filePath,
-		}
-
-		s.logger.DebugContext(
-			ctx, "use local file storage",
-			slog.String("path", filePath),
-		)
-
-	case missingError:
-		return fmt.Errorf("no configuration for file storage")
-	}
-
-	return nil
 }
 
 func (s *Storage) Init(ctx context.Context, skipNotAvailable bool) error {
@@ -157,12 +115,6 @@ func (s *Storage) FSIDForDownload(ctx context.Context) (uuid.UUID, error) {
 	storages, err := s.dataStorage.FileStorages(ctx)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("get fs from db: %w", err)
-	}
-
-	if s.legacyFileStorage != nil {
-		storages = append(storages, fsmodel.FileStorageSystem{
-			ID: uuid.Nil,
-		})
 	}
 
 	if len(storages) == 0 {

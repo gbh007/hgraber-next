@@ -68,7 +68,7 @@ func (d *Database) NewFile(ctx context.Context, file core.File) error {
 			"filename":  file.Filename,
 			"ext":       file.Ext,
 			"create_at": file.CreateAt,
-			"fs_id":     model.UUIDToDB(file.FSID),
+			"fs_id":     file.FSID,
 		})
 
 	query, args, err := builder.ToSql()
@@ -210,16 +210,9 @@ func (d *Database) FileIDs(ctx context.Context) ([]uuid.UUID, error) {
 func (d *Database) FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error) {
 	raw := make([]uuid.UUID, 0)
 
-	if fsID == uuid.Nil {
-		err := d.db.SelectContext(ctx, &raw, `SELECT id FROM files WHERE fs_id IS NULL;`)
-		if err != nil {
-			return nil, fmt.Errorf("exec: %w", err)
-		}
-	} else {
-		err := d.db.SelectContext(ctx, &raw, `SELECT id FROM files WHERE fs_id = $1;`, fsID)
-		if err != nil {
-			return nil, fmt.Errorf("exec: %w", err)
-		}
+	err := d.db.SelectContext(ctx, &raw, `SELECT id FROM files WHERE fs_id = $1;`, fsID)
+	if err != nil {
+		return nil, fmt.Errorf("exec: %w", err)
 	}
 
 	return raw, nil
@@ -254,7 +247,7 @@ func (d *Database) UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid
 	builder := squirrel.Update("files").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
-			"fs_id": model.UUIDToDB(fsID),
+			"fs_id": fsID,
 		}).
 		Where(squirrel.Eq{
 			"id": fileID,
@@ -312,21 +305,14 @@ func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidD
 		"SUM(\"size\")",
 	).
 		PlaceholderFormat(squirrel.Dollar).
-		From("files")
+		From("files").
+		Where(squirrel.Eq{
+			"fs_id": fsID,
+		})
 
 	if onlyInvalidData {
 		builder = builder.Where(squirrel.Eq{
 			"invalid_data": true,
-		})
-	}
-
-	if fsID == uuid.Nil {
-		builder = builder.Where(squirrel.Eq{
-			"fs_id": nil,
-		})
-	} else {
-		builder = builder.Where(squirrel.Eq{
-			"fs_id": fsID,
 		})
 	}
 
@@ -365,7 +351,7 @@ func (d *Database) FileIDsByFilter(ctx context.Context, filter fsmodel.FileFilte
 
 	if filter.FSID != nil {
 		builder = builder.Where(squirrel.Eq{
-			"fs_id": model.UUIDToDB(*filter.FSID),
+			"fs_id": *filter.FSID,
 		})
 	}
 

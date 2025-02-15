@@ -46,9 +46,7 @@ workers:
     interval: 3s
 storage:
   connection: postgres://hgrabernextuser:hgrabernextpass@localhost:5432/hgrabernext?sslmode=disable
-  file_path: ./.hidden/filedata
   max_connections: 10
-  # fs_agent_id: 019067fc-8d4f-769d-8c4f-e755597f9525
 file_storage:
   try_reconnect: true
 api:
