@@ -21,6 +21,7 @@ type ParseUseCases interface {
 type BookUseCases interface {
 	BookRaw(ctx context.Context, bookID uuid.UUID) (core.BookContainer, error)
 	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool) error
+	SetBookRebuild(ctx context.Context, bookID uuid.UUID, value bool) error
 	DeleteBook(ctx context.Context, bookID uuid.UUID) error
 }
 

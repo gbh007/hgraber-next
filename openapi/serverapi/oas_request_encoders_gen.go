@@ -235,8 +235,8 @@ func encodeAPIBookRestorePostRequest(
 	return nil
 }
 
-func encodeAPIBookUpdatePostRequest(
-	req *BookRaw,
+func encodeAPIBookStatusSetPostRequest(
+	req *APIBookStatusSetPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -249,8 +249,8 @@ func encodeAPIBookUpdatePostRequest(
 	return nil
 }
 
-func encodeAPIBookVerifyPostRequest(
-	req *APIBookVerifyPostReq,
+func encodeAPIBookUpdatePostRequest(
+	req *BookRaw,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

@@ -15,7 +15,24 @@ func (d *Database) VerifyBook(ctx context.Context, bookID uuid.UUID, verified bo
 	res, err := d.db.ExecContext(
 		ctx,
 		`UPDATE books SET verified_at = $2, verified = $3 WHERE id = $1;`,
-		bookID.String(), model.TimeToDB(verifiedAt), verified,
+		bookID, model.TimeToDB(verifiedAt), verified,
+	)
+	if err != nil {
+		return fmt.Errorf("update book: %w", err)
+	}
+
+	if !d.isApply(ctx, res) {
+		return core.BookNotFoundError
+	}
+
+	return nil
+}
+
+func (d *Database) SetBookRebuild(ctx context.Context, bookID uuid.UUID, reBuilded bool) error {
+	res, err := d.db.ExecContext(
+		ctx,
+		`UPDATE books SET is_rebuild = $2 WHERE id = $1;`,
+		bookID, reBuilded,
 	)
 	if err != nil {
 		return fmt.Errorf("update book: %w", err)

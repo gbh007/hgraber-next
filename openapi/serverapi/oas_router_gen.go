@@ -584,6 +584,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				case 's': // Prefix: "status/set"
+					origElem := elem
+					if l := len("status/set"); len(elem) >= l && elem[0:l] == "status/set" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIBookStatusSetPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				case 'u': // Prefix: "update"
 					origElem := elem
 					if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
@@ -597,27 +618,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						switch r.Method {
 						case "POST":
 							s.handleAPIBookUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				case 'v': // Prefix: "verify"
-					origElem := elem
-					if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIBookVerifyPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "POST")
 						}
@@ -2538,6 +2538,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
+				case 's': // Prefix: "status/set"
+					origElem := elem
+					if l := len("status/set"); len(elem) >= l && elem[0:l] == "status/set" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIBookStatusSetPostOperation
+							r.summary = "Изменение статуса книги"
+							r.operationID = ""
+							r.pathPattern = "/api/book/status/set"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				case 'u': // Prefix: "update"
 					origElem := elem
 					if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
@@ -2554,31 +2579,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.summary = "Изменение данных книги"
 							r.operationID = ""
 							r.pathPattern = "/api/book/update"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				case 'v': // Prefix: "verify"
-					origElem := elem
-					if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIBookVerifyPostOperation
-							r.summary = "Изменение статуса подтверждения (модерации) книги"
-							r.operationID = ""
-							r.pathPattern = "/api/book/verify"
 							r.args = args
 							r.count = 0
 							return r, true

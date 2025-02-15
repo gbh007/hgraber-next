@@ -1750,6 +1750,112 @@ type APIBookRestorePostUnauthorized ErrorResponse
 
 func (*APIBookRestorePostUnauthorized) aPIBookRestorePostRes() {}
 
+type APIBookStatusSetPostBadRequest ErrorResponse
+
+func (*APIBookStatusSetPostBadRequest) aPIBookStatusSetPostRes() {}
+
+type APIBookStatusSetPostForbidden ErrorResponse
+
+func (*APIBookStatusSetPostForbidden) aPIBookStatusSetPostRes() {}
+
+type APIBookStatusSetPostInternalServerError ErrorResponse
+
+func (*APIBookStatusSetPostInternalServerError) aPIBookStatusSetPostRes() {}
+
+// APIBookStatusSetPostNoContent is response for APIBookStatusSetPost operation.
+type APIBookStatusSetPostNoContent struct{}
+
+func (*APIBookStatusSetPostNoContent) aPIBookStatusSetPostRes() {}
+
+type APIBookStatusSetPostNotFound ErrorResponse
+
+func (*APIBookStatusSetPostNotFound) aPIBookStatusSetPostRes() {}
+
+type APIBookStatusSetPostReq struct {
+	// ID книги.
+	ID uuid.UUID `json:"id"`
+	// Тип статуса.
+	Status APIBookStatusSetPostReqStatus `json:"status"`
+	// Новое значение.
+	Value bool `json:"value"`
+}
+
+// GetID returns the value of ID.
+func (s *APIBookStatusSetPostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetStatus returns the value of Status.
+func (s *APIBookStatusSetPostReq) GetStatus() APIBookStatusSetPostReqStatus {
+	return s.Status
+}
+
+// GetValue returns the value of Value.
+func (s *APIBookStatusSetPostReq) GetValue() bool {
+	return s.Value
+}
+
+// SetID sets the value of ID.
+func (s *APIBookStatusSetPostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetStatus sets the value of Status.
+func (s *APIBookStatusSetPostReq) SetStatus(val APIBookStatusSetPostReqStatus) {
+	s.Status = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIBookStatusSetPostReq) SetValue(val bool) {
+	s.Value = val
+}
+
+// Тип статуса.
+type APIBookStatusSetPostReqStatus string
+
+const (
+	APIBookStatusSetPostReqStatusVerify  APIBookStatusSetPostReqStatus = "verify"
+	APIBookStatusSetPostReqStatusRebuild APIBookStatusSetPostReqStatus = "rebuild"
+)
+
+// AllValues returns all APIBookStatusSetPostReqStatus values.
+func (APIBookStatusSetPostReqStatus) AllValues() []APIBookStatusSetPostReqStatus {
+	return []APIBookStatusSetPostReqStatus{
+		APIBookStatusSetPostReqStatusVerify,
+		APIBookStatusSetPostReqStatusRebuild,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIBookStatusSetPostReqStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case APIBookStatusSetPostReqStatusVerify:
+		return []byte(s), nil
+	case APIBookStatusSetPostReqStatusRebuild:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIBookStatusSetPostReqStatus) UnmarshalText(data []byte) error {
+	switch APIBookStatusSetPostReqStatus(data) {
+	case APIBookStatusSetPostReqStatusVerify:
+		*s = APIBookStatusSetPostReqStatusVerify
+		return nil
+	case APIBookStatusSetPostReqStatusRebuild:
+		*s = APIBookStatusSetPostReqStatusRebuild
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APIBookStatusSetPostUnauthorized ErrorResponse
+
+func (*APIBookStatusSetPostUnauthorized) aPIBookStatusSetPostRes() {}
+
 type APIBookUpdatePostBadRequest ErrorResponse
 
 func (*APIBookUpdatePostBadRequest) aPIBookUpdatePostRes() {}
@@ -1774,58 +1880,6 @@ func (*APIBookUpdatePostNotFound) aPIBookUpdatePostRes() {}
 type APIBookUpdatePostUnauthorized ErrorResponse
 
 func (*APIBookUpdatePostUnauthorized) aPIBookUpdatePostRes() {}
-
-type APIBookVerifyPostBadRequest ErrorResponse
-
-func (*APIBookVerifyPostBadRequest) aPIBookVerifyPostRes() {}
-
-type APIBookVerifyPostForbidden ErrorResponse
-
-func (*APIBookVerifyPostForbidden) aPIBookVerifyPostRes() {}
-
-type APIBookVerifyPostInternalServerError ErrorResponse
-
-func (*APIBookVerifyPostInternalServerError) aPIBookVerifyPostRes() {}
-
-// APIBookVerifyPostNoContent is response for APIBookVerifyPost operation.
-type APIBookVerifyPostNoContent struct{}
-
-func (*APIBookVerifyPostNoContent) aPIBookVerifyPostRes() {}
-
-type APIBookVerifyPostNotFound ErrorResponse
-
-func (*APIBookVerifyPostNotFound) aPIBookVerifyPostRes() {}
-
-type APIBookVerifyPostReq struct {
-	// ID книги.
-	ID uuid.UUID `json:"id"`
-	// Новый статус подтверждения.
-	VerifyStatus bool `json:"verify_status"`
-}
-
-// GetID returns the value of ID.
-func (s *APIBookVerifyPostReq) GetID() uuid.UUID {
-	return s.ID
-}
-
-// GetVerifyStatus returns the value of VerifyStatus.
-func (s *APIBookVerifyPostReq) GetVerifyStatus() bool {
-	return s.VerifyStatus
-}
-
-// SetID sets the value of ID.
-func (s *APIBookVerifyPostReq) SetID(val uuid.UUID) {
-	s.ID = val
-}
-
-// SetVerifyStatus sets the value of VerifyStatus.
-func (s *APIBookVerifyPostReq) SetVerifyStatus(val bool) {
-	s.VerifyStatus = val
-}
-
-type APIBookVerifyPostUnauthorized ErrorResponse
-
-func (*APIBookVerifyPostUnauthorized) aPIBookVerifyPostRes() {}
 
 type APIDeduplicateBookByPageBodyPostBadRequest ErrorResponse
 

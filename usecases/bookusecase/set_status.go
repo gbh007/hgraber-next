@@ -16,3 +16,7 @@ func (uc *UseCase) VerifyBook(ctx context.Context, bookID uuid.UUID, verified bo
 
 	return uc.storage.VerifyBook(ctx, bookID, verified, verifiedAt)
 }
+
+func (uc *UseCase) SetBookRebuild(ctx context.Context, bookID uuid.UUID, value bool) error {
+	return uc.storage.SetBookRebuild(ctx, bookID, value)
+}

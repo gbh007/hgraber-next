@@ -188,6 +188,15 @@ func (UnimplementedHandler) APIBookRestorePost(ctx context.Context, req *APIBook
 	return r, ht.ErrNotImplemented
 }
 
+// APIBookStatusSetPost implements POST /api/book/status/set operation.
+//
+// Изменение статуса книги.
+//
+// POST /api/book/status/set
+func (UnimplementedHandler) APIBookStatusSetPost(ctx context.Context, req *APIBookStatusSetPostReq) (r APIBookStatusSetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIBookUpdatePost implements POST /api/book/update operation.
 //
 // Изменяет часть данных книги, ряд полей не изменяется
@@ -195,16 +204,6 @@ func (UnimplementedHandler) APIBookRestorePost(ctx context.Context, req *APIBook
 //
 // POST /api/book/update
 func (UnimplementedHandler) APIBookUpdatePost(ctx context.Context, req *BookRaw) (r APIBookUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIBookVerifyPost implements POST /api/book/verify operation.
-//
-// Изменение статуса подтверждения (модерации) книги,
-// нужна в случае массовой обработки.
-//
-// POST /api/book/verify
-func (UnimplementedHandler) APIBookVerifyPost(ctx context.Context, req *APIBookVerifyPostReq) (r APIBookVerifyPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

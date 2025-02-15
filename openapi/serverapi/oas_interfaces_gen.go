@@ -77,12 +77,12 @@ type APIBookRestorePostRes interface {
 	aPIBookRestorePostRes()
 }
 
-type APIBookUpdatePostRes interface {
-	aPIBookUpdatePostRes()
+type APIBookStatusSetPostRes interface {
+	aPIBookStatusSetPostRes()
 }
 
-type APIBookVerifyPostRes interface {
-	aPIBookVerifyPostRes()
+type APIBookUpdatePostRes interface {
+	aPIBookUpdatePostRes()
 }
 
 type APIDeduplicateBookByPageBodyPostRes interface {

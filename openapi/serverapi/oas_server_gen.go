@@ -126,6 +126,12 @@ type Handler interface {
 	//
 	// POST /api/book/restore
 	APIBookRestorePost(ctx context.Context, req *APIBookRestorePostReq) (APIBookRestorePostRes, error)
+	// APIBookStatusSetPost implements POST /api/book/status/set operation.
+	//
+	// Изменение статуса книги.
+	//
+	// POST /api/book/status/set
+	APIBookStatusSetPost(ctx context.Context, req *APIBookStatusSetPostReq) (APIBookStatusSetPostRes, error)
 	// APIBookUpdatePost implements POST /api/book/update operation.
 	//
 	// Изменяет часть данных книги, ряд полей не изменяется
@@ -133,13 +139,6 @@ type Handler interface {
 	//
 	// POST /api/book/update
 	APIBookUpdatePost(ctx context.Context, req *BookRaw) (APIBookUpdatePostRes, error)
-	// APIBookVerifyPost implements POST /api/book/verify operation.
-	//
-	// Изменение статуса подтверждения (модерации) книги,
-	// нужна в случае массовой обработки.
-	//
-	// POST /api/book/verify
-	APIBookVerifyPost(ctx context.Context, req *APIBookVerifyPostReq) (APIBookVerifyPostRes, error)
 	// APIDeduplicateBookByPageBodyPost implements POST /api/deduplicate/book-by-page-body operation.
 	//
 	// Поиск дубликатов книги по телу страницы.
