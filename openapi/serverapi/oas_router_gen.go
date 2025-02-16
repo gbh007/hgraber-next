@@ -731,132 +731,24 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
-					case 'a': // Prefix: "ad-hash-by-"
+					case 'a': // Prefix: "ad-hash/set"
 						origElem := elem
-						if l := len("ad-hash-by-"); len(elem) >= l && elem[0:l] == "ad-hash-by-" {
+						if l := len("ad-hash/set"); len(elem) >= l && elem[0:l] == "ad-hash/set" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'b': // Prefix: "book-pages/"
-							origElem := elem
-							if l := len("book-pages/"); len(elem) >= l && elem[0:l] == "book-pages/" {
-								elem = elem[l:]
-							} else {
-								break
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIDeduplicateDeadHashSetPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
 							}
 
-							if len(elem) == 0 {
-								break
-							}
-							switch elem[0] {
-							case 'c': // Prefix: "create"
-								origElem := elem
-								if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "POST":
-										s.handleAPIDeduplicateDeadHashByBookPagesCreatePostRequest([0]string{}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "POST")
-									}
-
-									return
-								}
-
-								elem = origElem
-							case 'd': // Prefix: "delete"
-								origElem := elem
-								if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "POST":
-										s.handleAPIDeduplicateDeadHashByBookPagesDeletePostRequest([0]string{}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "POST")
-									}
-
-									return
-								}
-
-								elem = origElem
-							}
-
-							elem = origElem
-						case 'p': // Prefix: "page/"
-							origElem := elem
-							if l := len("page/"); len(elem) >= l && elem[0:l] == "page/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								break
-							}
-							switch elem[0] {
-							case 'c': // Prefix: "create"
-								origElem := elem
-								if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "POST":
-										s.handleAPIDeduplicateDeadHashByPageCreatePostRequest([0]string{}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "POST")
-									}
-
-									return
-								}
-
-								elem = origElem
-							case 'd': // Prefix: "delete"
-								origElem := elem
-								if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "POST":
-										s.handleAPIDeduplicateDeadHashByPageDeletePostRequest([0]string{}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "POST")
-									}
-
-									return
-								}
-
-								elem = origElem
-							}
-
-							elem = origElem
+							return
 						}
 
 						elem = origElem
@@ -2705,148 +2597,28 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
-					case 'a': // Prefix: "ad-hash-by-"
+					case 'a': // Prefix: "ad-hash/set"
 						origElem := elem
-						if l := len("ad-hash-by-"); len(elem) >= l && elem[0:l] == "ad-hash-by-" {
+						if l := len("ad-hash/set"); len(elem) >= l && elem[0:l] == "ad-hash/set" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'b': // Prefix: "book-pages/"
-							origElem := elem
-							if l := len("book-pages/"); len(elem) >= l && elem[0:l] == "book-pages/" {
-								elem = elem[l:]
-							} else {
-								break
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIDeduplicateDeadHashSetPostOperation
+								r.summary = "Устанавливает значение мертвых хешей для книги или ее страницы"
+								r.operationID = ""
+								r.pathPattern = "/api/deduplicate/dead-hash/set"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
 							}
-
-							if len(elem) == 0 {
-								break
-							}
-							switch elem[0] {
-							case 'c': // Prefix: "create"
-								origElem := elem
-								if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch method {
-									case "POST":
-										r.name = APIDeduplicateDeadHashByBookPagesCreatePostOperation
-										r.summary = "Создает запись о мертвом хеше по страницам книги"
-										r.operationID = ""
-										r.pathPattern = "/api/deduplicate/dead-hash-by-book-pages/create"
-										r.args = args
-										r.count = 0
-										return r, true
-									default:
-										return
-									}
-								}
-
-								elem = origElem
-							case 'd': // Prefix: "delete"
-								origElem := elem
-								if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch method {
-									case "POST":
-										r.name = APIDeduplicateDeadHashByBookPagesDeletePostOperation
-										r.summary = "Удаляет запись о мертвом хеше по страницам книги"
-										r.operationID = ""
-										r.pathPattern = "/api/deduplicate/dead-hash-by-book-pages/delete"
-										r.args = args
-										r.count = 0
-										return r, true
-									default:
-										return
-									}
-								}
-
-								elem = origElem
-							}
-
-							elem = origElem
-						case 'p': // Prefix: "page/"
-							origElem := elem
-							if l := len("page/"); len(elem) >= l && elem[0:l] == "page/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								break
-							}
-							switch elem[0] {
-							case 'c': // Prefix: "create"
-								origElem := elem
-								if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch method {
-									case "POST":
-										r.name = APIDeduplicateDeadHashByPageCreatePostOperation
-										r.summary = "Создает запись о мертвом хеше по странице"
-										r.operationID = ""
-										r.pathPattern = "/api/deduplicate/dead-hash-by-page/create"
-										r.args = args
-										r.count = 0
-										return r, true
-									default:
-										return
-									}
-								}
-
-								elem = origElem
-							case 'd': // Prefix: "delete"
-								origElem := elem
-								if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch method {
-									case "POST":
-										r.name = APIDeduplicateDeadHashByPageDeletePostOperation
-										r.summary = "Удаляет запись о мертвом хеше по странице"
-										r.operationID = ""
-										r.pathPattern = "/api/deduplicate/dead-hash-by-page/delete"
-										r.args = args
-										r.count = 0
-										return r, true
-									default:
-										return
-									}
-								}
-
-								elem = origElem
-							}
-
-							elem = origElem
 						}
 
 						elem = origElem

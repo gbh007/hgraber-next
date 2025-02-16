@@ -9026,17 +9026,17 @@ func (s *APIDeduplicateComparePostUnauthorized) UnmarshalJSON(data []byte) error
 	return s.Decode(d)
 }
 
-// Encode encodes APIDeduplicateDeadHashByBookPagesCreatePostBadRequest as json.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostBadRequest) Encode(e *jx.Encoder) {
+// Encode encodes APIDeduplicateDeadHashSetPostBadRequest as json.
+func (s *APIDeduplicateDeadHashSetPostBadRequest) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
 
 	unwrapped.Encode(e)
 }
 
-// Decode decodes APIDeduplicateDeadHashByBookPagesCreatePostBadRequest from json.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostBadRequest) Decode(d *jx.Decoder) error {
+// Decode decodes APIDeduplicateDeadHashSetPostBadRequest from json.
+func (s *APIDeduplicateDeadHashSetPostBadRequest) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByBookPagesCreatePostBadRequest to nil")
+		return errors.New("invalid: unable to decode APIDeduplicateDeadHashSetPostBadRequest to nil")
 	}
 	var unwrapped ErrorResponse
 	if err := func() error {
@@ -9047,34 +9047,34 @@ func (s *APIDeduplicateDeadHashByBookPagesCreatePostBadRequest) Decode(d *jx.Dec
 	}(); err != nil {
 		return errors.Wrap(err, "alias")
 	}
-	*s = APIDeduplicateDeadHashByBookPagesCreatePostBadRequest(unwrapped)
+	*s = APIDeduplicateDeadHashSetPostBadRequest(unwrapped)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostBadRequest) MarshalJSON() ([]byte, error) {
+func (s *APIDeduplicateDeadHashSetPostBadRequest) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostBadRequest) UnmarshalJSON(data []byte) error {
+func (s *APIDeduplicateDeadHashSetPostBadRequest) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
-// Encode encodes APIDeduplicateDeadHashByBookPagesCreatePostForbidden as json.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostForbidden) Encode(e *jx.Encoder) {
+// Encode encodes APIDeduplicateDeadHashSetPostForbidden as json.
+func (s *APIDeduplicateDeadHashSetPostForbidden) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
 
 	unwrapped.Encode(e)
 }
 
-// Decode decodes APIDeduplicateDeadHashByBookPagesCreatePostForbidden from json.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostForbidden) Decode(d *jx.Decoder) error {
+// Decode decodes APIDeduplicateDeadHashSetPostForbidden from json.
+func (s *APIDeduplicateDeadHashSetPostForbidden) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByBookPagesCreatePostForbidden to nil")
+		return errors.New("invalid: unable to decode APIDeduplicateDeadHashSetPostForbidden to nil")
 	}
 	var unwrapped ErrorResponse
 	if err := func() error {
@@ -9085,34 +9085,34 @@ func (s *APIDeduplicateDeadHashByBookPagesCreatePostForbidden) Decode(d *jx.Deco
 	}(); err != nil {
 		return errors.Wrap(err, "alias")
 	}
-	*s = APIDeduplicateDeadHashByBookPagesCreatePostForbidden(unwrapped)
+	*s = APIDeduplicateDeadHashSetPostForbidden(unwrapped)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostForbidden) MarshalJSON() ([]byte, error) {
+func (s *APIDeduplicateDeadHashSetPostForbidden) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostForbidden) UnmarshalJSON(data []byte) error {
+func (s *APIDeduplicateDeadHashSetPostForbidden) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
-// Encode encodes APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError as json.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError) Encode(e *jx.Encoder) {
+// Encode encodes APIDeduplicateDeadHashSetPostInternalServerError as json.
+func (s *APIDeduplicateDeadHashSetPostInternalServerError) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
 
 	unwrapped.Encode(e)
 }
 
-// Decode decodes APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError from json.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError) Decode(d *jx.Decoder) error {
+// Decode decodes APIDeduplicateDeadHashSetPostInternalServerError from json.
+func (s *APIDeduplicateDeadHashSetPostInternalServerError) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError to nil")
+		return errors.New("invalid: unable to decode APIDeduplicateDeadHashSetPostInternalServerError to nil")
 	}
 	var unwrapped ErrorResponse
 	if err := func() error {
@@ -9123,547 +9123,96 @@ func (s *APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError) Decode(
 	}(); err != nil {
 		return errors.Wrap(err, "alias")
 	}
-	*s = APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError(unwrapped)
+	*s = APIDeduplicateDeadHashSetPostInternalServerError(unwrapped)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError) MarshalJSON() ([]byte, error) {
+func (s *APIDeduplicateDeadHashSetPostInternalServerError) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError) UnmarshalJSON(data []byte) error {
+func (s *APIDeduplicateDeadHashSetPostInternalServerError) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIDeduplicateDeadHashSetPostNotFound as json.
+func (s *APIDeduplicateDeadHashSetPostNotFound) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIDeduplicateDeadHashSetPostNotFound from json.
+func (s *APIDeduplicateDeadHashSetPostNotFound) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIDeduplicateDeadHashSetPostNotFound to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIDeduplicateDeadHashSetPostNotFound(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIDeduplicateDeadHashSetPostNotFound) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIDeduplicateDeadHashSetPostNotFound) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostReq) Encode(e *jx.Encoder) {
+func (s *APIDeduplicateDeadHashSetPostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("book_id")
-		json.EncodeUUID(e, s.BookID)
-	}
-}
-
-var jsonFieldsNameOfAPIDeduplicateDeadHashByBookPagesCreatePostReq = [1]string{
-	0: "book_id",
-}
-
-// Decode decodes APIDeduplicateDeadHashByBookPagesCreatePostReq from json.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByBookPagesCreatePostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "book_id":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := json.DecodeUUID(d)
-				s.BookID = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"book_id\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIDeduplicateDeadHashByBookPagesCreatePostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIDeduplicateDeadHashByBookPagesCreatePostReq) {
-					name = jsonFieldsNameOfAPIDeduplicateDeadHashByBookPagesCreatePostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized as json.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized from json.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByBookPagesDeletePostBadRequest as json.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostBadRequest) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByBookPagesDeletePostBadRequest from json.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByBookPagesDeletePostBadRequest to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByBookPagesDeletePostBadRequest(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByBookPagesDeletePostForbidden as json.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostForbidden) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByBookPagesDeletePostForbidden from json.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostForbidden) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByBookPagesDeletePostForbidden to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByBookPagesDeletePostForbidden(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostForbidden) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostForbidden) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError as json.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError from json.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("book_id")
-		json.EncodeUUID(e, s.BookID)
-	}
-}
-
-var jsonFieldsNameOfAPIDeduplicateDeadHashByBookPagesDeletePostReq = [1]string{
-	0: "book_id",
-}
-
-// Decode decodes APIDeduplicateDeadHashByBookPagesDeletePostReq from json.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByBookPagesDeletePostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "book_id":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := json.DecodeUUID(d)
-				s.BookID = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"book_id\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIDeduplicateDeadHashByBookPagesDeletePostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIDeduplicateDeadHashByBookPagesDeletePostReq) {
-					name = jsonFieldsNameOfAPIDeduplicateDeadHashByBookPagesDeletePostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized as json.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized from json.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByPageCreatePostBadRequest as json.
-func (s *APIDeduplicateDeadHashByPageCreatePostBadRequest) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByPageCreatePostBadRequest from json.
-func (s *APIDeduplicateDeadHashByPageCreatePostBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByPageCreatePostBadRequest to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByPageCreatePostBadRequest(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByPageCreatePostForbidden as json.
-func (s *APIDeduplicateDeadHashByPageCreatePostForbidden) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByPageCreatePostForbidden from json.
-func (s *APIDeduplicateDeadHashByPageCreatePostForbidden) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByPageCreatePostForbidden to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByPageCreatePostForbidden(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostForbidden) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostForbidden) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByPageCreatePostInternalServerError as json.
-func (s *APIDeduplicateDeadHashByPageCreatePostInternalServerError) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByPageCreatePostInternalServerError from json.
-func (s *APIDeduplicateDeadHashByPageCreatePostInternalServerError) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByPageCreatePostInternalServerError to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByPageCreatePostInternalServerError(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostInternalServerError) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostInternalServerError) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIDeduplicateDeadHashByPageCreatePostReq) encodeFields(e *jx.Encoder) {
+func (s *APIDeduplicateDeadHashSetPostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("book_id")
 		json.EncodeUUID(e, s.BookID)
 	}
 	{
-		e.FieldStart("page_number")
-		e.Int(s.PageNumber)
+		if s.PageNumber.Set {
+			e.FieldStart("page_number")
+			s.PageNumber.Encode(e)
+		}
+	}
+	{
+		e.FieldStart("value")
+		e.Bool(s.Value)
 	}
 }
 
-var jsonFieldsNameOfAPIDeduplicateDeadHashByPageCreatePostReq = [2]string{
+var jsonFieldsNameOfAPIDeduplicateDeadHashSetPostReq = [3]string{
 	0: "book_id",
 	1: "page_number",
+	2: "value",
 }
 
-// Decode decodes APIDeduplicateDeadHashByPageCreatePostReq from json.
-func (s *APIDeduplicateDeadHashByPageCreatePostReq) Decode(d *jx.Decoder) error {
+// Decode decodes APIDeduplicateDeadHashSetPostReq from json.
+func (s *APIDeduplicateDeadHashSetPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByPageCreatePostReq to nil")
+		return errors.New("invalid: unable to decode APIDeduplicateDeadHashSetPostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -9682,28 +9231,38 @@ func (s *APIDeduplicateDeadHashByPageCreatePostReq) Decode(d *jx.Decoder) error 
 				return errors.Wrap(err, "decode field \"book_id\"")
 			}
 		case "page_number":
-			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := d.Int()
-				s.PageNumber = int(v)
-				if err != nil {
+				s.PageNumber.Reset()
+				if err := s.PageNumber.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"page_number\"")
 			}
+		case "value":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Bool()
+				s.Value = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"value\"")
+			}
 		default:
 			return d.Skip()
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIDeduplicateDeadHashByPageCreatePostReq")
+		return errors.Wrap(err, "decode APIDeduplicateDeadHashSetPostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000101,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -9715,8 +9274,8 @@ func (s *APIDeduplicateDeadHashByPageCreatePostReq) Decode(d *jx.Decoder) error 
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIDeduplicateDeadHashByPageCreatePostReq) {
-					name = jsonFieldsNameOfAPIDeduplicateDeadHashByPageCreatePostReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfAPIDeduplicateDeadHashSetPostReq) {
+					name = jsonFieldsNameOfAPIDeduplicateDeadHashSetPostReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -9737,29 +9296,29 @@ func (s *APIDeduplicateDeadHashByPageCreatePostReq) Decode(d *jx.Decoder) error 
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostReq) MarshalJSON() ([]byte, error) {
+func (s *APIDeduplicateDeadHashSetPostReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostReq) UnmarshalJSON(data []byte) error {
+func (s *APIDeduplicateDeadHashSetPostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
-// Encode encodes APIDeduplicateDeadHashByPageCreatePostUnauthorized as json.
-func (s *APIDeduplicateDeadHashByPageCreatePostUnauthorized) Encode(e *jx.Encoder) {
+// Encode encodes APIDeduplicateDeadHashSetPostUnauthorized as json.
+func (s *APIDeduplicateDeadHashSetPostUnauthorized) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
 
 	unwrapped.Encode(e)
 }
 
-// Decode decodes APIDeduplicateDeadHashByPageCreatePostUnauthorized from json.
-func (s *APIDeduplicateDeadHashByPageCreatePostUnauthorized) Decode(d *jx.Decoder) error {
+// Decode decodes APIDeduplicateDeadHashSetPostUnauthorized from json.
+func (s *APIDeduplicateDeadHashSetPostUnauthorized) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByPageCreatePostUnauthorized to nil")
+		return errors.New("invalid: unable to decode APIDeduplicateDeadHashSetPostUnauthorized to nil")
 	}
 	var unwrapped ErrorResponse
 	if err := func() error {
@@ -9770,284 +9329,19 @@ func (s *APIDeduplicateDeadHashByPageCreatePostUnauthorized) Decode(d *jx.Decode
 	}(); err != nil {
 		return errors.Wrap(err, "alias")
 	}
-	*s = APIDeduplicateDeadHashByPageCreatePostUnauthorized(unwrapped)
+	*s = APIDeduplicateDeadHashSetPostUnauthorized(unwrapped)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostUnauthorized) MarshalJSON() ([]byte, error) {
+func (s *APIDeduplicateDeadHashSetPostUnauthorized) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByPageCreatePostUnauthorized) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByPageDeletePostBadRequest as json.
-func (s *APIDeduplicateDeadHashByPageDeletePostBadRequest) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByPageDeletePostBadRequest from json.
-func (s *APIDeduplicateDeadHashByPageDeletePostBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByPageDeletePostBadRequest to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByPageDeletePostBadRequest(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByPageDeletePostForbidden as json.
-func (s *APIDeduplicateDeadHashByPageDeletePostForbidden) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByPageDeletePostForbidden from json.
-func (s *APIDeduplicateDeadHashByPageDeletePostForbidden) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByPageDeletePostForbidden to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByPageDeletePostForbidden(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostForbidden) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostForbidden) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByPageDeletePostInternalServerError as json.
-func (s *APIDeduplicateDeadHashByPageDeletePostInternalServerError) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByPageDeletePostInternalServerError from json.
-func (s *APIDeduplicateDeadHashByPageDeletePostInternalServerError) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByPageDeletePostInternalServerError to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByPageDeletePostInternalServerError(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostInternalServerError) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostInternalServerError) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIDeduplicateDeadHashByPageDeletePostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("book_id")
-		json.EncodeUUID(e, s.BookID)
-	}
-	{
-		e.FieldStart("page_number")
-		e.Int(s.PageNumber)
-	}
-}
-
-var jsonFieldsNameOfAPIDeduplicateDeadHashByPageDeletePostReq = [2]string{
-	0: "book_id",
-	1: "page_number",
-}
-
-// Decode decodes APIDeduplicateDeadHashByPageDeletePostReq from json.
-func (s *APIDeduplicateDeadHashByPageDeletePostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByPageDeletePostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "book_id":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := json.DecodeUUID(d)
-				s.BookID = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"book_id\"")
-			}
-		case "page_number":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Int()
-				s.PageNumber = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page_number\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIDeduplicateDeadHashByPageDeletePostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIDeduplicateDeadHashByPageDeletePostReq) {
-					name = jsonFieldsNameOfAPIDeduplicateDeadHashByPageDeletePostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIDeduplicateDeadHashByPageDeletePostUnauthorized as json.
-func (s *APIDeduplicateDeadHashByPageDeletePostUnauthorized) Encode(e *jx.Encoder) {
-	unwrapped := (*ErrorResponse)(s)
-
-	unwrapped.Encode(e)
-}
-
-// Decode decodes APIDeduplicateDeadHashByPageDeletePostUnauthorized from json.
-func (s *APIDeduplicateDeadHashByPageDeletePostUnauthorized) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIDeduplicateDeadHashByPageDeletePostUnauthorized to nil")
-	}
-	var unwrapped ErrorResponse
-	if err := func() error {
-		if err := unwrapped.Decode(d); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = APIDeduplicateDeadHashByPageDeletePostUnauthorized(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostUnauthorized) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIDeduplicateDeadHashByPageDeletePostUnauthorized) UnmarshalJSON(data []byte) error {
+func (s *APIDeduplicateDeadHashSetPostUnauthorized) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

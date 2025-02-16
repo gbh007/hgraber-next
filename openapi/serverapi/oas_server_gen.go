@@ -157,30 +157,13 @@ type Handler interface {
 	//
 	// POST /api/deduplicate/compare
 	APIDeduplicateComparePost(ctx context.Context, req *APIDeduplicateComparePostReq) (APIDeduplicateComparePostRes, error)
-	// APIDeduplicateDeadHashByBookPagesCreatePost implements POST /api/deduplicate/dead-hash-by-book-pages/create operation.
+	// APIDeduplicateDeadHashSetPost implements POST /api/deduplicate/dead-hash/set operation.
 	//
-	// Создает запись о мертвом хеше по страницам книги.
+	// Устанавливает значение мертвых хешей для книги или
+	// ее страницы.
 	//
-	// POST /api/deduplicate/dead-hash-by-book-pages/create
-	APIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Context, req *APIDeduplicateDeadHashByBookPagesCreatePostReq) (APIDeduplicateDeadHashByBookPagesCreatePostRes, error)
-	// APIDeduplicateDeadHashByBookPagesDeletePost implements POST /api/deduplicate/dead-hash-by-book-pages/delete operation.
-	//
-	// Удаляет запись о мертвом хеше по страницам книги.
-	//
-	// POST /api/deduplicate/dead-hash-by-book-pages/delete
-	APIDeduplicateDeadHashByBookPagesDeletePost(ctx context.Context, req *APIDeduplicateDeadHashByBookPagesDeletePostReq) (APIDeduplicateDeadHashByBookPagesDeletePostRes, error)
-	// APIDeduplicateDeadHashByPageCreatePost implements POST /api/deduplicate/dead-hash-by-page/create operation.
-	//
-	// Создает запись о мертвом хеше по странице.
-	//
-	// POST /api/deduplicate/dead-hash-by-page/create
-	APIDeduplicateDeadHashByPageCreatePost(ctx context.Context, req *APIDeduplicateDeadHashByPageCreatePostReq) (APIDeduplicateDeadHashByPageCreatePostRes, error)
-	// APIDeduplicateDeadHashByPageDeletePost implements POST /api/deduplicate/dead-hash-by-page/delete operation.
-	//
-	// Удаляет запись о мертвом хеше по странице.
-	//
-	// POST /api/deduplicate/dead-hash-by-page/delete
-	APIDeduplicateDeadHashByPageDeletePost(ctx context.Context, req *APIDeduplicateDeadHashByPageDeletePostReq) (APIDeduplicateDeadHashByPageDeletePostRes, error)
+	// POST /api/deduplicate/dead-hash/set
+	APIDeduplicateDeadHashSetPost(ctx context.Context, req *APIDeduplicateDeadHashSetPostReq) (APIDeduplicateDeadHashSetPostRes, error)
 	// APIDeduplicateDeleteAllPagesByBookPost implements POST /api/deduplicate/delete-all-pages-by-book operation.
 	//
 	// Удаляет все страницы из книги и их дубликаты в системе.

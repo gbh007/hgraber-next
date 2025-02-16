@@ -97,20 +97,8 @@ type APIDeduplicateComparePostRes interface {
 	aPIDeduplicateComparePostRes()
 }
 
-type APIDeduplicateDeadHashByBookPagesCreatePostRes interface {
-	aPIDeduplicateDeadHashByBookPagesCreatePostRes()
-}
-
-type APIDeduplicateDeadHashByBookPagesDeletePostRes interface {
-	aPIDeduplicateDeadHashByBookPagesDeletePostRes()
-}
-
-type APIDeduplicateDeadHashByPageCreatePostRes interface {
-	aPIDeduplicateDeadHashByPageCreatePostRes()
-}
-
-type APIDeduplicateDeadHashByPageDeletePostRes interface {
-	aPIDeduplicateDeadHashByPageDeletePostRes()
+type APIDeduplicateDeadHashSetPostRes interface {
+	aPIDeduplicateDeadHashSetPostRes()
 }
 
 type APIDeduplicateDeleteAllPagesByBookPostRes interface {

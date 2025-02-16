@@ -234,39 +234,13 @@ func (UnimplementedHandler) APIDeduplicateComparePost(ctx context.Context, req *
 	return r, ht.ErrNotImplemented
 }
 
-// APIDeduplicateDeadHashByBookPagesCreatePost implements POST /api/deduplicate/dead-hash-by-book-pages/create operation.
+// APIDeduplicateDeadHashSetPost implements POST /api/deduplicate/dead-hash/set operation.
 //
-// Создает запись о мертвом хеше по страницам книги.
+// Устанавливает значение мертвых хешей для книги или
+// ее страницы.
 //
-// POST /api/deduplicate/dead-hash-by-book-pages/create
-func (UnimplementedHandler) APIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Context, req *APIDeduplicateDeadHashByBookPagesCreatePostReq) (r APIDeduplicateDeadHashByBookPagesCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIDeduplicateDeadHashByBookPagesDeletePost implements POST /api/deduplicate/dead-hash-by-book-pages/delete operation.
-//
-// Удаляет запись о мертвом хеше по страницам книги.
-//
-// POST /api/deduplicate/dead-hash-by-book-pages/delete
-func (UnimplementedHandler) APIDeduplicateDeadHashByBookPagesDeletePost(ctx context.Context, req *APIDeduplicateDeadHashByBookPagesDeletePostReq) (r APIDeduplicateDeadHashByBookPagesDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIDeduplicateDeadHashByPageCreatePost implements POST /api/deduplicate/dead-hash-by-page/create operation.
-//
-// Создает запись о мертвом хеше по странице.
-//
-// POST /api/deduplicate/dead-hash-by-page/create
-func (UnimplementedHandler) APIDeduplicateDeadHashByPageCreatePost(ctx context.Context, req *APIDeduplicateDeadHashByPageCreatePostReq) (r APIDeduplicateDeadHashByPageCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIDeduplicateDeadHashByPageDeletePost implements POST /api/deduplicate/dead-hash-by-page/delete operation.
-//
-// Удаляет запись о мертвом хеше по странице.
-//
-// POST /api/deduplicate/dead-hash-by-page/delete
-func (UnimplementedHandler) APIDeduplicateDeadHashByPageDeletePost(ctx context.Context, req *APIDeduplicateDeadHashByPageDeletePostReq) (r APIDeduplicateDeadHashByPageDeletePostRes, _ error) {
+// POST /api/deduplicate/dead-hash/set
+func (UnimplementedHandler) APIDeduplicateDeadHashSetPost(ctx context.Context, req *APIDeduplicateDeadHashSetPostReq) (r APIDeduplicateDeadHashSetPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

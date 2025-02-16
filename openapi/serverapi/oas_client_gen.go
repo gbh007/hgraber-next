@@ -177,30 +177,13 @@ type Invoker interface {
 	//
 	// POST /api/deduplicate/compare
 	APIDeduplicateComparePost(ctx context.Context, request *APIDeduplicateComparePostReq) (APIDeduplicateComparePostRes, error)
-	// APIDeduplicateDeadHashByBookPagesCreatePost invokes POST /api/deduplicate/dead-hash-by-book-pages/create operation.
+	// APIDeduplicateDeadHashSetPost invokes POST /api/deduplicate/dead-hash/set operation.
 	//
-	// Создает запись о мертвом хеше по страницам книги.
+	// Устанавливает значение мертвых хешей для книги или
+	// ее страницы.
 	//
-	// POST /api/deduplicate/dead-hash-by-book-pages/create
-	APIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Context, request *APIDeduplicateDeadHashByBookPagesCreatePostReq) (APIDeduplicateDeadHashByBookPagesCreatePostRes, error)
-	// APIDeduplicateDeadHashByBookPagesDeletePost invokes POST /api/deduplicate/dead-hash-by-book-pages/delete operation.
-	//
-	// Удаляет запись о мертвом хеше по страницам книги.
-	//
-	// POST /api/deduplicate/dead-hash-by-book-pages/delete
-	APIDeduplicateDeadHashByBookPagesDeletePost(ctx context.Context, request *APIDeduplicateDeadHashByBookPagesDeletePostReq) (APIDeduplicateDeadHashByBookPagesDeletePostRes, error)
-	// APIDeduplicateDeadHashByPageCreatePost invokes POST /api/deduplicate/dead-hash-by-page/create operation.
-	//
-	// Создает запись о мертвом хеше по странице.
-	//
-	// POST /api/deduplicate/dead-hash-by-page/create
-	APIDeduplicateDeadHashByPageCreatePost(ctx context.Context, request *APIDeduplicateDeadHashByPageCreatePostReq) (APIDeduplicateDeadHashByPageCreatePostRes, error)
-	// APIDeduplicateDeadHashByPageDeletePost invokes POST /api/deduplicate/dead-hash-by-page/delete operation.
-	//
-	// Удаляет запись о мертвом хеше по странице.
-	//
-	// POST /api/deduplicate/dead-hash-by-page/delete
-	APIDeduplicateDeadHashByPageDeletePost(ctx context.Context, request *APIDeduplicateDeadHashByPageDeletePostReq) (APIDeduplicateDeadHashByPageDeletePostRes, error)
+	// POST /api/deduplicate/dead-hash/set
+	APIDeduplicateDeadHashSetPost(ctx context.Context, request *APIDeduplicateDeadHashSetPostReq) (APIDeduplicateDeadHashSetPostRes, error)
 	// APIDeduplicateDeleteAllPagesByBookPost invokes POST /api/deduplicate/delete-all-pages-by-book operation.
 	//
 	// Удаляет все страницы из книги и их дубликаты в системе.
@@ -3343,20 +3326,21 @@ func (c *Client) sendAPIDeduplicateComparePost(ctx context.Context, request *API
 	return result, nil
 }
 
-// APIDeduplicateDeadHashByBookPagesCreatePost invokes POST /api/deduplicate/dead-hash-by-book-pages/create operation.
+// APIDeduplicateDeadHashSetPost invokes POST /api/deduplicate/dead-hash/set operation.
 //
-// Создает запись о мертвом хеше по страницам книги.
+// Устанавливает значение мертвых хешей для книги или
+// ее страницы.
 //
-// POST /api/deduplicate/dead-hash-by-book-pages/create
-func (c *Client) APIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Context, request *APIDeduplicateDeadHashByBookPagesCreatePostReq) (APIDeduplicateDeadHashByBookPagesCreatePostRes, error) {
-	res, err := c.sendAPIDeduplicateDeadHashByBookPagesCreatePost(ctx, request)
+// POST /api/deduplicate/dead-hash/set
+func (c *Client) APIDeduplicateDeadHashSetPost(ctx context.Context, request *APIDeduplicateDeadHashSetPostReq) (APIDeduplicateDeadHashSetPostRes, error) {
+	res, err := c.sendAPIDeduplicateDeadHashSetPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Context, request *APIDeduplicateDeadHashByBookPagesCreatePostReq) (res APIDeduplicateDeadHashByBookPagesCreatePostRes, err error) {
+func (c *Client) sendAPIDeduplicateDeadHashSetPost(ctx context.Context, request *APIDeduplicateDeadHashSetPostReq) (res APIDeduplicateDeadHashSetPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/dead-hash-by-book-pages/create"),
+		semconv.HTTPRouteKey.String("/api/deduplicate/dead-hash/set"),
 	}
 
 	// Run stopwatch.
@@ -3371,7 +3355,7 @@ func (c *Client) sendAPIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Con
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIDeduplicateDeadHashByBookPagesCreatePostOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, APIDeduplicateDeadHashSetPostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3389,7 +3373,7 @@ func (c *Client) sendAPIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Con
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/api/deduplicate/dead-hash-by-book-pages/create"
+	pathParts[0] = "/api/deduplicate/dead-hash/set"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -3397,7 +3381,7 @@ func (c *Client) sendAPIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Con
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeAPIDeduplicateDeadHashByBookPagesCreatePostRequest(request, r); err != nil {
+	if err := encodeAPIDeduplicateDeadHashSetPostRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -3406,7 +3390,7 @@ func (c *Client) sendAPIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Con
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APIDeduplicateDeadHashByBookPagesCreatePostOperation, r); {
+			switch err := c.securityHeaderAuth(ctx, APIDeduplicateDeadHashSetPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -3417,7 +3401,7 @@ func (c *Client) sendAPIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Con
 		}
 		{
 			stage = "Security:Cookies"
-			switch err := c.securityCookies(ctx, APIDeduplicateDeadHashByBookPagesCreatePostOperation, r); {
+			switch err := c.securityCookies(ctx, APIDeduplicateDeadHashSetPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 1
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -3454,364 +3438,7 @@ func (c *Client) sendAPIDeduplicateDeadHashByBookPagesCreatePost(ctx context.Con
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeAPIDeduplicateDeadHashByBookPagesCreatePostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIDeduplicateDeadHashByBookPagesDeletePost invokes POST /api/deduplicate/dead-hash-by-book-pages/delete operation.
-//
-// Удаляет запись о мертвом хеше по страницам книги.
-//
-// POST /api/deduplicate/dead-hash-by-book-pages/delete
-func (c *Client) APIDeduplicateDeadHashByBookPagesDeletePost(ctx context.Context, request *APIDeduplicateDeadHashByBookPagesDeletePostReq) (APIDeduplicateDeadHashByBookPagesDeletePostRes, error) {
-	res, err := c.sendAPIDeduplicateDeadHashByBookPagesDeletePost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIDeduplicateDeadHashByBookPagesDeletePost(ctx context.Context, request *APIDeduplicateDeadHashByBookPagesDeletePostReq) (res APIDeduplicateDeadHashByBookPagesDeletePostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/dead-hash-by-book-pages/delete"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIDeduplicateDeadHashByBookPagesDeletePostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/deduplicate/dead-hash-by-book-pages/delete"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIDeduplicateDeadHashByBookPagesDeletePostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APIDeduplicateDeadHashByBookPagesDeletePostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"HeaderAuth\"")
-			}
-		}
-		{
-			stage = "Security:Cookies"
-			switch err := c.securityCookies(ctx, APIDeduplicateDeadHashByBookPagesDeletePostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 1
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Cookies\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-				{0b00000010},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIDeduplicateDeadHashByBookPagesDeletePostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIDeduplicateDeadHashByPageCreatePost invokes POST /api/deduplicate/dead-hash-by-page/create operation.
-//
-// Создает запись о мертвом хеше по странице.
-//
-// POST /api/deduplicate/dead-hash-by-page/create
-func (c *Client) APIDeduplicateDeadHashByPageCreatePost(ctx context.Context, request *APIDeduplicateDeadHashByPageCreatePostReq) (APIDeduplicateDeadHashByPageCreatePostRes, error) {
-	res, err := c.sendAPIDeduplicateDeadHashByPageCreatePost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIDeduplicateDeadHashByPageCreatePost(ctx context.Context, request *APIDeduplicateDeadHashByPageCreatePostReq) (res APIDeduplicateDeadHashByPageCreatePostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/dead-hash-by-page/create"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIDeduplicateDeadHashByPageCreatePostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/deduplicate/dead-hash-by-page/create"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIDeduplicateDeadHashByPageCreatePostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APIDeduplicateDeadHashByPageCreatePostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"HeaderAuth\"")
-			}
-		}
-		{
-			stage = "Security:Cookies"
-			switch err := c.securityCookies(ctx, APIDeduplicateDeadHashByPageCreatePostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 1
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Cookies\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-				{0b00000010},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIDeduplicateDeadHashByPageCreatePostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIDeduplicateDeadHashByPageDeletePost invokes POST /api/deduplicate/dead-hash-by-page/delete operation.
-//
-// Удаляет запись о мертвом хеше по странице.
-//
-// POST /api/deduplicate/dead-hash-by-page/delete
-func (c *Client) APIDeduplicateDeadHashByPageDeletePost(ctx context.Context, request *APIDeduplicateDeadHashByPageDeletePostReq) (APIDeduplicateDeadHashByPageDeletePostRes, error) {
-	res, err := c.sendAPIDeduplicateDeadHashByPageDeletePost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIDeduplicateDeadHashByPageDeletePost(ctx context.Context, request *APIDeduplicateDeadHashByPageDeletePostReq) (res APIDeduplicateDeadHashByPageDeletePostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/dead-hash-by-page/delete"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIDeduplicateDeadHashByPageDeletePostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/deduplicate/dead-hash-by-page/delete"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIDeduplicateDeadHashByPageDeletePostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APIDeduplicateDeadHashByPageDeletePostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"HeaderAuth\"")
-			}
-		}
-		{
-			stage = "Security:Cookies"
-			switch err := c.securityCookies(ctx, APIDeduplicateDeadHashByPageDeletePostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 1
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Cookies\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-				{0b00000010},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIDeduplicateDeadHashByPageDeletePostResponse(resp)
+	result, err := decodeAPIDeduplicateDeadHashSetPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

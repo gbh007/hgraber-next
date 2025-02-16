@@ -2381,189 +2381,69 @@ type APIDeduplicateComparePostUnauthorized ErrorResponse
 
 func (*APIDeduplicateComparePostUnauthorized) aPIDeduplicateComparePostRes() {}
 
-type APIDeduplicateDeadHashByBookPagesCreatePostBadRequest ErrorResponse
+type APIDeduplicateDeadHashSetPostBadRequest ErrorResponse
 
-func (*APIDeduplicateDeadHashByBookPagesCreatePostBadRequest) aPIDeduplicateDeadHashByBookPagesCreatePostRes() {
-}
+func (*APIDeduplicateDeadHashSetPostBadRequest) aPIDeduplicateDeadHashSetPostRes() {}
 
-type APIDeduplicateDeadHashByBookPagesCreatePostForbidden ErrorResponse
+type APIDeduplicateDeadHashSetPostForbidden ErrorResponse
 
-func (*APIDeduplicateDeadHashByBookPagesCreatePostForbidden) aPIDeduplicateDeadHashByBookPagesCreatePostRes() {
-}
+func (*APIDeduplicateDeadHashSetPostForbidden) aPIDeduplicateDeadHashSetPostRes() {}
 
-type APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError ErrorResponse
+type APIDeduplicateDeadHashSetPostInternalServerError ErrorResponse
 
-func (*APIDeduplicateDeadHashByBookPagesCreatePostInternalServerError) aPIDeduplicateDeadHashByBookPagesCreatePostRes() {
-}
+func (*APIDeduplicateDeadHashSetPostInternalServerError) aPIDeduplicateDeadHashSetPostRes() {}
 
-// APIDeduplicateDeadHashByBookPagesCreatePostNoContent is response for APIDeduplicateDeadHashByBookPagesCreatePost operation.
-type APIDeduplicateDeadHashByBookPagesCreatePostNoContent struct{}
+// APIDeduplicateDeadHashSetPostNoContent is response for APIDeduplicateDeadHashSetPost operation.
+type APIDeduplicateDeadHashSetPostNoContent struct{}
 
-func (*APIDeduplicateDeadHashByBookPagesCreatePostNoContent) aPIDeduplicateDeadHashByBookPagesCreatePostRes() {
-}
+func (*APIDeduplicateDeadHashSetPostNoContent) aPIDeduplicateDeadHashSetPostRes() {}
 
-type APIDeduplicateDeadHashByBookPagesCreatePostReq struct {
-	// ID книги.
-	BookID uuid.UUID `json:"book_id"`
-}
+type APIDeduplicateDeadHashSetPostNotFound ErrorResponse
 
-// GetBookID returns the value of BookID.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostReq) GetBookID() uuid.UUID {
-	return s.BookID
-}
+func (*APIDeduplicateDeadHashSetPostNotFound) aPIDeduplicateDeadHashSetPostRes() {}
 
-// SetBookID sets the value of BookID.
-func (s *APIDeduplicateDeadHashByBookPagesCreatePostReq) SetBookID(val uuid.UUID) {
-	s.BookID = val
-}
-
-type APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized ErrorResponse
-
-func (*APIDeduplicateDeadHashByBookPagesCreatePostUnauthorized) aPIDeduplicateDeadHashByBookPagesCreatePostRes() {
-}
-
-type APIDeduplicateDeadHashByBookPagesDeletePostBadRequest ErrorResponse
-
-func (*APIDeduplicateDeadHashByBookPagesDeletePostBadRequest) aPIDeduplicateDeadHashByBookPagesDeletePostRes() {
-}
-
-type APIDeduplicateDeadHashByBookPagesDeletePostForbidden ErrorResponse
-
-func (*APIDeduplicateDeadHashByBookPagesDeletePostForbidden) aPIDeduplicateDeadHashByBookPagesDeletePostRes() {
-}
-
-type APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError ErrorResponse
-
-func (*APIDeduplicateDeadHashByBookPagesDeletePostInternalServerError) aPIDeduplicateDeadHashByBookPagesDeletePostRes() {
-}
-
-// APIDeduplicateDeadHashByBookPagesDeletePostNoContent is response for APIDeduplicateDeadHashByBookPagesDeletePost operation.
-type APIDeduplicateDeadHashByBookPagesDeletePostNoContent struct{}
-
-func (*APIDeduplicateDeadHashByBookPagesDeletePostNoContent) aPIDeduplicateDeadHashByBookPagesDeletePostRes() {
-}
-
-type APIDeduplicateDeadHashByBookPagesDeletePostReq struct {
-	// ID книги.
-	BookID uuid.UUID `json:"book_id"`
-}
-
-// GetBookID returns the value of BookID.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostReq) GetBookID() uuid.UUID {
-	return s.BookID
-}
-
-// SetBookID sets the value of BookID.
-func (s *APIDeduplicateDeadHashByBookPagesDeletePostReq) SetBookID(val uuid.UUID) {
-	s.BookID = val
-}
-
-type APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized ErrorResponse
-
-func (*APIDeduplicateDeadHashByBookPagesDeletePostUnauthorized) aPIDeduplicateDeadHashByBookPagesDeletePostRes() {
-}
-
-type APIDeduplicateDeadHashByPageCreatePostBadRequest ErrorResponse
-
-func (*APIDeduplicateDeadHashByPageCreatePostBadRequest) aPIDeduplicateDeadHashByPageCreatePostRes() {
-}
-
-type APIDeduplicateDeadHashByPageCreatePostForbidden ErrorResponse
-
-func (*APIDeduplicateDeadHashByPageCreatePostForbidden) aPIDeduplicateDeadHashByPageCreatePostRes() {}
-
-type APIDeduplicateDeadHashByPageCreatePostInternalServerError ErrorResponse
-
-func (*APIDeduplicateDeadHashByPageCreatePostInternalServerError) aPIDeduplicateDeadHashByPageCreatePostRes() {
-}
-
-// APIDeduplicateDeadHashByPageCreatePostNoContent is response for APIDeduplicateDeadHashByPageCreatePost operation.
-type APIDeduplicateDeadHashByPageCreatePostNoContent struct{}
-
-func (*APIDeduplicateDeadHashByPageCreatePostNoContent) aPIDeduplicateDeadHashByPageCreatePostRes() {}
-
-type APIDeduplicateDeadHashByPageCreatePostReq struct {
+type APIDeduplicateDeadHashSetPostReq struct {
 	// ID книги.
 	BookID uuid.UUID `json:"book_id"`
 	// Номер страницы в книге.
-	PageNumber int `json:"page_number"`
+	PageNumber OptInt `json:"page_number"`
+	// Состояние мертвого хеша.
+	Value bool `json:"value"`
 }
 
 // GetBookID returns the value of BookID.
-func (s *APIDeduplicateDeadHashByPageCreatePostReq) GetBookID() uuid.UUID {
+func (s *APIDeduplicateDeadHashSetPostReq) GetBookID() uuid.UUID {
 	return s.BookID
 }
 
 // GetPageNumber returns the value of PageNumber.
-func (s *APIDeduplicateDeadHashByPageCreatePostReq) GetPageNumber() int {
+func (s *APIDeduplicateDeadHashSetPostReq) GetPageNumber() OptInt {
 	return s.PageNumber
 }
 
+// GetValue returns the value of Value.
+func (s *APIDeduplicateDeadHashSetPostReq) GetValue() bool {
+	return s.Value
+}
+
 // SetBookID sets the value of BookID.
-func (s *APIDeduplicateDeadHashByPageCreatePostReq) SetBookID(val uuid.UUID) {
+func (s *APIDeduplicateDeadHashSetPostReq) SetBookID(val uuid.UUID) {
 	s.BookID = val
 }
 
 // SetPageNumber sets the value of PageNumber.
-func (s *APIDeduplicateDeadHashByPageCreatePostReq) SetPageNumber(val int) {
+func (s *APIDeduplicateDeadHashSetPostReq) SetPageNumber(val OptInt) {
 	s.PageNumber = val
 }
 
-type APIDeduplicateDeadHashByPageCreatePostUnauthorized ErrorResponse
-
-func (*APIDeduplicateDeadHashByPageCreatePostUnauthorized) aPIDeduplicateDeadHashByPageCreatePostRes() {
+// SetValue sets the value of Value.
+func (s *APIDeduplicateDeadHashSetPostReq) SetValue(val bool) {
+	s.Value = val
 }
 
-type APIDeduplicateDeadHashByPageDeletePostBadRequest ErrorResponse
+type APIDeduplicateDeadHashSetPostUnauthorized ErrorResponse
 
-func (*APIDeduplicateDeadHashByPageDeletePostBadRequest) aPIDeduplicateDeadHashByPageDeletePostRes() {
-}
-
-type APIDeduplicateDeadHashByPageDeletePostForbidden ErrorResponse
-
-func (*APIDeduplicateDeadHashByPageDeletePostForbidden) aPIDeduplicateDeadHashByPageDeletePostRes() {}
-
-type APIDeduplicateDeadHashByPageDeletePostInternalServerError ErrorResponse
-
-func (*APIDeduplicateDeadHashByPageDeletePostInternalServerError) aPIDeduplicateDeadHashByPageDeletePostRes() {
-}
-
-// APIDeduplicateDeadHashByPageDeletePostNoContent is response for APIDeduplicateDeadHashByPageDeletePost operation.
-type APIDeduplicateDeadHashByPageDeletePostNoContent struct{}
-
-func (*APIDeduplicateDeadHashByPageDeletePostNoContent) aPIDeduplicateDeadHashByPageDeletePostRes() {}
-
-type APIDeduplicateDeadHashByPageDeletePostReq struct {
-	// ID книги.
-	BookID uuid.UUID `json:"book_id"`
-	// Номер страницы в книге.
-	PageNumber int `json:"page_number"`
-}
-
-// GetBookID returns the value of BookID.
-func (s *APIDeduplicateDeadHashByPageDeletePostReq) GetBookID() uuid.UUID {
-	return s.BookID
-}
-
-// GetPageNumber returns the value of PageNumber.
-func (s *APIDeduplicateDeadHashByPageDeletePostReq) GetPageNumber() int {
-	return s.PageNumber
-}
-
-// SetBookID sets the value of BookID.
-func (s *APIDeduplicateDeadHashByPageDeletePostReq) SetBookID(val uuid.UUID) {
-	s.BookID = val
-}
-
-// SetPageNumber sets the value of PageNumber.
-func (s *APIDeduplicateDeadHashByPageDeletePostReq) SetPageNumber(val int) {
-	s.PageNumber = val
-}
-
-type APIDeduplicateDeadHashByPageDeletePostUnauthorized ErrorResponse
-
-func (*APIDeduplicateDeadHashByPageDeletePostUnauthorized) aPIDeduplicateDeadHashByPageDeletePostRes() {
-}
+func (*APIDeduplicateDeadHashSetPostUnauthorized) aPIDeduplicateDeadHashSetPostRes() {}
 
 type APIDeduplicateDeleteAllPagesByBookPostBadRequest ErrorResponse
 
