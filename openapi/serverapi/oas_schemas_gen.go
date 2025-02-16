@@ -606,6 +606,58 @@ type APIAttributeColorCreatePostNoContent struct{}
 
 func (*APIAttributeColorCreatePostNoContent) aPIAttributeColorCreatePostRes() {}
 
+// Цвет аттрибута.
+type APIAttributeColorCreatePostReq struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+	// Цвет текста.
+	TextColor string `json:"text_color"`
+	// Цвет фона.
+	BackgroundColor string `json:"background_color"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeColorCreatePostReq) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeColorCreatePostReq) GetValue() string {
+	return s.Value
+}
+
+// GetTextColor returns the value of TextColor.
+func (s *APIAttributeColorCreatePostReq) GetTextColor() string {
+	return s.TextColor
+}
+
+// GetBackgroundColor returns the value of BackgroundColor.
+func (s *APIAttributeColorCreatePostReq) GetBackgroundColor() string {
+	return s.BackgroundColor
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeColorCreatePostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeColorCreatePostReq) SetValue(val string) {
+	s.Value = val
+}
+
+// SetTextColor sets the value of TextColor.
+func (s *APIAttributeColorCreatePostReq) SetTextColor(val string) {
+	s.TextColor = val
+}
+
+// SetBackgroundColor sets the value of BackgroundColor.
+func (s *APIAttributeColorCreatePostReq) SetBackgroundColor(val string) {
+	s.BackgroundColor = val
+}
+
 type APIAttributeColorCreatePostUnauthorized ErrorResponse
 
 func (*APIAttributeColorCreatePostUnauthorized) aPIAttributeColorCreatePostRes() {}
@@ -754,6 +806,58 @@ func (*APIAttributeColorUpdatePostNoContent) aPIAttributeColorUpdatePostRes() {}
 type APIAttributeColorUpdatePostNotFound ErrorResponse
 
 func (*APIAttributeColorUpdatePostNotFound) aPIAttributeColorUpdatePostRes() {}
+
+// Цвет аттрибута.
+type APIAttributeColorUpdatePostReq struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+	// Цвет текста.
+	TextColor string `json:"text_color"`
+	// Цвет фона.
+	BackgroundColor string `json:"background_color"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeColorUpdatePostReq) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeColorUpdatePostReq) GetValue() string {
+	return s.Value
+}
+
+// GetTextColor returns the value of TextColor.
+func (s *APIAttributeColorUpdatePostReq) GetTextColor() string {
+	return s.TextColor
+}
+
+// GetBackgroundColor returns the value of BackgroundColor.
+func (s *APIAttributeColorUpdatePostReq) GetBackgroundColor() string {
+	return s.BackgroundColor
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeColorUpdatePostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeColorUpdatePostReq) SetValue(val string) {
+	s.Value = val
+}
+
+// SetTextColor sets the value of TextColor.
+func (s *APIAttributeColorUpdatePostReq) SetTextColor(val string) {
+	s.TextColor = val
+}
+
+// SetBackgroundColor sets the value of BackgroundColor.
+func (s *APIAttributeColorUpdatePostReq) SetBackgroundColor(val string) {
+	s.BackgroundColor = val
+}
 
 type APIAttributeColorUpdatePostUnauthorized ErrorResponse
 

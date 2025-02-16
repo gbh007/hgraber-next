@@ -49,7 +49,7 @@ type Handler interface {
 	// Создание покраски аттрибута.
 	//
 	// POST /api/attribute/color/create
-	APIAttributeColorCreatePost(ctx context.Context, req *AttributeColor) (APIAttributeColorCreatePostRes, error)
+	APIAttributeColorCreatePost(ctx context.Context, req *APIAttributeColorCreatePostReq) (APIAttributeColorCreatePostRes, error)
 	// APIAttributeColorDeletePost implements POST /api/attribute/color/delete operation.
 	//
 	// Удаление цвета атрибута.
@@ -73,7 +73,7 @@ type Handler interface {
 	// Обновления покраски атрибута.
 	//
 	// POST /api/attribute/color/update
-	APIAttributeColorUpdatePost(ctx context.Context, req *AttributeColor) (APIAttributeColorUpdatePostRes, error)
+	APIAttributeColorUpdatePost(ctx context.Context, req *APIAttributeColorUpdatePostReq) (APIAttributeColorUpdatePostRes, error)
 	// APIAttributeCountGet implements GET /api/attribute/count operation.
 	//
 	// Получение информации о количестве вариантов

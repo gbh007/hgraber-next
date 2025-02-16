@@ -72,7 +72,7 @@ func (UnimplementedHandler) APIAgentUpdatePost(ctx context.Context, req *Agent) 
 // Создание покраски аттрибута.
 //
 // POST /api/attribute/color/create
-func (UnimplementedHandler) APIAttributeColorCreatePost(ctx context.Context, req *AttributeColor) (r APIAttributeColorCreatePostRes, _ error) {
+func (UnimplementedHandler) APIAttributeColorCreatePost(ctx context.Context, req *APIAttributeColorCreatePostReq) (r APIAttributeColorCreatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -108,7 +108,7 @@ func (UnimplementedHandler) APIAttributeColorListGet(ctx context.Context) (r API
 // Обновления покраски атрибута.
 //
 // POST /api/attribute/color/update
-func (UnimplementedHandler) APIAttributeColorUpdatePost(ctx context.Context, req *AttributeColor) (r APIAttributeColorUpdatePostRes, _ error) {
+func (UnimplementedHandler) APIAttributeColorUpdatePost(ctx context.Context, req *APIAttributeColorUpdatePostReq) (r APIAttributeColorUpdatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

@@ -69,7 +69,7 @@ type Invoker interface {
 	// Создание покраски аттрибута.
 	//
 	// POST /api/attribute/color/create
-	APIAttributeColorCreatePost(ctx context.Context, request *AttributeColor) (APIAttributeColorCreatePostRes, error)
+	APIAttributeColorCreatePost(ctx context.Context, request *APIAttributeColorCreatePostReq) (APIAttributeColorCreatePostRes, error)
 	// APIAttributeColorDeletePost invokes POST /api/attribute/color/delete operation.
 	//
 	// Удаление цвета атрибута.
@@ -93,7 +93,7 @@ type Invoker interface {
 	// Обновления покраски атрибута.
 	//
 	// POST /api/attribute/color/update
-	APIAttributeColorUpdatePost(ctx context.Context, request *AttributeColor) (APIAttributeColorUpdatePostRes, error)
+	APIAttributeColorUpdatePost(ctx context.Context, request *APIAttributeColorUpdatePostReq) (APIAttributeColorUpdatePostRes, error)
 	// APIAttributeCountGet invokes GET /api/attribute/count operation.
 	//
 	// Получение информации о количестве вариантов
@@ -1163,12 +1163,12 @@ func (c *Client) sendAPIAgentUpdatePost(ctx context.Context, request *Agent) (re
 // Создание покраски аттрибута.
 //
 // POST /api/attribute/color/create
-func (c *Client) APIAttributeColorCreatePost(ctx context.Context, request *AttributeColor) (APIAttributeColorCreatePostRes, error) {
+func (c *Client) APIAttributeColorCreatePost(ctx context.Context, request *APIAttributeColorCreatePostReq) (APIAttributeColorCreatePostRes, error) {
 	res, err := c.sendAPIAttributeColorCreatePost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIAttributeColorCreatePost(ctx context.Context, request *AttributeColor) (res APIAttributeColorCreatePostRes, err error) {
+func (c *Client) sendAPIAttributeColorCreatePost(ctx context.Context, request *APIAttributeColorCreatePostReq) (res APIAttributeColorCreatePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/attribute/color/create"),
@@ -1636,12 +1636,12 @@ func (c *Client) sendAPIAttributeColorListGet(ctx context.Context) (res APIAttri
 // Обновления покраски атрибута.
 //
 // POST /api/attribute/color/update
-func (c *Client) APIAttributeColorUpdatePost(ctx context.Context, request *AttributeColor) (APIAttributeColorUpdatePostRes, error) {
+func (c *Client) APIAttributeColorUpdatePost(ctx context.Context, request *APIAttributeColorUpdatePostReq) (APIAttributeColorUpdatePostRes, error) {
 	res, err := c.sendAPIAttributeColorUpdatePost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIAttributeColorUpdatePost(ctx context.Context, request *AttributeColor) (res APIAttributeColorUpdatePostRes, err error) {
+func (c *Client) sendAPIAttributeColorUpdatePost(ctx context.Context, request *APIAttributeColorUpdatePostReq) (res APIAttributeColorUpdatePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/attribute/color/update"),

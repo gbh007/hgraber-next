@@ -402,7 +402,7 @@ func (s *Server) decodeAPIAgentUpdatePostRequest(r *http.Request) (
 }
 
 func (s *Server) decodeAPIAttributeColorCreatePostRequest(r *http.Request) (
-	req *AttributeColor,
+	req *APIAttributeColorCreatePostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -441,7 +441,7 @@ func (s *Server) decodeAPIAttributeColorCreatePostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request AttributeColor
+		var request APIAttributeColorCreatePostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -591,7 +591,7 @@ func (s *Server) decodeAPIAttributeColorGetPostRequest(r *http.Request) (
 }
 
 func (s *Server) decodeAPIAttributeColorUpdatePostRequest(r *http.Request) (
-	req *AttributeColor,
+	req *APIAttributeColorUpdatePostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -630,7 +630,7 @@ func (s *Server) decodeAPIAttributeColorUpdatePostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request AttributeColor
+		var request APIAttributeColorUpdatePostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

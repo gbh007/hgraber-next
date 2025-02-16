@@ -96,7 +96,7 @@ func encodeAPIAgentUpdatePostRequest(
 }
 
 func encodeAPIAttributeColorCreatePostRequest(
-	req *AttributeColor,
+	req *APIAttributeColorCreatePostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -138,7 +138,7 @@ func encodeAPIAttributeColorGetPostRequest(
 }
 
 func encodeAPIAttributeColorUpdatePostRequest(
-	req *AttributeColor,
+	req *APIAttributeColorUpdatePostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

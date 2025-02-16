@@ -1387,7 +1387,7 @@ func (s *Server) handleAPIAttributeColorCreatePostRequest(args [0]string, argsEs
 		}
 
 		type (
-			Request  = *AttributeColor
+			Request  = *APIAttributeColorCreatePostReq
 			Params   = struct{}
 			Response = APIAttributeColorCreatePostRes
 		)
@@ -2168,7 +2168,7 @@ func (s *Server) handleAPIAttributeColorUpdatePostRequest(args [0]string, argsEs
 		}
 
 		type (
-			Request  = *AttributeColor
+			Request  = *APIAttributeColorUpdatePostReq
 			Params   = struct{}
 			Response = APIAttributeColorUpdatePostRes
 		)

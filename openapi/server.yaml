@@ -3282,7 +3282,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AttributeColor"
+              type: object
+              description: Цвет аттрибута
+              properties:
+                code:
+                  type: string
+                  description: Код атрибута
+                value:
+                  type: string
+                  description: Значение атрибута
+                text_color:
+                  type: string
+                  description: Цвет текста
+                background_color:
+                  type: string
+                  description: Цвет фона
+              required:
+                - code
+                - value
+                - text_color
+                - background_color
       responses:
         204:
           description: Успешное создание
@@ -3322,7 +3341,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AttributeColor"
+              type: object
+              description: Цвет аттрибута
+              properties:
+                code:
+                  type: string
+                  description: Код атрибута
+                value:
+                  type: string
+                  description: Значение атрибута
+                text_color:
+                  type: string
+                  description: Цвет текста
+                background_color:
+                  type: string
+                  description: Цвет фона
+              required:
+                - code
+                - value
+                - text_color
+                - background_color
       responses:
         204:
           description: Успешное обновление
