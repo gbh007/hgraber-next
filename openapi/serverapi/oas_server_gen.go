@@ -105,6 +105,13 @@ type Handler interface {
 	//
 	// POST /api/book/list
 	APIBookListPost(ctx context.Context, req *BookFilter) (APIBookListPostRes, error)
+	// APIBookPageBodyPost implements POST /api/book/page/body operation.
+	//
+	// Получение тела страницы (по оригинальному адресу или
+	// данным книги).
+	//
+	// POST /api/book/page/body
+	APIBookPageBodyPost(ctx context.Context, req *APIBookPageBodyPostReq) (APIBookPageBodyPostRes, error)
 	// APIBookRawPost implements POST /api/book/raw operation.
 	//
 	// Информация о книге (или по ИД или по адресу).
@@ -285,13 +292,6 @@ type Handler interface {
 	//
 	// POST /api/label/set
 	APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) (APILabelSetPostRes, error)
-	// APIPageBodyPost implements POST /api/page/body operation.
-	//
-	// Получение тела страницы (по оригинальному адресу или
-	// данным книги).
-	//
-	// POST /api/page/body
-	APIPageBodyPost(ctx context.Context, req *APIPageBodyPostReq) (APIPageBodyPostRes, error)
 	// APIParsingHandlePost implements POST /api/parsing/handle operation.
 	//
 	// Обработка ссылок на новые книги.

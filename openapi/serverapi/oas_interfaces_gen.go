@@ -65,6 +65,10 @@ type APIBookListPostRes interface {
 	aPIBookListPostRes()
 }
 
+type APIBookPageBodyPostRes interface {
+	aPIBookPageBodyPostRes()
+}
+
 type APIBookRawPostRes interface {
 	aPIBookRawPostRes()
 }
@@ -179,10 +183,6 @@ type APILabelPresetUpdatePostRes interface {
 
 type APILabelSetPostRes interface {
 	aPILabelSetPostRes()
-}
-
-type APIPageBodyPostRes interface {
-	aPIPageBodyPostRes()
 }
 
 type APIParsingHandlePostRes interface {

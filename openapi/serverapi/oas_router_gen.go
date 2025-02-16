@@ -491,6 +491,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				case 'p': // Prefix: "page/body"
+					origElem := elem
+					if l := len("page/body"); len(elem) >= l && elem[0:l] == "page/body" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIBookPageBodyPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				case 'r': // Prefix: "r"
 					origElem := elem
 					if l := len("r"); len(elem) >= l && elem[0:l] == "r" {
@@ -1246,9 +1267,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'p': // Prefix: "pa"
+			case 'p': // Prefix: "parsing/"
 				origElem := elem
-				if l := len("pa"); len(elem) >= l && elem[0:l] == "pa" {
+				if l := len("parsing/"); len(elem) >= l && elem[0:l] == "parsing/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -1258,9 +1279,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'g': // Prefix: "ge/body"
+				case 'h': // Prefix: "handle"
 					origElem := elem
-					if l := len("ge/body"); len(elem) >= l && elem[0:l] == "ge/body" {
+					if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
 						elem = elem[l:]
 					} else {
 						break
@@ -1270,7 +1291,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "POST":
-							s.handleAPIPageBodyPostRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleAPIParsingHandlePostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "POST")
 						}
@@ -1279,9 +1300,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 'r': // Prefix: "rsing/"
+				case 'm': // Prefix: "mirror/"
 					origElem := elem
-					if l := len("rsing/"); len(elem) >= l && elem[0:l] == "rsing/" {
+					if l := len("mirror/"); len(elem) >= l && elem[0:l] == "mirror/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -1291,9 +1312,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
-					case 'h': // Prefix: "handle"
+					case 'c': // Prefix: "create"
 						origElem := elem
-						if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
+						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
 							elem = elem[l:]
 						} else {
 							break
@@ -1303,7 +1324,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "POST":
-								s.handleAPIParsingHandlePostRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleAPIParsingMirrorCreatePostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "POST")
 							}
@@ -1312,123 +1333,87 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
-					case 'm': // Prefix: "mirror/"
+					case 'd': // Prefix: "delete"
 						origElem := elem
-						if l := len("mirror/"); len(elem) >= l && elem[0:l] == "mirror/" {
+						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIParsingMirrorDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'g': // Prefix: "get"
+						origElem := elem
+						if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+							elem = elem[l:]
+						} else {
 							break
 						}
-						switch elem[0] {
-						case 'c': // Prefix: "create"
-							origElem := elem
-							if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-								elem = elem[l:]
-							} else {
-								break
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIParsingMirrorGetPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
 							}
 
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPIParsingMirrorCreatePostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
+							return
+						}
 
-								return
+						elem = origElem
+					case 'l': // Prefix: "list"
+						origElem := elem
+						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleAPIParsingMirrorListGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
 							}
 
-							elem = origElem
-						case 'd': // Prefix: "delete"
-							origElem := elem
-							if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-								elem = elem[l:]
-							} else {
-								break
+							return
+						}
+
+						elem = origElem
+					case 'u': // Prefix: "update"
+						origElem := elem
+						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIParsingMirrorUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
 							}
 
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPIParsingMirrorDeletePostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						case 'g': // Prefix: "get"
-							origElem := elem
-							if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPIParsingMirrorGetPostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						case 'l': // Prefix: "list"
-							origElem := elem
-							if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "GET":
-									s.handleAPIParsingMirrorListGetRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "GET")
-								}
-
-								return
-							}
-
-							elem = origElem
-						case 'u': // Prefix: "update"
-							origElem := elem
-							if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPIParsingMirrorUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
+							return
 						}
 
 						elem = origElem
@@ -2244,6 +2229,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.summary = "Список книг"
 							r.operationID = ""
 							r.pathPattern = "/api/book/list"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'p': // Prefix: "page/body"
+					origElem := elem
+					if l := len("page/body"); len(elem) >= l && elem[0:l] == "page/body" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIBookPageBodyPostOperation
+							r.summary = "Получение тела страницы"
+							r.operationID = ""
+							r.pathPattern = "/api/book/page/body"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -3122,9 +3132,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 'p': // Prefix: "pa"
+			case 'p': // Prefix: "parsing/"
 				origElem := elem
-				if l := len("pa"); len(elem) >= l && elem[0:l] == "pa" {
+				if l := len("parsing/"); len(elem) >= l && elem[0:l] == "parsing/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -3134,9 +3144,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'g': // Prefix: "ge/body"
+				case 'h': // Prefix: "handle"
 					origElem := elem
-					if l := len("ge/body"); len(elem) >= l && elem[0:l] == "ge/body" {
+					if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
 						elem = elem[l:]
 					} else {
 						break
@@ -3146,10 +3156,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = APIPageBodyPostOperation
-							r.summary = "Получение тела страницы"
+							r.name = APIParsingHandlePostOperation
+							r.summary = "Обработка ссылок на новые книги"
 							r.operationID = ""
-							r.pathPattern = "/api/page/body"
+							r.pathPattern = "/api/parsing/handle"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -3159,9 +3169,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				case 'r': // Prefix: "rsing/"
+				case 'm': // Prefix: "mirror/"
 					origElem := elem
-					if l := len("rsing/"); len(elem) >= l && elem[0:l] == "rsing/" {
+					if l := len("mirror/"); len(elem) >= l && elem[0:l] == "mirror/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -3171,9 +3181,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
-					case 'h': // Prefix: "handle"
+					case 'c': // Prefix: "create"
 						origElem := elem
-						if l := len("handle"); len(elem) >= l && elem[0:l] == "handle" {
+						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
 							elem = elem[l:]
 						} else {
 							break
@@ -3183,10 +3193,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = APIParsingHandlePostOperation
-								r.summary = "Обработка ссылок на новые книги"
+								r.name = APIParsingMirrorCreatePostOperation
+								r.summary = "Создание данных зеркала"
 								r.operationID = ""
-								r.pathPattern = "/api/parsing/handle"
+								r.pathPattern = "/api/parsing/mirror/create"
 								r.args = args
 								r.count = 0
 								return r, true
@@ -3196,143 +3206,103 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
-					case 'm': // Prefix: "mirror/"
+					case 'd': // Prefix: "delete"
 						origElem := elem
-						if l := len("mirror/"); len(elem) >= l && elem[0:l] == "mirror/" {
+						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIParsingMirrorDeletePostOperation
+								r.summary = "Удаление зеркала"
+								r.operationID = ""
+								r.pathPattern = "/api/parsing/mirror/delete"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'g': // Prefix: "get"
+						origElem := elem
+						if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+							elem = elem[l:]
+						} else {
 							break
 						}
-						switch elem[0] {
-						case 'c': // Prefix: "create"
-							origElem := elem
-							if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-								elem = elem[l:]
-							} else {
-								break
-							}
 
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = APIParsingMirrorCreatePostOperation
-									r.summary = "Создание данных зеркала"
-									r.operationID = ""
-									r.pathPattern = "/api/parsing/mirror/create"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIParsingMirrorGetPostOperation
+								r.summary = "Получение данных зеркала"
+								r.operationID = ""
+								r.pathPattern = "/api/parsing/mirror/get"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
 							}
+						}
 
-							elem = origElem
-						case 'd': // Prefix: "delete"
-							origElem := elem
-							if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-								elem = elem[l:]
-							} else {
-								break
+						elem = origElem
+					case 'l': // Prefix: "list"
+						origElem := elem
+						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = APIParsingMirrorListGetOperation
+								r.summary = "Зеркала"
+								r.operationID = ""
+								r.pathPattern = "/api/parsing/mirror/list"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
 							}
+						}
 
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = APIParsingMirrorDeletePostOperation
-									r.summary = "Удаление зеркала"
-									r.operationID = ""
-									r.pathPattern = "/api/parsing/mirror/delete"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
+						elem = origElem
+					case 'u': // Prefix: "update"
+						origElem := elem
+						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIParsingMirrorUpdatePostOperation
+								r.summary = "Обновления зеркала"
+								r.operationID = ""
+								r.pathPattern = "/api/parsing/mirror/update"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
 							}
-
-							elem = origElem
-						case 'g': // Prefix: "get"
-							origElem := elem
-							if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = APIParsingMirrorGetPostOperation
-									r.summary = "Получение данных зеркала"
-									r.operationID = ""
-									r.pathPattern = "/api/parsing/mirror/get"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						case 'l': // Prefix: "list"
-							origElem := elem
-							if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "GET":
-									r.name = APIParsingMirrorListGetOperation
-									r.summary = "Зеркала"
-									r.operationID = ""
-									r.pathPattern = "/api/parsing/mirror/list"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						case 'u': // Prefix: "update"
-							origElem := elem
-							if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = APIParsingMirrorUpdatePostOperation
-									r.summary = "Обновления зеркала"
-									r.operationID = ""
-									r.pathPattern = "/api/parsing/mirror/update"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
 						}
 
 						elem = origElem

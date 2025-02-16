@@ -1614,7 +1614,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/page/body:
+  /api/book/page/body:
     post:
       description: Получение тела страницы (по оригинальному адресу или данным книги)
       summary: Получение тела страницы
@@ -2769,7 +2769,6 @@ paths:
       description: Удаляет книгу и/или ее страницы
       summary: Удаляет книгу и/или ее страницы
       tags:
-        - deduplicate
         - book
       requestBody:
         required: true

@@ -10,7 +10,7 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIPageBodyPost(ctx context.Context, req *serverapi.APIPageBodyPostReq) (serverapi.APIPageBodyPostRes, error) {
+func (c *FSHandlersController) APIBookPageBodyPost(ctx context.Context, req *serverapi.APIBookPageBodyPostReq) (serverapi.APIBookPageBodyPostRes, error) {
 	var (
 		body      io.Reader
 		err       error
@@ -27,27 +27,27 @@ func (c *FSHandlersController) APIPageBodyPost(ctx context.Context, req *servera
 		body, err = c.parseUseCases.PageBodyByURL(ctx, req.URL.Value)
 
 	default:
-		return &serverapi.APIPageBodyPostBadRequest{
+		return &serverapi.APIBookPageBodyPostBadRequest{
 			InnerCode: apiservercore.ValidationCode,
 			Details:   serverapi.NewOptString("id/page number and url is empty"),
 		}, nil
 	}
 
 	if errors.Is(err, core.PageNotFoundError) || errors.Is(err, core.FileNotFoundError) {
-		return &serverapi.APIPageBodyPostNotFound{
+		return &serverapi.APIBookPageBodyPostNotFound{
 			InnerCode: innerCode,
 			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
 	if err != nil {
-		return &serverapi.APIPageBodyPostInternalServerError{
+		return &serverapi.APIBookPageBodyPostInternalServerError{
 			InnerCode: innerCode,
 			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}
 
-	return &serverapi.APIPageBodyPostOK{
+	return &serverapi.APIBookPageBodyPostOK{
 		Data: body,
 	}, nil
 }

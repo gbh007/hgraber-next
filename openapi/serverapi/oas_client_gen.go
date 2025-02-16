@@ -125,6 +125,13 @@ type Invoker interface {
 	//
 	// POST /api/book/list
 	APIBookListPost(ctx context.Context, request *BookFilter) (APIBookListPostRes, error)
+	// APIBookPageBodyPost invokes POST /api/book/page/body operation.
+	//
+	// Получение тела страницы (по оригинальному адресу или
+	// данным книги).
+	//
+	// POST /api/book/page/body
+	APIBookPageBodyPost(ctx context.Context, request *APIBookPageBodyPostReq) (APIBookPageBodyPostRes, error)
 	// APIBookRawPost invokes POST /api/book/raw operation.
 	//
 	// Информация о книге (или по ИД или по адресу).
@@ -305,13 +312,6 @@ type Invoker interface {
 	//
 	// POST /api/label/set
 	APILabelSetPost(ctx context.Context, request *APILabelSetPostReq) (APILabelSetPostRes, error)
-	// APIPageBodyPost invokes POST /api/page/body operation.
-	//
-	// Получение тела страницы (по оригинальному адресу или
-	// данным книги).
-	//
-	// POST /api/page/body
-	APIPageBodyPost(ctx context.Context, request *APIPageBodyPostReq) (APIPageBodyPostRes, error)
 	// APIParsingHandlePost invokes POST /api/parsing/handle operation.
 	//
 	// Обработка ссылок на новые книги.
@@ -2351,6 +2351,126 @@ func (c *Client) sendAPIBookListPost(ctx context.Context, request *BookFilter) (
 
 	stage = "DecodeResponse"
 	result, err := decodeAPIBookListPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIBookPageBodyPost invokes POST /api/book/page/body operation.
+//
+// Получение тела страницы (по оригинальному адресу или
+// данным книги).
+//
+// POST /api/book/page/body
+func (c *Client) APIBookPageBodyPost(ctx context.Context, request *APIBookPageBodyPostReq) (APIBookPageBodyPostRes, error) {
+	res, err := c.sendAPIBookPageBodyPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIBookPageBodyPost(ctx context.Context, request *APIBookPageBodyPostReq) (res APIBookPageBodyPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/book/page/body"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIBookPageBodyPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/book/page/body"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIBookPageBodyPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIBookPageBodyPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, APIBookPageBodyPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIBookPageBodyPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -5841,126 +5961,6 @@ func (c *Client) sendAPILabelSetPost(ctx context.Context, request *APILabelSetPo
 
 	stage = "DecodeResponse"
 	result, err := decodeAPILabelSetPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIPageBodyPost invokes POST /api/page/body operation.
-//
-// Получение тела страницы (по оригинальному адресу или
-// данным книги).
-//
-// POST /api/page/body
-func (c *Client) APIPageBodyPost(ctx context.Context, request *APIPageBodyPostReq) (APIPageBodyPostRes, error) {
-	res, err := c.sendAPIPageBodyPost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIPageBodyPost(ctx context.Context, request *APIPageBodyPostReq) (res APIPageBodyPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/page/body"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIPageBodyPostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/page/body"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIPageBodyPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APIPageBodyPostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"HeaderAuth\"")
-			}
-		}
-		{
-			stage = "Security:Cookies"
-			switch err := c.securityCookies(ctx, APIPageBodyPostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 1
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Cookies\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-				{0b00000010},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIPageBodyPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

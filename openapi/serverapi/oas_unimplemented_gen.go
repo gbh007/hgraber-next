@@ -158,6 +158,16 @@ func (UnimplementedHandler) APIBookListPost(ctx context.Context, req *BookFilter
 	return r, ht.ErrNotImplemented
 }
 
+// APIBookPageBodyPost implements POST /api/book/page/body operation.
+//
+// Получение тела страницы (по оригинальному адресу или
+// данным книги).
+//
+// POST /api/book/page/body
+func (UnimplementedHandler) APIBookPageBodyPost(ctx context.Context, req *APIBookPageBodyPostReq) (r APIBookPageBodyPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIBookRawPost implements POST /api/book/raw operation.
 //
 // Информация о книге (или по ИД или по адресу).
@@ -422,16 +432,6 @@ func (UnimplementedHandler) APILabelPresetUpdatePost(ctx context.Context, req *A
 //
 // POST /api/label/set
 func (UnimplementedHandler) APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) (r APILabelSetPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIPageBodyPost implements POST /api/page/body operation.
-//
-// Получение тела страницы (по оригинальному адресу или
-// данным книги).
-//
-// POST /api/page/body
-func (UnimplementedHandler) APIPageBodyPost(ctx context.Context, req *APIPageBodyPostReq) (r APIPageBodyPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

@@ -1501,6 +1501,81 @@ type APIBookListPostUnauthorized ErrorResponse
 
 func (*APIBookListPostUnauthorized) aPIBookListPostRes() {}
 
+type APIBookPageBodyPostBadRequest ErrorResponse
+
+func (*APIBookPageBodyPostBadRequest) aPIBookPageBodyPostRes() {}
+
+type APIBookPageBodyPostForbidden ErrorResponse
+
+func (*APIBookPageBodyPostForbidden) aPIBookPageBodyPostRes() {}
+
+type APIBookPageBodyPostInternalServerError ErrorResponse
+
+func (*APIBookPageBodyPostInternalServerError) aPIBookPageBodyPostRes() {}
+
+type APIBookPageBodyPostNotFound ErrorResponse
+
+func (*APIBookPageBodyPostNotFound) aPIBookPageBodyPostRes() {}
+
+type APIBookPageBodyPostOK struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APIBookPageBodyPostOK) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*APIBookPageBodyPostOK) aPIBookPageBodyPostRes() {}
+
+type APIBookPageBodyPostReq struct {
+	// ID книги.
+	ID OptUUID `json:"id"`
+	// Номер страницы.
+	PageNumber OptInt `json:"page_number"`
+	// Оригинальный URL страницы.
+	URL OptURI `json:"url"`
+}
+
+// GetID returns the value of ID.
+func (s *APIBookPageBodyPostReq) GetID() OptUUID {
+	return s.ID
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIBookPageBodyPostReq) GetPageNumber() OptInt {
+	return s.PageNumber
+}
+
+// GetURL returns the value of URL.
+func (s *APIBookPageBodyPostReq) GetURL() OptURI {
+	return s.URL
+}
+
+// SetID sets the value of ID.
+func (s *APIBookPageBodyPostReq) SetID(val OptUUID) {
+	s.ID = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIBookPageBodyPostReq) SetPageNumber(val OptInt) {
+	s.PageNumber = val
+}
+
+// SetURL sets the value of URL.
+func (s *APIBookPageBodyPostReq) SetURL(val OptURI) {
+	s.URL = val
+}
+
+type APIBookPageBodyPostUnauthorized ErrorResponse
+
+func (*APIBookPageBodyPostUnauthorized) aPIBookPageBodyPostRes() {}
+
 type APIBookRawPostBadRequest ErrorResponse
 
 func (*APIBookRawPostBadRequest) aPIBookRawPostRes() {}
@@ -3766,81 +3841,6 @@ func (s *APILabelSetPostReq) SetValue(val string) {
 type APILabelSetPostUnauthorized ErrorResponse
 
 func (*APILabelSetPostUnauthorized) aPILabelSetPostRes() {}
-
-type APIPageBodyPostBadRequest ErrorResponse
-
-func (*APIPageBodyPostBadRequest) aPIPageBodyPostRes() {}
-
-type APIPageBodyPostForbidden ErrorResponse
-
-func (*APIPageBodyPostForbidden) aPIPageBodyPostRes() {}
-
-type APIPageBodyPostInternalServerError ErrorResponse
-
-func (*APIPageBodyPostInternalServerError) aPIPageBodyPostRes() {}
-
-type APIPageBodyPostNotFound ErrorResponse
-
-func (*APIPageBodyPostNotFound) aPIPageBodyPostRes() {}
-
-type APIPageBodyPostOK struct {
-	Data io.Reader
-}
-
-// Read reads data from the Data reader.
-//
-// Kept to satisfy the io.Reader interface.
-func (s APIPageBodyPostOK) Read(p []byte) (n int, err error) {
-	if s.Data == nil {
-		return 0, io.EOF
-	}
-	return s.Data.Read(p)
-}
-
-func (*APIPageBodyPostOK) aPIPageBodyPostRes() {}
-
-type APIPageBodyPostReq struct {
-	// ID книги.
-	ID OptUUID `json:"id"`
-	// Номер страницы.
-	PageNumber OptInt `json:"page_number"`
-	// Оригинальный URL страницы.
-	URL OptURI `json:"url"`
-}
-
-// GetID returns the value of ID.
-func (s *APIPageBodyPostReq) GetID() OptUUID {
-	return s.ID
-}
-
-// GetPageNumber returns the value of PageNumber.
-func (s *APIPageBodyPostReq) GetPageNumber() OptInt {
-	return s.PageNumber
-}
-
-// GetURL returns the value of URL.
-func (s *APIPageBodyPostReq) GetURL() OptURI {
-	return s.URL
-}
-
-// SetID sets the value of ID.
-func (s *APIPageBodyPostReq) SetID(val OptUUID) {
-	s.ID = val
-}
-
-// SetPageNumber sets the value of PageNumber.
-func (s *APIPageBodyPostReq) SetPageNumber(val OptInt) {
-	s.PageNumber = val
-}
-
-// SetURL sets the value of URL.
-func (s *APIPageBodyPostReq) SetURL(val OptURI) {
-	s.URL = val
-}
-
-type APIPageBodyPostUnauthorized ErrorResponse
-
-func (*APIPageBodyPostUnauthorized) aPIPageBodyPostRes() {}
 
 type APIParsingHandlePostBadRequest ErrorResponse
 
