@@ -1677,59 +1677,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/book/delete:
-    post:
-      description: Удаление книги (без удаления метаинформации)
-      summary: Удаление книги
-      tags:
-        - book
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                  description: ID книги
-              required:
-                - id
-      responses:
-        204:
-          description: Успешное удаление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
   /api/book/status/set:
     post:
       description: Изменение статуса книги
@@ -2817,12 +2764,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/deduplicate/delete-all-pages-by-book:
+  /api/book/delete:
     post:
-      description: Удаляет все страницы из книги и их дубликаты в системе
-      summary: Удаляет все страницы из книги и их дубликаты в системе
+      description: Удаляет книгу и/или ее страницы
+      summary: Удаляет книгу и/или ее страницы
       tags:
         - deduplicate
+        - book
       requestBody:
         required: true
         content:
@@ -2830,6 +2778,13 @@ paths:
             schema:
               type: object
               properties:
+                type:
+                  type: string
+                  enum:
+                    - soft
+                    - page_and_copy
+                    - dead_hashed_pages
+                  description: Формат удаления
                 book_id:
                   type: string
                   format: uuid
@@ -2838,6 +2793,7 @@ paths:
                   type: boolean
                   description: Пометить пустые книги которые появились после операции как удаленные
               required:
+                - type
                 - book_id
       responses:
         204:
@@ -2860,49 +2816,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /api/deduplicate/delete-book-dead-hashed-pages:
-    post:
-      description: Удаляет из книги страницы с мертвыми хешами
-      summary: Удаляет из книги страницы с мертвыми хешами
-      tags:
-        - deduplicate
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                book_id:
-                  type: string
-                  format: uuid
-                  description: ID книги
-              required:
-                - book_id
-      responses:
-        204:
-          description: Успешное выполнение
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
+        404:
+          description: Данные не найдены
           content:
             application/json:
               schema:

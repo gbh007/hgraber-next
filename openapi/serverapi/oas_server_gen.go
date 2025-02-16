@@ -89,7 +89,7 @@ type Handler interface {
 	APIBookArchiveIDGet(ctx context.Context, params APIBookArchiveIDGetParams) (APIBookArchiveIDGetRes, error)
 	// APIBookDeletePost implements POST /api/book/delete operation.
 	//
-	// Удаление книги (без удаления метаинформации).
+	// Удаляет книгу и/или ее страницы.
 	//
 	// POST /api/book/delete
 	APIBookDeletePost(ctx context.Context, req *APIBookDeletePostReq) (APIBookDeletePostRes, error)
@@ -164,24 +164,12 @@ type Handler interface {
 	//
 	// POST /api/deduplicate/dead-hash/set
 	APIDeduplicateDeadHashSetPost(ctx context.Context, req *APIDeduplicateDeadHashSetPostReq) (APIDeduplicateDeadHashSetPostRes, error)
-	// APIDeduplicateDeleteAllPagesByBookPost implements POST /api/deduplicate/delete-all-pages-by-book operation.
-	//
-	// Удаляет все страницы из книги и их дубликаты в системе.
-	//
-	// POST /api/deduplicate/delete-all-pages-by-book
-	APIDeduplicateDeleteAllPagesByBookPost(ctx context.Context, req *APIDeduplicateDeleteAllPagesByBookPostReq) (APIDeduplicateDeleteAllPagesByBookPostRes, error)
 	// APIDeduplicateDeleteAllPagesByHashPost implements POST /api/deduplicate/delete-all-pages-by-hash operation.
 	//
 	// Удаляет страницы с таким же хешом как у указанной.
 	//
 	// POST /api/deduplicate/delete-all-pages-by-hash
 	APIDeduplicateDeleteAllPagesByHashPost(ctx context.Context, req *APIDeduplicateDeleteAllPagesByHashPostReq) (APIDeduplicateDeleteAllPagesByHashPostRes, error)
-	// APIDeduplicateDeleteBookDeadHashedPagesPost implements POST /api/deduplicate/delete-book-dead-hashed-pages operation.
-	//
-	// Удаляет из книги страницы с мертвыми хешами.
-	//
-	// POST /api/deduplicate/delete-book-dead-hashed-pages
-	APIDeduplicateDeleteBookDeadHashedPagesPost(ctx context.Context, req *APIDeduplicateDeleteBookDeadHashedPagesPostReq) (APIDeduplicateDeleteBookDeadHashedPagesPostRes, error)
 	// APIDeduplicateUniquePagesPost implements POST /api/deduplicate/unique-pages operation.
 	//
 	// Поиск уникальных страниц в книге.

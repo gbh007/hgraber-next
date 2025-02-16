@@ -44,6 +44,7 @@ type ExportUseCases interface {
 type DeduplicateUseCases interface {
 	deduplicatehandlers.DeduplicateUseCases
 	systemhandlers.DeduplicateUseCases
+	bookhandlers.DeduplicateUseCases
 }
 
 type SystemUseCases interface {
@@ -150,6 +151,7 @@ func New(
 			exportUseCases,
 			reBuilderUseCases,
 			bffUseCases,
+			deduplicateUseCases,
 			config.GetDebug(),
 			ac,
 		),

@@ -26,8 +26,6 @@ type DeduplicateUseCases interface {
 
 	MarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID) error
 	UnMarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID) error
-	RemoveBookPagesWithDeadHash(ctx context.Context, bookID uuid.UUID, deleteEmptyBook bool) error
-	DeleteBookDeadHashedPages(ctx context.Context, bookID uuid.UUID) error
 }
 
 type DeduplicateHandlersController struct {

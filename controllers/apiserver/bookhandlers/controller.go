@@ -40,6 +40,11 @@ type BFFUseCases interface {
 	BookList(ctx context.Context, filter core.BookFilter) (bff.BookList, error)
 }
 
+type DeduplicateUseCases interface {
+	RemoveBookPagesWithDeadHash(ctx context.Context, bookID uuid.UUID, deleteEmptyBook bool) error
+	DeleteBookDeadHashedPages(ctx context.Context, bookID uuid.UUID) error
+}
+
 type BookHandlersController struct {
 	logger *slog.Logger
 	tracer trace.Tracer
@@ -47,11 +52,12 @@ type BookHandlersController struct {
 
 	apiCore *apiservercore.Controller
 
-	parseUseCases     ParseUseCases
-	bookUseCases      BookUseCases
-	exportUseCases    ExportUseCases
-	rebuilderUseCases ReBuilderUseCases
-	bffUseCases       BFFUseCases
+	parseUseCases       ParseUseCases
+	bookUseCases        BookUseCases
+	exportUseCases      ExportUseCases
+	rebuilderUseCases   ReBuilderUseCases
+	bffUseCases         BFFUseCases
+	deduplicateUseCases DeduplicateUseCases
 }
 
 func New(
@@ -62,19 +68,21 @@ func New(
 	exportUseCases ExportUseCases,
 	rebuilderUseCases ReBuilderUseCases,
 	bffUseCases BFFUseCases,
+	deduplicateUseCases DeduplicateUseCases,
 	debug bool,
 	ac *apiservercore.Controller,
 ) *BookHandlersController {
 	c := &BookHandlersController{
-		logger:            logger,
-		tracer:            tracer,
-		parseUseCases:     parseUseCases,
-		bookUseCases:      bookUseCases,
-		exportUseCases:    exportUseCases,
-		rebuilderUseCases: rebuilderUseCases,
-		bffUseCases:       bffUseCases,
-		debug:             debug,
-		apiCore:           ac,
+		logger:              logger,
+		tracer:              tracer,
+		parseUseCases:       parseUseCases,
+		bookUseCases:        bookUseCases,
+		exportUseCases:      exportUseCases,
+		rebuilderUseCases:   rebuilderUseCases,
+		bffUseCases:         bffUseCases,
+		deduplicateUseCases: deduplicateUseCases,
+		debug:               debug,
+		apiCore:             ac,
 	}
 
 	return c

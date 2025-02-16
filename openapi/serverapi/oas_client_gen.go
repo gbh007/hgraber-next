@@ -109,7 +109,7 @@ type Invoker interface {
 	APIBookArchiveIDGet(ctx context.Context, params APIBookArchiveIDGetParams) (APIBookArchiveIDGetRes, error)
 	// APIBookDeletePost invokes POST /api/book/delete operation.
 	//
-	// Удаление книги (без удаления метаинформации).
+	// Удаляет книгу и/или ее страницы.
 	//
 	// POST /api/book/delete
 	APIBookDeletePost(ctx context.Context, request *APIBookDeletePostReq) (APIBookDeletePostRes, error)
@@ -184,24 +184,12 @@ type Invoker interface {
 	//
 	// POST /api/deduplicate/dead-hash/set
 	APIDeduplicateDeadHashSetPost(ctx context.Context, request *APIDeduplicateDeadHashSetPostReq) (APIDeduplicateDeadHashSetPostRes, error)
-	// APIDeduplicateDeleteAllPagesByBookPost invokes POST /api/deduplicate/delete-all-pages-by-book operation.
-	//
-	// Удаляет все страницы из книги и их дубликаты в системе.
-	//
-	// POST /api/deduplicate/delete-all-pages-by-book
-	APIDeduplicateDeleteAllPagesByBookPost(ctx context.Context, request *APIDeduplicateDeleteAllPagesByBookPostReq) (APIDeduplicateDeleteAllPagesByBookPostRes, error)
 	// APIDeduplicateDeleteAllPagesByHashPost invokes POST /api/deduplicate/delete-all-pages-by-hash operation.
 	//
 	// Удаляет страницы с таким же хешом как у указанной.
 	//
 	// POST /api/deduplicate/delete-all-pages-by-hash
 	APIDeduplicateDeleteAllPagesByHashPost(ctx context.Context, request *APIDeduplicateDeleteAllPagesByHashPostReq) (APIDeduplicateDeleteAllPagesByHashPostRes, error)
-	// APIDeduplicateDeleteBookDeadHashedPagesPost invokes POST /api/deduplicate/delete-book-dead-hashed-pages operation.
-	//
-	// Удаляет из книги страницы с мертвыми хешами.
-	//
-	// POST /api/deduplicate/delete-book-dead-hashed-pages
-	APIDeduplicateDeleteBookDeadHashedPagesPost(ctx context.Context, request *APIDeduplicateDeleteBookDeadHashedPagesPostReq) (APIDeduplicateDeleteBookDeadHashedPagesPostRes, error)
 	// APIDeduplicateUniquePagesPost invokes POST /api/deduplicate/unique-pages operation.
 	//
 	// Поиск уникальных страниц в книге.
@@ -2015,7 +2003,7 @@ func (c *Client) sendAPIBookArchiveIDGet(ctx context.Context, params APIBookArch
 
 // APIBookDeletePost invokes POST /api/book/delete operation.
 //
-// Удаление книги (без удаления метаинформации).
+// Удаляет книгу и/или ее страницы.
 //
 // POST /api/book/delete
 func (c *Client) APIBookDeletePost(ctx context.Context, request *APIBookDeletePostReq) (APIBookDeletePostRes, error) {
@@ -3446,125 +3434,6 @@ func (c *Client) sendAPIDeduplicateDeadHashSetPost(ctx context.Context, request 
 	return result, nil
 }
 
-// APIDeduplicateDeleteAllPagesByBookPost invokes POST /api/deduplicate/delete-all-pages-by-book operation.
-//
-// Удаляет все страницы из книги и их дубликаты в системе.
-//
-// POST /api/deduplicate/delete-all-pages-by-book
-func (c *Client) APIDeduplicateDeleteAllPagesByBookPost(ctx context.Context, request *APIDeduplicateDeleteAllPagesByBookPostReq) (APIDeduplicateDeleteAllPagesByBookPostRes, error) {
-	res, err := c.sendAPIDeduplicateDeleteAllPagesByBookPost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIDeduplicateDeleteAllPagesByBookPost(ctx context.Context, request *APIDeduplicateDeleteAllPagesByBookPostReq) (res APIDeduplicateDeleteAllPagesByBookPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/delete-all-pages-by-book"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIDeduplicateDeleteAllPagesByBookPostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/deduplicate/delete-all-pages-by-book"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIDeduplicateDeleteAllPagesByBookPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APIDeduplicateDeleteAllPagesByBookPostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"HeaderAuth\"")
-			}
-		}
-		{
-			stage = "Security:Cookies"
-			switch err := c.securityCookies(ctx, APIDeduplicateDeleteAllPagesByBookPostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 1
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Cookies\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-				{0b00000010},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIDeduplicateDeleteAllPagesByBookPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // APIDeduplicateDeleteAllPagesByHashPost invokes POST /api/deduplicate/delete-all-pages-by-hash operation.
 //
 // Удаляет страницы с таким же хешом как у указанной.
@@ -3677,125 +3546,6 @@ func (c *Client) sendAPIDeduplicateDeleteAllPagesByHashPost(ctx context.Context,
 
 	stage = "DecodeResponse"
 	result, err := decodeAPIDeduplicateDeleteAllPagesByHashPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIDeduplicateDeleteBookDeadHashedPagesPost invokes POST /api/deduplicate/delete-book-dead-hashed-pages operation.
-//
-// Удаляет из книги страницы с мертвыми хешами.
-//
-// POST /api/deduplicate/delete-book-dead-hashed-pages
-func (c *Client) APIDeduplicateDeleteBookDeadHashedPagesPost(ctx context.Context, request *APIDeduplicateDeleteBookDeadHashedPagesPostReq) (APIDeduplicateDeleteBookDeadHashedPagesPostRes, error) {
-	res, err := c.sendAPIDeduplicateDeleteBookDeadHashedPagesPost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIDeduplicateDeleteBookDeadHashedPagesPost(ctx context.Context, request *APIDeduplicateDeleteBookDeadHashedPagesPostReq) (res APIDeduplicateDeleteBookDeadHashedPagesPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/delete-book-dead-hashed-pages"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIDeduplicateDeleteBookDeadHashedPagesPostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/deduplicate/delete-book-dead-hashed-pages"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIDeduplicateDeleteBookDeadHashedPagesPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APIDeduplicateDeleteBookDeadHashedPagesPostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"HeaderAuth\"")
-			}
-		}
-		{
-			stage = "Security:Cookies"
-			switch err := c.securityCookies(ctx, APIDeduplicateDeleteBookDeadHashedPagesPostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 1
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Cookies\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-				{0b00000010},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIDeduplicateDeleteBookDeadHashedPagesPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

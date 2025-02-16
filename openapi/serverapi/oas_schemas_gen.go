@@ -922,18 +922,92 @@ type APIBookDeletePostNotFound ErrorResponse
 func (*APIBookDeletePostNotFound) aPIBookDeletePostRes() {}
 
 type APIBookDeletePostReq struct {
+	// Формат удаления.
+	Type APIBookDeletePostReqType `json:"type"`
 	// ID книги.
-	ID uuid.UUID `json:"id"`
+	BookID uuid.UUID `json:"book_id"`
+	// Пометить пустые книги которые появились после
+	// операции как удаленные.
+	MarkAsDeletedEmptyBook OptBool `json:"mark_as_deleted_empty_book"`
 }
 
-// GetID returns the value of ID.
-func (s *APIBookDeletePostReq) GetID() uuid.UUID {
-	return s.ID
+// GetType returns the value of Type.
+func (s *APIBookDeletePostReq) GetType() APIBookDeletePostReqType {
+	return s.Type
 }
 
-// SetID sets the value of ID.
-func (s *APIBookDeletePostReq) SetID(val uuid.UUID) {
-	s.ID = val
+// GetBookID returns the value of BookID.
+func (s *APIBookDeletePostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetMarkAsDeletedEmptyBook returns the value of MarkAsDeletedEmptyBook.
+func (s *APIBookDeletePostReq) GetMarkAsDeletedEmptyBook() OptBool {
+	return s.MarkAsDeletedEmptyBook
+}
+
+// SetType sets the value of Type.
+func (s *APIBookDeletePostReq) SetType(val APIBookDeletePostReqType) {
+	s.Type = val
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIBookDeletePostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetMarkAsDeletedEmptyBook sets the value of MarkAsDeletedEmptyBook.
+func (s *APIBookDeletePostReq) SetMarkAsDeletedEmptyBook(val OptBool) {
+	s.MarkAsDeletedEmptyBook = val
+}
+
+// Формат удаления.
+type APIBookDeletePostReqType string
+
+const (
+	APIBookDeletePostReqTypeSoft            APIBookDeletePostReqType = "soft"
+	APIBookDeletePostReqTypePageAndCopy     APIBookDeletePostReqType = "page_and_copy"
+	APIBookDeletePostReqTypeDeadHashedPages APIBookDeletePostReqType = "dead_hashed_pages"
+)
+
+// AllValues returns all APIBookDeletePostReqType values.
+func (APIBookDeletePostReqType) AllValues() []APIBookDeletePostReqType {
+	return []APIBookDeletePostReqType{
+		APIBookDeletePostReqTypeSoft,
+		APIBookDeletePostReqTypePageAndCopy,
+		APIBookDeletePostReqTypeDeadHashedPages,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIBookDeletePostReqType) MarshalText() ([]byte, error) {
+	switch s {
+	case APIBookDeletePostReqTypeSoft:
+		return []byte(s), nil
+	case APIBookDeletePostReqTypePageAndCopy:
+		return []byte(s), nil
+	case APIBookDeletePostReqTypeDeadHashedPages:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIBookDeletePostReqType) UnmarshalText(data []byte) error {
+	switch APIBookDeletePostReqType(data) {
+	case APIBookDeletePostReqTypeSoft:
+		*s = APIBookDeletePostReqTypeSoft
+		return nil
+	case APIBookDeletePostReqTypePageAndCopy:
+		*s = APIBookDeletePostReqTypePageAndCopy
+		return nil
+	case APIBookDeletePostReqTypeDeadHashedPages:
+		*s = APIBookDeletePostReqTypeDeadHashedPages
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type APIBookDeletePostUnauthorized ErrorResponse
@@ -2445,58 +2519,6 @@ type APIDeduplicateDeadHashSetPostUnauthorized ErrorResponse
 
 func (*APIDeduplicateDeadHashSetPostUnauthorized) aPIDeduplicateDeadHashSetPostRes() {}
 
-type APIDeduplicateDeleteAllPagesByBookPostBadRequest ErrorResponse
-
-func (*APIDeduplicateDeleteAllPagesByBookPostBadRequest) aPIDeduplicateDeleteAllPagesByBookPostRes() {
-}
-
-type APIDeduplicateDeleteAllPagesByBookPostForbidden ErrorResponse
-
-func (*APIDeduplicateDeleteAllPagesByBookPostForbidden) aPIDeduplicateDeleteAllPagesByBookPostRes() {}
-
-type APIDeduplicateDeleteAllPagesByBookPostInternalServerError ErrorResponse
-
-func (*APIDeduplicateDeleteAllPagesByBookPostInternalServerError) aPIDeduplicateDeleteAllPagesByBookPostRes() {
-}
-
-// APIDeduplicateDeleteAllPagesByBookPostNoContent is response for APIDeduplicateDeleteAllPagesByBookPost operation.
-type APIDeduplicateDeleteAllPagesByBookPostNoContent struct{}
-
-func (*APIDeduplicateDeleteAllPagesByBookPostNoContent) aPIDeduplicateDeleteAllPagesByBookPostRes() {}
-
-type APIDeduplicateDeleteAllPagesByBookPostReq struct {
-	// ID книги.
-	BookID uuid.UUID `json:"book_id"`
-	// Пометить пустые книги которые появились после
-	// операции как удаленные.
-	MarkAsDeletedEmptyBook OptBool `json:"mark_as_deleted_empty_book"`
-}
-
-// GetBookID returns the value of BookID.
-func (s *APIDeduplicateDeleteAllPagesByBookPostReq) GetBookID() uuid.UUID {
-	return s.BookID
-}
-
-// GetMarkAsDeletedEmptyBook returns the value of MarkAsDeletedEmptyBook.
-func (s *APIDeduplicateDeleteAllPagesByBookPostReq) GetMarkAsDeletedEmptyBook() OptBool {
-	return s.MarkAsDeletedEmptyBook
-}
-
-// SetBookID sets the value of BookID.
-func (s *APIDeduplicateDeleteAllPagesByBookPostReq) SetBookID(val uuid.UUID) {
-	s.BookID = val
-}
-
-// SetMarkAsDeletedEmptyBook sets the value of MarkAsDeletedEmptyBook.
-func (s *APIDeduplicateDeleteAllPagesByBookPostReq) SetMarkAsDeletedEmptyBook(val OptBool) {
-	s.MarkAsDeletedEmptyBook = val
-}
-
-type APIDeduplicateDeleteAllPagesByBookPostUnauthorized ErrorResponse
-
-func (*APIDeduplicateDeleteAllPagesByBookPostUnauthorized) aPIDeduplicateDeleteAllPagesByBookPostRes() {
-}
-
 type APIDeduplicateDeleteAllPagesByHashPostBadRequest ErrorResponse
 
 func (*APIDeduplicateDeleteAllPagesByHashPostBadRequest) aPIDeduplicateDeleteAllPagesByHashPostRes() {
@@ -2558,47 +2580,6 @@ func (s *APIDeduplicateDeleteAllPagesByHashPostReq) SetSetDeadHash(val OptBool) 
 type APIDeduplicateDeleteAllPagesByHashPostUnauthorized ErrorResponse
 
 func (*APIDeduplicateDeleteAllPagesByHashPostUnauthorized) aPIDeduplicateDeleteAllPagesByHashPostRes() {
-}
-
-type APIDeduplicateDeleteBookDeadHashedPagesPostBadRequest ErrorResponse
-
-func (*APIDeduplicateDeleteBookDeadHashedPagesPostBadRequest) aPIDeduplicateDeleteBookDeadHashedPagesPostRes() {
-}
-
-type APIDeduplicateDeleteBookDeadHashedPagesPostForbidden ErrorResponse
-
-func (*APIDeduplicateDeleteBookDeadHashedPagesPostForbidden) aPIDeduplicateDeleteBookDeadHashedPagesPostRes() {
-}
-
-type APIDeduplicateDeleteBookDeadHashedPagesPostInternalServerError ErrorResponse
-
-func (*APIDeduplicateDeleteBookDeadHashedPagesPostInternalServerError) aPIDeduplicateDeleteBookDeadHashedPagesPostRes() {
-}
-
-// APIDeduplicateDeleteBookDeadHashedPagesPostNoContent is response for APIDeduplicateDeleteBookDeadHashedPagesPost operation.
-type APIDeduplicateDeleteBookDeadHashedPagesPostNoContent struct{}
-
-func (*APIDeduplicateDeleteBookDeadHashedPagesPostNoContent) aPIDeduplicateDeleteBookDeadHashedPagesPostRes() {
-}
-
-type APIDeduplicateDeleteBookDeadHashedPagesPostReq struct {
-	// ID книги.
-	BookID uuid.UUID `json:"book_id"`
-}
-
-// GetBookID returns the value of BookID.
-func (s *APIDeduplicateDeleteBookDeadHashedPagesPostReq) GetBookID() uuid.UUID {
-	return s.BookID
-}
-
-// SetBookID sets the value of BookID.
-func (s *APIDeduplicateDeleteBookDeadHashedPagesPostReq) SetBookID(val uuid.UUID) {
-	s.BookID = val
-}
-
-type APIDeduplicateDeleteBookDeadHashedPagesPostUnauthorized ErrorResponse
-
-func (*APIDeduplicateDeleteBookDeadHashedPagesPostUnauthorized) aPIDeduplicateDeleteBookDeadHashedPagesPostRes() {
 }
 
 type APIDeduplicateUniquePagesPostBadRequest ErrorResponse

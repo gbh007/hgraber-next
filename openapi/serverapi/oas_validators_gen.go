@@ -189,6 +189,42 @@ func (s *APIAgentTaskExportPostReq) Validate() error {
 	return nil
 }
 
+func (s *APIBookDeletePostReq) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Type.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "type",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s APIBookDeletePostReqType) Validate() error {
+	switch s {
+	case "soft":
+		return nil
+	case "page_and_copy":
+		return nil
+	case "dead_hashed_pages":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s *APIBookDetailsPostOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer

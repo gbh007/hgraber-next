@@ -133,7 +133,7 @@ func (UnimplementedHandler) APIBookArchiveIDGet(ctx context.Context, params APIB
 
 // APIBookDeletePost implements POST /api/book/delete operation.
 //
-// Удаление книги (без удаления метаинформации).
+// Удаляет книгу и/или ее страницы.
 //
 // POST /api/book/delete
 func (UnimplementedHandler) APIBookDeletePost(ctx context.Context, req *APIBookDeletePostReq) (r APIBookDeletePostRes, _ error) {
@@ -244,30 +244,12 @@ func (UnimplementedHandler) APIDeduplicateDeadHashSetPost(ctx context.Context, r
 	return r, ht.ErrNotImplemented
 }
 
-// APIDeduplicateDeleteAllPagesByBookPost implements POST /api/deduplicate/delete-all-pages-by-book operation.
-//
-// Удаляет все страницы из книги и их дубликаты в системе.
-//
-// POST /api/deduplicate/delete-all-pages-by-book
-func (UnimplementedHandler) APIDeduplicateDeleteAllPagesByBookPost(ctx context.Context, req *APIDeduplicateDeleteAllPagesByBookPostReq) (r APIDeduplicateDeleteAllPagesByBookPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // APIDeduplicateDeleteAllPagesByHashPost implements POST /api/deduplicate/delete-all-pages-by-hash operation.
 //
 // Удаляет страницы с таким же хешом как у указанной.
 //
 // POST /api/deduplicate/delete-all-pages-by-hash
 func (UnimplementedHandler) APIDeduplicateDeleteAllPagesByHashPost(ctx context.Context, req *APIDeduplicateDeleteAllPagesByHashPostReq) (r APIDeduplicateDeleteAllPagesByHashPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIDeduplicateDeleteBookDeadHashedPagesPost implements POST /api/deduplicate/delete-book-dead-hashed-pages operation.
-//
-// Удаляет из книги страницы с мертвыми хешами.
-//
-// POST /api/deduplicate/delete-book-dead-hashed-pages
-func (UnimplementedHandler) APIDeduplicateDeleteBookDeadHashedPagesPost(ctx context.Context, req *APIDeduplicateDeleteBookDeadHashedPagesPostReq) (r APIDeduplicateDeleteBookDeadHashedPagesPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

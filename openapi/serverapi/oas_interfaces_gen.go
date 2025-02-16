@@ -101,16 +101,8 @@ type APIDeduplicateDeadHashSetPostRes interface {
 	aPIDeduplicateDeadHashSetPostRes()
 }
 
-type APIDeduplicateDeleteAllPagesByBookPostRes interface {
-	aPIDeduplicateDeleteAllPagesByBookPostRes()
-}
-
 type APIDeduplicateDeleteAllPagesByHashPostRes interface {
 	aPIDeduplicateDeleteAllPagesByHashPostRes()
-}
-
-type APIDeduplicateDeleteBookDeadHashedPagesPostRes interface {
-	aPIDeduplicateDeleteBookDeadHashedPagesPostRes()
 }
 
 type APIDeduplicateUniquePagesPostRes interface {
