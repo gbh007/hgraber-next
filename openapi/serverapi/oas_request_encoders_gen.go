@@ -207,6 +207,20 @@ func encodeAPIBookPageBodyPostRequest(
 	return nil
 }
 
+func encodeAPIBookPageDeletePostRequest(
+	req *APIBookPageDeletePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIBookRawPostRequest(
 	req *APIBookRawPostReq,
 	r *http.Request,
@@ -321,20 +335,6 @@ func encodeAPIDeduplicateComparePostRequest(
 
 func encodeAPIDeduplicateDeadHashSetPostRequest(
 	req *APIDeduplicateDeadHashSetPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeAPIDeduplicateDeleteAllPagesByHashPostRequest(
-	req *APIDeduplicateDeleteAllPagesByHashPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

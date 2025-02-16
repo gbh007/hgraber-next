@@ -23,6 +23,7 @@ type BookUseCases interface {
 	VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool) error
 	SetBookRebuild(ctx context.Context, bookID uuid.UUID, value bool) error
 	DeleteBook(ctx context.Context, bookID uuid.UUID) error
+	DeletePage(ctx context.Context, bookID uuid.UUID, pageNumber int) error
 }
 
 type ExportUseCases interface {
@@ -43,6 +44,7 @@ type BFFUseCases interface {
 type DeduplicateUseCases interface {
 	RemoveBookPagesWithDeadHash(ctx context.Context, bookID uuid.UUID, deleteEmptyBook bool) error
 	DeleteBookDeadHashedPages(ctx context.Context, bookID uuid.UUID) error
+	DeleteAllPageByHash(ctx context.Context, bookID uuid.UUID, pageNumber int, setDeadHash bool) error
 }
 
 type BookHandlersController struct {

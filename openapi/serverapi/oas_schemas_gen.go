@@ -1576,6 +1576,124 @@ type APIBookPageBodyPostUnauthorized ErrorResponse
 
 func (*APIBookPageBodyPostUnauthorized) aPIBookPageBodyPostRes() {}
 
+type APIBookPageDeletePostBadRequest ErrorResponse
+
+func (*APIBookPageDeletePostBadRequest) aPIBookPageDeletePostRes() {}
+
+type APIBookPageDeletePostForbidden ErrorResponse
+
+func (*APIBookPageDeletePostForbidden) aPIBookPageDeletePostRes() {}
+
+type APIBookPageDeletePostInternalServerError ErrorResponse
+
+func (*APIBookPageDeletePostInternalServerError) aPIBookPageDeletePostRes() {}
+
+// APIBookPageDeletePostNoContent is response for APIBookPageDeletePost operation.
+type APIBookPageDeletePostNoContent struct{}
+
+func (*APIBookPageDeletePostNoContent) aPIBookPageDeletePostRes() {}
+
+type APIBookPageDeletePostNotFound ErrorResponse
+
+func (*APIBookPageDeletePostNotFound) aPIBookPageDeletePostRes() {}
+
+type APIBookPageDeletePostReq struct {
+	// Тип удаления.
+	Type APIBookPageDeletePostReqType `json:"type"`
+	// ID книги.
+	BookID uuid.UUID `json:"book_id"`
+	// Номер страницы в книге.
+	PageNumber int `json:"page_number"`
+	// Проставить мертвый хеш по той же странице.
+	SetDeadHash OptBool `json:"set_dead_hash"`
+}
+
+// GetType returns the value of Type.
+func (s *APIBookPageDeletePostReq) GetType() APIBookPageDeletePostReqType {
+	return s.Type
+}
+
+// GetBookID returns the value of BookID.
+func (s *APIBookPageDeletePostReq) GetBookID() uuid.UUID {
+	return s.BookID
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIBookPageDeletePostReq) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// GetSetDeadHash returns the value of SetDeadHash.
+func (s *APIBookPageDeletePostReq) GetSetDeadHash() OptBool {
+	return s.SetDeadHash
+}
+
+// SetType sets the value of Type.
+func (s *APIBookPageDeletePostReq) SetType(val APIBookPageDeletePostReqType) {
+	s.Type = val
+}
+
+// SetBookID sets the value of BookID.
+func (s *APIBookPageDeletePostReq) SetBookID(val uuid.UUID) {
+	s.BookID = val
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIBookPageDeletePostReq) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+// SetSetDeadHash sets the value of SetDeadHash.
+func (s *APIBookPageDeletePostReq) SetSetDeadHash(val OptBool) {
+	s.SetDeadHash = val
+}
+
+// Тип удаления.
+type APIBookPageDeletePostReqType string
+
+const (
+	APIBookPageDeletePostReqTypeOne     APIBookPageDeletePostReqType = "one"
+	APIBookPageDeletePostReqTypeAllCopy APIBookPageDeletePostReqType = "all_copy"
+)
+
+// AllValues returns all APIBookPageDeletePostReqType values.
+func (APIBookPageDeletePostReqType) AllValues() []APIBookPageDeletePostReqType {
+	return []APIBookPageDeletePostReqType{
+		APIBookPageDeletePostReqTypeOne,
+		APIBookPageDeletePostReqTypeAllCopy,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIBookPageDeletePostReqType) MarshalText() ([]byte, error) {
+	switch s {
+	case APIBookPageDeletePostReqTypeOne:
+		return []byte(s), nil
+	case APIBookPageDeletePostReqTypeAllCopy:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIBookPageDeletePostReqType) UnmarshalText(data []byte) error {
+	switch APIBookPageDeletePostReqType(data) {
+	case APIBookPageDeletePostReqTypeOne:
+		*s = APIBookPageDeletePostReqTypeOne
+		return nil
+	case APIBookPageDeletePostReqTypeAllCopy:
+		*s = APIBookPageDeletePostReqTypeAllCopy
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APIBookPageDeletePostUnauthorized ErrorResponse
+
+func (*APIBookPageDeletePostUnauthorized) aPIBookPageDeletePostRes() {}
+
 type APIBookRawPostBadRequest ErrorResponse
 
 func (*APIBookRawPostBadRequest) aPIBookRawPostRes() {}
@@ -2593,69 +2711,6 @@ func (s *APIDeduplicateDeadHashSetPostReq) SetValue(val bool) {
 type APIDeduplicateDeadHashSetPostUnauthorized ErrorResponse
 
 func (*APIDeduplicateDeadHashSetPostUnauthorized) aPIDeduplicateDeadHashSetPostRes() {}
-
-type APIDeduplicateDeleteAllPagesByHashPostBadRequest ErrorResponse
-
-func (*APIDeduplicateDeleteAllPagesByHashPostBadRequest) aPIDeduplicateDeleteAllPagesByHashPostRes() {
-}
-
-type APIDeduplicateDeleteAllPagesByHashPostForbidden ErrorResponse
-
-func (*APIDeduplicateDeleteAllPagesByHashPostForbidden) aPIDeduplicateDeleteAllPagesByHashPostRes() {}
-
-type APIDeduplicateDeleteAllPagesByHashPostInternalServerError ErrorResponse
-
-func (*APIDeduplicateDeleteAllPagesByHashPostInternalServerError) aPIDeduplicateDeleteAllPagesByHashPostRes() {
-}
-
-// APIDeduplicateDeleteAllPagesByHashPostNoContent is response for APIDeduplicateDeleteAllPagesByHashPost operation.
-type APIDeduplicateDeleteAllPagesByHashPostNoContent struct{}
-
-func (*APIDeduplicateDeleteAllPagesByHashPostNoContent) aPIDeduplicateDeleteAllPagesByHashPostRes() {}
-
-type APIDeduplicateDeleteAllPagesByHashPostReq struct {
-	// ID книги.
-	BookID uuid.UUID `json:"book_id"`
-	// Номер страницы в книге.
-	PageNumber int `json:"page_number"`
-	// Проставить мертвый хеш по той же странице.
-	SetDeadHash OptBool `json:"set_dead_hash"`
-}
-
-// GetBookID returns the value of BookID.
-func (s *APIDeduplicateDeleteAllPagesByHashPostReq) GetBookID() uuid.UUID {
-	return s.BookID
-}
-
-// GetPageNumber returns the value of PageNumber.
-func (s *APIDeduplicateDeleteAllPagesByHashPostReq) GetPageNumber() int {
-	return s.PageNumber
-}
-
-// GetSetDeadHash returns the value of SetDeadHash.
-func (s *APIDeduplicateDeleteAllPagesByHashPostReq) GetSetDeadHash() OptBool {
-	return s.SetDeadHash
-}
-
-// SetBookID sets the value of BookID.
-func (s *APIDeduplicateDeleteAllPagesByHashPostReq) SetBookID(val uuid.UUID) {
-	s.BookID = val
-}
-
-// SetPageNumber sets the value of PageNumber.
-func (s *APIDeduplicateDeleteAllPagesByHashPostReq) SetPageNumber(val int) {
-	s.PageNumber = val
-}
-
-// SetSetDeadHash sets the value of SetDeadHash.
-func (s *APIDeduplicateDeleteAllPagesByHashPostReq) SetSetDeadHash(val OptBool) {
-	s.SetDeadHash = val
-}
-
-type APIDeduplicateDeleteAllPagesByHashPostUnauthorized ErrorResponse
-
-func (*APIDeduplicateDeleteAllPagesByHashPostUnauthorized) aPIDeduplicateDeleteAllPagesByHashPostRes() {
-}
 
 type APIDeduplicateUniquePagesPostBadRequest ErrorResponse
 

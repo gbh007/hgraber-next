@@ -491,24 +491,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 'p': // Prefix: "page/body"
+				case 'p': // Prefix: "page/"
 					origElem := elem
-					if l := len("page/body"); len(elem) >= l && elem[0:l] == "page/body" {
+					if l := len("page/"); len(elem) >= l && elem[0:l] == "page/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIBookPageBodyPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
+						break
+					}
+					switch elem[0] {
+					case 'b': // Prefix: "body"
+						origElem := elem
+						if l := len("body"); len(elem) >= l && elem[0:l] == "body" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIBookPageBodyPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'd': // Prefix: "delete"
+						origElem := elem
+						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIBookPageDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -740,60 +776,24 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 'd': // Prefix: "de"
+				case 'd': // Prefix: "dead-hash/set"
 					origElem := elem
-					if l := len("de"); len(elem) >= l && elem[0:l] == "de" {
+					if l := len("dead-hash/set"); len(elem) >= l && elem[0:l] == "dead-hash/set" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'a': // Prefix: "ad-hash/set"
-						origElem := elem
-						if l := len("ad-hash/set"); len(elem) >= l && elem[0:l] == "ad-hash/set" {
-							elem = elem[l:]
-						} else {
-							break
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIDeduplicateDeadHashSetPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
 						}
 
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIDeduplicateDeadHashSetPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-						elem = origElem
-					case 'l': // Prefix: "lete-all-pages-by-hash"
-						origElem := elem
-						if l := len("lete-all-pages-by-hash"); len(elem) >= l && elem[0:l] == "lete-all-pages-by-hash" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIDeduplicateDeleteAllPagesByHashPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-						elem = origElem
+						return
 					}
 
 					elem = origElem
@@ -2238,28 +2238,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				case 'p': // Prefix: "page/body"
+				case 'p': // Prefix: "page/"
 					origElem := elem
-					if l := len("page/body"); len(elem) >= l && elem[0:l] == "page/body" {
+					if l := len("page/"); len(elem) >= l && elem[0:l] == "page/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIBookPageBodyPostOperation
-							r.summary = "Получение тела страницы"
-							r.operationID = ""
-							r.pathPattern = "/api/book/page/body"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'b': // Prefix: "body"
+						origElem := elem
+						if l := len("body"); len(elem) >= l && elem[0:l] == "body" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIBookPageBodyPostOperation
+								r.summary = "Получение тела страницы"
+								r.operationID = ""
+								r.pathPattern = "/api/book/page/body"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'd': // Prefix: "delete"
+						origElem := elem
+						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIBookPageDeletePostOperation
+								r.summary = "Удаляет страницы из книг"
+								r.operationID = ""
+								r.pathPattern = "/api/book/page/delete"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -2523,68 +2563,28 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				case 'd': // Prefix: "de"
+				case 'd': // Prefix: "dead-hash/set"
 					origElem := elem
-					if l := len("de"); len(elem) >= l && elem[0:l] == "de" {
+					if l := len("dead-hash/set"); len(elem) >= l && elem[0:l] == "dead-hash/set" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'a': // Prefix: "ad-hash/set"
-						origElem := elem
-						if l := len("ad-hash/set"); len(elem) >= l && elem[0:l] == "ad-hash/set" {
-							elem = elem[l:]
-						} else {
-							break
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIDeduplicateDeadHashSetPostOperation
+							r.summary = "Устанавливает значение мертвых хешей для книги или ее страницы"
+							r.operationID = ""
+							r.pathPattern = "/api/deduplicate/dead-hash/set"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
 						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIDeduplicateDeadHashSetPostOperation
-								r.summary = "Устанавливает значение мертвых хешей для книги или ее страницы"
-								r.operationID = ""
-								r.pathPattern = "/api/deduplicate/dead-hash/set"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					case 'l': // Prefix: "lete-all-pages-by-hash"
-						origElem := elem
-						if l := len("lete-all-pages-by-hash"); len(elem) >= l && elem[0:l] == "lete-all-pages-by-hash" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIDeduplicateDeleteAllPagesByHashPostOperation
-								r.summary = "Удаляет страницы из книг"
-								r.operationID = ""
-								r.pathPattern = "/api/deduplicate/delete-all-pages-by-hash"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
 					}
 
 					elem = origElem

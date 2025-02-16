@@ -168,6 +168,15 @@ func (UnimplementedHandler) APIBookPageBodyPost(ctx context.Context, req *APIBoo
 	return r, ht.ErrNotImplemented
 }
 
+// APIBookPageDeletePost implements POST /api/book/page/delete operation.
+//
+// Удаляет страницы из книг.
+//
+// POST /api/book/page/delete
+func (UnimplementedHandler) APIBookPageDeletePost(ctx context.Context, req *APIBookPageDeletePostReq) (r APIBookPageDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIBookRawPost implements POST /api/book/raw operation.
 //
 // Информация о книге (или по ИД или по адресу).
@@ -251,15 +260,6 @@ func (UnimplementedHandler) APIDeduplicateComparePost(ctx context.Context, req *
 //
 // POST /api/deduplicate/dead-hash/set
 func (UnimplementedHandler) APIDeduplicateDeadHashSetPost(ctx context.Context, req *APIDeduplicateDeadHashSetPostReq) (r APIDeduplicateDeadHashSetPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIDeduplicateDeleteAllPagesByHashPost implements POST /api/deduplicate/delete-all-pages-by-hash operation.
-//
-// Удаляет страницы с таким же хешом как у указанной.
-//
-// POST /api/deduplicate/delete-all-pages-by-hash
-func (UnimplementedHandler) APIDeduplicateDeleteAllPagesByHashPost(ctx context.Context, req *APIDeduplicateDeleteAllPagesByHashPostReq) (r APIDeduplicateDeleteAllPagesByHashPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

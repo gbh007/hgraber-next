@@ -69,6 +69,10 @@ type APIBookPageBodyPostRes interface {
 	aPIBookPageBodyPostRes()
 }
 
+type APIBookPageDeletePostRes interface {
+	aPIBookPageDeletePostRes()
+}
+
 type APIBookRawPostRes interface {
 	aPIBookRawPostRes()
 }
@@ -103,10 +107,6 @@ type APIDeduplicateComparePostRes interface {
 
 type APIDeduplicateDeadHashSetPostRes interface {
 	aPIDeduplicateDeadHashSetPostRes()
-}
-
-type APIDeduplicateDeleteAllPagesByHashPostRes interface {
-	aPIDeduplicateDeleteAllPagesByHashPostRes()
 }
 
 type APIDeduplicateUniquePagesPostRes interface {

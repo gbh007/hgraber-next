@@ -22,7 +22,6 @@ type DeduplicateUseCases interface {
 
 	CreateDeadHashByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) error
 	DeleteDeadHashByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) error
-	DeleteAllPageByHash(ctx context.Context, bookID uuid.UUID, pageNumber int, setDeadHash bool) error
 
 	MarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID) error
 	UnMarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID) error

@@ -112,6 +112,12 @@ type Handler interface {
 	//
 	// POST /api/book/page/body
 	APIBookPageBodyPost(ctx context.Context, req *APIBookPageBodyPostReq) (APIBookPageBodyPostRes, error)
+	// APIBookPageDeletePost implements POST /api/book/page/delete operation.
+	//
+	// Удаляет страницы из книг.
+	//
+	// POST /api/book/page/delete
+	APIBookPageDeletePost(ctx context.Context, req *APIBookPageDeletePostReq) (APIBookPageDeletePostRes, error)
 	// APIBookRawPost implements POST /api/book/raw operation.
 	//
 	// Информация о книге (или по ИД или по адресу).
@@ -171,12 +177,6 @@ type Handler interface {
 	//
 	// POST /api/deduplicate/dead-hash/set
 	APIDeduplicateDeadHashSetPost(ctx context.Context, req *APIDeduplicateDeadHashSetPostReq) (APIDeduplicateDeadHashSetPostRes, error)
-	// APIDeduplicateDeleteAllPagesByHashPost implements POST /api/deduplicate/delete-all-pages-by-hash operation.
-	//
-	// Удаляет страницы с таким же хешом как у указанной.
-	//
-	// POST /api/deduplicate/delete-all-pages-by-hash
-	APIDeduplicateDeleteAllPagesByHashPost(ctx context.Context, req *APIDeduplicateDeleteAllPagesByHashPostReq) (APIDeduplicateDeleteAllPagesByHashPostRes, error)
 	// APIDeduplicateUniquePagesPost implements POST /api/deduplicate/unique-pages operation.
 	//
 	// Поиск уникальных страниц в книге.
