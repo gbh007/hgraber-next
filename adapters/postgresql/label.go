@@ -20,7 +20,7 @@ func (d *Database) SetLabel(ctx context.Context, label core.BookLabel) error {
 	builder := squirrel.Insert("book_labels").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
-			"book_id":     label.BookID.String(),
+			"book_id":     label.BookID,
 			"page_number": label.PageNumber,
 			"name":        label.Name,
 			"value":       label.Value,
@@ -35,7 +35,7 @@ func (d *Database) SetLabel(ctx context.Context, label core.BookLabel) error {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	_, err = d.db.ExecContext(ctx, query, args...)
+	_, err = d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -47,7 +47,7 @@ func (d *Database) DeleteLabel(ctx context.Context, label core.BookLabel) error 
 	builder := squirrel.Delete("book_labels").
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"book_id":     label.BookID.String(),
+			"book_id":     label.BookID,
 			"page_number": label.PageNumber,
 			"name":        label.Name,
 		})
@@ -96,7 +96,7 @@ func (d *Database) Labels(ctx context.Context, bookID uuid.UUID) ([]core.BookLab
 		PlaceholderFormat(squirrel.Dollar).
 		From("book_labels").
 		Where(squirrel.Eq{
-			"book_id": bookID.String(),
+			"book_id": bookID,
 		})
 
 	query, args, err := builder.ToSql()
@@ -135,7 +135,7 @@ func (d *Database) ReplaceLabels(ctx context.Context, bookID uuid.UUID, labels [
 
 	for _, label := range labels {
 		builder = builder.Values(
-			label.BookID.String(),
+			bookID,
 			label.PageNumber,
 			label.Name,
 			label.Value,
@@ -197,7 +197,7 @@ func (d *Database) SetLabels(ctx context.Context, labels []core.BookLabel) error
 
 	for _, label := range labels {
 		builder = builder.Values(
-			label.BookID.String(),
+			label.BookID,
 			label.PageNumber,
 			label.Name,
 			label.Value,

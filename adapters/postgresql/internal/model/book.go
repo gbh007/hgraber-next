@@ -11,26 +11,28 @@ import (
 )
 
 type Book struct {
-	ID               string         `db:"id"`
+	ID               uuid.UUID      `db:"id"`
 	Name             sql.NullString `db:"name"`
 	OriginURL        sql.NullString `db:"origin_url"`
 	PageCount        sql.NullInt32  `db:"page_count"`
 	AttributesParsed bool           `db:"attributes_parsed"`
-	CreateAt         time.Time      `db:"create_at"`
-	Deleted          bool           `db:"deleted"`
-	DeletedAt        sql.NullTime   `db:"deleted_at"`
-	Verified         bool           `db:"verified"`
-	VerifiedAt       sql.NullTime   `db:"verified_at"`
-	IsRebuild        bool           `db:"is_rebuild"`
+
+	CreateAt time.Time `db:"create_at"`
+
+	Deleted   bool         `db:"deleted"`
+	DeletedAt sql.NullTime `db:"deleted_at"`
+
+	Verified   bool         `db:"verified"`
+	VerifiedAt sql.NullTime `db:"verified_at"`
+
+	IsRebuild bool `db:"is_rebuild"`
 }
 
 func (b Book) ToEntity() (core.Book, error) {
-	id, err := uuid.Parse(b.ID)
-	if err != nil {
-		return core.Book{}, err
-	}
-
-	var originURL *url.URL
+	var (
+		originURL *url.URL
+		err       error
+	)
 
 	if b.OriginURL.Valid {
 		originURL, err = url.Parse(b.OriginURL.String)
@@ -40,7 +42,7 @@ func (b Book) ToEntity() (core.Book, error) {
 	}
 
 	return core.Book{
-		ID:               id,
+		ID:               b.ID,
 		Name:             b.Name.String,
 		OriginURL:        originURL,
 		PageCount:        int(b.PageCount.Int32),

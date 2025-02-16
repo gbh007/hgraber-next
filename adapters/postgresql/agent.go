@@ -149,7 +149,7 @@ func (d *Database) UpdateAgent(ctx context.Context, agent core.Agent) error {
 			"priority":        agent.Priority,
 		}).
 		Where(squirrel.Eq{
-			"id": agent.ID.String(),
+			"id": agent.ID,
 		})
 
 	query, args, err := builder.ToSql()
@@ -175,7 +175,7 @@ func (d *Database) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 	builder := squirrel.Delete("agents").
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"id": id.String(),
+			"id": id,
 		})
 
 	query, args, err := builder.ToSql()

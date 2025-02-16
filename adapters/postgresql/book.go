@@ -18,7 +18,7 @@ func (d *Database) NewBook(ctx context.Context, book core.Book) error {
 	builder := squirrel.Insert("books").
 		PlaceholderFormat(squirrel.Dollar).SetMap(
 		map[string]interface{}{
-			"id":                book.ID.String(),
+			"id":                book.ID,
 			"name":              model.StringToDB(book.Name),
 			"origin_url":        model.URLToDB(book.OriginURL),
 			"page_count":        model.Int32ToDB(book.PageCount),
@@ -60,7 +60,7 @@ func (d *Database) UpdateBook(ctx context.Context, book core.Book) error {
 			},
 		).
 		Where(squirrel.Eq{
-			"id": book.ID.String(),
+			"id": book.ID,
 		})
 
 	query, args, err := builder.ToSql()
@@ -126,7 +126,7 @@ func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {
 	builder := squirrel.Delete("books").
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"id": id.String(),
+			"id": id,
 		})
 
 	query, args, err := builder.ToSql()

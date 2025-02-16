@@ -10,34 +10,22 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-// FIXME: проверить работу UUID
 type Page struct {
-	BookID     string         `db:"book_id"`
+	BookID     uuid.UUID      `db:"book_id"`
 	PageNumber int            `db:"page_number"`
 	Ext        string         `db:"ext"`
 	OriginURL  sql.NullString `db:"origin_url"`
 	CreateAt   time.Time      `db:"create_at"`
 	Downloaded bool           `db:"downloaded"`
 	LoadAt     sql.NullTime   `db:"load_at"`
-	FileID     sql.NullString `db:"file_id"`
+	FileID     uuid.NullUUID  `db:"file_id"`
 }
 
 func (p Page) ToEntity() (core.Page, error) {
-	bookID, err := uuid.Parse(p.BookID)
-	if err != nil {
-		return core.Page{}, err
-	}
-
-	fileID := uuid.Nil
-
-	if p.FileID.Valid {
-		fileID, err = uuid.Parse(p.FileID.String)
-		if err != nil {
-			return core.Page{}, err
-		}
-	}
-
-	var originURL *url.URL
+	var (
+		originURL *url.URL
+		err       error
+	)
 
 	if p.OriginURL.Valid {
 		originURL, err = url.Parse(p.OriginURL.String)
@@ -47,19 +35,19 @@ func (p Page) ToEntity() (core.Page, error) {
 	}
 
 	return core.Page{
-		BookID:     bookID,
+		BookID:     p.BookID,
 		PageNumber: p.PageNumber,
 		Ext:        p.Ext,
 		OriginURL:  originURL,
 		CreateAt:   p.CreateAt,
 		Downloaded: p.Downloaded,
 		LoadAt:     p.LoadAt.Time,
-		FileID:     fileID,
+		FileID:     p.FileID.UUID,
 	}, nil
 }
 
 type PageForDownload struct {
-	BookID     string         `db:"book_id"`
+	BookID     uuid.UUID      `db:"book_id"`
 	PageNumber int            `db:"page_number"`
 	Ext        string         `db:"ext"`
 	BookURL    sql.NullString `db:"book_url"`
@@ -67,12 +55,10 @@ type PageForDownload struct {
 }
 
 func (p PageForDownload) ToEntity() (core.PageForDownload, error) {
-	bookID, err := uuid.Parse(p.BookID)
-	if err != nil {
-		return core.PageForDownload{}, err
-	}
-
-	var bookURL *url.URL
+	var (
+		bookURL *url.URL
+		err     error
+	)
 
 	if p.BookURL.Valid {
 		bookURL, err = url.Parse(p.BookURL.String)
@@ -91,7 +77,7 @@ func (p PageForDownload) ToEntity() (core.PageForDownload, error) {
 	}
 
 	return core.PageForDownload{
-		BookID:     bookID,
+		BookID:     p.BookID,
 		PageNumber: p.PageNumber,
 		Ext:        p.Ext,
 		BookURL:    bookURL,

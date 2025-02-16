@@ -21,7 +21,7 @@ func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (c
 	err := d.db.GetContext(
 		ctx, raw,
 		`SELECT * FROM pages WHERE book_id = $1 AND page_number = $2 LIMIT 1;`,
-		id.String(), pageNumber,
+		id, pageNumber,
 	)
 	if errors.Is(err, sql.ErrNoRows) {
 		return core.Page{}, core.PageNotFoundError
@@ -43,7 +43,7 @@ func (d *Database) UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageN
 	res, err := d.db.ExecContext(
 		ctx,
 		`UPDATE pages SET downloaded = $1, load_at = $2, file_id = $5 WHERE book_id = $3 AND page_number = $4;`,
-		downloaded, time.Now().UTC(), id.String(), pageNumber, model.UUIDToDB(fileID),
+		downloaded, time.Now().UTC(), id, pageNumber, model.UUIDToDB(fileID),
 	)
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []co
 		return err
 	}
 
-	_, err = tx.ExecContext(ctx, `DELETE FROM pages WHERE book_id = $1;`, id.String())
+	_, err = tx.ExecContext(ctx, `DELETE FROM pages WHERE book_id = $1;`, id)
 	if err != nil {
 		rollbackErr := tx.Rollback()
 		if rollbackErr != nil {
@@ -77,7 +77,7 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []co
 		_, err = tx.ExecContext(
 			ctx,
 			`INSERT INTO pages (book_id, page_number, ext, origin_url, create_at, downloaded, load_at, file_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
-			id.String(), v.PageNumber, v.Ext, model.URLToDB(v.OriginURL), v.CreateAt.UTC(), v.Downloaded, model.TimeToDB(v.LoadAt), model.UUIDToDB(v.FileID),
+			id, v.PageNumber, v.Ext, model.URLToDB(v.OriginURL), v.CreateAt.UTC(), v.Downloaded, model.TimeToDB(v.LoadAt), model.UUIDToDB(v.FileID),
 		)
 		if err != nil {
 			rollbackErr := tx.Rollback()
@@ -108,7 +108,7 @@ func (d *Database) NewBookPages(ctx context.Context, pages []core.Page) error {
 		_, err = tx.ExecContext(
 			ctx,
 			`INSERT INTO pages (book_id, page_number, ext, origin_url, create_at, downloaded, load_at, file_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
-			v.BookID.String(), v.PageNumber, v.Ext, model.URLToDB(v.OriginURL), v.CreateAt.UTC(), v.Downloaded, model.TimeToDB(v.LoadAt), model.UUIDToDB(v.FileID),
+			v.BookID, v.PageNumber, v.Ext, model.URLToDB(v.OriginURL), v.CreateAt.UTC(), v.Downloaded, model.TimeToDB(v.LoadAt), model.UUIDToDB(v.FileID),
 		)
 		if err != nil {
 			rollbackErr := tx.Rollback()
@@ -131,7 +131,7 @@ func (d *Database) NewBookPages(ctx context.Context, pages []core.Page) error {
 func (d *Database) bookPages(ctx context.Context, bookID uuid.UUID) ([]*model.Page, error) {
 	raw := make([]*model.Page, 0)
 
-	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM pages WHERE book_id = $1 ORDER BY page_number;`, bookID.String())
+	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM pages WHERE book_id = $1 ORDER BY page_number;`, bookID)
 	if err != nil {
 		return nil, err
 	}

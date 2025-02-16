@@ -19,7 +19,7 @@ import (
 func (d *Database) bookAttributes(ctx context.Context, bookID uuid.UUID) ([]*model.BookAttribute, error) {
 	raw := make([]*model.BookAttribute, 0)
 
-	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM book_attributes WHERE book_id = $1;`, bookID.String())
+	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM book_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (d *Database) UpdateAttributes(ctx context.Context, bookID uuid.UUID, attri
 		}
 	}()
 
-	_, err = tx.ExecContext(ctx, `DELETE FROM book_attributes WHERE book_id = $1;`, bookID.String())
+	_, err = tx.ExecContext(ctx, `DELETE FROM book_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return fmt.Errorf("delete old attributes: %w", err)
 	}
@@ -73,7 +73,7 @@ func (d *Database) UpdateAttributes(ctx context.Context, bookID uuid.UUID, attri
 
 	for code, values := range attributes {
 		for _, value := range values {
-			builder = builder.Values(bookID.String(), code, value)
+			builder = builder.Values(bookID, code, value)
 		}
 	}
 

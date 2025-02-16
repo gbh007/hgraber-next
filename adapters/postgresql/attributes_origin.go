@@ -15,7 +15,7 @@ import (
 )
 
 func (d *Database) BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error) {
-	rows, err := d.pool.Query(ctx, `SELECT attr, values FROM book_origin_attributes WHERE book_id = $1;`, bookID.String())
+	rows, err := d.pool.Query(ctx, `SELECT attr, values FROM book_origin_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return nil, fmt.Errorf("select rows: %w", err)
 	}
@@ -57,7 +57,7 @@ func (d *Database) UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID,
 		}
 	}()
 
-	_, err = tx.Exec(ctx, `DELETE FROM book_origin_attributes WHERE book_id = $1;`, bookID.String())
+	_, err = tx.Exec(ctx, `DELETE FROM book_origin_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return fmt.Errorf("delete old attributes: %w", err)
 	}
@@ -71,7 +71,7 @@ func (d *Database) UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID,
 		)
 
 	for code, values := range attributes {
-		builder = builder.Values(bookID.String(), code, values)
+		builder = builder.Values(bookID, code, values)
 	}
 
 	query, args, err := builder.ToSql()

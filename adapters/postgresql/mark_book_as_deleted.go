@@ -47,17 +47,17 @@ SELECT
 FROM pages p
     LEFT JOIN files f ON p.file_id = f.id
 WHERE
-    p.book_id = $1;`, bookID.String())
+    p.book_id = $1;`, bookID)
 	if err != nil {
 		return fmt.Errorf("copy pages: %w", err)
 	}
 
-	_, err = tx.ExecContext(ctx, `DELETE FROM pages WHERE book_id = $1;`, bookID.String())
+	_, err = tx.ExecContext(ctx, `DELETE FROM pages WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return fmt.Errorf("delete pages: %w", err)
 	}
 
-	_, err = tx.ExecContext(ctx, `DELETE FROM book_attributes WHERE book_id = $1;`, bookID.String())
+	_, err = tx.ExecContext(ctx, `DELETE FROM book_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return fmt.Errorf("delete attributes: %w", err)
 	}
@@ -65,7 +65,7 @@ WHERE
 	res, err := tx.ExecContext(
 		ctx,
 		`UPDATE books SET deleted_at = $2, deleted = $3 WHERE id = $1;`,
-		bookID.String(), time.Now().UTC(), true,
+		bookID, time.Now().UTC(), true,
 	)
 	if err != nil {
 		return fmt.Errorf("update book: %w", err)
@@ -115,12 +115,12 @@ SELECT
 FROM pages p
     LEFT JOIN files f ON p.file_id = f.id
 WHERE
-    p.book_id = $1 AND p.page_number = $2;`, bookID.String(), pageNumber)
+    p.book_id = $1 AND p.page_number = $2;`, bookID, pageNumber)
 	if err != nil {
 		return fmt.Errorf("copy page: %w", err)
 	}
 
-	_, err = tx.ExecContext(ctx, `DELETE FROM pages WHERE book_id = $1 AND page_number = $2;`, bookID.String(), pageNumber)
+	_, err = tx.ExecContext(ctx, `DELETE FROM pages WHERE book_id = $1 AND page_number = $2;`, bookID, pageNumber)
 	if err != nil {
 		return fmt.Errorf("delete page: %w", err)
 	}

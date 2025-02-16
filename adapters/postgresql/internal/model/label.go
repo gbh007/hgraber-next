@@ -9,7 +9,7 @@ import (
 )
 
 type BookLabel struct {
-	BookID     string    `db:"book_id"`
+	BookID     uuid.UUID `db:"book_id"`
 	PageNumber int       `db:"page_number"`
 	Name       string    `db:"name"`
 	Value      string    `db:"value"`
@@ -17,13 +17,8 @@ type BookLabel struct {
 }
 
 func (bl BookLabel) ToEntity() (core.BookLabel, error) {
-	id, err := uuid.Parse(bl.BookID)
-	if err != nil {
-		return core.BookLabel{}, err
-	}
-
 	return core.BookLabel{
-		BookID:     id,
+		BookID:     bl.BookID,
 		PageNumber: bl.PageNumber,
 		Name:       bl.Name,
 		Value:      bl.Value,

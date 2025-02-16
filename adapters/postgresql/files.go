@@ -47,7 +47,7 @@ func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha
 	res, err := d.db.ExecContext(
 		ctx,
 		`UPDATE files SET md5_sum = $2, sha256_sum = $3, "size" = $4 WHERE id = $1`,
-		id.String(), model.StringToDB(md5Sum), model.StringToDB(sha256Sum), sql.NullInt64{Int64: size, Valid: size > 0},
+		id, model.StringToDB(md5Sum), model.StringToDB(sha256Sum), sql.NullInt64{Int64: size, Valid: size > 0},
 	)
 	if err != nil {
 		return err
@@ -90,10 +90,10 @@ func (d *Database) ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UU
 	builder := squirrel.Update("pages").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
-			"file_id": newFileID.String(),
+			"file_id": newFileID,
 		}).
 		Where(squirrel.Eq{
-			"file_id": oldFileID.String(),
+			"file_id": oldFileID,
 		})
 
 	query, args, err := builder.ToSql()
@@ -174,7 +174,7 @@ func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
 	builder := squirrel.Delete("files").
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"id": id.String(),
+			"id": id,
 		})
 
 	query, args, err := builder.ToSql()

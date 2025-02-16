@@ -2,6 +2,8 @@ package model
 
 import (
 	"database/sql"
+
+	"github.com/google/uuid"
 )
 
 type Attribute struct {
@@ -13,13 +15,13 @@ type Attribute struct {
 }
 
 type BookAttribute struct {
-	BookID string `db:"book_id"`
-	Attr   string `db:"attr"`
-	Value  string `db:"value"`
+	BookID uuid.UUID `db:"book_id"`
+	Attr   string    `db:"attr"`
+	Value  string    `db:"value"`
 }
 
 type BookOriginalAttribute struct {
-	BookID string   `db:"book_id"`
-	Attr   string   `db:"attr"`
-	Value  []string `db:"values"`
+	BookID uuid.UUID `db:"book_id"`
+	Attr   string    `db:"attr"`
+	Value  []string  `db:"values"`
 }
