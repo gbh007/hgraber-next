@@ -200,7 +200,7 @@ type Handler interface {
 	// Создание файловой системы.
 	//
 	// POST /api/fs/create
-	APIFsCreatePost(ctx context.Context, req *FileSystemInfo) (APIFsCreatePostRes, error)
+	APIFsCreatePost(ctx context.Context, req *APIFsCreatePostReq) (APIFsCreatePostRes, error)
 	// APIFsDeletePost implements POST /api/fs/delete operation.
 	//
 	// Удаление файловой системы.
@@ -243,7 +243,7 @@ type Handler interface {
 	// Изменение настроек файловой системы.
 	//
 	// POST /api/fs/update
-	APIFsUpdatePost(ctx context.Context, req *FileSystemInfo) (APIFsUpdatePostRes, error)
+	APIFsUpdatePost(ctx context.Context, req *APIFsUpdatePostReq) (APIFsUpdatePostRes, error)
 	// APIFsValidatePost implements POST /api/fs/validate operation.
 	//
 	// Запускает валидацию файлов на файловой системе.

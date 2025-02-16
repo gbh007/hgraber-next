@@ -372,7 +372,7 @@ func encodeAPIDeduplicateUniquePagesPostRequest(
 }
 
 func encodeAPIFsCreatePostRequest(
-	req *FileSystemInfo,
+	req *APIFsCreatePostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -470,7 +470,7 @@ func encodeAPIFsTransferPostRequest(
 }
 
 func encodeAPIFsUpdatePostRequest(
-	req *FileSystemInfo,
+	req *APIFsUpdatePostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

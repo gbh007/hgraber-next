@@ -3573,7 +3573,41 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FileSystemInfo"
+              type: object
+              description: Данные о файловой системе
+              properties:
+                name:
+                  type: string
+                  description: Название ФС
+                description:
+                  type: string
+                  description: Описание ФС
+                agent_id:
+                  type: string
+                  format: uuid
+                  description: ID агента
+                path:
+                  type: string
+                  description: Название ФС
+                download_priority:
+                  type: integer
+                  description: Приоритет при загрузке новых файлов
+                deduplicate_priority:
+                  type: integer
+                  description: Приоритет при удалении дубликатов (приоритет сохранить файл с этой ФС)
+                highway_enabled:
+                  type: boolean
+                  description: Включен ли режим highway для ФС
+                highway_addr:
+                  type: string
+                  description: Внешний адрес highway
+                  format: uri
+                  example: http://example.com
+              required:
+                - name
+                - download_priority
+                - deduplicate_priority
+                - highway_enabled
       responses:
         200:
           description: Успешное создание
@@ -3624,7 +3658,46 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FileSystemInfo"
+              type: object
+              description: Данные о файловой системе
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID ФС
+                name:
+                  type: string
+                  description: Название ФС
+                description:
+                  type: string
+                  description: Описание ФС
+                agent_id:
+                  type: string
+                  format: uuid
+                  description: ID агента
+                path:
+                  type: string
+                  description: Название ФС
+                download_priority:
+                  type: integer
+                  description: Приоритет при загрузке новых файлов
+                deduplicate_priority:
+                  type: integer
+                  description: Приоритет при удалении дубликатов (приоритет сохранить файл с этой ФС)
+                highway_enabled:
+                  type: boolean
+                  description: Включен ли режим highway для ФС
+                highway_addr:
+                  type: string
+                  description: Внешний адрес highway
+                  format: uri
+                  example: http://example.com
+              required:
+                - id
+                - name
+                - download_priority
+                - deduplicate_priority
+                - highway_enabled
       responses:
         204:
           description: Успешное обновление

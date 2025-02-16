@@ -220,7 +220,7 @@ type Invoker interface {
 	// Создание файловой системы.
 	//
 	// POST /api/fs/create
-	APIFsCreatePost(ctx context.Context, request *FileSystemInfo) (APIFsCreatePostRes, error)
+	APIFsCreatePost(ctx context.Context, request *APIFsCreatePostReq) (APIFsCreatePostRes, error)
 	// APIFsDeletePost invokes POST /api/fs/delete operation.
 	//
 	// Удаление файловой системы.
@@ -263,7 +263,7 @@ type Invoker interface {
 	// Изменение настроек файловой системы.
 	//
 	// POST /api/fs/update
-	APIFsUpdatePost(ctx context.Context, request *FileSystemInfo) (APIFsUpdatePostRes, error)
+	APIFsUpdatePost(ctx context.Context, request *APIFsUpdatePostReq) (APIFsUpdatePostRes, error)
 	// APIFsValidatePost invokes POST /api/fs/validate operation.
 	//
 	// Запускает валидацию файлов на файловой системе.
@@ -4071,12 +4071,12 @@ func (c *Client) sendAPIFileIDGet(ctx context.Context, params APIFileIDGetParams
 // Создание файловой системы.
 //
 // POST /api/fs/create
-func (c *Client) APIFsCreatePost(ctx context.Context, request *FileSystemInfo) (APIFsCreatePostRes, error) {
+func (c *Client) APIFsCreatePost(ctx context.Context, request *APIFsCreatePostReq) (APIFsCreatePostRes, error) {
 	res, err := c.sendAPIFsCreatePost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIFsCreatePost(ctx context.Context, request *FileSystemInfo) (res APIFsCreatePostRes, err error) {
+func (c *Client) sendAPIFsCreatePost(ctx context.Context, request *APIFsCreatePostReq) (res APIFsCreatePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/fs/create"),
@@ -4905,12 +4905,12 @@ func (c *Client) sendAPIFsTransferPost(ctx context.Context, request *APIFsTransf
 // Изменение настроек файловой системы.
 //
 // POST /api/fs/update
-func (c *Client) APIFsUpdatePost(ctx context.Context, request *FileSystemInfo) (APIFsUpdatePostRes, error) {
+func (c *Client) APIFsUpdatePost(ctx context.Context, request *APIFsUpdatePostReq) (APIFsUpdatePostRes, error) {
 	res, err := c.sendAPIFsUpdatePost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIFsUpdatePost(ctx context.Context, request *FileSystemInfo) (res APIFsUpdatePostRes, err error) {
+func (c *Client) sendAPIFsUpdatePost(ctx context.Context, request *APIFsUpdatePostReq) (res APIFsUpdatePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/fs/update"),

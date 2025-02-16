@@ -295,7 +295,7 @@ func (UnimplementedHandler) APIFileIDGet(ctx context.Context, params APIFileIDGe
 // Создание файловой системы.
 //
 // POST /api/fs/create
-func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req *FileSystemInfo) (r APIFsCreatePostRes, _ error) {
+func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req *APIFsCreatePostReq) (r APIFsCreatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -359,7 +359,7 @@ func (UnimplementedHandler) APIFsTransferPost(ctx context.Context, req *APIFsTra
 // Изменение настроек файловой системы.
 //
 // POST /api/fs/update
-func (UnimplementedHandler) APIFsUpdatePost(ctx context.Context, req *FileSystemInfo) (r APIFsUpdatePostRes, _ error) {
+func (UnimplementedHandler) APIFsUpdatePost(ctx context.Context, req *APIFsUpdatePostReq) (r APIFsUpdatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

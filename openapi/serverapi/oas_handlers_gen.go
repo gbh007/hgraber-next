@@ -6144,7 +6144,7 @@ func (s *Server) handleAPIFsCreatePostRequest(args [0]string, argsEscaped bool, 
 		}
 
 		type (
-			Request  = *FileSystemInfo
+			Request  = *APIFsCreatePostReq
 			Params   = struct{}
 			Response = APIFsCreatePostRes
 		)
@@ -7538,7 +7538,7 @@ func (s *Server) handleAPIFsUpdatePostRequest(args [0]string, argsEscaped bool, 
 		}
 
 		type (
-			Request  = *FileSystemInfo
+			Request  = *APIFsUpdatePostReq
 			Params   = struct{}
 			Response = APIFsUpdatePostRes
 		)

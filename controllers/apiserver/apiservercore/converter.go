@@ -187,21 +187,6 @@ func ConvertAgentToAPI(raw core.Agent) serverapi.Agent {
 	}
 }
 
-func ConvertFileSystemInfoFromAPI(raw *serverapi.FileSystemInfo) fsmodel.FileStorageSystem {
-	return fsmodel.FileStorageSystem{
-		ID:                  raw.ID,
-		Name:                raw.Name,
-		Description:         raw.Description.Value,
-		AgentID:             raw.AgentID.Value,
-		Path:                raw.Path.Value,
-		DownloadPriority:    raw.DownloadPriority,
-		DeduplicatePriority: raw.DeduplicatePriority,
-		HighwayEnabled:      raw.HighwayEnabled,
-		HighwayAddr:         UrlFromOpt(raw.HighwayAddr),
-		CreatedAt:           raw.CreatedAt,
-	}
-}
-
 func ConvertFileSystemInfoToAPI(raw fsmodel.FileStorageSystem) serverapi.FileSystemInfo {
 	return serverapi.FileSystemInfo{
 		ID:                  raw.ID,

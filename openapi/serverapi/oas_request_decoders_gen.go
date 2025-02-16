@@ -1697,7 +1697,7 @@ func (s *Server) decodeAPIDeduplicateUniquePagesPostRequest(r *http.Request) (
 }
 
 func (s *Server) decodeAPIFsCreatePostRequest(r *http.Request) (
-	req *FileSystemInfo,
+	req *APIFsCreatePostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -1736,7 +1736,7 @@ func (s *Server) decodeAPIFsCreatePostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request FileSystemInfo
+		var request APIFsCreatePostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -2138,7 +2138,7 @@ func (s *Server) decodeAPIFsTransferPostRequest(r *http.Request) (
 }
 
 func (s *Server) decodeAPIFsUpdatePostRequest(r *http.Request) (
-	req *FileSystemInfo,
+	req *APIFsUpdatePostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -2177,7 +2177,7 @@ func (s *Server) decodeAPIFsUpdatePostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request FileSystemInfo
+		var request APIFsUpdatePostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

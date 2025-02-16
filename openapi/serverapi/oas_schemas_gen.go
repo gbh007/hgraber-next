@@ -2936,6 +2936,107 @@ func (s *APIFsCreatePostOK) SetID(val uuid.UUID) {
 
 func (*APIFsCreatePostOK) aPIFsCreatePostRes() {}
 
+// Данные о файловой системе.
+type APIFsCreatePostReq struct {
+	// Название ФС.
+	Name string `json:"name"`
+	// Описание ФС.
+	Description OptString `json:"description"`
+	// ID агента.
+	AgentID OptUUID `json:"agent_id"`
+	// Название ФС.
+	Path OptString `json:"path"`
+	// Приоритет при загрузке новых файлов.
+	DownloadPriority int `json:"download_priority"`
+	// Приоритет при удалении дубликатов (приоритет
+	// сохранить файл с этой ФС).
+	DeduplicatePriority int `json:"deduplicate_priority"`
+	// Включен ли режим highway для ФС.
+	HighwayEnabled bool `json:"highway_enabled"`
+	// Внешний адрес highway.
+	HighwayAddr OptURI `json:"highway_addr"`
+}
+
+// GetName returns the value of Name.
+func (s *APIFsCreatePostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIFsCreatePostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetAgentID returns the value of AgentID.
+func (s *APIFsCreatePostReq) GetAgentID() OptUUID {
+	return s.AgentID
+}
+
+// GetPath returns the value of Path.
+func (s *APIFsCreatePostReq) GetPath() OptString {
+	return s.Path
+}
+
+// GetDownloadPriority returns the value of DownloadPriority.
+func (s *APIFsCreatePostReq) GetDownloadPriority() int {
+	return s.DownloadPriority
+}
+
+// GetDeduplicatePriority returns the value of DeduplicatePriority.
+func (s *APIFsCreatePostReq) GetDeduplicatePriority() int {
+	return s.DeduplicatePriority
+}
+
+// GetHighwayEnabled returns the value of HighwayEnabled.
+func (s *APIFsCreatePostReq) GetHighwayEnabled() bool {
+	return s.HighwayEnabled
+}
+
+// GetHighwayAddr returns the value of HighwayAddr.
+func (s *APIFsCreatePostReq) GetHighwayAddr() OptURI {
+	return s.HighwayAddr
+}
+
+// SetName sets the value of Name.
+func (s *APIFsCreatePostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIFsCreatePostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetAgentID sets the value of AgentID.
+func (s *APIFsCreatePostReq) SetAgentID(val OptUUID) {
+	s.AgentID = val
+}
+
+// SetPath sets the value of Path.
+func (s *APIFsCreatePostReq) SetPath(val OptString) {
+	s.Path = val
+}
+
+// SetDownloadPriority sets the value of DownloadPriority.
+func (s *APIFsCreatePostReq) SetDownloadPriority(val int) {
+	s.DownloadPriority = val
+}
+
+// SetDeduplicatePriority sets the value of DeduplicatePriority.
+func (s *APIFsCreatePostReq) SetDeduplicatePriority(val int) {
+	s.DeduplicatePriority = val
+}
+
+// SetHighwayEnabled sets the value of HighwayEnabled.
+func (s *APIFsCreatePostReq) SetHighwayEnabled(val bool) {
+	s.HighwayEnabled = val
+}
+
+// SetHighwayAddr sets the value of HighwayAddr.
+func (s *APIFsCreatePostReq) SetHighwayAddr(val OptURI) {
+	s.HighwayAddr = val
+}
+
 type APIFsCreatePostUnauthorized ErrorResponse
 
 func (*APIFsCreatePostUnauthorized) aPIFsCreatePostRes() {}
@@ -3346,6 +3447,119 @@ func (*APIFsUpdatePostNoContent) aPIFsUpdatePostRes() {}
 type APIFsUpdatePostNotFound ErrorResponse
 
 func (*APIFsUpdatePostNotFound) aPIFsUpdatePostRes() {}
+
+// Данные о файловой системе.
+type APIFsUpdatePostReq struct {
+	// ID ФС.
+	ID uuid.UUID `json:"id"`
+	// Название ФС.
+	Name string `json:"name"`
+	// Описание ФС.
+	Description OptString `json:"description"`
+	// ID агента.
+	AgentID OptUUID `json:"agent_id"`
+	// Название ФС.
+	Path OptString `json:"path"`
+	// Приоритет при загрузке новых файлов.
+	DownloadPriority int `json:"download_priority"`
+	// Приоритет при удалении дубликатов (приоритет
+	// сохранить файл с этой ФС).
+	DeduplicatePriority int `json:"deduplicate_priority"`
+	// Включен ли режим highway для ФС.
+	HighwayEnabled bool `json:"highway_enabled"`
+	// Внешний адрес highway.
+	HighwayAddr OptURI `json:"highway_addr"`
+}
+
+// GetID returns the value of ID.
+func (s *APIFsUpdatePostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIFsUpdatePostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIFsUpdatePostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetAgentID returns the value of AgentID.
+func (s *APIFsUpdatePostReq) GetAgentID() OptUUID {
+	return s.AgentID
+}
+
+// GetPath returns the value of Path.
+func (s *APIFsUpdatePostReq) GetPath() OptString {
+	return s.Path
+}
+
+// GetDownloadPriority returns the value of DownloadPriority.
+func (s *APIFsUpdatePostReq) GetDownloadPriority() int {
+	return s.DownloadPriority
+}
+
+// GetDeduplicatePriority returns the value of DeduplicatePriority.
+func (s *APIFsUpdatePostReq) GetDeduplicatePriority() int {
+	return s.DeduplicatePriority
+}
+
+// GetHighwayEnabled returns the value of HighwayEnabled.
+func (s *APIFsUpdatePostReq) GetHighwayEnabled() bool {
+	return s.HighwayEnabled
+}
+
+// GetHighwayAddr returns the value of HighwayAddr.
+func (s *APIFsUpdatePostReq) GetHighwayAddr() OptURI {
+	return s.HighwayAddr
+}
+
+// SetID sets the value of ID.
+func (s *APIFsUpdatePostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIFsUpdatePostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIFsUpdatePostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetAgentID sets the value of AgentID.
+func (s *APIFsUpdatePostReq) SetAgentID(val OptUUID) {
+	s.AgentID = val
+}
+
+// SetPath sets the value of Path.
+func (s *APIFsUpdatePostReq) SetPath(val OptString) {
+	s.Path = val
+}
+
+// SetDownloadPriority sets the value of DownloadPriority.
+func (s *APIFsUpdatePostReq) SetDownloadPriority(val int) {
+	s.DownloadPriority = val
+}
+
+// SetDeduplicatePriority sets the value of DeduplicatePriority.
+func (s *APIFsUpdatePostReq) SetDeduplicatePriority(val int) {
+	s.DeduplicatePriority = val
+}
+
+// SetHighwayEnabled sets the value of HighwayEnabled.
+func (s *APIFsUpdatePostReq) SetHighwayEnabled(val bool) {
+	s.HighwayEnabled = val
+}
+
+// SetHighwayAddr sets the value of HighwayAddr.
+func (s *APIFsUpdatePostReq) SetHighwayAddr(val OptURI) {
+	s.HighwayAddr = val
+}
 
 type APIFsUpdatePostUnauthorized ErrorResponse
 
