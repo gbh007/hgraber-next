@@ -2,6 +2,7 @@ package deduplicatehandlers
 
 import (
 	"context"
+	"io"
 	"log/slog"
 
 	"github.com/google/uuid"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 type BFFUseCases interface {
@@ -25,6 +27,8 @@ type DeduplicateUseCases interface {
 
 	MarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID) error
 	UnMarkBookPagesAsDeadHash(ctx context.Context, bookID uuid.UUID) error
+
+	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]core.DeduplicateArchiveResult, error)
 }
 
 type DeduplicateHandlersController struct {

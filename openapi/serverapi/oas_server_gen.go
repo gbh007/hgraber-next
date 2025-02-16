@@ -152,6 +152,12 @@ type Handler interface {
 	//
 	// POST /api/book/update
 	APIBookUpdatePost(ctx context.Context, req *BookRaw) (APIBookUpdatePostRes, error)
+	// APIDeduplicateArchivePost implements POST /api/deduplicate/archive operation.
+	//
+	// Проверка наличия данных в системе из архива.
+	//
+	// POST /api/deduplicate/archive
+	APIDeduplicateArchivePost(ctx context.Context, req APIDeduplicateArchivePostReq) (APIDeduplicateArchivePostRes, error)
 	// APIDeduplicateBookByPageBodyPost implements POST /api/deduplicate/book-by-page-body operation.
 	//
 	// Поиск дубликатов книги по телу страницы.
@@ -328,12 +334,6 @@ type Handler interface {
 	//
 	// POST /api/parsing/mirror/update
 	APIParsingMirrorUpdatePost(ctx context.Context, req *APIParsingMirrorUpdatePostReq) (APIParsingMirrorUpdatePostRes, error)
-	// APISystemDeduplicateArchivePost implements POST /api/system/deduplicate/archive operation.
-	//
-	// Проверка наличия данных в системе из архива.
-	//
-	// POST /api/system/deduplicate/archive
-	APISystemDeduplicateArchivePost(ctx context.Context, req APISystemDeduplicateArchivePostReq) (APISystemDeduplicateArchivePostRes, error)
 	// APISystemImportArchivePost implements POST /api/system/import/archive operation.
 	//
 	// Импорт новой книги через архив.

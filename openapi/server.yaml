@@ -12,8 +12,6 @@ security:
   - cookies: []
 
 tags:
-  - name: user
-    description: Взаимодействие с данными пользователя
   - name: book
     description: Взаимодействие с данными книги
   - name: parsing
@@ -24,14 +22,14 @@ tags:
     description: Взаимодействие с данными меток
   - name: agent
     description: Взаимодействие с системами агентов
-  - name: rebuild
-    description: Перестроение и изменение книг
   - name: deduplicate
     description: Дедупликация данных
   - name: fs
     description: Взаимодействие с файловыми системами
   - name: system
     description: Взаимодействие с системой граббера
+  - name: user
+    description: Взаимодействие с данными пользователя
 
 paths:
   /api/user/login:
@@ -79,7 +77,7 @@ paths:
       description: Получение тела файла (изображения страницы)
       summary: Получение тела файла
       tags:
-        - book
+        - fs
       parameters:
         - name: id
           description: ID файла для получения
@@ -1205,7 +1203,6 @@ paths:
       summary: Информация о книге
       tags:
         - book
-        - rebuild
       requestBody:
         required: true
         content:
@@ -1265,7 +1262,6 @@ paths:
       summary: Изменение данных книги
       tags:
         - book
-        - rebuild
       requestBody:
         required: true
         content:
@@ -1312,7 +1308,6 @@ paths:
       summary: Создает новую книгу из старой
       tags:
         - book
-        - rebuild
       requestBody:
         required: true
         content:
@@ -1425,8 +1420,6 @@ paths:
       summary: Восстановление удаленной книги или ее страниц
       tags:
         - book
-        - rebuild
-        - deduplicate
       requestBody:
         required: true
         content:
@@ -2216,12 +2209,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/system/deduplicate/archive:
+  /api/deduplicate/archive:
     post:
       description: Проверка наличия данных в системе из архива
       summary: Проверка наличия данных в системе из архива
       tags:
-        - system
         - deduplicate
       requestBody:
         content:

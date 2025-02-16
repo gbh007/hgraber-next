@@ -291,6 +291,16 @@ func encodeAPIBookUpdatePostRequest(
 	return nil
 }
 
+func encodeAPIDeduplicateArchivePostRequest(
+	req APIDeduplicateArchivePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/octet-stream"
+	body := req
+	ht.SetBody(r, body, contentType)
+	return nil
+}
+
 func encodeAPIDeduplicateBookByPageBodyPostRequest(
 	req *APIDeduplicateBookByPageBodyPostReq,
 	r *http.Request,
@@ -652,16 +662,6 @@ func encodeAPIParsingMirrorUpdatePostRequest(
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeAPISystemDeduplicateArchivePostRequest(
-	req APISystemDeduplicateArchivePostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/octet-stream"
-	body := req
-	ht.SetBody(r, body, contentType)
 	return nil
 }
 

@@ -93,6 +93,10 @@ type APIBookUpdatePostRes interface {
 	aPIBookUpdatePostRes()
 }
 
+type APIDeduplicateArchivePostRes interface {
+	aPIDeduplicateArchivePostRes()
+}
+
 type APIDeduplicateBookByPageBodyPostRes interface {
 	aPIDeduplicateBookByPageBodyPostRes()
 }
@@ -207,10 +211,6 @@ type APIParsingMirrorListGetRes interface {
 
 type APIParsingMirrorUpdatePostRes interface {
 	aPIParsingMirrorUpdatePostRes()
-}
-
-type APISystemDeduplicateArchivePostRes interface {
-	aPISystemDeduplicateArchivePostRes()
 }
 
 type APISystemImportArchivePostRes interface {

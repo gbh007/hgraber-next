@@ -10,7 +10,6 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
-	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/parsing"
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
@@ -30,10 +29,6 @@ type ExportUseCases interface {
 	ImportArchive(ctx context.Context, body io.Reader, deduplicate bool, autoVerify bool) (uuid.UUID, error)
 }
 
-type DeduplicateUseCases interface {
-	ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]core.DeduplicateArchiveResult, error)
-}
-
 type SystemUseCases interface {
 	RunTask(ctx context.Context, code systemmodel.TaskCode) error
 	TaskResults(ctx context.Context) ([]*systemmodel.TaskResult, error)
@@ -49,10 +44,9 @@ type SystemHandlersController struct {
 
 	apiCore *apiservercore.Controller
 
-	parseUseCases       ParseUseCases
-	exportUseCases      ExportUseCases
-	deduplicateUseCases DeduplicateUseCases
-	systemUseCases      SystemUseCases
+	parseUseCases  ParseUseCases
+	exportUseCases ExportUseCases
+	systemUseCases SystemUseCases
 }
 
 func New(
@@ -60,20 +54,18 @@ func New(
 	tracer trace.Tracer,
 	parseUseCases ParseUseCases,
 	exportUseCases ExportUseCases,
-	deduplicateUseCases DeduplicateUseCases,
 	systemUseCases SystemUseCases,
 	debug bool,
 	ac *apiservercore.Controller,
 ) *SystemHandlersController {
 	c := &SystemHandlersController{
-		logger:              logger,
-		tracer:              tracer,
-		parseUseCases:       parseUseCases,
-		exportUseCases:      exportUseCases,
-		deduplicateUseCases: deduplicateUseCases,
-		systemUseCases:      systemUseCases,
-		debug:               debug,
-		apiCore:             ac,
+		logger:         logger,
+		tracer:         tracer,
+		parseUseCases:  parseUseCases,
+		exportUseCases: exportUseCases,
+		systemUseCases: systemUseCases,
+		debug:          debug,
+		apiCore:        ac,
 	}
 
 	return c

@@ -226,6 +226,15 @@ func (UnimplementedHandler) APIBookUpdatePost(ctx context.Context, req *BookRaw)
 	return r, ht.ErrNotImplemented
 }
 
+// APIDeduplicateArchivePost implements POST /api/deduplicate/archive operation.
+//
+// Проверка наличия данных в системе из архива.
+//
+// POST /api/deduplicate/archive
+func (UnimplementedHandler) APIDeduplicateArchivePost(ctx context.Context, req APIDeduplicateArchivePostReq) (r APIDeduplicateArchivePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIDeduplicateBookByPageBodyPost implements POST /api/deduplicate/book-by-page-body operation.
 //
 // Поиск дубликатов книги по телу страницы.
@@ -486,15 +495,6 @@ func (UnimplementedHandler) APIParsingMirrorListGet(ctx context.Context) (r APIP
 //
 // POST /api/parsing/mirror/update
 func (UnimplementedHandler) APIParsingMirrorUpdatePost(ctx context.Context, req *APIParsingMirrorUpdatePostReq) (r APIParsingMirrorUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APISystemDeduplicateArchivePost implements POST /api/system/deduplicate/archive operation.
-//
-// Проверка наличия данных в системе из архива.
-//
-// POST /api/system/deduplicate/archive
-func (UnimplementedHandler) APISystemDeduplicateArchivePost(ctx context.Context, req APISystemDeduplicateArchivePostReq) (r APISystemDeduplicateArchivePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
