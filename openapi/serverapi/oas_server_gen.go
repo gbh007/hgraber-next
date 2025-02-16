@@ -43,7 +43,7 @@ type Handler interface {
 	// Обновление данных агента.
 	//
 	// POST /api/agent/update
-	APIAgentUpdatePost(ctx context.Context, req *Agent) (APIAgentUpdatePostRes, error)
+	APIAgentUpdatePost(ctx context.Context, req *APIAgentUpdatePostReq) (APIAgentUpdatePostRes, error)
 	// APIAttributeColorCreatePost implements POST /api/attribute/color/create operation.
 	//
 	// Создание покраски аттрибута.

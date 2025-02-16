@@ -1188,7 +1188,7 @@ func (s *Server) handleAPIAgentUpdatePostRequest(args [0]string, argsEscaped boo
 		}
 
 		type (
-			Request  = *Agent
+			Request  = *APIAgentUpdatePostReq
 			Params   = struct{}
 			Response = APIAgentUpdatePostRes
 		)

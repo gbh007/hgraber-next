@@ -82,7 +82,7 @@ func encodeAPIAgentTaskExportPostRequest(
 }
 
 func encodeAPIAgentUpdatePostRequest(
-	req *Agent,
+	req *APIAgentUpdatePostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

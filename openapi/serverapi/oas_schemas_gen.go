@@ -585,6 +585,118 @@ type APIAgentUpdatePostNoContent struct{}
 
 func (*APIAgentUpdatePostNoContent) aPIAgentUpdatePostRes() {}
 
+type APIAgentUpdatePostReq struct {
+	// ID агента.
+	ID uuid.UUID `json:"id"`
+	// Название агента.
+	Name string `json:"name"`
+	// Адрес агента.
+	Addr url.URL `json:"addr"`
+	// Токен доступа к агенту.
+	Token string `json:"token"`
+	// Может ли агент обрабатывать ссылки внешних систем.
+	CanParse bool `json:"can_parse"`
+	// Может ли агент обрабатывать множественные ссылки
+	// внешних систем.
+	CanParseMulti bool `json:"can_parse_multi"`
+	// Может ли агент экспортировать данные из системы.
+	CanExport bool `json:"can_export"`
+	// Может ли агент работать в режиме ФС.
+	HasFs bool `json:"has_fs"`
+	// Приоритет при выборе агентов.
+	Priority int `json:"priority"`
+}
+
+// GetID returns the value of ID.
+func (s *APIAgentUpdatePostReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIAgentUpdatePostReq) GetName() string {
+	return s.Name
+}
+
+// GetAddr returns the value of Addr.
+func (s *APIAgentUpdatePostReq) GetAddr() url.URL {
+	return s.Addr
+}
+
+// GetToken returns the value of Token.
+func (s *APIAgentUpdatePostReq) GetToken() string {
+	return s.Token
+}
+
+// GetCanParse returns the value of CanParse.
+func (s *APIAgentUpdatePostReq) GetCanParse() bool {
+	return s.CanParse
+}
+
+// GetCanParseMulti returns the value of CanParseMulti.
+func (s *APIAgentUpdatePostReq) GetCanParseMulti() bool {
+	return s.CanParseMulti
+}
+
+// GetCanExport returns the value of CanExport.
+func (s *APIAgentUpdatePostReq) GetCanExport() bool {
+	return s.CanExport
+}
+
+// GetHasFs returns the value of HasFs.
+func (s *APIAgentUpdatePostReq) GetHasFs() bool {
+	return s.HasFs
+}
+
+// GetPriority returns the value of Priority.
+func (s *APIAgentUpdatePostReq) GetPriority() int {
+	return s.Priority
+}
+
+// SetID sets the value of ID.
+func (s *APIAgentUpdatePostReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIAgentUpdatePostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetAddr sets the value of Addr.
+func (s *APIAgentUpdatePostReq) SetAddr(val url.URL) {
+	s.Addr = val
+}
+
+// SetToken sets the value of Token.
+func (s *APIAgentUpdatePostReq) SetToken(val string) {
+	s.Token = val
+}
+
+// SetCanParse sets the value of CanParse.
+func (s *APIAgentUpdatePostReq) SetCanParse(val bool) {
+	s.CanParse = val
+}
+
+// SetCanParseMulti sets the value of CanParseMulti.
+func (s *APIAgentUpdatePostReq) SetCanParseMulti(val bool) {
+	s.CanParseMulti = val
+}
+
+// SetCanExport sets the value of CanExport.
+func (s *APIAgentUpdatePostReq) SetCanExport(val bool) {
+	s.CanExport = val
+}
+
+// SetHasFs sets the value of HasFs.
+func (s *APIAgentUpdatePostReq) SetHasFs(val bool) {
+	s.HasFs = val
+}
+
+// SetPriority sets the value of Priority.
+func (s *APIAgentUpdatePostReq) SetPriority(val int) {
+	s.Priority = val
+}
+
 type APIAgentUpdatePostUnauthorized ErrorResponse
 
 func (*APIAgentUpdatePostUnauthorized) aPIAgentUpdatePostRes() {}

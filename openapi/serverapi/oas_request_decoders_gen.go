@@ -339,7 +339,7 @@ func (s *Server) decodeAPIAgentTaskExportPostRequest(r *http.Request) (
 }
 
 func (s *Server) decodeAPIAgentUpdatePostRequest(r *http.Request) (
-	req *Agent,
+	req *APIAgentUpdatePostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -378,7 +378,7 @@ func (s *Server) decodeAPIAgentUpdatePostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request Agent
+		var request APIAgentUpdatePostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

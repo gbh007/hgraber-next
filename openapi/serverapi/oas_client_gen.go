@@ -63,7 +63,7 @@ type Invoker interface {
 	// Обновление данных агента.
 	//
 	// POST /api/agent/update
-	APIAgentUpdatePost(ctx context.Context, request *Agent) (APIAgentUpdatePostRes, error)
+	APIAgentUpdatePost(ctx context.Context, request *APIAgentUpdatePostReq) (APIAgentUpdatePostRes, error)
 	// APIAttributeColorCreatePost invokes POST /api/attribute/color/create operation.
 	//
 	// Создание покраски аттрибута.
@@ -1044,12 +1044,12 @@ func (c *Client) sendAPIAgentTaskExportPost(ctx context.Context, request *APIAge
 // Обновление данных агента.
 //
 // POST /api/agent/update
-func (c *Client) APIAgentUpdatePost(ctx context.Context, request *Agent) (APIAgentUpdatePostRes, error) {
+func (c *Client) APIAgentUpdatePost(ctx context.Context, request *APIAgentUpdatePostReq) (APIAgentUpdatePostRes, error) {
 	res, err := c.sendAPIAgentUpdatePost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIAgentUpdatePost(ctx context.Context, request *Agent) (res APIAgentUpdatePostRes, err error) {
+func (c *Client) sendAPIAgentUpdatePost(ctx context.Context, request *APIAgentUpdatePostReq) (res APIAgentUpdatePostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/agent/update"),

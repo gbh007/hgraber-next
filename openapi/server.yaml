@@ -2968,7 +2968,48 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Agent"
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID агента
+                name:
+                  type: string
+                  description: Название агента
+                addr:
+                  type: string
+                  description: Адрес агента
+                  format: uri
+                  example: http://example.com
+                token:
+                  type: string
+                  description: Токен доступа к агенту
+                can_parse:
+                  type: boolean
+                  description: Может ли агент обрабатывать ссылки внешних систем
+                can_parse_multi:
+                  type: boolean
+                  description: Может ли агент обрабатывать множественные ссылки внешних систем
+                can_export:
+                  type: boolean
+                  description: Может ли агент экспортировать данные из системы
+                has_fs:
+                  type: boolean
+                  description: Может ли агент работать в режиме ФС
+                priority:
+                  type: integer
+                  description: Приоритет при выборе агентов
+              required:
+                - id
+                - name
+                - addr
+                - token
+                - can_parse
+                - can_parse_multi
+                - can_export
+                - has_fs
+                - priority
       responses:
         204:
           description: Успешное обновление агента

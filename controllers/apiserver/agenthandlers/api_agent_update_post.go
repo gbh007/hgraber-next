@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AgentHandlersController) APIAgentUpdatePost(ctx context.Context, req *serverapi.Agent) (serverapi.APIAgentUpdatePostRes, error) {
+func (c *AgentHandlersController) APIAgentUpdatePost(ctx context.Context, req *serverapi.APIAgentUpdatePostReq) (serverapi.APIAgentUpdatePostRes, error) {
 	err := c.agentUseCases.UpdateAgent(ctx, core.Agent{
 		ID:            req.ID,
 		Name:          req.Name,
@@ -19,7 +19,6 @@ func (c *AgentHandlersController) APIAgentUpdatePost(ctx context.Context, req *s
 		CanExport:     req.CanExport,
 		HasFS:         req.HasFs,
 		Priority:      req.Priority,
-		CreateAt:      req.CreatedAt,
 	})
 	if err != nil {
 		return &serverapi.APIAgentUpdatePostInternalServerError{

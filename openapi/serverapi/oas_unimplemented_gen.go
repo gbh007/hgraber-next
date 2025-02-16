@@ -63,7 +63,7 @@ func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req *API
 // Обновление данных агента.
 //
 // POST /api/agent/update
-func (UnimplementedHandler) APIAgentUpdatePost(ctx context.Context, req *Agent) (r APIAgentUpdatePostRes, _ error) {
+func (UnimplementedHandler) APIAgentUpdatePost(ctx context.Context, req *APIAgentUpdatePostReq) (r APIAgentUpdatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
