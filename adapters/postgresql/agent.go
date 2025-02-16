@@ -2,6 +2,8 @@ package postgresql
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -9,13 +11,10 @@ import (
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/pkg"
 )
 
 func (d *Database) Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error) {
-	raw := make([]model.Agent, 0)
-
-	builder := squirrel.Select("*").
+	builder := squirrel.Select(model.AgentColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("agents").OrderBy("priority DESC")
 
@@ -50,25 +49,31 @@ func (d *Database) Agents(ctx context.Context, filter core.AgentFilter) ([]core.
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	err = d.db.SelectContext(ctx, &raw, query, args...)
+	result := make([]core.Agent, 0)
+
+	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
-		return nil, fmt.Errorf("storage: exec query: %w", err)
+		return nil, fmt.Errorf("exec query :%w", err)
 	}
 
-	result, err := pkg.MapWithError(raw, func(a model.Agent) (core.Agent, error) {
-		return a.ToEntity()
-	})
-	if err != nil {
-		return nil, fmt.Errorf("storage: convert: %w", err)
+	defer rows.Close()
+
+	for rows.Next() {
+		page := core.Agent{}
+
+		err := rows.Scan(model.AgentScanner(&page))
+		if err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+
+		result = append(result, page)
 	}
 
 	return result, nil
 }
 
 func (d *Database) Agent(ctx context.Context, id uuid.UUID) (core.Agent, error) {
-	raw := model.Agent{}
-
-	builder := squirrel.Select("*").
+	builder := squirrel.Select(model.AgentColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("agents").
 		Where(squirrel.Eq{
@@ -83,14 +88,17 @@ func (d *Database) Agent(ctx context.Context, id uuid.UUID) (core.Agent, error) 
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	err = d.db.GetContext(ctx, &raw, query, args...)
-	if err != nil {
-		return core.Agent{}, fmt.Errorf("storage: exec query: %w", err)
+	result := core.Agent{}
+	row := d.pool.QueryRow(ctx, query, args...)
+
+	err = row.Scan(model.AgentScanner(&result))
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return core.Agent{}, core.AgentNotFoundError
 	}
 
-	result, err := raw.ToEntity()
 	if err != nil {
-		return core.Agent{}, fmt.Errorf("storage: convert: %w", err)
+		return core.Agent{}, fmt.Errorf("exec query :%w", err)
 	}
 
 	return result, nil
@@ -100,7 +108,7 @@ func (d *Database) NewAgent(ctx context.Context, agent core.Agent) error {
 	builder := squirrel.Insert("agents").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
-			"id":              agent.ID.String(),
+			"id":              agent.ID,
 			"name":            agent.Name,
 			"addr":            agent.Addr.String(),
 			"token":           agent.Token,
@@ -119,7 +127,7 @@ func (d *Database) NewAgent(ctx context.Context, agent core.Agent) error {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	_, err = d.db.ExecContext(ctx, query, args...)
+	_, err = d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -151,12 +159,12 @@ func (d *Database) UpdateAgent(ctx context.Context, agent core.Agent) error {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	res, err := d.db.ExecContext(ctx, query, args...)
+	res, err := d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
 
-	if !d.isApply(ctx, res) {
+	if res.RowsAffected() < 1 {
 		return core.AgentNotFoundError
 	}
 
@@ -177,12 +185,12 @@ func (d *Database) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	res, err := d.db.ExecContext(ctx, query, args...)
+	res, err := d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
 
-	if !d.isApply(ctx, res) {
+	if res.RowsAffected() < 1 {
 		return core.AgentNotFoundError
 	}
 
