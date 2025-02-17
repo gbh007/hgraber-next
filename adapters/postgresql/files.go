@@ -44,7 +44,7 @@ FROM (
 }
 
 func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha256Sum string, size int64) error {
-	res, err := d.db.ExecContext(
+	res, err := d.pool.Exec(
 		ctx,
 		`UPDATE files SET md5_sum = $2, sha256_sum = $3, "size" = $4 WHERE id = $1`,
 		id, model.StringToDB(md5Sum), model.StringToDB(sha256Sum), sql.NullInt64{Int64: size, Valid: size > 0},
@@ -53,7 +53,7 @@ func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha
 		return err
 	}
 
-	if !d.isApply(ctx, res) {
+	if res.RowsAffected() < 1 {
 		return core.FileNotFoundError
 	}
 
@@ -78,7 +78,7 @@ func (d *Database) NewFile(ctx context.Context, file core.File) error {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	_, err = d.db.ExecContext(ctx, query, args...)
+	_, err = d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -184,27 +184,16 @@ func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	res, err := d.db.ExecContext(ctx, query, args...)
+	res, err := d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
 
-	if !d.isApply(ctx, res) {
+	if res.RowsAffected() < 1 {
 		return core.FileNotFoundError
 	}
 
 	return nil
-}
-
-func (d *Database) FileIDs(ctx context.Context) ([]uuid.UUID, error) {
-	raw := make([]uuid.UUID, 0)
-
-	err := d.db.SelectContext(ctx, &raw, `SELECT id FROM files;`)
-	if err != nil {
-		return nil, fmt.Errorf("exec: %w", err)
-	}
-
-	return raw, nil
 }
 
 func (d *Database) FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error) {
@@ -235,9 +224,13 @@ func (d *Database) UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, 
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	res, err := d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
+	}
+
+	if res.RowsAffected() < 1 {
+		return core.FileNotFoundError
 	}
 
 	return nil
@@ -260,9 +253,13 @@ func (d *Database) UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	res, err := d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
+	}
+
+	if res.RowsAffected() < 1 {
+		return core.FileNotFoundError
 	}
 
 	return nil

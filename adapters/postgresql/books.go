@@ -18,7 +18,9 @@ func (d *Database) BookCount(ctx context.Context, filter core.BookFilter) (int, 
 		return 0, fmt.Errorf("build book filter: %w", err)
 	}
 
-	err = d.db.GetContext(ctx, &c, query, args...)
+	row := d.pool.QueryRow(ctx, query, args...)
+
+	err = row.Scan(&c)
 	if err != nil {
 		return 0, fmt.Errorf("exec query: %w", err)
 	}
@@ -27,25 +29,29 @@ func (d *Database) BookCount(ctx context.Context, filter core.BookFilter) (int, 
 }
 
 func (d *Database) BookIDs(ctx context.Context, filter core.BookFilter) ([]uuid.UUID, error) {
-	idsRaw := make([]string, 0)
+	ids := make([]uuid.UUID, 0)
 
 	query, args, err := d.buildBooksFilter(ctx, filter, false)
 	if err != nil {
 		return nil, fmt.Errorf("build book filter: %w", err)
 	}
 
-	err = d.db.SelectContext(ctx, &idsRaw, query, args...)
+	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query: %w", err)
 	}
 
-	ids := make([]uuid.UUID, len(idsRaw))
+	defer rows.Close()
 
-	for i, idRaw := range idsRaw {
-		ids[i], err = uuid.Parse(idRaw)
+	for rows.Next() {
+		var id uuid.UUID
+
+		err := rows.Scan(&id)
 		if err != nil {
-			return nil, fmt.Errorf("parse uuid: %w", err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
+
+		ids = append(ids, id)
 	}
 
 	return ids, nil
