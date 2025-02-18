@@ -9,10 +9,11 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
 func (uc *UseCase) ValidateFS(ctx context.Context, fsID uuid.UUID) error {
-	ids, err := uc.storage.FileIDsByFS(ctx, fsID)
+	ids, err := uc.storage.FileIDsByFilter(ctx, fsmodel.FileFilter{FSID: &fsID})
 	if err != nil {
 		return err
 	}

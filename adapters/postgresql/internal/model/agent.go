@@ -24,23 +24,23 @@ func AgentColumns() []string {
 	}
 }
 
-func AgentScanner(p *core.Agent) RowScanner {
+func AgentScanner(agent *core.Agent) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			u string
 		)
 
 		err := rows.Scan(
-			&p.ID,
-			&p.Name,
+			&agent.ID,
+			&agent.Name,
 			&u,
-			&p.Token,
-			&p.CanParse,
-			&p.CanParseMulti,
-			&p.CanExport,
-			&p.HasFS,
-			&p.Priority,
-			&p.CreateAt,
+			&agent.Token,
+			&agent.CanParse,
+			&agent.CanParseMulti,
+			&agent.CanExport,
+			&agent.HasFS,
+			&agent.Priority,
+			&agent.CreateAt,
 		)
 		if err != nil {
 			return fmt.Errorf("scan to model: %w", err)
@@ -51,7 +51,7 @@ func AgentScanner(p *core.Agent) RowScanner {
 			return fmt.Errorf("parse addr: %w", err)
 		}
 
-		p.Addr = *addr
+		agent.Addr = *addr
 
 		return nil
 	}

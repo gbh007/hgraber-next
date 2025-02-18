@@ -14,7 +14,7 @@ import (
 type storage interface {
 	DetachedFiles(ctx context.Context) ([]core.File, error)
 	DeleteFile(ctx context.Context, id uuid.UUID) error
-	FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error)
+	FileIDsByFilter(ctx context.Context, filter fsmodel.FileFilter) ([]uuid.UUID, error)
 
 	TruncateDeletedPages(ctx context.Context) error
 

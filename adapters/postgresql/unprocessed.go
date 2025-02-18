@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Masterminds/squirrel"
+
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
@@ -50,20 +52,41 @@ func (d *Database) UnprocessedBooks(ctx context.Context) ([]core.Book, error) {
 
 // FIXME: добавить лимиты
 func (d *Database) GetUnHashedFiles(ctx context.Context) ([]core.File, error) {
-	raw := make([]*model.File, 0)
+	builder := squirrel.Select(model.FileColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("files").
+		Where(squirrel.Or{
+			squirrel.Expr(`md5_sum IS NULL`),
+			squirrel.Expr(`sha256_sum IS NULL`),
+			squirrel.Expr(`"size" IS NULL`),
+		})
 
-	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM files WHERE md5_sum IS NULL OR sha256_sum IS NULL OR "size" IS NULL;`)
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return nil, fmt.Errorf("exec: %w", err)
+		return nil, fmt.Errorf("storage: build query: %w", err)
 	}
 
-	out := make([]core.File, len(raw))
-	for i, v := range raw {
-		out[i], err = v.ToEntity()
+	d.squirrelDebugLog(ctx, query, args)
+
+	result := make([]core.File, 0)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		file := core.File{}
+
+		err := rows.Scan(model.FileScanner(&file))
 		if err != nil {
-			return nil, fmt.Errorf("convert %s: %w", v.ID, err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
+
+		result = append(result, file)
 	}
 
-	return out, nil
+	return result, nil
 }

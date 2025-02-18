@@ -16,7 +16,8 @@ import (
 func (d *Database) Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error) {
 	builder := squirrel.Select(model.AgentColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("agents").OrderBy("priority DESC")
+		From("agents").
+		OrderBy("priority DESC")
 
 	if filter.CanParse {
 		builder = builder.Where(squirrel.Eq{
@@ -59,14 +60,14 @@ func (d *Database) Agents(ctx context.Context, filter core.AgentFilter) ([]core.
 	defer rows.Close()
 
 	for rows.Next() {
-		page := core.Agent{}
+		agent := core.Agent{}
 
-		err := rows.Scan(model.AgentScanner(&page))
+		err := rows.Scan(model.AgentScanner(&agent))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}
 
-		result = append(result, page)
+		result = append(result, agent)
 	}
 
 	return result, nil

@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/pkg"
 )
 
 func TimeToDB(t time.Time) sql.NullTime {
@@ -45,4 +47,10 @@ func URLToDB(u *url.URL) sql.NullString {
 		String: u.String(),
 		Valid:  true,
 	}
+}
+
+func StringsPrefix(arr []string, prefix string) []string {
+	return pkg.Map(arr, func(s string) string {
+		return prefix + s
+	})
 }

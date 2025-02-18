@@ -21,9 +21,7 @@ type storage interface {
 
 	File(ctx context.Context, id uuid.UUID) (core.File, error)
 	UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid.UUID) error
-	FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error)
 	UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, invalidData bool) error
-
 	FileIDsByFilter(ctx context.Context, filter fsmodel.FileFilter) ([]uuid.UUID, error)
 
 	GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (core.Page, error)

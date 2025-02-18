@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/gbh007/hgraber-next/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -41,7 +42,7 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UU
 		taskResult.StartStage("search file ids in storage")
 		span.AddEvent("search file ids in storage", trace.WithTimestamp(time.Now()))
 
-		storageIDs, err := uc.storage.FileIDsByFS(ctx, fsID)
+		storageIDs, err := uc.storage.FileIDsByFilter(ctx, fsmodel.FileFilter{FSID: &fsID})
 		if err != nil {
 			taskResult.SetError(err)
 

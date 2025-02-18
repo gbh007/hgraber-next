@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
@@ -14,10 +15,8 @@ import (
 )
 
 func (d *Database) DuplicatedFiles(ctx context.Context) ([]core.File, error) {
-	raw := make([]*model.File, 0)
-
-	// FIXME: условие дедупликации не учитывает размер
-	err := d.db.SelectContext(ctx, &raw, `SELECT f.*
+	// TODO: переделать на squirrel
+	query := `SELECT ` + strings.Join(model.StringsPrefix(model.FileColumns(), "f."), ", ") + `
 FROM (
         SELECT COUNT(*) AS c, md5_sum, sha256_sum
         FROM files
@@ -27,20 +26,29 @@ FROM (
             COUNT(*) > 1
     ) AS t
     INNER join files AS f ON f.md5_sum = t.md5_sum
-    AND f.sha256_sum = t.sha256_sum ORDER BY f.id;`)
+    AND f.sha256_sum = t.sha256_sum ORDER BY f.id;`
+
+	result := make([]core.File, 0)
+
+	rows, err := d.pool.Query(ctx, query)
 	if err != nil {
-		return nil, fmt.Errorf("exec: %w", err)
+		return nil, fmt.Errorf("exec query :%w", err)
 	}
 
-	out := make([]core.File, len(raw))
-	for i, v := range raw {
-		out[i], err = v.ToEntity()
+	defer rows.Close()
+
+	for rows.Next() {
+		file := core.File{}
+
+		err := rows.Scan(model.FileScanner(&file))
 		if err != nil {
-			return nil, fmt.Errorf("convert %s: %w", v.ID, err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
+
+		result = append(result, file)
 	}
 
-	return out, nil
+	return result, nil
 }
 
 func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha256Sum string, size int64) error {
@@ -112,33 +120,49 @@ func (d *Database) ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UU
 }
 
 func (d *Database) DetachedFiles(ctx context.Context) ([]core.File, error) {
-	raw := make([]*model.File, 0)
+	builder := squirrel.Select(model.FileColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("files").
+		Where(squirrel.Expr(`
+			NOT EXISTS (
+				SELECT 1
+				FROM pages
+				WHERE pages.file_id = files.id
+			)
+		`))
 
-	err := d.db.SelectContext(ctx, &raw, `SELECT *
-FROM files AS f
-WHERE
-    NOT EXISTS (
-        SELECT file_id
-        FROM pages
-        WHERE file_id = f.id
-    );`)
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return nil, fmt.Errorf("exec: %w", err)
+		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	out := make([]core.File, len(raw))
-	for i, v := range raw {
-		out[i], err = v.ToEntity()
+	d.squirrelDebugLog(ctx, query, args)
+
+	result := make([]core.File, 0)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		file := core.File{}
+
+		err := rows.Scan(model.FileScanner(&file))
 		if err != nil {
-			return nil, fmt.Errorf("convert %s: %w", v.ID, err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
+
+		result = append(result, file)
 	}
 
-	return out, nil
+	return result, nil
 }
 
 func (d *Database) FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]core.File, error) {
-	builder := squirrel.Select("*").
+	builder := squirrel.Select(model.FileColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("files").
 		Where(squirrel.Eq{
@@ -152,22 +176,27 @@ func (d *Database) FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]core
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	raw := make([]*model.File, 0)
+	result := make([]core.File, 0)
 
-	err = d.db.SelectContext(ctx, &raw, query, args...)
+	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
-		return nil, fmt.Errorf("exec: %w", err)
+		return nil, fmt.Errorf("exec query :%w", err)
 	}
 
-	out := make([]core.File, len(raw))
-	for i, v := range raw {
-		out[i], err = v.ToEntity()
+	defer rows.Close()
+
+	for rows.Next() {
+		file := core.File{}
+
+		err := rows.Scan(model.FileScanner(&file))
 		if err != nil {
-			return nil, fmt.Errorf("convert %s: %w", v.ID, err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
+
+		result = append(result, file)
 	}
 
-	return out, nil
+	return result, nil
 }
 
 func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
@@ -194,17 +223,6 @@ func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
 	}
 
 	return nil
-}
-
-func (d *Database) FileIDsByFS(ctx context.Context, fsID uuid.UUID) ([]uuid.UUID, error) {
-	raw := make([]uuid.UUID, 0)
-
-	err := d.db.SelectContext(ctx, &raw, `SELECT id FROM files WHERE fs_id = $1;`, fsID)
-	if err != nil {
-		return nil, fmt.Errorf("exec: %w", err)
-	}
-
-	return raw, nil
 }
 
 func (d *Database) UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, invalidData bool) error {
@@ -266,7 +284,7 @@ func (d *Database) UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid
 }
 
 func (d *Database) File(ctx context.Context, id uuid.UUID) (core.File, error) {
-	builder := squirrel.Select("*").
+	builder := squirrel.Select(model.FileColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("files").
 		Where(squirrel.Eq{
@@ -281,19 +299,16 @@ func (d *Database) File(ctx context.Context, id uuid.UUID) (core.File, error) {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	raw := model.File{}
+	file := core.File{}
 
-	err = d.db.GetContext(ctx, &raw, query, args...)
+	row := d.pool.QueryRow(ctx, query, args...)
+
+	err = row.Scan(model.FileScanner(&file))
 	if err != nil {
 		return core.File{}, fmt.Errorf("exec: %w", err)
 	}
 
-	out, err := raw.ToEntity()
-	if err != nil {
-		return core.File{}, fmt.Errorf("convert: %w", err)
-	}
-
-	return out, nil
+	return file, nil
 }
 
 func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (core.SizeWithCount, error) {

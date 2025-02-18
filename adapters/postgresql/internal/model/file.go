@@ -2,35 +2,54 @@ package model
 
 import (
 	"database/sql"
-	"time"
+	"fmt"
 
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-type File struct {
-	ID          uuid.UUID      `db:"id"`
-	Filename    string         `db:"filename"`
-	Ext         string         `db:"ext"`
-	Md5Sum      sql.NullString `db:"md5_sum"`
-	Sha256Sum   sql.NullString `db:"sha256_sum"`
-	Size        sql.NullInt64  `db:"size"`
-	FSID        uuid.UUID      `db:"fs_id"`
-	InvalidData bool           `db:"invalid_data"`
-	CreateAt    time.Time      `db:"create_at"`
+func FileColumns() []string {
+	return []string{
+		"id",
+		"filename",
+		"ext",
+		"md5_sum",
+		"sha256_sum",
+		"\"size\"",
+		"fs_id",
+		"invalid_data",
+		"create_at",
+	}
 }
 
-func (f File) ToEntity() (core.File, error) {
-	return core.File{
-		ID:          f.ID,
-		Filename:    f.Filename,
-		Ext:         f.Ext,
-		Md5Sum:      f.Md5Sum.String,
-		Sha256Sum:   f.Sha256Sum.String,
-		Size:        f.Size.Int64,
-		FSID:        f.FSID,
-		InvalidData: f.InvalidData,
-		CreateAt:    f.CreateAt,
-	}, nil
+func FileScanner(file *core.File) RowScanner {
+	return func(rows pgx.Rows) error {
+		var (
+			md5Sum    sql.NullString
+			sha256Sum sql.NullString
+			size      sql.NullInt64
+		)
+
+		err := rows.Scan(
+			&file.ID,
+			&file.Filename,
+			&file.Ext,
+			&md5Sum,
+			&sha256Sum,
+			&size,
+			&file.FSID,
+			&file.InvalidData,
+			&file.CreateAt,
+		)
+		if err != nil {
+			return fmt.Errorf("scan to model: %w", err)
+		}
+
+		file.Md5Sum = md5Sum.String
+		file.Sha256Sum = sha256Sum.String
+		file.Size = size.Int64
+
+		return nil
+	}
 }
