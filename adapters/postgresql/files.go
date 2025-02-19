@@ -123,13 +123,7 @@ func (d *Database) DetachedFiles(ctx context.Context) ([]core.File, error) {
 	builder := squirrel.Select(model.FileColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("files").
-		Where(squirrel.Expr(`
-			NOT EXISTS (
-				SELECT 1
-				FROM pages
-				WHERE pages.file_id = files.id
-			)
-		`))
+		Where(squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE pages.file_id = files.id)`))
 
 	query, args, err := builder.ToSql()
 	if err != nil {

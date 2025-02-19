@@ -37,7 +37,7 @@ func (d *Database) NewBook(ctx context.Context, book core.Book) error {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	_, err = d.db.ExecContext(ctx, query, args...)
+	_, err = d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("storage: exec query: %w", err)
 	}
@@ -70,12 +70,12 @@ func (d *Database) UpdateBook(ctx context.Context, book core.Book) error {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	res, err := d.db.ExecContext(ctx, query, args...)
+	res, err := d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("storage: exec query: %w", err)
 	}
 
-	if !d.isApply(ctx, res) {
+	if res.RowsAffected() < 1 {
 		return core.BookNotFoundError
 	}
 
@@ -107,7 +107,7 @@ func (d *Database) GetBook(ctx context.Context, bookID uuid.UUID) (core.Book, er
 
 	err := d.db.GetContext(ctx, raw, `SELECT * FROM books WHERE id = $1 LIMIT 1;`, bookID)
 	if errors.Is(err, sql.ErrNoRows) {
-		return core.Book{}, fmt.Errorf("%w - %d", core.BookNotFoundError, bookID)
+		return core.Book{}, core.BookNotFoundError
 	}
 
 	if err != nil {
@@ -136,12 +136,12 @@ func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	res, err := d.db.ExecContext(ctx, query, args...)
+	res, err := d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
 
-	if !d.isApply(ctx, res) {
+	if res.RowsAffected() < 1 {
 		return core.BookNotFoundError
 	}
 
@@ -162,12 +162,12 @@ func (d *Database) DeleteBooks(ctx context.Context, ids []uuid.UUID) error {
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	res, err := d.db.ExecContext(ctx, query, args...)
+	res, err := d.pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
 
-	if !d.isApply(ctx, res) {
+	if res.RowsAffected() < 1 {
 		return core.BookNotFoundError
 	}
 

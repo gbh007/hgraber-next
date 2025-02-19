@@ -1,27 +1,36 @@
 package model
 
 import (
-	"time"
+	"fmt"
 
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-type BookLabel struct {
-	BookID     uuid.UUID `db:"book_id"`
-	PageNumber int       `db:"page_number"`
-	Name       string    `db:"name"`
-	Value      string    `db:"value"`
-	CreateAt   time.Time `db:"create_at"`
+func BookLabelColumns() []string {
+	return []string{
+		"book_id",
+		"page_number",
+		"name",
+		"value",
+		"create_at",
+	}
 }
 
-func (bl BookLabel) ToEntity() (core.BookLabel, error) {
-	return core.BookLabel{
-		BookID:     bl.BookID,
-		PageNumber: bl.PageNumber,
-		Name:       bl.Name,
-		Value:      bl.Value,
-		CreateAt:   bl.CreateAt,
-	}, nil
+func BookLabelScanner(label *core.BookLabel) RowScanner {
+	return func(rows pgx.Rows) error {
+		err := rows.Scan(
+			&label.BookID,
+			&label.PageNumber,
+			&label.Name,
+			&label.Value,
+			&label.CreateAt,
+		)
+		if err != nil {
+			return fmt.Errorf("scan to model: %w", err)
+		}
+
+		return nil
+	}
 }

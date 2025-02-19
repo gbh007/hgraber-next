@@ -13,7 +13,6 @@ import (
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/pkg"
 )
 
 func (d *Database) SetLabel(ctx context.Context, label core.BookLabel) error {
@@ -90,9 +89,7 @@ func (d *Database) DeleteBookLabels(ctx context.Context, bookID uuid.UUID) error
 }
 
 func (d *Database) Labels(ctx context.Context, bookID uuid.UUID) ([]core.BookLabel, error) {
-	raw := make([]model.BookLabel, 0)
-
-	builder := squirrel.Select("*").
+	builder := squirrel.Select(model.BookLabelColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("book_labels").
 		Where(squirrel.Eq{
@@ -106,16 +103,24 @@ func (d *Database) Labels(ctx context.Context, bookID uuid.UUID) ([]core.BookLab
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	err = d.db.SelectContext(ctx, &raw, query, args...)
+	result := make([]core.BookLabel, 0)
+
+	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
-		return nil, fmt.Errorf("exec query: %w", err)
+		return nil, fmt.Errorf("exec query :%w", err)
 	}
 
-	result, err := pkg.MapWithError(raw, func(a model.BookLabel) (core.BookLabel, error) {
-		return a.ToEntity()
-	})
-	if err != nil {
-		return nil, fmt.Errorf("convert: %w", err)
+	defer rows.Close()
+
+	for rows.Next() {
+		label := core.BookLabel{}
+
+		err := rows.Scan(model.BookLabelScanner(&label))
+		if err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+
+		result = append(result, label)
 	}
 
 	return result, nil
