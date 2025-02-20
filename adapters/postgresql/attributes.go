@@ -43,13 +43,13 @@ func (d *Database) BookAttributes(ctx context.Context, bookID uuid.UUID) (map[st
 }
 
 func (d *Database) UpdateAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error {
-	tx, err := d.db.BeginTxx(ctx, nil)
+	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
 	}
 
 	defer func() {
-		err := tx.Rollback()
+		err := tx.Rollback(ctx)
 		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
 			d.logger.ErrorContext(
 				ctx, "rollback UpdateAttributes tx",
@@ -58,7 +58,7 @@ func (d *Database) UpdateAttributes(ctx context.Context, bookID uuid.UUID, attri
 		}
 	}()
 
-	_, err = tx.ExecContext(ctx, `DELETE FROM book_attributes WHERE book_id = $1;`, bookID)
+	_, err = tx.Exec(ctx, `DELETE FROM book_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return fmt.Errorf("delete old attributes: %w", err)
 	}
@@ -84,12 +84,12 @@ func (d *Database) UpdateAttributes(ctx context.Context, bookID uuid.UUID, attri
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	_, err = tx.ExecContext(ctx, query, args...)
+	_, err = tx.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
 
-	err = tx.Commit()
+	err = tx.Commit(ctx)
 	if err != nil {
 		return fmt.Errorf("commit tx: %w", err)
 	}

@@ -2,7 +2,6 @@ package postgresql
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"log/slog"
 
@@ -53,25 +52,6 @@ func New(
 		pool:   dbpool,
 		db:     db,
 	}, nil
-}
-
-func isApplyWithErr(r sql.Result) (bool, error) {
-	c, err := r.RowsAffected()
-	if err != nil {
-		return false, nil
-	}
-
-	return c != 0, nil
-}
-
-func (d *Database) isApply(ctx context.Context, r sql.Result) bool {
-	apply, err := isApplyWithErr(r)
-
-	if err != nil {
-		d.logger.ErrorContext(ctx, err.Error())
-	}
-
-	return apply
 }
 
 func (d *Database) squirrelDebugLog(ctx context.Context, query string, args []any) {

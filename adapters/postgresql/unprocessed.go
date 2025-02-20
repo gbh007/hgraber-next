@@ -2,7 +2,9 @@ package postgresql
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
+	"net/url"
 
 	"github.com/Masterminds/squirrel"
 
@@ -12,22 +14,72 @@ import (
 
 // FIXME: добавить лимиты
 func (d *Database) NotDownloadedPages(ctx context.Context) ([]core.PageForDownload, error) {
-	raw := make([]*model.PageForDownload, 0)
+	builder := squirrel.Select(
+		"p.book_id",
+		"b.origin_url AS book_url",  // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
+		"p.origin_url AS image_url", // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
+		"p.page_number",
+		"p.ext",
+	).
+		PlaceholderFormat(squirrel.Dollar).
+		From("books AS b").
+		InnerJoin("pages AS p ON b.id = p.book_id").
+		Where(squirrel.Eq{
+			"p.downloaded": false,
+		})
 
-	err := d.db.SelectContext(ctx, &raw, `SELECT p.book_id, b.origin_url AS book_url, p.origin_url AS image_url, p.page_number, p.ext from books AS b INNER JOIN pages AS p ON b.id = p.book_id WHERE downloaded = FALSE;`)
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return nil, fmt.Errorf("select: %w", err)
+		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	out := make([]core.PageForDownload, len(raw))
-	for i, v := range raw {
-		out[i], err = v.ToEntity()
+	d.squirrelDebugLog(ctx, query, args)
+
+	result := make([]core.PageForDownload, 0)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			page     core.PageForDownload
+			bookURL  sql.NullString
+			imageURL sql.NullString
+		)
+
+		err := rows.Scan(
+			&page.BookID,
+			&bookURL,
+			&imageURL,
+			&page.PageNumber,
+			&page.Ext,
+		)
 		if err != nil {
-			return nil, fmt.Errorf("to entity (%s, %d): %w", v.BookID, v.PageNumber, err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
+
+		if bookURL.Valid {
+			page.BookURL, err = url.Parse(bookURL.String)
+			if err != nil {
+				return nil, fmt.Errorf("parse book url (%s,%d): %w", page.BookID.String(), page.PageNumber, err)
+			}
+		}
+
+		if imageURL.Valid {
+			page.ImageURL, err = url.Parse(imageURL.String)
+			if err != nil {
+				return nil, fmt.Errorf("parse page url (%s,%d): %w", page.BookID.String(), page.PageNumber, err)
+			}
+		}
+
+		result = append(result, page)
 	}
 
-	return out, nil
+	return result, nil
 }
 
 // FIXME: добавить лимиты

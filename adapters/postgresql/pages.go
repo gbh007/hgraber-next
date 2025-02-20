@@ -5,42 +5,50 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/url"
 	"time"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (core.Page, error) {
-	raw := new(model.Page)
+	builder := squirrel.Select(model.PageColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("pages").
+		Where(squirrel.Eq{
+			"book_id":     id,
+			"page_number": pageNumber,
+		}).
+		Limit(1)
 
-	err := d.db.GetContext(
-		ctx, raw,
-		`SELECT * FROM pages WHERE book_id = $1 AND page_number = $2 LIMIT 1;`,
-		id, pageNumber,
-	)
-	if errors.Is(err, sql.ErrNoRows) {
-		return core.Page{}, core.PageNotFoundError
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return core.Page{}, fmt.Errorf("build query: %w", err)
 	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	page := core.Page{}
+
+	row := d.pool.QueryRow(ctx, query, args...)
+
+	err = row.Scan(model.PageScanner(&page))
 
 	if err != nil {
-		return core.Page{}, fmt.Errorf("get page from db: %w", err)
+		return core.Page{}, fmt.Errorf("exec query :%w", err)
 	}
 
-	p, err := raw.ToEntity()
-	if err != nil {
-		return core.Page{}, fmt.Errorf("convert page: %w", err)
-	}
-
-	return p, nil
+	return page, nil
 }
 
 func (d *Database) UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageNumber int, downloaded bool, fileID uuid.UUID) error {
-	res, err := d.db.ExecContext(
+	res, err := d.pool.Exec(
 		ctx,
 		`UPDATE pages SET downloaded = $1, load_at = $2, file_id = $5 WHERE book_id = $3 AND page_number = $4;`,
 		downloaded, time.Now().UTC(), id, pageNumber, model.UUIDToDB(fileID),
@@ -49,7 +57,7 @@ func (d *Database) UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageN
 		return err
 	}
 
-	if !d.isApply(ctx, res) {
+	if res.RowsAffected() < 1 {
 		return core.PageNotFoundError
 	}
 
@@ -58,40 +66,41 @@ func (d *Database) UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageN
 
 // FIXME: отрефакторить на squirel
 func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []core.Page) error {
-	tx, err := d.db.BeginTxx(ctx, nil)
+	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return err
 	}
 
-	_, err = tx.ExecContext(ctx, `DELETE FROM pages WHERE book_id = $1;`, id)
-	if err != nil {
-		rollbackErr := tx.Rollback()
-		if rollbackErr != nil {
-			d.logger.ErrorContext(ctx, rollbackErr.Error())
+	defer func() {
+		err := tx.Rollback(ctx)
+		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
+			d.logger.ErrorContext(
+				ctx, "rollback UpdateBookPages tx",
+				slog.Any("err", err),
+			)
 		}
+	}()
 
-		return err
+	_, err = tx.Exec(ctx, `DELETE FROM pages WHERE book_id = $1;`, id)
+	if err != nil {
+		return fmt.Errorf("delete old pages: %w", err)
 	}
 
+	// TODO: слить с аналогичным дейтвием, реализовать как приватную функцию которая принимает транзакцию.
 	for _, v := range pages {
-		_, err = tx.ExecContext(
+		_, err = tx.Exec(
 			ctx,
 			`INSERT INTO pages (book_id, page_number, ext, origin_url, create_at, downloaded, load_at, file_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
 			id, v.PageNumber, v.Ext, model.URLToDB(v.OriginURL), v.CreateAt.UTC(), v.Downloaded, model.TimeToDB(v.LoadAt), model.UUIDToDB(v.FileID),
 		)
 		if err != nil {
-			rollbackErr := tx.Rollback()
-			if rollbackErr != nil {
-				d.logger.ErrorContext(ctx, rollbackErr.Error())
-			}
-
-			return err
+			return fmt.Errorf("insert page %d: %w", v.PageNumber, err)
 		}
 	}
 
-	err = tx.Commit()
+	err = tx.Commit(ctx)
 	if err != nil {
-		return err
+		return fmt.Errorf("commit tx: %w", err)
 	}
 
 	return nil
@@ -99,86 +108,117 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []co
 
 // FIXME: отрефакторить на squirel
 func (d *Database) NewBookPages(ctx context.Context, pages []core.Page) error {
-	tx, err := d.db.BeginTxx(ctx, nil)
+	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return err
 	}
 
+	defer func() {
+		err := tx.Rollback(ctx)
+		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
+			d.logger.ErrorContext(
+				ctx, "rollback UpdateBookPages tx",
+				slog.Any("err", err),
+			)
+		}
+	}()
+
+	// TODO: слить с аналогичным дейтвием, реализовать как приватную функцию которая принимает транзакцию.
 	for _, v := range pages {
-		_, err = tx.ExecContext(
+		_, err = tx.Exec(
 			ctx,
 			`INSERT INTO pages (book_id, page_number, ext, origin_url, create_at, downloaded, load_at, file_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
 			v.BookID, v.PageNumber, v.Ext, model.URLToDB(v.OriginURL), v.CreateAt.UTC(), v.Downloaded, model.TimeToDB(v.LoadAt), model.UUIDToDB(v.FileID),
 		)
 		if err != nil {
-			rollbackErr := tx.Rollback()
-			if rollbackErr != nil {
-				d.logger.ErrorContext(ctx, rollbackErr.Error())
-			}
-
-			return err
+			return fmt.Errorf("insert page %d: %w", v.PageNumber, err)
 		}
 	}
 
-	err = tx.Commit()
+	err = tx.Commit(ctx)
 	if err != nil {
-		return err
+		return fmt.Errorf("commit tx: %w", err)
 	}
 
 	return nil
 }
 
-func (d *Database) bookPages(ctx context.Context, bookID uuid.UUID) ([]*model.Page, error) {
-	raw := make([]*model.Page, 0)
-
-	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM pages WHERE book_id = $1 ORDER BY page_number;`, bookID)
-	if err != nil {
-		return nil, err
-	}
-
-	return raw, nil
-}
-
 func (d *Database) BookPages(ctx context.Context, bookID uuid.UUID) ([]core.Page, error) {
-	pages, err := d.bookPages(ctx, bookID)
+	builder := squirrel.Select(model.PageColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("pages").
+		Where(squirrel.Eq{
+			"book_id": bookID,
+		}).
+		OrderBy("page_number")
+
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return nil, fmt.Errorf("get pages :%w", err)
+		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	out := make([]core.Page, 0, len(pages))
+	d.squirrelDebugLog(ctx, query, args)
 
-	for _, pageRaw := range pages {
-		page, err := pageRaw.ToEntity()
+	result := make([]core.Page, 0)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		page := core.Page{}
+
+		err := rows.Scan(model.PageScanner(&page))
 		if err != nil {
-			return nil, fmt.Errorf("convert page :%w", err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
 
-		out = append(out, page)
+		result = append(result, page)
 	}
 
-	return out, nil
+	return result, nil
 }
 
 func (d *Database) PagesByURL(ctx context.Context, u url.URL) ([]core.Page, error) {
-	raw := make([]*model.Page, 0)
+	builder := squirrel.Select(model.PageColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("pages").
+		Where(squirrel.Eq{
+			"origin_url": u.String(),
+		}).
+		OrderBy("book_id", "page_number")
 
-	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM pages WHERE origin_url = $1 ORDER BY book_id, page_number;`, u.String())
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return nil, fmt.Errorf("get pages :%w", err)
+		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	out := make([]core.Page, 0, len(raw))
+	d.squirrelDebugLog(ctx, query, args)
 
-	for _, pageRaw := range raw {
-		page, err := pageRaw.ToEntity()
+	result := make([]core.Page, 0)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		page := core.Page{}
+
+		err := rows.Scan(model.PageScanner(&page))
 		if err != nil {
-			return nil, fmt.Errorf("convert page :%w", err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
 
-		out = append(out, page)
+		result = append(result, page)
 	}
 
-	return out, nil
+	return result, nil
 }
 
 func (d *Database) BookPagesCount(ctx context.Context, bookID uuid.UUID) (int, error) {
