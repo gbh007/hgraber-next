@@ -84,22 +84,52 @@ func (d *Database) NotDownloadedPages(ctx context.Context) ([]core.PageForDownlo
 
 // FIXME: добавить лимиты
 func (d *Database) UnprocessedBooks(ctx context.Context) ([]core.Book, error) {
-	raw := make([]*model.Book, 0)
+	builder := squirrel.Select(model.BookColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("books").
+		Where(squirrel.And{
+			squirrel.Or{
+				squirrel.Expr(`name IS NULL`),
+				squirrel.Expr(`page_count IS NULL`),
+				squirrel.Eq{
+					"attributes_parsed": false,
+				},
+			},
+			squirrel.Expr(`origin_url IS NOT NULL`),
+			squirrel.Eq{
+				"deleted":    false,
+				"is_rebuild": false,
+			},
+		})
 
-	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE AND is_rebuild = FALSE;`)
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return nil, fmt.Errorf("select: %w", err)
+		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	out := make([]core.Book, len(raw))
-	for i, v := range raw {
-		out[i], err = v.ToEntity()
+	d.squirrelDebugLog(ctx, query, args)
+
+	result := make([]core.Book, 0)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		book := core.Book{}
+
+		err := rows.Scan(model.BookScanner(&book))
 		if err != nil {
-			return nil, fmt.Errorf("to entity (%s): %w", v.ID, err)
+			return nil, fmt.Errorf("scan: %w", err)
 		}
+
+		result = append(result, book)
 	}
 
-	return out, nil
+	return result, nil
 }
 
 // FIXME: добавить лимиты

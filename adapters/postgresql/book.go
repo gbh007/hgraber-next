@@ -83,43 +83,74 @@ func (d *Database) UpdateBook(ctx context.Context, book core.Book) error {
 }
 
 func (d *Database) GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error) {
-	var idsRaw []string
+	builder := squirrel.Select("id").
+		PlaceholderFormat(squirrel.Dollar).
+		From("books").
+		Where(squirrel.Eq{
+			"origin_url": url.String(),
+		})
 
-	err := d.db.SelectContext(ctx, &idsRaw, `SELECT id FROM books WHERE origin_url = $1;`, url.String())
+	query, args, err := builder.ToSql()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	ids := make([]uuid.UUID, len(idsRaw))
+	d.squirrelDebugLog(ctx, query, args)
 
-	for i, idRaw := range idsRaw {
-		ids[i], err = uuid.Parse(idRaw)
+	result := []uuid.UUID{}
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		id := uuid.UUID{}
+
+		err := rows.Scan(&id)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("scan: %w", err)
 		}
+
+		result = append(result, id)
 	}
 
-	return ids, nil
+	return result, nil
 }
 
 func (d *Database) GetBook(ctx context.Context, bookID uuid.UUID) (core.Book, error) {
-	raw := new(model.Book)
+	builder := squirrel.Select(model.BookColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("books").
+		Where(squirrel.Eq{
+			"id": bookID,
+		}).
+		Limit(1)
 
-	err := d.db.GetContext(ctx, raw, `SELECT * FROM books WHERE id = $1 LIMIT 1;`, bookID)
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return core.Book{}, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	book := core.Book{}
+
+	row := d.pool.QueryRow(ctx, query, args...)
+
+	err = row.Scan(model.BookScanner(&book))
+
 	if errors.Is(err, sql.ErrNoRows) {
 		return core.Book{}, core.BookNotFoundError
 	}
 
 	if err != nil {
-		return core.Book{}, err
+		return core.Book{}, fmt.Errorf("exec query :%w", err)
 	}
 
-	b, err := raw.ToEntity()
-	if err != nil {
-		return core.Book{}, err
-	}
-
-	return b, nil
+	return book, nil
 }
 
 func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {

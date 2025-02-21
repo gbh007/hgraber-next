@@ -2,58 +2,69 @@ package model
 
 import (
 	"database/sql"
+	"fmt"
 	"net/url"
-	"time"
 
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-type Book struct {
-	ID               uuid.UUID      `db:"id"`
-	Name             sql.NullString `db:"name"`
-	OriginURL        sql.NullString `db:"origin_url"`
-	PageCount        sql.NullInt32  `db:"page_count"`
-	AttributesParsed bool           `db:"attributes_parsed"`
-
-	CreateAt time.Time `db:"create_at"`
-
-	Deleted   bool         `db:"deleted"`
-	DeletedAt sql.NullTime `db:"deleted_at"`
-
-	Verified   bool         `db:"verified"`
-	VerifiedAt sql.NullTime `db:"verified_at"`
-
-	IsRebuild bool `db:"is_rebuild"`
+func BookColumns() []string {
+	return []string{
+		"id",
+		"name",
+		"origin_url",
+		"page_count",
+		"attributes_parsed",
+		"create_at",
+		"deleted",
+		"deleted_at",
+		"verified",
+		"verified_at",
+		"is_rebuild",
+	}
 }
 
-func (b Book) ToEntity() (core.Book, error) {
-	var (
-		originURL *url.URL
-		err       error
-	)
+func BookScanner(book *core.Book) RowScanner {
+	return func(rows pgx.Rows) error {
+		var (
+			name       sql.NullString
+			originURL  sql.NullString
+			pageCount  sql.NullInt32
+			deletedAt  sql.NullTime
+			verifiedAt sql.NullTime
+		)
 
-	if b.OriginURL.Valid {
-		originURL, err = url.Parse(b.OriginURL.String)
+		err := rows.Scan(
+			&book.ID,
+			&name,
+			&originURL,
+			&pageCount,
+			&book.AttributesParsed,
+			&book.CreateAt,
+			&book.Deleted,
+			&deletedAt,
+			&book.Verified,
+			&verifiedAt,
+			&book.IsRebuild,
+		)
 		if err != nil {
-			return core.Book{}, err
+			return fmt.Errorf("scan to model: %w", err)
 		}
+
+		if originURL.Valid {
+			book.OriginURL, err = url.Parse(originURL.String)
+			if err != nil {
+				return fmt.Errorf("parse origin url: %w", err)
+			}
+		}
+
+		book.Name = name.String
+		book.PageCount = int(pageCount.Int32)
+		book.DeletedAt = deletedAt.Time
+		book.VerifiedAt = verifiedAt.Time
+
+		return nil
 	}
-
-	return core.Book{
-		ID:               b.ID,
-		Name:             b.Name.String,
-		OriginURL:        originURL,
-		PageCount:        int(b.PageCount.Int32),
-		AttributesParsed: b.AttributesParsed,
-		CreateAt:         b.CreateAt,
-
-		Deleted:    b.Deleted,
-		DeletedAt:  b.DeletedAt.Time,
-		Verified:   b.Verified,
-		VerifiedAt: b.VerifiedAt.Time,
-
-		IsRebuild: b.IsRebuild,
-	}, nil
 }
