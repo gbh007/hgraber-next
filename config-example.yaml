@@ -1,7 +1,6 @@
 application:
   debug:
     logs: true
-    db: false
   metric:
     scrape_period:
       main_info: 10s
@@ -45,6 +44,8 @@ workers:
     queue_size: 100
     interval: 3s
 storage:
+  debug_squirrel: false
+  debug_pgx: false
   connection: postgres://hgrabernextuser:hgrabernextpass@localhost:5432/hgrabernext?sslmode=disable
   max_connections: 10
 file_storage:

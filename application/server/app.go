@@ -88,7 +88,8 @@ func Serve() {
 		ctx,
 		logger,
 		tracer,
-		cfg.Application.Debug.DB,
+		cfg.Storage.DebugPGX,
+		cfg.Storage.DebugSquirrel,
 		cfg.Storage.Connection,
 		cfg.Storage.MaxConnections,
 	)

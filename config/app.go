@@ -20,13 +20,11 @@ func ApplicationDefault() Application {
 
 type ApplicationDebug struct {
 	Logs bool `yaml:"logs" envconfig:"LOGS"`
-	DB   bool `yaml:"db" envconfig:"DB"`
 }
 
 func ApplicationDebugDefault() ApplicationDebug {
 	return ApplicationDebug{
 		Logs: false,
-		DB:   false,
 	}
 }
 
