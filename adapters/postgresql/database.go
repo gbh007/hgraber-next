@@ -7,20 +7,21 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
-	"github.com/jmoiron/sqlx"
+	"go.opentelemetry.io/otel/trace"
 )
 
 type Database struct {
 	logger *slog.Logger
+	tracer trace.Tracer
 	debug  bool
 
 	pool *pgxpool.Pool
-	db   *sqlx.DB
 }
 
 func New(
 	ctx context.Context,
 	logger *slog.Logger,
+	tracer trace.Tracer,
 	debug bool,
 	dataSourceName string,
 	maxConn int32,
@@ -34,23 +35,28 @@ func New(
 		pgxConfig.MaxConns = maxConn
 	}
 
+	// TODO: начать использовать
+	// pgxConfig.ConnConfig.Tracer = pgxTracer{
+	// 	logger: logger,
+	// 	tracer: tracer,
+	// 	debug:  debug,
+	// }
+
 	dbpool, err := pgxpool.NewWithConfig(ctx, pgxConfig)
 	if err != nil {
 		return nil, fmt.Errorf("create pool: %w", err)
 	}
 
-	db := sqlx.NewDb(stdlib.OpenDBFromPool(dbpool), "pgx")
-
-	err = migrate(ctx, logger, db.DB)
+	err = migrate(ctx, logger, stdlib.OpenDBFromPool(dbpool))
 	if err != nil {
 		return nil, fmt.Errorf("migrate: %w", err)
 	}
 
 	return &Database{
 		logger: logger,
+		tracer: tracer,
 		debug:  debug,
 		pool:   dbpool,
-		db:     db,
 	}, nil
 }
 
@@ -65,3 +71,29 @@ func (d *Database) squirrelDebugLog(ctx context.Context, query string, args []an
 		slog.Any("args", args),
 	)
 }
+
+/*  TODO: начать использовать
+var _ pgx.QueryTracer = (*pgxTracer)(nil)
+var _ pgx.BatchTracer = (*pgxTracer)(nil)
+
+type pgxTracer struct {
+	logger *slog.Logger
+	tracer trace.Tracer
+	debug  bool
+}
+
+func (t pgxTracer) TraceQueryStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryStartData) context.Context {
+	return ctx
+}
+
+func (t pgxTracer) TraceQueryEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryEndData) {}
+
+func (t pgxTracer) TraceBatchStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchStartData) context.Context {
+	return ctx
+}
+
+func (t pgxTracer) TraceBatchQuery(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchQueryData) {
+}
+
+func (t pgxTracer) TraceBatchEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchEndData) {}
+*/

@@ -9,7 +9,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/grafana/pyroscope-go v1.2.0
 	github.com/jackc/pgx/v5 v5.7.2
-	github.com/jmoiron/sqlx v1.4.0
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/ogen-go/ogen v1.10.0
 	github.com/pressly/goose/v3 v3.24.0

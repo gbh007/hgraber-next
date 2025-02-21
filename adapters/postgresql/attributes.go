@@ -15,28 +15,28 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-// TODO: объединить с потребителем
-func (d *Database) bookAttributes(ctx context.Context, bookID uuid.UUID) ([]*model.BookAttribute, error) {
-	raw := make([]*model.BookAttribute, 0)
-
-	err := d.db.SelectContext(ctx, &raw, `SELECT * FROM book_attributes WHERE book_id = $1;`, bookID)
-	if err != nil {
-		return nil, err
-	}
-
-	return raw, nil
-}
-
 func (d *Database) BookAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error) {
-	attributes, err := d.bookAttributes(ctx, bookID)
+	rows, err := d.pool.Query(ctx, `SELECT attr, value FROM book_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
-		return nil, fmt.Errorf("get attributes: %w", err)
+		return nil, fmt.Errorf("select rows: %w", err)
 	}
+
+	defer rows.Close()
 
 	out := make(map[string][]string, core.PossibleAttributeCount)
 
-	for _, attribute := range attributes {
-		out[attribute.Attr] = append(out[attribute.Attr], attribute.Value)
+	for rows.Next() {
+		var (
+			code  string
+			value string
+		)
+
+		err = rows.Scan(&code, &value)
+		if err != nil {
+			return nil, fmt.Errorf("scan rows: %w", err)
+		}
+
+		out[code] = append(out[code], value)
 	}
 
 	return out, nil
@@ -139,13 +139,7 @@ func (d *Database) AttributesCount(ctx context.Context) ([]core.AttributeVariant
 }
 
 func (d *Database) Attributes(ctx context.Context) ([]core.Attribute, error) {
-	builder := squirrel.Select(
-		"code",
-		"name",
-		"plural_name",
-		"\"order\"",
-		"description",
-	).
+	builder := squirrel.Select(model.AttributeColumns()...).
 		From("attributes").
 		PlaceholderFormat(squirrel.Dollar).
 		OrderBy("\"order\"")
@@ -168,20 +162,11 @@ func (d *Database) Attributes(ctx context.Context) ([]core.Attribute, error) {
 
 	for rows.Next() {
 		attribute := core.Attribute{}
-		description := sql.NullString{}
 
-		err = rows.Scan(
-			&attribute.Code,
-			&attribute.Name,
-			&attribute.PluralName,
-			&attribute.Order,
-			&description,
-		)
+		err = rows.Scan(model.AttributeScanner(&attribute))
 		if err != nil {
 			return nil, fmt.Errorf("scan row: %w", err)
 		}
-
-		attribute.Description = description.String
 
 		result = append(result, attribute)
 	}

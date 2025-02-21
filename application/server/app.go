@@ -87,6 +87,7 @@ func Serve() {
 	storage, err := postgresql.New(
 		ctx,
 		logger,
+		tracer,
 		cfg.Application.Debug.DB,
 		cfg.Storage.Connection,
 		cfg.Storage.MaxConnections,
