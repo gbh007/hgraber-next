@@ -1,6 +1,7 @@
+log:
+  include_source: false
+  level: info
 application:
-  debug:
-    logs: true
   metric:
     scrape_period:
       main_info: 10s

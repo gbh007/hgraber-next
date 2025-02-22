@@ -3,28 +3,16 @@ package config
 import "time"
 
 type Application struct {
-	Debug         ApplicationDebug `yaml:"debug" envconfig:"DEBUG"`
-	Metric        Metric           `yaml:"metric" envconfig:"METRIC"`
-	ServiceName   string           `yaml:"service_name" envconfig:"SERVICE_NAME"`
-	TraceEndpoint string           `yaml:"trace_endpoint" envconfig:"TRACE_ENDPOINT"`
-	Pyroscope     Pyroscope        `yaml:"pyroscope" envconfig:"PYROSCOPE"`
+	Metric        Metric    `yaml:"metric" envconfig:"METRIC"`
+	ServiceName   string    `yaml:"service_name" envconfig:"SERVICE_NAME"`
+	TraceEndpoint string    `yaml:"trace_endpoint" envconfig:"TRACE_ENDPOINT"`
+	Pyroscope     Pyroscope `yaml:"pyroscope" envconfig:"PYROSCOPE"`
 }
 
 func ApplicationDefault() Application {
 	return Application{
-		Debug:       ApplicationDebugDefault(),
 		Metric:      MetricDefault(),
 		ServiceName: "hgraber-next",
-	}
-}
-
-type ApplicationDebug struct {
-	Logs bool `yaml:"logs" envconfig:"LOGS"`
-}
-
-func ApplicationDebugDefault() ApplicationDebug {
-	return ApplicationDebug{
-		Logs: false,
 	}
 }
 

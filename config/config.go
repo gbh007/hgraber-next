@@ -5,6 +5,7 @@ import (
 )
 
 type Config struct {
+	Log         Log         `yaml:"log" envconfig:"LOG"`
 	Application Application `yaml:"application" envconfig:"APPLICATION"`
 	Parsing     Parsing     `yaml:"parsing" envconfig:"PARSING"`
 	Workers     Workers     `yaml:"workers" envconfig:"WORKERS"`
@@ -16,6 +17,7 @@ type Config struct {
 
 func ConfigDefault() Config {
 	return Config{
+		Log:         LogDefault(),
 		Application: ApplicationDefault(),
 		Parsing:     ParsingDefault(),
 		API:         APIDefault(),
