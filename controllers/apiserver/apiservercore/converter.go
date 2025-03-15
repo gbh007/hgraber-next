@@ -220,3 +220,15 @@ func ConvertFSDBFilesInfoToAPI(raw *core.SizeWithCount) serverapi.OptFSDBFilesIn
 		SizeFormatted: core.PrettySize(raw.Size),
 	})
 }
+
+func ConvertAttributeRemapToAPI(raw core.AttributeRemap) serverapi.AttributeRemap {
+	return serverapi.AttributeRemap{
+		Code:      raw.Code,
+		Value:     raw.Value,
+		ToCode:    OptString(raw.ToCode),
+		ToValue:   OptString(raw.ToValue),
+		IsDelete:  serverapi.NewOptBool(raw.IsDelete()),
+		CreatedAt: raw.CreatedAt,
+		UpdatedAt: OptTime(raw.UpdateAt),
+	}
+}

@@ -13,7 +13,7 @@ func (c *AttributeHandlersController) APIAttributeCountGet(ctx context.Context) 
 	attributes, err := c.attributeUseCases.AttributesCount(ctx)
 	if err != nil {
 		return &serverapi.APIAttributeCountGetInternalServerError{
-			InnerCode: apiservercore.WebAPIUseCaseCode,
+			InnerCode: apiservercore.AttributeUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}

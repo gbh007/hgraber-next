@@ -151,6 +151,62 @@ func encodeAPIAttributeColorUpdatePostRequest(
 	return nil
 }
 
+func encodeAPIAttributeRemapCreatePostRequest(
+	req *APIAttributeRemapCreatePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIAttributeRemapDeletePostRequest(
+	req *APIAttributeRemapDeletePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIAttributeRemapGetPostRequest(
+	req *APIAttributeRemapGetPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIAttributeRemapUpdatePostRequest(
+	req *APIAttributeRemapUpdatePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIBookDeletePostRequest(
 	req *APIBookDeletePostReq,
 	r *http.Request,

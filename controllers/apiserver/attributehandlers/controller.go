@@ -17,6 +17,12 @@ type AttributeUseCases interface {
 	DeleteAttributeColor(ctx context.Context, code, value string) error
 	AttributeColors(ctx context.Context) ([]core.AttributeColor, error)
 	AttributeColor(ctx context.Context, code, value string) (core.AttributeColor, error)
+
+	CreateAttributeRemap(ctx context.Context, ar core.AttributeRemap) error
+	UpdateAttributeRemap(ctx context.Context, ar core.AttributeRemap) error
+	DeleteAttributeRemap(ctx context.Context, code, value string) error
+	AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, error)
+	AttributeRemap(ctx context.Context, code, value string) (core.AttributeRemap, error)
 }
 
 type AttributeHandlersController struct {

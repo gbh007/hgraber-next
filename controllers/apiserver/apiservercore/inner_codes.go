@@ -12,5 +12,6 @@ const (
 	RebuilderUseCaseCode   = "rebuilder_uc"
 	FSUseCaseCode          = "fs_uc"
 	BFFUseCaseCode         = "bff_uc"
+	AttributeUseCaseCode   = "attribute_uc"
 	ValidationCode         = "validation"
 )

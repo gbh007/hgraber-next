@@ -2,6 +2,8 @@ package postgresql
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -144,7 +146,11 @@ func (d *Database) AttributeRemap(ctx context.Context, code, value string) (core
 	ar := core.AttributeRemap{}
 
 	err = row.Scan(model.AttributeRemapScanner(&ar))
-	if err != nil { // TODO: err no rows
+	if errors.Is(err, sql.ErrNoRows) {
+		return core.AttributeRemap{}, core.AttributeRemapNotFoundError
+	}
+
+	if err != nil {
 		return core.AttributeRemap{}, fmt.Errorf("scan row: %w", err)
 	}
 

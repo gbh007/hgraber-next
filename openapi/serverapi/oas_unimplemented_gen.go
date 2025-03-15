@@ -122,6 +122,51 @@ func (UnimplementedHandler) APIAttributeCountGet(ctx context.Context) (r APIAttr
 	return r, ht.ErrNotImplemented
 }
 
+// APIAttributeRemapCreatePost implements POST /api/attribute/remap/create operation.
+//
+// Создание ремапинга аттрибута.
+//
+// POST /api/attribute/remap/create
+func (UnimplementedHandler) APIAttributeRemapCreatePost(ctx context.Context, req *APIAttributeRemapCreatePostReq) (r APIAttributeRemapCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIAttributeRemapDeletePost implements POST /api/attribute/remap/delete operation.
+//
+// Удаление ремапинга атрибута.
+//
+// POST /api/attribute/remap/delete
+func (UnimplementedHandler) APIAttributeRemapDeletePost(ctx context.Context, req *APIAttributeRemapDeletePostReq) (r APIAttributeRemapDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIAttributeRemapGetPost implements POST /api/attribute/remap/get operation.
+//
+// Ремапинг конкретного атрибута.
+//
+// POST /api/attribute/remap/get
+func (UnimplementedHandler) APIAttributeRemapGetPost(ctx context.Context, req *APIAttributeRemapGetPostReq) (r APIAttributeRemapGetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIAttributeRemapListGet implements GET /api/attribute/remap/list operation.
+//
+// Ремапинги атрибутов.
+//
+// GET /api/attribute/remap/list
+func (UnimplementedHandler) APIAttributeRemapListGet(ctx context.Context) (r APIAttributeRemapListGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIAttributeRemapUpdatePost implements POST /api/attribute/remap/update operation.
+//
+// Обновления ремапинга атрибута.
+//
+// POST /api/attribute/remap/update
+func (UnimplementedHandler) APIAttributeRemapUpdatePost(ctx context.Context, req *APIAttributeRemapUpdatePostReq) (r APIAttributeRemapUpdatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIBookArchiveIDGet implements GET /api/book/archive/{id} operation.
 //
 // Получение архива с книгой.
