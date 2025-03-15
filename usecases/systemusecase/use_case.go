@@ -36,14 +36,19 @@ type workerManager interface {
 	SetRunnerCount(ctx context.Context, counts map[string]int)
 }
 
+type attributeRemaper interface {
+	RemapBooks(ctx context.Context) (systemmodel.RunnableTask, error)
+}
+
 type UseCase struct {
 	logger *slog.Logger
 
-	storage       storage
-	tmpStorage    tmpStorage
-	deduplicator  deduplicator
-	cleanuper     cleanuper
-	workerManager workerManager
+	storage          storage
+	tmpStorage       tmpStorage
+	deduplicator     deduplicator
+	cleanuper        cleanuper
+	workerManager    workerManager
+	attributeRemaper attributeRemaper
 }
 
 func New(
@@ -53,13 +58,15 @@ func New(
 	deduplicator deduplicator,
 	cleanuper cleanuper,
 	workerManager workerManager,
+	attributeRemaper attributeRemaper,
 ) *UseCase {
 	return &UseCase{
-		logger:        logger,
-		storage:       storage,
-		tmpStorage:    tmpStorage,
-		deduplicator:  deduplicator,
-		cleanuper:     cleanuper,
-		workerManager: workerManager,
+		logger:           logger,
+		storage:          storage,
+		tmpStorage:       tmpStorage,
+		deduplicator:     deduplicator,
+		cleanuper:        cleanuper,
+		workerManager:    workerManager,
+		attributeRemaper: attributeRemaper,
 	}
 }

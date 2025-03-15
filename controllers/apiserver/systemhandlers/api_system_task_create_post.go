@@ -16,9 +16,6 @@ func (c *SystemHandlersController) APISystemTaskCreatePost(ctx context.Context, 
 		code = systemmodel.DeduplicateFilesTaskCode
 	case "remove_detached_files":
 		code = systemmodel.RemoveDetachedFilesTaskCode
-	// FIXME: удалить если не будет дальнейших модификаций
-	// case "remove_mismatch_files":
-	// 	code = entities.RemoveFilesInStoragesMismatchTaskCode
 	case "fill_dead_hashes":
 		code = systemmodel.FillDeadHashesTaskCode
 	case "fill_dead_hashes_with_remove_deleted_pages":
@@ -27,6 +24,8 @@ func (c *SystemHandlersController) APISystemTaskCreatePost(ctx context.Context, 
 		code = systemmodel.CleanDeletedPagesTaskCode
 	case "clean_deleted_rebuilds":
 		code = systemmodel.CleanDeletedRebuildsTaskCode
+	case "remap_attributes":
+		code = systemmodel.RemapAttributesTaskCode
 	}
 
 	err := c.systemUseCases.RunTask(ctx, code)

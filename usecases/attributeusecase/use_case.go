@@ -4,6 +4,8 @@ import (
 	"context"
 	"log/slog"
 
+	"github.com/google/uuid"
+
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
@@ -24,20 +26,29 @@ type storage interface {
 	DeleteAttributeRemap(ctx context.Context, code, value string) error
 	AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, error)
 	AttributeRemap(ctx context.Context, code, value string) (core.AttributeRemap, error)
+
+	BookIDs(ctx context.Context, filter core.BookFilter) ([]uuid.UUID, error)
+	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
+	UpdateAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error
+	DeleteBookAttributes(ctx context.Context, bookID uuid.UUID) error
 }
 
 type UseCase struct {
 	logger *slog.Logger
 
 	storage storage
+
+	remapToLower bool
 }
 
 func New(
 	logger *slog.Logger,
 	storage storage,
+	remapToLower bool,
 ) *UseCase {
 	return &UseCase{
-		logger:  logger,
-		storage: storage,
+		logger:       logger,
+		storage:      storage,
+		remapToLower: remapToLower,
 	}
 }

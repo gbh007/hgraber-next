@@ -148,7 +148,7 @@ func Serve() {
 	reBuilderUseCases := rebuilderusecase.New(logger, tracer, storage, cfg.AttributeRemap.Auto, cfg.AttributeRemap.AllLower)
 	fsUseCases := filesystemusecase.New(logger, storage, fileStorageAdapter, tmpStorage)
 	bffUseCases := bffusecase.New(logger, storage, deduplicateUseCases)
-	attributeUseCases := attributeusecase.New(logger, storage)
+	attributeUseCases := attributeusecase.New(logger, storage, cfg.AttributeRemap.AllLower)
 	labelUseCases := labelusecase.New(logger, storage)
 
 	workersController := workermanager.New(
@@ -163,7 +163,7 @@ func Serve() {
 	)
 	asyncController.RegisterRunner(workersController)
 
-	systemUseCases := systemusecase.New(logger, storage, tmpStorage, deduplicateUseCases, cleanupUseCases, workersController)
+	systemUseCases := systemusecase.New(logger, storage, tmpStorage, deduplicateUseCases, cleanupUseCases, workersController, attributeUseCases)
 
 	agentUseCases := agentusecase.New(logger, agentSystem, storage)
 
