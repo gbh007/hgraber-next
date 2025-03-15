@@ -92,3 +92,7 @@ type AttributeRemap struct {
 func (ar AttributeRemap) IsDelete() bool {
 	return ar.ToCode == "" || ar.ToValue == ""
 }
+
+func (ar AttributeRemap) IsNoRemap() bool {
+	return ar.Code == ar.ToCode && ar.Value == ar.ToValue
+}
