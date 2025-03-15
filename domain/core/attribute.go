@@ -1,6 +1,7 @@
 package core
 
 import (
+	"strings"
 	"time"
 
 	"github.com/gbh007/hgraber-next/pkg"
@@ -95,4 +96,69 @@ func (ar AttributeRemap) IsDelete() bool {
 
 func (ar AttributeRemap) IsNoRemap() bool {
 	return ar.Code == ar.ToCode && ar.Value == ar.ToValue
+}
+
+type AttributeRemaper struct {
+	rules   map[string]map[string]AttributeRemap
+	toLower bool
+}
+
+func NewAttributeRemaper(remaps []AttributeRemap, toLower bool) AttributeRemaper {
+	rmp := AttributeRemaper{
+		rules:   make(map[string]map[string]AttributeRemap, PossibleAttributeCount),
+		toLower: toLower,
+	}
+
+	for _, remap := range remaps {
+		if _, ok := rmp.rules[remap.Code]; !ok {
+			rmp.rules[remap.Code] = make(map[string]AttributeRemap)
+		}
+
+		rmp.rules[remap.Code][remap.Value] = remap
+	}
+
+	return rmp
+}
+
+func (rmp AttributeRemaper) Remap(origin map[string][]string) map[string][]string {
+	attributes := make(map[string][]string, PossibleAttributeCount)
+
+	for code, values := range origin {
+		for _, value := range values {
+			v := value
+			if rmp.toLower {
+				v = strings.ToLower(v)
+			}
+
+			remap, ok := rmp.rules[code][value]
+			if !ok || remap.IsNoRemap() {
+				attributes[code] = append(attributes[code], v)
+
+				continue
+			}
+
+			if remap.IsDelete() {
+				continue
+			}
+
+			toV := remap.ToValue
+			if rmp.toLower {
+				toV = strings.ToLower(remap.ToValue)
+			}
+
+			attributes[remap.ToCode] = append(attributes[remap.ToCode], toV)
+		}
+	}
+
+	for code := range attributes {
+		attributes[code] = pkg.Unique(attributes[code])
+	}
+
+	for code, values := range attributes {
+		if len(values) == 0 {
+			delete(attributes, code)
+		}
+	}
+
+	return attributes
 }

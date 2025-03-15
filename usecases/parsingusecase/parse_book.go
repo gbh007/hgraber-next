@@ -26,20 +26,34 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.B
 		return fmt.Errorf("agent parse: %w", err)
 	}
 
-	attributes := make(map[string][]string, 7)
+	if len(info.Attributes) > 0 {
+		attributes := make(map[string][]string, 7)
 
-	for _, attr := range info.Attributes {
-		attributes[attr.Code] = attr.Values
-	}
+		for _, attr := range info.Attributes {
+			attributes[attr.Code] = attr.Values
+		}
 
-	err = uc.storage.UpdateOriginAttributes(ctx, book.ID, attributes)
-	if err != nil {
-		return fmt.Errorf("update original attributes: %w", err)
-	}
+		err = uc.storage.UpdateOriginAttributes(ctx, book.ID, attributes)
+		if err != nil {
+			return fmt.Errorf("update original attributes: %w", err)
+		}
 
-	err = uc.storage.UpdateAttributes(ctx, book.ID, attributes)
-	if err != nil {
-		return fmt.Errorf("update attributes: %w", err)
+		if uc.autoRemap {
+			remaps, err := uc.storage.AttributeRemaps(ctx)
+			if err != nil {
+				return fmt.Errorf("storage: get attributes remaps: %w", err)
+			}
+
+			remaper := core.NewAttributeRemaper(remaps, uc.remapToLower)
+			attributes = remaper.Remap(attributes)
+		}
+
+		if len(attributes) > 0 {
+			err = uc.storage.UpdateAttributes(ctx, book.ID, attributes)
+			if err != nil {
+				return fmt.Errorf("update attributes: %w", err)
+			}
+		}
 	}
 
 	err = uc.storage.UpdateBookPages(ctx, book.ID, pkg.Map(info.Pages, func(p agentmodel.AgentBookDetailsPagesItem) core.Page {

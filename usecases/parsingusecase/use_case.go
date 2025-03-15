@@ -40,6 +40,8 @@ type storage interface {
 	DeleteMirror(ctx context.Context, id uuid.UUID) error
 	Mirrors(ctx context.Context) ([]parsing.URLMirror, error)
 	Mirror(ctx context.Context, id uuid.UUID) (parsing.URLMirror, error)
+
+	AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, error)
 }
 
 type agentSystem interface {
@@ -69,6 +71,9 @@ type UseCase struct {
 	bookAdapter bookAdapter
 
 	parseBookTimeout time.Duration
+
+	autoRemap    bool
+	remapToLower bool
 }
 
 func New(
@@ -78,6 +83,8 @@ func New(
 	fileStorage fileStorage,
 	bookAdapter bookAdapter,
 	parseBookTimeout time.Duration,
+	autoRemap bool,
+	remapToLower bool,
 ) *UseCase {
 	return &UseCase{
 		logger:           logger,
@@ -86,5 +93,7 @@ func New(
 		fileStorage:      fileStorage,
 		parseBookTimeout: parseBookTimeout,
 		bookAdapter:      bookAdapter,
+		autoRemap:        autoRemap,
+		remapToLower:     remapToLower,
 	}
 }
