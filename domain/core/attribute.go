@@ -79,3 +79,16 @@ func AttributesValuesDiff(a, b []string) (aUniq, both, bUniq []string) {
 
 	return
 }
+
+type AttributeRemap struct {
+	Code      string
+	Value     string
+	ToCode    string
+	ToValue   string
+	CreatedAt time.Time
+	UpdateAt  time.Time
+}
+
+func (ar AttributeRemap) IsDelete() bool {
+	return ar.ToCode == "" || ar.ToValue == ""
+}
