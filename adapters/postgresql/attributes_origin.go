@@ -102,3 +102,35 @@ func (d *Database) DeleteBookOriginAttributes(ctx context.Context, bookID uuid.U
 
 	return nil
 }
+
+func (d *Database) BookOriginAttributesCount(ctx context.Context) ([]core.AttributeVariant, error) {
+	rows, err := d.pool.Query(ctx, `SELECT COUNT(*), attr, UNNEST(values) as value FROM book_origin_attributes GROUP BY attr, value;`)
+	if err != nil {
+		return nil, fmt.Errorf("get attributes count: %w", err)
+	}
+
+	defer rows.Close()
+
+	result := make([]core.AttributeVariant, 0, 100) // Берем изначальный запас емкости побольше
+
+	for rows.Next() {
+		var (
+			count int
+			code  string
+			value string
+		)
+
+		err := rows.Scan(&count, &code, &value)
+		if err != nil {
+			return nil, fmt.Errorf("get attributes count: scan row: %w", err)
+		}
+
+		result = append(result, core.AttributeVariant{
+			Code:  code,
+			Value: value,
+			Count: count,
+		})
+	}
+
+	return result, nil
+}

@@ -81,6 +81,13 @@ type Handler interface {
 	//
 	// GET /api/attribute/count
 	APIAttributeCountGet(ctx context.Context) (APIAttributeCountGetRes, error)
+	// APIAttributeOriginCountGet implements GET /api/attribute/origin/count operation.
+	//
+	// Получение информации о количестве вариантов
+	// оригинальных атрибутов.
+	//
+	// GET /api/attribute/origin/count
+	APIAttributeOriginCountGet(ctx context.Context) (APIAttributeOriginCountGetRes, error)
 	// APIAttributeRemapCreatePost implements POST /api/attribute/remap/create operation.
 	//
 	// Создание ремапинга аттрибута.

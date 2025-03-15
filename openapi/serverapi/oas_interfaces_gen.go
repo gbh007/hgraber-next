@@ -49,6 +49,10 @@ type APIAttributeCountGetRes interface {
 	aPIAttributeCountGetRes()
 }
 
+type APIAttributeOriginCountGetRes interface {
+	aPIAttributeOriginCountGetRes()
+}
+
 type APIAttributeRemapCreatePostRes interface {
 	aPIAttributeRemapCreatePostRes()
 }

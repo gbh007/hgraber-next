@@ -18,6 +18,7 @@ const (
 	APIAttributeColorListGetOperation         OperationName = "APIAttributeColorListGet"
 	APIAttributeColorUpdatePostOperation      OperationName = "APIAttributeColorUpdatePost"
 	APIAttributeCountGetOperation             OperationName = "APIAttributeCountGet"
+	APIAttributeOriginCountGetOperation       OperationName = "APIAttributeOriginCountGet"
 	APIAttributeRemapCreatePostOperation      OperationName = "APIAttributeRemapCreatePost"
 	APIAttributeRemapDeletePostOperation      OperationName = "APIAttributeRemapDeletePost"
 	APIAttributeRemapGetPostOperation         OperationName = "APIAttributeRemapGetPost"

@@ -382,6 +382,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
+					case 'o': // Prefix: "origin/count"
+						origElem := elem
+						if l := len("origin/count"); len(elem) >= l && elem[0:l] == "origin/count" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleAPIAttributeOriginCountGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
 					case 'r': // Prefix: "remap/"
 						origElem := elem
 						if l := len("remap/"); len(elem) >= l && elem[0:l] == "remap/" {
@@ -2247,6 +2268,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 
 							elem = origElem
+						}
+
+						elem = origElem
+					case 'o': // Prefix: "origin/count"
+						origElem := elem
+						if l := len("origin/count"); len(elem) >= l && elem[0:l] == "origin/count" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = APIAttributeOriginCountGetOperation
+								r.summary = "Количество вариантов оригинальных атрибутов"
+								r.operationID = ""
+								r.pathPattern = "/api/attribute/origin/count"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
 						}
 
 						elem = origElem

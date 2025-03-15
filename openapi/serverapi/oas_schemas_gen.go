@@ -1043,6 +1043,74 @@ type APIAttributeCountGetUnauthorized ErrorResponse
 
 func (*APIAttributeCountGetUnauthorized) aPIAttributeCountGetRes() {}
 
+type APIAttributeOriginCountGetForbidden ErrorResponse
+
+func (*APIAttributeOriginCountGetForbidden) aPIAttributeOriginCountGetRes() {}
+
+type APIAttributeOriginCountGetInternalServerError ErrorResponse
+
+func (*APIAttributeOriginCountGetInternalServerError) aPIAttributeOriginCountGetRes() {}
+
+type APIAttributeOriginCountGetOK struct {
+	// Список аттрибутов.
+	Attributes []APIAttributeOriginCountGetOKAttributesItem `json:"attributes"`
+}
+
+// GetAttributes returns the value of Attributes.
+func (s *APIAttributeOriginCountGetOK) GetAttributes() []APIAttributeOriginCountGetOKAttributesItem {
+	return s.Attributes
+}
+
+// SetAttributes sets the value of Attributes.
+func (s *APIAttributeOriginCountGetOK) SetAttributes(val []APIAttributeOriginCountGetOKAttributesItem) {
+	s.Attributes = val
+}
+
+func (*APIAttributeOriginCountGetOK) aPIAttributeOriginCountGetRes() {}
+
+type APIAttributeOriginCountGetOKAttributesItem struct {
+	// Код аттрибута.
+	Code string `json:"code"`
+	// Значение аттрибута.
+	Value string `json:"value"`
+	// Количество книг с таким аттрибутом.
+	Count int `json:"count"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeOriginCountGetOKAttributesItem) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeOriginCountGetOKAttributesItem) GetValue() string {
+	return s.Value
+}
+
+// GetCount returns the value of Count.
+func (s *APIAttributeOriginCountGetOKAttributesItem) GetCount() int {
+	return s.Count
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeOriginCountGetOKAttributesItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeOriginCountGetOKAttributesItem) SetValue(val string) {
+	s.Value = val
+}
+
+// SetCount sets the value of Count.
+func (s *APIAttributeOriginCountGetOKAttributesItem) SetCount(val int) {
+	s.Count = val
+}
+
+type APIAttributeOriginCountGetUnauthorized ErrorResponse
+
+func (*APIAttributeOriginCountGetUnauthorized) aPIAttributeOriginCountGetRes() {}
+
 type APIAttributeRemapCreatePostBadRequest ErrorResponse
 
 func (*APIAttributeRemapCreatePostBadRequest) aPIAttributeRemapCreatePostRes() {}

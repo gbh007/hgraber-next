@@ -12,6 +12,8 @@ import (
 
 type AttributeUseCases interface {
 	AttributesCount(ctx context.Context) ([]core.AttributeVariant, error)
+	BookOriginAttributesCount(ctx context.Context) ([]core.AttributeVariant, error)
+
 	CreateAttributeColor(ctx context.Context, color core.AttributeColor) error
 	UpdateAttributeColor(ctx context.Context, color core.AttributeColor) error
 	DeleteAttributeColor(ctx context.Context, code, value string) error

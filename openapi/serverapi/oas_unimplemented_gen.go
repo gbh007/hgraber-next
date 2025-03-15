@@ -122,6 +122,16 @@ func (UnimplementedHandler) APIAttributeCountGet(ctx context.Context) (r APIAttr
 	return r, ht.ErrNotImplemented
 }
 
+// APIAttributeOriginCountGet implements GET /api/attribute/origin/count operation.
+//
+// Получение информации о количестве вариантов
+// оригинальных атрибутов.
+//
+// GET /api/attribute/origin/count
+func (UnimplementedHandler) APIAttributeOriginCountGet(ctx context.Context) (r APIAttributeOriginCountGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIAttributeRemapCreatePost implements POST /api/attribute/remap/create operation.
 //
 // Создание ремапинга аттрибута.

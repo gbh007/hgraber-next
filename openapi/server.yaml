@@ -523,6 +523,58 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/attribute/origin/count:
+    get:
+      description: Получение информации о количестве вариантов оригинальных атрибутов
+      summary: Количество вариантов оригинальных атрибутов
+      tags:
+        - attribute
+      responses:
+        200:
+          description: Информация об атрибутах
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attributes:
+                    description: Список аттрибутов
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: Код аттрибута
+                        value:
+                          type: string
+                          description: Значение аттрибута
+                        count:
+                          type: integer
+                          description: Количество книг с таким аттрибутом
+                      required:
+                        - code
+                        - value
+                        - count
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/label/set:
     post:
       description: Установка метки на книгу или страницу

@@ -9,6 +9,8 @@ import (
 
 type storage interface {
 	AttributesCount(ctx context.Context) ([]core.AttributeVariant, error)
+	BookOriginAttributesCount(ctx context.Context) ([]core.AttributeVariant, error)
+
 	Attributes(ctx context.Context) ([]core.Attribute, error)
 
 	InsertAttributeColor(ctx context.Context, color core.AttributeColor) error
