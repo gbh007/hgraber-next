@@ -12153,9 +12153,57 @@ func (s *APIDeduplicateComparePostOK) encodeFields(e *jx.Encoder) {
 		e.FieldStart("target_covered_origin_without_dead_hashes")
 		e.Float64(s.TargetCoveredOriginWithoutDeadHashes)
 	}
+	{
+		if s.OriginBookSize.Set {
+			e.FieldStart("origin_book_size")
+			s.OriginBookSize.Encode(e)
+		}
+	}
+	{
+		if s.OriginBookSizeFormatted.Set {
+			e.FieldStart("origin_book_size_formatted")
+			s.OriginBookSizeFormatted.Encode(e)
+		}
+	}
+	{
+		if s.OriginPageAvgSize.Set {
+			e.FieldStart("origin_page_avg_size")
+			s.OriginPageAvgSize.Encode(e)
+		}
+	}
+	{
+		if s.OriginPageAvgSizeFormatted.Set {
+			e.FieldStart("origin_page_avg_size_formatted")
+			s.OriginPageAvgSizeFormatted.Encode(e)
+		}
+	}
+	{
+		if s.TargetBookSize.Set {
+			e.FieldStart("target_book_size")
+			s.TargetBookSize.Encode(e)
+		}
+	}
+	{
+		if s.TargetBookSizeFormatted.Set {
+			e.FieldStart("target_book_size_formatted")
+			s.TargetBookSizeFormatted.Encode(e)
+		}
+	}
+	{
+		if s.TargetPageAvgSize.Set {
+			e.FieldStart("target_page_avg_size")
+			s.TargetPageAvgSize.Encode(e)
+		}
+	}
+	{
+		if s.TargetPageAvgSizeFormatted.Set {
+			e.FieldStart("target_page_avg_size_formatted")
+			s.TargetPageAvgSizeFormatted.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIDeduplicateComparePostOK = [12]string{
+var jsonFieldsNameOfAPIDeduplicateComparePostOK = [20]string{
 	0:  "origin",
 	1:  "target",
 	2:  "origin_pages",
@@ -12168,6 +12216,14 @@ var jsonFieldsNameOfAPIDeduplicateComparePostOK = [12]string{
 	9:  "target_covered_origin",
 	10: "origin_covered_target_without_dead_hashes",
 	11: "target_covered_origin_without_dead_hashes",
+	12: "origin_book_size",
+	13: "origin_book_size_formatted",
+	14: "origin_page_avg_size",
+	15: "origin_page_avg_size_formatted",
+	16: "target_book_size",
+	17: "target_book_size_formatted",
+	18: "target_page_avg_size",
+	19: "target_page_avg_size_formatted",
 }
 
 // Decode decodes APIDeduplicateComparePostOK from json.
@@ -12175,7 +12231,7 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode APIDeduplicateComparePostOK to nil")
 	}
-	var requiredBitSet [2]uint8
+	var requiredBitSet [3]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -12349,6 +12405,86 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"target_covered_origin_without_dead_hashes\"")
 			}
+		case "origin_book_size":
+			if err := func() error {
+				s.OriginBookSize.Reset()
+				if err := s.OriginBookSize.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_book_size\"")
+			}
+		case "origin_book_size_formatted":
+			if err := func() error {
+				s.OriginBookSizeFormatted.Reset()
+				if err := s.OriginBookSizeFormatted.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_book_size_formatted\"")
+			}
+		case "origin_page_avg_size":
+			if err := func() error {
+				s.OriginPageAvgSize.Reset()
+				if err := s.OriginPageAvgSize.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_page_avg_size\"")
+			}
+		case "origin_page_avg_size_formatted":
+			if err := func() error {
+				s.OriginPageAvgSizeFormatted.Reset()
+				if err := s.OriginPageAvgSizeFormatted.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"origin_page_avg_size_formatted\"")
+			}
+		case "target_book_size":
+			if err := func() error {
+				s.TargetBookSize.Reset()
+				if err := s.TargetBookSize.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_book_size\"")
+			}
+		case "target_book_size_formatted":
+			if err := func() error {
+				s.TargetBookSizeFormatted.Reset()
+				if err := s.TargetBookSizeFormatted.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_book_size_formatted\"")
+			}
+		case "target_page_avg_size":
+			if err := func() error {
+				s.TargetPageAvgSize.Reset()
+				if err := s.TargetPageAvgSize.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_page_avg_size\"")
+			}
+		case "target_page_avg_size_formatted":
+			if err := func() error {
+				s.TargetPageAvgSizeFormatted.Reset()
+				if err := s.TargetPageAvgSizeFormatted.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"target_page_avg_size_formatted\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -12358,9 +12494,10 @@ func (s *APIDeduplicateComparePostOK) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [2]uint8{
+	for i, mask := range [3]uint8{
 		0b00000011,
 		0b00001111,
+		0b00000000,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

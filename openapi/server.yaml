@@ -2684,6 +2684,34 @@ paths:
                     type: number
                     format: float64
                     description: Процент (0-1) покрытия книги в оригинале без учета мертвых хешей
+                  origin_book_size:
+                    type: integer
+                    format: int64
+                    description: Размер страниц в оригинальной книге
+                  origin_book_size_formatted:
+                    type: string
+                    description: Размер страниц в оригинальной книге в человеко читаемом виде
+                  origin_page_avg_size:
+                    type: integer
+                    format: int64
+                    description: Средний размер страниц в оригинальной книге
+                  origin_page_avg_size_formatted:
+                    type: string
+                    description: Средний размер страниц в оригинальной книге в человеко читаемом виде
+                  target_book_size:
+                    type: integer
+                    format: int64
+                    description: Размер страниц в целевой книге
+                  target_book_size_formatted:
+                    type: string
+                    description: Размер страниц в целевой книге в человеко читаемом виде
+                  target_page_avg_size:
+                    type: integer
+                    format: int64
+                    description: Средний размер страниц в целевой книге
+                  target_page_avg_size_formatted:
+                    type: string
+                    description: Средний размер страниц в целевой книге в человеко читаемом виде
                 required:
                   - origin
                   - target

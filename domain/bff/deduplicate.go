@@ -27,6 +27,9 @@ type BookPagesCompareResult struct {
 	OriginBook core.Book
 	TargetBook core.Book
 
+	OriginSize core.SizeWithCount
+	TargetSize core.SizeWithCount
+
 	OriginPreviewPage PreviewPage
 	TargetPreviewPage PreviewPage
 

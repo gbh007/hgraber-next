@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -33,5 +34,15 @@ func (c *DeduplicateHandlersController) APIDeduplicateComparePost(ctx context.Co
 		TargetCoveredOrigin:                  data.ReverseEntryPercentage,
 		OriginCoveredTargetWithoutDeadHashes: data.EntryPercentageWithoutDeadHashes,
 		TargetCoveredOriginWithoutDeadHashes: data.ReverseEntryPercentageWithoutDeadHashes,
+
+		OriginBookSize:             serverapi.NewOptInt64(data.OriginSize.Size),
+		OriginBookSizeFormatted:    serverapi.NewOptString(core.PrettySize(data.OriginSize.Size)),
+		OriginPageAvgSize:          serverapi.NewOptInt64(data.OriginSize.Avg()),
+		OriginPageAvgSizeFormatted: serverapi.NewOptString(core.PrettySize(data.OriginSize.Avg())),
+
+		TargetBookSize:             serverapi.NewOptInt64(data.TargetSize.Size),
+		TargetBookSizeFormatted:    serverapi.NewOptString(core.PrettySize(data.TargetSize.Size)),
+		TargetPageAvgSize:          serverapi.NewOptInt64(data.TargetSize.Avg()),
+		TargetPageAvgSizeFormatted: serverapi.NewOptString(core.PrettySize(data.TargetSize.Avg())),
 	}, nil
 }

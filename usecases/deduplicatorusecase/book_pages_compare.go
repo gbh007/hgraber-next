@@ -92,6 +92,9 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 		} else {
 			result.BothPages = append(result.BothPages, preview) // Приоритет отдаем оригинальной книге
 		}
+
+		result.OriginSize.Count++
+		result.OriginSize.Size += page.Size
 	}
 
 	for _, page := range targetPages {
@@ -107,6 +110,9 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 		if hashes[page.FileHash] == 0 {
 			result.TargetPages = append(result.TargetPages, preview)
 		}
+
+		result.TargetSize.Count++
+		result.TargetSize.Size += page.Size
 	}
 
 	pageSortFunc := func(a, b bff.PreviewPage) int {

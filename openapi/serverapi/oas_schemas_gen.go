@@ -3225,6 +3225,26 @@ type APIDeduplicateComparePostOK struct {
 	// Процент (0-1) покрытия книги в оригинале без учета
 	// мертвых хешей.
 	TargetCoveredOriginWithoutDeadHashes float64 `json:"target_covered_origin_without_dead_hashes"`
+	// Размер страниц в оригинальной книге.
+	OriginBookSize OptInt64 `json:"origin_book_size"`
+	// Размер страниц в оригинальной книге в человеко
+	// читаемом виде.
+	OriginBookSizeFormatted OptString `json:"origin_book_size_formatted"`
+	// Средний размер страниц в оригинальной книге.
+	OriginPageAvgSize OptInt64 `json:"origin_page_avg_size"`
+	// Средний размер страниц в оригинальной книге в
+	// человеко читаемом виде.
+	OriginPageAvgSizeFormatted OptString `json:"origin_page_avg_size_formatted"`
+	// Размер страниц в целевой книге.
+	TargetBookSize OptInt64 `json:"target_book_size"`
+	// Размер страниц в целевой книге в человеко читаемом
+	// виде.
+	TargetBookSizeFormatted OptString `json:"target_book_size_formatted"`
+	// Средний размер страниц в целевой книге.
+	TargetPageAvgSize OptInt64 `json:"target_page_avg_size"`
+	// Средний размер страниц в целевой книге в человеко
+	// читаемом виде.
+	TargetPageAvgSizeFormatted OptString `json:"target_page_avg_size_formatted"`
 }
 
 // GetOrigin returns the value of Origin.
@@ -3287,6 +3307,46 @@ func (s *APIDeduplicateComparePostOK) GetTargetCoveredOriginWithoutDeadHashes() 
 	return s.TargetCoveredOriginWithoutDeadHashes
 }
 
+// GetOriginBookSize returns the value of OriginBookSize.
+func (s *APIDeduplicateComparePostOK) GetOriginBookSize() OptInt64 {
+	return s.OriginBookSize
+}
+
+// GetOriginBookSizeFormatted returns the value of OriginBookSizeFormatted.
+func (s *APIDeduplicateComparePostOK) GetOriginBookSizeFormatted() OptString {
+	return s.OriginBookSizeFormatted
+}
+
+// GetOriginPageAvgSize returns the value of OriginPageAvgSize.
+func (s *APIDeduplicateComparePostOK) GetOriginPageAvgSize() OptInt64 {
+	return s.OriginPageAvgSize
+}
+
+// GetOriginPageAvgSizeFormatted returns the value of OriginPageAvgSizeFormatted.
+func (s *APIDeduplicateComparePostOK) GetOriginPageAvgSizeFormatted() OptString {
+	return s.OriginPageAvgSizeFormatted
+}
+
+// GetTargetBookSize returns the value of TargetBookSize.
+func (s *APIDeduplicateComparePostOK) GetTargetBookSize() OptInt64 {
+	return s.TargetBookSize
+}
+
+// GetTargetBookSizeFormatted returns the value of TargetBookSizeFormatted.
+func (s *APIDeduplicateComparePostOK) GetTargetBookSizeFormatted() OptString {
+	return s.TargetBookSizeFormatted
+}
+
+// GetTargetPageAvgSize returns the value of TargetPageAvgSize.
+func (s *APIDeduplicateComparePostOK) GetTargetPageAvgSize() OptInt64 {
+	return s.TargetPageAvgSize
+}
+
+// GetTargetPageAvgSizeFormatted returns the value of TargetPageAvgSizeFormatted.
+func (s *APIDeduplicateComparePostOK) GetTargetPageAvgSizeFormatted() OptString {
+	return s.TargetPageAvgSizeFormatted
+}
+
 // SetOrigin sets the value of Origin.
 func (s *APIDeduplicateComparePostOK) SetOrigin(val BookSimple) {
 	s.Origin = val
@@ -3345,6 +3405,46 @@ func (s *APIDeduplicateComparePostOK) SetOriginCoveredTargetWithoutDeadHashes(va
 // SetTargetCoveredOriginWithoutDeadHashes sets the value of TargetCoveredOriginWithoutDeadHashes.
 func (s *APIDeduplicateComparePostOK) SetTargetCoveredOriginWithoutDeadHashes(val float64) {
 	s.TargetCoveredOriginWithoutDeadHashes = val
+}
+
+// SetOriginBookSize sets the value of OriginBookSize.
+func (s *APIDeduplicateComparePostOK) SetOriginBookSize(val OptInt64) {
+	s.OriginBookSize = val
+}
+
+// SetOriginBookSizeFormatted sets the value of OriginBookSizeFormatted.
+func (s *APIDeduplicateComparePostOK) SetOriginBookSizeFormatted(val OptString) {
+	s.OriginBookSizeFormatted = val
+}
+
+// SetOriginPageAvgSize sets the value of OriginPageAvgSize.
+func (s *APIDeduplicateComparePostOK) SetOriginPageAvgSize(val OptInt64) {
+	s.OriginPageAvgSize = val
+}
+
+// SetOriginPageAvgSizeFormatted sets the value of OriginPageAvgSizeFormatted.
+func (s *APIDeduplicateComparePostOK) SetOriginPageAvgSizeFormatted(val OptString) {
+	s.OriginPageAvgSizeFormatted = val
+}
+
+// SetTargetBookSize sets the value of TargetBookSize.
+func (s *APIDeduplicateComparePostOK) SetTargetBookSize(val OptInt64) {
+	s.TargetBookSize = val
+}
+
+// SetTargetBookSizeFormatted sets the value of TargetBookSizeFormatted.
+func (s *APIDeduplicateComparePostOK) SetTargetBookSizeFormatted(val OptString) {
+	s.TargetBookSizeFormatted = val
+}
+
+// SetTargetPageAvgSize sets the value of TargetPageAvgSize.
+func (s *APIDeduplicateComparePostOK) SetTargetPageAvgSize(val OptInt64) {
+	s.TargetPageAvgSize = val
+}
+
+// SetTargetPageAvgSizeFormatted sets the value of TargetPageAvgSizeFormatted.
+func (s *APIDeduplicateComparePostOK) SetTargetPageAvgSizeFormatted(val OptString) {
+	s.TargetPageAvgSizeFormatted = val
 }
 
 func (*APIDeduplicateComparePostOK) aPIDeduplicateComparePostRes() {}
