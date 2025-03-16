@@ -523,6 +523,58 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/attribute/origin/count:
+    get:
+      description: Получение информации о количестве вариантов оригинальных атрибутов
+      summary: Количество вариантов оригинальных атрибутов
+      tags:
+        - attribute
+      responses:
+        200:
+          description: Информация об атрибутах
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attributes:
+                    description: Список аттрибутов
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: Код аттрибута
+                        value:
+                          type: string
+                          description: Значение аттрибута
+                        count:
+                          type: integer
+                          description: Количество книг с таким аттрибутом
+                      required:
+                        - code
+                        - value
+                        - count
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/label/set:
     post:
       description: Установка метки на книгу или страницу
@@ -3584,6 +3636,280 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/attribute/remap/create:
+    post:
+      description: Создание ремапинга аттрибута
+      summary: Создание ремапинга аттрибута
+      tags:
+        - attribute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Цвет аттрибута
+              properties:
+                code:
+                  type: string
+                  description: Код атрибута
+                value:
+                  type: string
+                  description: Значение атрибута
+                to_code:
+                  type: string
+                  description: Код целевого атрибута
+                to_value:
+                  type: string
+                  description: Значение целевого атрибута
+                is_delete:
+                  type: boolean
+                  description: Признак того что при ремапинге аттрибут надо удалить
+              required:
+                - code
+                - value
+      responses:
+        204:
+          description: Успешное создание
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/attribute/remap/update:
+    post:
+      description: Обновления ремапинга атрибута
+      summary: Обновления ремапинга атрибута
+      tags:
+        - attribute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Цвет аттрибута
+              properties:
+                code:
+                  type: string
+                  description: Код атрибута
+                value:
+                  type: string
+                  description: Значение атрибута
+                to_code:
+                  type: string
+                  description: Код целевого атрибута
+                to_value:
+                  type: string
+                  description: Значение целевого атрибута
+                is_delete:
+                  type: boolean
+                  description: Признак того что при ремапинге аттрибут надо удалить
+              required:
+                - code
+                - value
+      responses:
+        204:
+          description: Успешное обновление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/attribute/remap/delete:
+    post:
+      description: Удаление ремапинга атрибута
+      summary: Удаление ремапинга атрибута
+      tags:
+        - attribute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: Код атрибута
+                value:
+                  type: string
+                  description: Значение атрибута
+              required:
+                - code
+                - value
+      responses:
+        204:
+          description: Успешное удаление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/attribute/remap/get:
+    post:
+      description: Ремапинг конкретного атрибута
+      summary: Ремапинг конкретного атрибута
+      tags:
+        - attribute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: Код атрибута
+                value:
+                  type: string
+                  description: Значение атрибута
+              required:
+                - code
+                - value
+      responses:
+        200:
+          description: Информация о ремапинге
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttributeRemap"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/attribute/remap/list:
+    get:
+      description: Ремапинги атрибутов
+      summary: Ремапинги атрибутов
+      tags:
+        - attribute
+      responses:
+        200:
+          description: Информация о цветах
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  remaps:
+                    description: Список ремапингов
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AttributeRemap"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/fs/get:
     post:
       description: Данные настроек файловой системы
@@ -4275,6 +4601,38 @@ components:
         - value
         - text_color
         - background_color
+        - created_at
+
+    AttributeRemap:
+      type: object
+      description: Ремапинг аттрибута
+      properties:
+        code:
+          type: string
+          description: Код атрибута
+        value:
+          type: string
+          description: Значение атрибута
+        to_code:
+          type: string
+          description: Код целевого атрибута
+        to_value:
+          type: string
+          description: Значение целевого атрибута
+        is_delete:
+          type: boolean
+          description: Признак того что это удаление атрибута
+        created_at:
+          type: string
+          format: date-time
+          description: Время создания
+        updated_at:
+          type: string
+          format: date-time
+          description: Время обновления
+      required:
+        - code
+        - value
         - created_at
 
     BookRaw:

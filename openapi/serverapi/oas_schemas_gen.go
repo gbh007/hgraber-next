@@ -1043,6 +1043,372 @@ type APIAttributeCountGetUnauthorized ErrorResponse
 
 func (*APIAttributeCountGetUnauthorized) aPIAttributeCountGetRes() {}
 
+type APIAttributeOriginCountGetForbidden ErrorResponse
+
+func (*APIAttributeOriginCountGetForbidden) aPIAttributeOriginCountGetRes() {}
+
+type APIAttributeOriginCountGetInternalServerError ErrorResponse
+
+func (*APIAttributeOriginCountGetInternalServerError) aPIAttributeOriginCountGetRes() {}
+
+type APIAttributeOriginCountGetOK struct {
+	// Список аттрибутов.
+	Attributes []APIAttributeOriginCountGetOKAttributesItem `json:"attributes"`
+}
+
+// GetAttributes returns the value of Attributes.
+func (s *APIAttributeOriginCountGetOK) GetAttributes() []APIAttributeOriginCountGetOKAttributesItem {
+	return s.Attributes
+}
+
+// SetAttributes sets the value of Attributes.
+func (s *APIAttributeOriginCountGetOK) SetAttributes(val []APIAttributeOriginCountGetOKAttributesItem) {
+	s.Attributes = val
+}
+
+func (*APIAttributeOriginCountGetOK) aPIAttributeOriginCountGetRes() {}
+
+type APIAttributeOriginCountGetOKAttributesItem struct {
+	// Код аттрибута.
+	Code string `json:"code"`
+	// Значение аттрибута.
+	Value string `json:"value"`
+	// Количество книг с таким аттрибутом.
+	Count int `json:"count"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeOriginCountGetOKAttributesItem) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeOriginCountGetOKAttributesItem) GetValue() string {
+	return s.Value
+}
+
+// GetCount returns the value of Count.
+func (s *APIAttributeOriginCountGetOKAttributesItem) GetCount() int {
+	return s.Count
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeOriginCountGetOKAttributesItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeOriginCountGetOKAttributesItem) SetValue(val string) {
+	s.Value = val
+}
+
+// SetCount sets the value of Count.
+func (s *APIAttributeOriginCountGetOKAttributesItem) SetCount(val int) {
+	s.Count = val
+}
+
+type APIAttributeOriginCountGetUnauthorized ErrorResponse
+
+func (*APIAttributeOriginCountGetUnauthorized) aPIAttributeOriginCountGetRes() {}
+
+type APIAttributeRemapCreatePostBadRequest ErrorResponse
+
+func (*APIAttributeRemapCreatePostBadRequest) aPIAttributeRemapCreatePostRes() {}
+
+type APIAttributeRemapCreatePostForbidden ErrorResponse
+
+func (*APIAttributeRemapCreatePostForbidden) aPIAttributeRemapCreatePostRes() {}
+
+type APIAttributeRemapCreatePostInternalServerError ErrorResponse
+
+func (*APIAttributeRemapCreatePostInternalServerError) aPIAttributeRemapCreatePostRes() {}
+
+// APIAttributeRemapCreatePostNoContent is response for APIAttributeRemapCreatePost operation.
+type APIAttributeRemapCreatePostNoContent struct{}
+
+func (*APIAttributeRemapCreatePostNoContent) aPIAttributeRemapCreatePostRes() {}
+
+// Цвет аттрибута.
+type APIAttributeRemapCreatePostReq struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+	// Код целевого атрибута.
+	ToCode OptString `json:"to_code"`
+	// Значение целевого атрибута.
+	ToValue OptString `json:"to_value"`
+	// Признак того что при ремапинге аттрибут надо удалить.
+	IsDelete OptBool `json:"is_delete"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeRemapCreatePostReq) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeRemapCreatePostReq) GetValue() string {
+	return s.Value
+}
+
+// GetToCode returns the value of ToCode.
+func (s *APIAttributeRemapCreatePostReq) GetToCode() OptString {
+	return s.ToCode
+}
+
+// GetToValue returns the value of ToValue.
+func (s *APIAttributeRemapCreatePostReq) GetToValue() OptString {
+	return s.ToValue
+}
+
+// GetIsDelete returns the value of IsDelete.
+func (s *APIAttributeRemapCreatePostReq) GetIsDelete() OptBool {
+	return s.IsDelete
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeRemapCreatePostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeRemapCreatePostReq) SetValue(val string) {
+	s.Value = val
+}
+
+// SetToCode sets the value of ToCode.
+func (s *APIAttributeRemapCreatePostReq) SetToCode(val OptString) {
+	s.ToCode = val
+}
+
+// SetToValue sets the value of ToValue.
+func (s *APIAttributeRemapCreatePostReq) SetToValue(val OptString) {
+	s.ToValue = val
+}
+
+// SetIsDelete sets the value of IsDelete.
+func (s *APIAttributeRemapCreatePostReq) SetIsDelete(val OptBool) {
+	s.IsDelete = val
+}
+
+type APIAttributeRemapCreatePostUnauthorized ErrorResponse
+
+func (*APIAttributeRemapCreatePostUnauthorized) aPIAttributeRemapCreatePostRes() {}
+
+type APIAttributeRemapDeletePostBadRequest ErrorResponse
+
+func (*APIAttributeRemapDeletePostBadRequest) aPIAttributeRemapDeletePostRes() {}
+
+type APIAttributeRemapDeletePostForbidden ErrorResponse
+
+func (*APIAttributeRemapDeletePostForbidden) aPIAttributeRemapDeletePostRes() {}
+
+type APIAttributeRemapDeletePostInternalServerError ErrorResponse
+
+func (*APIAttributeRemapDeletePostInternalServerError) aPIAttributeRemapDeletePostRes() {}
+
+// APIAttributeRemapDeletePostNoContent is response for APIAttributeRemapDeletePost operation.
+type APIAttributeRemapDeletePostNoContent struct{}
+
+func (*APIAttributeRemapDeletePostNoContent) aPIAttributeRemapDeletePostRes() {}
+
+type APIAttributeRemapDeletePostNotFound ErrorResponse
+
+func (*APIAttributeRemapDeletePostNotFound) aPIAttributeRemapDeletePostRes() {}
+
+type APIAttributeRemapDeletePostReq struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeRemapDeletePostReq) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeRemapDeletePostReq) GetValue() string {
+	return s.Value
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeRemapDeletePostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeRemapDeletePostReq) SetValue(val string) {
+	s.Value = val
+}
+
+type APIAttributeRemapDeletePostUnauthorized ErrorResponse
+
+func (*APIAttributeRemapDeletePostUnauthorized) aPIAttributeRemapDeletePostRes() {}
+
+type APIAttributeRemapGetPostForbidden ErrorResponse
+
+func (*APIAttributeRemapGetPostForbidden) aPIAttributeRemapGetPostRes() {}
+
+type APIAttributeRemapGetPostInternalServerError ErrorResponse
+
+func (*APIAttributeRemapGetPostInternalServerError) aPIAttributeRemapGetPostRes() {}
+
+type APIAttributeRemapGetPostNotFound ErrorResponse
+
+func (*APIAttributeRemapGetPostNotFound) aPIAttributeRemapGetPostRes() {}
+
+type APIAttributeRemapGetPostReq struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeRemapGetPostReq) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeRemapGetPostReq) GetValue() string {
+	return s.Value
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeRemapGetPostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeRemapGetPostReq) SetValue(val string) {
+	s.Value = val
+}
+
+type APIAttributeRemapGetPostUnauthorized ErrorResponse
+
+func (*APIAttributeRemapGetPostUnauthorized) aPIAttributeRemapGetPostRes() {}
+
+type APIAttributeRemapListGetForbidden ErrorResponse
+
+func (*APIAttributeRemapListGetForbidden) aPIAttributeRemapListGetRes() {}
+
+type APIAttributeRemapListGetInternalServerError ErrorResponse
+
+func (*APIAttributeRemapListGetInternalServerError) aPIAttributeRemapListGetRes() {}
+
+type APIAttributeRemapListGetOK struct {
+	// Список ремапингов.
+	Remaps []AttributeRemap `json:"remaps"`
+}
+
+// GetRemaps returns the value of Remaps.
+func (s *APIAttributeRemapListGetOK) GetRemaps() []AttributeRemap {
+	return s.Remaps
+}
+
+// SetRemaps sets the value of Remaps.
+func (s *APIAttributeRemapListGetOK) SetRemaps(val []AttributeRemap) {
+	s.Remaps = val
+}
+
+func (*APIAttributeRemapListGetOK) aPIAttributeRemapListGetRes() {}
+
+type APIAttributeRemapListGetUnauthorized ErrorResponse
+
+func (*APIAttributeRemapListGetUnauthorized) aPIAttributeRemapListGetRes() {}
+
+type APIAttributeRemapUpdatePostBadRequest ErrorResponse
+
+func (*APIAttributeRemapUpdatePostBadRequest) aPIAttributeRemapUpdatePostRes() {}
+
+type APIAttributeRemapUpdatePostForbidden ErrorResponse
+
+func (*APIAttributeRemapUpdatePostForbidden) aPIAttributeRemapUpdatePostRes() {}
+
+type APIAttributeRemapUpdatePostInternalServerError ErrorResponse
+
+func (*APIAttributeRemapUpdatePostInternalServerError) aPIAttributeRemapUpdatePostRes() {}
+
+// APIAttributeRemapUpdatePostNoContent is response for APIAttributeRemapUpdatePost operation.
+type APIAttributeRemapUpdatePostNoContent struct{}
+
+func (*APIAttributeRemapUpdatePostNoContent) aPIAttributeRemapUpdatePostRes() {}
+
+type APIAttributeRemapUpdatePostNotFound ErrorResponse
+
+func (*APIAttributeRemapUpdatePostNotFound) aPIAttributeRemapUpdatePostRes() {}
+
+// Цвет аттрибута.
+type APIAttributeRemapUpdatePostReq struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+	// Код целевого атрибута.
+	ToCode OptString `json:"to_code"`
+	// Значение целевого атрибута.
+	ToValue OptString `json:"to_value"`
+	// Признак того что при ремапинге аттрибут надо удалить.
+	IsDelete OptBool `json:"is_delete"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIAttributeRemapUpdatePostReq) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIAttributeRemapUpdatePostReq) GetValue() string {
+	return s.Value
+}
+
+// GetToCode returns the value of ToCode.
+func (s *APIAttributeRemapUpdatePostReq) GetToCode() OptString {
+	return s.ToCode
+}
+
+// GetToValue returns the value of ToValue.
+func (s *APIAttributeRemapUpdatePostReq) GetToValue() OptString {
+	return s.ToValue
+}
+
+// GetIsDelete returns the value of IsDelete.
+func (s *APIAttributeRemapUpdatePostReq) GetIsDelete() OptBool {
+	return s.IsDelete
+}
+
+// SetCode sets the value of Code.
+func (s *APIAttributeRemapUpdatePostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIAttributeRemapUpdatePostReq) SetValue(val string) {
+	s.Value = val
+}
+
+// SetToCode sets the value of ToCode.
+func (s *APIAttributeRemapUpdatePostReq) SetToCode(val OptString) {
+	s.ToCode = val
+}
+
+// SetToValue sets the value of ToValue.
+func (s *APIAttributeRemapUpdatePostReq) SetToValue(val OptString) {
+	s.ToValue = val
+}
+
+// SetIsDelete sets the value of IsDelete.
+func (s *APIAttributeRemapUpdatePostReq) SetIsDelete(val OptBool) {
+	s.IsDelete = val
+}
+
+type APIAttributeRemapUpdatePostUnauthorized ErrorResponse
+
+func (*APIAttributeRemapUpdatePostUnauthorized) aPIAttributeRemapUpdatePostRes() {}
+
 type APIBookArchiveIDGetBadRequest ErrorResponse
 
 func (*APIBookArchiveIDGetBadRequest) aPIBookArchiveIDGetRes() {}
@@ -5946,6 +6312,97 @@ func (s *AttributeColor) SetCreatedAt(val time.Time) {
 }
 
 func (*AttributeColor) aPIAttributeColorGetPostRes() {}
+
+// Ремапинг аттрибута.
+// Ref: #/components/schemas/AttributeRemap
+type AttributeRemap struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+	// Код целевого атрибута.
+	ToCode OptString `json:"to_code"`
+	// Значение целевого атрибута.
+	ToValue OptString `json:"to_value"`
+	// Признак того что это удаление атрибута.
+	IsDelete OptBool `json:"is_delete"`
+	// Время создания.
+	CreatedAt time.Time `json:"created_at"`
+	// Время обновления.
+	UpdatedAt OptDateTime `json:"updated_at"`
+}
+
+// GetCode returns the value of Code.
+func (s *AttributeRemap) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *AttributeRemap) GetValue() string {
+	return s.Value
+}
+
+// GetToCode returns the value of ToCode.
+func (s *AttributeRemap) GetToCode() OptString {
+	return s.ToCode
+}
+
+// GetToValue returns the value of ToValue.
+func (s *AttributeRemap) GetToValue() OptString {
+	return s.ToValue
+}
+
+// GetIsDelete returns the value of IsDelete.
+func (s *AttributeRemap) GetIsDelete() OptBool {
+	return s.IsDelete
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *AttributeRemap) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *AttributeRemap) GetUpdatedAt() OptDateTime {
+	return s.UpdatedAt
+}
+
+// SetCode sets the value of Code.
+func (s *AttributeRemap) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *AttributeRemap) SetValue(val string) {
+	s.Value = val
+}
+
+// SetToCode sets the value of ToCode.
+func (s *AttributeRemap) SetToCode(val OptString) {
+	s.ToCode = val
+}
+
+// SetToValue sets the value of ToValue.
+func (s *AttributeRemap) SetToValue(val OptString) {
+	s.ToValue = val
+}
+
+// SetIsDelete sets the value of IsDelete.
+func (s *AttributeRemap) SetIsDelete(val OptBool) {
+	s.IsDelete = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *AttributeRemap) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *AttributeRemap) SetUpdatedAt(val OptDateTime) {
+	s.UpdatedAt = val
+}
+
+func (*AttributeRemap) aPIAttributeRemapGetPostRes() {}
 
 // Аттрибут книги.
 // Ref: #/components/schemas/BookAttribute

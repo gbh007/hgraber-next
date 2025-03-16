@@ -13,7 +13,7 @@ func (c *AttributeHandlersController) APIAttributeColorListGet(ctx context.Conte
 	colors, err := c.attributeUseCases.AttributeColors(ctx)
 	if err != nil {
 		return &serverapi.APIAttributeColorListGetInternalServerError{
-			InnerCode: apiservercore.WebAPIUseCaseCode,
+			InnerCode: apiservercore.AttributeUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}

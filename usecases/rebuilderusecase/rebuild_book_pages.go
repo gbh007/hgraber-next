@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/pkg"
 )
 
 func (uc *UseCase) rebuildBookPages(
@@ -18,7 +19,7 @@ func (uc *UseCase) rebuildBookPages(
 	resources rebuildPageResources,
 	newPageOrder map[int]int,
 ) (rebuildedPagesInfo, error) {
-	selectedPages = slices.Compact(selectedPages)
+	selectedPages = pkg.Unique(selectedPages)
 
 	if len(newPageOrder) > 0 {
 		slices.SortFunc(selectedPages, func(a, b int) int {

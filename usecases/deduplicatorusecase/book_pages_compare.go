@@ -9,6 +9,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/pkg"
 )
 
 func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (bff.BookPagesCompareResult, error) {
@@ -57,7 +58,7 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 		md5Sums = append(md5Sums, page.Md5Sum)
 	}
 
-	md5Sums = slices.Compact(md5Sums)
+	md5Sums = pkg.Unique(md5Sums)
 
 	deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, md5Sums)
 	if err != nil {

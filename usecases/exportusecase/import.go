@@ -150,14 +150,30 @@ func (uc *UseCase) ImportArchive(
 		}
 	}
 
-	err = uc.storage.UpdateOriginAttributes(ctx, bookID, book.Attributes)
-	if err != nil {
-		return uuid.Nil, fmt.Errorf("set original attributes: %w", err)
-	}
+	if len(book.Attributes) > 0 {
+		err = uc.storage.UpdateOriginAttributes(ctx, bookID, book.Attributes)
+		if err != nil {
+			return uuid.Nil, fmt.Errorf("set original attributes: %w", err)
+		}
 
-	err = uc.storage.UpdateAttributes(ctx, bookID, book.Attributes)
-	if err != nil {
-		return uuid.Nil, fmt.Errorf("set attributes: %w", err)
+		attributes := book.Attributes
+
+		if uc.autoRemap {
+			remaps, err := uc.storage.AttributeRemaps(ctx)
+			if err != nil {
+				return uuid.Nil, fmt.Errorf("storage: get attributes remaps: %w", err)
+			}
+
+			remaper := core.NewAttributeRemaper(remaps, uc.remapToLower)
+			attributes = remaper.Remap(attributes)
+		}
+
+		if len(attributes) > 0 {
+			err = uc.storage.UpdateAttributes(ctx, bookID, attributes)
+			if err != nil {
+				return uuid.Nil, fmt.Errorf("set attributes: %w", err)
+			}
+		}
 	}
 
 	for i, p := range book.Pages {

@@ -11,7 +11,7 @@ func (c *AttributeHandlersController) APIAttributeColorGetPost(ctx context.Conte
 	color, err := c.attributeUseCases.AttributeColor(ctx, req.Code, req.Value)
 	if err != nil {
 		return &serverapi.APIAttributeColorGetPostInternalServerError{
-			InnerCode: apiservercore.WebAPIUseCaseCode,
+			InnerCode: apiservercore.AttributeUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}

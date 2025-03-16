@@ -56,9 +56,23 @@ func (uc *UseCase) rebuildBookSave(
 			return fmt.Errorf("storage: set origin attributes: %w", err)
 		}
 
-		err = uc.storage.UpdateAttributes(ctx, bookToMerge.ID, newAttributes)
-		if err != nil {
-			return fmt.Errorf("storage: set attributes: %w", err)
+		attributes := newAttributes
+
+		if uc.autoRemap {
+			remaps, err := uc.storage.AttributeRemaps(ctx)
+			if err != nil {
+				return fmt.Errorf("storage: get attributes remaps: %w", err)
+			}
+
+			remaper := core.NewAttributeRemaper(remaps, uc.remapToLower)
+			attributes = remaper.Remap(attributes)
+		}
+
+		if len(attributes) > 0 {
+			err = uc.storage.UpdateAttributes(ctx, bookToMerge.ID, attributes)
+			if err != nil {
+				return fmt.Errorf("storage: set attributes: %w", err)
+			}
 		}
 	}
 

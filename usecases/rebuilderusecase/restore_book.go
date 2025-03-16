@@ -71,9 +71,21 @@ func (uc *UseCase) RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages 
 	}
 
 	if len(attributes) > 0 {
-		err = uc.storage.UpdateAttributes(ctx, bookID, attributes)
-		if err != nil {
-			return fmt.Errorf("storage: update book attributes: %w", err)
+		if uc.autoRemap {
+			remaps, err := uc.storage.AttributeRemaps(ctx)
+			if err != nil {
+				return fmt.Errorf("storage: get attributes remaps: %w", err)
+			}
+
+			remaper := core.NewAttributeRemaper(remaps, uc.remapToLower)
+			attributes = remaper.Remap(attributes)
+		}
+
+		if len(attributes) > 0 {
+			err = uc.storage.UpdateAttributes(ctx, bookID, attributes)
+			if err != nil {
+				return fmt.Errorf("storage: update book attributes: %w", err)
+			}
 		}
 	}
 

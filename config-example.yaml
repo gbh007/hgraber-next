@@ -63,3 +63,6 @@ agent_server:
   token: local-cache
   log_error_handler: false
   debug: false
+attribute_remap:
+  auto: true
+  all_lower: true

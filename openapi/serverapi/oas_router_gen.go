@@ -214,9 +214,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 't': // Prefix: "ttribute/co"
+				case 't': // Prefix: "ttribute/"
 					origElem := elem
-					if l := len("ttribute/co"); len(elem) >= l && elem[0:l] == "ttribute/co" {
+					if l := len("ttribute/"); len(elem) >= l && elem[0:l] == "ttribute/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -226,9 +226,186 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
-					case 'l': // Prefix: "lor/"
+					case 'c': // Prefix: "co"
 						origElem := elem
-						if l := len("lor/"); len(elem) >= l && elem[0:l] == "lor/" {
+						if l := len("co"); len(elem) >= l && elem[0:l] == "co" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'l': // Prefix: "lor/"
+							origElem := elem
+							if l := len("lor/"); len(elem) >= l && elem[0:l] == "lor/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'c': // Prefix: "create"
+								origElem := elem
+								if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleAPIAttributeColorCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							case 'd': // Prefix: "delete"
+								origElem := elem
+								if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleAPIAttributeColorDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							case 'g': // Prefix: "get"
+								origElem := elem
+								if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleAPIAttributeColorGetPostRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							case 'l': // Prefix: "list"
+								origElem := elem
+								if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "GET":
+										s.handleAPIAttributeColorListGetRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "GET")
+									}
+
+									return
+								}
+
+								elem = origElem
+							case 'u': // Prefix: "update"
+								origElem := elem
+								if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleAPIAttributeColorUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						case 'u': // Prefix: "unt"
+							origElem := elem
+							if l := len("unt"); len(elem) >= l && elem[0:l] == "unt" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleAPIAttributeCountGetRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'o': // Prefix: "origin/count"
+						origElem := elem
+						if l := len("origin/count"); len(elem) >= l && elem[0:l] == "origin/count" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleAPIAttributeOriginCountGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'r': // Prefix: "remap/"
+						origElem := elem
+						if l := len("remap/"); len(elem) >= l && elem[0:l] == "remap/" {
 							elem = elem[l:]
 						} else {
 							break
@@ -250,7 +427,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "POST":
-									s.handleAPIAttributeColorCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+									s.handleAPIAttributeRemapCreatePostRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "POST")
 								}
@@ -271,7 +448,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "POST":
-									s.handleAPIAttributeColorDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+									s.handleAPIAttributeRemapDeletePostRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "POST")
 								}
@@ -292,7 +469,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "POST":
-									s.handleAPIAttributeColorGetPostRequest([0]string{}, elemIsEscaped, w, r)
+									s.handleAPIAttributeRemapGetPostRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "POST")
 								}
@@ -313,7 +490,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "GET":
-									s.handleAPIAttributeColorListGetRequest([0]string{}, elemIsEscaped, w, r)
+									s.handleAPIAttributeRemapListGetRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "GET")
 								}
@@ -334,7 +511,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "POST":
-									s.handleAPIAttributeColorUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
+									s.handleAPIAttributeRemapUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "POST")
 								}
@@ -343,27 +520,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							elem = origElem
-						}
-
-						elem = origElem
-					case 'u': // Prefix: "unt"
-						origElem := elem
-						if l := len("unt"); len(elem) >= l && elem[0:l] == "unt" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleAPIAttributeCountGetRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET")
-							}
-
-							return
 						}
 
 						elem = origElem
@@ -1923,9 +2079,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				case 't': // Prefix: "ttribute/co"
+				case 't': // Prefix: "ttribute/"
 					origElem := elem
-					if l := len("ttribute/co"); len(elem) >= l && elem[0:l] == "ttribute/co" {
+					if l := len("ttribute/"); len(elem) >= l && elem[0:l] == "ttribute/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -1935,9 +2091,214 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
-					case 'l': // Prefix: "lor/"
+					case 'c': // Prefix: "co"
 						origElem := elem
-						if l := len("lor/"); len(elem) >= l && elem[0:l] == "lor/" {
+						if l := len("co"); len(elem) >= l && elem[0:l] == "co" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'l': // Prefix: "lor/"
+							origElem := elem
+							if l := len("lor/"); len(elem) >= l && elem[0:l] == "lor/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'c': // Prefix: "create"
+								origElem := elem
+								if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "POST":
+										r.name = APIAttributeColorCreatePostOperation
+										r.summary = "Создание покраски аттрибута"
+										r.operationID = ""
+										r.pathPattern = "/api/attribute/color/create"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							case 'd': // Prefix: "delete"
+								origElem := elem
+								if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "POST":
+										r.name = APIAttributeColorDeletePostOperation
+										r.summary = "Удаление цвета атрибута"
+										r.operationID = ""
+										r.pathPattern = "/api/attribute/color/delete"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							case 'g': // Prefix: "get"
+								origElem := elem
+								if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "POST":
+										r.name = APIAttributeColorGetPostOperation
+										r.summary = "Цвет конкретного атрибута"
+										r.operationID = ""
+										r.pathPattern = "/api/attribute/color/get"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							case 'l': // Prefix: "list"
+								origElem := elem
+								if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "GET":
+										r.name = APIAttributeColorListGetOperation
+										r.summary = "Цвета атрибутов"
+										r.operationID = ""
+										r.pathPattern = "/api/attribute/color/list"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							case 'u': // Prefix: "update"
+								origElem := elem
+								if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "POST":
+										r.name = APIAttributeColorUpdatePostOperation
+										r.summary = "Обновления покраски атрибута"
+										r.operationID = ""
+										r.pathPattern = "/api/attribute/color/update"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						case 'u': // Prefix: "unt"
+							origElem := elem
+							if l := len("unt"); len(elem) >= l && elem[0:l] == "unt" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = APIAttributeCountGetOperation
+									r.summary = "Количество вариантов атрибутов"
+									r.operationID = ""
+									r.pathPattern = "/api/attribute/count"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'o': // Prefix: "origin/count"
+						origElem := elem
+						if l := len("origin/count"); len(elem) >= l && elem[0:l] == "origin/count" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = APIAttributeOriginCountGetOperation
+								r.summary = "Количество вариантов оригинальных атрибутов"
+								r.operationID = ""
+								r.pathPattern = "/api/attribute/origin/count"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'r': // Prefix: "remap/"
+						origElem := elem
+						if l := len("remap/"); len(elem) >= l && elem[0:l] == "remap/" {
 							elem = elem[l:]
 						} else {
 							break
@@ -1959,10 +2320,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "POST":
-									r.name = APIAttributeColorCreatePostOperation
-									r.summary = "Создание покраски аттрибута"
+									r.name = APIAttributeRemapCreatePostOperation
+									r.summary = "Создание ремапинга аттрибута"
 									r.operationID = ""
-									r.pathPattern = "/api/attribute/color/create"
+									r.pathPattern = "/api/attribute/remap/create"
 									r.args = args
 									r.count = 0
 									return r, true
@@ -1984,10 +2345,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "POST":
-									r.name = APIAttributeColorDeletePostOperation
-									r.summary = "Удаление цвета атрибута"
+									r.name = APIAttributeRemapDeletePostOperation
+									r.summary = "Удаление ремапинга атрибута"
 									r.operationID = ""
-									r.pathPattern = "/api/attribute/color/delete"
+									r.pathPattern = "/api/attribute/remap/delete"
 									r.args = args
 									r.count = 0
 									return r, true
@@ -2009,10 +2370,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "POST":
-									r.name = APIAttributeColorGetPostOperation
-									r.summary = "Цвет конкретного атрибута"
+									r.name = APIAttributeRemapGetPostOperation
+									r.summary = "Ремапинг конкретного атрибута"
 									r.operationID = ""
-									r.pathPattern = "/api/attribute/color/get"
+									r.pathPattern = "/api/attribute/remap/get"
 									r.args = args
 									r.count = 0
 									return r, true
@@ -2034,10 +2395,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "GET":
-									r.name = APIAttributeColorListGetOperation
-									r.summary = "Цвета атрибутов"
+									r.name = APIAttributeRemapListGetOperation
+									r.summary = "Ремапинги атрибутов"
 									r.operationID = ""
-									r.pathPattern = "/api/attribute/color/list"
+									r.pathPattern = "/api/attribute/remap/list"
 									r.args = args
 									r.count = 0
 									return r, true
@@ -2059,10 +2420,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "POST":
-									r.name = APIAttributeColorUpdatePostOperation
-									r.summary = "Обновления покраски атрибута"
+									r.name = APIAttributeRemapUpdatePostOperation
+									r.summary = "Обновления ремапинга атрибута"
 									r.operationID = ""
-									r.pathPattern = "/api/attribute/color/update"
+									r.pathPattern = "/api/attribute/remap/update"
 									r.args = args
 									r.count = 0
 									return r, true
@@ -2072,31 +2433,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 
 							elem = origElem
-						}
-
-						elem = origElem
-					case 'u': // Prefix: "unt"
-						origElem := elem
-						if l := len("unt"); len(elem) >= l && elem[0:l] == "unt" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = APIAttributeCountGetOperation
-								r.summary = "Количество вариантов атрибутов"
-								r.operationID = ""
-								r.pathPattern = "/api/attribute/count"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
 						}
 
 						elem = origElem

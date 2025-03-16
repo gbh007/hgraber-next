@@ -24,14 +24,33 @@ func (uc *UseCase) UpdateBook(ctx context.Context, book core.BookContainer) erro
 	}
 
 	if len(book.Attributes) > 0 {
+		attributes := book.Attributes
+
+		if uc.autoRemap {
+			remaps, err := uc.storage.AttributeRemaps(ctx)
+			if err != nil {
+				return fmt.Errorf("storage: get attributes remaps: %w", err)
+			}
+
+			remaper := core.NewAttributeRemaper(remaps, uc.remapToLower)
+			attributes = remaper.Remap(attributes)
+		}
+
 		err = uc.storage.UpdateOriginAttributes(ctx, book.Book.ID, book.Attributes)
 		if err != nil {
 			return fmt.Errorf("storage: update origin attributes: %w", err)
 		}
 
-		err = uc.storage.UpdateAttributes(ctx, book.Book.ID, book.Attributes)
-		if err != nil {
-			return fmt.Errorf("storage: update attributes: %w", err)
+		if len(attributes) > 0 {
+			err = uc.storage.UpdateAttributes(ctx, book.Book.ID, attributes)
+			if err != nil {
+				return fmt.Errorf("storage: update attributes: %w", err)
+			}
+		} else {
+			err = uc.storage.DeleteBookAttributes(ctx, book.Book.ID)
+			if err != nil {
+				return fmt.Errorf("storage: delete book origin attributes: %w", err)
+			}
 		}
 	} else {
 		err = uc.storage.DeleteBookAttributes(ctx, book.Book.ID)

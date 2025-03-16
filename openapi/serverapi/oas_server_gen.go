@@ -81,6 +81,43 @@ type Handler interface {
 	//
 	// GET /api/attribute/count
 	APIAttributeCountGet(ctx context.Context) (APIAttributeCountGetRes, error)
+	// APIAttributeOriginCountGet implements GET /api/attribute/origin/count operation.
+	//
+	// Получение информации о количестве вариантов
+	// оригинальных атрибутов.
+	//
+	// GET /api/attribute/origin/count
+	APIAttributeOriginCountGet(ctx context.Context) (APIAttributeOriginCountGetRes, error)
+	// APIAttributeRemapCreatePost implements POST /api/attribute/remap/create operation.
+	//
+	// Создание ремапинга аттрибута.
+	//
+	// POST /api/attribute/remap/create
+	APIAttributeRemapCreatePost(ctx context.Context, req *APIAttributeRemapCreatePostReq) (APIAttributeRemapCreatePostRes, error)
+	// APIAttributeRemapDeletePost implements POST /api/attribute/remap/delete operation.
+	//
+	// Удаление ремапинга атрибута.
+	//
+	// POST /api/attribute/remap/delete
+	APIAttributeRemapDeletePost(ctx context.Context, req *APIAttributeRemapDeletePostReq) (APIAttributeRemapDeletePostRes, error)
+	// APIAttributeRemapGetPost implements POST /api/attribute/remap/get operation.
+	//
+	// Ремапинг конкретного атрибута.
+	//
+	// POST /api/attribute/remap/get
+	APIAttributeRemapGetPost(ctx context.Context, req *APIAttributeRemapGetPostReq) (APIAttributeRemapGetPostRes, error)
+	// APIAttributeRemapListGet implements GET /api/attribute/remap/list operation.
+	//
+	// Ремапинги атрибутов.
+	//
+	// GET /api/attribute/remap/list
+	APIAttributeRemapListGet(ctx context.Context) (APIAttributeRemapListGetRes, error)
+	// APIAttributeRemapUpdatePost implements POST /api/attribute/remap/update operation.
+	//
+	// Обновления ремапинга атрибута.
+	//
+	// POST /api/attribute/remap/update
+	APIAttributeRemapUpdatePost(ctx context.Context, req *APIAttributeRemapUpdatePostReq) (APIAttributeRemapUpdatePostRes, error)
 	// APIBookArchiveIDGet implements GET /api/book/archive/{id} operation.
 	//
 	// Получение архива с книгой.

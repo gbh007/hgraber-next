@@ -79,6 +79,11 @@ func (c *SystemHandlersController) APISystemTaskResultsGet(ctx context.Context) 
 				Name:        "Очистить удаленные ребилды",
 				Description: serverapi.NewOptString("Удаляет полностью из БД данные ребилдов (страницы, метки, атрибуты и т.д.), что отмечены как удаленные"),
 			},
+			{
+				Code:        "remap_attributes",
+				Name:        "Выполнить ремапинг аттрибутов всех книг",
+				Description: serverapi.NewOptString("Выполняет ремапинг аттрибутов всех книг, кроме удаленных"),
+			},
 		},
 	}, nil
 }

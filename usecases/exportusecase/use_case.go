@@ -36,6 +36,8 @@ type storage interface {
 	Mirrors(ctx context.Context) ([]parsing.URLMirror, error)
 
 	BookIDs(ctx context.Context, filter core.BookFilter) ([]uuid.UUID, error)
+
+	AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, error)
 }
 
 type agentSystem interface {
@@ -59,6 +61,9 @@ type UseCase struct {
 	agentSystem agentSystem
 	tmpStorage  tmpStorage
 	bookAdapter bookAdapter
+
+	autoRemap    bool
+	remapToLower bool
 }
 
 func New(
@@ -68,13 +73,17 @@ func New(
 	agentSystem agentSystem,
 	tmpStorage tmpStorage,
 	bookAdapter bookAdapter,
+	autoRemap bool,
+	remapToLower bool,
 ) *UseCase {
 	return &UseCase{
-		logger:      logger,
-		storage:     storage,
-		fileStorage: fileStorage,
-		agentSystem: agentSystem,
-		tmpStorage:  tmpStorage,
-		bookAdapter: bookAdapter,
+		logger:       logger,
+		storage:      storage,
+		fileStorage:  fileStorage,
+		agentSystem:  agentSystem,
+		tmpStorage:   tmpStorage,
+		bookAdapter:  bookAdapter,
+		autoRemap:    autoRemap,
+		remapToLower: remapToLower,
 	}
 }

@@ -11,11 +11,11 @@ const (
 	UnknownTaskCode TaskCode = iota
 	DeduplicateFilesTaskCode
 	RemoveDetachedFilesTaskCode
-	RemoveFilesInStoragesMismatchTaskCode
 	FillDeadHashesTaskCode
 	FillDeadHashesAndRemoveDeletedPagesTaskCode
 	CleanDeletedPagesTaskCode
 	CleanDeletedRebuildsTaskCode
+	RemapAttributesTaskCode
 )
 
 type TaskResultWriter interface {

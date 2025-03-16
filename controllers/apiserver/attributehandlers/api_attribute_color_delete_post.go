@@ -11,7 +11,7 @@ func (c *AttributeHandlersController) APIAttributeColorDeletePost(ctx context.Co
 	err := c.attributeUseCases.DeleteAttributeColor(ctx, req.Code, req.Value)
 	if err != nil {
 		return &serverapi.APIAttributeColorDeletePostInternalServerError{
-			InnerCode: apiservercore.WebAPIUseCaseCode,
+			InnerCode: apiservercore.AttributeUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),
 		}, nil
 	}

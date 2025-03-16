@@ -42,6 +42,8 @@ type storage interface {
 	MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, pageNumber int) error
 	MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error
 	BookPagesCount(ctx context.Context, bookID uuid.UUID) (int, error)
+
+	AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, error)
 }
 
 type UseCase struct {
@@ -49,16 +51,23 @@ type UseCase struct {
 	tracer trace.Tracer
 
 	storage storage
+
+	autoRemap    bool
+	remapToLower bool
 }
 
 func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	storage storage,
+	autoRemap bool,
+	remapToLower bool,
 ) *UseCase {
 	return &UseCase{
-		logger:  logger,
-		tracer:  tracer,
-		storage: storage,
+		logger:       logger,
+		tracer:       tracer,
+		storage:      storage,
+		autoRemap:    autoRemap,
+		remapToLower: remapToLower,
 	}
 }

@@ -49,6 +49,30 @@ type APIAttributeCountGetRes interface {
 	aPIAttributeCountGetRes()
 }
 
+type APIAttributeOriginCountGetRes interface {
+	aPIAttributeOriginCountGetRes()
+}
+
+type APIAttributeRemapCreatePostRes interface {
+	aPIAttributeRemapCreatePostRes()
+}
+
+type APIAttributeRemapDeletePostRes interface {
+	aPIAttributeRemapDeletePostRes()
+}
+
+type APIAttributeRemapGetPostRes interface {
+	aPIAttributeRemapGetPostRes()
+}
+
+type APIAttributeRemapListGetRes interface {
+	aPIAttributeRemapListGetRes()
+}
+
+type APIAttributeRemapUpdatePostRes interface {
+	aPIAttributeRemapUpdatePostRes()
+}
+
 type APIBookArchiveIDGetRes interface {
 	aPIBookArchiveIDGetRes()
 }
