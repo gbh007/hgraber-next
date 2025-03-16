@@ -64,9 +64,10 @@ type BookDetailsFSDisposition struct {
 }
 
 type BookShort struct {
-	Book        core.Book
-	PreviewPage PreviewPage
-	Tags        []string
+	Book            core.Book
+	PreviewPage     PreviewPage
+	Tags            []string
+	ColorAttributes []core.AttributeColor
 }
 
 type BookList struct {

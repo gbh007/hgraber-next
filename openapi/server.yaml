@@ -1548,8 +1548,32 @@ paths:
                         tags:
                           type: array
                           description: Список тегов (одноименный атрибут) книги
+                          deprecated: true
                           items:
                             type: string
+                        color_attributes:
+                          type: array
+                          description: Список цветных аттрибутов
+                          items:
+                            type: object
+                            properties:
+                              code:
+                                type: string
+                                description: Код атрибута
+                              value:
+                                type: string
+                                description: Значение атрибута
+                              text_color:
+                                type: string
+                                description: Цвет текста
+                              background_color:
+                                type: string
+                                description: Цвет фона
+                            required:
+                              - code
+                              - value
+                              - text_color
+                              - background_color
                       required:
                         - info
                         - page_loaded_percent

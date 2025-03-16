@@ -7708,11 +7708,22 @@ func (s *APIBookListPostOKBooksItem) encodeFields(e *jx.Encoder) {
 			e.ArrEnd()
 		}
 	}
+	{
+		if s.ColorAttributes != nil {
+			e.FieldStart("color_attributes")
+			e.ArrStart()
+			for _, elem := range s.ColorAttributes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIBookListPostOKBooksItem = [2]string{
+var jsonFieldsNameOfAPIBookListPostOKBooksItem = [3]string{
 	0: "info",
 	1: "tags",
+	2: "color_attributes",
 }
 
 // Decode decodes APIBookListPostOKBooksItem from json.
@@ -7752,6 +7763,23 @@ func (s *APIBookListPostOKBooksItem) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"tags\"")
+			}
+		case "color_attributes":
+			if err := func() error {
+				s.ColorAttributes = make([]APIBookListPostOKBooksItemColorAttributesItem, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem APIBookListPostOKBooksItemColorAttributesItem
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.ColorAttributes = append(s.ColorAttributes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"color_attributes\"")
 			}
 		default:
 			return d.Skip()
@@ -7805,6 +7833,153 @@ func (s *APIBookListPostOKBooksItem) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIBookListPostOKBooksItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("code")
+		e.Str(s.Code)
+	}
+	{
+		e.FieldStart("value")
+		e.Str(s.Value)
+	}
+	{
+		e.FieldStart("text_color")
+		e.Str(s.TextColor)
+	}
+	{
+		e.FieldStart("background_color")
+		e.Str(s.BackgroundColor)
+	}
+}
+
+var jsonFieldsNameOfAPIBookListPostOKBooksItemColorAttributesItem = [4]string{
+	0: "code",
+	1: "value",
+	2: "text_color",
+	3: "background_color",
+}
+
+// Decode decodes APIBookListPostOKBooksItemColorAttributesItem from json.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIBookListPostOKBooksItemColorAttributesItem to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "code":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Code = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"code\"")
+			}
+		case "value":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Value = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"value\"")
+			}
+		case "text_color":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.TextColor = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"text_color\"")
+			}
+		case "background_color":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Str()
+				s.BackgroundColor = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"background_color\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIBookListPostOKBooksItemColorAttributesItem")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00001111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIBookListPostOKBooksItemColorAttributesItem) {
+					name = jsonFieldsNameOfAPIBookListPostOKBooksItemColorAttributesItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

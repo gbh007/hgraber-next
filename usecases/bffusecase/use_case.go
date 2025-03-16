@@ -31,6 +31,8 @@ type storage interface {
 	Attributes(ctx context.Context) ([]core.Attribute, error)
 
 	FileStorages(ctx context.Context) ([]fsmodel.FileStorageSystem, error)
+
+	AttributeColors(ctx context.Context) ([]core.AttributeColor, error)
 }
 
 type deduplicator interface {

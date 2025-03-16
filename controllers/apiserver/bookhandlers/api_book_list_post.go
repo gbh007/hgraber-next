@@ -5,6 +5,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -25,6 +26,14 @@ func (c *BookHandlersController) APIBookListPost(ctx context.Context, req *serve
 			return serverapi.APIBookListPostOKBooksItem{
 				Info: c.apiCore.ConvertSimpleBook(b.Book, b.PreviewPage),
 				Tags: b.Tags,
+				ColorAttributes: pkg.Map(b.ColorAttributes, func(attr core.AttributeColor) serverapi.APIBookListPostOKBooksItemColorAttributesItem {
+					return serverapi.APIBookListPostOKBooksItemColorAttributesItem{
+						Code:            attr.Code,
+						Value:           attr.Value,
+						TextColor:       attr.TextColor,
+						BackgroundColor: attr.BackgroundColor,
+					}
+				}),
 			}
 		}),
 		Pages: pkg.Map(bookList.Pages, func(v int) serverapi.APIBookListPostOKPagesItem {

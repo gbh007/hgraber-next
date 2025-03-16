@@ -2017,7 +2017,11 @@ func (*APIBookListPostOK) aPIBookListPostRes() {}
 type APIBookListPostOKBooksItem struct {
 	Info BookSimple `json:"info"`
 	// Список тегов (одноименный атрибут) книги.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	Tags []string `json:"tags"`
+	// Список цветных аттрибутов.
+	ColorAttributes []APIBookListPostOKBooksItemColorAttributesItem `json:"color_attributes"`
 }
 
 // GetInfo returns the value of Info.
@@ -2030,6 +2034,11 @@ func (s *APIBookListPostOKBooksItem) GetTags() []string {
 	return s.Tags
 }
 
+// GetColorAttributes returns the value of ColorAttributes.
+func (s *APIBookListPostOKBooksItem) GetColorAttributes() []APIBookListPostOKBooksItemColorAttributesItem {
+	return s.ColorAttributes
+}
+
 // SetInfo sets the value of Info.
 func (s *APIBookListPostOKBooksItem) SetInfo(val BookSimple) {
 	s.Info = val
@@ -2038,6 +2047,62 @@ func (s *APIBookListPostOKBooksItem) SetInfo(val BookSimple) {
 // SetTags sets the value of Tags.
 func (s *APIBookListPostOKBooksItem) SetTags(val []string) {
 	s.Tags = val
+}
+
+// SetColorAttributes sets the value of ColorAttributes.
+func (s *APIBookListPostOKBooksItem) SetColorAttributes(val []APIBookListPostOKBooksItemColorAttributesItem) {
+	s.ColorAttributes = val
+}
+
+type APIBookListPostOKBooksItemColorAttributesItem struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значение атрибута.
+	Value string `json:"value"`
+	// Цвет текста.
+	TextColor string `json:"text_color"`
+	// Цвет фона.
+	BackgroundColor string `json:"background_color"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) GetCode() string {
+	return s.Code
+}
+
+// GetValue returns the value of Value.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) GetValue() string {
+	return s.Value
+}
+
+// GetTextColor returns the value of TextColor.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) GetTextColor() string {
+	return s.TextColor
+}
+
+// GetBackgroundColor returns the value of BackgroundColor.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) GetBackgroundColor() string {
+	return s.BackgroundColor
+}
+
+// SetCode sets the value of Code.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValue sets the value of Value.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) SetValue(val string) {
+	s.Value = val
+}
+
+// SetTextColor sets the value of TextColor.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) SetTextColor(val string) {
+	s.TextColor = val
+}
+
+// SetBackgroundColor sets the value of BackgroundColor.
+func (s *APIBookListPostOKBooksItemColorAttributesItem) SetBackgroundColor(val string) {
+	s.BackgroundColor = val
 }
 
 type APIBookListPostOKPagesItem struct {

@@ -19,6 +19,20 @@ func (uc *UseCase) BookList(ctx context.Context, filter core.BookFilter) (bff.Bo
 		return bff.BookList{}, nil
 	}
 
+	colors, err := uc.storage.AttributeColors(ctx)
+	if err != nil {
+		return bff.BookList{}, fmt.Errorf("storage: get attribute colors: %w", err)
+	}
+
+	colorMap := make(map[string]map[string]core.AttributeColor)
+	for _, color := range colors {
+		if _, ok := colorMap[color.Code]; !ok {
+			colorMap[color.Code] = make(map[string]core.AttributeColor)
+		}
+
+		colorMap[color.Code][color.Value] = color
+	}
+
 	result := bff.BookList{
 		Count: count,
 		// FIXME: тут костыли, необходимо отказаться от расчета на сервере
@@ -67,6 +81,12 @@ func (uc *UseCase) BookList(ctx context.Context, filter core.BookFilter) (bff.Bo
 		) {
 			if attr.Code == "tag" {
 				bffBook.Tags = attr.Values
+			}
+
+			for _, value := range attr.Values {
+				if color, ok := colorMap[attr.Code][value]; ok {
+					bffBook.ColorAttributes = append(bffBook.ColorAttributes, color)
+				}
 			}
 		}
 
