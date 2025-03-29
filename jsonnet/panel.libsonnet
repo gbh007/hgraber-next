@@ -541,6 +541,22 @@ local heatmapDefaultColor() =
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
         ),
+        panel.timeSeries.new('Web cache RPS')
+        + panel.timeSeries.queryOptions.withTargets([
+          prometheus.new(
+            config.datasource.metrics.uid,
+            'sum(rate(hgraber_next_agent_web_cache_total{%s}[$__rate_interval])) by (action)' % [
+              config.label.filter.service,
+            ],
+          )
+          + prometheus.withLegendFormat('{{action}}'),
+        ])
+        + simpleTSLegend()
+        + panel.timeSeries.standardOptions.withUnit('reqps')
+        + panel.timeSeries.queryOptions.withDatasource(
+          config.datasource.metrics.type,
+          config.datasource.metrics.uid,
+        ),
       ], 12, 9, y + 1)),
     ],
   other(y):
