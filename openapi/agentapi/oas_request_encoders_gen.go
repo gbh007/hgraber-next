@@ -49,6 +49,34 @@ func encodeAPIFsInfoPostRequest(
 	return nil
 }
 
+func encodeAPIHproxyParseBookPostRequest(
+	req *APIHproxyParseBookPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIHproxyParseListPostRequest(
+	req *APIHproxyParseListPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIImportArchivePostRequest(
 	req APIImportArchivePostReq,
 	r *http.Request,

@@ -13,6 +13,8 @@ const (
 	APIFsInfoPostOperation             OperationName = "APIFsInfoPost"
 	APIHighwayFileIDExtGetOperation    OperationName = "APIHighwayFileIDExtGet"
 	APIHighwayTokenCreatePostOperation OperationName = "APIHighwayTokenCreatePost"
+	APIHproxyParseBookPostOperation    OperationName = "APIHproxyParseBookPost"
+	APIHproxyParseListPostOperation    OperationName = "APIHproxyParseListPost"
 	APIImportArchivePostOperation      OperationName = "APIImportArchivePost"
 	APIParsingBookCheckPostOperation   OperationName = "APIParsingBookCheckPost"
 	APIParsingBookMultiPostOperation   OperationName = "APIParsingBookMultiPost"

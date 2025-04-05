@@ -561,6 +561,349 @@ type APIHighwayTokenCreatePostUnauthorized ErrorResponse
 
 func (*APIHighwayTokenCreatePostUnauthorized) aPIHighwayTokenCreatePostRes() {}
 
+type APIHproxyParseBookPostBadRequest ErrorResponse
+
+func (*APIHproxyParseBookPostBadRequest) aPIHproxyParseBookPostRes() {}
+
+type APIHproxyParseBookPostForbidden ErrorResponse
+
+func (*APIHproxyParseBookPostForbidden) aPIHproxyParseBookPostRes() {}
+
+type APIHproxyParseBookPostInternalServerError ErrorResponse
+
+func (*APIHproxyParseBookPostInternalServerError) aPIHproxyParseBookPostRes() {}
+
+type APIHproxyParseBookPostOK struct {
+	// Название книги.
+	Name string `json:"name"`
+	// Ссылка на внешнюю систему.
+	URL url.URL `json:"url"`
+	// Ссылка на превью.
+	PreviewURL OptURI `json:"preview_url"`
+	// Количество страниц.
+	PageCount int `json:"page_count"`
+	// Данные страниц книги.
+	Pages []APIHproxyParseBookPostOKPagesItem `json:"pages"`
+	// Данные атрибутов книги.
+	Attributes []APIHproxyParseBookPostOKAttributesItem `json:"attributes"`
+}
+
+// GetName returns the value of Name.
+func (s *APIHproxyParseBookPostOK) GetName() string {
+	return s.Name
+}
+
+// GetURL returns the value of URL.
+func (s *APIHproxyParseBookPostOK) GetURL() url.URL {
+	return s.URL
+}
+
+// GetPreviewURL returns the value of PreviewURL.
+func (s *APIHproxyParseBookPostOK) GetPreviewURL() OptURI {
+	return s.PreviewURL
+}
+
+// GetPageCount returns the value of PageCount.
+func (s *APIHproxyParseBookPostOK) GetPageCount() int {
+	return s.PageCount
+}
+
+// GetPages returns the value of Pages.
+func (s *APIHproxyParseBookPostOK) GetPages() []APIHproxyParseBookPostOKPagesItem {
+	return s.Pages
+}
+
+// GetAttributes returns the value of Attributes.
+func (s *APIHproxyParseBookPostOK) GetAttributes() []APIHproxyParseBookPostOKAttributesItem {
+	return s.Attributes
+}
+
+// SetName sets the value of Name.
+func (s *APIHproxyParseBookPostOK) SetName(val string) {
+	s.Name = val
+}
+
+// SetURL sets the value of URL.
+func (s *APIHproxyParseBookPostOK) SetURL(val url.URL) {
+	s.URL = val
+}
+
+// SetPreviewURL sets the value of PreviewURL.
+func (s *APIHproxyParseBookPostOK) SetPreviewURL(val OptURI) {
+	s.PreviewURL = val
+}
+
+// SetPageCount sets the value of PageCount.
+func (s *APIHproxyParseBookPostOK) SetPageCount(val int) {
+	s.PageCount = val
+}
+
+// SetPages sets the value of Pages.
+func (s *APIHproxyParseBookPostOK) SetPages(val []APIHproxyParseBookPostOKPagesItem) {
+	s.Pages = val
+}
+
+// SetAttributes sets the value of Attributes.
+func (s *APIHproxyParseBookPostOK) SetAttributes(val []APIHproxyParseBookPostOKAttributesItem) {
+	s.Attributes = val
+}
+
+func (*APIHproxyParseBookPostOK) aPIHproxyParseBookPostRes() {}
+
+type APIHproxyParseBookPostOKAttributesItem struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Значения атрибута.
+	Values []APIHproxyParseBookPostOKAttributesItemValuesItem `json:"values"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIHproxyParseBookPostOKAttributesItem) GetCode() string {
+	return s.Code
+}
+
+// GetValues returns the value of Values.
+func (s *APIHproxyParseBookPostOKAttributesItem) GetValues() []APIHproxyParseBookPostOKAttributesItemValuesItem {
+	return s.Values
+}
+
+// SetCode sets the value of Code.
+func (s *APIHproxyParseBookPostOKAttributesItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetValues sets the value of Values.
+func (s *APIHproxyParseBookPostOKAttributesItem) SetValues(val []APIHproxyParseBookPostOKAttributesItemValuesItem) {
+	s.Values = val
+}
+
+type APIHproxyParseBookPostOKAttributesItemValuesItem struct {
+	// Название.
+	Name string `json:"name"`
+	// Ссылка на фильтрацию по значению.
+	URL OptURI `json:"url"`
+}
+
+// GetName returns the value of Name.
+func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) GetName() string {
+	return s.Name
+}
+
+// GetURL returns the value of URL.
+func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) GetURL() OptURI {
+	return s.URL
+}
+
+// SetName sets the value of Name.
+func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetURL sets the value of URL.
+func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) SetURL(val OptURI) {
+	s.URL = val
+}
+
+type APIHproxyParseBookPostOKPagesItem struct {
+	// Номер страницы в книге.
+	PageNumber int `json:"page_number"`
+	// Ссылка на изображение во внешней системе.
+	URL url.URL `json:"url"`
+	// Название файла с расширением.
+	Filename string `json:"filename"`
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIHproxyParseBookPostOKPagesItem) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// GetURL returns the value of URL.
+func (s *APIHproxyParseBookPostOKPagesItem) GetURL() url.URL {
+	return s.URL
+}
+
+// GetFilename returns the value of Filename.
+func (s *APIHproxyParseBookPostOKPagesItem) GetFilename() string {
+	return s.Filename
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIHproxyParseBookPostOKPagesItem) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+// SetURL sets the value of URL.
+func (s *APIHproxyParseBookPostOKPagesItem) SetURL(val url.URL) {
+	s.URL = val
+}
+
+// SetFilename sets the value of Filename.
+func (s *APIHproxyParseBookPostOKPagesItem) SetFilename(val string) {
+	s.Filename = val
+}
+
+type APIHproxyParseBookPostReq struct {
+	// Ссылка для обработки.
+	URL url.URL `json:"url"`
+}
+
+// GetURL returns the value of URL.
+func (s *APIHproxyParseBookPostReq) GetURL() url.URL {
+	return s.URL
+}
+
+// SetURL sets the value of URL.
+func (s *APIHproxyParseBookPostReq) SetURL(val url.URL) {
+	s.URL = val
+}
+
+type APIHproxyParseBookPostUnauthorized ErrorResponse
+
+func (*APIHproxyParseBookPostUnauthorized) aPIHproxyParseBookPostRes() {}
+
+type APIHproxyParseListPostBadRequest ErrorResponse
+
+func (*APIHproxyParseListPostBadRequest) aPIHproxyParseListPostRes() {}
+
+type APIHproxyParseListPostForbidden ErrorResponse
+
+func (*APIHproxyParseListPostForbidden) aPIHproxyParseListPostRes() {}
+
+type APIHproxyParseListPostInternalServerError ErrorResponse
+
+func (*APIHproxyParseListPostInternalServerError) aPIHproxyParseListPostRes() {}
+
+type APIHproxyParseListPostOK struct {
+	// Результаты обработки.
+	Results []APIHproxyParseListPostOKResultsItem `json:"results"`
+}
+
+// GetResults returns the value of Results.
+func (s *APIHproxyParseListPostOK) GetResults() []APIHproxyParseListPostOKResultsItem {
+	return s.Results
+}
+
+// SetResults sets the value of Results.
+func (s *APIHproxyParseListPostOK) SetResults(val []APIHproxyParseListPostOKResultsItem) {
+	s.Results = val
+}
+
+func (*APIHproxyParseListPostOK) aPIHproxyParseListPostRes() {}
+
+// Экземпляр.
+type APIHproxyParseListPostOKResultsItem struct {
+	// Ссылка на экземпляр.
+	LinkURL url.URL `json:"link_url"`
+	// Название экземпляра.
+	Name OptString `json:"name"`
+	// Ссылка на превью экземпляра.
+	PreviewURL OptURI `json:"preview_url"`
+	// Тип экземпляра.
+	Type APIHproxyParseListPostOKResultsItemType `json:"type"`
+}
+
+// GetLinkURL returns the value of LinkURL.
+func (s *APIHproxyParseListPostOKResultsItem) GetLinkURL() url.URL {
+	return s.LinkURL
+}
+
+// GetName returns the value of Name.
+func (s *APIHproxyParseListPostOKResultsItem) GetName() OptString {
+	return s.Name
+}
+
+// GetPreviewURL returns the value of PreviewURL.
+func (s *APIHproxyParseListPostOKResultsItem) GetPreviewURL() OptURI {
+	return s.PreviewURL
+}
+
+// GetType returns the value of Type.
+func (s *APIHproxyParseListPostOKResultsItem) GetType() APIHproxyParseListPostOKResultsItemType {
+	return s.Type
+}
+
+// SetLinkURL sets the value of LinkURL.
+func (s *APIHproxyParseListPostOKResultsItem) SetLinkURL(val url.URL) {
+	s.LinkURL = val
+}
+
+// SetName sets the value of Name.
+func (s *APIHproxyParseListPostOKResultsItem) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetPreviewURL sets the value of PreviewURL.
+func (s *APIHproxyParseListPostOKResultsItem) SetPreviewURL(val OptURI) {
+	s.PreviewURL = val
+}
+
+// SetType sets the value of Type.
+func (s *APIHproxyParseListPostOKResultsItem) SetType(val APIHproxyParseListPostOKResultsItemType) {
+	s.Type = val
+}
+
+// Тип экземпляра.
+type APIHproxyParseListPostOKResultsItemType string
+
+const (
+	APIHproxyParseListPostOKResultsItemTypeDetails APIHproxyParseListPostOKResultsItemType = "details"
+	APIHproxyParseListPostOKResultsItemTypeList    APIHproxyParseListPostOKResultsItemType = "list"
+)
+
+// AllValues returns all APIHproxyParseListPostOKResultsItemType values.
+func (APIHproxyParseListPostOKResultsItemType) AllValues() []APIHproxyParseListPostOKResultsItemType {
+	return []APIHproxyParseListPostOKResultsItemType{
+		APIHproxyParseListPostOKResultsItemTypeDetails,
+		APIHproxyParseListPostOKResultsItemTypeList,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIHproxyParseListPostOKResultsItemType) MarshalText() ([]byte, error) {
+	switch s {
+	case APIHproxyParseListPostOKResultsItemTypeDetails:
+		return []byte(s), nil
+	case APIHproxyParseListPostOKResultsItemTypeList:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIHproxyParseListPostOKResultsItemType) UnmarshalText(data []byte) error {
+	switch APIHproxyParseListPostOKResultsItemType(data) {
+	case APIHproxyParseListPostOKResultsItemTypeDetails:
+		*s = APIHproxyParseListPostOKResultsItemTypeDetails
+		return nil
+	case APIHproxyParseListPostOKResultsItemTypeList:
+		*s = APIHproxyParseListPostOKResultsItemTypeList
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APIHproxyParseListPostReq struct {
+	// Ссылка для обработки.
+	URL url.URL `json:"url"`
+}
+
+// GetURL returns the value of URL.
+func (s *APIHproxyParseListPostReq) GetURL() url.URL {
+	return s.URL
+}
+
+// SetURL sets the value of URL.
+func (s *APIHproxyParseListPostReq) SetURL(val url.URL) {
+	s.URL = val
+}
+
+type APIHproxyParseListPostUnauthorized ErrorResponse
+
+func (*APIHproxyParseListPostUnauthorized) aPIHproxyParseListPostRes() {}
+
 type APIImportArchivePostBadRequest ErrorResponse
 
 func (*APIImportArchivePostBadRequest) aPIImportArchivePostRes() {}
