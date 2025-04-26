@@ -1,16 +1,22 @@
 package hproxyhandlers
 
 import (
-	"context"
+	"io"
 	"log/slog"
+	"net/url"
 
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
+	"github.com/gbh007/hgraber-next/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-type HProxyUseCases interface{}
+type HProxyUseCases interface {
+	List(u url.URL) (hproxymodel.List, error)
+	Book(u url.URL) (hproxymodel.Book, error)
+	Image(bookURL, imageURL url.URL) (io.Reader, error)
+}
 
 type HProxyHandlersController struct {
 	logger *slog.Logger
@@ -40,23 +46,10 @@ func New(
 	return c
 }
 
-func (c *HProxyHandlersController) APIHproxyBookPost(ctx context.Context, req *serverapi.APIHproxyBookPostReq) (serverapi.APIHproxyBookPostRes, error) {
-	return &serverapi.APIHproxyBookPostInternalServerError{
-		InnerCode: apiservercore.HProxyUseCaseCode,
-		Details:   serverapi.NewOptString("unimplemented"),
-	}, nil
-}
+func (c *HProxyHandlersController) filePreview(bookURL url.URL, imageURL *url.URL) serverapi.OptURI {
+	if imageURL == nil {
+		return serverapi.OptURI{}
+	}
 
-func (c *HProxyHandlersController) APIHproxyFileGet(ctx context.Context, params serverapi.APIHproxyFileGetParams) (serverapi.APIHproxyFileGetRes, error) {
-	return &serverapi.APIHproxyFileGetInternalServerError{
-		InnerCode: apiservercore.HProxyUseCaseCode,
-		Details:   serverapi.NewOptString("unimplemented"),
-	}, nil
-}
-
-func (c *HProxyHandlersController) APIHproxyListPost(ctx context.Context, req *serverapi.APIHproxyListPostReq) (serverapi.APIHproxyListPostRes, error) {
-	return &serverapi.APIHproxyListPostInternalServerError{
-		InnerCode: apiservercore.HProxyUseCaseCode,
-		Details:   serverapi.NewOptString("unimplemented"),
-	}, nil
+	return serverapi.NewOptURI(c.apiCore.GetHProxyFileURL(bookURL, *imageURL))
 }

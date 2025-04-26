@@ -70,6 +70,10 @@ type AttributeUseCases interface {
 	attributehandlers.AttributeUseCases
 }
 
+type HProxyUseCases interface {
+	hproxyhandlers.HProxyUseCases
+}
+
 type config interface {
 	GetAddr() string
 	GetExternalAddr() string
@@ -116,6 +120,7 @@ func New(
 	attributeUseCases AttributeUseCases,
 	labelUseCases LabelUseCases,
 	bookUseCases BookUseCases,
+	hProxyUseCases HProxyUseCases,
 ) (*Controller, error) {
 	ac, err := apiservercore.New(
 		logger,
@@ -192,7 +197,7 @@ func New(
 		HProxyHandlersController: hproxyhandlers.New(
 			logger,
 			tracer,
-			nil, // FIXME
+			hProxyUseCases,
 			config.GetDebug(),
 			ac,
 		),

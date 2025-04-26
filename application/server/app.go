@@ -182,6 +182,7 @@ func Serve() {
 		attributeUseCases,
 		labelUseCases,
 		bookUseCases,
+		nil, // FIXME
 	)
 	if err != nil {
 		logger.ErrorContext(
