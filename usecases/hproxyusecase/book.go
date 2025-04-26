@@ -49,19 +49,33 @@ func (uc *UseCase) Book(ctx context.Context, u url.URL) (hproxymodel.Book, error
 				continue
 			}
 
-			list, err := uc.agentSystem.HProxyBook(ctx, agent.ID, u)
+			book, err := uc.agentSystem.HProxyBook(ctx, agent.ID, u)
 			if err != nil {
 				return hproxymodel.Book{}, fmt.Errorf("parse book: %w", err)
 			}
 
-			newAttrs, err := uc.handleAttributes(ctx, list.Attributes)
+			newAttrs, err := uc.handleAttributes(ctx, book.Attributes)
 			if err != nil {
 				return hproxymodel.Book{}, fmt.Errorf("handle attributes: %w", err)
 			}
 
-			list.Attributes = newAttrs
+			book.Attributes = newAttrs
 
-			return list, nil
+			if book.PreviewURL == nil {
+				for _, page := range book.Pages {
+					if page.PageNumber == core.PageNumberForPreview {
+						book.PreviewURL = &page.ExtPreviewURL
+
+						break
+					}
+				}
+			}
+
+			if book.PageCount == 0 {
+				book.PageCount = len(book.Pages)
+			}
+
+			return book, nil
 		}
 	}
 
