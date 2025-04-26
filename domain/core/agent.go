@@ -24,5 +24,6 @@ type AgentFilter struct {
 	CanParse      bool
 	CanParseMulti bool
 	CanExport     bool
+	CanHProxy     bool // FIXME: поддержать
 	HasFS         bool
 }
