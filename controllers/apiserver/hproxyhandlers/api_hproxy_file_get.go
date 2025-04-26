@@ -2,6 +2,8 @@ package hproxyhandlers
 
 import (
 	"context"
+	"mime"
+	"path"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -16,8 +18,15 @@ func (c *HProxyHandlersController) APIHproxyFileGet(ctx context.Context, params 
 		}, nil
 	}
 
+	// Это не самый правильный и ленивый костыль, но пока его будет достаточно
+	contentType := mime.TypeByExtension(path.Ext(params.ImageURL.String()))
+
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+
 	return &serverapi.APIHproxyFileGetOKHeaders{
-		ContentType: "application/octet-stream", // TODO: работать с типом
+		ContentType: contentType,
 		Response: serverapi.APIHproxyFileGetOK{
 			Data: r,
 		},

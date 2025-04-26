@@ -125,28 +125,12 @@ func (rmp AttributeRemaper) Remap(origin map[string][]string) map[string][]strin
 
 	for code, values := range origin {
 		for _, value := range values {
-			v := value
-			if rmp.toLower {
-				v = strings.ToLower(v)
-			}
-
-			remap, ok := rmp.rules[code][value]
-			if !ok || remap.IsNoRemap() {
-				attributes[code] = append(attributes[code], v)
-
+			toCode, toValue, ok := rmp.RemapOne(code, value)
+			if !ok {
 				continue
 			}
 
-			if remap.IsDelete() {
-				continue
-			}
-
-			toV := remap.ToValue
-			if rmp.toLower {
-				toV = strings.ToLower(remap.ToValue)
-			}
-
-			attributes[remap.ToCode] = append(attributes[remap.ToCode], toV)
+			attributes[toCode] = append(attributes[toCode], toValue)
 		}
 	}
 
@@ -161,4 +145,27 @@ func (rmp AttributeRemaper) Remap(origin map[string][]string) map[string][]strin
 	}
 
 	return attributes
+}
+
+func (rmp AttributeRemaper) RemapOne(code, value string) (string, string, bool) {
+	v := value
+	if rmp.toLower {
+		v = strings.ToLower(v)
+	}
+
+	remap, ok := rmp.rules[code][value]
+	if !ok || remap.IsNoRemap() {
+		return code, v, true
+	}
+
+	if remap.IsDelete() {
+		return "", "", false
+	}
+
+	toV := remap.ToValue
+	if rmp.toLower {
+		toV = strings.ToLower(remap.ToValue)
+	}
+
+	return remap.ToCode, toV, true
 }

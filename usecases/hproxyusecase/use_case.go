@@ -19,6 +19,9 @@ var errCanNotParse = errors.New("can't parse")
 
 type storage interface {
 	Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error)
+
+	Attributes(ctx context.Context) ([]core.Attribute, error)
+	AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, error)
 }
 
 type agentSystem interface {

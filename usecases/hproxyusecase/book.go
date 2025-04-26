@@ -54,6 +54,13 @@ func (uc *UseCase) Book(ctx context.Context, u url.URL) (hproxymodel.Book, error
 				return hproxymodel.Book{}, fmt.Errorf("parse book: %w", err)
 			}
 
+			newAttrs, err := uc.handleAttributes(ctx, list.Attributes)
+			if err != nil {
+				return hproxymodel.Book{}, fmt.Errorf("handle attributes: %w", err)
+			}
+
+			list.Attributes = newAttrs
+
 			return list, nil
 		}
 	}
