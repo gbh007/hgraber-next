@@ -30,6 +30,8 @@ tags:
     description: Взаимодействие с системой граббера
   - name: user
     description: Взаимодействие с данными пользователя
+  - name: hproxy
+    description: Взаимодействие с данными сайтов через агентов
 
 paths:
   /api/user/login:
@@ -4517,6 +4519,276 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         403:
           description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/hproxy/list:
+    post:
+      description: Парсинг списка данных по ссылке
+      summary: Парсинг списка данных по ссылке
+      tags:
+        - hproxy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: Ссылка для обработки
+              required:
+                - url
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books:
+                    type: array
+                    description: Список книг
+                    items:
+                      type: object
+                      properties:
+                        ext_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на книгу во внешней системе
+                        name:
+                          type: string
+                          description: Название книги
+                        preview_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на превью книги
+                      required:
+                        - ext_url
+                  pagination:
+                    type: array
+                    description: Данные пагинации
+                    items:
+                      type: object
+                      properties:
+                        ext_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на страницу пагинации во внешней системе
+                        name:
+                          type: string
+                          description: Название страницы или ее номер
+                      required:
+                        - ext_url
+                        - name
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/hproxy/book:
+    post:
+      description: Парсинг данных книги по ссылке
+      summary: Парсинг данных книги по ссылке
+      tags:
+        - hproxy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: Ссылка для обработки
+              required:
+                - url
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - name
+                  - ext_url
+                  - page_count
+                  - pages
+                  - attributes
+                properties:
+                  name:
+                    type: string
+                    description: Название книги
+                  ext_url:
+                    type: string
+                    format: uri
+                    description: Ссылка на внешнюю систему
+                  preview_url:
+                    type: string
+                    format: uri
+                    description: Ссылка на превью
+                  page_count:
+                    type: integer
+                    description: Количество страниц
+                  pages:
+                    type: array
+                    description: данные страниц книги
+                    items:
+                      type: object
+                      properties:
+                        page_number:
+                          type: integer
+                          description: Номер страницы в книге
+                          minimum: 1
+                        preview_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на превью
+                      required:
+                        - page_number
+                        - preview_url
+                  attributes:
+                    type: array
+                    description: Данные атрибутов книги
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: Код атрибута
+                        name:
+                          type: string
+                          description: Название атрибута
+                        values:
+                          type: array
+                          description: Значения атрибута
+                          items:
+                            type: object
+                            properties:
+                              ext_name:
+                                type: string
+                                description: Название во внешней системе
+                              name:
+                                type: string
+                                description: Название во внутренней системе
+                              ext_url:
+                                type: string
+                                format: uri
+                                description: Ссылка на фильтрацию по значению
+                            required:
+                              - ext_name
+                      required:
+                        - code
+                        - name
+                        - values
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/hproxy/file:
+    get:
+      description: Получение тела файла (изображения страницы)
+      summary: Получение тела файла
+      tags:
+        - hproxy
+      parameters:
+        - name: book_url
+          in: query
+          description: Ссылка на книгу во внешней системе
+          required: true
+          schema:
+            type: string
+            format: uri
+        - name: image_url
+          in: query
+          description: Ссылка на изображение во внешней системе
+          required: true
+          schema:
+            type: string
+            format: uri
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
           content:
             application/json:
               schema:

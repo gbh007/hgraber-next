@@ -287,6 +287,24 @@ type Handler interface {
 	//
 	// POST /api/fs/validate
 	APIFsValidatePost(ctx context.Context, req *APIFsValidatePostReq) (APIFsValidatePostRes, error)
+	// APIHproxyBookPost implements POST /api/hproxy/book operation.
+	//
+	// Парсинг данных книги по ссылке.
+	//
+	// POST /api/hproxy/book
+	APIHproxyBookPost(ctx context.Context, req *APIHproxyBookPostReq) (APIHproxyBookPostRes, error)
+	// APIHproxyFileGet implements GET /api/hproxy/file operation.
+	//
+	// Получение тела файла (изображения страницы).
+	//
+	// GET /api/hproxy/file
+	APIHproxyFileGet(ctx context.Context, params APIHproxyFileGetParams) (APIHproxyFileGetRes, error)
+	// APIHproxyListPost implements POST /api/hproxy/list operation.
+	//
+	// Парсинг списка данных по ссылке.
+	//
+	// POST /api/hproxy/list
+	APIHproxyListPost(ctx context.Context, req *APIHproxyListPostReq) (APIHproxyListPostRes, error)
 	// APILabelDeletePost implements POST /api/label/delete operation.
 	//
 	// Удаление метки на книгу или страницу.

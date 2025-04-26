@@ -181,6 +181,18 @@ type APIFsValidatePostRes interface {
 	aPIFsValidatePostRes()
 }
 
+type APIHproxyBookPostRes interface {
+	aPIHproxyBookPostRes()
+}
+
+type APIHproxyFileGetRes interface {
+	aPIHproxyFileGetRes()
+}
+
+type APIHproxyListPostRes interface {
+	aPIHproxyListPostRes()
+}
+
 type APILabelDeletePostRes interface {
 	aPILabelDeletePostRes()
 }

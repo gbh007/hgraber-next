@@ -12,6 +12,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/bookhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/deduplicatehandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/fshandlers"
+	"github.com/gbh007/hgraber-next/controllers/apiserver/hproxyhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/labelhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/systemhandlers"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -86,6 +87,7 @@ type Controller struct {
 	*fshandlers.FSHandlersController
 	*labelhandlers.LabelHandlersController
 	*systemhandlers.SystemHandlersController
+	*hproxyhandlers.HProxyHandlersController
 
 	logger          *slog.Logger
 	tracer          trace.Tracer
@@ -184,6 +186,13 @@ func New(
 			parseUseCases,
 			exportUseCases,
 			systemUseCases,
+			config.GetDebug(),
+			ac,
+		),
+		HProxyHandlersController: hproxyhandlers.New(
+			logger,
+			tracer,
+			nil, // FIXME
 			config.GetDebug(),
 			ac,
 		),

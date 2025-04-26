@@ -1246,6 +1246,84 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
+			case 'h': // Prefix: "hproxy/"
+				origElem := elem
+				if l := len("hproxy/"); len(elem) >= l && elem[0:l] == "hproxy/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'b': // Prefix: "book"
+					origElem := elem
+					if l := len("book"); len(elem) >= l && elem[0:l] == "book" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIHproxyBookPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'f': // Prefix: "file"
+					origElem := elem
+					if l := len("file"); len(elem) >= l && elem[0:l] == "file" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleAPIHproxyFileGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'l': // Prefix: "list"
+					origElem := elem
+					if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIHproxyListPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
 			case 'l': // Prefix: "label/"
 				origElem := elem
 				if l := len("label/"); len(elem) >= l && elem[0:l] == "label/" {
@@ -3257,6 +3335,96 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
+			case 'h': // Prefix: "hproxy/"
+				origElem := elem
+				if l := len("hproxy/"); len(elem) >= l && elem[0:l] == "hproxy/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'b': // Prefix: "book"
+					origElem := elem
+					if l := len("book"); len(elem) >= l && elem[0:l] == "book" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIHproxyBookPostOperation
+							r.summary = "Парсинг данных книги по ссылке"
+							r.operationID = ""
+							r.pathPattern = "/api/hproxy/book"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'f': // Prefix: "file"
+					origElem := elem
+					if l := len("file"); len(elem) >= l && elem[0:l] == "file" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = APIHproxyFileGetOperation
+							r.summary = "Получение тела файла"
+							r.operationID = ""
+							r.pathPattern = "/api/hproxy/file"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'l': // Prefix: "list"
+					origElem := elem
+					if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIHproxyListPostOperation
+							r.summary = "Парсинг списка данных по ссылке"
+							r.operationID = ""
+							r.pathPattern = "/api/hproxy/list"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
 					}
 
 					elem = origElem

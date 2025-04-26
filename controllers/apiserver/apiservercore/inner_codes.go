@@ -14,4 +14,5 @@ const (
 	BFFUseCaseCode         = "bff_uc"
 	AttributeUseCaseCode   = "attribute_uc"
 	ValidationCode         = "validation"
+	HProxyUseCaseCode      = "hproxy_uc"
 )

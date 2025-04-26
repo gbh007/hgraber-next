@@ -200,3 +200,106 @@ func decodeAPIFileIDGetParams(args [1]string, argsEscaped bool, r *http.Request)
 	}
 	return params, nil
 }
+
+// APIHproxyFileGetParams is parameters of GET /api/hproxy/file operation.
+type APIHproxyFileGetParams struct {
+	// Ссылка на книгу во внешней системе.
+	BookURL url.URL
+	// Ссылка на изображение во внешней системе.
+	ImageURL url.URL
+}
+
+func unpackAPIHproxyFileGetParams(packed middleware.Parameters) (params APIHproxyFileGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "book_url",
+			In:   "query",
+		}
+		params.BookURL = packed[key].(url.URL)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "image_url",
+			In:   "query",
+		}
+		params.ImageURL = packed[key].(url.URL)
+	}
+	return params
+}
+
+func decodeAPIHproxyFileGetParams(args [0]string, argsEscaped bool, r *http.Request) (params APIHproxyFileGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: book_url.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "book_url",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToURL(val)
+				if err != nil {
+					return err
+				}
+
+				params.BookURL = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "book_url",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode query: image_url.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "image_url",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToURL(val)
+				if err != nil {
+					return err
+				}
+
+				params.ImageURL = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "image_url",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}

@@ -4348,6 +4348,407 @@ type APIFsValidatePostUnauthorized ErrorResponse
 
 func (*APIFsValidatePostUnauthorized) aPIFsValidatePostRes() {}
 
+type APIHproxyBookPostBadRequest ErrorResponse
+
+func (*APIHproxyBookPostBadRequest) aPIHproxyBookPostRes() {}
+
+type APIHproxyBookPostForbidden ErrorResponse
+
+func (*APIHproxyBookPostForbidden) aPIHproxyBookPostRes() {}
+
+type APIHproxyBookPostInternalServerError ErrorResponse
+
+func (*APIHproxyBookPostInternalServerError) aPIHproxyBookPostRes() {}
+
+type APIHproxyBookPostOK struct {
+	// Название книги.
+	Name string `json:"name"`
+	// Ссылка на внешнюю систему.
+	ExtURL url.URL `json:"ext_url"`
+	// Ссылка на превью.
+	PreviewURL OptURI `json:"preview_url"`
+	// Количество страниц.
+	PageCount int `json:"page_count"`
+	// Данные страниц книги.
+	Pages []APIHproxyBookPostOKPagesItem `json:"pages"`
+	// Данные атрибутов книги.
+	Attributes []APIHproxyBookPostOKAttributesItem `json:"attributes"`
+}
+
+// GetName returns the value of Name.
+func (s *APIHproxyBookPostOK) GetName() string {
+	return s.Name
+}
+
+// GetExtURL returns the value of ExtURL.
+func (s *APIHproxyBookPostOK) GetExtURL() url.URL {
+	return s.ExtURL
+}
+
+// GetPreviewURL returns the value of PreviewURL.
+func (s *APIHproxyBookPostOK) GetPreviewURL() OptURI {
+	return s.PreviewURL
+}
+
+// GetPageCount returns the value of PageCount.
+func (s *APIHproxyBookPostOK) GetPageCount() int {
+	return s.PageCount
+}
+
+// GetPages returns the value of Pages.
+func (s *APIHproxyBookPostOK) GetPages() []APIHproxyBookPostOKPagesItem {
+	return s.Pages
+}
+
+// GetAttributes returns the value of Attributes.
+func (s *APIHproxyBookPostOK) GetAttributes() []APIHproxyBookPostOKAttributesItem {
+	return s.Attributes
+}
+
+// SetName sets the value of Name.
+func (s *APIHproxyBookPostOK) SetName(val string) {
+	s.Name = val
+}
+
+// SetExtURL sets the value of ExtURL.
+func (s *APIHproxyBookPostOK) SetExtURL(val url.URL) {
+	s.ExtURL = val
+}
+
+// SetPreviewURL sets the value of PreviewURL.
+func (s *APIHproxyBookPostOK) SetPreviewURL(val OptURI) {
+	s.PreviewURL = val
+}
+
+// SetPageCount sets the value of PageCount.
+func (s *APIHproxyBookPostOK) SetPageCount(val int) {
+	s.PageCount = val
+}
+
+// SetPages sets the value of Pages.
+func (s *APIHproxyBookPostOK) SetPages(val []APIHproxyBookPostOKPagesItem) {
+	s.Pages = val
+}
+
+// SetAttributes sets the value of Attributes.
+func (s *APIHproxyBookPostOK) SetAttributes(val []APIHproxyBookPostOKAttributesItem) {
+	s.Attributes = val
+}
+
+func (*APIHproxyBookPostOK) aPIHproxyBookPostRes() {}
+
+type APIHproxyBookPostOKAttributesItem struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Название атрибута.
+	Name string `json:"name"`
+	// Значения атрибута.
+	Values []APIHproxyBookPostOKAttributesItemValuesItem `json:"values"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIHproxyBookPostOKAttributesItem) GetCode() string {
+	return s.Code
+}
+
+// GetName returns the value of Name.
+func (s *APIHproxyBookPostOKAttributesItem) GetName() string {
+	return s.Name
+}
+
+// GetValues returns the value of Values.
+func (s *APIHproxyBookPostOKAttributesItem) GetValues() []APIHproxyBookPostOKAttributesItemValuesItem {
+	return s.Values
+}
+
+// SetCode sets the value of Code.
+func (s *APIHproxyBookPostOKAttributesItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetName sets the value of Name.
+func (s *APIHproxyBookPostOKAttributesItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetValues sets the value of Values.
+func (s *APIHproxyBookPostOKAttributesItem) SetValues(val []APIHproxyBookPostOKAttributesItemValuesItem) {
+	s.Values = val
+}
+
+type APIHproxyBookPostOKAttributesItemValuesItem struct {
+	// Название во внешней системе.
+	ExtName string `json:"ext_name"`
+	// Название во внутренней системе.
+	Name OptString `json:"name"`
+	// Ссылка на фильтрацию по значению.
+	ExtURL OptURI `json:"ext_url"`
+}
+
+// GetExtName returns the value of ExtName.
+func (s *APIHproxyBookPostOKAttributesItemValuesItem) GetExtName() string {
+	return s.ExtName
+}
+
+// GetName returns the value of Name.
+func (s *APIHproxyBookPostOKAttributesItemValuesItem) GetName() OptString {
+	return s.Name
+}
+
+// GetExtURL returns the value of ExtURL.
+func (s *APIHproxyBookPostOKAttributesItemValuesItem) GetExtURL() OptURI {
+	return s.ExtURL
+}
+
+// SetExtName sets the value of ExtName.
+func (s *APIHproxyBookPostOKAttributesItemValuesItem) SetExtName(val string) {
+	s.ExtName = val
+}
+
+// SetName sets the value of Name.
+func (s *APIHproxyBookPostOKAttributesItemValuesItem) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetExtURL sets the value of ExtURL.
+func (s *APIHproxyBookPostOKAttributesItemValuesItem) SetExtURL(val OptURI) {
+	s.ExtURL = val
+}
+
+type APIHproxyBookPostOKPagesItem struct {
+	// Номер страницы в книге.
+	PageNumber int `json:"page_number"`
+	// Ссылка на превью.
+	PreviewURL url.URL `json:"preview_url"`
+}
+
+// GetPageNumber returns the value of PageNumber.
+func (s *APIHproxyBookPostOKPagesItem) GetPageNumber() int {
+	return s.PageNumber
+}
+
+// GetPreviewURL returns the value of PreviewURL.
+func (s *APIHproxyBookPostOKPagesItem) GetPreviewURL() url.URL {
+	return s.PreviewURL
+}
+
+// SetPageNumber sets the value of PageNumber.
+func (s *APIHproxyBookPostOKPagesItem) SetPageNumber(val int) {
+	s.PageNumber = val
+}
+
+// SetPreviewURL sets the value of PreviewURL.
+func (s *APIHproxyBookPostOKPagesItem) SetPreviewURL(val url.URL) {
+	s.PreviewURL = val
+}
+
+type APIHproxyBookPostReq struct {
+	// Ссылка для обработки.
+	URL url.URL `json:"url"`
+}
+
+// GetURL returns the value of URL.
+func (s *APIHproxyBookPostReq) GetURL() url.URL {
+	return s.URL
+}
+
+// SetURL sets the value of URL.
+func (s *APIHproxyBookPostReq) SetURL(val url.URL) {
+	s.URL = val
+}
+
+type APIHproxyBookPostUnauthorized ErrorResponse
+
+func (*APIHproxyBookPostUnauthorized) aPIHproxyBookPostRes() {}
+
+type APIHproxyFileGetBadRequest ErrorResponse
+
+func (*APIHproxyFileGetBadRequest) aPIHproxyFileGetRes() {}
+
+type APIHproxyFileGetForbidden ErrorResponse
+
+func (*APIHproxyFileGetForbidden) aPIHproxyFileGetRes() {}
+
+type APIHproxyFileGetInternalServerError ErrorResponse
+
+func (*APIHproxyFileGetInternalServerError) aPIHproxyFileGetRes() {}
+
+type APIHproxyFileGetNotFound ErrorResponse
+
+func (*APIHproxyFileGetNotFound) aPIHproxyFileGetRes() {}
+
+type APIHproxyFileGetOK struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APIHproxyFileGetOK) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+// APIHproxyFileGetOKHeaders wraps APIHproxyFileGetOK with response headers.
+type APIHproxyFileGetOKHeaders struct {
+	ContentType string
+	Response    APIHproxyFileGetOK
+}
+
+// GetContentType returns the value of ContentType.
+func (s *APIHproxyFileGetOKHeaders) GetContentType() string {
+	return s.ContentType
+}
+
+// GetResponse returns the value of Response.
+func (s *APIHproxyFileGetOKHeaders) GetResponse() APIHproxyFileGetOK {
+	return s.Response
+}
+
+// SetContentType sets the value of ContentType.
+func (s *APIHproxyFileGetOKHeaders) SetContentType(val string) {
+	s.ContentType = val
+}
+
+// SetResponse sets the value of Response.
+func (s *APIHproxyFileGetOKHeaders) SetResponse(val APIHproxyFileGetOK) {
+	s.Response = val
+}
+
+func (*APIHproxyFileGetOKHeaders) aPIHproxyFileGetRes() {}
+
+type APIHproxyFileGetUnauthorized ErrorResponse
+
+func (*APIHproxyFileGetUnauthorized) aPIHproxyFileGetRes() {}
+
+type APIHproxyListPostBadRequest ErrorResponse
+
+func (*APIHproxyListPostBadRequest) aPIHproxyListPostRes() {}
+
+type APIHproxyListPostForbidden ErrorResponse
+
+func (*APIHproxyListPostForbidden) aPIHproxyListPostRes() {}
+
+type APIHproxyListPostInternalServerError ErrorResponse
+
+func (*APIHproxyListPostInternalServerError) aPIHproxyListPostRes() {}
+
+type APIHproxyListPostOK struct {
+	// Список книг.
+	Books []APIHproxyListPostOKBooksItem `json:"books"`
+	// Данные пагинации.
+	Pagination []APIHproxyListPostOKPaginationItem `json:"pagination"`
+}
+
+// GetBooks returns the value of Books.
+func (s *APIHproxyListPostOK) GetBooks() []APIHproxyListPostOKBooksItem {
+	return s.Books
+}
+
+// GetPagination returns the value of Pagination.
+func (s *APIHproxyListPostOK) GetPagination() []APIHproxyListPostOKPaginationItem {
+	return s.Pagination
+}
+
+// SetBooks sets the value of Books.
+func (s *APIHproxyListPostOK) SetBooks(val []APIHproxyListPostOKBooksItem) {
+	s.Books = val
+}
+
+// SetPagination sets the value of Pagination.
+func (s *APIHproxyListPostOK) SetPagination(val []APIHproxyListPostOKPaginationItem) {
+	s.Pagination = val
+}
+
+func (*APIHproxyListPostOK) aPIHproxyListPostRes() {}
+
+type APIHproxyListPostOKBooksItem struct {
+	// Ссылка на книгу во внешней системе.
+	ExtURL url.URL `json:"ext_url"`
+	// Название книги.
+	Name OptString `json:"name"`
+	// Ссылка на превью книги.
+	PreviewURL OptURI `json:"preview_url"`
+}
+
+// GetExtURL returns the value of ExtURL.
+func (s *APIHproxyListPostOKBooksItem) GetExtURL() url.URL {
+	return s.ExtURL
+}
+
+// GetName returns the value of Name.
+func (s *APIHproxyListPostOKBooksItem) GetName() OptString {
+	return s.Name
+}
+
+// GetPreviewURL returns the value of PreviewURL.
+func (s *APIHproxyListPostOKBooksItem) GetPreviewURL() OptURI {
+	return s.PreviewURL
+}
+
+// SetExtURL sets the value of ExtURL.
+func (s *APIHproxyListPostOKBooksItem) SetExtURL(val url.URL) {
+	s.ExtURL = val
+}
+
+// SetName sets the value of Name.
+func (s *APIHproxyListPostOKBooksItem) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetPreviewURL sets the value of PreviewURL.
+func (s *APIHproxyListPostOKBooksItem) SetPreviewURL(val OptURI) {
+	s.PreviewURL = val
+}
+
+type APIHproxyListPostOKPaginationItem struct {
+	// Ссылка на страницу пагинации во внешней системе.
+	ExtURL url.URL `json:"ext_url"`
+	// Название страницы или ее номер.
+	Name string `json:"name"`
+}
+
+// GetExtURL returns the value of ExtURL.
+func (s *APIHproxyListPostOKPaginationItem) GetExtURL() url.URL {
+	return s.ExtURL
+}
+
+// GetName returns the value of Name.
+func (s *APIHproxyListPostOKPaginationItem) GetName() string {
+	return s.Name
+}
+
+// SetExtURL sets the value of ExtURL.
+func (s *APIHproxyListPostOKPaginationItem) SetExtURL(val url.URL) {
+	s.ExtURL = val
+}
+
+// SetName sets the value of Name.
+func (s *APIHproxyListPostOKPaginationItem) SetName(val string) {
+	s.Name = val
+}
+
+type APIHproxyListPostReq struct {
+	// Ссылка для обработки.
+	URL url.URL `json:"url"`
+}
+
+// GetURL returns the value of URL.
+func (s *APIHproxyListPostReq) GetURL() url.URL {
+	return s.URL
+}
+
+// SetURL sets the value of URL.
+func (s *APIHproxyListPostReq) SetURL(val url.URL) {
+	s.URL = val
+}
+
+type APIHproxyListPostUnauthorized ErrorResponse
+
+func (*APIHproxyListPostUnauthorized) aPIHproxyListPostRes() {}
+
 type APILabelDeletePostBadRequest ErrorResponse
 
 func (*APILabelDeletePostBadRequest) aPILabelDeletePostRes() {}
