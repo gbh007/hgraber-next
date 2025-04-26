@@ -1,6 +1,7 @@
 package hproxyhandlers
 
 import (
+	"context"
 	"io"
 	"log/slog"
 	"net/url"
@@ -13,9 +14,9 @@ import (
 )
 
 type HProxyUseCases interface {
-	List(u url.URL) (hproxymodel.List, error)
-	Book(u url.URL) (hproxymodel.Book, error)
-	Image(bookURL, imageURL url.URL) (io.Reader, error)
+	List(ctx context.Context, u url.URL) (hproxymodel.List, error)
+	Book(ctx context.Context, u url.URL) (hproxymodel.Book, error)
+	Image(ctx context.Context, bookURL, imageURL url.URL) (io.Reader, error)
 }
 
 type HProxyHandlersController struct {

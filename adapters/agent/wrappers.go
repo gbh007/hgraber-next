@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/domain/hproxymodel"
 )
 
 func (c *Client) BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) (agentmodel.AgentBookDetails, error) {
@@ -71,4 +72,22 @@ func (c *Client) Status(ctx context.Context, agentID uuid.UUID) (agentmodel.Agen
 	}
 
 	return adapter.Status(ctx)
+}
+
+func (c *Client) HProxyList(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.List, error) {
+	adapter, err := c.getAdapter(agentID)
+	if err != nil {
+		return hproxymodel.List{}, err
+	}
+
+	return adapter.HProxyList(ctx, u)
+}
+
+func (c *Client) HProxyBook(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.Book, error) {
+	adapter, err := c.getAdapter(agentID)
+	if err != nil {
+		return hproxymodel.Book{}, err
+	}
+
+	return adapter.HProxyBook(ctx, u)
 }

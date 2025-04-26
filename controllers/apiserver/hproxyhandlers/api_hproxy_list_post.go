@@ -10,7 +10,7 @@ import (
 )
 
 func (c *HProxyHandlersController) APIHproxyListPost(ctx context.Context, req *serverapi.APIHproxyListPostReq) (serverapi.APIHproxyListPostRes, error) {
-	data, err := c.hProxyUseCases.List(req.URL)
+	data, err := c.hProxyUseCases.List(ctx, req.URL)
 	if err != nil {
 		return &serverapi.APIHproxyListPostInternalServerError{
 			InnerCode: apiservercore.HProxyUseCaseCode,

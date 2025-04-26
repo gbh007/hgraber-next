@@ -8,7 +8,7 @@ import (
 )
 
 func (c *HProxyHandlersController) APIHproxyFileGet(ctx context.Context, params serverapi.APIHproxyFileGetParams) (serverapi.APIHproxyFileGetRes, error) {
-	r, err := c.hProxyUseCases.Image(params.BookURL, params.ImageURL)
+	r, err := c.hProxyUseCases.Image(ctx, params.BookURL, params.ImageURL)
 	if err != nil {
 		return &serverapi.APIHproxyFileGetInternalServerError{
 			InnerCode: apiservercore.HProxyUseCaseCode,
