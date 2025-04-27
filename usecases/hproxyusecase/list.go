@@ -16,7 +16,7 @@ import (
 func (uc *UseCase) List(ctx context.Context, u url.URL) (hproxymodel.List, error) {
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParseMulti: true,
-		CanHProxy:     true,
+		HasHProxy:     true,
 	})
 	if err != nil {
 		return hproxymodel.List{}, fmt.Errorf("get agents: %w", err)

@@ -18,6 +18,7 @@ func (c *AgentHandlersController) APIAgentUpdatePost(ctx context.Context, req *s
 		CanParseMulti: req.CanParseMulti,
 		CanExport:     req.CanExport,
 		HasFS:         req.HasFs,
+		HasHProxy:     req.HasHproxy,
 		Priority:      req.Priority,
 	})
 	if err != nil {

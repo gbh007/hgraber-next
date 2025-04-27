@@ -141,6 +141,7 @@ func ConvertAgentToAPI(raw core.Agent) serverapi.Agent {
 		CanParseMulti: raw.CanParseMulti,
 		CanExport:     raw.CanExport,
 		HasFs:         raw.HasFS,
+		HasHproxy:     raw.HasHProxy,
 		Priority:      raw.Priority,
 		CreatedAt:     raw.CreateAt,
 	}

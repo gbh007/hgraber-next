@@ -3028,6 +3028,9 @@ paths:
                 has_fs:
                   type: boolean
                   description: Может ли агент работать в режиме ФС
+                has_hproxy:
+                  type: boolean
+                  description: Может ли агент работать в режиме HProxy
                 priority:
                   type: integer
                   description: Приоритет при выборе агентов
@@ -3103,6 +3106,9 @@ paths:
                 has_fs:
                   type: boolean
                   description: Может ли агент работать в режиме ФС
+                has_hproxy:
+                  type: boolean
+                  description: Может ли агент работать в режиме HProxy
                 priority:
                   type: integer
                   description: Приоритет при выборе агентов
@@ -3115,6 +3121,7 @@ paths:
                 - can_parse_multi
                 - can_export
                 - has_fs
+                - has_hproxy
                 - priority
       responses:
         204:
@@ -3226,6 +3233,9 @@ paths:
                 has_fs:
                   type: boolean
                   description: Может ли агент работать в режиме ФС
+                has_hproxy:
+                  type: boolean
+                  description: Может ли агент работать в режиме HProxy
                 include_status:
                   type: boolean
                   description: Проверить состояние агента (запрос статуса у самого агента)
@@ -5241,6 +5251,9 @@ components:
         has_fs:
           type: boolean
           description: Может ли агент работать в режиме ФС
+        has_hproxy:
+          type: boolean
+          description: Может ли агент работать в режиме HProxy
         priority:
           type: integer
           description: Приоритет при выборе агентов
@@ -5257,6 +5270,7 @@ components:
         - can_parse_multi
         - can_export
         - has_fs
+        - has_hproxy
         - priority
         - created_at
 

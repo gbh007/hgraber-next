@@ -329,6 +329,8 @@ type APIAgentListPostReq struct {
 	CanParseMulti OptBool `json:"can_parse_multi"`
 	// Может ли агент работать в режиме ФС.
 	HasFs OptBool `json:"has_fs"`
+	// Может ли агент работать в режиме HProxy.
+	HasHproxy OptBool `json:"has_hproxy"`
 	// Проверить состояние агента (запрос статуса у самого
 	// агента).
 	IncludeStatus OptBool `json:"include_status"`
@@ -354,6 +356,11 @@ func (s *APIAgentListPostReq) GetHasFs() OptBool {
 	return s.HasFs
 }
 
+// GetHasHproxy returns the value of HasHproxy.
+func (s *APIAgentListPostReq) GetHasHproxy() OptBool {
+	return s.HasHproxy
+}
+
 // GetIncludeStatus returns the value of IncludeStatus.
 func (s *APIAgentListPostReq) GetIncludeStatus() OptBool {
 	return s.IncludeStatus
@@ -377,6 +384,11 @@ func (s *APIAgentListPostReq) SetCanParseMulti(val OptBool) {
 // SetHasFs sets the value of HasFs.
 func (s *APIAgentListPostReq) SetHasFs(val OptBool) {
 	s.HasFs = val
+}
+
+// SetHasHproxy sets the value of HasHproxy.
+func (s *APIAgentListPostReq) SetHasHproxy(val OptBool) {
+	s.HasHproxy = val
 }
 
 // SetIncludeStatus sets the value of IncludeStatus.
@@ -421,6 +433,8 @@ type APIAgentNewPostReq struct {
 	CanExport OptBool `json:"can_export"`
 	// Может ли агент работать в режиме ФС.
 	HasFs OptBool `json:"has_fs"`
+	// Может ли агент работать в режиме HProxy.
+	HasHproxy OptBool `json:"has_hproxy"`
 	// Приоритет при выборе агентов.
 	Priority OptInt `json:"priority"`
 }
@@ -458,6 +472,11 @@ func (s *APIAgentNewPostReq) GetCanExport() OptBool {
 // GetHasFs returns the value of HasFs.
 func (s *APIAgentNewPostReq) GetHasFs() OptBool {
 	return s.HasFs
+}
+
+// GetHasHproxy returns the value of HasHproxy.
+func (s *APIAgentNewPostReq) GetHasHproxy() OptBool {
+	return s.HasHproxy
 }
 
 // GetPriority returns the value of Priority.
@@ -498,6 +517,11 @@ func (s *APIAgentNewPostReq) SetCanExport(val OptBool) {
 // SetHasFs sets the value of HasFs.
 func (s *APIAgentNewPostReq) SetHasFs(val OptBool) {
 	s.HasFs = val
+}
+
+// SetHasHproxy sets the value of HasHproxy.
+func (s *APIAgentNewPostReq) SetHasHproxy(val OptBool) {
+	s.HasHproxy = val
 }
 
 // SetPriority sets the value of Priority.
@@ -603,6 +627,8 @@ type APIAgentUpdatePostReq struct {
 	CanExport bool `json:"can_export"`
 	// Может ли агент работать в режиме ФС.
 	HasFs bool `json:"has_fs"`
+	// Может ли агент работать в режиме HProxy.
+	HasHproxy bool `json:"has_hproxy"`
 	// Приоритет при выборе агентов.
 	Priority int `json:"priority"`
 }
@@ -645,6 +671,11 @@ func (s *APIAgentUpdatePostReq) GetCanExport() bool {
 // GetHasFs returns the value of HasFs.
 func (s *APIAgentUpdatePostReq) GetHasFs() bool {
 	return s.HasFs
+}
+
+// GetHasHproxy returns the value of HasHproxy.
+func (s *APIAgentUpdatePostReq) GetHasHproxy() bool {
+	return s.HasHproxy
 }
 
 // GetPriority returns the value of Priority.
@@ -690,6 +721,11 @@ func (s *APIAgentUpdatePostReq) SetCanExport(val bool) {
 // SetHasFs sets the value of HasFs.
 func (s *APIAgentUpdatePostReq) SetHasFs(val bool) {
 	s.HasFs = val
+}
+
+// SetHasHproxy sets the value of HasHproxy.
+func (s *APIAgentUpdatePostReq) SetHasHproxy(val bool) {
+	s.HasHproxy = val
 }
 
 // SetPriority sets the value of Priority.
@@ -6728,6 +6764,8 @@ type Agent struct {
 	CanExport bool `json:"can_export"`
 	// Может ли агент работать в режиме ФС.
 	HasFs bool `json:"has_fs"`
+	// Может ли агент работать в режиме HProxy.
+	HasHproxy bool `json:"has_hproxy"`
 	// Приоритет при выборе агентов.
 	Priority int `json:"priority"`
 	// Время создания.
@@ -6772,6 +6810,11 @@ func (s *Agent) GetCanExport() bool {
 // GetHasFs returns the value of HasFs.
 func (s *Agent) GetHasFs() bool {
 	return s.HasFs
+}
+
+// GetHasHproxy returns the value of HasHproxy.
+func (s *Agent) GetHasHproxy() bool {
+	return s.HasHproxy
 }
 
 // GetPriority returns the value of Priority.
@@ -6822,6 +6865,11 @@ func (s *Agent) SetCanExport(val bool) {
 // SetHasFs sets the value of HasFs.
 func (s *Agent) SetHasFs(val bool) {
 	s.HasFs = val
+}
+
+// SetHasHproxy sets the value of HasHproxy.
+func (s *Agent) SetHasHproxy(val bool) {
+	s.HasHproxy = val
 }
 
 // SetPriority sets the value of Priority.

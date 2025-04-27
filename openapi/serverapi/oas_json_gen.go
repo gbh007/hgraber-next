@@ -1252,6 +1252,12 @@ func (s *APIAgentListPostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.HasHproxy.Set {
+			e.FieldStart("has_hproxy")
+			s.HasHproxy.Encode(e)
+		}
+	}
+	{
 		if s.IncludeStatus.Set {
 			e.FieldStart("include_status")
 			s.IncludeStatus.Encode(e)
@@ -1259,12 +1265,13 @@ func (s *APIAgentListPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIAgentListPostReq = [5]string{
+var jsonFieldsNameOfAPIAgentListPostReq = [6]string{
 	0: "can_parse",
 	1: "can_export",
 	2: "can_parse_multi",
 	3: "has_fs",
-	4: "include_status",
+	4: "has_hproxy",
+	5: "include_status",
 }
 
 // Decode decodes APIAgentListPostReq from json.
@@ -1314,6 +1321,16 @@ func (s *APIAgentListPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"has_fs\"")
+			}
+		case "has_hproxy":
+			if err := func() error {
+				s.HasHproxy.Reset()
+				if err := s.HasHproxy.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"has_hproxy\"")
 			}
 		case "include_status":
 			if err := func() error {
@@ -1547,6 +1564,12 @@ func (s *APIAgentNewPostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.HasHproxy.Set {
+			e.FieldStart("has_hproxy")
+			s.HasHproxy.Encode(e)
+		}
+	}
+	{
 		if s.Priority.Set {
 			e.FieldStart("priority")
 			s.Priority.Encode(e)
@@ -1554,7 +1577,7 @@ func (s *APIAgentNewPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIAgentNewPostReq = [8]string{
+var jsonFieldsNameOfAPIAgentNewPostReq = [9]string{
 	0: "name",
 	1: "addr",
 	2: "token",
@@ -1562,7 +1585,8 @@ var jsonFieldsNameOfAPIAgentNewPostReq = [8]string{
 	4: "can_parse_multi",
 	5: "can_export",
 	6: "has_fs",
-	7: "priority",
+	7: "has_hproxy",
+	8: "priority",
 }
 
 // Decode decodes APIAgentNewPostReq from json.
@@ -1570,7 +1594,7 @@ func (s *APIAgentNewPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode APIAgentNewPostReq to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -1650,6 +1674,16 @@ func (s *APIAgentNewPostReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"has_fs\"")
 			}
+		case "has_hproxy":
+			if err := func() error {
+				s.HasHproxy.Reset()
+				if err := s.HasHproxy.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"has_hproxy\"")
+			}
 		case "priority":
 			if err := func() error {
 				s.Priority.Reset()
@@ -1669,8 +1703,9 @@ func (s *APIAgentNewPostReq) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
+	for i, mask := range [2]uint8{
 		0b00000111,
+		0b00000000,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2190,12 +2225,16 @@ func (s *APIAgentUpdatePostReq) encodeFields(e *jx.Encoder) {
 		e.Bool(s.HasFs)
 	}
 	{
+		e.FieldStart("has_hproxy")
+		e.Bool(s.HasHproxy)
+	}
+	{
 		e.FieldStart("priority")
 		e.Int(s.Priority)
 	}
 }
 
-var jsonFieldsNameOfAPIAgentUpdatePostReq = [9]string{
+var jsonFieldsNameOfAPIAgentUpdatePostReq = [10]string{
 	0: "id",
 	1: "name",
 	2: "addr",
@@ -2204,7 +2243,8 @@ var jsonFieldsNameOfAPIAgentUpdatePostReq = [9]string{
 	5: "can_parse_multi",
 	6: "can_export",
 	7: "has_fs",
-	8: "priority",
+	8: "has_hproxy",
+	9: "priority",
 }
 
 // Decode decodes APIAgentUpdatePostReq from json.
@@ -2312,8 +2352,20 @@ func (s *APIAgentUpdatePostReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"has_fs\"")
 			}
-		case "priority":
+		case "has_hproxy":
 			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Bool()
+				s.HasHproxy = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"has_hproxy\"")
+			}
+		case "priority":
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				v, err := d.Int()
 				s.Priority = int(v)
@@ -2335,7 +2387,7 @@ func (s *APIAgentUpdatePostReq) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -26101,6 +26153,10 @@ func (s *Agent) encodeFields(e *jx.Encoder) {
 		e.Bool(s.HasFs)
 	}
 	{
+		e.FieldStart("has_hproxy")
+		e.Bool(s.HasHproxy)
+	}
+	{
 		e.FieldStart("priority")
 		e.Int(s.Priority)
 	}
@@ -26110,17 +26166,18 @@ func (s *Agent) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAgent = [10]string{
-	0: "id",
-	1: "name",
-	2: "addr",
-	3: "token",
-	4: "can_parse",
-	5: "can_parse_multi",
-	6: "can_export",
-	7: "has_fs",
-	8: "priority",
-	9: "created_at",
+var jsonFieldsNameOfAgent = [11]string{
+	0:  "id",
+	1:  "name",
+	2:  "addr",
+	3:  "token",
+	4:  "can_parse",
+	5:  "can_parse_multi",
+	6:  "can_export",
+	7:  "has_fs",
+	8:  "has_hproxy",
+	9:  "priority",
+	10: "created_at",
 }
 
 // Decode decodes Agent from json.
@@ -26228,8 +26285,20 @@ func (s *Agent) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"has_fs\"")
 			}
-		case "priority":
+		case "has_hproxy":
 			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Bool()
+				s.HasHproxy = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"has_hproxy\"")
+			}
+		case "priority":
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				v, err := d.Int()
 				s.Priority = int(v)
@@ -26241,7 +26310,7 @@ func (s *Agent) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"priority\"")
 			}
 		case "created_at":
-			requiredBitSet[1] |= 1 << 1
+			requiredBitSet[1] |= 1 << 2
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreatedAt = v
@@ -26263,7 +26332,7 @@ func (s *Agent) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

@@ -16,6 +16,7 @@ type Agent struct {
 	CanParseMulti bool
 	CanExport     bool
 	HasFS         bool
+	HasHProxy     bool
 	Priority      int
 	CreateAt      time.Time
 }
@@ -24,6 +25,6 @@ type AgentFilter struct {
 	CanParse      bool
 	CanParseMulti bool
 	CanExport     bool
-	CanHProxy     bool // FIXME: поддержать
 	HasFS         bool
+	HasHProxy     bool
 }
