@@ -29,6 +29,14 @@ type APIHighwayTokenCreatePostRes interface {
 	aPIHighwayTokenCreatePostRes()
 }
 
+type APIHproxyParseBookPostRes interface {
+	aPIHproxyParseBookPostRes()
+}
+
+type APIHproxyParseListPostRes interface {
+	aPIHproxyParseListPostRes()
+}
+
 type APIImportArchivePostRes interface {
 	aPIImportArchivePostRes()
 }

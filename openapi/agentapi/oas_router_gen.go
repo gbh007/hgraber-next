@@ -181,9 +181,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'h': // Prefix: "highway/"
+			case 'h': // Prefix: "h"
 				origElem := elem
-				if l := len("highway/"); len(elem) >= l && elem[0:l] == "highway/" {
+				if l := len("h"); len(elem) >= l && elem[0:l] == "h" {
 					elem = elem[l:]
 				} else {
 					break
@@ -193,50 +193,86 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'f': // Prefix: "file/"
+				case 'i': // Prefix: "ighway/"
 					origElem := elem
-					if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
+					if l := len("ighway/"); len(elem) >= l && elem[0:l] == "ighway/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					// Param: "id"
-					// Match until "."
-					idx := strings.IndexByte(elem, '.')
-					if idx < 0 {
-						idx = len(elem)
-					}
-					args[0] = elem[:idx]
-					elem = elem[idx:]
-
 					if len(elem) == 0 {
 						break
 					}
 					switch elem[0] {
-					case '.': // Prefix: "."
+					case 'f': // Prefix: "file/"
 						origElem := elem
-						if l := len("."); len(elem) >= l && elem[0:l] == "." {
+						if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						// Param: "ext"
-						// Leaf parameter
-						args[1] = elem
-						elem = ""
+						// Param: "id"
+						// Match until "."
+						idx := strings.IndexByte(elem, '.')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[0] = elem[:idx]
+						elem = elem[idx:]
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case '.': // Prefix: "."
+							origElem := elem
+							if l := len("."); len(elem) >= l && elem[0:l] == "." {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "ext"
+							// Leaf parameter
+							args[1] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleAPIHighwayFileIDExtGetRequest([2]string{
+										args[0],
+										args[1],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 't': // Prefix: "token/create"
+						origElem := elem
+						if l := len("token/create"); len(elem) >= l && elem[0:l] == "token/create" {
+							elem = elem[l:]
+						} else {
+							break
+						}
 
 						if len(elem) == 0 {
 							// Leaf node.
 							switch r.Method {
-							case "GET":
-								s.handleAPIHighwayFileIDExtGetRequest([2]string{
-									args[0],
-									args[1],
-								}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleAPIHighwayTokenCreatePostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "GET")
+								s.notAllowed(w, r, "POST")
 							}
 
 							return
@@ -246,24 +282,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 't': // Prefix: "token/create"
+				case 'p': // Prefix: "proxy/parse/"
 					origElem := elem
-					if l := len("token/create"); len(elem) >= l && elem[0:l] == "token/create" {
+					if l := len("proxy/parse/"); len(elem) >= l && elem[0:l] == "proxy/parse/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIHighwayTokenCreatePostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
+						break
+					}
+					switch elem[0] {
+					case 'b': // Prefix: "book"
+						origElem := elem
+						if l := len("book"); len(elem) >= l && elem[0:l] == "book" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIHproxyParseBookPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'l': // Prefix: "list"
+						origElem := elem
+						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIHproxyParseListPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -663,9 +735,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 'h': // Prefix: "highway/"
+			case 'h': // Prefix: "h"
 				origElem := elem
-				if l := len("highway/"); len(elem) >= l && elem[0:l] == "highway/" {
+				if l := len("h"); len(elem) >= l && elem[0:l] == "h" {
 					elem = elem[l:]
 				} else {
 					break
@@ -675,50 +747,90 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'f': // Prefix: "file/"
+				case 'i': // Prefix: "ighway/"
 					origElem := elem
-					if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
+					if l := len("ighway/"); len(elem) >= l && elem[0:l] == "ighway/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					// Param: "id"
-					// Match until "."
-					idx := strings.IndexByte(elem, '.')
-					if idx < 0 {
-						idx = len(elem)
-					}
-					args[0] = elem[:idx]
-					elem = elem[idx:]
-
 					if len(elem) == 0 {
 						break
 					}
 					switch elem[0] {
-					case '.': // Prefix: "."
+					case 'f': // Prefix: "file/"
 						origElem := elem
-						if l := len("."); len(elem) >= l && elem[0:l] == "." {
+						if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						// Param: "ext"
-						// Leaf parameter
-						args[1] = elem
-						elem = ""
+						// Param: "id"
+						// Match until "."
+						idx := strings.IndexByte(elem, '.')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[0] = elem[:idx]
+						elem = elem[idx:]
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case '.': // Prefix: "."
+							origElem := elem
+							if l := len("."); len(elem) >= l && elem[0:l] == "." {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "ext"
+							// Leaf parameter
+							args[1] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = APIHighwayFileIDExtGetOperation
+									r.summary = "Получение файла через highway"
+									r.operationID = ""
+									r.pathPattern = "/api/highway/file/{id}.{ext}"
+									r.args = args
+									r.count = 2
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 't': // Prefix: "token/create"
+						origElem := elem
+						if l := len("token/create"); len(elem) >= l && elem[0:l] == "token/create" {
+							elem = elem[l:]
+						} else {
+							break
+						}
 
 						if len(elem) == 0 {
 							// Leaf node.
 							switch method {
-							case "GET":
-								r.name = APIHighwayFileIDExtGetOperation
-								r.summary = "Получение файла через highway"
+							case "POST":
+								r.name = APIHighwayTokenCreatePostOperation
+								r.summary = "Создание нового токена для highway"
 								r.operationID = ""
-								r.pathPattern = "/api/highway/file/{id}.{ext}"
+								r.pathPattern = "/api/highway/token/create"
 								r.args = args
-								r.count = 2
+								r.count = 0
 								return r, true
 							default:
 								return
@@ -729,28 +841,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				case 't': // Prefix: "token/create"
+				case 'p': // Prefix: "proxy/parse/"
 					origElem := elem
-					if l := len("token/create"); len(elem) >= l && elem[0:l] == "token/create" {
+					if l := len("proxy/parse/"); len(elem) >= l && elem[0:l] == "proxy/parse/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIHighwayTokenCreatePostOperation
-							r.summary = "Создание нового токена для highway"
-							r.operationID = ""
-							r.pathPattern = "/api/highway/token/create"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'b': // Prefix: "book"
+						origElem := elem
+						if l := len("book"); len(elem) >= l && elem[0:l] == "book" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIHproxyParseBookPostOperation
+								r.summary = "Парсинг данных книги по ссылке"
+								r.operationID = ""
+								r.pathPattern = "/api/hproxy/parse/book"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'l': // Prefix: "list"
+						origElem := elem
+						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIHproxyParseListPostOperation
+								r.summary = "Парсинг списка данных по ссылке"
+								r.operationID = ""
+								r.pathPattern = "/api/hproxy/parse/list"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem

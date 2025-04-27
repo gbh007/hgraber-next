@@ -54,3 +54,17 @@ func (c *Controller) APIHighwayTokenCreatePost(ctx context.Context) (agentapi.AP
 		Details:   agentapi.NewOptString("unsupported api"),
 	}, nil
 }
+
+func (c *Controller) APIHproxyParseBookPost(ctx context.Context, req *agentapi.APIHproxyParseBookPostReq) (agentapi.APIHproxyParseBookPostRes, error) {
+	return &agentapi.APIHproxyParseBookPostBadRequest{
+		InnerCode: ValidationCode,
+		Details:   agentapi.NewOptString("unsupported api"),
+	}, nil
+}
+
+func (c *Controller) APIHproxyParseListPost(ctx context.Context, req *agentapi.APIHproxyParseListPostReq) (agentapi.APIHproxyParseListPostRes, error) {
+	return &agentapi.APIHproxyParseListPostBadRequest{
+		InnerCode: ValidationCode,
+		Details:   agentapi.NewOptString("unsupported api"),
+	}, nil
+}

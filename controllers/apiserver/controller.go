@@ -12,6 +12,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/bookhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/deduplicatehandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/fshandlers"
+	"github.com/gbh007/hgraber-next/controllers/apiserver/hproxyhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/labelhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/systemhandlers"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -69,6 +70,10 @@ type AttributeUseCases interface {
 	attributehandlers.AttributeUseCases
 }
 
+type HProxyUseCases interface {
+	hproxyhandlers.HProxyUseCases
+}
+
 type config interface {
 	GetAddr() string
 	GetExternalAddr() string
@@ -86,6 +91,7 @@ type Controller struct {
 	*fshandlers.FSHandlersController
 	*labelhandlers.LabelHandlersController
 	*systemhandlers.SystemHandlersController
+	*hproxyhandlers.HProxyHandlersController
 
 	logger          *slog.Logger
 	tracer          trace.Tracer
@@ -114,6 +120,7 @@ func New(
 	attributeUseCases AttributeUseCases,
 	labelUseCases LabelUseCases,
 	bookUseCases BookUseCases,
+	hProxyUseCases HProxyUseCases,
 ) (*Controller, error) {
 	ac, err := apiservercore.New(
 		logger,
@@ -184,6 +191,13 @@ func New(
 			parseUseCases,
 			exportUseCases,
 			systemUseCases,
+			config.GetDebug(),
+			ac,
+		),
+		HProxyHandlersController: hproxyhandlers.New(
+			logger,
+			tracer,
+			hProxyUseCases,
 			config.GetDebug(),
 			ac,
 		),

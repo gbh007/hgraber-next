@@ -76,6 +76,24 @@ func (UnimplementedHandler) APIHighwayTokenCreatePost(ctx context.Context) (r AP
 	return r, ht.ErrNotImplemented
 }
 
+// APIHproxyParseBookPost implements POST /api/hproxy/parse/book operation.
+//
+// Парсинг данных книги по ссылке.
+//
+// POST /api/hproxy/parse/book
+func (UnimplementedHandler) APIHproxyParseBookPost(ctx context.Context, req *APIHproxyParseBookPostReq) (r APIHproxyParseBookPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIHproxyParseListPost implements POST /api/hproxy/parse/list operation.
+//
+// Парсинг списка данных по ссылке.
+//
+// POST /api/hproxy/parse/list
+func (UnimplementedHandler) APIHproxyParseListPost(ctx context.Context, req *APIHproxyParseListPostReq) (r APIHproxyParseListPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIImportArchivePost implements POST /api/import/archive operation.
 //
 // Загрузка архива.

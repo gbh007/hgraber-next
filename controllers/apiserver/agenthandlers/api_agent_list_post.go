@@ -16,6 +16,7 @@ func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *ser
 		CanExport:     req.CanExport.Value,
 		CanParseMulti: req.CanParseMulti.Value,
 		HasFS:         req.HasFs.Value,
+		HasHProxy:     req.HasHproxy.Value,
 	}, req.IncludeStatus.Value)
 	if err != nil {
 		return &serverapi.APIAgentListPostInternalServerError{
@@ -24,36 +25,36 @@ func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *ser
 		}, nil
 	}
 
-	responseAgents := pkg.Map(agents, func(aws agentmodel.AgentWithStatus) serverapi.APIAgentListPostOKItem {
+	responseAgents := pkg.Map(agents, func(agent agentmodel.AgentWithStatus) serverapi.APIAgentListPostOKItem {
 		status := serverapi.OptAPIAgentListPostOKItemStatus{}
 
 		switch {
-		case aws.StatusError != "":
+		case agent.StatusError != "":
 			status = serverapi.NewOptAPIAgentListPostOKItemStatus(serverapi.APIAgentListPostOKItemStatus{
-				CheckStatusError: serverapi.NewOptString(aws.StatusError),
+				CheckStatusError: serverapi.NewOptString(agent.StatusError),
 				Status:           serverapi.APIAgentListPostOKItemStatusStatusUnknown,
 			})
 
-		case aws.IsOffline:
+		case agent.IsOffline:
 			status = serverapi.NewOptAPIAgentListPostOKItemStatus(serverapi.APIAgentListPostOKItemStatus{
 				Status: serverapi.APIAgentListPostOKItemStatusStatusOffline,
 			})
 
-		case !aws.Status.StartAt.IsZero():
+		case !agent.Status.StartAt.IsZero():
 			t := serverapi.APIAgentListPostOKItemStatusStatusUnknown
 
 			switch {
-			case aws.Status.IsOK:
+			case agent.Status.IsOK:
 				t = serverapi.APIAgentListPostOKItemStatusStatusOk
-			case aws.Status.IsWarning:
+			case agent.Status.IsWarning:
 				t = serverapi.APIAgentListPostOKItemStatusStatusWarning
-			case aws.Status.IsError:
+			case agent.Status.IsError:
 				t = serverapi.APIAgentListPostOKItemStatusStatusError
 			}
 
 			status = serverapi.NewOptAPIAgentListPostOKItemStatus(serverapi.APIAgentListPostOKItemStatus{
-				StartAt: serverapi.NewOptDateTime(aws.Status.StartAt),
-				Problems: pkg.Map(aws.Status.Problems, func(p agentmodel.AgentStatusProblem) serverapi.APIAgentListPostOKItemStatusProblemsItem {
+				StartAt: serverapi.NewOptDateTime(agent.Status.StartAt),
+				Problems: pkg.Map(agent.Status.Problems, func(p agentmodel.AgentStatusProblem) serverapi.APIAgentListPostOKItemStatusProblemsItem {
 					t := serverapi.APIAgentListPostOKItemStatusProblemsItemTypeError
 
 					switch {
@@ -74,7 +75,7 @@ func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *ser
 
 		return serverapi.APIAgentListPostOKItem{
 			Status: status,
-			Info:   apiservercore.ConvertAgentToAPI(aws.Agent),
+			Info:   apiservercore.ConvertAgentToAPI(agent.Agent),
 		}
 	})
 

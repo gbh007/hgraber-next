@@ -20,6 +20,8 @@ tags:
     description: API агента для импорта архива
   - name: fs
     description: API агента для использования в качестве файловой системы
+  - name: hproxy
+    description: API агента для использования в качестве прокси системы на оригинальный сайт
 
 paths:
   /api/core/status:
@@ -831,6 +833,208 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/hproxy/parse/list:
+    post:
+      description: Парсинг списка данных по ссылке
+      summary: Парсинг списка данных по ссылке
+      tags:
+        - hproxy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: Ссылка для обработки
+              required:
+                - url
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - results
+                properties:
+                  results:
+                    type: array
+                    description: Результаты обработки
+                    items:
+                      type: object
+                      description: Экземпляр
+                      properties:
+                        link_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на экземпляр
+                        name:
+                          type: string
+                          description: Название экземпляра
+                        preview_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на превью экземпляра
+                        type:
+                          type: string
+                          description: Тип экземпляра
+                          enum:
+                            - details
+                            - list
+                      required:
+                        - link_url
+                        - type
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/hproxy/parse/book:
+    post:
+      description: Парсинг данных книги по ссылке
+      summary: Парсинг данных книги по ссылке
+      tags:
+        - hproxy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: Ссылка для обработки
+              required:
+                - url
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - name
+                  - url
+                  - page_count
+                  - pages
+                  - attributes
+                properties:
+                  name:
+                    type: string
+                    description: Название книги
+                  url:
+                    type: string
+                    format: uri
+                    description: Ссылка на внешнюю систему
+                  preview_url:
+                    type: string
+                    format: uri
+                    description: Ссылка на превью
+                  page_count:
+                    type: integer
+                    description: Количество страниц
+                  pages:
+                    type: array
+                    description: данные страниц книги
+                    items:
+                      type: object
+                      properties:
+                        page_number:
+                          type: integer
+                          description: Номер страницы в книге
+                          minimum: 1
+                        url:
+                          type: string
+                          format: uri
+                          description: Ссылка на изображение во внешней системе
+                        filename:
+                          type: string
+                          description: Название файла с расширением
+                          example: 1.jpg
+                      required:
+                        - page_number
+                        - url
+                        - filename
+                  attributes:
+                    type: array
+                    description: Данные атрибутов книги
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: Код атрибута
+                        values:
+                          type: array
+                          description: Значения атрибута
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: Название
+                              url:
+                                type: string
+                                format: uri
+                                description: Ссылка на фильтрацию по значению
+                            required:
+                              - name
+                      required:
+                        - code
+                        - values
+        400:
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Токен доступа не предоставлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     ErrorResponse:
@@ -869,6 +1073,7 @@ components:
               code:
                 type: string
                 description: Код атрибута
+                # FIXME: убрать это ограничение
                 enum:
                   - author
                   - category

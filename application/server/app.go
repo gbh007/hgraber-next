@@ -27,6 +27,7 @@ import (
 	"github.com/gbh007/hgraber-next/usecases/deduplicatorusecase"
 	"github.com/gbh007/hgraber-next/usecases/exportusecase"
 	"github.com/gbh007/hgraber-next/usecases/filesystemusecase"
+	"github.com/gbh007/hgraber-next/usecases/hproxyusecase"
 	"github.com/gbh007/hgraber-next/usecases/labelusecase"
 	"github.com/gbh007/hgraber-next/usecases/parsingusecase"
 	"github.com/gbh007/hgraber-next/usecases/rebuilderusecase"
@@ -166,6 +167,7 @@ func Serve() {
 	systemUseCases := systemusecase.New(logger, storage, tmpStorage, deduplicateUseCases, cleanupUseCases, workersController, attributeUseCases)
 
 	agentUseCases := agentusecase.New(logger, agentSystem, storage)
+	hProxyUseCases := hproxyusecase.New(logger, storage, agentSystem, cfg.Parsing.ParseBookTimeout, cfg.AttributeRemap.Auto, cfg.AttributeRemap.AllLower)
 
 	apiController, err := apiserver.New(
 		logger,
@@ -182,6 +184,7 @@ func Serve() {
 		attributeUseCases,
 		labelUseCases,
 		bookUseCases,
+		hProxyUseCases,
 	)
 	if err != nil {
 		logger.ErrorContext(

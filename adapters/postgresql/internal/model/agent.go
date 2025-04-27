@@ -19,6 +19,7 @@ func AgentColumns() []string {
 		"can_parse_multi",
 		"can_export",
 		"has_fs",
+		"has_hproxy",
 		"priority",
 		"create_at",
 	}
@@ -39,6 +40,7 @@ func AgentScanner(agent *core.Agent) RowScanner {
 			&agent.CanParseMulti,
 			&agent.CanExport,
 			&agent.HasFS,
+			&agent.HasHProxy,
 			&agent.Priority,
 			&agent.CreateAt,
 		)

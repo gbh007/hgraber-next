@@ -50,6 +50,18 @@ type Handler interface {
 	//
 	// POST /api/highway/token/create
 	APIHighwayTokenCreatePost(ctx context.Context) (APIHighwayTokenCreatePostRes, error)
+	// APIHproxyParseBookPost implements POST /api/hproxy/parse/book operation.
+	//
+	// Парсинг данных книги по ссылке.
+	//
+	// POST /api/hproxy/parse/book
+	APIHproxyParseBookPost(ctx context.Context, req *APIHproxyParseBookPostReq) (APIHproxyParseBookPostRes, error)
+	// APIHproxyParseListPost implements POST /api/hproxy/parse/list operation.
+	//
+	// Парсинг списка данных по ссылке.
+	//
+	// POST /api/hproxy/parse/list
+	APIHproxyParseListPost(ctx context.Context, req *APIHproxyParseListPostReq) (APIHproxyParseListPostRes, error)
 	// APIImportArchivePost implements POST /api/import/archive operation.
 	//
 	// Загрузка архива.

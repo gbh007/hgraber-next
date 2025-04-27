@@ -427,6 +427,33 @@ func (UnimplementedHandler) APIFsValidatePost(ctx context.Context, req *APIFsVal
 	return r, ht.ErrNotImplemented
 }
 
+// APIHproxyBookPost implements POST /api/hproxy/book operation.
+//
+// Парсинг данных книги по ссылке.
+//
+// POST /api/hproxy/book
+func (UnimplementedHandler) APIHproxyBookPost(ctx context.Context, req *APIHproxyBookPostReq) (r APIHproxyBookPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIHproxyFileGet implements GET /api/hproxy/file operation.
+//
+// Получение тела файла (изображения страницы).
+//
+// GET /api/hproxy/file
+func (UnimplementedHandler) APIHproxyFileGet(ctx context.Context, params APIHproxyFileGetParams) (r APIHproxyFileGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIHproxyListPost implements POST /api/hproxy/list operation.
+//
+// Парсинг списка данных по ссылке.
+//
+// POST /api/hproxy/list
+func (UnimplementedHandler) APIHproxyListPost(ctx context.Context, req *APIHproxyListPostReq) (r APIHproxyListPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APILabelDeletePost implements POST /api/label/delete operation.
 //
 // Удаление метки на книгу или страницу.

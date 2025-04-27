@@ -1,53 +1,12 @@
 package apiservercore
 
 import (
-	"context"
-	"log/slog"
-	"net/url"
-	"time"
-
-	"github.com/google/uuid"
-
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
 )
-
-func (c *Controller) GetFileURL(fileID uuid.UUID, ext string, fsID uuid.UUID) url.URL {
-	if c.fsUseCases != nil {
-		// FIXME: подумать над местом получше,
-		// или более явным пробросом контекста,
-		// или автообновлением токенов, чтобы не было надобности в ошибках.
-		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
-		defer cancel()
-
-		u, ok, err := c.fsUseCases.HighwayFileURL(ctx, fileID, ext, fsID)
-		if err != nil {
-			c.logger.ErrorContext(
-				ctx, "get highway file url",
-				slog.Any("error", err),
-			)
-		}
-
-		if ok {
-			return u
-		}
-	}
-
-	u := url.URL{
-		Scheme: c.externalServerScheme,
-		Host:   c.externalServerHostWithPort,
-		Path:   "/api/file/" + fileID.String() + ext,
-	}
-
-	v := url.Values{}
-	v.Add("fsid", fsID.String())
-	u.RawQuery = v.Encode()
-
-	return u
-}
 
 func (c *Controller) ConvertPreviewPageUrl(p bff.PreviewPage) serverapi.OptURI {
 	previewURL := serverapi.OptURI{}
@@ -182,6 +141,7 @@ func ConvertAgentToAPI(raw core.Agent) serverapi.Agent {
 		CanParseMulti: raw.CanParseMulti,
 		CanExport:     raw.CanExport,
 		HasFs:         raw.HasFS,
+		HasHproxy:     raw.HasHProxy,
 		Priority:      raw.Priority,
 		CreatedAt:     raw.CreateAt,
 	}

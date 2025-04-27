@@ -70,6 +70,18 @@ type Invoker interface {
 	//
 	// POST /api/highway/token/create
 	APIHighwayTokenCreatePost(ctx context.Context) (APIHighwayTokenCreatePostRes, error)
+	// APIHproxyParseBookPost invokes POST /api/hproxy/parse/book operation.
+	//
+	// Парсинг данных книги по ссылке.
+	//
+	// POST /api/hproxy/parse/book
+	APIHproxyParseBookPost(ctx context.Context, request *APIHproxyParseBookPostReq) (APIHproxyParseBookPostRes, error)
+	// APIHproxyParseListPost invokes POST /api/hproxy/parse/list operation.
+	//
+	// Парсинг списка данных по ссылке.
+	//
+	// POST /api/hproxy/parse/list
+	APIHproxyParseListPost(ctx context.Context, request *APIHproxyParseListPostReq) (APIHproxyParseListPostRes, error)
 	// APIImportArchivePost invokes POST /api/import/archive operation.
 	//
 	// Загрузка архива.
@@ -938,6 +950,220 @@ func (c *Client) sendAPIHighwayTokenCreatePost(ctx context.Context) (res APIHigh
 
 	stage = "DecodeResponse"
 	result, err := decodeAPIHighwayTokenCreatePostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIHproxyParseBookPost invokes POST /api/hproxy/parse/book operation.
+//
+// Парсинг данных книги по ссылке.
+//
+// POST /api/hproxy/parse/book
+func (c *Client) APIHproxyParseBookPost(ctx context.Context, request *APIHproxyParseBookPostReq) (APIHproxyParseBookPostRes, error) {
+	res, err := c.sendAPIHproxyParseBookPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIHproxyParseBookPost(ctx context.Context, request *APIHproxyParseBookPostReq) (res APIHproxyParseBookPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/hproxy/parse/book"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIHproxyParseBookPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/hproxy/parse/book"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIHproxyParseBookPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIHproxyParseBookPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIHproxyParseBookPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIHproxyParseListPost invokes POST /api/hproxy/parse/list operation.
+//
+// Парсинг списка данных по ссылке.
+//
+// POST /api/hproxy/parse/list
+func (c *Client) APIHproxyParseListPost(ctx context.Context, request *APIHproxyParseListPostReq) (APIHproxyParseListPostRes, error) {
+	res, err := c.sendAPIHproxyParseListPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIHproxyParseListPost(ctx context.Context, request *APIHproxyParseListPostReq) (res APIHproxyParseListPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/hproxy/parse/list"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIHproxyParseListPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/hproxy/parse/list"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIHproxyParseListPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIHproxyParseListPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIHproxyParseListPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
