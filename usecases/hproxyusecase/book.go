@@ -10,6 +10,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
 func (uc *UseCase) Book(ctx context.Context, u url.URL) (hproxymodel.Book, error) {
@@ -74,6 +75,27 @@ func (uc *UseCase) Book(ctx context.Context, u url.URL) (hproxymodel.Book, error
 			if book.PageCount == 0 {
 				book.PageCount = len(book.Pages)
 			}
+
+			mirrors, err := uc.storage.Mirrors(ctx)
+			if err != nil {
+				return hproxymodel.Book{}, fmt.Errorf("get mirrors: %w", err)
+			}
+
+			mirrorCalculator := parsing.NewUrlCloner(mirrors)
+
+			duplicates, err := mirrorCalculator.GetClones(u)
+			if err != nil {
+				return hproxymodel.Book{}, fmt.Errorf("calc duplicates: %w", err)
+			}
+
+			duplicates = append(duplicates, u)
+
+			ids, err := uc.existsInStorage(ctx, duplicates)
+			if err != nil {
+				return hproxymodel.Book{}, fmt.Errorf("check duplicates: %w", err)
+			}
+
+			book.ExistsIDs = ids
 
 			return book, nil
 		}

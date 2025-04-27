@@ -4574,6 +4574,12 @@ paths:
                           type: string
                           format: uri
                           description: Ссылка на превью книги
+                        exists_ids:
+                          type: array
+                          description: ИД книг которые имеют такую же ссылку
+                          items:
+                            type: string
+                            format: uuid
                       required:
                         - ext_url
                   pagination:
@@ -4664,6 +4670,12 @@ paths:
                   page_count:
                     type: integer
                     description: Количество страниц
+                  exists_ids:
+                    type: array
+                    description: ИД книг которые имеют такую же ссылку
+                    items:
+                      type: string
+                      format: uuid
                   pages:
                     type: array
                     description: данные страниц книги

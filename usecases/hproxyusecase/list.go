@@ -10,6 +10,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
 func (uc *UseCase) List(ctx context.Context, u url.URL) (hproxymodel.List, error) {
@@ -54,6 +55,29 @@ func (uc *UseCase) List(ctx context.Context, u url.URL) (hproxymodel.List, error
 			list, err := uc.agentSystem.HProxyList(ctx, agent.ID, u)
 			if err != nil {
 				return hproxymodel.List{}, fmt.Errorf("parse list: %w", err)
+			}
+
+			mirrors, err := uc.storage.Mirrors(ctx)
+			if err != nil {
+				return hproxymodel.List{}, fmt.Errorf("get mirrors: %w", err)
+			}
+
+			mirrorCalculator := parsing.NewUrlCloner(mirrors)
+
+			for i, book := range list.Books {
+				duplicates, err := mirrorCalculator.GetClones(book.ExtURL)
+				if err != nil {
+					return hproxymodel.List{}, fmt.Errorf("calc duplicates: %w", err)
+				}
+
+				duplicates = append(duplicates, book.ExtURL)
+
+				ids, err := uc.existsInStorage(ctx, duplicates)
+				if err != nil {
+					return hproxymodel.List{}, fmt.Errorf("check duplicates: %w", err)
+				}
+
+				list.Books[i].ExistsIDs = ids
 			}
 
 			return list, nil

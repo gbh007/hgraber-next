@@ -24,6 +24,7 @@ func (c *HProxyHandlersController) APIHproxyListPost(ctx context.Context, req *s
 				ExtURL:     b.ExtURL,
 				Name:       apiservercore.OptString(b.Name),
 				PreviewURL: c.filePreview(b.ExtURL, b.ExtPreviewURL),
+				ExistsIds:  b.ExistsIDs,
 			}
 		}),
 		Pagination: pkg.Map(data.Pagination, func(p hproxymodel.ListPage) serverapi.APIHproxyListPostOKPaginationItem {

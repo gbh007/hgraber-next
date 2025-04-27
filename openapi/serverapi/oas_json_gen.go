@@ -16705,6 +16705,16 @@ func (s *APIHproxyBookPostOK) encodeFields(e *jx.Encoder) {
 		e.Int(s.PageCount)
 	}
 	{
+		if s.ExistsIds != nil {
+			e.FieldStart("exists_ids")
+			e.ArrStart()
+			for _, elem := range s.ExistsIds {
+				json.EncodeUUID(e, elem)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
 		e.FieldStart("pages")
 		e.ArrStart()
 		for _, elem := range s.Pages {
@@ -16722,13 +16732,14 @@ func (s *APIHproxyBookPostOK) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIHproxyBookPostOK = [6]string{
+var jsonFieldsNameOfAPIHproxyBookPostOK = [7]string{
 	0: "name",
 	1: "ext_url",
 	2: "preview_url",
 	3: "page_count",
-	4: "pages",
-	5: "attributes",
+	4: "exists_ids",
+	5: "pages",
+	6: "attributes",
 }
 
 // Decode decodes APIHproxyBookPostOK from json.
@@ -16786,8 +16797,27 @@ func (s *APIHproxyBookPostOK) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"page_count\"")
 			}
+		case "exists_ids":
+			if err := func() error {
+				s.ExistsIds = make([]uuid.UUID, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem uuid.UUID
+					v, err := json.DecodeUUID(d)
+					elem = v
+					if err != nil {
+						return err
+					}
+					s.ExistsIds = append(s.ExistsIds, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"exists_ids\"")
+			}
 		case "pages":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				s.Pages = make([]APIHproxyBookPostOKPagesItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -16805,7 +16835,7 @@ func (s *APIHproxyBookPostOK) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"pages\"")
 			}
 		case "attributes":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				s.Attributes = make([]APIHproxyBookPostOKAttributesItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -16832,7 +16862,7 @@ func (s *APIHproxyBookPostOK) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00111011,
+		0b01101011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -17826,12 +17856,23 @@ func (s *APIHproxyListPostOKBooksItem) encodeFields(e *jx.Encoder) {
 			s.PreviewURL.Encode(e)
 		}
 	}
+	{
+		if s.ExistsIds != nil {
+			e.FieldStart("exists_ids")
+			e.ArrStart()
+			for _, elem := range s.ExistsIds {
+				json.EncodeUUID(e, elem)
+			}
+			e.ArrEnd()
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIHproxyListPostOKBooksItem = [3]string{
+var jsonFieldsNameOfAPIHproxyListPostOKBooksItem = [4]string{
 	0: "ext_url",
 	1: "name",
 	2: "preview_url",
+	3: "exists_ids",
 }
 
 // Decode decodes APIHproxyListPostOKBooksItem from json.
@@ -17874,6 +17915,25 @@ func (s *APIHproxyListPostOKBooksItem) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"preview_url\"")
+			}
+		case "exists_ids":
+			if err := func() error {
+				s.ExistsIds = make([]uuid.UUID, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem uuid.UUID
+					v, err := json.DecodeUUID(d)
+					elem = v
+					if err != nil {
+						return err
+					}
+					s.ExistsIds = append(s.ExistsIds, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"exists_ids\"")
 			}
 		default:
 			return d.Skip()

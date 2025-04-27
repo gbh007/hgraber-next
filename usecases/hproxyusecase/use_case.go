@@ -3,6 +3,7 @@ package hproxyusecase
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/url"
@@ -13,12 +14,16 @@ import (
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
 var errCanNotParse = errors.New("can't parse")
 
 type storage interface {
 	Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error)
+
+	Mirrors(ctx context.Context) ([]parsing.URLMirror, error)
+	GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error)
 
 	Attributes(ctx context.Context) ([]core.Attribute, error)
 	AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, error)
@@ -62,4 +67,20 @@ func New(
 		autoRemap:        autoRemap,
 		remapToLower:     remapToLower,
 	}
+}
+
+func (uc *UseCase) existsInStorage(ctx context.Context, urls []url.URL) ([]uuid.UUID, error) {
+	for _, u := range urls {
+		// FIXME: нужно сделать более оптимальный метод
+		ids, err := uc.storage.GetBookIDsByURL(ctx, u)
+		if err != nil {
+			return nil, fmt.Errorf("check exists by (%s): %w", u.String(), err)
+		}
+
+		if len(ids) > 0 {
+			return ids, nil
+		}
+	}
+
+	return []uuid.UUID{}, nil
 }

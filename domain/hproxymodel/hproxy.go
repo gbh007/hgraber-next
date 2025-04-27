@@ -1,11 +1,16 @@
 package hproxymodel
 
-import "net/url"
+import (
+	"net/url"
+
+	"github.com/google/uuid"
+)
 
 type ListBook struct {
 	ExtURL        url.URL
 	Name          string
 	ExtPreviewURL *url.URL
+	ExistsIDs     []uuid.UUID
 }
 
 type ListPage struct {
@@ -40,6 +45,7 @@ type Book struct {
 	ExURL      url.URL
 	PreviewURL *url.URL
 	PageCount  int
+	ExistsIDs  []uuid.UUID
 	Pages      []BookPage
 	Attributes []BookAttribute
 }

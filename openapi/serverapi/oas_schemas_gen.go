@@ -4369,6 +4369,8 @@ type APIHproxyBookPostOK struct {
 	PreviewURL OptURI `json:"preview_url"`
 	// Количество страниц.
 	PageCount int `json:"page_count"`
+	// ИД книг которые имеют такую же ссылку.
+	ExistsIds []uuid.UUID `json:"exists_ids"`
 	// Данные страниц книги.
 	Pages []APIHproxyBookPostOKPagesItem `json:"pages"`
 	// Данные атрибутов книги.
@@ -4393,6 +4395,11 @@ func (s *APIHproxyBookPostOK) GetPreviewURL() OptURI {
 // GetPageCount returns the value of PageCount.
 func (s *APIHproxyBookPostOK) GetPageCount() int {
 	return s.PageCount
+}
+
+// GetExistsIds returns the value of ExistsIds.
+func (s *APIHproxyBookPostOK) GetExistsIds() []uuid.UUID {
+	return s.ExistsIds
 }
 
 // GetPages returns the value of Pages.
@@ -4423,6 +4430,11 @@ func (s *APIHproxyBookPostOK) SetPreviewURL(val OptURI) {
 // SetPageCount sets the value of PageCount.
 func (s *APIHproxyBookPostOK) SetPageCount(val int) {
 	s.PageCount = val
+}
+
+// SetExistsIds sets the value of ExistsIds.
+func (s *APIHproxyBookPostOK) SetExistsIds(val []uuid.UUID) {
+	s.ExistsIds = val
 }
 
 // SetPages sets the value of Pages.
@@ -4671,6 +4683,8 @@ type APIHproxyListPostOKBooksItem struct {
 	Name OptString `json:"name"`
 	// Ссылка на превью книги.
 	PreviewURL OptURI `json:"preview_url"`
+	// ИД книг которые имеют такую же ссылку.
+	ExistsIds []uuid.UUID `json:"exists_ids"`
 }
 
 // GetExtURL returns the value of ExtURL.
@@ -4688,6 +4702,11 @@ func (s *APIHproxyListPostOKBooksItem) GetPreviewURL() OptURI {
 	return s.PreviewURL
 }
 
+// GetExistsIds returns the value of ExistsIds.
+func (s *APIHproxyListPostOKBooksItem) GetExistsIds() []uuid.UUID {
+	return s.ExistsIds
+}
+
 // SetExtURL sets the value of ExtURL.
 func (s *APIHproxyListPostOKBooksItem) SetExtURL(val url.URL) {
 	s.ExtURL = val
@@ -4701,6 +4720,11 @@ func (s *APIHproxyListPostOKBooksItem) SetName(val OptString) {
 // SetPreviewURL sets the value of PreviewURL.
 func (s *APIHproxyListPostOKBooksItem) SetPreviewURL(val OptURI) {
 	s.PreviewURL = val
+}
+
+// SetExistsIds sets the value of ExistsIds.
+func (s *APIHproxyListPostOKBooksItem) SetExistsIds(val []uuid.UUID) {
+	s.ExistsIds = val
 }
 
 type APIHproxyListPostOKPaginationItem struct {

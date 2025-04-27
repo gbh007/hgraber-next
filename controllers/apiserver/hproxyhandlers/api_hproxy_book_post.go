@@ -23,6 +23,7 @@ func (c *HProxyHandlersController) APIHproxyBookPost(ctx context.Context, req *s
 		ExtURL:     book.ExURL,
 		PreviewURL: c.filePreview(book.ExURL, book.PreviewURL),
 		PageCount:  book.PageCount,
+		ExistsIds:  book.ExistsIDs,
 		Pages: pkg.Map(book.Pages, func(p hproxymodel.BookPage) serverapi.APIHproxyBookPostOKPagesItem {
 			return serverapi.APIHproxyBookPostOKPagesItem{
 				PageNumber: p.PageNumber,
