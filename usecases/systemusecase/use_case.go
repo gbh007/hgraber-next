@@ -19,16 +19,17 @@ type tmpStorage interface {
 }
 
 type deduplicator interface {
-	DeduplicateFiles(ctx context.Context) (systemmodel.RunnableTask, error)
 	FillDeadHashes(ctx context.Context, withRemoveDeletedPages bool) (systemmodel.RunnableTask, error)
 }
 
 type cleanuper interface {
+	DeduplicateFiles(ctx context.Context) (systemmodel.RunnableTask, error)
 	RemoveDetachedFiles(ctx context.Context) (systemmodel.RunnableTask, error)
 	RemoveFilesInStoragesMismatch(ctx context.Context, fsID uuid.UUID) (systemmodel.RunnableTask, error)
 	CleanDeletedPages(ctx context.Context) (systemmodel.RunnableTask, error)
 	CleanDeletedRebuilds(ctx context.Context) (systemmodel.RunnableTask, error)
 	CleanAfterRebuild(ctx context.Context) (systemmodel.RunnableTask, error)
+	CleanAfterParse(ctx context.Context) (systemmodel.RunnableTask, error)
 }
 
 type workerManager interface {

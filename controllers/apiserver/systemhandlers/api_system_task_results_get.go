@@ -55,6 +55,11 @@ func (c *SystemHandlersController) APISystemTaskResultsGet(ctx context.Context) 
 				Description: serverapi.NewOptString("Наполняет мертвые хеши, очищает удаленные страницы, удаляет неиспользуемые файлы, удаляет удаленные ребилды"),
 			},
 			{
+				Code:        "clean_after_parse",
+				Name:        "Очистить данные после парсинга и закачки книг",
+				Description: serverapi.NewOptString("Перепривязывает страницы к одному общему файлу, вместо двух одинаковых файлов, удаляет неиспользуемые файлы"),
+			},
+			{
 				Code:        "deduplicate_files",
 				Name:        "Дедуплицировать файлы",
 				Description: serverapi.NewOptString("Перепривязывает страницы к одному общему файлу, вместо двух одинаковых файлов"),

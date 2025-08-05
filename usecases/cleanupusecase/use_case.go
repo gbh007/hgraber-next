@@ -25,6 +25,10 @@ type storage interface {
 	SetDeadHashes(ctx context.Context, hashes []core.DeadHash) error
 	DeletedPagesHashes(ctx context.Context) ([]core.FileHash, error)
 	RemoveDeletedPagesByHashes(ctx context.Context, hashes []core.FileHash) error
+
+	DuplicatedFiles(ctx context.Context) ([]core.File, error)
+	ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UUID) error
+	FileStorages(ctx context.Context) ([]fsmodel.FileStorageSystem, error)
 }
 
 type fileStorage interface {

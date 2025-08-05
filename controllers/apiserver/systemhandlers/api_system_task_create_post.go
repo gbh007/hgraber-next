@@ -28,6 +28,8 @@ func (c *SystemHandlersController) APISystemTaskCreatePost(ctx context.Context, 
 		code = systemmodel.RemapAttributesTaskCode
 	case "clean_after_rebuild":
 		code = systemmodel.CleanAfterRebuildTaskCode
+	case "clean_after_parse":
+		code = systemmodel.CleanAfterParseTaskCode
 	}
 
 	err := c.systemUseCases.RunTask(ctx, code)

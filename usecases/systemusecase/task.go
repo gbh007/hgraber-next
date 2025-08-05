@@ -16,7 +16,7 @@ func (uc *UseCase) RunTask(ctx context.Context, code systemmodel.TaskCode) error
 
 	switch code {
 	case systemmodel.DeduplicateFilesTaskCode:
-		task, err = uc.deduplicator.DeduplicateFiles(ctx)
+		task, err = uc.cleanuper.DeduplicateFiles(ctx)
 	case systemmodel.RemoveDetachedFilesTaskCode:
 		task, err = uc.cleanuper.RemoveDetachedFiles(ctx)
 	case systemmodel.FillDeadHashesTaskCode:
@@ -31,6 +31,8 @@ func (uc *UseCase) RunTask(ctx context.Context, code systemmodel.TaskCode) error
 		task, err = uc.attributeRemaper.RemapBooks(ctx)
 	case systemmodel.CleanAfterRebuildTaskCode:
 		task, err = uc.cleanuper.CleanAfterRebuild(ctx)
+	case systemmodel.CleanAfterParseTaskCode:
+		task, err = uc.cleanuper.CleanAfterParse(ctx)
 	}
 
 	if err != nil {

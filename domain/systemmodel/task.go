@@ -17,6 +17,7 @@ const (
 	CleanDeletedRebuildsTaskCode
 	RemapAttributesTaskCode
 	CleanAfterRebuildTaskCode
+	CleanAfterParseTaskCode
 )
 
 type TaskResultWriter interface {

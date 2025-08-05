@@ -13,7 +13,7 @@ func (uc *UseCase) CleanAfterRebuild(_ context.Context) (systemmodel.RunnableTas
 	return systemmodel.RunnableTaskFunction(func(ctx context.Context, taskResult systemmodel.TaskResultWriter) {
 		defer taskResult.Finish()
 
-		taskResult.SetName("CleanupAfterRebuild")
+		taskResult.SetName("CleanAfterRebuild")
 
 		taskResult.StartStage("search hashes")
 
