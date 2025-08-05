@@ -50,6 +50,11 @@ func (c *SystemHandlersController) APISystemTaskResultsGet(ctx context.Context) 
 		Results: responseResults,
 		Tasks: []serverapi.APISystemTaskResultsGetOKTasksItem{
 			{
+				Code:        "clean_after_rebuild",
+				Name:        "Очистить данные после ребилдов",
+				Description: serverapi.NewOptString("Наполняет мертвые хеши, очищает удаленные страницы, удаляет неиспользуемые файлы, удаляет удаленные ребилды"),
+			},
+			{
 				Code:        "deduplicate_files",
 				Name:        "Дедуплицировать файлы",
 				Description: serverapi.NewOptString("Перепривязывает страницы к одному общему файлу, вместо двух одинаковых файлов"),

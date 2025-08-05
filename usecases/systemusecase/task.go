@@ -29,6 +29,8 @@ func (uc *UseCase) RunTask(ctx context.Context, code systemmodel.TaskCode) error
 		task, err = uc.cleanuper.CleanDeletedRebuilds(ctx)
 	case systemmodel.RemapAttributesTaskCode:
 		task, err = uc.attributeRemaper.RemapBooks(ctx)
+	case systemmodel.CleanAfterRebuildTaskCode:
+		task, err = uc.cleanuper.CleanAfterRebuild(ctx)
 	}
 
 	if err != nil {

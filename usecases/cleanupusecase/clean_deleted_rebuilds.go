@@ -5,6 +5,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
+
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
@@ -14,37 +16,46 @@ func (uc *UseCase) CleanDeletedRebuilds(_ context.Context) (systemmodel.Runnable
 
 		taskResult.SetName("CleanDeletedRebuilds")
 
-		taskResult.StartStage("search deleted rebuilds")
+		ids, err := uc.cleanDeletedRebuilds(ctx, taskResult)
+		if err != nil {
+			return // В результат выполнения данные уже проставлены
+		}
 
-		ids, err := uc.storage.BookIDsWithDeletedRebuilds(ctx)
+		taskResult.SetResult(fmt.Sprintf("Удалено %d", len(ids)))
+	}), nil
+}
+
+func (uc *UseCase) cleanDeletedRebuilds(ctx context.Context, taskResult systemmodel.TaskResultWriter) (ids []uuid.UUID, err error) {
+	taskResult.StartStage("search deleted rebuilds")
+
+	ids, err = uc.storage.BookIDsWithDeletedRebuilds(ctx)
+	if err != nil {
+		taskResult.SetError(err)
+
+		return
+	}
+
+	buff := &bytes.Buffer{}
+
+	for _, id := range ids {
+		buff.WriteString(id.String() + "\n")
+	}
+
+	taskResult.SetResult(buff.String())
+	taskResult.EndStage()
+
+	taskResult.StartStage("remove deleted rebuilds")
+
+	if len(ids) > 0 {
+		err = uc.storage.DeleteBooks(ctx, ids)
 		if err != nil {
 			taskResult.SetError(err)
 
 			return
 		}
+	}
 
-		buff := &bytes.Buffer{}
+	taskResult.EndStage()
 
-		for _, id := range ids {
-			buff.WriteString(id.String() + "\n")
-		}
-
-		taskResult.SetResult(buff.String())
-		taskResult.EndStage()
-
-		taskResult.StartStage("remove deleted rebuilds")
-
-		if len(ids) > 0 {
-			err = uc.storage.DeleteBooks(ctx, ids)
-			if err != nil {
-				taskResult.SetError(err)
-
-				return
-			}
-		}
-
-		taskResult.EndStage()
-
-		taskResult.SetResult(fmt.Sprintf("Удалено %d", len(ids)))
-	}), nil
+	return
 }

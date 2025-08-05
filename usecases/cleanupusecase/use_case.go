@@ -20,6 +20,11 @@ type storage interface {
 
 	BookIDsWithDeletedRebuilds(ctx context.Context) ([]uuid.UUID, error)
 	DeleteBooks(ctx context.Context, ids []uuid.UUID) error
+
+	BookPagesCountByHash(ctx context.Context, hash core.FileHash) (int64, error)
+	SetDeadHashes(ctx context.Context, hashes []core.DeadHash) error
+	DeletedPagesHashes(ctx context.Context) ([]core.FileHash, error)
+	RemoveDeletedPagesByHashes(ctx context.Context, hashes []core.FileHash) error
 }
 
 type fileStorage interface {
