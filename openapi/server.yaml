@@ -32,6 +32,8 @@ tags:
     description: Взаимодействие с данными пользователя
   - name: hproxy
     description: Взаимодействие с данными сайтов через агентов
+  - name: massload
+    description: Функционал для работы с массовыми загрузками
 
 paths:
   /api/user/login:
@@ -4822,6 +4824,502 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/massload/info/create:
+    post:
+      description: Создание информации о массовой загрузке
+      summary: Создание информации о массовой загрузке
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Массовая загрузка
+              properties:
+                description:
+                  type: string
+                  description: Описание массовой загрузки
+                is_deduplicated:
+                  type: boolean
+                  description: Признак того что эта загрузка была дедуплицирована
+              required:
+                - is_deduplicated
+      responses:
+        200:
+          description: Успешное создание
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ИД загрузки
+                required:
+                  - id
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/info/update:
+    post:
+      description: Обновление массовой загрузки
+      summary: Обновление массовой загрузки
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Массовая загрузка
+              properties:
+                id:
+                  type: integer
+                  description: ИД массовой загрузки
+                description:
+                  type: string
+                  description: Описание массовой загрузки
+                is_deduplicated:
+                  type: boolean
+                  description: Признак того что эта загрузка была дедуплицирована
+              required:
+                - id
+                - is_deduplicated
+      responses:
+        204:
+          description: Успешное обновление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/info/delete:
+    post:
+      description: Удаление массовой загрузки
+      summary: Удаление массовой загрузки
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: ИД массовой загрузки
+              required:
+                - id
+      responses:
+        204:
+          description: Успешное удаление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/info/get:
+    post:
+      description: Получение массовой загрузки
+      summary: Получение массовой загрузки
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: ИД массовой загрузки
+              required:
+                - id
+      responses:
+        200:
+          description: Информация о загрузке
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MassloadInfo"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/info/list:
+    get:
+      description: Массовые загрузки
+      summary: Массовые загрузки
+      tags:
+        - massload
+      responses:
+        200:
+          description: Информация о загрузках
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  colors:
+                    description: Список загрузок
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MassloadInfo"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/info/external_link/create:
+    post:
+      description: Привязка внешней ссылки к массовой загрузке
+      summary: Привязка внешней ссылки к массовой загрузке
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                massload_id:
+                  type: integer
+                  description: ИД массовой загрузки
+                url:
+                  type: string
+                  description: Ссылка
+                  format: uri
+                  example: http://example.com
+              required:
+                - massload_id
+                - url
+      responses:
+        204:
+          description: Успешное создание
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/info/external_link/delete:
+    post:
+      description: Удаление внешней ссылки для массовой загрузки
+      summary: Удаление внешней ссылки для массовой загрузки
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                massload_id:
+                  type: integer
+                  description: ИД массовой загрузки
+                url:
+                  type: string
+                  description: Ссылка
+                  format: uri
+                  example: http://example.com
+              required:
+                - massload_id
+                - url
+      responses:
+        204:
+          description: Успешное удаление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/info/attribute/create:
+    post:
+      description: Привязка аттрибута к массовой загрузке
+      summary: Привязка аттрибута к массовой загрузке
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                massload_id:
+                  type: integer
+                  description: ИД массовой загрузки
+                code:
+                  type: string
+                  description: Код атрибута
+                value:
+                  type: string
+                  description: Значение атрибута
+              required:
+                - massload_id
+                - code
+                - value
+      responses:
+        204:
+          description: Успешное создание
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/info/attribute/delete:
+    post:
+      description: Удаление аттрибута для массовой загрузки
+      summary: Удаление аттрибута для массовой загрузки
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                massload_id:
+                  type: integer
+                  description: ИД массовой загрузки
+                code:
+                  type: string
+                  description: Код атрибута
+                value:
+                  type: string
+                  description: Значение атрибута
+              required:
+                - massload_id
+                - code
+                - value
+      responses:
+        204:
+          description: Успешное удаление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     BookFlags:
@@ -5353,6 +5851,102 @@ components:
         - count
         - size
         - size_formatted
+
+    MassloadInfo:
+      type: object
+      description: Данные массовой загрузки
+      properties:
+        id:
+          type: integer
+          description: ИД массовой загрузки
+        description:
+          type: string
+          description: Описание массовой загрузки
+        is_deduplicated:
+          type: boolean
+          description: Признак того что эта загрузка была дедуплицирована
+        page_size:
+          type: integer
+          format: int64
+          description: Размер файлов страниц
+        page_size_formatted:
+          type: string
+          description: Размер файлов страниц в человеко читаемом виде
+        file_size:
+          type: integer
+          format: int64
+          description: Размер файлов в файловой системе
+        file_size_formatted:
+          type: string
+          description: Размер файлов в файловой системе в человеко читаемом виде
+        created_at:
+          type: string
+          format: date-time
+          description: Время создания
+        updated_at:
+          type: string
+          format: date-time
+          description: Время создания
+        external_links:
+          type: array
+          description: Внешние ссылки для массовой загрузки
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                description: Адрес
+                format: uri
+                example: http://example.com
+              created_at:
+                type: string
+                format: date-time
+                description: Время создания
+            required:
+              - url
+              - created_at
+        attributes:
+          type: array
+          description: Атрибуты которые мапятся на массовую загрузку (например конкретный автор)
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Код атрибута
+              value:
+                type: string
+                description: Значение атрибута
+              page_size:
+                type: integer
+                format: int64
+                description: Размер файлов страниц
+              page_size_formatted:
+                type: string
+                description: Размер файлов страниц в человеко читаемом виде
+              file_size:
+                type: integer
+                format: int64
+                description: Размер файлов в файловой системе
+              file_size_formatted:
+                type: string
+                description: Размер файлов в файловой системе в человеко читаемом виде
+              created_at:
+                type: string
+                format: date-time
+                description: Время создания
+              updated_at:
+                type: string
+                format: date-time
+                description: Время создания
+            required:
+              - code
+              - value
+              - created_at
+      required:
+        - id
+        - is_deduplicated
+        - created_at
 
   securitySchemes:
     headerAuth:
