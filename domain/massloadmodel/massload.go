@@ -7,6 +7,7 @@ import (
 
 type Massload struct {
 	ID             int
+	Name    string
 	Description    string
 	IsDeduplicated bool
 	PageSize       *int64

@@ -13,6 +13,7 @@ import (
 func MassloadColumns() []string {
 	return []string{
 		"id",
+		"name",
 		"description",
 		"is_deduplicated",
 		"page_size",
@@ -33,6 +34,7 @@ func MassloadScanner(ml *massloadmodel.Massload) RowScanner {
 
 		err := rows.Scan(
 			&ml.ID,
+			&ml.Name,
 			&description,
 			&ml.IsDeduplicated,
 			&pageSize,

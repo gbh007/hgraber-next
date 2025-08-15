@@ -15,6 +15,7 @@ func (d Database) CreateMassload(ctx context.Context, ml massloadmodel.Massload)
 	builder := squirrel.Insert("massloads").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
+			"name":            ml.Name,
 			"description":     model.StringToDB(ml.Description),
 			"is_deduplicated": ml.IsDeduplicated,
 			"created_at":      ml.CreatedAt,
@@ -44,6 +45,7 @@ func (d Database) UpdateMassload(ctx context.Context, ml massloadmodel.Massload)
 	builder := squirrel.Update("massloads").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
+			"name":            ml.Name,
 			"description":     model.StringToDB(ml.Description),
 			"is_deduplicated": ml.IsDeduplicated,
 			"updated_at":      model.TimeToDB(ml.UpdatedAt),
