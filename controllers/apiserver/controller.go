@@ -14,6 +14,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/fshandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/hproxyhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/labelhandlers"
+	"github.com/gbh007/hgraber-next/controllers/apiserver/massloadhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/systemhandlers"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
@@ -92,6 +93,7 @@ type Controller struct {
 	*labelhandlers.LabelHandlersController
 	*systemhandlers.SystemHandlersController
 	*hproxyhandlers.HProxyHandlersController
+	*massloadhandlers.MassloadController
 
 	logger          *slog.Logger
 	tracer          trace.Tracer
@@ -198,6 +200,12 @@ func New(
 			logger,
 			tracer,
 			hProxyUseCases,
+			config.GetDebug(),
+			ac,
+		),
+		MassloadController: massloadhandlers.New(
+			logger,
+			tracer,
 			config.GetDebug(),
 			ac,
 		),

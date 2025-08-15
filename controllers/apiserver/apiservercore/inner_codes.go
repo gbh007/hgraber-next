@@ -15,4 +15,5 @@ const (
 	AttributeUseCaseCode   = "attribute_uc"
 	ValidationCode         = "validation"
 	HProxyUseCaseCode      = "hproxy_uc"
+	MassloadUseCaseCode    = "massload_uc"
 )
