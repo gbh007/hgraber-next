@@ -75,6 +75,10 @@ type HProxyUseCases interface {
 	hproxyhandlers.HProxyUseCases
 }
 
+type MassloadUseCases interface {
+	massloadhandlers.MassloadUseCases
+}
+
 type config interface {
 	GetAddr() string
 	GetExternalAddr() string
@@ -123,6 +127,7 @@ func New(
 	labelUseCases LabelUseCases,
 	bookUseCases BookUseCases,
 	hProxyUseCases HProxyUseCases,
+	massloadUseCases MassloadUseCases,
 ) (*Controller, error) {
 	ac, err := apiservercore.New(
 		logger,
@@ -208,6 +213,7 @@ func New(
 			tracer,
 			config.GetDebug(),
 			ac,
+			massloadUseCases,
 		),
 
 		logger:          logger,
