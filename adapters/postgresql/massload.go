@@ -11,7 +11,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 )
 
-func (d Database) CreateMassload(ctx context.Context, ml massloadmodel.Massload) (int, error) {
+func (d *Database) CreateMassload(ctx context.Context, ml massloadmodel.Massload) (int, error) {
 	builder := squirrel.Insert("massloads").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
@@ -41,7 +41,7 @@ func (d Database) CreateMassload(ctx context.Context, ml massloadmodel.Massload)
 	return id, nil
 }
 
-func (d Database) UpdateMassload(ctx context.Context, ml massloadmodel.Massload) error {
+func (d *Database) UpdateMassload(ctx context.Context, ml massloadmodel.Massload) error {
 	builder := squirrel.Update("massloads").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
@@ -69,7 +69,7 @@ func (d Database) UpdateMassload(ctx context.Context, ml massloadmodel.Massload)
 	return nil
 }
 
-func (d Database) UpdateMassloadSize(ctx context.Context, ml massloadmodel.Massload) error {
+func (d *Database) UpdateMassloadSize(ctx context.Context, ml massloadmodel.Massload) error {
 	builder := squirrel.Update("massloads").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
@@ -182,7 +182,7 @@ func (d *Database) DeleteMassload(ctx context.Context, id int) error {
 	return nil
 }
 
-func (d Database) CreateMassloadExternalLink(ctx context.Context, id int, link massloadmodel.MassloadExternalLink) error {
+func (d *Database) CreateMassloadExternalLink(ctx context.Context, id int, link massloadmodel.MassloadExternalLink) error {
 	builder := squirrel.Insert("massload_external_links").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
@@ -229,10 +229,13 @@ func (d *Database) DeleteMassloadExternalLink(ctx context.Context, id int, u url
 	return nil
 }
 
-func (d *Database) MassloadExternalLinks(ctx context.Context) ([]massloadmodel.MassloadExternalLink, error) {
+func (d *Database) MassloadExternalLinks(ctx context.Context, id int) ([]massloadmodel.MassloadExternalLink, error) {
 	builder := squirrel.Select(model.MassloadExternalLinkColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("massload_external_links").
+		Where(squirrel.Eq{
+			"massload_id": id,
+		}).
 		OrderBy("created_at")
 
 	query, args, err := builder.ToSql()
@@ -265,7 +268,7 @@ func (d *Database) MassloadExternalLinks(ctx context.Context) ([]massloadmodel.M
 	return result, nil
 }
 
-func (d Database) CreateMassloadAttribute(ctx context.Context, id int, attr massloadmodel.MassloadAttribute) error {
+func (d *Database) CreateMassloadAttribute(ctx context.Context, id int, attr massloadmodel.MassloadAttribute) error {
 	builder := squirrel.Insert("massload_attributes").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
@@ -290,7 +293,7 @@ func (d Database) CreateMassloadAttribute(ctx context.Context, id int, attr mass
 	return nil
 }
 
-func (d Database) UpdateMassloadAttributeSize(ctx context.Context, attr massloadmodel.MassloadAttribute) error {
+func (d *Database) UpdateMassloadAttributeSize(ctx context.Context, attr massloadmodel.MassloadAttribute) error {
 	builder := squirrel.Update("massload_attributes").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{

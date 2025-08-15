@@ -29,6 +29,7 @@ import (
 	"github.com/gbh007/hgraber-next/usecases/filesystemusecase"
 	"github.com/gbh007/hgraber-next/usecases/hproxyusecase"
 	"github.com/gbh007/hgraber-next/usecases/labelusecase"
+	"github.com/gbh007/hgraber-next/usecases/massloadusecase"
 	"github.com/gbh007/hgraber-next/usecases/parsingusecase"
 	"github.com/gbh007/hgraber-next/usecases/rebuilderusecase"
 	"github.com/gbh007/hgraber-next/usecases/systemusecase"
@@ -151,6 +152,7 @@ func Serve() {
 	bffUseCases := bffusecase.New(logger, storage, deduplicateUseCases)
 	attributeUseCases := attributeusecase.New(logger, storage, cfg.AttributeRemap.AllLower)
 	labelUseCases := labelusecase.New(logger, storage)
+	massloadUseCases := massloadusecase.New(logger, storage)
 
 	workersController := workermanager.New(
 		logger,
@@ -185,6 +187,7 @@ func Serve() {
 		labelUseCases,
 		bookUseCases,
 		hProxyUseCases,
+		massloadUseCases,
 	)
 	if err != nil {
 		logger.ErrorContext(
