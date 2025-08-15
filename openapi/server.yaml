@@ -4838,6 +4838,9 @@ paths:
               type: object
               description: Массовая загрузка
               properties:
+                name:
+                  type: string
+                  description: Название массовой загрузки
                 description:
                   type: string
                   description: Описание массовой загрузки
@@ -4845,6 +4848,7 @@ paths:
                   type: boolean
                   description: Признак того что эта загрузка была дедуплицирована
               required:
+                - name
                 - is_deduplicated
       responses:
         200:
@@ -4901,6 +4905,9 @@ paths:
                 id:
                   type: integer
                   description: ИД массовой загрузки
+                name:
+                  type: string
+                  description: Название массовой загрузки
                 description:
                   type: string
                   description: Описание массовой загрузки
@@ -4909,6 +4916,7 @@ paths:
                   description: Признак того что эта загрузка была дедуплицирована
               required:
                 - id
+                - name
                 - is_deduplicated
       responses:
         204:
@@ -5859,6 +5867,9 @@ components:
         id:
           type: integer
           description: ИД массовой загрузки
+        name:
+          type: string
+          description: Название массовой загрузки
         description:
           type: string
           description: Описание массовой загрузки
@@ -5945,6 +5956,7 @@ components:
               - created_at
       required:
         - id
+        - name
         - is_deduplicated
         - created_at
 

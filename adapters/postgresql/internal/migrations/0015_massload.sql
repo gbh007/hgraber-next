@@ -2,6 +2,7 @@
 
 CREATE TABLE massloads (
     id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
     description TEXT,
     is_deduplicated BOOLEAN NOT NULL DEFAULT FALSE,
     page_size INT8,
