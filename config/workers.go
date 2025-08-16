@@ -10,6 +10,7 @@ type Workers struct {
 	Tasker         Worker `yaml:"tasker" envconfig:"TASKER"`
 	FileValidator  Worker `yaml:"file_validator" envconfig:"FILE_VALIDATOR"`
 	FileTransferer Worker `yaml:"file_transferer" envconfig:"FILE_TRANSFERER"`
+	MassloadSizer  Worker `yaml:"massload_sizer" envconfig:"MASSLOAD_SIZER"`
 }
 
 func WorkersDefault() Workers {
@@ -21,6 +22,11 @@ func WorkersDefault() Workers {
 		Tasker:         WorkerDefault(),
 		FileValidator:  WorkerDefault(),
 		FileTransferer: WorkerDefault(),
+		MassloadSizer: Worker{
+			Count:     1,
+			QueueSize: 100,
+			Interval:  time.Hour,
+		},
 	}
 }
 

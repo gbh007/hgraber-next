@@ -24,6 +24,9 @@ type storage interface {
 	MassloadAttributes(ctx context.Context, id int) ([]massloadmodel.MassloadAttribute, error)
 	DeleteMassloadAttribute(ctx context.Context, id int, attr massloadmodel.MassloadAttribute) error
 	UpdateMassloadAttributeSize(ctx context.Context, attr massloadmodel.MassloadAttribute) error
+
+	AttributesPageSize(ctx context.Context, attrs map[string][]string) (int64, error)
+	AttributesFileSize(ctx context.Context, attrs map[string][]string) (int64, error)
 }
 
 type UseCase struct {

@@ -163,6 +163,7 @@ func Serve() {
 		workermanager.NewTasker(tmpStorage, logger, tracer, cfg.Workers.Tasker, metricProvider),
 		workermanager.NewFileValidator(fsUseCases, logger, tracer, cfg.Workers.FileValidator, metricProvider),
 		workermanager.NewFileTransfer(fsUseCases, logger, tracer, cfg.Workers.FileTransferer, metricProvider),
+		workermanager.NewMassLoadSize(massloadUseCases, logger, tracer, cfg.Workers.MassloadSizer, metricProvider),
 	)
 	asyncController.RegisterRunner(workersController)
 
