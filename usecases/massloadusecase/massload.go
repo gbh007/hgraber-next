@@ -64,5 +64,12 @@ func (uc *UseCase) Massloads(ctx context.Context) ([]massloadmodel.Massload, err
 		return nil, fmt.Errorf("storage get massloads: %w", err)
 	}
 
+	for i, ml := range mls {
+		mls[i].Attributes, err = uc.storage.MassloadAttributes(ctx, ml.ID)
+		if err != nil {
+			return nil, fmt.Errorf("storage get attributes %d: %w", ml.ID, err)
+		}
+	}
+
 	return mls, nil
 }
