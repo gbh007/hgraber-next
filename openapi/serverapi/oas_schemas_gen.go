@@ -8585,6 +8585,7 @@ func (s *BookSimple) SetFlags(val BookFlags) {
 
 type Cookies struct {
 	APIKey string
+	Roles  []string
 }
 
 // GetAPIKey returns the value of APIKey.
@@ -8592,9 +8593,19 @@ func (s *Cookies) GetAPIKey() string {
 	return s.APIKey
 }
 
+// GetRoles returns the value of Roles.
+func (s *Cookies) GetRoles() []string {
+	return s.Roles
+}
+
 // SetAPIKey sets the value of APIKey.
 func (s *Cookies) SetAPIKey(val string) {
 	s.APIKey = val
+}
+
+// SetRoles sets the value of Roles.
+func (s *Cookies) SetRoles(val []string) {
+	s.Roles = val
 }
 
 // Данные ошибки.
@@ -8797,6 +8808,7 @@ func (*FileSystemInfo) aPIFsGetPostRes() {}
 
 type HeaderAuth struct {
 	APIKey string
+	Roles  []string
 }
 
 // GetAPIKey returns the value of APIKey.
@@ -8804,9 +8816,19 @@ func (s *HeaderAuth) GetAPIKey() string {
 	return s.APIKey
 }
 
+// GetRoles returns the value of Roles.
+func (s *HeaderAuth) GetRoles() []string {
+	return s.Roles
+}
+
 // SetAPIKey sets the value of APIKey.
 func (s *HeaderAuth) SetAPIKey(val string) {
 	s.APIKey = val
+}
+
+// SetRoles sets the value of Roles.
+func (s *HeaderAuth) SetRoles(val []string) {
+	s.Roles = val
 }
 
 // Данные массовой загрузки.

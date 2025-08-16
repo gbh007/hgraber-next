@@ -1305,6 +1305,9 @@ func encodeAPIBookArchiveIDGetResponse(response APIBookArchiveIDGetRes, w http.R
 		span.SetStatus(codes.Ok, http.StatusText(200))
 
 		writer := w
+		if closer, ok := response.Response.Data.(io.Closer); ok {
+			defer closer.Close()
+		}
 		if _, err := io.Copy(writer, response.Response); err != nil {
 			return errors.Wrap(err, "write")
 		}
@@ -1624,6 +1627,9 @@ func encodeAPIBookPageBodyPostResponse(response APIBookPageBodyPostRes, w http.R
 		span.SetStatus(codes.Ok, http.StatusText(200))
 
 		writer := w
+		if closer, ok := response.Data.(io.Closer); ok {
+			defer closer.Close()
+		}
 		if _, err := io.Copy(writer, response); err != nil {
 			return errors.Wrap(err, "write")
 		}
@@ -2630,6 +2636,9 @@ func encodeAPIFileIDGetResponse(response APIFileIDGetRes, w http.ResponseWriter,
 		span.SetStatus(codes.Ok, http.StatusText(200))
 
 		writer := w
+		if closer, ok := response.Response.Data.(io.Closer); ok {
+			defer closer.Close()
+		}
 		if _, err := io.Copy(writer, response.Response); err != nil {
 			return errors.Wrap(err, "write")
 		}
@@ -3446,6 +3455,9 @@ func encodeAPIHproxyFileGetResponse(response APIHproxyFileGetRes, w http.Respons
 		span.SetStatus(codes.Ok, http.StatusText(200))
 
 		writer := w
+		if closer, ok := response.Response.Data.(io.Closer); ok {
+			defer closer.Close()
+		}
 		if _, err := io.Copy(writer, response.Response); err != nil {
 			return errors.Wrap(err, "write")
 		}

@@ -255,7 +255,7 @@ func decodeAPIHproxyFileGetParams(args [0]string, argsEscaped bool, r *http.Requ
 				return err
 			}
 		} else {
-			return validate.ErrFieldRequired
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -291,7 +291,7 @@ func decodeAPIHproxyFileGetParams(args [0]string, argsEscaped bool, r *http.Requ
 				return err
 			}
 		} else {
-			return validate.ErrFieldRequired
+			return err
 		}
 		return nil
 	}(); err != nil {

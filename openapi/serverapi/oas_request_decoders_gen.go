@@ -9,7 +9,6 @@ import (
 
 	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
-	"go.uber.org/multierr"
 
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/validate"
@@ -26,13 +25,13 @@ func (s *Server) decodeAPIAgentDeletePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -89,13 +88,13 @@ func (s *Server) decodeAPIAgentGetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -152,13 +151,13 @@ func (s *Server) decodeAPIAgentListPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -215,13 +214,13 @@ func (s *Server) decodeAPIAgentNewPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -278,13 +277,13 @@ func (s *Server) decodeAPIAgentTaskExportPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -349,13 +348,13 @@ func (s *Server) decodeAPIAgentUpdatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -412,13 +411,13 @@ func (s *Server) decodeAPIAttributeColorCreatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -475,13 +474,13 @@ func (s *Server) decodeAPIAttributeColorDeletePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -538,13 +537,13 @@ func (s *Server) decodeAPIAttributeColorGetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -601,13 +600,13 @@ func (s *Server) decodeAPIAttributeColorUpdatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -664,13 +663,13 @@ func (s *Server) decodeAPIAttributeRemapCreatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -727,13 +726,13 @@ func (s *Server) decodeAPIAttributeRemapDeletePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -790,13 +789,13 @@ func (s *Server) decodeAPIAttributeRemapGetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -853,13 +852,13 @@ func (s *Server) decodeAPIAttributeRemapUpdatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -916,13 +915,13 @@ func (s *Server) decodeAPIBookDeletePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -987,13 +986,13 @@ func (s *Server) decodeAPIBookDetailsPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1050,13 +1049,13 @@ func (s *Server) decodeAPIBookListPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1121,13 +1120,13 @@ func (s *Server) decodeAPIBookPageBodyPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1184,13 +1183,13 @@ func (s *Server) decodeAPIBookPageDeletePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1255,13 +1254,13 @@ func (s *Server) decodeAPIBookRawPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1318,13 +1317,13 @@ func (s *Server) decodeAPIBookRebuildPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1389,13 +1388,13 @@ func (s *Server) decodeAPIBookRestorePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1452,13 +1451,13 @@ func (s *Server) decodeAPIBookStatusSetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1523,13 +1522,13 @@ func (s *Server) decodeAPIBookUpdatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1594,13 +1593,13 @@ func (s *Server) decodeAPIDeduplicateArchivePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1628,13 +1627,13 @@ func (s *Server) decodeAPIDeduplicateBookByPageBodyPostRequest(r *http.Request) 
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1691,13 +1690,13 @@ func (s *Server) decodeAPIDeduplicateBooksByPagePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1762,13 +1761,13 @@ func (s *Server) decodeAPIDeduplicateComparePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1825,13 +1824,13 @@ func (s *Server) decodeAPIDeduplicateDeadHashSetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1896,13 +1895,13 @@ func (s *Server) decodeAPIDeduplicateUniquePagesPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -1959,13 +1958,13 @@ func (s *Server) decodeAPIFsCreatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2022,13 +2021,13 @@ func (s *Server) decodeAPIFsDeletePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2085,13 +2084,13 @@ func (s *Server) decodeAPIFsGetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2148,13 +2147,13 @@ func (s *Server) decodeAPIFsListPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2211,13 +2210,13 @@ func (s *Server) decodeAPIFsRemoveMismatchPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2274,13 +2273,13 @@ func (s *Server) decodeAPIFsTransferBookPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2337,13 +2336,13 @@ func (s *Server) decodeAPIFsTransferPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2400,13 +2399,13 @@ func (s *Server) decodeAPIFsUpdatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2463,13 +2462,13 @@ func (s *Server) decodeAPIFsValidatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2526,13 +2525,13 @@ func (s *Server) decodeAPIHproxyBookPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2589,13 +2588,13 @@ func (s *Server) decodeAPIHproxyListPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2652,13 +2651,13 @@ func (s *Server) decodeAPILabelDeletePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2715,13 +2714,13 @@ func (s *Server) decodeAPILabelGetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2778,13 +2777,13 @@ func (s *Server) decodeAPILabelPresetCreatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2849,13 +2848,13 @@ func (s *Server) decodeAPILabelPresetDeletePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2912,13 +2911,13 @@ func (s *Server) decodeAPILabelPresetGetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -2975,13 +2974,13 @@ func (s *Server) decodeAPILabelPresetUpdatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3046,13 +3045,13 @@ func (s *Server) decodeAPILabelSetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3109,13 +3108,13 @@ func (s *Server) decodeAPIMassloadInfoAttributeCreatePostRequest(r *http.Request
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3172,13 +3171,13 @@ func (s *Server) decodeAPIMassloadInfoAttributeDeletePostRequest(r *http.Request
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3235,13 +3234,13 @@ func (s *Server) decodeAPIMassloadInfoCreatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3298,13 +3297,13 @@ func (s *Server) decodeAPIMassloadInfoDeletePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3361,13 +3360,13 @@ func (s *Server) decodeAPIMassloadInfoExternalLinkCreatePostRequest(r *http.Requ
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3424,13 +3423,13 @@ func (s *Server) decodeAPIMassloadInfoExternalLinkDeletePostRequest(r *http.Requ
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3487,13 +3486,13 @@ func (s *Server) decodeAPIMassloadInfoGetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3550,13 +3549,13 @@ func (s *Server) decodeAPIMassloadInfoUpdatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3613,13 +3612,13 @@ func (s *Server) decodeAPIParsingHandlePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3684,13 +3683,13 @@ func (s *Server) decodeAPIParsingMirrorCreatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3755,13 +3754,13 @@ func (s *Server) decodeAPIParsingMirrorDeletePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3818,13 +3817,13 @@ func (s *Server) decodeAPIParsingMirrorGetPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3881,13 +3880,13 @@ func (s *Server) decodeAPIParsingMirrorUpdatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3952,13 +3951,13 @@ func (s *Server) decodeAPISystemImportArchivePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -3986,13 +3985,13 @@ func (s *Server) decodeAPISystemTaskCreatePostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -4049,13 +4048,13 @@ func (s *Server) decodeAPISystemWorkerConfigPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -4112,13 +4111,13 @@ func (s *Server) decodeAPIUserLoginPostRequest(r *http.Request) (
 		// Close in reverse order, to match defer behavior.
 		for i := len(closers) - 1; i >= 0; i-- {
 			c := closers[i]
-			merr = multierr.Append(merr, c())
+			merr = errors.Join(merr, c())
 		}
 		return merr
 	}
 	defer func() {
 		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
+			rerr = errors.Join(rerr, close())
 		}
 	}()
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))

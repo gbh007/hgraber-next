@@ -59,7 +59,7 @@ func decodeAPIFsCreatePostParams(args [0]string, argsEscaped bool, r *http.Reque
 				return err
 			}
 		} else {
-			return validate.ErrFieldRequired
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -117,7 +117,7 @@ func decodeAPIFsGetGetParams(args [0]string, argsEscaped bool, r *http.Request) 
 				return err
 			}
 		} else {
-			return validate.ErrFieldRequired
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -283,7 +283,7 @@ func decodeAPIHighwayFileIDExtGetParams(args [2]string, argsEscaped bool, r *htt
 				return err
 			}
 		} else {
-			return validate.ErrFieldRequired
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -359,7 +359,7 @@ func decodeAPIImportArchivePostParams(args [0]string, argsEscaped bool, r *http.
 				return err
 			}
 		} else {
-			return validate.ErrFieldRequired
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -432,7 +432,7 @@ func decodeAPIImportArchivePostParams(args [0]string, argsEscaped bool, r *http.
 				return err
 			}
 		} else {
-			return validate.ErrFieldRequired
+			return err
 		}
 		return nil
 	}(); err != nil {

@@ -3117,7 +3117,7 @@ func decodeAPIBookArchiveIDGetResponse(resp *http.Response) (res APIBookArchiveI
 							return err
 						}
 					} else {
-						return validate.ErrFieldRequired
+						return err
 					}
 					return nil
 				}(); err != nil {
@@ -6409,7 +6409,7 @@ func decodeAPIFileIDGetResponse(resp *http.Response) (res APIFileIDGetRes, _ err
 							return err
 						}
 					} else {
-						return validate.ErrFieldRequired
+						return err
 					}
 					return nil
 				}(); err != nil {
@@ -8376,7 +8376,7 @@ func decodeAPIHproxyFileGetResponse(resp *http.Response) (res APIHproxyFileGetRe
 							return err
 						}
 					} else {
-						return validate.ErrFieldRequired
+						return err
 					}
 					return nil
 				}(); err != nil {
