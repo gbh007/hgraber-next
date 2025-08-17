@@ -15,7 +15,7 @@ func MassloadColumns() []string {
 		"id",
 		"name",
 		"description",
-		"is_deduplicated",
+		"flags",
 		"page_size",
 		"file_size",
 		"created_at",
@@ -26,18 +26,19 @@ func MassloadColumns() []string {
 func MassloadScanner(ml *massloadmodel.Massload) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
-			description    sql.NullString
-			pageSize       sql.NullInt64
-			fileSize       sql.NullInt64
-			updatedAt      sql.NullTime
-			isDeduplicated bool
+			description sql.NullString
+			pageSize    sql.NullInt64
+			fileSize    sql.NullInt64
+			updatedAt   sql.NullTime
+			// flags       pgtype.Array[string]
 		)
 
 		err := rows.Scan(
 			&ml.ID,
 			&ml.Name,
 			&description,
-			&isDeduplicated,
+			// &flags,
+			&ml.Flags,
 			&pageSize,
 			&fileSize,
 			&ml.CreatedAt,
@@ -49,12 +50,7 @@ func MassloadScanner(ml *massloadmodel.Massload) RowScanner {
 
 		ml.UpdatedAt = updatedAt.Time
 		ml.Description = description.String
-
-		if isDeduplicated { // FIXME: перевести на новую модель
-			ml.Flags = []string{
-				"deduplicated",
-			}
-		}
+		// ml.Flags = flags.Elements
 
 		if pageSize.Valid {
 			ml.PageSize = &pageSize.Int64 // TODO: оптимизировать чтобы не уходили в кучу лишние данные.
@@ -138,6 +134,35 @@ func MassloadAttributeScanner(attr *massloadmodel.MassloadAttribute) RowScanner 
 		if fileSize.Valid {
 			attr.FileSize = &fileSize.Int64 // TODO: оптимизировать чтобы не уходили в кучу лишние данные.
 		}
+
+		return nil
+	}
+}
+
+func MassloadFlagColumns() []string {
+	return []string{
+		"code",
+		"name",
+		"description",
+		"created_at",
+	}
+}
+
+func MassloadFlagScanner(ml *massloadmodel.Flag) RowScanner {
+	return func(rows pgx.Rows) error {
+		var description sql.NullString
+
+		err := rows.Scan(
+			&ml.Code,
+			&ml.Name,
+			&description,
+			&ml.CreatedAt,
+		)
+		if err != nil {
+			return fmt.Errorf("scan to model: %w", err)
+		}
+
+		ml.Description = description.String
 
 		return nil
 	}

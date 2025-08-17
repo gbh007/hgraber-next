@@ -17,6 +17,8 @@ type MassloadUseCases interface {
 	Massload(ctx context.Context, id int) (massloadmodel.Massload, error)
 	Massloads(ctx context.Context) ([]massloadmodel.Massload, error)
 
+	MassloadFlags(ctx context.Context) ([]massloadmodel.Flag, error)
+
 	CreateMassloadAttribute(ctx context.Context, massloadID int, code, value string) error
 	DeleteMassloadAttribute(ctx context.Context, massloadID int, code, value string) error
 

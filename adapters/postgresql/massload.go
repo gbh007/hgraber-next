@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/url"
-	"slices"
 
 	"github.com/Masterminds/squirrel"
 
@@ -16,10 +15,10 @@ func (d *Database) CreateMassload(ctx context.Context, ml massloadmodel.Massload
 	builder := squirrel.Insert("massloads").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"name":            ml.Name,
-			"description":     model.StringToDB(ml.Description),
-			"is_deduplicated": slices.Contains(ml.Flags, "deduplicated"), // FIXME: перевести на новую модель
-			"created_at":      ml.CreatedAt,
+			"name":        ml.Name,
+			"description": model.StringToDB(ml.Description),
+			"flags":       ml.Flags,
+			"created_at":  ml.CreatedAt,
 		}).
 		Suffix("RETURNING id")
 
@@ -46,10 +45,10 @@ func (d *Database) UpdateMassload(ctx context.Context, ml massloadmodel.Massload
 	builder := squirrel.Update("massloads").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"name":            ml.Name,
-			"description":     model.StringToDB(ml.Description),
-			"is_deduplicated": slices.Contains(ml.Flags, "deduplicated"), // FIXME: перевести на новую модель
-			"updated_at":      model.TimeToDB(ml.UpdatedAt),
+			"name":        ml.Name,
+			"description": model.StringToDB(ml.Description),
+			"flags":       ml.Flags,
+			"updated_at":  model.TimeToDB(ml.UpdatedAt),
 		}).
 		Where(squirrel.Eq{
 			"id": ml.ID,
@@ -181,6 +180,42 @@ func (d *Database) DeleteMassload(ctx context.Context, id int) error {
 	}
 
 	return nil
+}
+
+func (d *Database) MassloadFlags(ctx context.Context) ([]massloadmodel.Flag, error) {
+	builder := squirrel.Select(model.MassloadFlagColumns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From("massload_flags").
+		OrderBy("created_at", "code")
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	result := make([]massloadmodel.Flag, 0)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		flag := massloadmodel.Flag{}
+
+		err := rows.Scan(model.MassloadFlagScanner(&flag))
+		if err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+
+		result = append(result, flag)
+	}
+
+	return result, nil
 }
 
 func (d *Database) CreateMassloadExternalLink(ctx context.Context, id int, link massloadmodel.MassloadExternalLink) error {

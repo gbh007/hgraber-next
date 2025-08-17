@@ -32,3 +32,10 @@ type MassloadAttribute struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
+
+type Flag struct {
+	Code        string
+	Name        string
+	Description string
+	CreatedAt   time.Time
+}
