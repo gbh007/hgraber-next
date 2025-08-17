@@ -15,18 +15,18 @@ type Massload struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 
-	ExternalLinks []MassloadExternalLink
-	Attributes    []MassloadAttribute
+	ExternalLinks []ExternalLink
+	Attributes    []Attribute
 }
 
-type MassloadExternalLink struct {
+type ExternalLink struct {
 	URL       url.URL
 	CreatedAt time.Time
 }
 
-type MassloadAttribute struct {
-	AttrCode  string
-	AttrValue string
+type Attribute struct {
+	Code      string
+	Value     string
 	PageSize  *int64
 	FileSize  *int64
 	CreatedAt time.Time

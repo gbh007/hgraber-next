@@ -9,9 +9,9 @@ import (
 )
 
 func (uc *UseCase) CreateMassloadAttribute(ctx context.Context, massloadID int, code, value string) error {
-	err := uc.storage.CreateMassloadAttribute(ctx, massloadID, massloadmodel.MassloadAttribute{
-		AttrCode:  code,
-		AttrValue: value,
+	err := uc.storage.CreateMassloadAttribute(ctx, massloadID, massloadmodel.Attribute{
+		Code:      code,
+		Value:     value,
 		CreatedAt: time.Now(),
 	})
 	if err != nil {
@@ -22,9 +22,9 @@ func (uc *UseCase) CreateMassloadAttribute(ctx context.Context, massloadID int, 
 }
 
 func (uc *UseCase) DeleteMassloadAttribute(ctx context.Context, massloadID int, code, value string) error {
-	err := uc.storage.DeleteMassloadAttribute(ctx, massloadID, massloadmodel.MassloadAttribute{
-		AttrCode:  code,
-		AttrValue: value,
+	err := uc.storage.DeleteMassloadAttribute(ctx, massloadID, massloadmodel.Attribute{
+		Code:  code,
+		Value: value,
 	})
 	if err != nil {
 		return fmt.Errorf("storage delete: %w", err)

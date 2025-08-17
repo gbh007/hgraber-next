@@ -36,16 +36,16 @@ func convertMassloadInfo(ml massloadmodel.Massload) serverapi.MassloadInfo {
 		FileSizeFormatted: apiservercore.OptString(core.PrettySizePointer(ml.FileSize)),
 		CreatedAt:         ml.CreatedAt,
 		UpdatedAt:         apiservercore.OptTime(ml.UpdatedAt),
-		ExternalLinks: pkg.Map(ml.ExternalLinks, func(link massloadmodel.MassloadExternalLink) serverapi.MassloadInfoExternalLinksItem {
+		ExternalLinks: pkg.Map(ml.ExternalLinks, func(link massloadmodel.ExternalLink) serverapi.MassloadInfoExternalLinksItem {
 			return serverapi.MassloadInfoExternalLinksItem{
 				URL:       link.URL,
 				CreatedAt: link.CreatedAt,
 			}
 		}),
-		Attributes: pkg.Map(ml.Attributes, func(attr massloadmodel.MassloadAttribute) serverapi.MassloadInfoAttributesItem {
+		Attributes: pkg.Map(ml.Attributes, func(attr massloadmodel.Attribute) serverapi.MassloadInfoAttributesItem {
 			return serverapi.MassloadInfoAttributesItem{
-				Code:              attr.AttrCode,
-				Value:             attr.AttrValue,
+				Code:              attr.Code,
+				Value:             attr.Value,
 				PageSize:          apiservercore.OptInt64Pointer(attr.PageSize),
 				PageSizeFormatted: apiservercore.OptString(core.PrettySizePointer(attr.PageSize)),
 				FileSize:          apiservercore.OptInt64Pointer(attr.FileSize),

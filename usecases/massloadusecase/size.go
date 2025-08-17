@@ -27,7 +27,7 @@ func (uc *UseCase) UpdateSize(ctx context.Context, ml massloadmodel.Massload) er
 	attrMap := make(map[string][]string)
 
 	for _, attr := range attrs {
-		attrMap[attr.AttrCode] = append(attrMap[attr.AttrCode], attr.AttrValue)
+		attrMap[attr.Code] = append(attrMap[attr.Code], attr.Value)
 	}
 
 	for code, values := range attrMap {
@@ -57,7 +57,7 @@ func (uc *UseCase) UpdateSize(ctx context.Context, ml massloadmodel.Massload) er
 	return nil
 }
 
-func (uc *UseCase) MassloadAttributesForUpdate(ctx context.Context) ([]massloadmodel.MassloadAttribute, error) {
+func (uc *UseCase) MassloadAttributesForUpdate(ctx context.Context) ([]massloadmodel.Attribute, error) {
 	attrs, err := uc.storage.MassloadsAttributes(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("storage get massloads attributes: %w", err)
@@ -66,10 +66,10 @@ func (uc *UseCase) MassloadAttributesForUpdate(ctx context.Context) ([]massloadm
 	return attrs, nil
 }
 
-func (uc *UseCase) UpdateAttributesSize(ctx context.Context, attr massloadmodel.MassloadAttribute) error {
+func (uc *UseCase) UpdateAttributesSize(ctx context.Context, attr massloadmodel.Attribute) error {
 	attrMap := map[string][]string{
-		attr.AttrCode: {
-			attr.AttrValue,
+		attr.Code: {
+			attr.Value,
 		},
 	}
 
@@ -83,9 +83,9 @@ func (uc *UseCase) UpdateAttributesSize(ctx context.Context, attr massloadmodel.
 		return fmt.Errorf("storage get page size: %w", err)
 	}
 
-	err = uc.storage.UpdateMassloadAttributeSize(ctx, massloadmodel.MassloadAttribute{
-		AttrCode:  attr.AttrCode,
-		AttrValue: attr.AttrValue,
+	err = uc.storage.UpdateMassloadAttributeSize(ctx, massloadmodel.Attribute{
+		Code:      attr.Code,
+		Value:     attr.Value,
 		PageSize:  &pageSize,
 		FileSize:  &fileSize,
 		UpdatedAt: time.Now(),

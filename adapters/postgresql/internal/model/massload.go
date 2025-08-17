@@ -71,7 +71,7 @@ func MassloadExternalLinkColumns() []string {
 	}
 }
 
-func MassloadExternalLinkScanner(link *massloadmodel.MassloadExternalLink) RowScanner {
+func MassloadExternalLinkScanner(link *massloadmodel.ExternalLink) RowScanner {
 	return func(rows pgx.Rows) error {
 		var rawUrl string
 
@@ -105,7 +105,7 @@ func MassloadAttributeColumns() []string {
 	}
 }
 
-func MassloadAttributeScanner(attr *massloadmodel.MassloadAttribute) RowScanner {
+func MassloadAttributeScanner(attr *massloadmodel.Attribute) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			pageSize  sql.NullInt64
@@ -114,8 +114,8 @@ func MassloadAttributeScanner(attr *massloadmodel.MassloadAttribute) RowScanner 
 		)
 
 		err := rows.Scan(
-			&attr.AttrCode,
-			&attr.AttrValue,
+			&attr.Code,
+			&attr.Value,
 			&pageSize,
 			&fileSize,
 			&attr.CreatedAt,

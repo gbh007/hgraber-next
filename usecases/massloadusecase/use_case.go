@@ -18,16 +18,16 @@ type storage interface {
 
 	MassloadFlags(ctx context.Context) ([]massloadmodel.Flag, error)
 
-	CreateMassloadExternalLink(ctx context.Context, id int, link massloadmodel.MassloadExternalLink) error
-	MassloadExternalLinks(ctx context.Context, id int) ([]massloadmodel.MassloadExternalLink, error)
+	CreateMassloadExternalLink(ctx context.Context, id int, link massloadmodel.ExternalLink) error
+	MassloadExternalLinks(ctx context.Context, id int) ([]massloadmodel.ExternalLink, error)
 	DeleteMassloadExternalLink(ctx context.Context, id int, u url.URL) error
 
-	CreateMassloadAttribute(ctx context.Context, id int, attr massloadmodel.MassloadAttribute) error
-	MassloadAttributes(ctx context.Context, id int) ([]massloadmodel.MassloadAttribute, error)
-	DeleteMassloadAttribute(ctx context.Context, id int, attr massloadmodel.MassloadAttribute) error
+	CreateMassloadAttribute(ctx context.Context, id int, attr massloadmodel.Attribute) error
+	MassloadAttributes(ctx context.Context, id int) ([]massloadmodel.Attribute, error)
+	DeleteMassloadAttribute(ctx context.Context, id int, attr massloadmodel.Attribute) error
 
-	MassloadsAttributes(ctx context.Context) ([]massloadmodel.MassloadAttribute, error)
-	UpdateMassloadAttributeSize(ctx context.Context, attr massloadmodel.MassloadAttribute) error
+	MassloadsAttributes(ctx context.Context) ([]massloadmodel.Attribute, error)
+	UpdateMassloadAttributeSize(ctx context.Context, attr massloadmodel.Attribute) error
 
 	AttributesPageSize(ctx context.Context, attrs map[string][]string) (int64, error)
 	AttributesFileSize(ctx context.Context, attrs map[string][]string) (int64, error)

@@ -218,7 +218,7 @@ func (d *Database) MassloadFlags(ctx context.Context) ([]massloadmodel.Flag, err
 	return result, nil
 }
 
-func (d *Database) CreateMassloadExternalLink(ctx context.Context, id int, link massloadmodel.MassloadExternalLink) error {
+func (d *Database) CreateMassloadExternalLink(ctx context.Context, id int, link massloadmodel.ExternalLink) error {
 	builder := squirrel.Insert("massload_external_links").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
@@ -265,7 +265,7 @@ func (d *Database) DeleteMassloadExternalLink(ctx context.Context, id int, u url
 	return nil
 }
 
-func (d *Database) MassloadExternalLinks(ctx context.Context, id int) ([]massloadmodel.MassloadExternalLink, error) {
+func (d *Database) MassloadExternalLinks(ctx context.Context, id int) ([]massloadmodel.ExternalLink, error) {
 	builder := squirrel.Select(model.MassloadExternalLinkColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("massload_external_links").
@@ -281,7 +281,7 @@ func (d *Database) MassloadExternalLinks(ctx context.Context, id int) ([]massloa
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	result := make([]massloadmodel.MassloadExternalLink, 0)
+	result := make([]massloadmodel.ExternalLink, 0)
 
 	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
@@ -291,7 +291,7 @@ func (d *Database) MassloadExternalLinks(ctx context.Context, id int) ([]massloa
 	defer rows.Close()
 
 	for rows.Next() {
-		link := massloadmodel.MassloadExternalLink{}
+		link := massloadmodel.ExternalLink{}
 
 		err := rows.Scan(model.MassloadExternalLinkScanner(&link))
 		if err != nil {
@@ -304,13 +304,13 @@ func (d *Database) MassloadExternalLinks(ctx context.Context, id int) ([]massloa
 	return result, nil
 }
 
-func (d *Database) CreateMassloadAttribute(ctx context.Context, id int, attr massloadmodel.MassloadAttribute) error {
+func (d *Database) CreateMassloadAttribute(ctx context.Context, id int, attr massloadmodel.Attribute) error {
 	builder := squirrel.Insert("massload_attributes").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
 			"massload_id": id,
-			"attr_code":   attr.AttrCode,
-			"attr_value":  attr.AttrValue,
+			"attr_code":   attr.Code,
+			"attr_value":  attr.Value,
 			"created_at":  attr.CreatedAt,
 		})
 
@@ -329,7 +329,7 @@ func (d *Database) CreateMassloadAttribute(ctx context.Context, id int, attr mas
 	return nil
 }
 
-func (d *Database) UpdateMassloadAttributeSize(ctx context.Context, attr massloadmodel.MassloadAttribute) error {
+func (d *Database) UpdateMassloadAttributeSize(ctx context.Context, attr massloadmodel.Attribute) error {
 	builder := squirrel.Update("massload_attributes").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
@@ -338,8 +338,8 @@ func (d *Database) UpdateMassloadAttributeSize(ctx context.Context, attr massloa
 			"updated_at": model.TimeToDB(attr.UpdatedAt),
 		}).
 		Where(squirrel.Eq{
-			"attr_code":  attr.AttrCode,
-			"attr_value": attr.AttrValue,
+			"attr_code":  attr.Code,
+			"attr_value": attr.Value,
 		})
 
 	query, args, err := builder.ToSql()
@@ -357,13 +357,13 @@ func (d *Database) UpdateMassloadAttributeSize(ctx context.Context, attr massloa
 	return nil
 }
 
-func (d *Database) DeleteMassloadAttribute(ctx context.Context, id int, attr massloadmodel.MassloadAttribute) error {
+func (d *Database) DeleteMassloadAttribute(ctx context.Context, id int, attr massloadmodel.Attribute) error {
 	builder := squirrel.Delete("massload_attributes").
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
 			"massload_id": id,
-			"attr_code":   attr.AttrCode,
-			"attr_value":  attr.AttrValue,
+			"attr_code":   attr.Code,
+			"attr_value":  attr.Value,
 		})
 
 	query, args, err := builder.ToSql()
@@ -381,7 +381,7 @@ func (d *Database) DeleteMassloadAttribute(ctx context.Context, id int, attr mas
 	return nil
 }
 
-func (d *Database) MassloadAttributes(ctx context.Context, id int) ([]massloadmodel.MassloadAttribute, error) {
+func (d *Database) MassloadAttributes(ctx context.Context, id int) ([]massloadmodel.Attribute, error) {
 	builder := squirrel.Select(model.MassloadAttributeColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("massload_attributes").
@@ -397,7 +397,7 @@ func (d *Database) MassloadAttributes(ctx context.Context, id int) ([]massloadmo
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	result := make([]massloadmodel.MassloadAttribute, 0)
+	result := make([]massloadmodel.Attribute, 0)
 
 	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
@@ -407,7 +407,7 @@ func (d *Database) MassloadAttributes(ctx context.Context, id int) ([]massloadmo
 	defer rows.Close()
 
 	for rows.Next() {
-		attr := massloadmodel.MassloadAttribute{}
+		attr := massloadmodel.Attribute{}
 
 		err := rows.Scan(model.MassloadAttributeScanner(&attr))
 		if err != nil {
@@ -420,7 +420,7 @@ func (d *Database) MassloadAttributes(ctx context.Context, id int) ([]massloadmo
 	return result, nil
 }
 
-func (d *Database) MassloadsAttributes(ctx context.Context) ([]massloadmodel.MassloadAttribute, error) {
+func (d *Database) MassloadsAttributes(ctx context.Context) ([]massloadmodel.Attribute, error) {
 	builder := squirrel.
 		Select(
 			"attr_code",
@@ -440,7 +440,7 @@ func (d *Database) MassloadsAttributes(ctx context.Context) ([]massloadmodel.Mas
 
 	d.squirrelDebugLog(ctx, query, args)
 
-	result := make([]massloadmodel.MassloadAttribute, 0)
+	result := make([]massloadmodel.Attribute, 0)
 
 	rows, err := d.pool.Query(ctx, query, args...)
 	if err != nil {
@@ -450,9 +450,9 @@ func (d *Database) MassloadsAttributes(ctx context.Context) ([]massloadmodel.Mas
 	defer rows.Close()
 
 	for rows.Next() {
-		attr := massloadmodel.MassloadAttribute{}
+		attr := massloadmodel.Attribute{}
 
-		err := rows.Scan(&attr.AttrCode, &attr.AttrValue)
+		err := rows.Scan(&attr.Code, &attr.Value)
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

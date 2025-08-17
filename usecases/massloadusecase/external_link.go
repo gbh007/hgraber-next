@@ -10,7 +10,7 @@ import (
 )
 
 func (uc *UseCase) CreateMassloadExternalLink(ctx context.Context, massloadID int, url url.URL) error {
-	err := uc.storage.CreateMassloadExternalLink(ctx, massloadID, massloadmodel.MassloadExternalLink{
+	err := uc.storage.CreateMassloadExternalLink(ctx, massloadID, massloadmodel.ExternalLink{
 		URL:       url,
 		CreatedAt: time.Now(),
 	})

@@ -46,8 +46,8 @@ func NewMassloadSize(
 }
 
 type massloadAttributeSizeUnitUseCases interface {
-	MassloadAttributesForUpdate(ctx context.Context) ([]massloadmodel.MassloadAttribute, error)
-	UpdateAttributesSize(ctx context.Context, attr massloadmodel.MassloadAttribute) error
+	MassloadAttributesForUpdate(ctx context.Context) ([]massloadmodel.Attribute, error)
+	UpdateAttributesSize(ctx context.Context, attr massloadmodel.Attribute) error
 }
 
 func NewMassloadAttributeSize(
@@ -56,19 +56,19 @@ func NewMassloadAttributeSize(
 	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
-) *worker.Worker[massloadmodel.MassloadAttribute] {
-	return worker.New[massloadmodel.MassloadAttribute](
+) *worker.Worker[massloadmodel.Attribute] {
+	return worker.New[massloadmodel.Attribute](
 		"massload_attribute_sizer",
 		cfg.GetQueueSize(),
 		cfg.GetInterval(),
 		logger,
-		func(ctx context.Context, attr massloadmodel.MassloadAttribute) error {
+		func(ctx context.Context, attr massloadmodel.Attribute) error {
 			err := useCases.UpdateAttributesSize(ctx, attr)
 			if err != nil {
 				return pkg.WrapError(
 					err, "fail update massload attribute size info",
-					pkg.ErrorArgument("code", attr.AttrCode),
-					pkg.ErrorArgument("value", attr.AttrValue),
+					pkg.ErrorArgument("code", attr.Code),
+					pkg.ErrorArgument("value", attr.Value),
 				)
 			}
 
