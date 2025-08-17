@@ -26,17 +26,18 @@ func MassloadColumns() []string {
 func MassloadScanner(ml *massloadmodel.Massload) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
-			description sql.NullString
-			pageSize    sql.NullInt64
-			fileSize    sql.NullInt64
-			updatedAt   sql.NullTime
+			description    sql.NullString
+			pageSize       sql.NullInt64
+			fileSize       sql.NullInt64
+			updatedAt      sql.NullTime
+			isDeduplicated bool
 		)
 
 		err := rows.Scan(
 			&ml.ID,
 			&ml.Name,
 			&description,
-			&ml.IsDeduplicated,
+			&isDeduplicated,
 			&pageSize,
 			&fileSize,
 			&ml.CreatedAt,
@@ -48,6 +49,12 @@ func MassloadScanner(ml *massloadmodel.Massload) RowScanner {
 
 		ml.UpdatedAt = updatedAt.Time
 		ml.Description = description.String
+
+		if isDeduplicated { // FIXME: перевести на новую модель
+			ml.Flags = []string{
+				"deduplicated",
+			}
+		}
 
 		if pageSize.Valid {
 			ml.PageSize = &pageSize.Int64 // TODO: оптимизировать чтобы не уходили в кучу лишние данные.

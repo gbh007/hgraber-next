@@ -526,6 +526,15 @@ func (UnimplementedHandler) APILabelSetPost(ctx context.Context, req *APILabelSe
 	return r, ht.ErrNotImplemented
 }
 
+// APIMassloadFlagListGet implements GET /api/massload/flag/list operation.
+//
+// Флаги для массовых загрузок.
+//
+// GET /api/massload/flag/list
+func (UnimplementedHandler) APIMassloadFlagListGet(ctx context.Context) (r APIMassloadFlagListGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIMassloadInfoAttributeCreatePost implements POST /api/massload/info/attribute/create operation.
 //
 // Привязка аттрибута к массовой загрузке.
@@ -589,12 +598,12 @@ func (UnimplementedHandler) APIMassloadInfoGetPost(ctx context.Context, req *API
 	return r, ht.ErrNotImplemented
 }
 
-// APIMassloadInfoListGet implements GET /api/massload/info/list operation.
+// APIMassloadInfoListPost implements POST /api/massload/info/list operation.
 //
 // Массовые загрузки.
 //
-// GET /api/massload/info/list
-func (UnimplementedHandler) APIMassloadInfoListGet(ctx context.Context) (r APIMassloadInfoListGetRes, _ error) {
+// POST /api/massload/info/list
+func (UnimplementedHandler) APIMassloadInfoListPost(ctx context.Context, req *APIMassloadInfoListPostReq) (r APIMassloadInfoListPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

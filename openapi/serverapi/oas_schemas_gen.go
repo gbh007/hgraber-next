@@ -5404,6 +5404,86 @@ type APILabelSetPostUnauthorized ErrorResponse
 
 func (*APILabelSetPostUnauthorized) aPILabelSetPostRes() {}
 
+type APIMassloadFlagListGetForbidden ErrorResponse
+
+func (*APIMassloadFlagListGetForbidden) aPIMassloadFlagListGetRes() {}
+
+type APIMassloadFlagListGetInternalServerError ErrorResponse
+
+func (*APIMassloadFlagListGetInternalServerError) aPIMassloadFlagListGetRes() {}
+
+type APIMassloadFlagListGetOK struct {
+	// Список флагов.
+	Flags []APIMassloadFlagListGetOKFlagsItem `json:"flags"`
+}
+
+// GetFlags returns the value of Flags.
+func (s *APIMassloadFlagListGetOK) GetFlags() []APIMassloadFlagListGetOKFlagsItem {
+	return s.Flags
+}
+
+// SetFlags sets the value of Flags.
+func (s *APIMassloadFlagListGetOK) SetFlags(val []APIMassloadFlagListGetOKFlagsItem) {
+	s.Flags = val
+}
+
+func (*APIMassloadFlagListGetOK) aPIMassloadFlagListGetRes() {}
+
+type APIMassloadFlagListGetOKFlagsItem struct {
+	// Код флага.
+	Code string `json:"code"`
+	// Название флага.
+	Name string `json:"name"`
+	// Описание флага.
+	Description OptString `json:"description"`
+	// Время создания.
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIMassloadFlagListGetOKFlagsItem) GetCode() string {
+	return s.Code
+}
+
+// GetName returns the value of Name.
+func (s *APIMassloadFlagListGetOKFlagsItem) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIMassloadFlagListGetOKFlagsItem) GetDescription() OptString {
+	return s.Description
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *APIMassloadFlagListGetOKFlagsItem) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetCode sets the value of Code.
+func (s *APIMassloadFlagListGetOKFlagsItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetName sets the value of Name.
+func (s *APIMassloadFlagListGetOKFlagsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIMassloadFlagListGetOKFlagsItem) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *APIMassloadFlagListGetOKFlagsItem) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+type APIMassloadFlagListGetUnauthorized ErrorResponse
+
+func (*APIMassloadFlagListGetUnauthorized) aPIMassloadFlagListGetRes() {}
+
 type APIMassloadInfoAttributeCreatePostBadRequest ErrorResponse
 
 func (*APIMassloadInfoAttributeCreatePostBadRequest) aPIMassloadInfoAttributeCreatePostRes() {}
@@ -5569,8 +5649,8 @@ type APIMassloadInfoCreatePostReq struct {
 	Name string `json:"name"`
 	// Описание массовой загрузки.
 	Description OptString `json:"description"`
-	// Признак того что эта загрузка была дедуплицирована.
-	IsDeduplicated bool `json:"is_deduplicated"`
+	// Флаги массовой загрузки.
+	Flags []string `json:"flags"`
 }
 
 // GetName returns the value of Name.
@@ -5583,9 +5663,9 @@ func (s *APIMassloadInfoCreatePostReq) GetDescription() OptString {
 	return s.Description
 }
 
-// GetIsDeduplicated returns the value of IsDeduplicated.
-func (s *APIMassloadInfoCreatePostReq) GetIsDeduplicated() bool {
-	return s.IsDeduplicated
+// GetFlags returns the value of Flags.
+func (s *APIMassloadInfoCreatePostReq) GetFlags() []string {
+	return s.Flags
 }
 
 // SetName sets the value of Name.
@@ -5598,9 +5678,9 @@ func (s *APIMassloadInfoCreatePostReq) SetDescription(val OptString) {
 	s.Description = val
 }
 
-// SetIsDeduplicated sets the value of IsDeduplicated.
-func (s *APIMassloadInfoCreatePostReq) SetIsDeduplicated(val bool) {
-	s.IsDeduplicated = val
+// SetFlags sets the value of Flags.
+func (s *APIMassloadInfoCreatePostReq) SetFlags(val []string) {
+	s.Flags = val
 }
 
 type APIMassloadInfoCreatePostUnauthorized ErrorResponse
@@ -5786,34 +5866,279 @@ type APIMassloadInfoGetPostUnauthorized ErrorResponse
 
 func (*APIMassloadInfoGetPostUnauthorized) aPIMassloadInfoGetPostRes() {}
 
-type APIMassloadInfoListGetForbidden ErrorResponse
+type APIMassloadInfoListPostForbidden ErrorResponse
 
-func (*APIMassloadInfoListGetForbidden) aPIMassloadInfoListGetRes() {}
+func (*APIMassloadInfoListPostForbidden) aPIMassloadInfoListPostRes() {}
 
-type APIMassloadInfoListGetInternalServerError ErrorResponse
+type APIMassloadInfoListPostInternalServerError ErrorResponse
 
-func (*APIMassloadInfoListGetInternalServerError) aPIMassloadInfoListGetRes() {}
+func (*APIMassloadInfoListPostInternalServerError) aPIMassloadInfoListPostRes() {}
 
-type APIMassloadInfoListGetOK struct {
+type APIMassloadInfoListPostOK struct {
 	// Список загрузок.
 	Massloads []MassloadInfo `json:"massloads"`
 }
 
 // GetMassloads returns the value of Massloads.
-func (s *APIMassloadInfoListGetOK) GetMassloads() []MassloadInfo {
+func (s *APIMassloadInfoListPostOK) GetMassloads() []MassloadInfo {
 	return s.Massloads
 }
 
 // SetMassloads sets the value of Massloads.
-func (s *APIMassloadInfoListGetOK) SetMassloads(val []MassloadInfo) {
+func (s *APIMassloadInfoListPostOK) SetMassloads(val []MassloadInfo) {
 	s.Massloads = val
 }
 
-func (*APIMassloadInfoListGetOK) aPIMassloadInfoListGetRes() {}
+func (*APIMassloadInfoListPostOK) aPIMassloadInfoListPostRes() {}
 
-type APIMassloadInfoListGetUnauthorized ErrorResponse
+type APIMassloadInfoListPostReq struct {
+	// Фильтры массовой загрузки.
+	Filter OptAPIMassloadInfoListPostReqFilter `json:"filter"`
+	// Параметры сортировки.
+	Sort OptAPIMassloadInfoListPostReqSort `json:"sort"`
+}
 
-func (*APIMassloadInfoListGetUnauthorized) aPIMassloadInfoListGetRes() {}
+// GetFilter returns the value of Filter.
+func (s *APIMassloadInfoListPostReq) GetFilter() OptAPIMassloadInfoListPostReqFilter {
+	return s.Filter
+}
+
+// GetSort returns the value of Sort.
+func (s *APIMassloadInfoListPostReq) GetSort() OptAPIMassloadInfoListPostReqSort {
+	return s.Sort
+}
+
+// SetFilter sets the value of Filter.
+func (s *APIMassloadInfoListPostReq) SetFilter(val OptAPIMassloadInfoListPostReqFilter) {
+	s.Filter = val
+}
+
+// SetSort sets the value of Sort.
+func (s *APIMassloadInfoListPostReq) SetSort(val OptAPIMassloadInfoListPostReqSort) {
+	s.Sort = val
+}
+
+// Фильтры массовой загрузки.
+type APIMassloadInfoListPostReqFilter struct {
+	// Название массовой загрузки (ilike).
+	Name OptString `json:"name"`
+	// Ссылка массовой загрузки (ilike, любая из).
+	ExternalLink OptString `json:"external_link"`
+	// Флаги - все и точное совпадение.
+	Flags []string `json:"flags"`
+	// Фильтр по атрибутам.
+	Attributes []APIMassloadInfoListPostReqFilterAttributesItem `json:"attributes"`
+}
+
+// GetName returns the value of Name.
+func (s *APIMassloadInfoListPostReqFilter) GetName() OptString {
+	return s.Name
+}
+
+// GetExternalLink returns the value of ExternalLink.
+func (s *APIMassloadInfoListPostReqFilter) GetExternalLink() OptString {
+	return s.ExternalLink
+}
+
+// GetFlags returns the value of Flags.
+func (s *APIMassloadInfoListPostReqFilter) GetFlags() []string {
+	return s.Flags
+}
+
+// GetAttributes returns the value of Attributes.
+func (s *APIMassloadInfoListPostReqFilter) GetAttributes() []APIMassloadInfoListPostReqFilterAttributesItem {
+	return s.Attributes
+}
+
+// SetName sets the value of Name.
+func (s *APIMassloadInfoListPostReqFilter) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetExternalLink sets the value of ExternalLink.
+func (s *APIMassloadInfoListPostReqFilter) SetExternalLink(val OptString) {
+	s.ExternalLink = val
+}
+
+// SetFlags sets the value of Flags.
+func (s *APIMassloadInfoListPostReqFilter) SetFlags(val []string) {
+	s.Flags = val
+}
+
+// SetAttributes sets the value of Attributes.
+func (s *APIMassloadInfoListPostReqFilter) SetAttributes(val []APIMassloadInfoListPostReqFilterAttributesItem) {
+	s.Attributes = val
+}
+
+type APIMassloadInfoListPostReqFilterAttributesItem struct {
+	// Код атрибута.
+	Code string `json:"code"`
+	// Тип фильтра.
+	Type APIMassloadInfoListPostReqFilterAttributesItemType `json:"type"`
+	// Значения для фильтрации (для операции like берется
+	// только 1-е значение).
+	Values []string `json:"values"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) GetCode() string {
+	return s.Code
+}
+
+// GetType returns the value of Type.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) GetType() APIMassloadInfoListPostReqFilterAttributesItemType {
+	return s.Type
+}
+
+// GetValues returns the value of Values.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) GetValues() []string {
+	return s.Values
+}
+
+// SetCode sets the value of Code.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) SetCode(val string) {
+	s.Code = val
+}
+
+// SetType sets the value of Type.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) SetType(val APIMassloadInfoListPostReqFilterAttributesItemType) {
+	s.Type = val
+}
+
+// SetValues sets the value of Values.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) SetValues(val []string) {
+	s.Values = val
+}
+
+// Тип фильтра.
+type APIMassloadInfoListPostReqFilterAttributesItemType string
+
+const (
+	APIMassloadInfoListPostReqFilterAttributesItemTypeLike APIMassloadInfoListPostReqFilterAttributesItemType = "like"
+	APIMassloadInfoListPostReqFilterAttributesItemTypeIn   APIMassloadInfoListPostReqFilterAttributesItemType = "in"
+)
+
+// AllValues returns all APIMassloadInfoListPostReqFilterAttributesItemType values.
+func (APIMassloadInfoListPostReqFilterAttributesItemType) AllValues() []APIMassloadInfoListPostReqFilterAttributesItemType {
+	return []APIMassloadInfoListPostReqFilterAttributesItemType{
+		APIMassloadInfoListPostReqFilterAttributesItemTypeLike,
+		APIMassloadInfoListPostReqFilterAttributesItemTypeIn,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIMassloadInfoListPostReqFilterAttributesItemType) MarshalText() ([]byte, error) {
+	switch s {
+	case APIMassloadInfoListPostReqFilterAttributesItemTypeLike:
+		return []byte(s), nil
+	case APIMassloadInfoListPostReqFilterAttributesItemTypeIn:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIMassloadInfoListPostReqFilterAttributesItemType) UnmarshalText(data []byte) error {
+	switch APIMassloadInfoListPostReqFilterAttributesItemType(data) {
+	case APIMassloadInfoListPostReqFilterAttributesItemTypeLike:
+		*s = APIMassloadInfoListPostReqFilterAttributesItemTypeLike
+		return nil
+	case APIMassloadInfoListPostReqFilterAttributesItemTypeIn:
+		*s = APIMassloadInfoListPostReqFilterAttributesItemTypeIn
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Параметры сортировки.
+type APIMassloadInfoListPostReqSort struct {
+	// Сортировать в обратном порядке.
+	Desc OptBool `json:"desc"`
+	// Поле для сортировки.
+	Field OptAPIMassloadInfoListPostReqSortField `json:"field"`
+}
+
+// GetDesc returns the value of Desc.
+func (s *APIMassloadInfoListPostReqSort) GetDesc() OptBool {
+	return s.Desc
+}
+
+// GetField returns the value of Field.
+func (s *APIMassloadInfoListPostReqSort) GetField() OptAPIMassloadInfoListPostReqSortField {
+	return s.Field
+}
+
+// SetDesc sets the value of Desc.
+func (s *APIMassloadInfoListPostReqSort) SetDesc(val OptBool) {
+	s.Desc = val
+}
+
+// SetField sets the value of Field.
+func (s *APIMassloadInfoListPostReqSort) SetField(val OptAPIMassloadInfoListPostReqSortField) {
+	s.Field = val
+}
+
+// Поле для сортировки.
+type APIMassloadInfoListPostReqSortField string
+
+const (
+	APIMassloadInfoListPostReqSortFieldID       APIMassloadInfoListPostReqSortField = "id"
+	APIMassloadInfoListPostReqSortFieldName     APIMassloadInfoListPostReqSortField = "name"
+	APIMassloadInfoListPostReqSortFieldPageSize APIMassloadInfoListPostReqSortField = "page_size"
+	APIMassloadInfoListPostReqSortFieldFileSize APIMassloadInfoListPostReqSortField = "file_size"
+)
+
+// AllValues returns all APIMassloadInfoListPostReqSortField values.
+func (APIMassloadInfoListPostReqSortField) AllValues() []APIMassloadInfoListPostReqSortField {
+	return []APIMassloadInfoListPostReqSortField{
+		APIMassloadInfoListPostReqSortFieldID,
+		APIMassloadInfoListPostReqSortFieldName,
+		APIMassloadInfoListPostReqSortFieldPageSize,
+		APIMassloadInfoListPostReqSortFieldFileSize,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIMassloadInfoListPostReqSortField) MarshalText() ([]byte, error) {
+	switch s {
+	case APIMassloadInfoListPostReqSortFieldID:
+		return []byte(s), nil
+	case APIMassloadInfoListPostReqSortFieldName:
+		return []byte(s), nil
+	case APIMassloadInfoListPostReqSortFieldPageSize:
+		return []byte(s), nil
+	case APIMassloadInfoListPostReqSortFieldFileSize:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIMassloadInfoListPostReqSortField) UnmarshalText(data []byte) error {
+	switch APIMassloadInfoListPostReqSortField(data) {
+	case APIMassloadInfoListPostReqSortFieldID:
+		*s = APIMassloadInfoListPostReqSortFieldID
+		return nil
+	case APIMassloadInfoListPostReqSortFieldName:
+		*s = APIMassloadInfoListPostReqSortFieldName
+		return nil
+	case APIMassloadInfoListPostReqSortFieldPageSize:
+		*s = APIMassloadInfoListPostReqSortFieldPageSize
+		return nil
+	case APIMassloadInfoListPostReqSortFieldFileSize:
+		*s = APIMassloadInfoListPostReqSortFieldFileSize
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APIMassloadInfoListPostUnauthorized ErrorResponse
+
+func (*APIMassloadInfoListPostUnauthorized) aPIMassloadInfoListPostRes() {}
 
 type APIMassloadInfoUpdatePostBadRequest ErrorResponse
 
@@ -5844,8 +6169,8 @@ type APIMassloadInfoUpdatePostReq struct {
 	Name string `json:"name"`
 	// Описание массовой загрузки.
 	Description OptString `json:"description"`
-	// Признак того что эта загрузка была дедуплицирована.
-	IsDeduplicated bool `json:"is_deduplicated"`
+	// Флаги массовой загрузки.
+	Flags []string `json:"flags"`
 }
 
 // GetID returns the value of ID.
@@ -5863,9 +6188,9 @@ func (s *APIMassloadInfoUpdatePostReq) GetDescription() OptString {
 	return s.Description
 }
 
-// GetIsDeduplicated returns the value of IsDeduplicated.
-func (s *APIMassloadInfoUpdatePostReq) GetIsDeduplicated() bool {
-	return s.IsDeduplicated
+// GetFlags returns the value of Flags.
+func (s *APIMassloadInfoUpdatePostReq) GetFlags() []string {
+	return s.Flags
 }
 
 // SetID sets the value of ID.
@@ -5883,9 +6208,9 @@ func (s *APIMassloadInfoUpdatePostReq) SetDescription(val OptString) {
 	s.Description = val
 }
 
-// SetIsDeduplicated sets the value of IsDeduplicated.
-func (s *APIMassloadInfoUpdatePostReq) SetIsDeduplicated(val bool) {
-	s.IsDeduplicated = val
+// SetFlags sets the value of Flags.
+func (s *APIMassloadInfoUpdatePostReq) SetFlags(val []string) {
+	s.Flags = val
 }
 
 type APIMassloadInfoUpdatePostUnauthorized ErrorResponse
@@ -8840,8 +9165,8 @@ type MassloadInfo struct {
 	Name string `json:"name"`
 	// Описание массовой загрузки.
 	Description OptString `json:"description"`
-	// Признак того что эта загрузка была дедуплицирована.
-	IsDeduplicated bool `json:"is_deduplicated"`
+	// Флаги массовой загрузки.
+	Flags []string `json:"flags"`
 	// Размер файлов страниц.
 	PageSize OptInt64 `json:"page_size"`
 	// Размер файлов страниц в человеко читаемом виде.
@@ -8877,9 +9202,9 @@ func (s *MassloadInfo) GetDescription() OptString {
 	return s.Description
 }
 
-// GetIsDeduplicated returns the value of IsDeduplicated.
-func (s *MassloadInfo) GetIsDeduplicated() bool {
-	return s.IsDeduplicated
+// GetFlags returns the value of Flags.
+func (s *MassloadInfo) GetFlags() []string {
+	return s.Flags
 }
 
 // GetPageSize returns the value of PageSize.
@@ -8937,9 +9262,9 @@ func (s *MassloadInfo) SetDescription(val OptString) {
 	s.Description = val
 }
 
-// SetIsDeduplicated sets the value of IsDeduplicated.
-func (s *MassloadInfo) SetIsDeduplicated(val bool) {
-	s.IsDeduplicated = val
+// SetFlags sets the value of Flags.
+func (s *MassloadInfo) SetFlags(val []string) {
+	s.Flags = val
 }
 
 // SetPageSize sets the value of PageSize.
@@ -9243,6 +9568,144 @@ func (o OptAPIBookRebuildPostReqFlags) Get() (v APIBookRebuildPostReqFlags, ok b
 
 // Or returns value if set, or given parameter if does not.
 func (o OptAPIBookRebuildPostReqFlags) Or(d APIBookRebuildPostReqFlags) APIBookRebuildPostReqFlags {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptAPIMassloadInfoListPostReqFilter returns new OptAPIMassloadInfoListPostReqFilter with value set to v.
+func NewOptAPIMassloadInfoListPostReqFilter(v APIMassloadInfoListPostReqFilter) OptAPIMassloadInfoListPostReqFilter {
+	return OptAPIMassloadInfoListPostReqFilter{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptAPIMassloadInfoListPostReqFilter is optional APIMassloadInfoListPostReqFilter.
+type OptAPIMassloadInfoListPostReqFilter struct {
+	Value APIMassloadInfoListPostReqFilter
+	Set   bool
+}
+
+// IsSet returns true if OptAPIMassloadInfoListPostReqFilter was set.
+func (o OptAPIMassloadInfoListPostReqFilter) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptAPIMassloadInfoListPostReqFilter) Reset() {
+	var v APIMassloadInfoListPostReqFilter
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptAPIMassloadInfoListPostReqFilter) SetTo(v APIMassloadInfoListPostReqFilter) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptAPIMassloadInfoListPostReqFilter) Get() (v APIMassloadInfoListPostReqFilter, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptAPIMassloadInfoListPostReqFilter) Or(d APIMassloadInfoListPostReqFilter) APIMassloadInfoListPostReqFilter {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptAPIMassloadInfoListPostReqSort returns new OptAPIMassloadInfoListPostReqSort with value set to v.
+func NewOptAPIMassloadInfoListPostReqSort(v APIMassloadInfoListPostReqSort) OptAPIMassloadInfoListPostReqSort {
+	return OptAPIMassloadInfoListPostReqSort{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptAPIMassloadInfoListPostReqSort is optional APIMassloadInfoListPostReqSort.
+type OptAPIMassloadInfoListPostReqSort struct {
+	Value APIMassloadInfoListPostReqSort
+	Set   bool
+}
+
+// IsSet returns true if OptAPIMassloadInfoListPostReqSort was set.
+func (o OptAPIMassloadInfoListPostReqSort) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptAPIMassloadInfoListPostReqSort) Reset() {
+	var v APIMassloadInfoListPostReqSort
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptAPIMassloadInfoListPostReqSort) SetTo(v APIMassloadInfoListPostReqSort) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptAPIMassloadInfoListPostReqSort) Get() (v APIMassloadInfoListPostReqSort, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptAPIMassloadInfoListPostReqSort) Or(d APIMassloadInfoListPostReqSort) APIMassloadInfoListPostReqSort {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptAPIMassloadInfoListPostReqSortField returns new OptAPIMassloadInfoListPostReqSortField with value set to v.
+func NewOptAPIMassloadInfoListPostReqSortField(v APIMassloadInfoListPostReqSortField) OptAPIMassloadInfoListPostReqSortField {
+	return OptAPIMassloadInfoListPostReqSortField{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptAPIMassloadInfoListPostReqSortField is optional APIMassloadInfoListPostReqSortField.
+type OptAPIMassloadInfoListPostReqSortField struct {
+	Value APIMassloadInfoListPostReqSortField
+	Set   bool
+}
+
+// IsSet returns true if OptAPIMassloadInfoListPostReqSortField was set.
+func (o OptAPIMassloadInfoListPostReqSortField) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptAPIMassloadInfoListPostReqSortField) Reset() {
+	var v APIMassloadInfoListPostReqSortField
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptAPIMassloadInfoListPostReqSortField) SetTo(v APIMassloadInfoListPostReqSortField) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptAPIMassloadInfoListPostReqSortField) Get() (v APIMassloadInfoListPostReqSortField, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptAPIMassloadInfoListPostReqSortField) Or(d APIMassloadInfoListPostReqSortField) APIMassloadInfoListPostReqSortField {
 	if v, ok := o.Get(); ok {
 		return v
 	}

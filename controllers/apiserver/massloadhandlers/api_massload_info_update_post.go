@@ -10,10 +10,10 @@ import (
 
 func (c *MassloadController) APIMassloadInfoUpdatePost(ctx context.Context, req *serverapi.APIMassloadInfoUpdatePostReq) (serverapi.APIMassloadInfoUpdatePostRes, error) {
 	err := c.massloadUseCases.UpdateMassload(ctx, massloadmodel.Massload{
-		ID:             req.ID,
-		Name:           req.Name,
-		Description:    req.Description.Value,
-		IsDeduplicated: req.IsDeduplicated,
+		ID:          req.ID,
+		Name:        req.Name,
+		Description: req.Description.Value,
+		Flags:       req.Flags,
 	})
 	if err != nil {
 		return &serverapi.APIMassloadInfoUpdatePostInternalServerError{

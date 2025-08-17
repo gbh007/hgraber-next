@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"slices"
 
 	"github.com/Masterminds/squirrel"
 
@@ -17,7 +18,7 @@ func (d *Database) CreateMassload(ctx context.Context, ml massloadmodel.Massload
 		SetMap(map[string]any{
 			"name":            ml.Name,
 			"description":     model.StringToDB(ml.Description),
-			"is_deduplicated": ml.IsDeduplicated,
+			"is_deduplicated": slices.Contains(ml.Flags, "deduplicated"), // FIXME: перевести на новую модель
 			"created_at":      ml.CreatedAt,
 		}).
 		Suffix("RETURNING id")
@@ -47,7 +48,7 @@ func (d *Database) UpdateMassload(ctx context.Context, ml massloadmodel.Massload
 		SetMap(map[string]any{
 			"name":            ml.Name,
 			"description":     model.StringToDB(ml.Description),
-			"is_deduplicated": ml.IsDeduplicated,
+			"is_deduplicated": slices.Contains(ml.Flags, "deduplicated"), // FIXME: перевести на новую модель
 			"updated_at":      model.TimeToDB(ml.UpdatedAt),
 		}).
 		Where(squirrel.Eq{

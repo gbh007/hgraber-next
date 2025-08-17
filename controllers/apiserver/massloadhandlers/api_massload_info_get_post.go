@@ -29,7 +29,7 @@ func convertMassloadInfo(ml massloadmodel.Massload) serverapi.MassloadInfo {
 		ID:                ml.ID,
 		Name:              ml.Name,
 		Description:       apiservercore.OptString(ml.Description),
-		IsDeduplicated:    ml.IsDeduplicated,
+		Flags:             ml.Flags,
 		PageSize:          apiservercore.OptInt64Pointer(ml.PageSize),
 		PageSizeFormatted: apiservercore.OptString(core.PrettySizePointer(ml.PageSize)),
 		FileSize:          apiservercore.OptInt64Pointer(ml.FileSize),

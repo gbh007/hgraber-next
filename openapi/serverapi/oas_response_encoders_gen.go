@@ -4160,6 +4160,65 @@ func encodeAPILabelSetPostResponse(response APILabelSetPostRes, w http.ResponseW
 	}
 }
 
+func encodeAPIMassloadFlagListGetResponse(response APIMassloadFlagListGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *APIMassloadFlagListGetOK:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *APIMassloadFlagListGetUnauthorized:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(401)
+		span.SetStatus(codes.Error, http.StatusText(401))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *APIMassloadFlagListGetForbidden:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(403)
+		span.SetStatus(codes.Error, http.StatusText(403))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *APIMassloadFlagListGetInternalServerError:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(500)
+		span.SetStatus(codes.Error, http.StatusText(500))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
 func encodeAPIMassloadInfoAttributeCreatePostResponse(response APIMassloadInfoAttributeCreatePostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *APIMassloadInfoAttributeCreatePostNoContent:
@@ -4694,9 +4753,9 @@ func encodeAPIMassloadInfoGetPostResponse(response APIMassloadInfoGetPostRes, w 
 	}
 }
 
-func encodeAPIMassloadInfoListGetResponse(response APIMassloadInfoListGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoListPostResponse(response APIMassloadInfoListPostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *APIMassloadInfoListGetOK:
+	case *APIMassloadInfoListPostOK:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -4709,7 +4768,7 @@ func encodeAPIMassloadInfoListGetResponse(response APIMassloadInfoListGetRes, w 
 
 		return nil
 
-	case *APIMassloadInfoListGetUnauthorized:
+	case *APIMassloadInfoListPostUnauthorized:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(401)
 		span.SetStatus(codes.Error, http.StatusText(401))
@@ -4722,7 +4781,7 @@ func encodeAPIMassloadInfoListGetResponse(response APIMassloadInfoListGetRes, w 
 
 		return nil
 
-	case *APIMassloadInfoListGetForbidden:
+	case *APIMassloadInfoListPostForbidden:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(403)
 		span.SetStatus(codes.Error, http.StatusText(403))
@@ -4735,7 +4794,7 @@ func encodeAPIMassloadInfoListGetResponse(response APIMassloadInfoListGetRes, w 
 
 		return nil
 
-	case *APIMassloadInfoListGetInternalServerError:
+	case *APIMassloadInfoListPostInternalServerError:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))

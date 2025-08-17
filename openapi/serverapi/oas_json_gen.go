@@ -21057,6 +21057,341 @@ func (s *APILabelSetPostUnauthorized) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes APIMassloadFlagListGetForbidden as json.
+func (s *APIMassloadFlagListGetForbidden) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIMassloadFlagListGetForbidden from json.
+func (s *APIMassloadFlagListGetForbidden) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadFlagListGetForbidden to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIMassloadFlagListGetForbidden(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadFlagListGetForbidden) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadFlagListGetForbidden) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadFlagListGetInternalServerError as json.
+func (s *APIMassloadFlagListGetInternalServerError) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIMassloadFlagListGetInternalServerError from json.
+func (s *APIMassloadFlagListGetInternalServerError) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadFlagListGetInternalServerError to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIMassloadFlagListGetInternalServerError(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadFlagListGetInternalServerError) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadFlagListGetInternalServerError) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIMassloadFlagListGetOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIMassloadFlagListGetOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Flags != nil {
+			e.FieldStart("flags")
+			e.ArrStart()
+			for _, elem := range s.Flags {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfAPIMassloadFlagListGetOK = [1]string{
+	0: "flags",
+}
+
+// Decode decodes APIMassloadFlagListGetOK from json.
+func (s *APIMassloadFlagListGetOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadFlagListGetOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "flags":
+			if err := func() error {
+				s.Flags = make([]APIMassloadFlagListGetOKFlagsItem, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem APIMassloadFlagListGetOKFlagsItem
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Flags = append(s.Flags, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"flags\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIMassloadFlagListGetOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadFlagListGetOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadFlagListGetOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIMassloadFlagListGetOKFlagsItem) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIMassloadFlagListGetOKFlagsItem) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("code")
+		e.Str(s.Code)
+	}
+	{
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+		if s.Description.Set {
+			e.FieldStart("description")
+			s.Description.Encode(e)
+		}
+	}
+	{
+		e.FieldStart("created_at")
+		json.EncodeDateTime(e, s.CreatedAt)
+	}
+}
+
+var jsonFieldsNameOfAPIMassloadFlagListGetOKFlagsItem = [4]string{
+	0: "code",
+	1: "name",
+	2: "description",
+	3: "created_at",
+}
+
+// Decode decodes APIMassloadFlagListGetOKFlagsItem from json.
+func (s *APIMassloadFlagListGetOKFlagsItem) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadFlagListGetOKFlagsItem to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "code":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Code = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"code\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "description":
+			if err := func() error {
+				s.Description.Reset()
+				if err := s.Description.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"description\"")
+			}
+		case "created_at":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := json.DecodeDateTime(d)
+				s.CreatedAt = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"created_at\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIMassloadFlagListGetOKFlagsItem")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00001011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIMassloadFlagListGetOKFlagsItem) {
+					name = jsonFieldsNameOfAPIMassloadFlagListGetOKFlagsItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadFlagListGetOKFlagsItem) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadFlagListGetOKFlagsItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadFlagListGetUnauthorized as json.
+func (s *APIMassloadFlagListGetUnauthorized) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIMassloadFlagListGetUnauthorized from json.
+func (s *APIMassloadFlagListGetUnauthorized) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadFlagListGetUnauthorized to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIMassloadFlagListGetUnauthorized(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadFlagListGetUnauthorized) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadFlagListGetUnauthorized) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes APIMassloadInfoAttributeCreatePostBadRequest as json.
 func (s *APIMassloadInfoAttributeCreatePostBadRequest) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
@@ -21927,15 +22262,21 @@ func (s *APIMassloadInfoCreatePostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		e.FieldStart("is_deduplicated")
-		e.Bool(s.IsDeduplicated)
+		if s.Flags != nil {
+			e.FieldStart("flags")
+			e.ArrStart()
+			for _, elem := range s.Flags {
+				e.Str(elem)
+			}
+			e.ArrEnd()
+		}
 	}
 }
 
 var jsonFieldsNameOfAPIMassloadInfoCreatePostReq = [3]string{
 	0: "name",
 	1: "description",
-	2: "is_deduplicated",
+	2: "flags",
 }
 
 // Decode decodes APIMassloadInfoCreatePostReq from json.
@@ -21969,17 +22310,24 @@ func (s *APIMassloadInfoCreatePostReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"description\"")
 			}
-		case "is_deduplicated":
-			requiredBitSet[0] |= 1 << 2
+		case "flags":
 			if err := func() error {
-				v, err := d.Bool()
-				s.IsDeduplicated = bool(v)
-				if err != nil {
+				s.Flags = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Flags = append(s.Flags, elem)
+					return nil
+				}); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"is_deduplicated\"")
+				return errors.Wrap(err, "decode field \"flags\"")
 			}
 		default:
 			return d.Skip()
@@ -21991,7 +22339,7 @@ func (s *APIMassloadInfoCreatePostReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000101,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -23215,17 +23563,17 @@ func (s *APIMassloadInfoGetPostUnauthorized) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes APIMassloadInfoListGetForbidden as json.
-func (s *APIMassloadInfoListGetForbidden) Encode(e *jx.Encoder) {
+// Encode encodes APIMassloadInfoListPostForbidden as json.
+func (s *APIMassloadInfoListPostForbidden) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
 
 	unwrapped.Encode(e)
 }
 
-// Decode decodes APIMassloadInfoListGetForbidden from json.
-func (s *APIMassloadInfoListGetForbidden) Decode(d *jx.Decoder) error {
+// Decode decodes APIMassloadInfoListPostForbidden from json.
+func (s *APIMassloadInfoListPostForbidden) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIMassloadInfoListGetForbidden to nil")
+		return errors.New("invalid: unable to decode APIMassloadInfoListPostForbidden to nil")
 	}
 	var unwrapped ErrorResponse
 	if err := func() error {
@@ -23236,34 +23584,34 @@ func (s *APIMassloadInfoListGetForbidden) Decode(d *jx.Decoder) error {
 	}(); err != nil {
 		return errors.Wrap(err, "alias")
 	}
-	*s = APIMassloadInfoListGetForbidden(unwrapped)
+	*s = APIMassloadInfoListPostForbidden(unwrapped)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIMassloadInfoListGetForbidden) MarshalJSON() ([]byte, error) {
+func (s *APIMassloadInfoListPostForbidden) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIMassloadInfoListGetForbidden) UnmarshalJSON(data []byte) error {
+func (s *APIMassloadInfoListPostForbidden) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
-// Encode encodes APIMassloadInfoListGetInternalServerError as json.
-func (s *APIMassloadInfoListGetInternalServerError) Encode(e *jx.Encoder) {
+// Encode encodes APIMassloadInfoListPostInternalServerError as json.
+func (s *APIMassloadInfoListPostInternalServerError) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
 
 	unwrapped.Encode(e)
 }
 
-// Decode decodes APIMassloadInfoListGetInternalServerError from json.
-func (s *APIMassloadInfoListGetInternalServerError) Decode(d *jx.Decoder) error {
+// Decode decodes APIMassloadInfoListPostInternalServerError from json.
+func (s *APIMassloadInfoListPostInternalServerError) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIMassloadInfoListGetInternalServerError to nil")
+		return errors.New("invalid: unable to decode APIMassloadInfoListPostInternalServerError to nil")
 	}
 	var unwrapped ErrorResponse
 	if err := func() error {
@@ -23274,32 +23622,32 @@ func (s *APIMassloadInfoListGetInternalServerError) Decode(d *jx.Decoder) error 
 	}(); err != nil {
 		return errors.Wrap(err, "alias")
 	}
-	*s = APIMassloadInfoListGetInternalServerError(unwrapped)
+	*s = APIMassloadInfoListPostInternalServerError(unwrapped)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIMassloadInfoListGetInternalServerError) MarshalJSON() ([]byte, error) {
+func (s *APIMassloadInfoListPostInternalServerError) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIMassloadInfoListGetInternalServerError) UnmarshalJSON(data []byte) error {
+func (s *APIMassloadInfoListPostInternalServerError) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *APIMassloadInfoListGetOK) Encode(e *jx.Encoder) {
+func (s *APIMassloadInfoListPostOK) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIMassloadInfoListGetOK) encodeFields(e *jx.Encoder) {
+func (s *APIMassloadInfoListPostOK) encodeFields(e *jx.Encoder) {
 	{
 		if s.Massloads != nil {
 			e.FieldStart("massloads")
@@ -23312,14 +23660,14 @@ func (s *APIMassloadInfoListGetOK) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIMassloadInfoListGetOK = [1]string{
+var jsonFieldsNameOfAPIMassloadInfoListPostOK = [1]string{
 	0: "massloads",
 }
 
-// Decode decodes APIMassloadInfoListGetOK from json.
-func (s *APIMassloadInfoListGetOK) Decode(d *jx.Decoder) error {
+// Decode decodes APIMassloadInfoListPostOK from json.
+func (s *APIMassloadInfoListPostOK) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIMassloadInfoListGetOK to nil")
+		return errors.New("invalid: unable to decode APIMassloadInfoListPostOK to nil")
 	}
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
@@ -23346,36 +23694,558 @@ func (s *APIMassloadInfoListGetOK) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIMassloadInfoListGetOK")
+		return errors.Wrap(err, "decode APIMassloadInfoListPostOK")
 	}
 
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIMassloadInfoListGetOK) MarshalJSON() ([]byte, error) {
+func (s *APIMassloadInfoListPostOK) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIMassloadInfoListGetOK) UnmarshalJSON(data []byte) error {
+func (s *APIMassloadInfoListPostOK) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
-// Encode encodes APIMassloadInfoListGetUnauthorized as json.
-func (s *APIMassloadInfoListGetUnauthorized) Encode(e *jx.Encoder) {
+// Encode implements json.Marshaler.
+func (s *APIMassloadInfoListPostReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIMassloadInfoListPostReq) encodeFields(e *jx.Encoder) {
+	{
+		if s.Filter.Set {
+			e.FieldStart("filter")
+			s.Filter.Encode(e)
+		}
+	}
+	{
+		if s.Sort.Set {
+			e.FieldStart("sort")
+			s.Sort.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAPIMassloadInfoListPostReq = [2]string{
+	0: "filter",
+	1: "sort",
+}
+
+// Decode decodes APIMassloadInfoListPostReq from json.
+func (s *APIMassloadInfoListPostReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoListPostReq to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "filter":
+			if err := func() error {
+				s.Filter.Reset()
+				if err := s.Filter.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"filter\"")
+			}
+		case "sort":
+			if err := func() error {
+				s.Sort.Reset()
+				if err := s.Sort.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sort\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIMassloadInfoListPostReq")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadInfoListPostReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoListPostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIMassloadInfoListPostReqFilter) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIMassloadInfoListPostReqFilter) encodeFields(e *jx.Encoder) {
+	{
+		if s.Name.Set {
+			e.FieldStart("name")
+			s.Name.Encode(e)
+		}
+	}
+	{
+		if s.ExternalLink.Set {
+			e.FieldStart("external_link")
+			s.ExternalLink.Encode(e)
+		}
+	}
+	{
+		if s.Flags != nil {
+			e.FieldStart("flags")
+			e.ArrStart()
+			for _, elem := range s.Flags {
+				e.Str(elem)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.Attributes != nil {
+			e.FieldStart("attributes")
+			e.ArrStart()
+			for _, elem := range s.Attributes {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfAPIMassloadInfoListPostReqFilter = [4]string{
+	0: "name",
+	1: "external_link",
+	2: "flags",
+	3: "attributes",
+}
+
+// Decode decodes APIMassloadInfoListPostReqFilter from json.
+func (s *APIMassloadInfoListPostReqFilter) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoListPostReqFilter to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			if err := func() error {
+				s.Name.Reset()
+				if err := s.Name.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "external_link":
+			if err := func() error {
+				s.ExternalLink.Reset()
+				if err := s.ExternalLink.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"external_link\"")
+			}
+		case "flags":
+			if err := func() error {
+				s.Flags = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Flags = append(s.Flags, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"flags\"")
+			}
+		case "attributes":
+			if err := func() error {
+				s.Attributes = make([]APIMassloadInfoListPostReqFilterAttributesItem, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem APIMassloadInfoListPostReqFilterAttributesItem
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Attributes = append(s.Attributes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"attributes\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIMassloadInfoListPostReqFilter")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadInfoListPostReqFilter) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoListPostReqFilter) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("code")
+		e.Str(s.Code)
+	}
+	{
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+	{
+		e.FieldStart("values")
+		e.ArrStart()
+		for _, elem := range s.Values {
+			e.Str(elem)
+		}
+		e.ArrEnd()
+	}
+}
+
+var jsonFieldsNameOfAPIMassloadInfoListPostReqFilterAttributesItem = [3]string{
+	0: "code",
+	1: "type",
+	2: "values",
+}
+
+// Decode decodes APIMassloadInfoListPostReqFilterAttributesItem from json.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoListPostReqFilterAttributesItem to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "code":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Code = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"code\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		case "values":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				s.Values = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Values = append(s.Values, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"values\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIMassloadInfoListPostReqFilterAttributesItem")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIMassloadInfoListPostReqFilterAttributesItem) {
+					name = jsonFieldsNameOfAPIMassloadInfoListPostReqFilterAttributesItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoListPostReqFilterAttributesItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoListPostReqFilterAttributesItemType as json.
+func (s APIMassloadInfoListPostReqFilterAttributesItemType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes APIMassloadInfoListPostReqFilterAttributesItemType from json.
+func (s *APIMassloadInfoListPostReqFilterAttributesItemType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoListPostReqFilterAttributesItemType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch APIMassloadInfoListPostReqFilterAttributesItemType(v) {
+	case APIMassloadInfoListPostReqFilterAttributesItemTypeLike:
+		*s = APIMassloadInfoListPostReqFilterAttributesItemTypeLike
+	case APIMassloadInfoListPostReqFilterAttributesItemTypeIn:
+		*s = APIMassloadInfoListPostReqFilterAttributesItemTypeIn
+	default:
+		*s = APIMassloadInfoListPostReqFilterAttributesItemType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s APIMassloadInfoListPostReqFilterAttributesItemType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoListPostReqFilterAttributesItemType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIMassloadInfoListPostReqSort) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIMassloadInfoListPostReqSort) encodeFields(e *jx.Encoder) {
+	{
+		if s.Desc.Set {
+			e.FieldStart("desc")
+			s.Desc.Encode(e)
+		}
+	}
+	{
+		if s.Field.Set {
+			e.FieldStart("field")
+			s.Field.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAPIMassloadInfoListPostReqSort = [2]string{
+	0: "desc",
+	1: "field",
+}
+
+// Decode decodes APIMassloadInfoListPostReqSort from json.
+func (s *APIMassloadInfoListPostReqSort) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoListPostReqSort to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "desc":
+			if err := func() error {
+				s.Desc.Reset()
+				if err := s.Desc.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"desc\"")
+			}
+		case "field":
+			if err := func() error {
+				s.Field.Reset()
+				if err := s.Field.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"field\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIMassloadInfoListPostReqSort")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadInfoListPostReqSort) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoListPostReqSort) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoListPostReqSortField as json.
+func (s APIMassloadInfoListPostReqSortField) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes APIMassloadInfoListPostReqSortField from json.
+func (s *APIMassloadInfoListPostReqSortField) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoListPostReqSortField to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch APIMassloadInfoListPostReqSortField(v) {
+	case APIMassloadInfoListPostReqSortFieldID:
+		*s = APIMassloadInfoListPostReqSortFieldID
+	case APIMassloadInfoListPostReqSortFieldName:
+		*s = APIMassloadInfoListPostReqSortFieldName
+	case APIMassloadInfoListPostReqSortFieldPageSize:
+		*s = APIMassloadInfoListPostReqSortFieldPageSize
+	case APIMassloadInfoListPostReqSortFieldFileSize:
+		*s = APIMassloadInfoListPostReqSortFieldFileSize
+	default:
+		*s = APIMassloadInfoListPostReqSortField(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s APIMassloadInfoListPostReqSortField) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoListPostReqSortField) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoListPostUnauthorized as json.
+func (s *APIMassloadInfoListPostUnauthorized) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorResponse)(s)
 
 	unwrapped.Encode(e)
 }
 
-// Decode decodes APIMassloadInfoListGetUnauthorized from json.
-func (s *APIMassloadInfoListGetUnauthorized) Decode(d *jx.Decoder) error {
+// Decode decodes APIMassloadInfoListPostUnauthorized from json.
+func (s *APIMassloadInfoListPostUnauthorized) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIMassloadInfoListGetUnauthorized to nil")
+		return errors.New("invalid: unable to decode APIMassloadInfoListPostUnauthorized to nil")
 	}
 	var unwrapped ErrorResponse
 	if err := func() error {
@@ -23386,19 +24256,19 @@ func (s *APIMassloadInfoListGetUnauthorized) Decode(d *jx.Decoder) error {
 	}(); err != nil {
 		return errors.Wrap(err, "alias")
 	}
-	*s = APIMassloadInfoListGetUnauthorized(unwrapped)
+	*s = APIMassloadInfoListPostUnauthorized(unwrapped)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIMassloadInfoListGetUnauthorized) MarshalJSON() ([]byte, error) {
+func (s *APIMassloadInfoListPostUnauthorized) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIMassloadInfoListGetUnauthorized) UnmarshalJSON(data []byte) error {
+func (s *APIMassloadInfoListPostUnauthorized) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -23579,8 +24449,14 @@ func (s *APIMassloadInfoUpdatePostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		e.FieldStart("is_deduplicated")
-		e.Bool(s.IsDeduplicated)
+		if s.Flags != nil {
+			e.FieldStart("flags")
+			e.ArrStart()
+			for _, elem := range s.Flags {
+				e.Str(elem)
+			}
+			e.ArrEnd()
+		}
 	}
 }
 
@@ -23588,7 +24464,7 @@ var jsonFieldsNameOfAPIMassloadInfoUpdatePostReq = [4]string{
 	0: "id",
 	1: "name",
 	2: "description",
-	3: "is_deduplicated",
+	3: "flags",
 }
 
 // Decode decodes APIMassloadInfoUpdatePostReq from json.
@@ -23634,17 +24510,24 @@ func (s *APIMassloadInfoUpdatePostReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"description\"")
 			}
-		case "is_deduplicated":
-			requiredBitSet[0] |= 1 << 3
+		case "flags":
 			if err := func() error {
-				v, err := d.Bool()
-				s.IsDeduplicated = bool(v)
-				if err != nil {
+				s.Flags = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Flags = append(s.Flags, elem)
+					return nil
+				}); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"is_deduplicated\"")
+				return errors.Wrap(err, "decode field \"flags\"")
 			}
 		default:
 			return d.Skip()
@@ -23656,7 +24539,7 @@ func (s *APIMassloadInfoUpdatePostReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001011,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -32275,8 +33158,14 @@ func (s *MassloadInfo) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		e.FieldStart("is_deduplicated")
-		e.Bool(s.IsDeduplicated)
+		if s.Flags != nil {
+			e.FieldStart("flags")
+			e.ArrStart()
+			for _, elem := range s.Flags {
+				e.Str(elem)
+			}
+			e.ArrEnd()
+		}
 	}
 	{
 		if s.PageSize.Set {
@@ -32338,7 +33227,7 @@ var jsonFieldsNameOfMassloadInfo = [12]string{
 	0:  "id",
 	1:  "name",
 	2:  "description",
-	3:  "is_deduplicated",
+	3:  "flags",
 	4:  "page_size",
 	5:  "page_size_formatted",
 	6:  "file_size",
@@ -32392,17 +33281,24 @@ func (s *MassloadInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"description\"")
 			}
-		case "is_deduplicated":
-			requiredBitSet[0] |= 1 << 3
+		case "flags":
 			if err := func() error {
-				v, err := d.Bool()
-				s.IsDeduplicated = bool(v)
-				if err != nil {
+				s.Flags = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.Flags = append(s.Flags, elem)
+					return nil
+				}); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"is_deduplicated\"")
+				return errors.Wrap(err, "decode field \"flags\"")
 			}
 		case "page_size":
 			if err := func() error {
@@ -32510,7 +33406,7 @@ func (s *MassloadInfo) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
-		0b00001011,
+		0b00000011,
 		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
@@ -32980,6 +33876,105 @@ func (s OptAPIBookRebuildPostReqFlags) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptAPIBookRebuildPostReqFlags) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoListPostReqFilter as json.
+func (o OptAPIMassloadInfoListPostReqFilter) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes APIMassloadInfoListPostReqFilter from json.
+func (o *OptAPIMassloadInfoListPostReqFilter) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptAPIMassloadInfoListPostReqFilter to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptAPIMassloadInfoListPostReqFilter) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptAPIMassloadInfoListPostReqFilter) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoListPostReqSort as json.
+func (o OptAPIMassloadInfoListPostReqSort) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes APIMassloadInfoListPostReqSort from json.
+func (o *OptAPIMassloadInfoListPostReqSort) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptAPIMassloadInfoListPostReqSort to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptAPIMassloadInfoListPostReqSort) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptAPIMassloadInfoListPostReqSort) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoListPostReqSortField as json.
+func (o OptAPIMassloadInfoListPostReqSortField) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes APIMassloadInfoListPostReqSortField from json.
+func (o *OptAPIMassloadInfoListPostReqSortField) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptAPIMassloadInfoListPostReqSortField to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptAPIMassloadInfoListPostReqSortField) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptAPIMassloadInfoListPostReqSortField) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

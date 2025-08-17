@@ -1456,9 +1456,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 				}
 
-			case 'm': // Prefix: "massload/info/"
+			case 'm': // Prefix: "massload/"
 
-				if l := len("massload/info/"); len(elem) >= l && elem[0:l] == "massload/info/" {
+				if l := len("massload/"); len(elem) >= l && elem[0:l] == "massload/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -1468,177 +1468,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'a': // Prefix: "attribute/"
+				case 'f': // Prefix: "flag/list"
 
-					if l := len("attribute/"); len(elem) >= l && elem[0:l] == "attribute/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'c': // Prefix: "create"
-
-						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIMassloadInfoAttributeCreatePostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-					case 'd': // Prefix: "delete"
-
-						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIMassloadInfoAttributeDeletePostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-					}
-
-				case 'c': // Prefix: "create"
-
-					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIMassloadInfoCreatePostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-				case 'd': // Prefix: "delete"
-
-					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIMassloadInfoDeletePostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-				case 'e': // Prefix: "external_link/"
-
-					if l := len("external_link/"); len(elem) >= l && elem[0:l] == "external_link/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'c': // Prefix: "create"
-
-						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIMassloadInfoExternalLinkCreatePostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-					case 'd': // Prefix: "delete"
-
-						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIMassloadInfoExternalLinkDeletePostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-					}
-
-				case 'g': // Prefix: "get"
-
-					if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIMassloadInfoGetPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-				case 'l': // Prefix: "list"
-
-					if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+					if l := len("flag/list"); len(elem) >= l && elem[0:l] == "flag/list" {
 						elem = elem[l:]
 					} else {
 						break
@@ -1648,7 +1480,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleAPIMassloadInfoListGetRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleAPIMassloadFlagListGetRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
@@ -1656,24 +1488,226 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 
-				case 'u': // Prefix: "update"
+				case 'i': // Prefix: "info/"
 
-					if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+					if l := len("info/"); len(elem) >= l && elem[0:l] == "info/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIMassloadInfoUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
+						break
+					}
+					switch elem[0] {
+					case 'a': // Prefix: "attribute/"
+
+						if l := len("attribute/"); len(elem) >= l && elem[0:l] == "attribute/" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'c': // Prefix: "create"
+
+							if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIMassloadInfoAttributeCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+						case 'd': // Prefix: "delete"
+
+							if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIMassloadInfoAttributeDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+						}
+
+					case 'c': // Prefix: "create"
+
+						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIMassloadInfoCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+					case 'd': // Prefix: "delete"
+
+						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIMassloadInfoDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+					case 'e': // Prefix: "external_link/"
+
+						if l := len("external_link/"); len(elem) >= l && elem[0:l] == "external_link/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'c': // Prefix: "create"
+
+							if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIMassloadInfoExternalLinkCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+						case 'd': // Prefix: "delete"
+
+							if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIMassloadInfoExternalLinkDeletePostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+						}
+
+					case 'g': // Prefix: "get"
+
+						if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIMassloadInfoGetPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+					case 'l': // Prefix: "list"
+
+						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIMassloadInfoListPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+					case 'u': // Prefix: "update"
+
+						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIMassloadInfoUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
 					}
 
 				}
@@ -3731,9 +3765,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 				}
 
-			case 'm': // Prefix: "massload/info/"
+			case 'm': // Prefix: "massload/"
 
-				if l := len("massload/info/"); len(elem) >= l && elem[0:l] == "massload/info/" {
+				if l := len("massload/"); len(elem) >= l && elem[0:l] == "massload/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -3743,205 +3777,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'a': // Prefix: "attribute/"
+				case 'f': // Prefix: "flag/list"
 
-					if l := len("attribute/"); len(elem) >= l && elem[0:l] == "attribute/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'c': // Prefix: "create"
-
-						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIMassloadInfoAttributeCreatePostOperation
-								r.summary = "Привязка аттрибута к массовой загрузке"
-								r.operationID = ""
-								r.pathPattern = "/api/massload/info/attribute/create"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-					case 'd': // Prefix: "delete"
-
-						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIMassloadInfoAttributeDeletePostOperation
-								r.summary = "Удаление аттрибута для массовой загрузки"
-								r.operationID = ""
-								r.pathPattern = "/api/massload/info/attribute/delete"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-					}
-
-				case 'c': // Prefix: "create"
-
-					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIMassloadInfoCreatePostOperation
-							r.summary = "Создание информации о массовой загрузке"
-							r.operationID = ""
-							r.pathPattern = "/api/massload/info/create"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-				case 'd': // Prefix: "delete"
-
-					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIMassloadInfoDeletePostOperation
-							r.summary = "Удаление массовой загрузки"
-							r.operationID = ""
-							r.pathPattern = "/api/massload/info/delete"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-				case 'e': // Prefix: "external_link/"
-
-					if l := len("external_link/"); len(elem) >= l && elem[0:l] == "external_link/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'c': // Prefix: "create"
-
-						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIMassloadInfoExternalLinkCreatePostOperation
-								r.summary = "Привязка внешней ссылки к массовой загрузке"
-								r.operationID = ""
-								r.pathPattern = "/api/massload/info/external_link/create"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-					case 'd': // Prefix: "delete"
-
-						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIMassloadInfoExternalLinkDeletePostOperation
-								r.summary = "Удаление внешней ссылки для массовой загрузки"
-								r.operationID = ""
-								r.pathPattern = "/api/massload/info/external_link/delete"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-					}
-
-				case 'g': // Prefix: "get"
-
-					if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIMassloadInfoGetPostOperation
-							r.summary = "Получение массовой загрузки"
-							r.operationID = ""
-							r.pathPattern = "/api/massload/info/get"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-				case 'l': // Prefix: "list"
-
-					if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+					if l := len("flag/list"); len(elem) >= l && elem[0:l] == "flag/list" {
 						elem = elem[l:]
 					} else {
 						break
@@ -3951,10 +3789,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = APIMassloadInfoListGetOperation
-							r.summary = "Массовые загрузки"
+							r.name = APIMassloadFlagListGetOperation
+							r.summary = "Флаги для массовых загрузок"
 							r.operationID = ""
-							r.pathPattern = "/api/massload/info/list"
+							r.pathPattern = "/api/massload/flag/list"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -3963,28 +3801,262 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 					}
 
-				case 'u': // Prefix: "update"
+				case 'i': // Prefix: "info/"
 
-					if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+					if l := len("info/"); len(elem) >= l && elem[0:l] == "info/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIMassloadInfoUpdatePostOperation
-							r.summary = "Обновление массовой загрузки"
-							r.operationID = ""
-							r.pathPattern = "/api/massload/info/update"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'a': // Prefix: "attribute/"
+
+						if l := len("attribute/"); len(elem) >= l && elem[0:l] == "attribute/" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'c': // Prefix: "create"
+
+							if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIMassloadInfoAttributeCreatePostOperation
+									r.summary = "Привязка аттрибута к массовой загрузке"
+									r.operationID = ""
+									r.pathPattern = "/api/massload/info/attribute/create"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+						case 'd': // Prefix: "delete"
+
+							if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIMassloadInfoAttributeDeletePostOperation
+									r.summary = "Удаление аттрибута для массовой загрузки"
+									r.operationID = ""
+									r.pathPattern = "/api/massload/info/attribute/delete"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+						}
+
+					case 'c': // Prefix: "create"
+
+						if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIMassloadInfoCreatePostOperation
+								r.summary = "Создание информации о массовой загрузке"
+								r.operationID = ""
+								r.pathPattern = "/api/massload/info/create"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'd': // Prefix: "delete"
+
+						if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIMassloadInfoDeletePostOperation
+								r.summary = "Удаление массовой загрузки"
+								r.operationID = ""
+								r.pathPattern = "/api/massload/info/delete"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'e': // Prefix: "external_link/"
+
+						if l := len("external_link/"); len(elem) >= l && elem[0:l] == "external_link/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'c': // Prefix: "create"
+
+							if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIMassloadInfoExternalLinkCreatePostOperation
+									r.summary = "Привязка внешней ссылки к массовой загрузке"
+									r.operationID = ""
+									r.pathPattern = "/api/massload/info/external_link/create"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+						case 'd': // Prefix: "delete"
+
+							if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIMassloadInfoExternalLinkDeletePostOperation
+									r.summary = "Удаление внешней ссылки для массовой загрузки"
+									r.operationID = ""
+									r.pathPattern = "/api/massload/info/external_link/delete"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+						}
+
+					case 'g': // Prefix: "get"
+
+						if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIMassloadInfoGetPostOperation
+								r.summary = "Получение массовой загрузки"
+								r.operationID = ""
+								r.pathPattern = "/api/massload/info/get"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'l': // Prefix: "list"
+
+						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIMassloadInfoListPostOperation
+								r.summary = "Массовые загрузки"
+								r.operationID = ""
+								r.pathPattern = "/api/massload/info/list"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'u': // Prefix: "update"
+
+						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIMassloadInfoUpdatePostOperation
+								r.summary = "Обновление массовой загрузки"
+								r.operationID = ""
+								r.pathPattern = "/api/massload/info/update"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
 					}
 
 				}

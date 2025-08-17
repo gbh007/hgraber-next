@@ -10088,6 +10088,152 @@ func decodeAPILabelSetPostResponse(resp *http.Response) (res APILabelSetPostRes,
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
+func decodeAPIMassloadFlagListGetResponse(resp *http.Response) (res APIMassloadFlagListGetRes, _ error) {
+	switch resp.StatusCode {
+	case 200:
+		// Code 200.
+		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
+		if err != nil {
+			return res, errors.Wrap(err, "parse media type")
+		}
+		switch {
+		case ct == "application/json":
+			buf, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return res, err
+			}
+			d := jx.DecodeBytes(buf)
+
+			var response APIMassloadFlagListGetOK
+			if err := func() error {
+				if err := response.Decode(d); err != nil {
+					return err
+				}
+				if err := d.Skip(); err != io.EOF {
+					return errors.New("unexpected trailing data")
+				}
+				return nil
+			}(); err != nil {
+				err = &ogenerrors.DecodeBodyError{
+					ContentType: ct,
+					Body:        buf,
+					Err:         err,
+				}
+				return res, err
+			}
+			return &response, nil
+		default:
+			return res, validate.InvalidContentType(ct)
+		}
+	case 401:
+		// Code 401.
+		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
+		if err != nil {
+			return res, errors.Wrap(err, "parse media type")
+		}
+		switch {
+		case ct == "application/json":
+			buf, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return res, err
+			}
+			d := jx.DecodeBytes(buf)
+
+			var response APIMassloadFlagListGetUnauthorized
+			if err := func() error {
+				if err := response.Decode(d); err != nil {
+					return err
+				}
+				if err := d.Skip(); err != io.EOF {
+					return errors.New("unexpected trailing data")
+				}
+				return nil
+			}(); err != nil {
+				err = &ogenerrors.DecodeBodyError{
+					ContentType: ct,
+					Body:        buf,
+					Err:         err,
+				}
+				return res, err
+			}
+			return &response, nil
+		default:
+			return res, validate.InvalidContentType(ct)
+		}
+	case 403:
+		// Code 403.
+		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
+		if err != nil {
+			return res, errors.Wrap(err, "parse media type")
+		}
+		switch {
+		case ct == "application/json":
+			buf, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return res, err
+			}
+			d := jx.DecodeBytes(buf)
+
+			var response APIMassloadFlagListGetForbidden
+			if err := func() error {
+				if err := response.Decode(d); err != nil {
+					return err
+				}
+				if err := d.Skip(); err != io.EOF {
+					return errors.New("unexpected trailing data")
+				}
+				return nil
+			}(); err != nil {
+				err = &ogenerrors.DecodeBodyError{
+					ContentType: ct,
+					Body:        buf,
+					Err:         err,
+				}
+				return res, err
+			}
+			return &response, nil
+		default:
+			return res, validate.InvalidContentType(ct)
+		}
+	case 500:
+		// Code 500.
+		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
+		if err != nil {
+			return res, errors.Wrap(err, "parse media type")
+		}
+		switch {
+		case ct == "application/json":
+			buf, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return res, err
+			}
+			d := jx.DecodeBytes(buf)
+
+			var response APIMassloadFlagListGetInternalServerError
+			if err := func() error {
+				if err := response.Decode(d); err != nil {
+					return err
+				}
+				if err := d.Skip(); err != io.EOF {
+					return errors.New("unexpected trailing data")
+				}
+				return nil
+			}(); err != nil {
+				err = &ogenerrors.DecodeBodyError{
+					ContentType: ct,
+					Body:        buf,
+					Err:         err,
+				}
+				return res, err
+			}
+			return &response, nil
+		default:
+			return res, validate.InvalidContentType(ct)
+		}
+	}
+	return res, validate.UnexpectedStatusCode(resp.StatusCode)
+}
+
 func decodeAPIMassloadInfoAttributeCreatePostResponse(resp *http.Response) (res APIMassloadInfoAttributeCreatePostRes, _ error) {
 	switch resp.StatusCode {
 	case 204:
@@ -11370,7 +11516,7 @@ func decodeAPIMassloadInfoGetPostResponse(resp *http.Response) (res APIMassloadI
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeAPIMassloadInfoListGetResponse(resp *http.Response) (res APIMassloadInfoListGetRes, _ error) {
+func decodeAPIMassloadInfoListPostResponse(resp *http.Response) (res APIMassloadInfoListPostRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -11386,7 +11532,7 @@ func decodeAPIMassloadInfoListGetResponse(resp *http.Response) (res APIMassloadI
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response APIMassloadInfoListGetOK
+			var response APIMassloadInfoListPostOK
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -11421,7 +11567,7 @@ func decodeAPIMassloadInfoListGetResponse(resp *http.Response) (res APIMassloadI
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response APIMassloadInfoListGetUnauthorized
+			var response APIMassloadInfoListPostUnauthorized
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -11456,7 +11602,7 @@ func decodeAPIMassloadInfoListGetResponse(resp *http.Response) (res APIMassloadI
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response APIMassloadInfoListGetForbidden
+			var response APIMassloadInfoListPostForbidden
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -11491,7 +11637,7 @@ func decodeAPIMassloadInfoListGetResponse(resp *http.Response) (res APIMassloadI
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response APIMassloadInfoListGetInternalServerError
+			var response APIMassloadInfoListPostInternalServerError
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

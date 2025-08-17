@@ -225,6 +225,10 @@ type APILabelSetPostRes interface {
 	aPILabelSetPostRes()
 }
 
+type APIMassloadFlagListGetRes interface {
+	aPIMassloadFlagListGetRes()
+}
+
 type APIMassloadInfoAttributeCreatePostRes interface {
 	aPIMassloadInfoAttributeCreatePostRes()
 }
@@ -253,8 +257,8 @@ type APIMassloadInfoGetPostRes interface {
 	aPIMassloadInfoGetPostRes()
 }
 
-type APIMassloadInfoListGetRes interface {
-	aPIMassloadInfoListGetRes()
+type APIMassloadInfoListPostRes interface {
+	aPIMassloadInfoListPostRes()
 }
 
 type APIMassloadInfoUpdatePostRes interface {

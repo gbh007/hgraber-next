@@ -4844,12 +4844,13 @@ paths:
                 description:
                   type: string
                   description: Описание массовой загрузки
-                is_deduplicated:
-                  type: boolean
-                  description: Признак того что эта загрузка была дедуплицирована
+                flags:
+                  type: array
+                  description: Флаги массовой загрузки
+                  items:
+                    type: string
               required:
                 - name
-                - is_deduplicated
       responses:
         200:
           description: Успешное создание
@@ -4911,13 +4912,14 @@ paths:
                 description:
                   type: string
                   description: Описание массовой загрузки
-                is_deduplicated:
-                  type: boolean
-                  description: Признак того что эта загрузка была дедуплицирована
+                flags:
+                  type: array
+                  description: Флаги массовой загрузки
+                  items:
+                    type: string
               required:
                 - id
                 - name
-                - is_deduplicated
       responses:
         204:
           description: Успешное обновление
@@ -5055,11 +5057,73 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
 
   /api/massload/info/list:
-    get:
+    post:
       description: Массовые загрузки
       summary: Массовые загрузки
       tags:
         - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filter:
+                  type: object
+                  description: Фильтры массовой загрузки
+                  properties:
+                    name:
+                      type: string
+                      description: Название массовой загрузки (ilike)
+                    external_link:
+                      type: string
+                      description: Ссылка массовой загрузки (ilike, любая из)
+                    flags:
+                      type: array
+                      description: Флаги - все и точное совпадение
+                      items:
+                        type: string
+                    attributes:
+                      type: array
+                      description: Фильтр по атрибутам
+                      items:
+                        type: object
+                        properties:
+                          code:
+                            type: string
+                            description: Код атрибута
+                          type:
+                            type: string
+                            description: Тип фильтра
+                            enum:
+                              - like
+                              - in
+                          values:
+                            type: array
+                            description: Значения для фильтрации (для операции like берется только 1-е значение)
+                            items:
+                              type: string
+                            minItems: 1
+                        required:
+                          - code
+                          - type
+                          - values
+                sort:
+                  type: object
+                  description: Параметры сортировки
+                  properties:
+                    desc:
+                      type: boolean
+                      description: Сортировать в обратном порядке
+                    field:
+                      type: string
+                      description: Поле для сортировки
+                      enum:
+                        - id
+                        - name
+                        - page_size
+                        - file_size
       responses:
         200:
           description: Информация о загрузках
@@ -5073,6 +5137,62 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/MassloadInfo"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/flag/list:
+    get:
+      description: Флаги для массовых загрузок
+      summary: Флаги для массовых загрузок
+      tags:
+        - massload
+      responses:
+        200:
+          description: Информация о загрузках
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  flags:
+                    description: Список флагов
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: Код флага
+                        name:
+                          type: string
+                          description: Название флага
+                        description:
+                          type: string
+                          description: Описание флага
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Время создания
+                      required:
+                        - code
+                        - name
+                        - created_at
         401:
           description: Пользователь не авторизован
           content:
@@ -5873,9 +5993,11 @@ components:
         description:
           type: string
           description: Описание массовой загрузки
-        is_deduplicated:
-          type: boolean
-          description: Признак того что эта загрузка была дедуплицирована
+        flags:
+          type: array
+          description: Флаги массовой загрузки
+          items:
+            type: string
         page_size:
           type: integer
           format: int64
@@ -5957,7 +6079,6 @@ components:
       required:
         - id
         - name
-        - is_deduplicated
         - created_at
 
   securitySchemes:

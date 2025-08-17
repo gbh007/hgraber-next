@@ -373,6 +373,12 @@ type Invoker interface {
 	//
 	// POST /api/label/set
 	APILabelSetPost(ctx context.Context, request *APILabelSetPostReq) (APILabelSetPostRes, error)
+	// APIMassloadFlagListGet invokes GET /api/massload/flag/list operation.
+	//
+	// Флаги для массовых загрузок.
+	//
+	// GET /api/massload/flag/list
+	APIMassloadFlagListGet(ctx context.Context) (APIMassloadFlagListGetRes, error)
 	// APIMassloadInfoAttributeCreatePost invokes POST /api/massload/info/attribute/create operation.
 	//
 	// Привязка аттрибута к массовой загрузке.
@@ -415,12 +421,12 @@ type Invoker interface {
 	//
 	// POST /api/massload/info/get
 	APIMassloadInfoGetPost(ctx context.Context, request *APIMassloadInfoGetPostReq) (APIMassloadInfoGetPostRes, error)
-	// APIMassloadInfoListGet invokes GET /api/massload/info/list operation.
+	// APIMassloadInfoListPost invokes POST /api/massload/info/list operation.
 	//
 	// Массовые загрузки.
 	//
-	// GET /api/massload/info/list
-	APIMassloadInfoListGet(ctx context.Context) (APIMassloadInfoListGetRes, error)
+	// POST /api/massload/info/list
+	APIMassloadInfoListPost(ctx context.Context, request *APIMassloadInfoListPostReq) (APIMassloadInfoListPostRes, error)
 	// APIMassloadInfoUpdatePost invokes POST /api/massload/info/update operation.
 	//
 	// Обновление массовой загрузки.
@@ -7291,6 +7297,122 @@ func (c *Client) sendAPILabelSetPost(ctx context.Context, request *APILabelSetPo
 	return result, nil
 }
 
+// APIMassloadFlagListGet invokes GET /api/massload/flag/list operation.
+//
+// Флаги для массовых загрузок.
+//
+// GET /api/massload/flag/list
+func (c *Client) APIMassloadFlagListGet(ctx context.Context) (APIMassloadFlagListGetRes, error) {
+	res, err := c.sendAPIMassloadFlagListGet(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIMassloadFlagListGet(ctx context.Context) (res APIMassloadFlagListGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/massload/flag/list"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, APIMassloadFlagListGetOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/massload/flag/list"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:HeaderAuth"
+			switch err := c.securityHeaderAuth(ctx, APIMassloadFlagListGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"HeaderAuth\"")
+			}
+		}
+		{
+			stage = "Security:Cookies"
+			switch err := c.securityCookies(ctx, APIMassloadFlagListGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 1
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Cookies\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{0b00000010},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIMassloadFlagListGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // APIMassloadInfoAttributeCreatePost invokes POST /api/massload/info/attribute/create operation.
 //
 // Привязка аттрибута к массовой загрузке.
@@ -8124,19 +8246,19 @@ func (c *Client) sendAPIMassloadInfoGetPost(ctx context.Context, request *APIMas
 	return result, nil
 }
 
-// APIMassloadInfoListGet invokes GET /api/massload/info/list operation.
+// APIMassloadInfoListPost invokes POST /api/massload/info/list operation.
 //
 // Массовые загрузки.
 //
-// GET /api/massload/info/list
-func (c *Client) APIMassloadInfoListGet(ctx context.Context) (APIMassloadInfoListGetRes, error) {
-	res, err := c.sendAPIMassloadInfoListGet(ctx)
+// POST /api/massload/info/list
+func (c *Client) APIMassloadInfoListPost(ctx context.Context, request *APIMassloadInfoListPostReq) (APIMassloadInfoListPostRes, error) {
+	res, err := c.sendAPIMassloadInfoListPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIMassloadInfoListGet(ctx context.Context) (res APIMassloadInfoListGetRes, err error) {
+func (c *Client) sendAPIMassloadInfoListPost(ctx context.Context, request *APIMassloadInfoListPostReq) (res APIMassloadInfoListPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/massload/info/list"),
 	}
 
@@ -8152,7 +8274,7 @@ func (c *Client) sendAPIMassloadInfoListGet(ctx context.Context) (res APIMassloa
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIMassloadInfoListGetOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, APIMassloadInfoListPostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -8174,9 +8296,12 @@ func (c *Client) sendAPIMassloadInfoListGet(ctx context.Context) (res APIMassloa
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIMassloadInfoListPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
 	}
 
 	{
@@ -8184,7 +8309,7 @@ func (c *Client) sendAPIMassloadInfoListGet(ctx context.Context) (res APIMassloa
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APIMassloadInfoListGetOperation, r); {
+			switch err := c.securityHeaderAuth(ctx, APIMassloadInfoListPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -8195,7 +8320,7 @@ func (c *Client) sendAPIMassloadInfoListGet(ctx context.Context) (res APIMassloa
 		}
 		{
 			stage = "Security:Cookies"
-			switch err := c.securityCookies(ctx, APIMassloadInfoListGetOperation, r); {
+			switch err := c.securityCookies(ctx, APIMassloadInfoListPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 1
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -8232,7 +8357,7 @@ func (c *Client) sendAPIMassloadInfoListGet(ctx context.Context) (res APIMassloa
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeAPIMassloadInfoListGetResponse(resp)
+	result, err := decodeAPIMassloadInfoListPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

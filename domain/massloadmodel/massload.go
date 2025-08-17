@@ -6,14 +6,14 @@ import (
 )
 
 type Massload struct {
-	ID             int
-	Name           string
-	Description    string
-	IsDeduplicated bool
-	PageSize       *int64
-	FileSize       *int64
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
+	ID          int
+	Name        string
+	Description string
+	Flags       []string
+	PageSize    *int64
+	FileSize    *int64
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 
 	ExternalLinks []MassloadExternalLink
 	Attributes    []MassloadAttribute

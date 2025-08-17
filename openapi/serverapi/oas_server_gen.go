@@ -353,6 +353,12 @@ type Handler interface {
 	//
 	// POST /api/label/set
 	APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) (APILabelSetPostRes, error)
+	// APIMassloadFlagListGet implements GET /api/massload/flag/list operation.
+	//
+	// Флаги для массовых загрузок.
+	//
+	// GET /api/massload/flag/list
+	APIMassloadFlagListGet(ctx context.Context) (APIMassloadFlagListGetRes, error)
 	// APIMassloadInfoAttributeCreatePost implements POST /api/massload/info/attribute/create operation.
 	//
 	// Привязка аттрибута к массовой загрузке.
@@ -395,12 +401,12 @@ type Handler interface {
 	//
 	// POST /api/massload/info/get
 	APIMassloadInfoGetPost(ctx context.Context, req *APIMassloadInfoGetPostReq) (APIMassloadInfoGetPostRes, error)
-	// APIMassloadInfoListGet implements GET /api/massload/info/list operation.
+	// APIMassloadInfoListPost implements POST /api/massload/info/list operation.
 	//
 	// Массовые загрузки.
 	//
-	// GET /api/massload/info/list
-	APIMassloadInfoListGet(ctx context.Context) (APIMassloadInfoListGetRes, error)
+	// POST /api/massload/info/list
+	APIMassloadInfoListPost(ctx context.Context, req *APIMassloadInfoListPostReq) (APIMassloadInfoListPostRes, error)
 	// APIMassloadInfoUpdatePost implements POST /api/massload/info/update operation.
 	//
 	// Обновление массовой загрузки.
