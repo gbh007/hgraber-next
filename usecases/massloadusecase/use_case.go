@@ -13,7 +13,7 @@ type storage interface {
 	UpdateMassload(ctx context.Context, ml massloadmodel.Massload) error
 	UpdateMassloadSize(ctx context.Context, ml massloadmodel.Massload) error
 	Massload(ctx context.Context, id int) (massloadmodel.Massload, error)
-	Massloads(ctx context.Context) ([]massloadmodel.Massload, error)
+	Massloads(ctx context.Context, filter massloadmodel.Filter) ([]massloadmodel.Massload, error)
 	DeleteMassload(ctx context.Context, id int) error
 
 	MassloadFlags(ctx context.Context) ([]massloadmodel.Flag, error)

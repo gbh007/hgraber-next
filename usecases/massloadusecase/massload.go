@@ -58,8 +58,8 @@ func (uc *UseCase) Massload(ctx context.Context, id int) (massloadmodel.Massload
 	return ml, nil
 }
 
-func (uc *UseCase) Massloads(ctx context.Context) ([]massloadmodel.Massload, error) {
-	mls, err := uc.storage.Massloads(ctx)
+func (uc *UseCase) Massloads(ctx context.Context, filter massloadmodel.Filter) ([]massloadmodel.Massload, error) {
+	mls, err := uc.storage.Massloads(ctx, filter)
 	if err != nil {
 		return nil, fmt.Errorf("storage get massloads: %w", err)
 	}

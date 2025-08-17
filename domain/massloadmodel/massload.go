@@ -39,3 +39,39 @@ type Flag struct {
 	Description string
 	CreatedAt   time.Time
 }
+
+type FilterOrderBy byte
+
+const (
+	FilterOrderByID FilterOrderBy = iota
+	FilterOrderByName
+	FilterOrderByPageSize
+	FilterOrderByFileSize
+)
+
+type FilterAttributeType byte
+
+const (
+	FilterAttributeTypeNone FilterAttributeType = iota
+	FilterAttributeTypeLike
+	FilterAttributeTypeIn
+)
+
+type Filter struct {
+	OrderBy FilterOrderBy
+	Desc    bool
+	Fields  FilterFields
+}
+
+type FilterFields struct {
+	Name         string
+	Attributes   []FilterAttribute
+	Flags        []string
+	ExternalLink string
+}
+
+type FilterAttribute struct {
+	Code   string
+	Type   FilterAttributeType
+	Values []string
+}

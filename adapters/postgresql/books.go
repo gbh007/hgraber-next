@@ -183,11 +183,11 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter core.BookFilter,
 	switch filter.ShowWithoutPreview {
 	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(
-			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, core.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?``
+			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, core.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?`
 		)
 	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(
-			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, core.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?``
+			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, core.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?`
 		)
 	}
 

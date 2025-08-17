@@ -124,11 +124,101 @@ func (d *Database) Massload(ctx context.Context, id int) (massloadmodel.Massload
 	return ml, nil
 }
 
-func (d *Database) Massloads(ctx context.Context) ([]massloadmodel.Massload, error) {
+func (d *Database) Massloads(ctx context.Context, filter massloadmodel.Filter) ([]massloadmodel.Massload, error) {
 	builder := squirrel.Select(model.MassloadColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("massloads").
-		OrderBy("id")
+		From("massloads")
+
+	orderBySuffix := ""
+
+	if filter.Desc {
+		orderBySuffix = " DESC"
+	} else {
+		orderBySuffix = " ASC"
+	}
+
+	orderBy := []string{
+		"id" + orderBySuffix,
+	}
+
+	switch filter.OrderBy {
+	case massloadmodel.FilterOrderByID:
+		orderBy = []string{
+			"id" + orderBySuffix,
+		}
+
+	case massloadmodel.FilterOrderByName:
+		orderBy = []string{
+			"name" + orderBySuffix,
+			"id" + orderBySuffix,
+		}
+
+	case massloadmodel.FilterOrderByPageSize:
+		orderBy = []string{
+			"page_size" + orderBySuffix + " NULLS LAST",
+			"id" + orderBySuffix,
+		}
+
+	case massloadmodel.FilterOrderByFileSize:
+		orderBy = []string{
+			"file_size" + orderBySuffix + " NULLS LAST",
+			"id" + orderBySuffix,
+		}
+	}
+
+	builder = builder.OrderBy(orderBy...)
+
+	if filter.Fields.Name != "" {
+		builder = builder.Where(squirrel.ILike{"name": "%" + filter.Fields.Name + "%"})
+	}
+
+	if len(filter.Fields.Flags) > 0 {
+		builder = builder.Where(squirrel.Expr("flags @> ?", filter.Fields.Flags)) // особенность библиотеки, необходимо использовать `?`
+	}
+
+	if filter.Fields.ExternalLink != "" {
+		builder = builder.Where(squirrel.Expr("EXISTS (SELECT FROM massload_external_links WHERE massload_id = id AND url ILIKE ?)", "%"+filter.Fields.Name+"%")) // особенность библиотеки, необходимо использовать `?`
+	}
+
+	for _, attrFilter := range filter.Fields.Attributes {
+		subBuilder := squirrel.Select("1").
+			PlaceholderFormat(squirrel.Question). // Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			From("massload_attributes").
+			Where(squirrel.Eq{
+				"attr_code": attrFilter.Code,
+			}).
+			Where(squirrel.Expr(`massload_id = id`))
+
+		switch attrFilter.Type {
+		case massloadmodel.FilterAttributeTypeLike:
+			if len(attrFilter.Values) == 0 {
+				continue
+			}
+
+			subBuilder = subBuilder.Where(squirrel.ILike{
+				"attr_value": "%" + attrFilter.Values[0] + "%",
+			})
+
+		case massloadmodel.FilterAttributeTypeIn:
+			if len(attrFilter.Values) == 0 {
+				continue
+			}
+
+			subBuilder = subBuilder.Where(squirrel.Eq{
+				"attr_value": attrFilter.Values,
+			})
+
+		default:
+			continue
+		}
+
+		subQuery, subArgs, err := subBuilder.ToSql()
+		if err != nil {
+			return nil, fmt.Errorf("build attribute sub query: %w", err)
+		}
+
+		builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
+	}
 
 	query, args, err := builder.ToSql()
 	if err != nil {

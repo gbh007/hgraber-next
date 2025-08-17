@@ -10,7 +10,7 @@ import (
 )
 
 func (uc *UseCase) MassloadForUpdate(ctx context.Context) ([]massloadmodel.Massload, error) {
-	mls, err := uc.storage.Massloads(ctx)
+	mls, err := uc.storage.Massloads(ctx, massloadmodel.Filter{})
 	if err != nil {
 		return nil, fmt.Errorf("storage get massloads: %w", err)
 	}
