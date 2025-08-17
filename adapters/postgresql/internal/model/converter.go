@@ -54,3 +54,14 @@ func StringsPrefix(arr []string, prefix string) []string {
 		return prefix + s
 	})
 }
+
+func NilInt64ToDB(i *int64) sql.NullInt64 {
+	if i == nil {
+		return sql.NullInt64{}
+	}
+
+	return sql.NullInt64{
+		Int64: *i,
+		Valid: true,
+	}
+}

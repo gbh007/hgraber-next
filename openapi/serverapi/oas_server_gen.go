@@ -353,6 +353,66 @@ type Handler interface {
 	//
 	// POST /api/label/set
 	APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) (APILabelSetPostRes, error)
+	// APIMassloadFlagListGet implements GET /api/massload/flag/list operation.
+	//
+	// Флаги для массовых загрузок.
+	//
+	// GET /api/massload/flag/list
+	APIMassloadFlagListGet(ctx context.Context) (APIMassloadFlagListGetRes, error)
+	// APIMassloadInfoAttributeCreatePost implements POST /api/massload/info/attribute/create operation.
+	//
+	// Привязка аттрибута к массовой загрузке.
+	//
+	// POST /api/massload/info/attribute/create
+	APIMassloadInfoAttributeCreatePost(ctx context.Context, req *APIMassloadInfoAttributeCreatePostReq) (APIMassloadInfoAttributeCreatePostRes, error)
+	// APIMassloadInfoAttributeDeletePost implements POST /api/massload/info/attribute/delete operation.
+	//
+	// Удаление аттрибута для массовой загрузки.
+	//
+	// POST /api/massload/info/attribute/delete
+	APIMassloadInfoAttributeDeletePost(ctx context.Context, req *APIMassloadInfoAttributeDeletePostReq) (APIMassloadInfoAttributeDeletePostRes, error)
+	// APIMassloadInfoCreatePost implements POST /api/massload/info/create operation.
+	//
+	// Создание информации о массовой загрузке.
+	//
+	// POST /api/massload/info/create
+	APIMassloadInfoCreatePost(ctx context.Context, req *APIMassloadInfoCreatePostReq) (APIMassloadInfoCreatePostRes, error)
+	// APIMassloadInfoDeletePost implements POST /api/massload/info/delete operation.
+	//
+	// Удаление массовой загрузки.
+	//
+	// POST /api/massload/info/delete
+	APIMassloadInfoDeletePost(ctx context.Context, req *APIMassloadInfoDeletePostReq) (APIMassloadInfoDeletePostRes, error)
+	// APIMassloadInfoExternalLinkCreatePost implements POST /api/massload/info/external_link/create operation.
+	//
+	// Привязка внешней ссылки к массовой загрузке.
+	//
+	// POST /api/massload/info/external_link/create
+	APIMassloadInfoExternalLinkCreatePost(ctx context.Context, req *APIMassloadInfoExternalLinkCreatePostReq) (APIMassloadInfoExternalLinkCreatePostRes, error)
+	// APIMassloadInfoExternalLinkDeletePost implements POST /api/massload/info/external_link/delete operation.
+	//
+	// Удаление внешней ссылки для массовой загрузки.
+	//
+	// POST /api/massload/info/external_link/delete
+	APIMassloadInfoExternalLinkDeletePost(ctx context.Context, req *APIMassloadInfoExternalLinkDeletePostReq) (APIMassloadInfoExternalLinkDeletePostRes, error)
+	// APIMassloadInfoGetPost implements POST /api/massload/info/get operation.
+	//
+	// Получение массовой загрузки.
+	//
+	// POST /api/massload/info/get
+	APIMassloadInfoGetPost(ctx context.Context, req *APIMassloadInfoGetPostReq) (APIMassloadInfoGetPostRes, error)
+	// APIMassloadInfoListPost implements POST /api/massload/info/list operation.
+	//
+	// Массовые загрузки.
+	//
+	// POST /api/massload/info/list
+	APIMassloadInfoListPost(ctx context.Context, req *APIMassloadInfoListPostReq) (APIMassloadInfoListPostRes, error)
+	// APIMassloadInfoUpdatePost implements POST /api/massload/info/update operation.
+	//
+	// Обновление массовой загрузки.
+	//
+	// POST /api/massload/info/update
+	APIMassloadInfoUpdatePost(ctx context.Context, req *APIMassloadInfoUpdatePostReq) (APIMassloadInfoUpdatePostRes, error)
 	// APIParsingHandlePost implements POST /api/parsing/handle operation.
 	//
 	// Обработка ссылок на новые книги.

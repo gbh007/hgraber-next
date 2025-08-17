@@ -118,7 +118,7 @@ func (w *Worker[T]) SetRunnersCount(newUnitCount int) {
 							w.unitsWG.Done()
 						},
 					},
-					max(w.interval/2, time.Millisecond*100),
+					min(time.Minute, max(w.interval/2, time.Millisecond*100)),
 				)
 
 				w.units = append(w.units, unit)

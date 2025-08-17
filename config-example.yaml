@@ -44,6 +44,14 @@ workers:
     count: 1
     queue_size: 100
     interval: 3s
+  massload_sizer:
+    count: 1
+    queue_size: 100
+    interval: 1h
+  massload_attribute_sizer:
+    count: 1
+    queue_size: 100
+    interval: 1h
 storage:
   debug_squirrel: false
   debug_pgx: false

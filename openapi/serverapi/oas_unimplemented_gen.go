@@ -526,6 +526,96 @@ func (UnimplementedHandler) APILabelSetPost(ctx context.Context, req *APILabelSe
 	return r, ht.ErrNotImplemented
 }
 
+// APIMassloadFlagListGet implements GET /api/massload/flag/list operation.
+//
+// Флаги для массовых загрузок.
+//
+// GET /api/massload/flag/list
+func (UnimplementedHandler) APIMassloadFlagListGet(ctx context.Context) (r APIMassloadFlagListGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadInfoAttributeCreatePost implements POST /api/massload/info/attribute/create operation.
+//
+// Привязка аттрибута к массовой загрузке.
+//
+// POST /api/massload/info/attribute/create
+func (UnimplementedHandler) APIMassloadInfoAttributeCreatePost(ctx context.Context, req *APIMassloadInfoAttributeCreatePostReq) (r APIMassloadInfoAttributeCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadInfoAttributeDeletePost implements POST /api/massload/info/attribute/delete operation.
+//
+// Удаление аттрибута для массовой загрузки.
+//
+// POST /api/massload/info/attribute/delete
+func (UnimplementedHandler) APIMassloadInfoAttributeDeletePost(ctx context.Context, req *APIMassloadInfoAttributeDeletePostReq) (r APIMassloadInfoAttributeDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadInfoCreatePost implements POST /api/massload/info/create operation.
+//
+// Создание информации о массовой загрузке.
+//
+// POST /api/massload/info/create
+func (UnimplementedHandler) APIMassloadInfoCreatePost(ctx context.Context, req *APIMassloadInfoCreatePostReq) (r APIMassloadInfoCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadInfoDeletePost implements POST /api/massload/info/delete operation.
+//
+// Удаление массовой загрузки.
+//
+// POST /api/massload/info/delete
+func (UnimplementedHandler) APIMassloadInfoDeletePost(ctx context.Context, req *APIMassloadInfoDeletePostReq) (r APIMassloadInfoDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadInfoExternalLinkCreatePost implements POST /api/massload/info/external_link/create operation.
+//
+// Привязка внешней ссылки к массовой загрузке.
+//
+// POST /api/massload/info/external_link/create
+func (UnimplementedHandler) APIMassloadInfoExternalLinkCreatePost(ctx context.Context, req *APIMassloadInfoExternalLinkCreatePostReq) (r APIMassloadInfoExternalLinkCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadInfoExternalLinkDeletePost implements POST /api/massload/info/external_link/delete operation.
+//
+// Удаление внешней ссылки для массовой загрузки.
+//
+// POST /api/massload/info/external_link/delete
+func (UnimplementedHandler) APIMassloadInfoExternalLinkDeletePost(ctx context.Context, req *APIMassloadInfoExternalLinkDeletePostReq) (r APIMassloadInfoExternalLinkDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadInfoGetPost implements POST /api/massload/info/get operation.
+//
+// Получение массовой загрузки.
+//
+// POST /api/massload/info/get
+func (UnimplementedHandler) APIMassloadInfoGetPost(ctx context.Context, req *APIMassloadInfoGetPostReq) (r APIMassloadInfoGetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadInfoListPost implements POST /api/massload/info/list operation.
+//
+// Массовые загрузки.
+//
+// POST /api/massload/info/list
+func (UnimplementedHandler) APIMassloadInfoListPost(ctx context.Context, req *APIMassloadInfoListPostReq) (r APIMassloadInfoListPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadInfoUpdatePost implements POST /api/massload/info/update operation.
+//
+// Обновление массовой загрузки.
+//
+// POST /api/massload/info/update
+func (UnimplementedHandler) APIMassloadInfoUpdatePost(ctx context.Context, req *APIMassloadInfoUpdatePostReq) (r APIMassloadInfoUpdatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIParsingHandlePost implements POST /api/parsing/handle operation.
 //
 // Обработка ссылок на новые книги.

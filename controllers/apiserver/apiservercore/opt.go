@@ -41,6 +41,14 @@ func OptString(s string) serverapi.OptString {
 	return serverapi.NewOptString(s)
 }
 
+func OptInt64Pointer(v *int64) serverapi.OptInt64 {
+	if v == nil {
+		return serverapi.OptInt64{}
+	}
+
+	return serverapi.NewOptInt64(*v)
+}
+
 func OptUUID(u uuid.UUID) serverapi.OptUUID {
 	if u == uuid.Nil {
 		return serverapi.OptUUID{}

@@ -1614,6 +1614,7 @@ func (s *ErrorResponse) SetDetails(val OptString) {
 
 type HeaderAuth struct {
 	APIKey string
+	Roles  []string
 }
 
 // GetAPIKey returns the value of APIKey.
@@ -1621,9 +1622,19 @@ func (s *HeaderAuth) GetAPIKey() string {
 	return s.APIKey
 }
 
+// GetRoles returns the value of Roles.
+func (s *HeaderAuth) GetRoles() []string {
+	return s.Roles
+}
+
 // SetAPIKey sets the value of APIKey.
 func (s *HeaderAuth) SetAPIKey(val string) {
 	s.APIKey = val
+}
+
+// SetRoles sets the value of Roles.
+func (s *HeaderAuth) SetRoles(val []string) {
+	s.Roles = val
 }
 
 // NewOptBool returns new OptBool with value set to v.

@@ -2,6 +2,14 @@ package core
 
 import "strconv"
 
+func PrettySizePointer(raw *int64) string {
+	if raw == nil {
+		return ""
+	}
+
+	return PrettySize(*raw)
+}
+
 func PrettySize(raw int64) string {
 	if raw < 1 {
 		return "0 б"

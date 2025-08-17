@@ -34,6 +34,23 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 	return "", false
 }
 
+var operationRolesHeaderAuth = map[string][]string{
+	APICoreStatusGetOperation:          []string{},
+	APIFsCreatePostOperation:           []string{},
+	APIFsDeletePostOperation:           []string{},
+	APIFsGetGetOperation:               []string{},
+	APIFsInfoPostOperation:             []string{},
+	APIHighwayTokenCreatePostOperation: []string{},
+	APIHproxyParseBookPostOperation:    []string{},
+	APIHproxyParseListPostOperation:    []string{},
+	APIImportArchivePostOperation:      []string{},
+	APIParsingBookCheckPostOperation:   []string{},
+	APIParsingBookMultiPostOperation:   []string{},
+	APIParsingBookPostOperation:        []string{},
+	APIParsingPageCheckPostOperation:   []string{},
+	APIParsingPagePostOperation:        []string{},
+}
+
 func (s *Server) securityHeaderAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
 	var t HeaderAuth
 	const parameterName = "X-HG-Agent-Token"
@@ -42,6 +59,7 @@ func (s *Server) securityHeaderAuth(ctx context.Context, operationName Operation
 		return ctx, false, nil
 	}
 	t.APIKey = value
+	t.Roles = operationRolesHeaderAuth[operationName]
 	rctx, err := s.sec.HandleHeaderAuth(ctx, operationName, t)
 	if errors.Is(err, ogenerrors.ErrSkipServerSecurity) {
 		return nil, false, nil

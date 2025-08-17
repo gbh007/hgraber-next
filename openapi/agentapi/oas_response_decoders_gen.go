@@ -1002,7 +1002,7 @@ func decodeAPIHighwayFileIDExtGetResponse(resp *http.Response) (res APIHighwayFi
 							return err
 						}
 					} else {
-						return validate.ErrFieldRequired
+						return err
 					}
 					return nil
 				}(); err != nil {
