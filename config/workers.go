@@ -3,14 +3,15 @@ package config
 import "time"
 
 type Workers struct {
-	Page           Worker `yaml:"page" envconfig:"PAGE"`
-	Book           Worker `yaml:"book" envconfig:"BOOK"`
-	Hasher         Worker `yaml:"hasher" envconfig:"HASHER"`
-	Exporter       Worker `yaml:"exporter" envconfig:"EXPORTER"`
-	Tasker         Worker `yaml:"tasker" envconfig:"TASKER"`
-	FileValidator  Worker `yaml:"file_validator" envconfig:"FILE_VALIDATOR"`
-	FileTransferer Worker `yaml:"file_transferer" envconfig:"FILE_TRANSFERER"`
-	MassloadSizer  Worker `yaml:"massload_sizer" envconfig:"MASSLOAD_SIZER"`
+	Page                   Worker `yaml:"page" envconfig:"PAGE"`
+	Book                   Worker `yaml:"book" envconfig:"BOOK"`
+	Hasher                 Worker `yaml:"hasher" envconfig:"HASHER"`
+	Exporter               Worker `yaml:"exporter" envconfig:"EXPORTER"`
+	Tasker                 Worker `yaml:"tasker" envconfig:"TASKER"`
+	FileValidator          Worker `yaml:"file_validator" envconfig:"FILE_VALIDATOR"`
+	FileTransferer         Worker `yaml:"file_transferer" envconfig:"FILE_TRANSFERER"`
+	MassloadSizer          Worker `yaml:"massload_sizer" envconfig:"MASSLOAD_SIZER"`
+	MassloadAttributeSizer Worker `yaml:"massload_attribute_sizer" envconfig:"MASSLOAD_ATTRIBUTE_SIZER"`
 }
 
 func WorkersDefault() Workers {
@@ -23,6 +24,11 @@ func WorkersDefault() Workers {
 		FileValidator:  WorkerDefault(),
 		FileTransferer: WorkerDefault(),
 		MassloadSizer: Worker{
+			Count:     1,
+			QueueSize: 100,
+			Interval:  time.Hour,
+		},
+		MassloadAttributeSizer: Worker{
 			Count:     1,
 			QueueSize: 100,
 			Interval:  time.Hour,

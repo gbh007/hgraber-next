@@ -56,3 +56,43 @@ func (uc *UseCase) UpdateSize(ctx context.Context, ml massloadmodel.Massload) er
 
 	return nil
 }
+
+func (uc *UseCase) MassloadAttributesForUpdate(ctx context.Context) ([]massloadmodel.MassloadAttribute, error) {
+	attrs, err := uc.storage.MassloadsAttributes(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("storage get massloads attributes: %w", err)
+	}
+
+	return attrs, nil
+}
+
+func (uc *UseCase) UpdateAttributesSize(ctx context.Context, attr massloadmodel.MassloadAttribute) error {
+	attrMap := map[string][]string{
+		attr.AttrCode: {
+			attr.AttrValue,
+		},
+	}
+
+	fileSize, err := uc.storage.AttributesFileSize(ctx, attrMap)
+	if err != nil {
+		return fmt.Errorf("storage get file size: %w", err)
+	}
+
+	pageSize, err := uc.storage.AttributesPageSize(ctx, attrMap)
+	if err != nil {
+		return fmt.Errorf("storage get page size: %w", err)
+	}
+
+	err = uc.storage.UpdateMassloadAttributeSize(ctx, massloadmodel.MassloadAttribute{
+		AttrCode:  attr.AttrCode,
+		AttrValue: attr.AttrValue,
+		PageSize:  &pageSize,
+		FileSize:  &fileSize,
+		UpdatedAt: time.Now(),
+	})
+	if err != nil {
+		return fmt.Errorf("storage update size: %w", err)
+	}
+
+	return nil
+}

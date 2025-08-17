@@ -383,3 +383,46 @@ func (d *Database) MassloadAttributes(ctx context.Context, id int) ([]massloadmo
 
 	return result, nil
 }
+
+func (d *Database) MassloadsAttributes(ctx context.Context) ([]massloadmodel.MassloadAttribute, error) {
+	builder := squirrel.
+		Select(
+			"attr_code",
+			"attr_value",
+		).
+		PlaceholderFormat(squirrel.Dollar).
+		From("massload_attributes").
+		GroupBy(
+			"attr_code",
+			"attr_value",
+		)
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("build query: %w", err)
+	}
+
+	d.squirrelDebugLog(ctx, query, args)
+
+	result := make([]massloadmodel.MassloadAttribute, 0)
+
+	rows, err := d.pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query :%w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		attr := massloadmodel.MassloadAttribute{}
+
+		err := rows.Scan(&attr.AttrCode, &attr.AttrValue)
+		if err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+
+		result = append(result, attr)
+	}
+
+	return result, nil
+}

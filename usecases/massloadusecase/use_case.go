@@ -23,6 +23,8 @@ type storage interface {
 	CreateMassloadAttribute(ctx context.Context, id int, attr massloadmodel.MassloadAttribute) error
 	MassloadAttributes(ctx context.Context, id int) ([]massloadmodel.MassloadAttribute, error)
 	DeleteMassloadAttribute(ctx context.Context, id int, attr massloadmodel.MassloadAttribute) error
+
+	MassloadsAttributes(ctx context.Context) ([]massloadmodel.MassloadAttribute, error)
 	UpdateMassloadAttributeSize(ctx context.Context, attr massloadmodel.MassloadAttribute) error
 
 	AttributesPageSize(ctx context.Context, attrs map[string][]string) (int64, error)
