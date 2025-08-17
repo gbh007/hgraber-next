@@ -177,7 +177,7 @@ func (d *Database) Massloads(ctx context.Context, filter massloadmodel.Filter) (
 	}
 
 	if filter.Fields.ExternalLink != "" {
-		builder = builder.Where(squirrel.Expr("EXISTS (SELECT FROM massload_external_links WHERE massload_id = id AND url ILIKE ?)", "%"+filter.Fields.Name+"%")) // особенность библиотеки, необходимо использовать `?`
+		builder = builder.Where(squirrel.Expr("EXISTS (SELECT FROM massload_external_links WHERE massload_id = id AND url ILIKE ?)", "%"+filter.Fields.ExternalLink+"%")) // особенность библиотеки, необходимо использовать `?`
 	}
 
 	for _, attrFilter := range filter.Fields.Attributes {
