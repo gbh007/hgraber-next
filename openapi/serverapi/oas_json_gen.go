@@ -23825,6 +23825,16 @@ func (s *APIMassloadInfoListPostReqFilter) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.ExcludedFlags != nil {
+			e.FieldStart("excluded_flags")
+			e.ArrStart()
+			for _, elem := range s.ExcludedFlags {
+				e.Str(elem)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
 		if s.Attributes != nil {
 			e.FieldStart("attributes")
 			e.ArrStart()
@@ -23836,11 +23846,12 @@ func (s *APIMassloadInfoListPostReqFilter) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIMassloadInfoListPostReqFilter = [4]string{
+var jsonFieldsNameOfAPIMassloadInfoListPostReqFilter = [5]string{
 	0: "name",
 	1: "external_link",
 	2: "flags",
-	3: "attributes",
+	3: "excluded_flags",
+	4: "attributes",
 }
 
 // Decode decodes APIMassloadInfoListPostReqFilter from json.
@@ -23889,6 +23900,25 @@ func (s *APIMassloadInfoListPostReqFilter) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"flags\"")
+			}
+		case "excluded_flags":
+			if err := func() error {
+				s.ExcludedFlags = make([]string, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
+						return err
+					}
+					s.ExcludedFlags = append(s.ExcludedFlags, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"excluded_flags\"")
 			}
 		case "attributes":
 			if err := func() error {

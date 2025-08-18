@@ -5924,8 +5924,10 @@ type APIMassloadInfoListPostReqFilter struct {
 	Name OptString `json:"name"`
 	// Ссылка массовой загрузки (ilike, любая из).
 	ExternalLink OptString `json:"external_link"`
-	// Флаги - все и точное совпадение.
+	// Флаги которые должны быть - все и точное совпадение.
 	Flags []string `json:"flags"`
+	// Флаги которых не должно быть - все и любой из.
+	ExcludedFlags []string `json:"excluded_flags"`
 	// Фильтр по атрибутам.
 	Attributes []APIMassloadInfoListPostReqFilterAttributesItem `json:"attributes"`
 }
@@ -5943,6 +5945,11 @@ func (s *APIMassloadInfoListPostReqFilter) GetExternalLink() OptString {
 // GetFlags returns the value of Flags.
 func (s *APIMassloadInfoListPostReqFilter) GetFlags() []string {
 	return s.Flags
+}
+
+// GetExcludedFlags returns the value of ExcludedFlags.
+func (s *APIMassloadInfoListPostReqFilter) GetExcludedFlags() []string {
+	return s.ExcludedFlags
 }
 
 // GetAttributes returns the value of Attributes.
@@ -5963,6 +5970,11 @@ func (s *APIMassloadInfoListPostReqFilter) SetExternalLink(val OptString) {
 // SetFlags sets the value of Flags.
 func (s *APIMassloadInfoListPostReqFilter) SetFlags(val []string) {
 	s.Flags = val
+}
+
+// SetExcludedFlags sets the value of ExcludedFlags.
+func (s *APIMassloadInfoListPostReqFilter) SetExcludedFlags(val []string) {
+	s.ExcludedFlags = val
 }
 
 // SetAttributes sets the value of Attributes.

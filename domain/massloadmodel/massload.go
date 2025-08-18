@@ -64,10 +64,11 @@ type Filter struct {
 }
 
 type FilterFields struct {
-	Name         string
-	Attributes   []FilterAttribute
-	Flags        []string
-	ExternalLink string
+	Name          string
+	Attributes    []FilterAttribute
+	Flags         []string
+	ExcludedFlags []string
+	ExternalLink  string
 }
 
 type FilterAttribute struct {

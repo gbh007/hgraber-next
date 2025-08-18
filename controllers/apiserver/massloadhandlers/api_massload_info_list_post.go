@@ -32,6 +32,7 @@ func (c *MassloadController) APIMassloadInfoListPost(ctx context.Context, req *s
 	filter.Fields.Name = req.Filter.Value.Name.Value
 	filter.Fields.ExternalLink = req.Filter.Value.ExternalLink.Value
 	filter.Fields.Flags = req.Filter.Value.Flags
+	filter.Fields.ExcludedFlags = req.Filter.Value.ExcludedFlags
 
 	filter.Fields.Attributes = make([]massloadmodel.FilterAttribute, 0, len(req.Filter.Value.Attributes))
 

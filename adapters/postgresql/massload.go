@@ -176,6 +176,10 @@ func (d *Database) Massloads(ctx context.Context, filter massloadmodel.Filter) (
 		builder = builder.Where(squirrel.Expr("flags @> ?", filter.Fields.Flags)) // особенность библиотеки, необходимо использовать `?`
 	}
 
+	if len(filter.Fields.ExcludedFlags) > 0 {
+		builder = builder.Where(squirrel.Expr("NOT flags && ?", filter.Fields.ExcludedFlags)) // особенность библиотеки, необходимо использовать `?`
+	}
+
 	if filter.Fields.ExternalLink != "" {
 		builder = builder.Where(squirrel.Expr("EXISTS (SELECT FROM massload_external_links WHERE massload_id = id AND url ILIKE ?)", "%"+filter.Fields.ExternalLink+"%")) // особенность библиотеки, необходимо использовать `?`
 	}

@@ -5081,7 +5081,12 @@ paths:
                       description: Ссылка массовой загрузки (ilike, любая из)
                     flags:
                       type: array
-                      description: Флаги - все и точное совпадение
+                      description: Флаги которые должны быть - все и точное совпадение
+                      items:
+                        type: string
+                    excluded_flags:
+                      type: array
+                      description: Флаги которых не должно быть - все и любой из
                       items:
                         type: string
                     attributes:
