@@ -1,4 +1,4 @@
-package postgresql
+package repository
 
 import (
 	"context"
@@ -10,22 +10,22 @@ import (
 	"github.com/pressly/goose/v3"
 )
 
+//go:embed migrations/*.sql
+var migrationsFS embed.FS
+
 var _ goose.Logger = (*slogGooseAdapter)(nil)
 
 type slogGooseAdapter struct {
 	logger *slog.Logger
 }
 
-func (a slogGooseAdapter) Fatalf(format string, v ...interface{}) {
-	a.logger.Error(fmt.Sprintf(format, v...))
+func (a slogGooseAdapter) Fatalf(format string, v ...any) {
+	a.logger.Error(fmt.Sprintf(format, v...)) //nolint:sloglint // особенность библиотеки goose
 }
 
-func (a slogGooseAdapter) Printf(format string, v ...interface{}) {
-	a.logger.Info(fmt.Sprintf(format, v...))
+func (a slogGooseAdapter) Printf(format string, v ...any) {
+	a.logger.Info(fmt.Sprintf(format, v...)) //nolint:sloglint // особенность библиотеки goose
 }
-
-//go:embed internal/migrations/*.sql
-var migrationsFS embed.FS
 
 func migrate(ctx context.Context, logger *slog.Logger, db *sql.DB) error {
 	goose.SetBaseFS(migrationsFS)
@@ -40,7 +40,7 @@ func migrate(ctx context.Context, logger *slog.Logger, db *sql.DB) error {
 	})
 
 	err = goose.UpContext(
-		ctx, db, "internal/migrations",
+		ctx, db, "migrations",
 		goose.WithNoColor(true),
 	)
 	if err != nil {

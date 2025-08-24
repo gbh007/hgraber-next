@@ -18,7 +18,7 @@ func (d *Database) BookCount(ctx context.Context, filter core.BookFilter) (int, 
 		return 0, fmt.Errorf("build book filter: %w", err)
 	}
 
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(&c)
 	if err != nil {
@@ -36,7 +36,7 @@ func (d *Database) BookIDs(ctx context.Context, filter core.BookFilter) ([]uuid.
 		return nil, fmt.Errorf("build book filter: %w", err)
 	}
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query: %w", err)
 	}
@@ -348,7 +348,7 @@ func (d *Database) buildBooksFilter(
 		return "", nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	return query, args, nil
 }

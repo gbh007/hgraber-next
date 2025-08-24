@@ -17,7 +17,7 @@ import (
 )
 
 func (d *Database) MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) error {
-	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
+	tx, err := d.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
 	}
@@ -25,7 +25,7 @@ func (d *Database) MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) erro
 	defer func() {
 		err := tx.Rollback(ctx)
 		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
-			d.logger.ErrorContext(
+			d.Logger.ErrorContext(
 				ctx, "rollback MarkBookAsDeleted tx",
 				slog.Any("err", err),
 			)
@@ -85,7 +85,7 @@ WHERE
 }
 
 func (d *Database) MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, pageNumber int) error {
-	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
+	tx, err := d.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
 	}
@@ -93,7 +93,7 @@ func (d *Database) MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, page
 	defer func() {
 		err := tx.Rollback(ctx)
 		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
-			d.logger.ErrorContext(
+			d.Logger.ErrorContext(
 				ctx, "rollback MarkPageAsDeleted tx",
 				slog.Any("err", err),
 			)
@@ -152,9 +152,9 @@ func (d *Database) UpdateBookDeletion(ctx context.Context, book core.Book) error
 		return fmt.Errorf("storage: build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	res, err := d.pool.Exec(ctx, query, args...)
+	res, err := d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("storage: exec query: %w", err)
 	}

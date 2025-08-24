@@ -26,9 +26,9 @@ func (d *Database) NewMirror(ctx context.Context, mirror parsing.URLMirror) erro
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -53,9 +53,9 @@ func (d *Database) UpdateMirror(ctx context.Context, mirror parsing.URLMirror) e
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -75,9 +75,9 @@ func (d *Database) DeleteMirror(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -96,11 +96,11 @@ func (d *Database) Mirrors(ctx context.Context) ([]parsing.URLMirror, error) {
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	out := make([]parsing.URLMirror, 0, 10)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -135,9 +135,9 @@ func (d *Database) Mirror(ctx context.Context, id uuid.UUID) (parsing.URLMirror,
 		return parsing.URLMirror{}, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	mirror := parsing.URLMirror{}
 

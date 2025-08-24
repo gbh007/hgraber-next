@@ -256,7 +256,7 @@ func (d *Database) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, 
 			return nil
 		})
 
-	batchResult := d.pool.SendBatch(ctx, batch)
+	batchResult := d.Pool.SendBatch(ctx, batch)
 
 	err := batchResult.Close()
 	if err != nil {

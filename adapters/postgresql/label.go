@@ -32,9 +32,9 @@ func (d *Database) SetLabel(ctx context.Context, label core.BookLabel) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -56,9 +56,9 @@ func (d *Database) DeleteLabel(ctx context.Context, label core.BookLabel) error 
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -78,9 +78,9 @@ func (d *Database) DeleteBookLabels(ctx context.Context, bookID uuid.UUID) error
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -101,11 +101,11 @@ func (d *Database) Labels(ctx context.Context, bookID uuid.UUID) ([]core.BookLab
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := make([]core.BookLabel, 0)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -153,7 +153,7 @@ func (d *Database) ReplaceLabels(ctx context.Context, bookID uuid.UUID, labels [
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
+	tx, err := d.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
 	}
@@ -161,7 +161,7 @@ func (d *Database) ReplaceLabels(ctx context.Context, bookID uuid.UUID, labels [
 	defer func() {
 		err := tx.Rollback(ctx)
 		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
-			d.logger.ErrorContext(
+			d.Logger.ErrorContext(
 				ctx, "rollback ReplaceLabels tx",
 				slog.Any("err", err),
 			)
@@ -173,7 +173,7 @@ func (d *Database) ReplaceLabels(ctx context.Context, bookID uuid.UUID, labels [
 		return fmt.Errorf("delete old labels: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	_, err = tx.Exec(ctx, query, args...)
 	if err != nil {
@@ -215,7 +215,7 @@ func (d *Database) SetLabels(ctx context.Context, labels []core.BookLabel) error
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
+	tx, err := d.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
 	}
@@ -223,14 +223,14 @@ func (d *Database) SetLabels(ctx context.Context, labels []core.BookLabel) error
 	defer func() {
 		err := tx.Rollback(ctx)
 		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
-			d.logger.ErrorContext(
+			d.Logger.ErrorContext(
 				ctx, "rollback ReplaceLabels tx",
 				slog.Any("err", err),
 			)
 		}
 	}()
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	_, err = tx.Exec(ctx, query, args...)
 	if err != nil {

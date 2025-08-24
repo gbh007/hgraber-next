@@ -32,11 +32,11 @@ func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (c
 		return core.Page{}, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	page := core.Page{}
 
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(model.PageScanner(&page))
 	if err != nil {
@@ -53,7 +53,7 @@ func (d *Database) UpdatePageDownloaded(
 	downloaded bool,
 	fileID uuid.UUID,
 ) error {
-	res, err := d.pool.Exec(
+	res, err := d.Pool.Exec(
 		ctx,
 		`UPDATE pages SET downloaded = $1, load_at = $2, file_id = $5 WHERE book_id = $3 AND page_number = $4;`,
 		downloaded, time.Now().UTC(), id, pageNumber, model.UUIDToDB(fileID),
@@ -71,7 +71,7 @@ func (d *Database) UpdatePageDownloaded(
 
 // FIXME: отрефакторить на squirel
 func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []core.Page) error {
-	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
+	tx, err := d.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return err
 	}
@@ -79,7 +79,7 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []co
 	defer func() {
 		err := tx.Rollback(ctx)
 		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
-			d.logger.ErrorContext(
+			d.Logger.ErrorContext(
 				ctx, "rollback UpdateBookPages tx",
 				slog.Any("err", err),
 			)
@@ -120,7 +120,7 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []co
 
 // FIXME: отрефакторить на squirel
 func (d *Database) NewBookPages(ctx context.Context, pages []core.Page) error {
-	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
+	tx, err := d.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return err
 	}
@@ -128,7 +128,7 @@ func (d *Database) NewBookPages(ctx context.Context, pages []core.Page) error {
 	defer func() {
 		err := tx.Rollback(ctx)
 		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
-			d.logger.ErrorContext(
+			d.Logger.ErrorContext(
 				ctx, "rollback UpdateBookPages tx",
 				slog.Any("err", err),
 			)
@@ -176,11 +176,11 @@ func (d *Database) BookPages(ctx context.Context, bookID uuid.UUID) ([]core.Page
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := make([]core.Page, 0)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -215,11 +215,11 @@ func (d *Database) PagesByURL(ctx context.Context, u url.URL) ([]core.Page, erro
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := make([]core.Page, 0)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -253,10 +253,10 @@ func (d *Database) BookPagesCount(ctx context.Context, bookID uuid.UUID) (int, e
 		return 0, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	count := sql.NullInt64{}
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(&count)
 	if err != nil {

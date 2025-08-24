@@ -25,9 +25,9 @@ func (d *Database) InsertAttributeColor(ctx context.Context, color core.Attribut
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -52,9 +52,9 @@ func (d *Database) UpdateAttributeColor(ctx context.Context, color core.Attribut
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -75,9 +75,9 @@ func (d *Database) DeleteAttributeColor(ctx context.Context, code, value string)
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -101,9 +101,9 @@ func (d *Database) AttributeColors(ctx context.Context) ([]core.AttributeColor, 
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query: %w", err)
 	}
@@ -153,9 +153,9 @@ func (d *Database) AttributeColor(ctx context.Context, code, value string) (core
 		return core.AttributeColor{}, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	color := core.AttributeColor{}
 

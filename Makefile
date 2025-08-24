@@ -5,6 +5,7 @@ BUILD_TIME = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 MOD_NAME = github.com/gbh007/hgraber-next
 LDFLAGS = -ldflags "-X '$(MOD_NAME)/version.Version=$(TAG)' -X '$(MOD_NAME)/version.Commit=$(COMMIT)' -X '$(MOD_NAME)/version.BuildAt=$(BUILD_TIME)' -X '$(MOD_NAME)/version.Branch=$(BRANCH)'"
+SERVICE_BIN = $(PWD)/bin/build
 
 GOBIN = $(PWD)/bin/utils
 GOLANGCI_LINT = $(GOBIN)/golangci-lint
@@ -50,33 +51,33 @@ tidy:
 	go mod tidy
 
 create_build_dir:
-	mkdir -p ./_build
+	mkdir -p $(SERVICE_BIN)
 
 .PHONY: run-example
 run-example: create_build_dir
-	go build $(LDFLAGS) -trimpath -o ./_build/server  ./cmd/server
+	go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server  ./cmd/server
 
-	./_build/server --config config-example.yaml
+	$(SERVICE_BIN)/server --config config-example.yaml
  
 .PHONY: run
 run: create_build_dir
-	go build $(LDFLAGS) -trimpath -o ./_build/server  ./cmd/server
+	go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server  ./cmd/server
 
-	./_build/server
+	$(SERVICE_BIN)/server
 
 
 .PHONY: config
 config: create_build_dir
-	go build $(LDFLAGS) -trimpath -o ./_build/server  ./cmd/server
+	go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server  ./cmd/server
 
-	./_build/server --generate-config config-generated.yaml
+	$(SERVICE_BIN)/server --generate-config config-generated.yaml
 
 
 .PHONY: build
 build: create_build_dir
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build $(LDFLAGS) -trimpath -o ./_build/server-linux-arm64  ./cmd/server
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -trimpath -o ./_build/server-linux-amd64  ./cmd/server
-	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build $(LDFLAGS) -trimpath -o ./_build/server-windows-amd64.exe  ./cmd/server
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server-linux-arm64  ./cmd/server
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server-linux-amd64  ./cmd/server
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server-windows-amd64.exe  ./cmd/server
 
 .PHONY: jsonnet-build
 jsonnet-build:

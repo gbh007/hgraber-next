@@ -35,9 +35,9 @@ func (d *Database) NewBook(ctx context.Context, book core.Book) error {
 		return fmt.Errorf("storage: build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("storage: exec query: %w", err)
 	}
@@ -68,9 +68,9 @@ func (d *Database) UpdateBook(ctx context.Context, book core.Book) error {
 		return fmt.Errorf("storage: build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	res, err := d.pool.Exec(ctx, query, args...)
+	res, err := d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("storage: exec query: %w", err)
 	}
@@ -95,11 +95,11 @@ func (d *Database) GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUI
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := []uuid.UUID{}
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -134,11 +134,11 @@ func (d *Database) GetBook(ctx context.Context, bookID uuid.UUID) (core.Book, er
 		return core.Book{}, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	book := core.Book{}
 
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(model.BookScanner(&book))
 
@@ -165,9 +165,9 @@ func (d *Database) DeleteBook(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	res, err := d.pool.Exec(ctx, query, args...)
+	res, err := d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -191,9 +191,9 @@ func (d *Database) DeleteBooks(ctx context.Context, ids []uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	res, err := d.pool.Exec(ctx, query, args...)
+	res, err := d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -219,11 +219,11 @@ func (d *Database) BookIDsWithDeletedRebuilds(ctx context.Context) ([]uuid.UUID,
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := []uuid.UUID{}
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}

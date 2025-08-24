@@ -12,7 +12,7 @@ import (
 )
 
 func (d *Database) VerifyBook(ctx context.Context, bookID uuid.UUID, verified bool, verifiedAt time.Time) error {
-	res, err := d.pool.Exec(
+	res, err := d.Pool.Exec(
 		ctx,
 		`UPDATE books SET verified_at = $2, verified = $3 WHERE id = $1;`,
 		bookID, model.TimeToDB(verifiedAt), verified,
@@ -29,7 +29,7 @@ func (d *Database) VerifyBook(ctx context.Context, bookID uuid.UUID, verified bo
 }
 
 func (d *Database) SetBookRebuild(ctx context.Context, bookID uuid.UUID, reBuilded bool) error {
-	res, err := d.pool.Exec(
+	res, err := d.Pool.Exec(
 		ctx,
 		`UPDATE books SET is_rebuild = $2 WHERE id = $1;`,
 		bookID, reBuilded,

@@ -15,7 +15,7 @@ import (
 )
 
 func (d *Database) BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error) {
-	rows, err := d.pool.Query(ctx, `SELECT attr, values FROM book_origin_attributes WHERE book_id = $1;`, bookID)
+	rows, err := d.Pool.Query(ctx, `SELECT attr, values FROM book_origin_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return nil, fmt.Errorf("select rows: %w", err)
 	}
@@ -42,7 +42,7 @@ func (d *Database) BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (
 }
 
 func (d *Database) UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error {
-	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
+	tx, err := d.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
 	}
@@ -50,7 +50,7 @@ func (d *Database) UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID,
 	defer func() {
 		err := tx.Rollback(ctx)
 		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
-			d.logger.ErrorContext(
+			d.Logger.ErrorContext(
 				ctx, "rollback UpdateOriginAttributes tx",
 				slog.Any("err", err),
 			)
@@ -79,7 +79,7 @@ func (d *Database) UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID,
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	_, err = tx.Exec(ctx, query, args...)
 	if err != nil {
@@ -95,7 +95,7 @@ func (d *Database) UpdateOriginAttributes(ctx context.Context, bookID uuid.UUID,
 }
 
 func (d *Database) DeleteBookOriginAttributes(ctx context.Context, bookID uuid.UUID) error {
-	_, err := d.pool.Exec(ctx, `DELETE FROM book_origin_attributes WHERE book_id = $1;`, bookID)
+	_, err := d.Pool.Exec(ctx, `DELETE FROM book_origin_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -104,7 +104,7 @@ func (d *Database) DeleteBookOriginAttributes(ctx context.Context, bookID uuid.U
 }
 
 func (d *Database) BookOriginAttributesCount(ctx context.Context) ([]core.AttributeVariant, error) {
-	rows, err := d.pool.Query(
+	rows, err := d.Pool.Query(
 		ctx,
 		`SELECT COUNT(*), attr, UNNEST(values) as value FROM book_origin_attributes GROUP BY attr, value;`,
 	)

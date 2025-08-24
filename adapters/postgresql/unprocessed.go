@@ -33,11 +33,11 @@ func (d *Database) NotDownloadedPages(ctx context.Context) ([]core.PageForDownlo
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := make([]core.PageForDownload, 0)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -107,11 +107,11 @@ func (d *Database) UnprocessedBooks(ctx context.Context) ([]core.Book, error) {
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := make([]core.Book, 0)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -148,11 +148,11 @@ func (d *Database) GetUnHashedFiles(ctx context.Context) ([]core.File, error) {
 		return nil, fmt.Errorf("storage: build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := make([]core.File, 0)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}

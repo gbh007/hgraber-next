@@ -21,11 +21,11 @@ func (d *Database) FileStorages(ctx context.Context) ([]fsmodel.FileStorageSyste
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	out := make([]fsmodel.FileStorageSystem, 0, 10)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -60,11 +60,11 @@ func (d *Database) FileStorage(ctx context.Context, id uuid.UUID) (fsmodel.FileS
 		return fsmodel.FileStorageSystem{}, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	fs := fsmodel.FileStorageSystem{}
 
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(model.FileStorageScanner(&fs))
 	if err != nil {
@@ -95,9 +95,9 @@ func (d *Database) NewFileStorage(ctx context.Context, fs fsmodel.FileStorageSys
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -127,9 +127,9 @@ func (d *Database) UpdateFileStorage(ctx context.Context, fs fsmodel.FileStorage
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -149,9 +149,9 @@ func (d *Database) DeleteFileStorage(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}

@@ -27,9 +27,9 @@ func (d *Database) SetDeadHash(ctx context.Context, hash core.DeadHash) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -64,9 +64,9 @@ func (d *Database) SetDeadHashes(ctx context.Context, hashes []core.DeadHash) er
 			return fmt.Errorf("build query: %w", err)
 		}
 
-		d.squirrelDebugLog(ctx, query, args)
+		d.SquirrelDebugLog(ctx, query, args)
 
-		_, err = d.pool.Exec(ctx, query, args...)
+		_, err = d.Pool.Exec(ctx, query, args...)
 		if err != nil {
 			return fmt.Errorf("exec query: %w", err)
 		}
@@ -93,9 +93,9 @@ func (d *Database) DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query: %w", err)
 	}
@@ -137,9 +137,9 @@ func (d *Database) DeleteDeadHash(ctx context.Context, hash core.DeadHash) error
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -166,13 +166,13 @@ func (d *Database) DeleteDeadHashes(ctx context.Context, hashes []core.DeadHash)
 			return fmt.Errorf("build query: %w", err)
 		}
 
-		d.squirrelDebugLog(ctx, query, args)
+		d.SquirrelDebugLog(ctx, query, args)
 		batch.Queue(query, args...)
 
 		resultCount++
 	}
 
-	batchResult := d.pool.SendBatch(ctx, batch)
+	batchResult := d.Pool.SendBatch(ctx, batch)
 	defer batchResult.Close()
 
 	for range resultCount {

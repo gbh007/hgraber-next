@@ -16,7 +16,7 @@ import (
 )
 
 func (d *Database) BookAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error) {
-	rows, err := d.pool.Query(ctx, `SELECT attr, value FROM book_attributes WHERE book_id = $1;`, bookID)
+	rows, err := d.Pool.Query(ctx, `SELECT attr, value FROM book_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return nil, fmt.Errorf("select rows: %w", err)
 	}
@@ -43,7 +43,7 @@ func (d *Database) BookAttributes(ctx context.Context, bookID uuid.UUID) (map[st
 }
 
 func (d *Database) UpdateAttributes(ctx context.Context, bookID uuid.UUID, attributes map[string][]string) error {
-	tx, err := d.pool.BeginTx(ctx, pgx.TxOptions{})
+	tx, err := d.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
 	}
@@ -51,7 +51,7 @@ func (d *Database) UpdateAttributes(ctx context.Context, bookID uuid.UUID, attri
 	defer func() {
 		err := tx.Rollback(ctx)
 		if err != nil && !errors.Is(err, sql.ErrTxDone) && !errors.Is(err, pgx.ErrTxClosed) {
-			d.logger.ErrorContext(
+			d.Logger.ErrorContext(
 				ctx, "rollback UpdateAttributes tx",
 				slog.Any("err", err),
 			)
@@ -82,7 +82,7 @@ func (d *Database) UpdateAttributes(ctx context.Context, bookID uuid.UUID, attri
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	_, err = tx.Exec(ctx, query, args...)
 	if err != nil {
@@ -98,7 +98,7 @@ func (d *Database) UpdateAttributes(ctx context.Context, bookID uuid.UUID, attri
 }
 
 func (d *Database) DeleteBookAttributes(ctx context.Context, bookID uuid.UUID) error {
-	_, err := d.pool.Exec(ctx, `DELETE FROM book_attributes WHERE book_id = $1;`, bookID)
+	_, err := d.Pool.Exec(ctx, `DELETE FROM book_attributes WHERE book_id = $1;`, bookID)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -107,7 +107,7 @@ func (d *Database) DeleteBookAttributes(ctx context.Context, bookID uuid.UUID) e
 }
 
 func (d *Database) AttributesCount(ctx context.Context) ([]core.AttributeVariant, error) {
-	rows, err := d.pool.Query(ctx, `SELECT COUNT(*), attr, value FROM book_attributes GROUP BY attr, value;`)
+	rows, err := d.Pool.Query(ctx, `SELECT COUNT(*), attr, value FROM book_attributes GROUP BY attr, value;`)
 	if err != nil {
 		return nil, fmt.Errorf("get attributes count: %w", err)
 	}
@@ -149,9 +149,9 @@ func (d *Database) Attributes(ctx context.Context) ([]core.Attribute, error) {
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query: %w", err)
 	}
@@ -204,9 +204,9 @@ func (d *Database) AttributesPageSize(ctx context.Context, attrs map[string][]st
 		return 0, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	var size sql.NullInt64
 
@@ -262,9 +262,9 @@ func (d *Database) AttributesFileSize(ctx context.Context, attrs map[string][]st
 		return 0, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	var size sql.NullInt64
 

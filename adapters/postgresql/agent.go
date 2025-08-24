@@ -54,11 +54,11 @@ func (d *Database) Agents(ctx context.Context, filter core.AgentFilter) ([]core.
 		return nil, fmt.Errorf("storage: build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := make([]core.Agent, 0)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -93,10 +93,10 @@ func (d *Database) Agent(ctx context.Context, id uuid.UUID) (core.Agent, error) 
 		return core.Agent{}, fmt.Errorf("storage: build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := core.Agent{}
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(model.AgentScanner(&result))
 
@@ -133,9 +133,9 @@ func (d *Database) NewAgent(ctx context.Context, agent core.Agent) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -166,9 +166,9 @@ func (d *Database) UpdateAgent(ctx context.Context, agent core.Agent) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	res, err := d.pool.Exec(ctx, query, args...)
+	res, err := d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -192,9 +192,9 @@ func (d *Database) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	res, err := d.pool.Exec(ctx, query, args...)
+	res, err := d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}

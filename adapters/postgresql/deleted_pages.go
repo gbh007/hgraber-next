@@ -36,9 +36,9 @@ func (d *Database) DeletedPagesHashes(ctx context.Context) ([]core.FileHash, err
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query: %w", err)
 	}
@@ -79,11 +79,11 @@ func (d *Database) DeletedPages(ctx context.Context, bookID uuid.UUID) ([]core.P
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	out := make([]core.PageWithHash, 0, 10)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -117,9 +117,9 @@ func (d *Database) RemoveDeletedPages(ctx context.Context, bookID uuid.UUID, pag
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query :%w", err)
 	}
@@ -141,9 +141,9 @@ func (d *Database) RemoveDeletedPagesByHash(ctx context.Context, hash core.FileH
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query :%w", err)
 	}
@@ -170,13 +170,13 @@ func (d *Database) RemoveDeletedPagesByHashes(ctx context.Context, hashes []core
 			return fmt.Errorf("build query: %w", err)
 		}
 
-		d.squirrelDebugLog(ctx, query, args)
+		d.SquirrelDebugLog(ctx, query, args)
 		batch.Queue(query, args...)
 
 		resultCount++
 	}
 
-	batchResult := d.pool.SendBatch(ctx, batch)
+	batchResult := d.Pool.SendBatch(ctx, batch)
 	defer batchResult.Close()
 
 	for range resultCount {
@@ -190,7 +190,7 @@ func (d *Database) RemoveDeletedPagesByHashes(ctx context.Context, hashes []core
 }
 
 func (d *Database) TruncateDeletedPages(ctx context.Context) error {
-	_, err := d.pool.Exec(ctx, `TRUNCATE deleted_pages;`)
+	_, err := d.Pool.Exec(ctx, `TRUNCATE deleted_pages;`)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}

@@ -29,11 +29,11 @@ func (d *Database) BookIDsByMD5(ctx context.Context, md5Sums []string) ([]uuid.U
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := []uuid.UUID{}
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -69,11 +69,11 @@ func (d *Database) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]c
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	out := make([]core.PageWithHash, 0, 10)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -110,10 +110,10 @@ func (d *Database) BookPageWithHash(ctx context.Context, bookID uuid.UUID, pageN
 		return core.PageWithHash{}, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	page := core.PageWithHash{}
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(model.PageWithHashScanner(&page))
 
@@ -144,11 +144,11 @@ func (d *Database) BookPagesWithHashByHash(ctx context.Context, hash core.FileHa
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	out := make([]core.PageWithHash, 0, 10)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -183,11 +183,11 @@ func (d *Database) BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []str
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	out := make([]core.PageWithHash, 0, 10)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -224,10 +224,10 @@ func (d *Database) BookPagesCountByHash(ctx context.Context, hash core.FileHash)
 		return 0, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	count := sql.NullInt64{}
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(&count)
 	if err != nil {

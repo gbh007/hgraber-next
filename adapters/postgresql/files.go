@@ -30,7 +30,7 @@ FROM (
 
 	result := make([]core.File, 0)
 
-	rows, err := d.pool.Query(ctx, query)
+	rows, err := d.Pool.Query(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -52,7 +52,7 @@ FROM (
 }
 
 func (d *Database) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha256Sum string, size int64) error {
-	res, err := d.pool.Exec(
+	res, err := d.Pool.Exec(
 		ctx,
 		`UPDATE files SET md5_sum = $2, sha256_sum = $3, "size" = $4 WHERE id = $1`,
 		id, model.StringToDB(md5Sum), model.StringToDB(sha256Sum), sql.NullInt64{Int64: size, Valid: size > 0},
@@ -84,9 +84,9 @@ func (d *Database) NewFile(ctx context.Context, file core.File) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -109,9 +109,9 @@ func (d *Database) ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UU
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	_, err = d.pool.Exec(ctx, query, args...)
+	_, err = d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -130,11 +130,11 @@ func (d *Database) DetachedFiles(ctx context.Context) ([]core.File, error) {
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := make([]core.File, 0)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -168,11 +168,11 @@ func (d *Database) FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]core
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	result := make([]core.File, 0)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec query :%w", err)
 	}
@@ -205,9 +205,9 @@ func (d *Database) DeleteFile(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	res, err := d.pool.Exec(ctx, query, args...)
+	res, err := d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -234,9 +234,9 @@ func (d *Database) UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, 
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	res, err := d.pool.Exec(ctx, query, args...)
+	res, err := d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -263,9 +263,9 @@ func (d *Database) UpdateFileFS(ctx context.Context, fileID, fsID uuid.UUID) err
 		return fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	res, err := d.pool.Exec(ctx, query, args...)
+	res, err := d.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
@@ -291,11 +291,11 @@ func (d *Database) File(ctx context.Context, id uuid.UUID) (core.File, error) {
 		return core.File{}, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	file := core.File{}
 
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(model.FileScanner(&file))
 	if err != nil {
@@ -337,11 +337,11 @@ func (d *Database) FSFilesInfo(
 		return core.SizeWithCount{}, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
 	var count, size sql.NullInt64
 
-	row := d.pool.QueryRow(ctx, query, args...)
+	row := d.Pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(&count, &size)
 	if err != nil {
@@ -397,9 +397,9 @@ func (d *Database) FileIDsByFilter(ctx context.Context, filter fsmodel.FileFilte
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.squirrelDebugLog(ctx, query, args)
+	d.SquirrelDebugLog(ctx, query, args)
 
-	rows, err := d.pool.Query(ctx, query, args...)
+	rows, err := d.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("exec: %w", err)
 	}
