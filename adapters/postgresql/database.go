@@ -15,6 +15,7 @@ import (
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/label"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/massload"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/repository"
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/urlmirror"
 )
 
 type Database struct {
@@ -26,6 +27,7 @@ type Database struct {
 	*label.LabelRepo
 	*book.BookRepo
 	*deadhash.DeadHashRepo
+	*urlmirror.URLMirrorRepo
 }
 
 func New(
@@ -59,5 +61,6 @@ func New(
 		LabelRepo:     label.New(repo),
 		BookRepo:      book.New(repo),
 		DeadHashRepo:  deadhash.New(repo),
+		URLMirrorRepo: urlmirror.New(repo),
 	}, nil
 }
