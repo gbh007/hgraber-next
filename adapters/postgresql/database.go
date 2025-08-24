@@ -10,6 +10,7 @@ import (
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/agent"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/attribute"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/file"
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/label"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/massload"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/repository"
 )
@@ -20,6 +21,7 @@ type Database struct {
 	*file.FileRepo
 	*agent.AgentRepo
 	*attribute.AttributeRepo
+	*label.LabelRepo
 }
 
 func New(
@@ -50,5 +52,6 @@ func New(
 		FileRepo:      file.New(repo),
 		AgentRepo:     agent.New(repo),
 		AttributeRepo: attribute.New(repo),
+		LabelRepo:     label.New(repo),
 	}, nil
 }
