@@ -7,6 +7,7 @@ import (
 
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/agent"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/file"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/massload"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/repository"
@@ -16,6 +17,7 @@ type Database struct {
 	*repository.Repository
 	*massload.MassloadRepo
 	*file.FileRepo
+	*agent.AgentRepo
 }
 
 func New(
@@ -44,5 +46,6 @@ func New(
 		Repository:   repo,
 		MassloadRepo: massload.New(repo),
 		FileRepo:     file.New(repo),
+		AgentRepo:    agent.New(repo),
 	}, nil
 }
