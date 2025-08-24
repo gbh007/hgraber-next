@@ -6,13 +6,48 @@ BUILD_TIME = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 MOD_NAME = github.com/gbh007/hgraber-next
 LDFLAGS = -ldflags "-X '$(MOD_NAME)/version.Version=$(TAG)' -X '$(MOD_NAME)/version.Commit=$(COMMIT)' -X '$(MOD_NAME)/version.BuildAt=$(BUILD_TIME)' -X '$(MOD_NAME)/version.Branch=$(BRANCH)'"
 
+GOBIN = $(PWD)/bin/utils
+GOLANGCI_LINT = $(GOBIN)/golangci-lint
 
-OGEN = github.com/ogen-go/ogen/cmd/ogen@v1.14.0
+$(GOLANGCI_LINT):
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(GOBIN) v2.4.0
+
+.PHONY: lint
+lint: $(GOLANGCI_LINT)
+	$(GOLANGCI_LINT) run
+
+.PHONY: install-tools
+install-tools:
+# 	На данный момент не работает корректно
+# 	go get -u -tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.4.0
+	go get -u -tool github.com/ogen-go/ogen/cmd/ogen@v1.14.0
+	go get -u -tool golang.org/x/tools/cmd/deadcode@v0.36.0
+	go get -u -tool mvdan.cc/gofumpt@v0.8.0
+	go get -u -tool golang.org/x/tools/cmd/goimports@v0.36.0
+	go get -u -tool github.com/daixiang0/gci@v0.13.7
+
+# .PHONY: lint
+# lint:
+# 	go tool golangci-lint run
+
+.PHONY: deadcode
+deadcode:
+	go tool deadcode -test ./...
+
+.PHONY: format
+format:
+	go tool gofumpt -l -w .
+	go tool goimports -l -w .
+	go tool gci write -s standard -s default -s "prefix(github.com/gbh007/hgraber-next)" --skip-generated .
 
 .PHONY: generate
 generate:
-	go run $(OGEN) --target openapi/agentapi -package agentapi --clean openapi/agent.yaml
-	go run $(OGEN) --target openapi/serverapi -package serverapi --clean openapi/server.yaml
+	go tool ogen --target openapi/agentapi -package agentapi --clean openapi/agent.yaml
+	go tool ogen --target openapi/serverapi -package serverapi --clean openapi/server.yaml
+
+.PHONY: tidy
+tidy:
+	go mod tidy
 
 create_build_dir:
 	mkdir -p ./_build
