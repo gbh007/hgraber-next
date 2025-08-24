@@ -7,11 +7,13 @@ import (
 
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/massload"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/repository"
 )
 
 type Database struct {
 	*repository.Repository
+	*massload.MassloadRepo
 }
 
 func New(
@@ -37,6 +39,7 @@ func New(
 	}
 
 	return &Database{
-		Repository: repo,
+		Repository:   repo,
+		MassloadRepo: massload.New(repo),
 	}, nil
 }

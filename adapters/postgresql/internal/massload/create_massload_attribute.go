@@ -1,0 +1,35 @@
+package massload
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/domain/massloadmodel"
+)
+
+func (repo *MassloadRepo) CreateMassloadAttribute(ctx context.Context, id int, attr massloadmodel.Attribute) error {
+	builder := squirrel.Insert("massload_attributes").
+		PlaceholderFormat(squirrel.Dollar).
+		SetMap(map[string]any{
+			"massload_id": id,
+			"attr_code":   attr.Code,
+			"attr_value":  attr.Value,
+			"created_at":  attr.CreatedAt,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("build query: %w", err)
+	}
+
+	repo.SquirrelDebugLog(ctx, query, args)
+
+	_, err = repo.Pool.Exec(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("exec query: %w", err)
+	}
+
+	return nil
+}
