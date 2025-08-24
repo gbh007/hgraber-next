@@ -40,7 +40,7 @@ type agentSystem interface {
 	PageLoad(ctx context.Context, agentID uuid.UUID, url agentmodel.AgentPageURL) (io.Reader, error)
 
 	HProxyList(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.List, error)
-	HProxyBook(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.Book, error)
+	HProxyBook(ctx context.Context, agentID uuid.UUID, u url.URL, pageLimit *int) (hproxymodel.Book, error)
 }
 
 type UseCase struct {

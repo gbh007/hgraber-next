@@ -22,7 +22,7 @@ func (a *FSAdapter) Create(ctx context.Context, fileID uuid.UUID, body io.Reader
 		agentapi.APIFsCreatePostParams{FileID: fileID},
 	)
 	if err != nil {
-		return err
+		return fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {
@@ -52,7 +52,7 @@ func (a *FSAdapter) Create(ctx context.Context, fileID uuid.UUID, body io.Reader
 func (a *FSAdapter) Delete(ctx context.Context, fileID uuid.UUID) error {
 	res, err := a.rawClient.APIFsDeletePost(ctx, &agentapi.APIFsDeletePostReq{FileID: fileID})
 	if err != nil {
-		return err
+		return fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {
@@ -82,7 +82,7 @@ func (a *FSAdapter) Delete(ctx context.Context, fileID uuid.UUID) error {
 func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error) {
 	res, err := a.rawClient.APIFsGetGet(ctx, agentapi.APIFsGetGetParams{FileID: fileID})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {
@@ -115,7 +115,7 @@ func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes 
 		IncludeFileSizes: agentapi.NewOptBool(includeFileSizes),
 	})
 	if err != nil {
-		return fsmodel.FSState{}, err
+		return fsmodel.FSState{}, fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {
@@ -154,7 +154,7 @@ func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes 
 func (a *FSAdapter) CreateHighwayToken(ctx context.Context) (string, time.Time, error) {
 	res, err := a.rawClient.APIHighwayTokenCreatePost(ctx)
 	if err != nil {
-		return "", time.Time{}, err
+		return "", time.Time{}, fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {

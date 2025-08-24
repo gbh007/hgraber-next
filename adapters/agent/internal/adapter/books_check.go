@@ -15,7 +15,7 @@ func (a *Adapter) BooksCheck(ctx context.Context, urls []url.URL) ([]agentmodel.
 		Urls: urls,
 	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {

@@ -13,7 +13,13 @@ func (c *HProxyHandlersController) APIHproxyBookPost(
 	ctx context.Context,
 	req *serverapi.APIHproxyBookPostReq,
 ) (serverapi.APIHproxyBookPostRes, error) {
-	book, err := c.hProxyUseCases.Book(ctx, req.URL)
+	var pageLimit *int
+
+	if req.PageLimit.Set {
+		pageLimit = &req.PageLimit.Value
+	}
+
+	book, err := c.hProxyUseCases.Book(ctx, req.URL, pageLimit)
 	if err != nil {
 		return &serverapi.APIHproxyBookPostInternalServerError{
 			InnerCode: apiservercore.HProxyUseCaseCode,

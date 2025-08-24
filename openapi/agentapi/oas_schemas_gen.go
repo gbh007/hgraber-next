@@ -746,6 +746,8 @@ func (s *APIHproxyParseBookPostOKPagesItem) SetFilename(val string) {
 type APIHproxyParseBookPostReq struct {
 	// Ссылка для обработки.
 	URL url.URL `json:"url"`
+	// Ограничение на количество страниц для парсинга.
+	PageLimit OptInt `json:"page_limit"`
 }
 
 // GetURL returns the value of URL.
@@ -753,9 +755,19 @@ func (s *APIHproxyParseBookPostReq) GetURL() url.URL {
 	return s.URL
 }
 
+// GetPageLimit returns the value of PageLimit.
+func (s *APIHproxyParseBookPostReq) GetPageLimit() OptInt {
+	return s.PageLimit
+}
+
 // SetURL sets the value of URL.
 func (s *APIHproxyParseBookPostReq) SetURL(val url.URL) {
 	s.URL = val
+}
+
+// SetPageLimit sets the value of PageLimit.
+func (s *APIHproxyParseBookPostReq) SetPageLimit(val OptInt) {
+	s.PageLimit = val
 }
 
 type APIHproxyParseBookPostUnauthorized ErrorResponse
@@ -777,6 +789,8 @@ func (*APIHproxyParseListPostInternalServerError) aPIHproxyParseListPostRes() {}
 type APIHproxyParseListPostOK struct {
 	// Результаты обработки.
 	Results []APIHproxyParseListPostOKResultsItem `json:"results"`
+	// Ссылка на следующую страницу.
+	NextURL OptURI `json:"next_url"`
 }
 
 // GetResults returns the value of Results.
@@ -784,9 +798,19 @@ func (s *APIHproxyParseListPostOK) GetResults() []APIHproxyParseListPostOKResult
 	return s.Results
 }
 
+// GetNextURL returns the value of NextURL.
+func (s *APIHproxyParseListPostOK) GetNextURL() OptURI {
+	return s.NextURL
+}
+
 // SetResults sets the value of Results.
 func (s *APIHproxyParseListPostOK) SetResults(val []APIHproxyParseListPostOKResultsItem) {
 	s.Results = val
+}
+
+// SetNextURL sets the value of NextURL.
+func (s *APIHproxyParseListPostOK) SetNextURL(val OptURI) {
+	s.NextURL = val
 }
 
 func (*APIHproxyParseListPostOK) aPIHproxyParseListPostRes() {}
@@ -1677,6 +1701,52 @@ func (o OptBool) Get() (v bool, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptBool) Or(d bool) bool {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt returns new OptInt with value set to v.
+func NewOptInt(v int) OptInt {
+	return OptInt{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt is optional int.
+type OptInt struct {
+	Value int
+	Set   bool
+}
+
+// IsSet returns true if OptInt was set.
+func (o OptInt) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt) Reset() {
+	var v int
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt) SetTo(v int) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt) Get() (v int, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt) Or(d int) int {
 	if v, ok := o.Get(); ok {
 		return v
 	}

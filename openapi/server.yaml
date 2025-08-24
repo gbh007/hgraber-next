@@ -4652,6 +4652,9 @@ paths:
                   type: string
                   format: uri
                   description: Ссылка для обработки
+                page_limit:
+                  type: integer
+                  description: Ограничение на количество страниц для парсинга
               required:
                 - url
       responses:

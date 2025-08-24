@@ -13,7 +13,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
-func (uc *UseCase) Book(ctx context.Context, u url.URL) (hproxymodel.Book, error) {
+func (uc *UseCase) Book(ctx context.Context, u url.URL, pageLimit *int) (hproxymodel.Book, error) {
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParse:  true,
 		HasHProxy: true,
@@ -50,7 +50,7 @@ func (uc *UseCase) Book(ctx context.Context, u url.URL) (hproxymodel.Book, error
 				continue
 			}
 
-			book, err := uc.agentSystem.HProxyBook(ctx, agent.ID, u)
+			book, err := uc.agentSystem.HProxyBook(ctx, agent.ID, u, pageLimit)
 			if err != nil {
 				return hproxymodel.Book{}, fmt.Errorf("parse book: %w", err)
 			}

@@ -23,6 +23,10 @@ func (a *Adapter) HProxyList(ctx context.Context, u url.URL) (hproxymodel.List, 
 	case *agentapi.APIHproxyParseListPostOK:
 		data := hproxymodel.List{}
 
+		if typedRes.NextURL.Set {
+			data.NextPage = &typedRes.NextURL.Value
+		}
+
 		for _, result := range typedRes.Results {
 			switch result.Type {
 			case agentapi.APIHproxyParseListPostOKResultsItemTypeList:
@@ -65,9 +69,16 @@ func (a *Adapter) HProxyList(ctx context.Context, u url.URL) (hproxymodel.List, 
 	}
 }
 
-func (a *Adapter) HProxyBook(ctx context.Context, u url.URL) (hproxymodel.Book, error) {
+func (a *Adapter) HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (hproxymodel.Book, error) {
+	pl := agentapi.OptInt{}
+
+	if pageLimit != nil {
+		pl = agentapi.NewOptInt(*pageLimit)
+	}
+
 	res, err := a.rawClient.APIHproxyParseBookPost(ctx, &agentapi.APIHproxyParseBookPostReq{
-		URL: u,
+		URL:       u,
+		PageLimit: pl,
 	})
 	if err != nil {
 		return hproxymodel.Book{}, fmt.Errorf("request: %w", err)
@@ -92,23 +103,30 @@ func (a *Adapter) HProxyBook(ctx context.Context, u url.URL) (hproxymodel.Book, 
 					ExtPreviewURL: p.URL,
 				}
 			}),
-			Attributes: pkg.Map(typedRes.Attributes, func(attr agentapi.APIHproxyParseBookPostOKAttributesItem) hproxymodel.BookAttribute {
-				return hproxymodel.BookAttribute{
-					Code: attr.Code,
-					Values: pkg.Map(attr.Values, func(v agentapi.APIHproxyParseBookPostOKAttributesItemValuesItem) hproxymodel.BookAttributeValue {
-						var u *url.URL
+			Attributes: pkg.Map(
+				typedRes.Attributes,
+				func(attr agentapi.APIHproxyParseBookPostOKAttributesItem) hproxymodel.BookAttribute {
+					return hproxymodel.BookAttribute{
+						Code: attr.Code,
+						Values: pkg.Map(
+							attr.Values,
+							func(
+								v agentapi.APIHproxyParseBookPostOKAttributesItemValuesItem,
+							) hproxymodel.BookAttributeValue {
+								var u *url.URL
 
-						if v.URL.Set {
-							u = &v.URL.Value
-						}
+								if v.URL.Set {
+									u = &v.URL.Value
+								}
 
-						return hproxymodel.BookAttributeValue{
-							ExtName: v.Name,
-							ExtURL:  u,
-						}
-					}),
-				}
-			}),
+								return hproxymodel.BookAttributeValue{
+									ExtName: v.Name,
+									ExtURL:  u,
+								}
+							},
+						),
+					}
+				}),
 		}, nil
 
 	case *agentapi.APIHproxyParseBookPostBadRequest:

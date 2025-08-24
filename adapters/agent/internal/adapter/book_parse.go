@@ -15,7 +15,7 @@ func (a *Adapter) BookParse(ctx context.Context, url url.URL) (agentmodel.AgentB
 		URL: url,
 	})
 	if err != nil {
-		return agentmodel.AgentBookDetails{}, err
+		return agentmodel.AgentBookDetails{}, fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {

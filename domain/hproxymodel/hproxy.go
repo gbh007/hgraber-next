@@ -21,6 +21,7 @@ type ListPage struct {
 type List struct {
 	Books      []ListBook
 	Pagination []ListPage
+	NextPage   *url.URL
 }
 
 type BookPage struct {

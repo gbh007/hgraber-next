@@ -15,7 +15,7 @@ import (
 
 type HProxyUseCases interface {
 	List(ctx context.Context, u url.URL) (hproxymodel.List, error)
-	Book(ctx context.Context, u url.URL) (hproxymodel.Book, error)
+	Book(ctx context.Context, u url.URL, pageLimit *int) (hproxymodel.Book, error)
 	Image(ctx context.Context, bookURL, imageURL url.URL) (io.Reader, error)
 }
 

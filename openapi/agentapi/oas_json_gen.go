@@ -2833,10 +2833,17 @@ func (s *APIHproxyParseBookPostReq) encodeFields(e *jx.Encoder) {
 		e.FieldStart("url")
 		json.EncodeURI(e, s.URL)
 	}
+	{
+		if s.PageLimit.Set {
+			e.FieldStart("page_limit")
+			s.PageLimit.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIHproxyParseBookPostReq = [1]string{
+var jsonFieldsNameOfAPIHproxyParseBookPostReq = [2]string{
 	0: "url",
+	1: "page_limit",
 }
 
 // Decode decodes APIHproxyParseBookPostReq from json.
@@ -2859,6 +2866,16 @@ func (s *APIHproxyParseBookPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"url\"")
+			}
+		case "page_limit":
+			if err := func() error {
+				s.PageLimit.Reset()
+				if err := s.PageLimit.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_limit\"")
 			}
 		default:
 			return d.Skip()
@@ -3085,10 +3102,17 @@ func (s *APIHproxyParseListPostOK) encodeFields(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	{
+		if s.NextURL.Set {
+			e.FieldStart("next_url")
+			s.NextURL.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIHproxyParseListPostOK = [1]string{
+var jsonFieldsNameOfAPIHproxyParseListPostOK = [2]string{
 	0: "results",
+	1: "next_url",
 }
 
 // Decode decodes APIHproxyParseListPostOK from json.
@@ -3117,6 +3141,16 @@ func (s *APIHproxyParseListPostOK) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"results\"")
+			}
+		case "next_url":
+			if err := func() error {
+				s.NextURL.Reset()
+				if err := s.NextURL.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"next_url\"")
 			}
 		default:
 			return d.Skip()
@@ -6237,6 +6271,41 @@ func (s OptBool) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptBool) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes int as json.
+func (o OptInt) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Int(int(o.Value))
+}
+
+// Decode decodes int from json.
+func (o *OptInt) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptInt to nil")
+	}
+	o.Set = true
+	v, err := d.Int()
+	if err != nil {
+		return err
+	}
+	o.Value = int(v)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptInt) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptInt) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

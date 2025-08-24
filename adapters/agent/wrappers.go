@@ -95,11 +95,11 @@ func (c *Client) HProxyList(ctx context.Context, agentID uuid.UUID, u url.URL) (
 	return adapter.HProxyList(ctx, u)
 }
 
-func (c *Client) HProxyBook(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.Book, error) {
+func (c *Client) HProxyBook(ctx context.Context, agentID uuid.UUID, u url.URL, pageLimit *int) (hproxymodel.Book, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return hproxymodel.Book{}, err
 	}
 
-	return adapter.HProxyBook(ctx, u)
+	return adapter.HProxyBook(ctx, u, pageLimit)
 }

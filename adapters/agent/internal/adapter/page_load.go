@@ -15,7 +15,7 @@ func (a *Adapter) PageLoad(ctx context.Context, url agentmodel.AgentPageURL) (io
 		ImageURL: url.ImageURL,
 	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {

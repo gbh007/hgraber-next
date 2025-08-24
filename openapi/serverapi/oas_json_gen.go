@@ -17356,10 +17356,17 @@ func (s *APIHproxyBookPostReq) encodeFields(e *jx.Encoder) {
 		e.FieldStart("url")
 		json.EncodeURI(e, s.URL)
 	}
+	{
+		if s.PageLimit.Set {
+			e.FieldStart("page_limit")
+			s.PageLimit.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIHproxyBookPostReq = [1]string{
+var jsonFieldsNameOfAPIHproxyBookPostReq = [2]string{
 	0: "url",
+	1: "page_limit",
 }
 
 // Decode decodes APIHproxyBookPostReq from json.
@@ -17382,6 +17389,16 @@ func (s *APIHproxyBookPostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"url\"")
+			}
+		case "page_limit":
+			if err := func() error {
+				s.PageLimit.Reset()
+				if err := s.PageLimit.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_limit\"")
 			}
 		default:
 			return d.Skip()

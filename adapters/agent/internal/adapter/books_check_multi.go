@@ -14,7 +14,7 @@ func (a *Adapter) BooksCheckMulti(ctx context.Context, u url.URL) ([]agentmodel.
 		URL: u,
 	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {

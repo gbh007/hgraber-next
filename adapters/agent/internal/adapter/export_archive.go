@@ -22,7 +22,7 @@ func (a *Adapter) ExportArchive(ctx context.Context, data agentmodel.AgentExport
 		},
 	)
 	if err != nil {
-		return err
+		return fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {

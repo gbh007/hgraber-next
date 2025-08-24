@@ -4593,6 +4593,8 @@ func (s *APIHproxyBookPostOKPagesItem) SetPreviewURL(val url.URL) {
 type APIHproxyBookPostReq struct {
 	// Ссылка для обработки.
 	URL url.URL `json:"url"`
+	// Ограничение на количество страниц для парсинга.
+	PageLimit OptInt `json:"page_limit"`
 }
 
 // GetURL returns the value of URL.
@@ -4600,9 +4602,19 @@ func (s *APIHproxyBookPostReq) GetURL() url.URL {
 	return s.URL
 }
 
+// GetPageLimit returns the value of PageLimit.
+func (s *APIHproxyBookPostReq) GetPageLimit() OptInt {
+	return s.PageLimit
+}
+
 // SetURL sets the value of URL.
 func (s *APIHproxyBookPostReq) SetURL(val url.URL) {
 	s.URL = val
+}
+
+// SetPageLimit sets the value of PageLimit.
+func (s *APIHproxyBookPostReq) SetPageLimit(val OptInt) {
+	s.PageLimit = val
 }
 
 type APIHproxyBookPostUnauthorized ErrorResponse
