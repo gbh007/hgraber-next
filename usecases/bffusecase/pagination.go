@@ -1,7 +1,7 @@
 package bffusecase
 
 // totalToPages - конвертирует количество данных в количество страниц
-func totalToPages(total int, onPageCount int) (pageCount int) {
+func totalToPages(total, onPageCount int) (pageCount int) {
 	pageCount = total / onPageCount
 
 	if total%onPageCount > 0 {
@@ -12,7 +12,7 @@ func totalToPages(total int, onPageCount int) (pageCount int) {
 }
 
 // generatePagination - генерирует последовательность страниц
-func generatePagination(currentPage int, pageCount int) []int {
+func generatePagination(currentPage, pageCount int) []int {
 	const (
 		leftPageCount   = 3
 		middlePageCount = 5
@@ -25,7 +25,7 @@ func generatePagination(currentPage int, pageCount int) []int {
 
 	// Если страниц меньше, чем максимально отображаемых, то отображаем их все
 	if pageCount <= maxLength {
-		for i := int(0); i < pageCount; i++ {
+		for i := range pageCount {
 			pages = append(pages, i+1)
 		}
 
@@ -33,7 +33,7 @@ func generatePagination(currentPage int, pageCount int) []int {
 	}
 
 	// Генерация первой тройки страниц
-	for i := int(0); i < leftPageCount; i++ {
+	for i := range leftPageCount {
 		pages = append(pages, i+1)
 	}
 

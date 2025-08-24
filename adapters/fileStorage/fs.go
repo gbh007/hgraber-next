@@ -15,6 +15,7 @@ import (
 
 func (s *Storage) searchFS(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (uuid.UUID, error) {
 	startAt := time.Now()
+
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("search_fs", fsID, time.Since(startAt))
 	}()
@@ -33,6 +34,7 @@ func (s *Storage) searchFS(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUI
 
 func (s *Storage) getFS(ctx context.Context, fsID uuid.UUID, tryReconnect bool) (rawFileStorageData, error) {
 	startAt := time.Now()
+
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("get_fs", &fsID, time.Since(startAt))
 	}()
@@ -68,6 +70,7 @@ func (s *Storage) getFS(ctx context.Context, fsID uuid.UUID, tryReconnect bool) 
 
 func (s *Storage) FSChange(ctx context.Context, fsID uuid.UUID, deleted bool) error {
 	startAt := time.Now()
+
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("change_fs", &fsID, time.Since(startAt))
 	}()

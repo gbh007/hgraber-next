@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *MassloadController) APIMassloadInfoDeletePost(ctx context.Context, req *serverapi.APIMassloadInfoDeletePostReq) (serverapi.APIMassloadInfoDeletePostRes, error) {
+func (c *MassloadController) APIMassloadInfoDeletePost(
+	ctx context.Context,
+	req *serverapi.APIMassloadInfoDeletePostReq,
+) (serverapi.APIMassloadInfoDeletePostRes, error) {
 	err := c.massloadUseCases.DeleteMassload(ctx, req.ID)
 	if err != nil {
 		return &serverapi.APIMassloadInfoDeletePostInternalServerError{

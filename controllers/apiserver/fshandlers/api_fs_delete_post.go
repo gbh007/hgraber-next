@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsDeletePost(ctx context.Context, req *serverapi.APIFsDeletePostReq) (serverapi.APIFsDeletePostRes, error) {
+func (c *FSHandlersController) APIFsDeletePost(
+	ctx context.Context,
+	req *serverapi.APIFsDeletePostReq,
+) (serverapi.APIFsDeletePostRes, error) {
 	err := c.fsUseCases.DeleteFileStorage(ctx, req.ID)
 	if err != nil {
 		return &serverapi.APIFsDeletePostInternalServerError{

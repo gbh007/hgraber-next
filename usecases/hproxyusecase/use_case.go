@@ -31,7 +31,11 @@ type storage interface {
 
 type agentSystem interface {
 	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
-	PagesCheck(ctx context.Context, agentID uuid.UUID, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error)
+	PagesCheck(
+		ctx context.Context,
+		agentID uuid.UUID,
+		urls []agentmodel.AgentPageURL,
+	) ([]agentmodel.AgentPageCheckResult, error)
 
 	PageLoad(ctx context.Context, agentID uuid.UUID, url agentmodel.AgentPageURL) (io.Reader, error)
 

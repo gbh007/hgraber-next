@@ -17,7 +17,11 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) NewBooks(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.FirstHandleMultipleResult, error) {
+func (uc *UseCase) NewBooks(
+	ctx context.Context,
+	urls []url.URL,
+	flags parsing.ParseFlags,
+) (parsing.FirstHandleMultipleResult, error) {
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParse: true,
 	})

@@ -82,6 +82,7 @@ func (w *Unit[T]) Name() string {
 
 func (w *Unit[T]) handleOne(ctx context.Context, value T) (err error) {
 	tStart := time.Now()
+
 	defer func() {
 		w.metricProvider.RegisterWorkerExecutionTaskTime(w.name, time.Since(tStart), err == nil)
 	}()

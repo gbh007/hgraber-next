@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *HProxyHandlersController) APIHproxyFileGet(ctx context.Context, params serverapi.APIHproxyFileGetParams) (serverapi.APIHproxyFileGetRes, error) {
+func (c *HProxyHandlersController) APIHproxyFileGet(
+	ctx context.Context,
+	params serverapi.APIHproxyFileGetParams,
+) (serverapi.APIHproxyFileGetRes, error) {
 	r, err := c.hProxyUseCases.Image(ctx, params.BookURL, params.ImageURL)
 	if err != nil {
 		return &serverapi.APIHproxyFileGetInternalServerError{

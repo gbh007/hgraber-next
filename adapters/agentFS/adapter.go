@@ -12,9 +12,9 @@ import (
 )
 
 type agentController interface {
-	FSCreate(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID, body io.Reader) error
-	FSDelete(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) error
-	FSGet(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) (io.Reader, error)
+	FSCreate(ctx context.Context, agentID, fileID uuid.UUID, body io.Reader) error
+	FSDelete(ctx context.Context, agentID, fileID uuid.UUID) error
+	FSGet(ctx context.Context, agentID, fileID uuid.UUID) (io.Reader, error)
 	FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (fsmodel.FSState, error)
 }
 

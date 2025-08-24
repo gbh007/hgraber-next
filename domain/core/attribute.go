@@ -94,6 +94,7 @@ func (ar AttributeRemap) IsDelete() bool {
 	return ar.ToCode == "" || ar.ToValue == ""
 }
 
+// TODO: очень много отрицаний для функции, надо сделать зеркальную
 func (ar AttributeRemap) IsNoRemap() bool {
 	return ar.Code == ar.ToCode && ar.Value == ar.ToValue
 }

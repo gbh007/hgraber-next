@@ -104,7 +104,10 @@ func (d *Database) DeleteBookOriginAttributes(ctx context.Context, bookID uuid.U
 }
 
 func (d *Database) BookOriginAttributesCount(ctx context.Context) ([]core.AttributeVariant, error) {
-	rows, err := d.pool.Query(ctx, `SELECT COUNT(*), attr, UNNEST(values) as value FROM book_origin_attributes GROUP BY attr, value;`)
+	rows, err := d.pool.Query(
+		ctx,
+		`SELECT COUNT(*), attr, UNNEST(values) as value FROM book_origin_attributes GROUP BY attr, value;`,
+	)
 	if err != nil {
 		return nil, fmt.Errorf("get attributes count: %w", err)
 	}

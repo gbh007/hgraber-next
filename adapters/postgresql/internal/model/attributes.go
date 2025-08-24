@@ -39,6 +39,7 @@ func AttributeScanner(attribute *core.Attribute) RowScanner {
 		return nil
 	}
 }
+
 func AttributeRemapColumns() []string {
 	return []string{
 		"attr",

@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookStatusSetPost(ctx context.Context, req *serverapi.APIBookStatusSetPostReq) (serverapi.APIBookStatusSetPostRes, error) {
+func (c *BookHandlersController) APIBookStatusSetPost(
+	ctx context.Context,
+	req *serverapi.APIBookStatusSetPostReq,
+) (serverapi.APIBookStatusSetPostRes, error) {
 	var err error
 
 	switch req.Status {

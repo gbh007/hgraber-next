@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *LabelHandlersController) APILabelPresetGetPost(ctx context.Context, req *serverapi.APILabelPresetGetPostReq) (serverapi.APILabelPresetGetPostRes, error) {
+func (c *LabelHandlersController) APILabelPresetGetPost(
+	ctx context.Context,
+	req *serverapi.APILabelPresetGetPostReq,
+) (serverapi.APILabelPresetGetPostRes, error) {
 	raw, err := c.labelUseCases.LabelPreset(ctx, req.Name)
 	if err != nil {
 		return &serverapi.APILabelPresetGetPostInternalServerError{

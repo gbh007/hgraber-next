@@ -25,7 +25,10 @@ func (uc *UseCase) CleanDeletedRebuilds(_ context.Context) (systemmodel.Runnable
 	}), nil
 }
 
-func (uc *UseCase) cleanDeletedRebuilds(ctx context.Context, taskResult systemmodel.TaskResultWriter) (ids []uuid.UUID, err error) {
+func (uc *UseCase) cleanDeletedRebuilds(
+	ctx context.Context,
+	taskResult systemmodel.TaskResultWriter,
+) (ids []uuid.UUID, err error) {
 	taskResult.StartStage("search deleted rebuilds")
 
 	ids, err = uc.storage.BookIDsWithDeletedRebuilds(ctx)

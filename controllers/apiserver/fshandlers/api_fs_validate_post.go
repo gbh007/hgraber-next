@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsValidatePost(ctx context.Context, req *serverapi.APIFsValidatePostReq) (serverapi.APIFsValidatePostRes, error) {
+func (c *FSHandlersController) APIFsValidatePost(
+	ctx context.Context,
+	req *serverapi.APIFsValidatePostReq,
+) (serverapi.APIFsValidatePostRes, error) {
 	err := c.fsUseCases.ValidateFS(ctx, req.ID)
 	if err != nil {
 		return &serverapi.APIFsValidatePostInternalServerError{

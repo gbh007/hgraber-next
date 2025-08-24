@@ -13,7 +13,10 @@ import (
 	"github.com/gbh007/hgraber-next/external"
 )
 
-func (uc *UseCase) ArchiveEntryPercentage(ctx context.Context, archiveBody io.Reader) ([]core.DeduplicateArchiveResult, error) {
+func (uc *UseCase) ArchiveEntryPercentage(
+	ctx context.Context,
+	archiveBody io.Reader,
+) ([]core.DeduplicateArchiveResult, error) {
 	bodyRaw, err := io.ReadAll(archiveBody)
 	if err != nil {
 		return nil, fmt.Errorf("read archive body: %w", err)

@@ -50,6 +50,7 @@ func (dq *DataQueue[T]) PopOne() (T, bool) {
 
 	if len(dq.queue) == 0 {
 		var empty T
+
 		return empty, false
 	}
 

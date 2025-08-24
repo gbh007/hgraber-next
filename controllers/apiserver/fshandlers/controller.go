@@ -22,7 +22,10 @@ type SystemUseCases interface {
 }
 
 type FSUseCases interface {
-	FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]fsmodel.FSWithStatus, error)
+	FileStoragesWithStatus(
+		ctx context.Context,
+		includeDBInfo, includeAvailableSizeInfo bool,
+	) ([]fsmodel.FSWithStatus, error)
 	FileStorage(ctx context.Context, id uuid.UUID) (fsmodel.FileStorageSystem, error)
 	NewFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) (uuid.UUID, error)
 	UpdateFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) error

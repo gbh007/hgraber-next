@@ -15,7 +15,11 @@ import (
 	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
-func (uc *UseCase) NewBooksMulti(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.MultiHandleMultipleResult, error) {
+func (uc *UseCase) NewBooksMulti(
+	ctx context.Context,
+	urls []url.URL,
+	flags parsing.ParseFlags,
+) (parsing.MultiHandleMultipleResult, error) {
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParseMulti: true,
 	})

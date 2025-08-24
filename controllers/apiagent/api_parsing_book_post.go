@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APIParsingBookPost(ctx context.Context, req *agentapi.APIParsingBookPostReq) (agentapi.APIParsingBookPostRes, error) {
+func (c *Controller) APIParsingBookPost(
+	ctx context.Context,
+	req *agentapi.APIParsingBookPostReq,
+) (agentapi.APIParsingBookPostRes, error) {
 	details, err := c.parsingUseCases.BookByURL(ctx, req.URL)
 	if err != nil {
 		return &agentapi.APIParsingBookPostInternalServerError{
@@ -28,12 +31,15 @@ func (c *Controller) APIParsingBookPost(ctx context.Context, req *agentapi.APIPa
 		URL:       u,
 		Name:      details.Book.Name,
 		PageCount: details.Book.PageCount,
-		Attributes: pkg.MapToSlice(details.Attributes, func(code string, values []string) agentapi.BookDetailsAttributesItem {
-			return agentapi.BookDetailsAttributesItem{
-				Code:   agentapi.BookDetailsAttributesItemCode(code),
-				Values: values,
-			}
-		}),
+		Attributes: pkg.MapToSlice(
+			details.Attributes,
+			func(code string, values []string) agentapi.BookDetailsAttributesItem {
+				return agentapi.BookDetailsAttributesItem{
+					Code:   agentapi.BookDetailsAttributesItemCode(code),
+					Values: values,
+				}
+			},
+		),
 		Pages: pkg.Map(details.Pages, func(p core.Page) agentapi.BookDetailsPagesItem {
 			var u url.URL
 

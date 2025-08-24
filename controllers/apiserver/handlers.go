@@ -39,7 +39,8 @@ func methodNotAllowed(w http.ResponseWriter, r *http.Request, allowed string) {
 
 func methodNotFound(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(http.StatusInternalServerError) // Специально не делаем 404, т.к. на нее может быть завязано особое поведение метода
+	// Специально не делаем 404, т.к. на нее может быть завязано особое поведение метода
+	w.WriteHeader(http.StatusInternalServerError)
 
 	if r.Method != http.MethodOptions {
 		// TODO: не игнорировать ошибку
@@ -77,9 +78,9 @@ func stackTrace(skip, count int) []string {
 
 func (c *Controller) methodErrorHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, err error) {
 	var (
-		httpCode         int    = http.StatusInternalServerError
-		errorCode        string = "internal error"
-		errorDescription string = "missing error"
+		httpCode         = http.StatusInternalServerError
+		errorCode        = "internal error"
+		errorDescription = "missing error"
 	)
 
 	if err != nil {
@@ -124,7 +125,10 @@ func (c *Controller) methodErrorHandler(ctx context.Context, w http.ResponseWrit
 	})
 }
 
-func (c *Controller) simplePanicRecover(req middleware.Request, next middleware.Next) (returnedResponse middleware.Response, returnedError error) {
+func (c *Controller) simplePanicRecover(
+	req middleware.Request,
+	next middleware.Next,
+) (returnedResponse middleware.Response, returnedError error) {
 	defer func() {
 		p := recover()
 		if p != nil {

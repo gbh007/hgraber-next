@@ -57,7 +57,12 @@ func (uc *UseCase) rebuildBookCleanSource(
 
 			err = uc.storage.MarkPageAsDeleted(ctx, page.BookID, page.PageNumber)
 			if err != nil {
-				return fmt.Errorf("storage: mark page (%s,%d) as deleted: %w", page.BookID.String(), page.PageNumber, err)
+				return fmt.Errorf(
+					"storage: mark page (%s,%d) as deleted: %w",
+					page.BookID.String(),
+					page.PageNumber,
+					err,
+				)
 			}
 		}
 

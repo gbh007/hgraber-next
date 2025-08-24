@@ -30,7 +30,10 @@ func (uc *UseCase) RemoveDetachedFiles(_ context.Context) (systemmodel.RunnableT
 	}), nil
 }
 
-func (uc *UseCase) removeDetachedFiles(ctx context.Context, taskResult systemmodel.TaskResultWriter) (count int, size int64, err error) {
+func (uc *UseCase) removeDetachedFiles(
+	ctx context.Context,
+	taskResult systemmodel.TaskResultWriter,
+) (count int, size int64, err error) {
 	ctx, span := uc.tracer.Start(ctx, "RemoveDetachedFiles")
 	defer span.End()
 

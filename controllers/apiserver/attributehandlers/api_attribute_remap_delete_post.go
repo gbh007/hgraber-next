@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AttributeHandlersController) APIAttributeRemapDeletePost(ctx context.Context, req *serverapi.APIAttributeRemapDeletePostReq) (serverapi.APIAttributeRemapDeletePostRes, error) {
+func (c *AttributeHandlersController) APIAttributeRemapDeletePost(
+	ctx context.Context,
+	req *serverapi.APIAttributeRemapDeletePostReq,
+) (serverapi.APIAttributeRemapDeletePostRes, error) {
 	err := c.attributeUseCases.DeleteAttributeRemap(ctx, req.Code, req.Value)
 	if err != nil {
 		return &serverapi.APIAttributeRemapDeletePostInternalServerError{

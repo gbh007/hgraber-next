@@ -241,7 +241,8 @@ func (d *Database) AttributesFileSize(ctx context.Context, attrs map[string][]st
 		`f.md5_sum`,
 		`f.sha256_sum`,
 	).
-		PlaceholderFormat(squirrel.Question). // Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+		// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+		PlaceholderFormat(squirrel.Question).
 		From(`files f`).
 		InnerJoin(`pages p ON f.id = p.file_id`).
 		InnerJoin(`book_attributes ba ON ba.book_id = p.book_id`).

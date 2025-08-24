@@ -52,9 +52,13 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]agentmodel.BookWithAgent
 			break
 		}
 
-		booksInfo, err := uc.agentSystem.BooksCheck(ctx, agent.ID, pkg.MapToSlice(urlMap, func(_ url.URL, b core.Book) url.URL {
-			return *b.OriginURL
-		}))
+		booksInfo, err := uc.agentSystem.BooksCheck(
+			ctx,
+			agent.ID,
+			pkg.MapToSlice(urlMap, func(_ url.URL, b core.Book) url.URL {
+				return *b.OriginURL
+			}),
+		)
 
 		if errors.Is(err, agentmodel.AgentAPIOffline) {
 			uc.logger.DebugContext(

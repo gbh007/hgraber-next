@@ -10,7 +10,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *BookHandlersController) APIBookListPost(ctx context.Context, req *serverapi.BookFilter) (serverapi.APIBookListPostRes, error) {
+func (c *BookHandlersController) APIBookListPost(
+	ctx context.Context,
+	req *serverapi.BookFilter,
+) (serverapi.APIBookListPostRes, error) {
 	filter := apiservercore.ConvertAPIBookFilter(*req)
 
 	bookList, err := c.bffUseCases.BookList(ctx, filter)
@@ -26,14 +29,17 @@ func (c *BookHandlersController) APIBookListPost(ctx context.Context, req *serve
 			return serverapi.APIBookListPostOKBooksItem{
 				Info: c.apiCore.ConvertSimpleBook(b.Book, b.PreviewPage),
 				Tags: b.Tags,
-				ColorAttributes: pkg.Map(b.ColorAttributes, func(attr core.AttributeColor) serverapi.APIBookListPostOKBooksItemColorAttributesItem {
-					return serverapi.APIBookListPostOKBooksItemColorAttributesItem{
-						Code:            attr.Code,
-						Value:           attr.Value,
-						TextColor:       attr.TextColor,
-						BackgroundColor: attr.BackgroundColor,
-					}
-				}),
+				ColorAttributes: pkg.Map(
+					b.ColorAttributes,
+					func(attr core.AttributeColor) serverapi.APIBookListPostOKBooksItemColorAttributesItem {
+						return serverapi.APIBookListPostOKBooksItemColorAttributesItem{
+							Code:            attr.Code,
+							Value:           attr.Value,
+							TextColor:       attr.TextColor,
+							BackgroundColor: attr.BackgroundColor,
+						}
+					},
+				),
 			}
 		}),
 		Pages: pkg.Map(bookList.Pages, func(v int) serverapi.APIBookListPostOKPagesItem {

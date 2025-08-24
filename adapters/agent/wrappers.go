@@ -20,7 +20,11 @@ func (c *Client) BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) 
 	return adapter.BookParse(ctx, url)
 }
 
-func (c *Client) BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error) {
+func (c *Client) BooksCheck(
+	ctx context.Context,
+	agentID uuid.UUID,
+	urls []url.URL,
+) ([]agentmodel.AgentBookCheckResult, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return nil, err
@@ -29,7 +33,11 @@ func (c *Client) BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.U
 	return adapter.BooksCheck(ctx, urls)
 }
 
-func (c *Client) BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]agentmodel.AgentBookCheckResult, error) {
+func (c *Client) BooksCheckMultiple(
+	ctx context.Context,
+	agentID uuid.UUID,
+	u url.URL,
+) ([]agentmodel.AgentBookCheckResult, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return nil, err
@@ -56,7 +64,11 @@ func (c *Client) PageLoad(ctx context.Context, agentID uuid.UUID, url agentmodel
 	return adapter.PageLoad(ctx, url)
 }
 
-func (c *Client) PagesCheck(ctx context.Context, agentID uuid.UUID, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error) {
+func (c *Client) PagesCheck(
+	ctx context.Context,
+	agentID uuid.UUID,
+	urls []agentmodel.AgentPageURL,
+) ([]agentmodel.AgentPageCheckResult, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return nil, err

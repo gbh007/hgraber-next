@@ -8,5 +8,6 @@ import (
 
 type PageForDownloadWithAgent struct {
 	core.PageForDownload
+
 	AgentID uuid.UUID
 }

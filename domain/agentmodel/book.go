@@ -8,6 +8,7 @@ import (
 
 type BookWithAgent struct {
 	core.Book
+
 	AgentID uuid.UUID
 }
 

@@ -9,7 +9,9 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *AttributeHandlersController) APIAttributeRemapListGet(ctx context.Context) (serverapi.APIAttributeRemapListGetRes, error) {
+func (c *AttributeHandlersController) APIAttributeRemapListGet(
+	ctx context.Context,
+) (serverapi.APIAttributeRemapListGetRes, error) {
 	colors, err := c.attributeUseCases.AttributeRemaps(ctx)
 	if err != nil {
 		return &serverapi.APIAttributeRemapListGetInternalServerError{

@@ -36,7 +36,11 @@ type storage interface {
 }
 
 type deduplicator interface {
-	BookAttributesCompare(ctx context.Context, originID, targetID uuid.UUID, useOrigin bool) (bff.BookAttributesCompareResult, error)
+	BookAttributesCompare(
+		ctx context.Context,
+		originID, targetID uuid.UUID,
+		useOrigin bool,
+	) (bff.BookAttributesCompareResult, error)
 	BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (bff.BookPagesCompareResult, error)
 }
 

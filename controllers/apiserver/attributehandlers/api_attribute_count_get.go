@@ -9,7 +9,9 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *AttributeHandlersController) APIAttributeCountGet(ctx context.Context) (serverapi.APIAttributeCountGetRes, error) {
+func (c *AttributeHandlersController) APIAttributeCountGet(
+	ctx context.Context,
+) (serverapi.APIAttributeCountGetRes, error) {
 	attributes, err := c.attributeUseCases.AttributesCount(ctx)
 	if err != nil {
 		return &serverapi.APIAttributeCountGetInternalServerError{

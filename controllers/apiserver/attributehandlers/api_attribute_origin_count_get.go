@@ -9,7 +9,9 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *AttributeHandlersController) APIAttributeOriginCountGet(ctx context.Context) (serverapi.APIAttributeOriginCountGetRes, error) {
+func (c *AttributeHandlersController) APIAttributeOriginCountGet(
+	ctx context.Context,
+) (serverapi.APIAttributeOriginCountGetRes, error) {
 	attributes, err := c.attributeUseCases.BookOriginAttributesCount(ctx)
 	if err != nil {
 		return &serverapi.APIAttributeOriginCountGetInternalServerError{
@@ -19,12 +21,15 @@ func (c *AttributeHandlersController) APIAttributeOriginCountGet(ctx context.Con
 	}
 
 	return &serverapi.APIAttributeOriginCountGetOK{
-		Attributes: pkg.Map(attributes, func(raw core.AttributeVariant) serverapi.APIAttributeOriginCountGetOKAttributesItem {
-			return serverapi.APIAttributeOriginCountGetOKAttributesItem{
-				Code:  raw.Code,
-				Value: raw.Value,
-				Count: raw.Count,
-			}
-		}),
+		Attributes: pkg.Map(
+			attributes,
+			func(raw core.AttributeVariant) serverapi.APIAttributeOriginCountGetOKAttributesItem {
+				return serverapi.APIAttributeOriginCountGetOKAttributesItem{
+					Code:  raw.Code,
+					Value: raw.Value,
+					Count: raw.Count,
+				}
+			},
+		),
 	}, nil
 }

@@ -27,9 +27,7 @@ func AgentColumns() []string {
 
 func AgentScanner(agent *core.Agent) RowScanner {
 	return func(rows pgx.Rows) error {
-		var (
-			u string
-		)
+		var u string
 
 		err := rows.Scan(
 			&agent.ID,

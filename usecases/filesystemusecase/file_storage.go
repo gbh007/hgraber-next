@@ -11,7 +11,10 @@ import (
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
-func (uc *UseCase) FileStoragesWithStatus(ctx context.Context, includeDBInfo, includeAvailableSizeInfo bool) ([]fsmodel.FSWithStatus, error) {
+func (uc *UseCase) FileStoragesWithStatus(
+	ctx context.Context,
+	includeDBInfo, includeAvailableSizeInfo bool,
+) ([]fsmodel.FSWithStatus, error) {
 	storages, err := uc.fileStorage.FSList(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("file storage: get fs list: %w", err)

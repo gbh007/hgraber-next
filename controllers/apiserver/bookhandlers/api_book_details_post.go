@@ -11,7 +11,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *BookHandlersController) APIBookDetailsPost(ctx context.Context, req *serverapi.APIBookDetailsPostReq) (serverapi.APIBookDetailsPostRes, error) {
+func (c *BookHandlersController) APIBookDetailsPost(
+	ctx context.Context,
+	req *serverapi.APIBookDetailsPostReq,
+) (serverapi.APIBookDetailsPostRes, error) {
 	book, err := c.bffUseCases.BookDetails(ctx, req.ID)
 	if errors.Is(err, core.BookNotFoundError) {
 		return &serverapi.APIBookDetailsPostNotFound{
@@ -54,16 +57,19 @@ func (c *BookHandlersController) APIBookDetailsPost(ctx context.Context, req *se
 			},
 			Set: book.Size.Total > 0,
 		},
-		FsDisposition: pkg.Map(book.FSDisposition, func(raw bff.BookDetailsFSDisposition) serverapi.APIBookDetailsPostOKFsDispositionItem {
-			return serverapi.APIBookDetailsPostOKFsDispositionItem{
-				ID:   raw.ID,
-				Name: raw.Name,
-				Files: serverapi.FSDBFilesInfo{
-					Count:         raw.Count,
-					Size:          raw.Size,
-					SizeFormatted: core.PrettySize(raw.Size),
-				},
-			}
-		}),
+		FsDisposition: pkg.Map(
+			book.FSDisposition,
+			func(raw bff.BookDetailsFSDisposition) serverapi.APIBookDetailsPostOKFsDispositionItem {
+				return serverapi.APIBookDetailsPostOKFsDispositionItem{
+					ID:   raw.ID,
+					Name: raw.Name,
+					Files: serverapi.FSDBFilesInfo{
+						Count:         raw.Count,
+						Size:          raw.Size,
+						SizeFormatted: core.PrettySize(raw.Size),
+					},
+				}
+			},
+		),
 	}, nil
 }

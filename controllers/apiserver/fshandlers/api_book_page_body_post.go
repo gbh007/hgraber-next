@@ -10,7 +10,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIBookPageBodyPost(ctx context.Context, req *serverapi.APIBookPageBodyPostReq) (serverapi.APIBookPageBodyPostRes, error) {
+func (c *FSHandlersController) APIBookPageBodyPost(
+	ctx context.Context,
+	req *serverapi.APIBookPageBodyPostReq,
+) (serverapi.APIBookPageBodyPostRes, error) {
 	var (
 		body      io.Reader
 		err       error

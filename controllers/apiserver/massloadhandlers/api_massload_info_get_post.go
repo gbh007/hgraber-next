@@ -10,7 +10,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *MassloadController) APIMassloadInfoGetPost(ctx context.Context, req *serverapi.APIMassloadInfoGetPostReq) (serverapi.APIMassloadInfoGetPostRes, error) {
+func (c *MassloadController) APIMassloadInfoGetPost(
+	ctx context.Context,
+	req *serverapi.APIMassloadInfoGetPostReq,
+) (serverapi.APIMassloadInfoGetPostRes, error) {
 	ml, err := c.massloadUseCases.Massload(ctx, req.ID)
 	if err != nil {
 		return &serverapi.APIMassloadInfoGetPostInternalServerError{
@@ -36,12 +39,15 @@ func convertMassloadInfo(ml massloadmodel.Massload) serverapi.MassloadInfo {
 		FileSizeFormatted: apiservercore.OptString(core.PrettySizePointer(ml.FileSize)),
 		CreatedAt:         ml.CreatedAt,
 		UpdatedAt:         apiservercore.OptTime(ml.UpdatedAt),
-		ExternalLinks: pkg.Map(ml.ExternalLinks, func(link massloadmodel.ExternalLink) serverapi.MassloadInfoExternalLinksItem {
-			return serverapi.MassloadInfoExternalLinksItem{
-				URL:       link.URL,
-				CreatedAt: link.CreatedAt,
-			}
-		}),
+		ExternalLinks: pkg.Map(
+			ml.ExternalLinks,
+			func(link massloadmodel.ExternalLink) serverapi.MassloadInfoExternalLinksItem {
+				return serverapi.MassloadInfoExternalLinksItem{
+					URL:       link.URL,
+					CreatedAt: link.CreatedAt,
+				}
+			},
+		),
 		Attributes: pkg.Map(ml.Attributes, func(attr massloadmodel.Attribute) serverapi.MassloadInfoAttributesItem {
 			return serverapi.MassloadInfoAttributesItem{
 				Code:              attr.Code,

@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APIParsingBookCheckPost(ctx context.Context, req *agentapi.APIParsingBookCheckPostReq) (agentapi.APIParsingBookCheckPostRes, error) {
+func (c *Controller) APIParsingBookCheckPost(
+	ctx context.Context,
+	req *agentapi.APIParsingBookCheckPostReq,
+) (agentapi.APIParsingBookCheckPostRes, error) {
 	result, err := c.parsingUseCases.BooksExists(ctx, req.Urls)
 	if err != nil {
 		return &agentapi.APIParsingBookCheckPostInternalServerError{

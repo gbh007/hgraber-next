@@ -13,7 +13,11 @@ import (
 )
 
 // TODO: по факту для этого метода не нужны превью, подумать над выделением в BFF.
-func (uc *UseCase) BooksByPage(ctx context.Context, bookID uuid.UUID, pageNumber int) ([]bff.BookWithPreviewPage, error) {
+func (uc *UseCase) BooksByPage(
+	ctx context.Context,
+	bookID uuid.UUID,
+	pageNumber int,
+) ([]bff.BookWithPreviewPage, error) {
 	originPage, err := uc.storage.BookPageWithHash(ctx, bookID, pageNumber)
 	if err != nil {
 		return nil, fmt.Errorf("get origin page: %w", err)

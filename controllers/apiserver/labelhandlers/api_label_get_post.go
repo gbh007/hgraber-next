@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *LabelHandlersController) APILabelGetPost(ctx context.Context, req *serverapi.APILabelGetPostReq) (serverapi.APILabelGetPostRes, error) {
+func (c *LabelHandlersController) APILabelGetPost(
+	ctx context.Context,
+	req *serverapi.APILabelGetPostReq,
+) (serverapi.APILabelGetPostRes, error) {
 	labels, err := c.labelUseCases.Labels(ctx, req.BookID)
 	if err != nil {
 		return &serverapi.APILabelGetPostInternalServerError{

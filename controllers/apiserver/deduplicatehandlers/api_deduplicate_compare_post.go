@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *DeduplicateHandlersController) APIDeduplicateComparePost(ctx context.Context, req *serverapi.APIDeduplicateComparePostReq) (serverapi.APIDeduplicateComparePostRes, error) {
+func (c *DeduplicateHandlersController) APIDeduplicateComparePost(
+	ctx context.Context,
+	req *serverapi.APIDeduplicateComparePostReq,
+) (serverapi.APIDeduplicateComparePostRes, error) {
 	data, err := c.bffUseCases.BookCompare(ctx, req.OriginBookID, req.TargetBookID)
 	if err != nil {
 		return &serverapi.APIDeduplicateComparePostInternalServerError{

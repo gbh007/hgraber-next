@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AttributeHandlersController) APIAttributeRemapGetPost(ctx context.Context, req *serverapi.APIAttributeRemapGetPostReq) (serverapi.APIAttributeRemapGetPostRes, error) {
+func (c *AttributeHandlersController) APIAttributeRemapGetPost(
+	ctx context.Context,
+	req *serverapi.APIAttributeRemapGetPostReq,
+) (serverapi.APIAttributeRemapGetPostRes, error) {
 	ar, err := c.attributeUseCases.AttributeRemap(ctx, req.Code, req.Value)
 	if err != nil {
 		return &serverapi.APIAttributeRemapGetPostInternalServerError{

@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *DeduplicateHandlersController) APIDeduplicateArchivePost(ctx context.Context, req serverapi.APIDeduplicateArchivePostReq) (serverapi.APIDeduplicateArchivePostRes, error) {
+func (c *DeduplicateHandlersController) APIDeduplicateArchivePost(
+	ctx context.Context,
+	req serverapi.APIDeduplicateArchivePostReq,
+) (serverapi.APIDeduplicateArchivePostRes, error) {
 	data, err := c.deduplicateUseCases.ArchiveEntryPercentage(ctx, req.Data)
 	if err != nil {
 		return &serverapi.APIDeduplicateArchivePostInternalServerError{
@@ -18,14 +21,16 @@ func (c *DeduplicateHandlersController) APIDeduplicateArchivePost(ctx context.Co
 		}, nil
 	}
 
-	result := serverapi.APIDeduplicateArchivePostOKApplicationJSON(pkg.Map(data, func(raw core.DeduplicateArchiveResult) serverapi.APIDeduplicateArchivePostOKItem {
-		return serverapi.APIDeduplicateArchivePostOKItem{
-			BookID:                 raw.TargetBookID,
-			BookOriginURL:          apiservercore.OptURL(raw.OriginBookURL),
-			EntryPercentage:        raw.EntryPercentage,
-			ReverseEntryPercentage: raw.ReverseEntryPercentage,
-		}
-	}))
+	result := serverapi.APIDeduplicateArchivePostOKApplicationJSON(
+		pkg.Map(data, func(raw core.DeduplicateArchiveResult) serverapi.APIDeduplicateArchivePostOKItem {
+			return serverapi.APIDeduplicateArchivePostOKItem{
+				BookID:                 raw.TargetBookID,
+				BookOriginURL:          apiservercore.OptURL(raw.OriginBookURL),
+				EntryPercentage:        raw.EntryPercentage,
+				ReverseEntryPercentage: raw.ReverseEntryPercentage,
+			}
+		}),
+	)
 
 	return &result, nil
 }

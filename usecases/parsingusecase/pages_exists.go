@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 )
 
-func (uc *UseCase) PagesExists(ctx context.Context, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error) {
+func (uc *UseCase) PagesExists(
+	ctx context.Context,
+	urls []agentmodel.AgentPageURL,
+) ([]agentmodel.AgentPageCheckResult, error) {
 	result := make([]agentmodel.AgentPageCheckResult, 0, len(urls))
 
 urlLoop:

@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookRawPost(ctx context.Context, req *serverapi.APIBookRawPostReq) (serverapi.APIBookRawPostRes, error) {
+func (c *BookHandlersController) APIBookRawPost(
+	ctx context.Context,
+	req *serverapi.APIBookRawPostReq,
+) (serverapi.APIBookRawPostRes, error) {
 	var (
 		book      core.BookContainer
 		err       error

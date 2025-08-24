@@ -78,8 +78,10 @@ func (d *Database) squirrelDebugLog(ctx context.Context, query string, args []an
 	)
 }
 
-var _ pgx.QueryTracer = (*pgxTracer)(nil)
-var _ pgx.BatchTracer = (*pgxTracer)(nil)
+var (
+	_ pgx.QueryTracer = (*pgxTracer)(nil)
+	_ pgx.BatchTracer = (*pgxTracer)(nil)
+)
 
 type pgxTracer struct {
 	logger *slog.Logger

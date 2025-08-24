@@ -10,7 +10,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *FSHandlersController) APIFsListPost(ctx context.Context, req *serverapi.APIFsListPostReq) (serverapi.APIFsListPostRes, error) {
+func (c *FSHandlersController) APIFsListPost(
+	ctx context.Context,
+	req *serverapi.APIFsListPostReq,
+) (serverapi.APIFsListPostRes, error) {
 	storages, err := c.fsUseCases.FileStoragesWithStatus(
 		ctx,
 		req.IncludeDbFileSize.Value,

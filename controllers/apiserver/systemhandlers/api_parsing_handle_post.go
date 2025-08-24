@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *SystemHandlersController) APIParsingHandlePost(ctx context.Context, req *serverapi.APIParsingHandlePostReq) (serverapi.APIParsingHandlePostRes, error) {
+func (c *SystemHandlersController) APIParsingHandlePost(
+	ctx context.Context,
+	req *serverapi.APIParsingHandlePostReq,
+) (serverapi.APIParsingHandlePostRes, error) {
 	if req.IsMulti.Value {
 		result, err := c.parseUseCases.NewBooksMulti(ctx, req.Urls, parsing.ParseFlags{
 			AutoVerify: req.AutoVerify.Value,
@@ -53,7 +56,9 @@ func (c *SystemHandlersController) APIParsingHandlePost(ctx context.Context, req
 	}, nil
 }
 
-func convertAPIParsingHandlePostOKDetails(raw []parsing.BookHandleResult) []serverapi.APIParsingHandlePostOKDetailsItem {
+func convertAPIParsingHandlePostOKDetails(
+	raw []parsing.BookHandleResult,
+) []serverapi.APIParsingHandlePostOKDetailsItem {
 	return pkg.Map(raw, func(b parsing.BookHandleResult) serverapi.APIParsingHandlePostOKDetailsItem {
 		return serverapi.APIParsingHandlePostOKDetailsItem{
 			URL:          b.URL,

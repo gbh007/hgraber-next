@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AgentHandlersController) APIAgentGetPost(ctx context.Context, req *serverapi.APIAgentGetPostReq) (serverapi.APIAgentGetPostRes, error) {
+func (c *AgentHandlersController) APIAgentGetPost(
+	ctx context.Context,
+	req *serverapi.APIAgentGetPostReq,
+) (serverapi.APIAgentGetPostRes, error) {
 	agent, err := c.agentUseCases.Agent(ctx, req.ID)
 
 	if errors.Is(err, core.AgentNotFoundError) {

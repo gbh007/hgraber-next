@@ -8,7 +8,9 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *SystemHandlersController) APISystemInfoWorkersGet(ctx context.Context) (serverapi.APISystemInfoWorkersGetRes, error) {
+func (c *SystemHandlersController) APISystemInfoWorkersGet(
+	ctx context.Context,
+) (serverapi.APISystemInfoWorkersGetRes, error) {
 	workers := c.systemUseCases.WorkersInfo(ctx)
 
 	return &serverapi.APISystemInfoWorkersGetOK{

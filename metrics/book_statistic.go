@@ -24,13 +24,31 @@ var (
 		"Данные размера книг",
 		nil, nil,
 	)
-	bookSizeBucket = []float64{megabyte, 5 * megabyte, 10 * megabyte, 30 * megabyte, 50 * megabyte, 100 * megabyte, 300 * megabyte, 600 * megabyte, gigabyte}
-	pageSizeDesc   = prometheus.NewDesc(
+	bookSizeBucket = []float64{
+		megabyte,
+		5 * megabyte,
+		10 * megabyte,
+		30 * megabyte,
+		50 * megabyte,
+		100 * megabyte,
+		300 * megabyte,
+		600 * megabyte,
+		gigabyte,
+	}
+	pageSizeDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(SystemName, SubSystemName, "statistic_page_size"),
 		"Данные размера страниц",
 		nil, nil,
 	)
-	pageSizeBucket        = []float64{50 * kilobyte, 200 * kilobyte, 500 * kilobyte, megabyte, 2 * megabyte, 5 * megabyte, 10 * megabyte}
+	pageSizeBucket = []float64{
+		50 * kilobyte,
+		200 * kilobyte,
+		500 * kilobyte,
+		megabyte,
+		2 * megabyte,
+		5 * megabyte,
+		10 * megabyte,
+	}
 	bookCountByAuthorDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(SystemName, SubSystemName, "statistic_books_by_author"),
 		"Данные количества книг у одного автора",
@@ -48,7 +66,15 @@ var (
 		"Данные размера страниц у одного автора",
 		nil, nil,
 	)
-	pagesSizeByAuthorBucket = []float64{50 * megabyte, 200 * megabyte, 500 * megabyte, gigabyte, 2 * gigabyte, 5 * gigabyte, 10 * gigabyte}
+	pagesSizeByAuthorBucket = []float64{
+		50 * megabyte,
+		200 * megabyte,
+		500 * megabyte,
+		gigabyte,
+		2 * gigabyte,
+		5 * gigabyte,
+		10 * gigabyte,
+	}
 )
 
 var _ prometheus.Collector = (*BookStatisticCollector)(nil)
@@ -81,10 +107,15 @@ func NewBookStatisticCollector() *BookStatisticCollector {
 
 func (c *BookStatisticCollector) Describe(desc chan<- *prometheus.Desc) {
 	desc <- pageInBookDesc
+
 	desc <- bookSizeDesc
+
 	desc <- pageSizeDesc
+
 	desc <- bookCountByAuthorDesc
+
 	desc <- pagesByAuthorDesc
+
 	desc <- pagesSizeByAuthorDesc
 }
 

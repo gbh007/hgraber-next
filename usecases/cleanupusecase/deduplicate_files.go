@@ -34,7 +34,10 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (systemmodel.RunnableTask
 	}), nil
 }
 
-func (uc *UseCase) deduplicateFiles(ctx context.Context, taskResult systemmodel.TaskResultWriter) (count int, size int64, err error) {
+func (uc *UseCase) deduplicateFiles(
+	ctx context.Context,
+	taskResult systemmodel.TaskResultWriter,
+) (count int, size int64, err error) {
 	ctx, span := uc.tracer.Start(ctx, "DeduplicateFiles")
 	defer span.End()
 

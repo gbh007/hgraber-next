@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *SystemHandlersController) APIParsingMirrorUpdatePost(ctx context.Context, req *serverapi.APIParsingMirrorUpdatePostReq) (serverapi.APIParsingMirrorUpdatePostRes, error) {
+func (c *SystemHandlersController) APIParsingMirrorUpdatePost(
+	ctx context.Context,
+	req *serverapi.APIParsingMirrorUpdatePostReq,
+) (serverapi.APIParsingMirrorUpdatePostRes, error) {
 	err := c.parseUseCases.UpdateMirror(ctx, parsing.URLMirror{
 		ID:          req.ID,
 		Name:        req.Name,

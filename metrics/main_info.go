@@ -90,7 +90,11 @@ func NewSystemInfoCollector(
 		}
 	}
 
-	err := RegisterWorkerInfoCollector(logger, infoProvider, time.Millisecond*100) // TODO: настраивать таймаут через конфиг
+	err := RegisterWorkerInfoCollector(
+		logger,
+		infoProvider,
+		time.Millisecond*100, // TODO: настраивать таймаут через конфиг
+	)
 	if err != nil {
 		return nil, fmt.Errorf("register worker collector: %w", err)
 	}
@@ -174,7 +178,6 @@ func (c *SystemInfoCollector) Start(ctx context.Context) (chan struct{}, error) 
 	return done, nil
 }
 
-//nolint:promlinter // ложно-положительное срабатывание
 func (c *SystemInfoCollector) collectMainInfo(ctx context.Context) {
 	tStart := time.Now()
 

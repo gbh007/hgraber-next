@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookRebuildPost(ctx context.Context, req *serverapi.APIBookRebuildPostReq) (serverapi.APIBookRebuildPostRes, error) {
+func (c *BookHandlersController) APIBookRebuildPost(
+	ctx context.Context,
+	req *serverapi.APIBookRebuildPostReq,
+) (serverapi.APIBookRebuildPostRes, error) {
 	id, err := c.rebuilderUseCases.RebuildBook(ctx, core.RebuildBookRequest{
 		ModifiedOldBook: apiservercore.ConvertBookRawToBookFull(&req.OldBook),
 		SelectedPages:   req.SelectedPages,

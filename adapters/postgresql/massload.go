@@ -173,20 +173,30 @@ func (d *Database) Massloads(ctx context.Context, filter massloadmodel.Filter) (
 	}
 
 	if len(filter.Fields.Flags) > 0 {
-		builder = builder.Where(squirrel.Expr("flags @> ?", filter.Fields.Flags)) // особенность библиотеки, необходимо использовать `?`
+		builder = builder.Where(
+			squirrel.Expr("flags @> ?", filter.Fields.Flags),
+		) // особенность библиотеки, необходимо использовать `?`
 	}
 
 	if len(filter.Fields.ExcludedFlags) > 0 {
-		builder = builder.Where(squirrel.Expr("NOT flags && ?", filter.Fields.ExcludedFlags)) // особенность библиотеки, необходимо использовать `?`
+		builder = builder.Where(
+			squirrel.Expr("NOT flags && ?", filter.Fields.ExcludedFlags),
+		) // особенность библиотеки, необходимо использовать `?`
 	}
 
 	if filter.Fields.ExternalLink != "" {
-		builder = builder.Where(squirrel.Expr("EXISTS (SELECT FROM massload_external_links WHERE massload_id = id AND url ILIKE ?)", "%"+filter.Fields.ExternalLink+"%")) // особенность библиотеки, необходимо использовать `?`
+		builder = builder.Where(
+			squirrel.Expr(
+				"EXISTS (SELECT FROM massload_external_links WHERE massload_id = id AND url ILIKE ?)",
+				"%"+filter.Fields.ExternalLink+"%",
+			),
+		) // особенность библиотеки, необходимо использовать `?`
 	}
 
 	for _, attrFilter := range filter.Fields.Attributes {
 		subBuilder := squirrel.Select("1").
-			PlaceholderFormat(squirrel.Question). // Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			PlaceholderFormat(squirrel.Question).
 			From("massload_attributes").
 			Where(squirrel.Eq{
 				"attr_code": attrFilter.Code,

@@ -14,7 +14,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFileIDGet(ctx context.Context, params serverapi.APIFileIDGetParams) (serverapi.APIFileIDGetRes, error) {
+func (c *FSHandlersController) APIFileIDGet(
+	ctx context.Context,
+	params serverapi.APIFileIDGetParams,
+) (serverapi.APIFileIDGetRes, error) {
 	fileID, err := uuid.Parse(strings.TrimSuffix(params.ID, path.Ext(params.ID)))
 	if err != nil {
 		return &serverapi.APIFileIDGetBadRequest{

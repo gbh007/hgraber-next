@@ -36,6 +36,7 @@ func (d *Database) SetDeadHash(ctx context.Context, hash core.DeadHash) error {
 
 	return nil
 }
+
 func (d *Database) SetDeadHashes(ctx context.Context, hashes []core.DeadHash) error {
 	batches := pkg.Batching(hashes, 5000)
 

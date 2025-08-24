@@ -9,7 +9,9 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *SystemHandlersController) APIParsingMirrorListGet(ctx context.Context) (serverapi.APIParsingMirrorListGetRes, error) {
+func (c *SystemHandlersController) APIParsingMirrorListGet(
+	ctx context.Context,
+) (serverapi.APIParsingMirrorListGetRes, error) {
 	mirrors, err := c.parseUseCases.Mirrors(ctx)
 	if err != nil {
 		return &serverapi.APIParsingMirrorListGetInternalServerError{

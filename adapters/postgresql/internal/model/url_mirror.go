@@ -20,9 +20,7 @@ func URLMirrorColumns() []string {
 
 func URLMirrorScanner(mirror *parsing.URLMirror) RowScanner {
 	return func(rows pgx.Rows) error {
-		var (
-			description sql.NullString
-		)
+		var description sql.NullString
 
 		err := rows.Scan(
 			&mirror.ID,

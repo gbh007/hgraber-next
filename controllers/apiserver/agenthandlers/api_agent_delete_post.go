@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AgentHandlersController) APIAgentDeletePost(ctx context.Context, req *serverapi.APIAgentDeletePostReq) (serverapi.APIAgentDeletePostRes, error) {
+func (c *AgentHandlersController) APIAgentDeletePost(
+	ctx context.Context,
+	req *serverapi.APIAgentDeletePostReq,
+) (serverapi.APIAgentDeletePostRes, error) {
 	err := c.agentUseCases.DeleteAgent(ctx, req.ID)
 
 	if errors.Is(err, core.AgentNotFoundError) {

@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *SystemHandlersController) APIParsingMirrorGetPost(ctx context.Context, req *serverapi.APIParsingMirrorGetPostReq) (serverapi.APIParsingMirrorGetPostRes, error) {
+func (c *SystemHandlersController) APIParsingMirrorGetPost(
+	ctx context.Context,
+	req *serverapi.APIParsingMirrorGetPostReq,
+) (serverapi.APIParsingMirrorGetPostRes, error) {
 	mirror, err := c.parseUseCases.Mirror(ctx, req.ID)
 	if err != nil {
 		return &serverapi.APIParsingMirrorGetPostInternalServerError{

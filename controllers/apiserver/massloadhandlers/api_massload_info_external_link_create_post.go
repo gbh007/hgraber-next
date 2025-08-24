@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *MassloadController) APIMassloadInfoExternalLinkCreatePost(ctx context.Context, req *serverapi.APIMassloadInfoExternalLinkCreatePostReq) (serverapi.APIMassloadInfoExternalLinkCreatePostRes, error) {
+func (c *MassloadController) APIMassloadInfoExternalLinkCreatePost(
+	ctx context.Context,
+	req *serverapi.APIMassloadInfoExternalLinkCreatePostReq,
+) (serverapi.APIMassloadInfoExternalLinkCreatePostRes, error) {
 	err := c.massloadUseCases.CreateMassloadExternalLink(ctx, req.MassloadID, req.URL)
 	if err != nil {
 		return &serverapi.APIMassloadInfoExternalLinkCreatePostInternalServerError{

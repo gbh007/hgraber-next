@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsUpdatePost(ctx context.Context, req *serverapi.APIFsUpdatePostReq) (serverapi.APIFsUpdatePostRes, error) {
+func (c *FSHandlersController) APIFsUpdatePost(
+	ctx context.Context,
+	req *serverapi.APIFsUpdatePostReq,
+) (serverapi.APIFsUpdatePostRes, error) {
 	err := c.fsUseCases.UpdateFileStorage(ctx, fsmodel.FileStorageSystem{
 		ID:                  req.ID,
 		Name:                req.Name,

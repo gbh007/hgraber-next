@@ -10,7 +10,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *serverapi.APIAgentListPostReq) (serverapi.APIAgentListPostRes, error) {
+func (c *AgentHandlersController) APIAgentListPost(
+	ctx context.Context,
+	req *serverapi.APIAgentListPostReq,
+) (serverapi.APIAgentListPostRes, error) {
 	agents, err := c.agentUseCases.Agents(ctx, core.AgentFilter{
 		CanParse:      req.CanParse.Value,
 		CanExport:     req.CanExport.Value,
@@ -54,21 +57,24 @@ func (c *AgentHandlersController) APIAgentListPost(ctx context.Context, req *ser
 
 			status = serverapi.NewOptAPIAgentListPostOKItemStatus(serverapi.APIAgentListPostOKItemStatus{
 				StartAt: serverapi.NewOptDateTime(agent.Status.StartAt),
-				Problems: pkg.Map(agent.Status.Problems, func(p agentmodel.AgentStatusProblem) serverapi.APIAgentListPostOKItemStatusProblemsItem {
-					t := serverapi.APIAgentListPostOKItemStatusProblemsItemTypeError
+				Problems: pkg.Map(
+					agent.Status.Problems,
+					func(p agentmodel.AgentStatusProblem) serverapi.APIAgentListPostOKItemStatusProblemsItem {
+						t := serverapi.APIAgentListPostOKItemStatusProblemsItemTypeError
 
-					switch {
-					case p.IsInfo:
-						t = serverapi.APIAgentListPostOKItemStatusProblemsItemTypeInfo
-					case p.IsWarning:
-						t = serverapi.APIAgentListPostOKItemStatusProblemsItemTypeWarning
-					}
+						switch {
+						case p.IsInfo:
+							t = serverapi.APIAgentListPostOKItemStatusProblemsItemTypeInfo
+						case p.IsWarning:
+							t = serverapi.APIAgentListPostOKItemStatusProblemsItemTypeWarning
+						}
 
-					return serverapi.APIAgentListPostOKItemStatusProblemsItem{
-						Type:    t,
-						Details: p.Details,
-					}
-				}),
+						return serverapi.APIAgentListPostOKItemStatusProblemsItem{
+							Type:    t,
+							Details: p.Details,
+						}
+					},
+				),
 				Status: t,
 			})
 		}

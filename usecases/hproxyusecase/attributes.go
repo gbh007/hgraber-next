@@ -10,7 +10,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) handleAttributes(ctx context.Context, oldAttrs []hproxymodel.BookAttribute) ([]hproxymodel.BookAttribute, error) {
+func (uc *UseCase) handleAttributes(
+	ctx context.Context,
+	oldAttrs []hproxymodel.BookAttribute,
+) ([]hproxymodel.BookAttribute, error) {
 	attributesInfo, err := uc.storage.Attributes(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("storage: get attributes info: %w", err)

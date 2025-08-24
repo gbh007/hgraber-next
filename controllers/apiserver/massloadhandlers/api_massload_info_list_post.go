@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *MassloadController) APIMassloadInfoListPost(ctx context.Context, req *serverapi.APIMassloadInfoListPostReq) (serverapi.APIMassloadInfoListPostRes, error) {
+func (c *MassloadController) APIMassloadInfoListPost(
+	ctx context.Context,
+	req *serverapi.APIMassloadInfoListPostReq,
+) (serverapi.APIMassloadInfoListPostRes, error) {
 	filter := massloadmodel.Filter{}
 
 	filter.Desc = req.Sort.Value.Desc.Value

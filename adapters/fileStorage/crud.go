@@ -13,6 +13,7 @@ import (
 
 func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error {
 	startAt := time.Now()
+
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("create", &fsID, time.Since(startAt))
 	}()
@@ -32,6 +33,7 @@ func (s *Storage) Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID)
 	}
 
 	startAt := time.Now()
+
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("delete", &targetFSID, time.Since(startAt))
 	}()
@@ -51,6 +53,7 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (i
 	}
 
 	startAt := time.Now()
+
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("get", &targetFSID, time.Since(startAt))
 	}()
@@ -63,8 +66,13 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (i
 	return storage.FS.Get(ctx, fileID)
 }
 
-func (s *Storage) State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (fsmodel.FSState, error) {
+func (s *Storage) State(
+	ctx context.Context,
+	includeFileIDs, includeFileSizes bool,
+	fsID uuid.UUID,
+) (fsmodel.FSState, error) {
 	startAt := time.Now()
+
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("state", &fsID, time.Since(startAt))
 	}()

@@ -6,7 +6,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIParsingPagePost(ctx context.Context, req *agentapi.APIParsingPagePostReq) (agentapi.APIParsingPagePostRes, error) {
+func (c *Controller) APIParsingPagePost(
+	ctx context.Context,
+	req *agentapi.APIParsingPagePostReq,
+) (agentapi.APIParsingPagePostRes, error) {
 	body, err := c.parsingUseCases.PageBodyByURL(ctx, req.ImageURL)
 	if err != nil {
 		return &agentapi.APIParsingPagePostInternalServerError{

@@ -10,7 +10,11 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) Agents(ctx context.Context, filter core.AgentFilter, includeStatus bool) ([]agentmodel.AgentWithStatus, error) {
+func (uc *UseCase) Agents(
+	ctx context.Context,
+	filter core.AgentFilter,
+	includeStatus bool,
+) ([]agentmodel.AgentWithStatus, error) {
 	agents, err := uc.storage.Agents(ctx, filter)
 	if err != nil {
 		return nil, fmt.Errorf("storage get agents: %w", err)

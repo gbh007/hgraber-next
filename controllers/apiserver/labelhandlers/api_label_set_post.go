@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *LabelHandlersController) APILabelSetPost(ctx context.Context, req *serverapi.APILabelSetPostReq) (serverapi.APILabelSetPostRes, error) {
+func (c *LabelHandlersController) APILabelSetPost(
+	ctx context.Context,
+	req *serverapi.APILabelSetPostReq,
+) (serverapi.APILabelSetPostRes, error) {
 	err := c.labelUseCases.SetLabel(ctx, core.BookLabel{
 		BookID:     req.BookID,
 		PageNumber: req.PageNumber.Value,

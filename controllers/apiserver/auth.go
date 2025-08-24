@@ -10,7 +10,11 @@ import (
 
 var errorAccessForbidden = errors.New("access forbidden")
 
-func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string, t serverapi.HeaderAuth) (context.Context, error) {
+func (c *Controller) HandleHeaderAuth(
+	ctx context.Context,
+	operationName string,
+	t serverapi.HeaderAuth,
+) (context.Context, error) {
 	if c.token == "" {
 		return ctx, nil
 	}
@@ -22,7 +26,11 @@ func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string,
 	return ctx, nil
 }
 
-func (c *Controller) HandleCookies(ctx context.Context, operationName string, t serverapi.Cookies) (context.Context, error) {
+func (c *Controller) HandleCookies(
+	ctx context.Context,
+	operationName string,
+	t serverapi.Cookies,
+) (context.Context, error) {
 	if c.token == "" {
 		return ctx, nil
 	}
@@ -34,7 +42,10 @@ func (c *Controller) HandleCookies(ctx context.Context, operationName string, t 
 	return ctx, nil
 }
 
-func (c *Controller) APIUserLoginPost(ctx context.Context, req *serverapi.APIUserLoginPostReq) (serverapi.APIUserLoginPostRes, error) {
+func (c *Controller) APIUserLoginPost(
+	ctx context.Context,
+	req *serverapi.APIUserLoginPostReq,
+) (serverapi.APIUserLoginPostRes, error) {
 	cookie := http.Cookie{
 		Name:     "X-HG-Token",
 		Value:    req.Token,

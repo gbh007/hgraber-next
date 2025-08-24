@@ -11,8 +11,14 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (s *Storage) HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error) {
+func (s *Storage) HighwayFileURL(
+	ctx context.Context,
+	fileID uuid.UUID,
+	ext string,
+	fsID uuid.UUID,
+) (url.URL, bool, error) {
 	startAt := time.Now()
+
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("highway", &fsID, time.Since(startAt))
 	}()

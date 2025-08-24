@@ -12,7 +12,7 @@ import (
 )
 
 func (uc *UseCase) CreateAttributeRemap(ctx context.Context, ar core.AttributeRemap) error {
-	if !(ar.IsDelete() || ar.IsNoRemap()) {
+	if !ar.IsDelete() && !ar.IsNoRemap() {
 		targetAR, err := uc.AttributeRemap(ctx, ar.ToCode, ar.ToValue)
 		if err != nil && !errors.Is(err, core.AttributeRemapNotFoundError) {
 			return fmt.Errorf("check existing attribute remap: %w", err)
@@ -29,7 +29,7 @@ func (uc *UseCase) CreateAttributeRemap(ctx context.Context, ar core.AttributeRe
 }
 
 func (uc *UseCase) UpdateAttributeRemap(ctx context.Context, ar core.AttributeRemap) error {
-	if !(ar.IsDelete() || ar.IsNoRemap()) {
+	if !ar.IsDelete() && !ar.IsNoRemap() {
 		targetAR, err := uc.AttributeRemap(ctx, ar.ToCode, ar.ToValue)
 		if err != nil && !errors.Is(err, core.AttributeRemapNotFoundError) {
 			return fmt.Errorf("check existing attribute remap: %w", err)

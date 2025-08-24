@@ -20,7 +20,7 @@ type storage interface {
 	FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (core.SizeWithCount, error)
 
 	File(ctx context.Context, id uuid.UUID) (core.File, error)
-	UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid.UUID) error
+	UpdateFileFS(ctx context.Context, fileID, fsID uuid.UUID) error
 	UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, invalidData bool) error
 	FileIDsByFilter(ctx context.Context, filter fsmodel.FileFilter) ([]uuid.UUID, error)
 
@@ -37,7 +37,7 @@ type fileStorage interface {
 	Create(ctx context.Context, fileID uuid.UUID, body io.Reader, fsID uuid.UUID) error
 	Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) error
 	HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error)
-	State(ctx context.Context, includeFileIDs bool, includeFileSizes bool, fsID uuid.UUID) (fsmodel.FSState, error)
+	State(ctx context.Context, includeFileIDs, includeFileSizes bool, fsID uuid.UUID) (fsmodel.FSState, error)
 }
 
 type tmpStorage interface {
@@ -69,6 +69,11 @@ func New(
 	}
 }
 
-func (uc *UseCase) HighwayFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) (url.URL, bool, error) {
+func (uc *UseCase) HighwayFileURL(
+	ctx context.Context,
+	fileID uuid.UUID,
+	ext string,
+	fsID uuid.UUID,
+) (url.URL, bool, error) {
 	return uc.fileStorage.HighwayFileURL(ctx, fileID, ext, fsID)
 }

@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookRestorePost(ctx context.Context, req *serverapi.APIBookRestorePostReq) (serverapi.APIBookRestorePostRes, error) {
+func (c *BookHandlersController) APIBookRestorePost(
+	ctx context.Context,
+	req *serverapi.APIBookRestorePostReq,
+) (serverapi.APIBookRestorePostRes, error) {
 	err := c.rebuilderUseCases.RestoreBook(ctx, req.BookID, req.OnlyPages.Value)
 	if err != nil {
 		return &serverapi.APIBookRestorePostInternalServerError{

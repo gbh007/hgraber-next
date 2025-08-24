@@ -14,12 +14,10 @@ type workerInfoProvider interface {
 	WorkersInfo(ctx context.Context) []systemmodel.SystemWorkerStat
 }
 
-var (
-	workerDesc = prometheus.NewDesc(
-		prometheus.BuildFQName(SystemName, SubSystemName, "worker_total"),
-		"Данные воркеров",
-		[]string{"worker_name", "counter"}, nil,
-	)
+var workerDesc = prometheus.NewDesc(
+	prometheus.BuildFQName(SystemName, SubSystemName, "worker_total"),
+	"Данные воркеров",
+	[]string{"worker_name", "counter"}, nil,
 )
 
 var _ prometheus.Collector = (*WorkerInfoCollector)(nil)
@@ -47,7 +45,6 @@ func (c *WorkerInfoCollector) Describe(desc chan<- *prometheus.Desc) {
 	desc <- workerDesc
 }
 
-//nolint:promlinter // ложно-положительное срабатывание
 func (c *WorkerInfoCollector) Collect(metr chan<- prometheus.Metric) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
 	defer cancel()
@@ -56,7 +53,9 @@ func (c *WorkerInfoCollector) Collect(metr chan<- prometheus.Metric) {
 
 	for _, worker := range workers {
 		metr <- prometheus.MustNewConstMetric(workerDesc, prometheus.GaugeValue, float64(worker.InQueueCount), worker.Name, "in_queue")
+
 		metr <- prometheus.MustNewConstMetric(workerDesc, prometheus.GaugeValue, float64(worker.InWorkCount), worker.Name, "in_work")
+
 		metr <- prometheus.MustNewConstMetric(workerDesc, prometheus.GaugeValue, float64(worker.RunnersCount), worker.Name, "runners")
 	}
 }

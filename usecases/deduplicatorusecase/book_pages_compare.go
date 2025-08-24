@@ -12,7 +12,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid.UUID) (bff.BookPagesCompareResult, error) {
+func (uc *UseCase) BookPagesCompare(
+	ctx context.Context,
+	originID, targetID uuid.UUID,
+) (bff.BookPagesCompareResult, error) {
 	originBook, err := uc.storage.GetBook(ctx, originID)
 	if err != nil {
 		return bff.BookPagesCompareResult{}, fmt.Errorf("storage: get book (%s): %w", originID.String(), err)
@@ -75,7 +78,11 @@ func (uc *UseCase) BookPagesCompare(ctx context.Context, originID, targetID uuid
 	result.ReverseEntryPercentage = core.EntryPercentageForPages(targetPages, originPages, nil)
 
 	result.EntryPercentageWithoutDeadHashes = core.EntryPercentageForPages(originPages, targetPages, existsDeadHashes)
-	result.ReverseEntryPercentageWithoutDeadHashes = core.EntryPercentageForPages(targetPages, originPages, existsDeadHashes)
+	result.ReverseEntryPercentageWithoutDeadHashes = core.EntryPercentageForPages(
+		targetPages,
+		originPages,
+		existsDeadHashes,
+	)
 
 	for _, page := range originPages {
 		_, hasDeadHash := existsDeadHashes[page.FileHash]

@@ -86,5 +86,6 @@ type AttributeToWeb struct {
 // TODO: подумать что делать с такими моделями
 type BookWithPreviewPage struct {
 	core.Book
+
 	PreviewPage PreviewPage
 }

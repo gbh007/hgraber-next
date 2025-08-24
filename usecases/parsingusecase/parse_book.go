@@ -56,15 +56,19 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.B
 		}
 	}
 
-	err = uc.storage.UpdateBookPages(ctx, book.ID, pkg.Map(info.Pages, func(p agentmodel.AgentBookDetailsPagesItem) core.Page {
-		return core.Page{
-			BookID:     book.ID,
-			PageNumber: p.PageNumber,
-			Ext:        path.Ext(p.Filename),
-			OriginURL:  &p.URL,
-			CreateAt:   time.Now(),
-		}
-	}))
+	err = uc.storage.UpdateBookPages(
+		ctx,
+		book.ID,
+		pkg.Map(info.Pages, func(p agentmodel.AgentBookDetailsPagesItem) core.Page {
+			return core.Page{
+				BookID:     book.ID,
+				PageNumber: p.PageNumber,
+				Ext:        path.Ext(p.Filename),
+				OriginURL:  &p.URL,
+				CreateAt:   time.Now(),
+			}
+		}),
+	)
 	if err != nil {
 		return fmt.Errorf("update pages: %w", err)
 	}

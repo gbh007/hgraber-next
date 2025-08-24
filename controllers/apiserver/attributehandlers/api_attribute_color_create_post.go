@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AttributeHandlersController) APIAttributeColorCreatePost(ctx context.Context, req *serverapi.APIAttributeColorCreatePostReq) (serverapi.APIAttributeColorCreatePostRes, error) {
+func (c *AttributeHandlersController) APIAttributeColorCreatePost(
+	ctx context.Context,
+	req *serverapi.APIAttributeColorCreatePostReq,
+) (serverapi.APIAttributeColorCreatePostRes, error) {
 	err := c.attributeUseCases.CreateAttributeColor(ctx, core.AttributeColor{
 		Code:            req.Code,
 		Value:           req.Value,

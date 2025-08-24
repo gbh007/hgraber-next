@@ -9,7 +9,9 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *LabelHandlersController) APILabelPresetListGet(ctx context.Context) (serverapi.APILabelPresetListGetRes, error) {
+func (c *LabelHandlersController) APILabelPresetListGet(
+	ctx context.Context,
+) (serverapi.APILabelPresetListGetRes, error) {
 	presets, err := c.labelUseCases.LabelPresets(ctx)
 	if err != nil {
 		return &serverapi.APILabelPresetListGetInternalServerError{

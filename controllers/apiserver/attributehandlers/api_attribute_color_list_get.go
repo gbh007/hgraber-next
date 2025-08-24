@@ -9,7 +9,9 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *AttributeHandlersController) APIAttributeColorListGet(ctx context.Context) (serverapi.APIAttributeColorListGetRes, error) {
+func (c *AttributeHandlersController) APIAttributeColorListGet(
+	ctx context.Context,
+) (serverapi.APIAttributeColorListGetRes, error) {
 	colors, err := c.attributeUseCases.AttributeColors(ctx)
 	if err != nil {
 		return &serverapi.APIAttributeColorListGetInternalServerError{

@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsRemoveMismatchPost(ctx context.Context, req *serverapi.APIFsRemoveMismatchPostReq) (serverapi.APIFsRemoveMismatchPostRes, error) {
+func (c *FSHandlersController) APIFsRemoveMismatchPost(
+	ctx context.Context,
+	req *serverapi.APIFsRemoveMismatchPostReq,
+) (serverapi.APIFsRemoveMismatchPostRes, error) {
 	err := c.systemUseCases.RemoveFilesInFSMismatch(ctx, req.ID)
 	if err != nil {
 		return &serverapi.APIFsRemoveMismatchPostInternalServerError{

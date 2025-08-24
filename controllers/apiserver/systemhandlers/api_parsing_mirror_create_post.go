@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *SystemHandlersController) APIParsingMirrorCreatePost(ctx context.Context, req *serverapi.APIParsingMirrorCreatePostReq) (serverapi.APIParsingMirrorCreatePostRes, error) {
+func (c *SystemHandlersController) APIParsingMirrorCreatePost(
+	ctx context.Context,
+	req *serverapi.APIParsingMirrorCreatePostReq,
+) (serverapi.APIParsingMirrorCreatePostRes, error) {
 	err := c.parseUseCases.NewMirror(ctx, parsing.URLMirror{
 		Name:        req.Name,
 		Prefixes:    req.Prefixes,

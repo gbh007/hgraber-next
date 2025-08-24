@@ -10,7 +10,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookPageDeletePost(ctx context.Context, req *serverapi.APIBookPageDeletePostReq) (serverapi.APIBookPageDeletePostRes, error) {
+func (c *BookHandlersController) APIBookPageDeletePost(
+	ctx context.Context,
+	req *serverapi.APIBookPageDeletePostReq,
+) (serverapi.APIBookPageDeletePostRes, error) {
 	var (
 		err error
 		uc  string

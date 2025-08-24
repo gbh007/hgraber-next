@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *AttributeHandlersController) APIAttributeRemapCreatePost(ctx context.Context, req *serverapi.APIAttributeRemapCreatePostReq) (serverapi.APIAttributeRemapCreatePostRes, error) {
+func (c *AttributeHandlersController) APIAttributeRemapCreatePost(
+	ctx context.Context,
+	req *serverapi.APIAttributeRemapCreatePostReq,
+) (serverapi.APIAttributeRemapCreatePostRes, error) {
 	if !(req.IsDelete.Value || (req.ToCode.IsSet() && req.ToValue.IsSet())) {
 		return &serverapi.APIAttributeRemapCreatePostBadRequest{
 			InnerCode: apiservercore.AttributeUseCaseCode,

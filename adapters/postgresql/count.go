@@ -34,23 +34,25 @@ func (d *Database) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, 
 		return nil
 	})
 
-	batch.Queue(`SELECT COUNT(*) FROM books WHERE deleted = FALSE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.DownloadedBookCount)
-		if err != nil {
-			return fmt.Errorf("get downloaded book count : %w", err)
-		}
+	batch.Queue(`SELECT COUNT(*) FROM books WHERE deleted = FALSE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.DownloadedBookCount)
+			if err != nil {
+				return fmt.Errorf("get downloaded book count : %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
-	batch.Queue(`SELECT COUNT(*) FROM books WHERE deleted = FALSE AND verified = TRUE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.VerifiedBookCount)
-		if err != nil {
-			return fmt.Errorf("get book verified count : %w", err)
-		}
+	batch.Queue(`SELECT COUNT(*) FROM books WHERE deleted = FALSE AND verified = TRUE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.VerifiedBookCount)
+			if err != nil {
+				return fmt.Errorf("get book verified count : %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
 	batch.Queue(`SELECT COUNT(*) FROM books WHERE is_rebuild = TRUE;`).QueryRow(func(row pgx.Row) error {
 		err := row.Scan(&systemSize.RebuildedBookCount)
@@ -61,14 +63,15 @@ func (d *Database) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, 
 		return nil
 	})
 
-	batch.Queue(`SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE AND is_rebuild = FALSE;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.BookUnparsedCount)
-		if err != nil {
-			return fmt.Errorf("get book unparsed count: %w", err)
-		}
+	batch.Queue(`SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE AND is_rebuild = FALSE;`).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.BookUnparsedCount)
+			if err != nil {
+				return fmt.Errorf("get book unparsed count: %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
 	batch.Queue(`SELECT COUNT(*) FROM books WHERE deleted = TRUE;`).QueryRow(func(row pgx.Row) error {
 		err := row.Scan(&systemSize.DeletedBookCount)
@@ -148,105 +151,110 @@ func (d *Database) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, 
 		return nil
 	})
 
-	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE md5_sum IS NULL OR sha256_sum IS NULL OR "size" IS NULL GROUP BY fs_id;`).Query(func(rows pgx.Rows) error {
-		defer rows.Close()
+	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE md5_sum IS NULL OR sha256_sum IS NULL OR "size" IS NULL GROUP BY fs_id;`).
+		Query(func(rows pgx.Rows) error {
+			defer rows.Close()
 
-		for rows.Next() {
-			var (
-				count sql.NullInt64
-				fsID  uuid.NullUUID
-			)
+			for rows.Next() {
+				var (
+					count sql.NullInt64
+					fsID  uuid.NullUUID
+				)
 
-			err := rows.Scan(&count, &fsID)
-			if err != nil {
-				return fmt.Errorf("get unhashed file count: %w", err)
+				err := rows.Scan(&count, &fsID)
+				if err != nil {
+					return fmt.Errorf("get unhashed file count: %w", err)
+				}
+
+				systemSize.UnhashedFileCountByFS[fsID.UUID] = count.Int64
 			}
 
-			systemSize.UnhashedFileCountByFS[fsID.UUID] = count.Int64
-		}
+			return nil
+		})
 
-		return nil
-	})
+	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE invalid_data = TRUE GROUP BY fs_id;`).
+		Query(func(rows pgx.Rows) error {
+			defer rows.Close()
 
-	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE invalid_data = TRUE GROUP BY fs_id;`).Query(func(rows pgx.Rows) error {
-		defer rows.Close()
+			for rows.Next() {
+				var (
+					count sql.NullInt64
+					fsID  uuid.NullUUID
+				)
 
-		for rows.Next() {
-			var (
-				count sql.NullInt64
-				fsID  uuid.NullUUID
-			)
+				err := rows.Scan(&count, &fsID)
+				if err != nil {
+					return fmt.Errorf("get invalid file count: %w", err)
+				}
 
-			err := rows.Scan(&count, &fsID)
-			if err != nil {
-				return fmt.Errorf("get invalid file count: %w", err)
+				systemSize.InvalidFileCountByFS[fsID.UUID] = count.Int64
 			}
 
-			systemSize.InvalidFileCountByFS[fsID.UUID] = count.Int64
-		}
+			return nil
+		})
 
-		return nil
-	})
+	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE NOT EXISTS (SELECT 1 FROM pages WHERE pages.file_id = files.id) GROUP BY fs_id;`).
+		Query(func(rows pgx.Rows) error {
+			defer rows.Close()
 
-	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE NOT EXISTS (SELECT 1 FROM pages WHERE pages.file_id = files.id) GROUP BY fs_id;`).Query(func(rows pgx.Rows) error {
-		defer rows.Close()
+			for rows.Next() {
+				var (
+					count sql.NullInt64
+					fsID  uuid.NullUUID
+				)
 
-		for rows.Next() {
-			var (
-				count sql.NullInt64
-				fsID  uuid.NullUUID
-			)
+				err := rows.Scan(&count, &fsID)
+				if err != nil {
+					return fmt.Errorf("get detached file count: %w", err)
+				}
 
-			err := rows.Scan(&count, &fsID)
-			if err != nil {
-				return fmt.Errorf("get detached file count: %w", err)
+				systemSize.DetachedFileCountByFS[fsID.UUID] = count.Int64
 			}
 
-			systemSize.DetachedFileCountByFS[fsID.UUID] = count.Int64
-		}
+			return nil
+		})
 
-		return nil
-	})
+	batch.Queue(`SELECT SUM(f."size"), fs_id FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL GROUP BY f.fs_id;`).
+		Query(func(rows pgx.Rows) error {
+			defer rows.Close()
 
-	batch.Queue(`SELECT SUM(f."size"), fs_id FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL GROUP BY f.fs_id;`).Query(func(rows pgx.Rows) error {
-		defer rows.Close()
+			for rows.Next() {
+				var (
+					size sql.NullInt64
+					fsID uuid.NullUUID
+				)
 
-		for rows.Next() {
-			var (
-				size sql.NullInt64
-				fsID uuid.NullUUID
-			)
+				err := rows.Scan(&size, &fsID)
+				if err != nil {
+					return fmt.Errorf("get page file size: %w", err)
+				}
 
-			err := rows.Scan(&size, &fsID)
-			if err != nil {
-				return fmt.Errorf("get page file size: %w", err)
+				systemSize.PageFileSizeByFS[fsID.UUID] = size.Int64
 			}
 
-			systemSize.PageFileSizeByFS[fsID.UUID] = size.Int64
-		}
+			return nil
+		})
 
-		return nil
-	})
+	batch.Queue(`SELECT SUM("size"), fs_id FROM files WHERE "size" IS NOT NULL GROUP BY fs_id;`).
+		Query(func(rows pgx.Rows) error {
+			defer rows.Close()
 
-	batch.Queue(`SELECT SUM("size"), fs_id FROM files WHERE "size" IS NOT NULL GROUP BY fs_id;`).Query(func(rows pgx.Rows) error {
-		defer rows.Close()
+			for rows.Next() {
+				var (
+					size sql.NullInt64
+					fsID uuid.NullUUID
+				)
 
-		for rows.Next() {
-			var (
-				size sql.NullInt64
-				fsID uuid.NullUUID
-			)
+				err := rows.Scan(&size, &fsID)
+				if err != nil {
+					return fmt.Errorf("get file size: %w", err)
+				}
 
-			err := rows.Scan(&size, &fsID)
-			if err != nil {
-				return fmt.Errorf("get file size: %w", err)
+				systemSize.FileSizeByFS[fsID.UUID] = size.Int64
 			}
 
-			systemSize.FileSizeByFS[fsID.UUID] = size.Int64
-		}
-
-		return nil
-	})
+			return nil
+		})
 
 	batchResult := d.pool.SendBatch(ctx, batch)
 

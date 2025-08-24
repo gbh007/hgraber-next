@@ -48,7 +48,11 @@ type agentSystem interface {
 	BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) (agentmodel.AgentBookDetails, error)
 	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
 	PageLoad(ctx context.Context, agentID uuid.UUID, url agentmodel.AgentPageURL) (io.Reader, error)
-	PagesCheck(ctx context.Context, agentID uuid.UUID, urls []agentmodel.AgentPageURL) ([]agentmodel.AgentPageCheckResult, error)
+	PagesCheck(
+		ctx context.Context,
+		agentID uuid.UUID,
+		urls []agentmodel.AgentPageURL,
+	) ([]agentmodel.AgentPageCheckResult, error)
 	BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]agentmodel.AgentBookCheckResult, error)
 }
 

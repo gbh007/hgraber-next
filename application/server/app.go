@@ -143,11 +143,35 @@ func Serve() {
 	}
 
 	bookUseCases := bookusecase.New(logger, storage)
-	parsingUseCases := parsingusecase.New(logger, storage, agentSystem, fileStorageAdapter, bookUseCases, cfg.Parsing.ParseBookTimeout, cfg.AttributeRemap.Auto, cfg.AttributeRemap.AllLower)
-	exportUseCases := exportusecase.New(logger, storage, fileStorageAdapter, agentSystem, tmpStorage, bookUseCases, cfg.AttributeRemap.Auto, cfg.AttributeRemap.AllLower)
+	parsingUseCases := parsingusecase.New(
+		logger,
+		storage,
+		agentSystem,
+		fileStorageAdapter,
+		bookUseCases,
+		cfg.Parsing.ParseBookTimeout,
+		cfg.AttributeRemap.Auto,
+		cfg.AttributeRemap.AllLower,
+	)
+	exportUseCases := exportusecase.New(
+		logger,
+		storage,
+		fileStorageAdapter,
+		agentSystem,
+		tmpStorage,
+		bookUseCases,
+		cfg.AttributeRemap.Auto,
+		cfg.AttributeRemap.AllLower,
+	)
 	deduplicateUseCases := deduplicatorusecase.New(logger, storage, tracer)
 	cleanupUseCases := cleanupusecase.New(logger, tracer, storage, fileStorageAdapter)
-	reBuilderUseCases := rebuilderusecase.New(logger, tracer, storage, cfg.AttributeRemap.Auto, cfg.AttributeRemap.AllLower)
+	reBuilderUseCases := rebuilderusecase.New(
+		logger,
+		tracer,
+		storage,
+		cfg.AttributeRemap.Auto,
+		cfg.AttributeRemap.AllLower,
+	)
 	fsUseCases := filesystemusecase.New(logger, storage, fileStorageAdapter, tmpStorage)
 	bffUseCases := bffusecase.New(logger, storage, deduplicateUseCases)
 	attributeUseCases := attributeusecase.New(logger, storage, cfg.AttributeRemap.AllLower)
@@ -164,14 +188,35 @@ func Serve() {
 		workermanager.NewFileValidator(fsUseCases, logger, tracer, cfg.Workers.FileValidator, metricProvider),
 		workermanager.NewFileTransfer(fsUseCases, logger, tracer, cfg.Workers.FileTransferer, metricProvider),
 		workermanager.NewMassloadSize(massloadUseCases, logger, tracer, cfg.Workers.MassloadSizer, metricProvider),
-		workermanager.NewMassloadAttributeSize(massloadUseCases, logger, tracer, cfg.Workers.MassloadAttributeSizer, metricProvider),
+		workermanager.NewMassloadAttributeSize(
+			massloadUseCases,
+			logger,
+			tracer,
+			cfg.Workers.MassloadAttributeSizer,
+			metricProvider,
+		),
 	)
 	asyncController.RegisterRunner(workersController)
 
-	systemUseCases := systemusecase.New(logger, storage, tmpStorage, deduplicateUseCases, cleanupUseCases, workersController, attributeUseCases)
+	systemUseCases := systemusecase.New(
+		logger,
+		storage,
+		tmpStorage,
+		deduplicateUseCases,
+		cleanupUseCases,
+		workersController,
+		attributeUseCases,
+	)
 
 	agentUseCases := agentusecase.New(logger, agentSystem, storage)
-	hProxyUseCases := hproxyusecase.New(logger, storage, agentSystem, cfg.Parsing.ParseBookTimeout, cfg.AttributeRemap.Auto, cfg.AttributeRemap.AllLower)
+	hProxyUseCases := hproxyusecase.New(
+		logger,
+		storage,
+		agentSystem,
+		cfg.Parsing.ParseBookTimeout,
+		cfg.AttributeRemap.Auto,
+		cfg.AttributeRemap.AllLower,
+	)
 
 	apiController, err := apiserver.New(
 		logger,

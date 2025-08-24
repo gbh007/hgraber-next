@@ -156,7 +156,10 @@ func convertAttributes(attributes []core.Attribute) map[string]core.Attribute {
 	})
 }
 
-func convertBookAttributes(attributes map[string]core.Attribute, bookAttributes map[string][]string) []bff.AttributeToWeb {
+func convertBookAttributes(
+	attributes map[string]core.Attribute,
+	bookAttributes map[string][]string,
+) []bff.AttributeToWeb {
 	result := pkg.MapToSlice(bookAttributes, func(code string, values []string) bff.AttributeToWeb {
 		return bff.AttributeToWeb{
 			Code:   code,

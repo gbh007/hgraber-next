@@ -8,13 +8,19 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) APIParsingPageCheckPost(ctx context.Context, req *agentapi.APIParsingPageCheckPostReq) (agentapi.APIParsingPageCheckPostRes, error) {
-	result, err := c.parsingUseCases.PagesExists(ctx, pkg.Map(req.Urls, func(u agentapi.APIParsingPageCheckPostReqUrlsItem) agentmodel.AgentPageURL {
-		return agentmodel.AgentPageURL{
-			BookURL:  u.BookURL,
-			ImageURL: u.ImageURL,
-		}
-	}))
+func (c *Controller) APIParsingPageCheckPost(
+	ctx context.Context,
+	req *agentapi.APIParsingPageCheckPostReq,
+) (agentapi.APIParsingPageCheckPostRes, error) {
+	result, err := c.parsingUseCases.PagesExists(
+		ctx,
+		pkg.Map(req.Urls, func(u agentapi.APIParsingPageCheckPostReqUrlsItem) agentmodel.AgentPageURL {
+			return agentmodel.AgentPageURL{
+				BookURL:  u.BookURL,
+				ImageURL: u.ImageURL,
+			}
+		}),
+	)
 	if err != nil {
 		return &agentapi.APIParsingPageCheckPostInternalServerError{
 			InnerCode: ParseUseCaseCode,

@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *BookHandlersController) APIBookArchiveIDGet(ctx context.Context, params serverapi.APIBookArchiveIDGetParams) (serverapi.APIBookArchiveIDGetRes, error) {
+func (c *BookHandlersController) APIBookArchiveIDGet(
+	ctx context.Context,
+	params serverapi.APIBookArchiveIDGetParams,
+) (serverapi.APIBookArchiveIDGetRes, error) {
 	body, book, err := c.exportUseCases.ExportBook(ctx, params.ID)
 	if errors.Is(err, core.BookNotFoundError) {
 		return &serverapi.APIBookArchiveIDGetNotFound{

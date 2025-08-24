@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *SystemHandlersController) APISystemTaskCreatePost(ctx context.Context, req *serverapi.APISystemTaskCreatePostReq) (serverapi.APISystemTaskCreatePostRes, error) {
+func (c *SystemHandlersController) APISystemTaskCreatePost(
+	ctx context.Context,
+	req *serverapi.APISystemTaskCreatePostReq,
+) (serverapi.APISystemTaskCreatePostRes, error) {
 	var code systemmodel.TaskCode
 
 	switch req.Code {

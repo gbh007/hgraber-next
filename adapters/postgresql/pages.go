@@ -39,7 +39,6 @@ func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (c
 	row := d.pool.QueryRow(ctx, query, args...)
 
 	err = row.Scan(model.PageScanner(&page))
-
 	if err != nil {
 		return core.Page{}, fmt.Errorf("exec query :%w", err)
 	}
@@ -47,7 +46,13 @@ func (d *Database) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (c
 	return page, nil
 }
 
-func (d *Database) UpdatePageDownloaded(ctx context.Context, id uuid.UUID, pageNumber int, downloaded bool, fileID uuid.UUID) error {
+func (d *Database) UpdatePageDownloaded(
+	ctx context.Context,
+	id uuid.UUID,
+	pageNumber int,
+	downloaded bool,
+	fileID uuid.UUID,
+) error {
 	res, err := d.pool.Exec(
 		ctx,
 		`UPDATE pages SET downloaded = $1, load_at = $2, file_id = $5 WHERE book_id = $3 AND page_number = $4;`,
@@ -91,7 +96,14 @@ func (d *Database) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []co
 		_, err = tx.Exec(
 			ctx,
 			`INSERT INTO pages (book_id, page_number, ext, origin_url, create_at, downloaded, load_at, file_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
-			id, v.PageNumber, v.Ext, model.URLToDB(v.OriginURL), v.CreateAt.UTC(), v.Downloaded, model.TimeToDB(v.LoadAt), model.UUIDToDB(v.FileID),
+			id,
+			v.PageNumber,
+			v.Ext,
+			model.URLToDB(v.OriginURL),
+			v.CreateAt.UTC(),
+			v.Downloaded,
+			model.TimeToDB(v.LoadAt),
+			model.UUIDToDB(v.FileID),
 		)
 		if err != nil {
 			return fmt.Errorf("insert page %d: %w", v.PageNumber, err)
@@ -128,7 +140,14 @@ func (d *Database) NewBookPages(ctx context.Context, pages []core.Page) error {
 		_, err = tx.Exec(
 			ctx,
 			`INSERT INTO pages (book_id, page_number, ext, origin_url, create_at, downloaded, load_at, file_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
-			v.BookID, v.PageNumber, v.Ext, model.URLToDB(v.OriginURL), v.CreateAt.UTC(), v.Downloaded, model.TimeToDB(v.LoadAt), model.UUIDToDB(v.FileID),
+			v.BookID,
+			v.PageNumber,
+			v.Ext,
+			model.URLToDB(v.OriginURL),
+			v.CreateAt.UTC(),
+			v.Downloaded,
+			model.TimeToDB(v.LoadAt),
+			model.UUIDToDB(v.FileID),
 		)
 		if err != nil {
 			return fmt.Errorf("insert page %d: %w", v.PageNumber, err)

@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *MassloadController) APIMassloadInfoExternalLinkDeletePost(ctx context.Context, req *serverapi.APIMassloadInfoExternalLinkDeletePostReq) (serverapi.APIMassloadInfoExternalLinkDeletePostRes, error) {
+func (c *MassloadController) APIMassloadInfoExternalLinkDeletePost(
+	ctx context.Context,
+	req *serverapi.APIMassloadInfoExternalLinkDeletePostReq,
+) (serverapi.APIMassloadInfoExternalLinkDeletePostRes, error) {
 	err := c.massloadUseCases.DeleteMassloadExternalLink(ctx, req.MassloadID, req.URL)
 	if err != nil {
 		return &serverapi.APIMassloadInfoExternalLinkDeletePostInternalServerError{

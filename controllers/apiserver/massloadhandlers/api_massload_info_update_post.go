@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *MassloadController) APIMassloadInfoUpdatePost(ctx context.Context, req *serverapi.APIMassloadInfoUpdatePostReq) (serverapi.APIMassloadInfoUpdatePostRes, error) {
+func (c *MassloadController) APIMassloadInfoUpdatePost(
+	ctx context.Context,
+	req *serverapi.APIMassloadInfoUpdatePostReq,
+) (serverapi.APIMassloadInfoUpdatePostRes, error) {
 	err := c.massloadUseCases.UpdateMassload(ctx, massloadmodel.Massload{
 		ID:          req.ID,
 		Name:        req.Name,

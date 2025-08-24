@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *DeduplicateHandlersController) APIDeduplicateDeadHashSetPost(ctx context.Context, req *serverapi.APIDeduplicateDeadHashSetPostReq) (serverapi.APIDeduplicateDeadHashSetPostRes, error) {
+func (c *DeduplicateHandlersController) APIDeduplicateDeadHashSetPost(
+	ctx context.Context,
+	req *serverapi.APIDeduplicateDeadHashSetPostReq,
+) (serverapi.APIDeduplicateDeadHashSetPostRes, error) {
 	var err error
 
 	switch {

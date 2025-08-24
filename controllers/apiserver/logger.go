@@ -18,7 +18,9 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			return
 		}
 
-		// Сделано специально для того чтобы получать тут ид трассировки а также иметь информацию о оверхеде с логирования.
+		// Сделано специально для того чтобы получать тут ид
+		// трассировки а также иметь информацию о оверхеде с
+		// логирования.
 		ctx, span := c.tracer.Start(r.Context(), "api server logging")
 		defer span.End()
 

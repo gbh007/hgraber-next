@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsTransferBookPost(ctx context.Context, req *serverapi.APIFsTransferBookPostReq) (serverapi.APIFsTransferBookPostRes, error) {
+func (c *FSHandlersController) APIFsTransferBookPost(
+	ctx context.Context,
+	req *serverapi.APIFsTransferBookPostReq,
+) (serverapi.APIFsTransferBookPostRes, error) {
 	var pageNumber *int
 
 	if req.OnlyPreviewPages.Value {

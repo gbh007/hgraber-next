@@ -11,7 +11,10 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (uc *UseCase) BookByPageEntryPercentage(ctx context.Context, originBookID uuid.UUID) ([]bff.DeduplicateBookResult, error) {
+func (uc *UseCase) BookByPageEntryPercentage(
+	ctx context.Context,
+	originBookID uuid.UUID,
+) ([]bff.DeduplicateBookResult, error) {
 	bookHashes, err := uc.storage.BookPagesWithHash(ctx, originBookID)
 	if err != nil {
 		return nil, fmt.Errorf("get book hashes storage: %w", err)

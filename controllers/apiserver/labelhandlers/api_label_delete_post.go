@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *LabelHandlersController) APILabelDeletePost(ctx context.Context, req *serverapi.APILabelDeletePostReq) (serverapi.APILabelDeletePostRes, error) {
+func (c *LabelHandlersController) APILabelDeletePost(
+	ctx context.Context,
+	req *serverapi.APILabelDeletePostReq,
+) (serverapi.APILabelDeletePostRes, error) {
 	err := c.labelUseCases.DeleteLabel(ctx, core.BookLabel{
 		BookID:     req.BookID,
 		PageNumber: req.PageNumber.Value,

@@ -5,9 +5,10 @@ import (
 	"log/slog"
 	"net/url"
 
+	"go.opentelemetry.io/otel/trace"
+
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
-	"go.opentelemetry.io/otel/trace"
 )
 
 type MassloadUseCases interface {

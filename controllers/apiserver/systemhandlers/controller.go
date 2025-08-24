@@ -16,7 +16,11 @@ import (
 
 type ParseUseCases interface {
 	NewBooks(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.FirstHandleMultipleResult, error)
-	NewBooksMulti(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.MultiHandleMultipleResult, error)
+	NewBooksMulti(
+		ctx context.Context,
+		urls []url.URL,
+		flags parsing.ParseFlags,
+	) (parsing.MultiHandleMultipleResult, error)
 
 	NewMirror(ctx context.Context, mirror parsing.URLMirror) error
 	UpdateMirror(ctx context.Context, mirror parsing.URLMirror) error
@@ -26,7 +30,7 @@ type ParseUseCases interface {
 }
 
 type ExportUseCases interface {
-	ImportArchive(ctx context.Context, body io.Reader, deduplicate bool, autoVerify bool) (uuid.UUID, error)
+	ImportArchive(ctx context.Context, body io.Reader, deduplicate, autoVerify bool) (uuid.UUID, error)
 }
 
 type SystemUseCases interface {

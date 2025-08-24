@@ -8,7 +8,10 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *DeduplicateHandlersController) APIDeduplicateUniquePagesPost(ctx context.Context, req *serverapi.APIDeduplicateUniquePagesPostReq) (serverapi.APIDeduplicateUniquePagesPostRes, error) {
+func (c *DeduplicateHandlersController) APIDeduplicateUniquePagesPost(
+	ctx context.Context,
+	req *serverapi.APIDeduplicateUniquePagesPostReq,
+) (serverapi.APIDeduplicateUniquePagesPostRes, error) {
 	data, err := c.deduplicateUseCases.UniquePages(ctx, req.BookID)
 	if err != nil {
 		return &serverapi.APIDeduplicateUniquePagesPostInternalServerError{

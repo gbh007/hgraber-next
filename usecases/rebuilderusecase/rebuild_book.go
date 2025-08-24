@@ -38,7 +38,11 @@ func (uc *UseCase) RebuildBook(ctx context.Context, request core.RebuildBookRequ
 
 		for _, pageNumber := range request.SelectedPages {
 			if _, ok := newPageOrder[pageNumber]; !ok {
-				return uuid.Nil, fmt.Errorf("%w: missing page %d in page order", core.ErrRebuildBookIncorrectRequest, pageNumber)
+				return uuid.Nil, fmt.Errorf(
+					"%w: missing page %d in page order",
+					core.ErrRebuildBookIncorrectRequest,
+					pageNumber,
+				)
 			}
 		}
 	}

@@ -24,7 +24,7 @@ type parsingUseCases interface {
 }
 
 type exportUseCases interface {
-	ImportArchive(ctx context.Context, body io.Reader, deduplicate bool, autoVerify bool) (uuid.UUID, error)
+	ImportArchive(ctx context.Context, body io.Reader, deduplicate, autoVerify bool) (uuid.UUID, error)
 }
 
 type Controller struct {
@@ -89,7 +89,11 @@ func New(
 
 var errorAccessForbidden = errors.New("access forbidden")
 
-func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string, t agentapi.HeaderAuth) (context.Context, error) {
+func (c *Controller) HandleHeaderAuth(
+	ctx context.Context,
+	operationName string,
+	t agentapi.HeaderAuth,
+) (context.Context, error) {
 	if c.token == "" {
 		return ctx, nil
 	}

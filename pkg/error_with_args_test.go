@@ -46,17 +46,17 @@ func TestErrorWithArgNew(t *testing.T) {
 func TestErrorWithArgEqualNil(t *testing.T) {
 	err1 := WrapError(nil, "hello", ErrorArgument("world", "!"))
 
-	assert.Nil(t, err1, "empty is not nil")
+	assert.NoError(t, err1, "empty is not nil")
 
 	assert.NotErrorIs(t, err1, sql.ErrNoRows, "equal not origin error")
 	assert.NotErrorIs(t, err1, sql.ErrTxDone, "equal not origin error")
 
 	err2 := WrapError(err1, "double trouble", ErrorArgument("first", 1), ErrorArgument("second", [2]int{}))
 
-	assert.Nil(t, err2, "empty is not nil")
+	assert.NoError(t, err2, "empty is not nil")
 	assert.NotErrorIs(t, err2, sql.ErrNoRows, "equal not origin error")
 	assert.NotErrorIs(t, err2, sql.ErrTxDone, "equal not origin error")
 
 	err3 := ErrorWithArgs("")
-	assert.Nil(t, err3, "empty is not nil")
+	assert.NoError(t, err3, "empty is not nil")
 }

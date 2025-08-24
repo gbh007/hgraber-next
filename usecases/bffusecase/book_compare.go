@@ -15,7 +15,12 @@ func (uc *UseCase) BookCompare(ctx context.Context, originID, targetID uuid.UUID
 		return bff.BookCompareResult{}, fmt.Errorf("deduplicator: page compare: %w", err)
 	}
 
-	attributeCompare, err := uc.deduplicator.BookAttributesCompare(ctx, originID, targetID, true) // Пока сравниваем на оригинальных атрибутах
+	attributeCompare, err := uc.deduplicator.BookAttributesCompare(
+		ctx,
+		originID,
+		targetID,
+		true,
+	) // Пока сравниваем на оригинальных атрибутах
 	if err != nil {
 		return bff.BookCompareResult{}, fmt.Errorf("deduplicator: attribute compare: %w", err)
 	}

@@ -57,7 +57,11 @@ func (d *Database) BookIDs(ctx context.Context, filter core.BookFilter) ([]uuid.
 	return ids, nil
 }
 
-func (d *Database) buildBooksFilter(ctx context.Context, filter core.BookFilter, isCount bool) (string, []interface{}, error) {
+func (d *Database) buildBooksFilter(
+	ctx context.Context,
+	filter core.BookFilter,
+	isCount bool,
+) (string, []interface{}, error) {
 	var builder squirrel.SelectBuilder
 
 	if isCount {
@@ -183,11 +187,17 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter core.BookFilter,
 	switch filter.ShowWithoutPreview {
 	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(
-			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, core.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?`
+			squirrel.Expr(
+				`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`,
+				core.PageNumberForPreview,
+			), // особенность библиотеки, необходимо использовать `?`
 		)
 	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(
-			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`, core.PageNumberForPreview), // особенность библиотеки, необходимо использовать `?`
+			squirrel.Expr(
+				`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`,
+				core.PageNumberForPreview,
+			), // особенность библиотеки, необходимо использовать `?`
 		)
 	}
 
@@ -197,7 +207,8 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter core.BookFilter,
 
 	for _, attrFilter := range filter.Fields.Attributes {
 		subBuilder := squirrel.Select("1").
-			PlaceholderFormat(squirrel.Question). // Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			PlaceholderFormat(squirrel.Question).
 			From("book_attributes").
 			Where(squirrel.Eq{
 				"attr": attrFilter.Code,
@@ -254,8 +265,9 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter core.BookFilter,
 			return "", nil, fmt.Errorf("build attribute sub query: %w", err)
 		}
 
+		// Случай когда нужно чтобы не было данных
 		if (attrFilter.Count == 0 && attrFilter.Type == core.BookFilterAttributeTypeCountEq) ||
-			(attrFilter.Count == 1 && attrFilter.Type == core.BookFilterAttributeTypeCountLt) { // Случай когда нужно чтобы не было данных
+			(attrFilter.Count == 1 && attrFilter.Type == core.BookFilterAttributeTypeCountLt) {
 			builder = builder.Where(squirrel.Expr(`NOT EXISTS (`+subQuery+`)`, subArgs...))
 		} else {
 			builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
@@ -264,7 +276,8 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter core.BookFilter,
 
 	for _, labelFilter := range filter.Fields.Labels {
 		subBuilder := squirrel.Select("1").
-			PlaceholderFormat(squirrel.Question). // Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			PlaceholderFormat(squirrel.Question).
 			From("book_labels").
 			Where(squirrel.Eq{
 				"name": labelFilter.Name,
@@ -321,8 +334,9 @@ func (d *Database) buildBooksFilter(ctx context.Context, filter core.BookFilter,
 			return "", nil, fmt.Errorf("build label sub query: %w", err)
 		}
 
+		// Случай когда нужно чтобы не было данных
 		if (labelFilter.Count == 0 && labelFilter.Type == core.BookFilterLabelTypeCountEq) ||
-			(labelFilter.Count == 1 && labelFilter.Type == core.BookFilterLabelTypeCountLt) { // Случай когда нужно чтобы не было данных
+			(labelFilter.Count == 1 && labelFilter.Type == core.BookFilterLabelTypeCountLt) {
 			builder = builder.Where(squirrel.Expr(`NOT EXISTS (`+subQuery+`)`, subArgs...))
 		} else {
 			builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))

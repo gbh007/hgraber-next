@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *MassloadController) APIMassloadInfoAttributeCreatePost(ctx context.Context, req *serverapi.APIMassloadInfoAttributeCreatePostReq) (serverapi.APIMassloadInfoAttributeCreatePostRes, error) {
+func (c *MassloadController) APIMassloadInfoAttributeCreatePost(
+	ctx context.Context,
+	req *serverapi.APIMassloadInfoAttributeCreatePostReq,
+) (serverapi.APIMassloadInfoAttributeCreatePostRes, error) {
 	err := c.massloadUseCases.CreateMassloadAttribute(ctx, req.MassloadID, req.Code, req.Value)
 	if err != nil {
 		return &serverapi.APIMassloadInfoAttributeCreatePostInternalServerError{

@@ -16,9 +16,9 @@ import (
 )
 
 type agentController interface {
-	FSCreate(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID, body io.Reader) error
-	FSDelete(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) error
-	FSGet(ctx context.Context, agentID uuid.UUID, fileID uuid.UUID) (io.Reader, error)
+	FSCreate(ctx context.Context, agentID, fileID uuid.UUID, body io.Reader) error
+	FSDelete(ctx context.Context, agentID, fileID uuid.UUID) error
+	FSGet(ctx context.Context, agentID, fileID uuid.UUID) (io.Reader, error)
 	FSState(ctx context.Context, agentID uuid.UUID, includeFileIDs, includeFileSizes bool) (fsmodel.FSState, error)
 
 	CreateHighwayToken(ctx context.Context, agentID uuid.UUID) (string, time.Time, error)
@@ -102,7 +102,9 @@ func (s *Storage) Init(ctx context.Context, skipNotAvailable bool) error {
 			return fmt.Errorf("connect fs (%s): %w", fs.ID.String(), err)
 		}
 
-		// В данном случае делаем внесение данных по одному т.к. снижение скорости инициализации из-за постоянных блокировок некритично.
+		// В данном случае делаем внесение данных по одному т.к.
+		// снижение скорости инициализации из-за постоянных
+		// блокировок некритично.
 		s.storageMapMutex.Lock()
 		s.storageMap[fs.ID] = storage
 		s.storageMapMutex.Unlock()

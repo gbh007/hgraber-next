@@ -248,7 +248,7 @@ func (d *Database) UpdateFileInvalidData(ctx context.Context, fileID uuid.UUID, 
 	return nil
 }
 
-func (d *Database) UpdateFileFS(ctx context.Context, fileID uuid.UUID, fsID uuid.UUID) error {
+func (d *Database) UpdateFileFS(ctx context.Context, fileID, fsID uuid.UUID) error {
 	builder := squirrel.Update("files").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]interface{}{
@@ -305,7 +305,11 @@ func (d *Database) File(ctx context.Context, id uuid.UUID) (core.File, error) {
 	return file, nil
 }
 
-func (d *Database) FSFilesInfo(ctx context.Context, fsID uuid.UUID, onlyInvalidData, onlyDetached bool) (core.SizeWithCount, error) {
+func (d *Database) FSFilesInfo(
+	ctx context.Context,
+	fsID uuid.UUID,
+	onlyInvalidData, onlyDetached bool,
+) (core.SizeWithCount, error) {
 	builder := squirrel.Select(
 		"COUNT(*)",
 		"SUM(\"size\")",
@@ -363,7 +367,8 @@ func (d *Database) FileIDsByFilter(ctx context.Context, filter fsmodel.FileFilte
 
 	if filter.BookID != nil || filter.PageNumber != nil {
 		subBuilder := squirrel.Select("1").
-			PlaceholderFormat(squirrel.Question). // Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			PlaceholderFormat(squirrel.Question).
 			From("pages").
 			Where(squirrel.Expr(`file_id = files.id`))
 

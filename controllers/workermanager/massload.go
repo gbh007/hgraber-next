@@ -4,10 +4,11 @@ import (
 	"context"
 	"log/slog"
 
+	"go.opentelemetry.io/otel/trace"
+
 	"github.com/gbh007/hgraber-next/controllers/internal/worker"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/pkg"
-	"go.opentelemetry.io/otel/trace"
 )
 
 type massloadSizeUnitUseCases interface {

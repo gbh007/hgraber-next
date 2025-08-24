@@ -7,7 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-func (c *FSHandlersController) APIFsTransferPost(ctx context.Context, req *serverapi.APIFsTransferPostReq) (serverapi.APIFsTransferPostRes, error) {
+func (c *FSHandlersController) APIFsTransferPost(
+	ctx context.Context,
+	req *serverapi.APIFsTransferPostReq,
+) (serverapi.APIFsTransferPostRes, error) {
 	err := c.fsUseCases.TransferFSFiles(ctx, req.From, req.To, req.OnlyPreviewPages.Value)
 	if err != nil {
 		return &serverapi.APIFsTransferPostInternalServerError{

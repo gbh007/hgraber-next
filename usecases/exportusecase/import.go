@@ -187,7 +187,12 @@ func (uc *UseCase) ImportArchive(
 				CreateAt: time.Now(),
 			})
 			if err != nil {
-				return uuid.Nil, fmt.Errorf("page (%d) storage: create file (%s): %w", p.PageNumber, fileID.String(), err)
+				return uuid.Nil, fmt.Errorf(
+					"page (%d) storage: create file (%s): %w",
+					p.PageNumber,
+					fileID.String(),
+					err,
+				)
 			}
 
 			p.FileID = fileID
