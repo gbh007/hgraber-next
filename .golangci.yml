@@ -36,6 +36,10 @@ linters:
   exclusions:
     warn-unused: true
     generated: strict
+    rules:
+      - linters:
+          - err113
+        text: do not define dynamic errors
 
   settings:
     cyclop:
