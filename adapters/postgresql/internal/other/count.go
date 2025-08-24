@@ -1,4 +1,4 @@
-package postgresql
+package other
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 )
 
 //nolint:lll,gocognit,cyclop,funlen // будет исправлено позднее
-func (d *Database) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, error) {
+func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, error) {
 	systemSize := systemmodel.SystemSizeInfo{
 		FileCountByFS:         make(map[uuid.UUID]int64, fsmodel.ApproximateFSCount),
 		UnhashedFileCountByFS: make(map[uuid.UUID]int64, fsmodel.ApproximateFSCount),
@@ -257,7 +257,7 @@ func (d *Database) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, 
 			return nil
 		})
 
-	batchResult := d.Pool.SendBatch(ctx, batch)
+	batchResult := repo.Pool.SendBatch(ctx, batch)
 
 	err := batchResult.Close()
 	if err != nil {

@@ -73,17 +73,17 @@ func MassloadExternalLinkColumns() []string {
 
 func MassloadExternalLinkScanner(link *massloadmodel.ExternalLink) RowScanner {
 	return func(rows pgx.Rows) error {
-		var rawUrl string
+		var rawURL string
 
 		err := rows.Scan(
-			&rawUrl,
+			&rawURL,
 			&link.CreatedAt,
 		)
 		if err != nil {
 			return fmt.Errorf("scan to model: %w", err)
 		}
 
-		u, err := url.Parse(rawUrl)
+		u, err := url.Parse(rawURL)
 		if err != nil {
 			return fmt.Errorf("parse url: %w", err)
 		}

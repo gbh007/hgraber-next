@@ -30,7 +30,7 @@ func (repo *MassloadRepo) MassloadAttributes(ctx context.Context, id int) ([]mas
 
 	rows, err := repo.Pool.Query(ctx, query, args...)
 	if err != nil {
-		return nil, fmt.Errorf("exec query :%w", err)
+		return nil, fmt.Errorf("exec query: %w", err)
 	}
 
 	defer rows.Close()

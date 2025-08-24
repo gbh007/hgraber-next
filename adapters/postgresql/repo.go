@@ -14,13 +14,13 @@ import (
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/file"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/label"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/massload"
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/other"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/page"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/repository"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/urlmirror"
 )
 
-type Database struct {
-	*repository.Repository
+type Repo struct {
 	*massload.MassloadRepo
 	*file.FileRepo
 	*agent.AgentRepo
@@ -30,6 +30,10 @@ type Database struct {
 	*deadhash.DeadHashRepo
 	*urlmirror.URLMirrorRepo
 	*page.PageRepo
+	*other.OtherRepo
+
+	// Переопределение для того чтобы реальные не были доступны из вне.
+	Repository, Logger, Tracer, Pool struct{} //nolint:revive // это объект пустышка
 }
 
 func New(
@@ -40,7 +44,7 @@ func New(
 	debugSquirrel bool,
 	dataSourceName string,
 	maxConn int32,
-) (*Database, error) {
+) (*Repo, error) {
 	repo, err := repository.New(
 		ctx,
 		logger,
@@ -54,8 +58,7 @@ func New(
 		return nil, fmt.Errorf("init base repo: %w", err)
 	}
 
-	return &Database{
-		Repository:    repo,
+	return &Repo{
 		MassloadRepo:  massload.New(repo),
 		FileRepo:      file.New(repo),
 		AgentRepo:     agent.New(repo),
@@ -65,5 +68,6 @@ func New(
 		DeadHashRepo:  deadhash.New(repo),
 		URLMirrorRepo: urlmirror.New(repo),
 		PageRepo:      page.New(repo),
+		OtherRepo:     other.New(repo),
 	}, nil
 }

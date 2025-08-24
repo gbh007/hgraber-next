@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"log/slog"
 	"runtime"
 
@@ -34,7 +35,7 @@ func initPyroscope(logger *slog.Logger, cfg config.Config) (*pyroscope.Profiler,
 		},
 	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("start pyroscope: %w", err)
 	}
 
 	return profiler, nil
