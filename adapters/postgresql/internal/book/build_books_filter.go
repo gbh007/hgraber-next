@@ -1,67 +1,20 @@
-package postgresql
+package book
 
 import (
 	"context"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (d *Database) BookCount(ctx context.Context, filter core.BookFilter) (int, error) {
-	var c int
-
-	query, args, err := d.buildBooksFilter(ctx, filter, true)
-	if err != nil {
-		return 0, fmt.Errorf("build book filter: %w", err)
-	}
-
-	row := d.Pool.QueryRow(ctx, query, args...)
-
-	err = row.Scan(&c)
-	if err != nil {
-		return 0, fmt.Errorf("exec query: %w", err)
-	}
-
-	return c, nil
-}
-
-func (d *Database) BookIDs(ctx context.Context, filter core.BookFilter) ([]uuid.UUID, error) {
-	ids := make([]uuid.UUID, 0)
-
-	query, args, err := d.buildBooksFilter(ctx, filter, false)
-	if err != nil {
-		return nil, fmt.Errorf("build book filter: %w", err)
-	}
-
-	rows, err := d.Pool.Query(ctx, query, args...)
-	if err != nil {
-		return nil, fmt.Errorf("exec query: %w", err)
-	}
-
-	defer rows.Close()
-
-	for rows.Next() {
-		var id uuid.UUID
-
-		err := rows.Scan(&id)
-		if err != nil {
-			return nil, fmt.Errorf("scan: %w", err)
-		}
-
-		ids = append(ids, id)
-	}
-
-	return ids, nil
-}
-
-func (d *Database) buildBooksFilter(
+//nolint:gocognit,cyclop,funlen // будет исправлено позднее
+func (repo *BookRepo) buildBooksFilter(
 	ctx context.Context,
 	filter core.BookFilter,
 	isCount bool,
-) (string, []interface{}, error) {
+) (string, []any, error) {
 	var builder squirrel.SelectBuilder
 
 	if isCount {
@@ -82,7 +35,7 @@ func (d *Database) buildBooksFilter(
 			builder = builder.Offset(uint64(filter.Offset))
 		}
 
-		orderBySuffix := ""
+		var orderBySuffix string
 
 		if filter.Desc {
 			orderBySuffix = " DESC"
@@ -140,6 +93,8 @@ func (d *Database) buildBooksFilter(
 		builder = builder.Where(squirrel.Eq{"deleted": true})
 	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(squirrel.Eq{"deleted": false})
+	case core.BookFilterShowTypeAll:
+		// Ничего не делаем
 	}
 
 	switch filter.ShowVerified {
@@ -147,6 +102,8 @@ func (d *Database) buildBooksFilter(
 		builder = builder.Where(squirrel.Eq{"verified": true})
 	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(squirrel.Eq{"verified": false})
+	case core.BookFilterShowTypeAll:
+		// Ничего не делаем
 	}
 
 	switch filter.ShowRebuilded {
@@ -154,6 +111,8 @@ func (d *Database) buildBooksFilter(
 		builder = builder.Where(squirrel.Eq{"is_rebuild": true})
 	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(squirrel.Eq{"is_rebuild": false})
+	case core.BookFilterShowTypeAll:
+		// Ничего не делаем
 	}
 
 	switch filter.ShowDownloaded {
@@ -171,6 +130,8 @@ func (d *Database) buildBooksFilter(
 			squirrel.Eq{"page_count": nil},
 			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE downloaded = FALSE AND books.id = pages.book_id)`),
 		})
+	case core.BookFilterShowTypeAll:
+		// Ничего не делаем
 	}
 
 	switch filter.ShowWithoutPages {
@@ -182,6 +143,8 @@ func (d *Database) buildBooksFilter(
 		builder = builder.Where(
 			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id)`),
 		)
+	case core.BookFilterShowTypeAll:
+		// Ничего не делаем
 	}
 
 	switch filter.ShowWithoutPreview {
@@ -199,6 +162,8 @@ func (d *Database) buildBooksFilter(
 				core.PageNumberForPreview,
 			), // особенность библиотеки, необходимо использовать `?`
 		)
+	case core.BookFilterShowTypeAll:
+		// Ничего не делаем
 	}
 
 	if filter.Fields.Name != "" {
@@ -255,6 +220,8 @@ func (d *Database) buildBooksFilter(
 				}).
 					GroupBy("attr")
 			}
+		case core.BookFilterAttributeTypeNone:
+			continue
 
 		default:
 			continue
@@ -324,7 +291,8 @@ func (d *Database) buildBooksFilter(
 				}).
 					GroupBy("name")
 			}
-
+		case core.BookFilterLabelTypeNone:
+			continue
 		default:
 			continue
 		}
@@ -348,7 +316,9 @@ func (d *Database) buildBooksFilter(
 		return "", nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.SquirrelDebugLog(ctx, query, args)
+	repo.SquirrelDebugLog(ctx, query, args)
 
 	return query, args, nil
 }
+
+//nolint:revive // будет исправлено позднее
