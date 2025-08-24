@@ -14,6 +14,7 @@ import (
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/file"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/label"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/massload"
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/page"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/repository"
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/urlmirror"
 )
@@ -28,6 +29,7 @@ type Database struct {
 	*book.BookRepo
 	*deadhash.DeadHashRepo
 	*urlmirror.URLMirrorRepo
+	*page.PageRepo
 }
 
 func New(
@@ -62,5 +64,6 @@ func New(
 		BookRepo:      book.New(repo),
 		DeadHashRepo:  deadhash.New(repo),
 		URLMirrorRepo: urlmirror.New(repo),
+		PageRepo:      page.New(repo),
 	}, nil
 }

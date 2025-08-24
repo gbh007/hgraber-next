@@ -1,4 +1,4 @@
-package postgresql
+package page
 
 import (
 	"context"
@@ -11,8 +11,8 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-// FIXME: добавить лимиты
-func (d *Database) NotDownloadedPages(ctx context.Context) ([]core.PageForDownload, error) {
+// TODO: добавить лимиты
+func (repo *PageRepo) NotDownloadedPages(ctx context.Context) ([]core.PageForDownload, error) {
 	builder := squirrel.Select(
 		"p.book_id",
 		"b.origin_url AS book_url",  // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
@@ -32,13 +32,13 @@ func (d *Database) NotDownloadedPages(ctx context.Context) ([]core.PageForDownlo
 		return nil, fmt.Errorf("build query: %w", err)
 	}
 
-	d.SquirrelDebugLog(ctx, query, args)
+	repo.SquirrelDebugLog(ctx, query, args)
 
 	result := make([]core.PageForDownload, 0)
 
-	rows, err := d.Pool.Query(ctx, query, args...)
+	rows, err := repo.Pool.Query(ctx, query, args...)
 	if err != nil {
-		return nil, fmt.Errorf("exec query :%w", err)
+		return nil, fmt.Errorf("exec query: %w", err)
 	}
 
 	defer rows.Close()
