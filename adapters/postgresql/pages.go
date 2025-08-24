@@ -265,3 +265,28 @@ func (d *Database) BookPagesCount(ctx context.Context, bookID uuid.UUID) (int, e
 
 	return int(count.Int64), nil
 }
+
+func (d *Database) ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UUID) error {
+	builder := squirrel.Update("pages").
+		PlaceholderFormat(squirrel.Dollar).
+		SetMap(map[string]interface{}{
+			"file_id": newFileID,
+		}).
+		Where(squirrel.Eq{
+			"file_id": oldFileID,
+		})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return fmt.Errorf("build query: %w", err)
+	}
+
+	d.SquirrelDebugLog(ctx, query, args)
+
+	_, err = d.Pool.Exec(ctx, query, args...)
+	if err != nil {
+		return fmt.Errorf("exec query: %w", err)
+	}
+
+	return nil
+}

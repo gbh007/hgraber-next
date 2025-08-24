@@ -12,6 +12,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
+//nolint:lll,gocognit,cyclop,funlen // будет исправлено позднее
 func (d *Database) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, error) {
 	systemSize := systemmodel.SystemSizeInfo{
 		FileCountByFS:         make(map[uuid.UUID]int64, fsmodel.ApproximateFSCount),
@@ -260,8 +261,10 @@ func (d *Database) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, 
 
 	err := batchResult.Close()
 	if err != nil {
-		return systemmodel.SystemSizeInfo{}, err
+		return systemmodel.SystemSizeInfo{}, fmt.Errorf("batch close: %w", err)
 	}
 
 	return systemSize, nil
 }
+
+//nolint:revive // будет исправлено позднее

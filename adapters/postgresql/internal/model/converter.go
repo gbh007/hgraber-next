@@ -33,7 +33,14 @@ func StringToDB(s string) sql.NullString {
 
 func Int32ToDB(i int) sql.NullInt32 {
 	return sql.NullInt32{
-		Int32: int32(i),
+		Int32: int32(i), //nolint:gosec // для удобства, гарантию обеспечивает логика сверху
+		Valid: i != 0,
+	}
+}
+
+func Int64ToDB(i int64) sql.NullInt64 {
+	return sql.NullInt64{
+		Int64: i,
 		Valid: i != 0,
 	}
 }
