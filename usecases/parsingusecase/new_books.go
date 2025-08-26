@@ -17,6 +17,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
+//nolint:gocognit,cyclop,funlen // будет исправлено позднее
 func (uc *UseCase) NewBooks(
 	ctx context.Context,
 	urls []url.URL,
@@ -49,7 +50,8 @@ func (uc *UseCase) NewBooks(
 	for _, u := range urls {
 		// Ссылки не могут содержать пробелы
 		if u.String() != strings.TrimSpace(u.String()) {
-			return parsing.FirstHandleMultipleResult{}, fmt.Errorf("url (%s) have space", u.String())
+			return parsing.FirstHandleMultipleResult{},
+				fmt.Errorf("url (%s) have space", u.String()) //nolint:revive // исключение
 		}
 
 		duplicates, err := mirrorCalculator.GetClones(u)
@@ -169,7 +171,7 @@ func (uc *UseCase) NewBooks(
 
 func (uc *UseCase) existsInStorage(ctx context.Context, urls []url.URL) ([]uuid.UUID, error) {
 	for _, u := range urls {
-		// FIXME: нужно сделать более оптимальный метод
+		// TODO: нужно сделать более оптимальный метод
 		ids, err := uc.storage.GetBookIDsByURL(ctx, u)
 		if err != nil {
 			return nil, fmt.Errorf("check exists by (%s): %w", u.String(), err)

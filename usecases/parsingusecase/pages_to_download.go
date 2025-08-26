@@ -30,8 +30,8 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownlo
 	}
 
 	pages = pkg.SliceFilter(pages, func(b core.PageForDownload) bool {
-		hasUrl := b.BookURL != nil && b.ImageURL != nil
-		if !hasUrl {
+		hasURL := b.BookURL != nil && b.ImageURL != nil
+		if !hasURL {
 			uc.logger.WarnContext(
 				ctx, "handle page without url",
 				slog.String("book_id", b.BookID.String()),
@@ -39,7 +39,7 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownlo
 			)
 		}
 
-		return hasUrl
+		return hasURL
 	})
 
 	toDownload := make([]parsing.PageForDownloadWithAgent, 0, len(pages))

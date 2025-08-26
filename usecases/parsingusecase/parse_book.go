@@ -2,6 +2,7 @@ package parsingusecase
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"path"
 	"time"
@@ -18,7 +19,7 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.B
 	defer agentCancel()
 
 	if book.OriginURL == nil {
-		return fmt.Errorf("missing url")
+		return errors.New("missing url")
 	}
 
 	info, err := uc.agentSystem.BookParse(agentCtx, agentID, *book.OriginURL)
@@ -27,7 +28,7 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.B
 	}
 
 	if len(info.Attributes) > 0 {
-		attributes := make(map[string][]string, 7)
+		attributes := make(map[string][]string, core.PossibleAttributeCount)
 
 		for _, attr := range info.Attributes {
 			attributes[attr.Code] = attr.Values

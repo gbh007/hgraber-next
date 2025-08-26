@@ -15,7 +15,7 @@ import (
 )
 
 type storage interface {
-	GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error)
+	GetBookIDsByURL(ctx context.Context, u url.URL) ([]uuid.UUID, error)
 	GetBook(ctx context.Context, bookID uuid.UUID) (core.Book, error)
 
 	NewBook(ctx context.Context, book core.Book) error
@@ -45,9 +45,9 @@ type storage interface {
 }
 
 type agentSystem interface {
-	BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) (agentmodel.AgentBookDetails, error)
+	BookParse(ctx context.Context, agentID uuid.UUID, u url.URL) (agentmodel.AgentBookDetails, error)
 	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
-	PageLoad(ctx context.Context, agentID uuid.UUID, url agentmodel.AgentPageURL) (io.Reader, error)
+	PageLoad(ctx context.Context, agentID uuid.UUID, u agentmodel.AgentPageURL) (io.Reader, error)
 	PagesCheck(
 		ctx context.Context,
 		agentID uuid.UUID,

@@ -30,15 +30,15 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]agentmodel.BookWithAgent
 	}
 
 	books = pkg.SliceFilter(books, func(b core.Book) bool {
-		hasUrl := b.OriginURL != nil
-		if !hasUrl {
+		hasURL := b.OriginURL != nil
+		if !hasURL {
 			uc.logger.WarnContext(
 				ctx, "handle book without url",
 				slog.String("book_id", b.ID.String()),
 			)
 		}
 
-		return hasUrl
+		return hasURL
 	})
 
 	toParse := make([]agentmodel.BookWithAgent, 0, len(books))

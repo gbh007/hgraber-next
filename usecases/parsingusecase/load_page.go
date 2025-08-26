@@ -2,6 +2,7 @@ package parsingusecase
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -13,7 +14,7 @@ import (
 
 func (uc *UseCase) DownloadPage(ctx context.Context, agentID uuid.UUID, page core.PageForDownload) error {
 	if page.BookURL == nil || page.ImageURL == nil {
-		return fmt.Errorf("invalid page")
+		return errors.New("invalid page")
 	}
 
 	fsID, err := uc.fileStorage.FSIDForDownload(ctx)

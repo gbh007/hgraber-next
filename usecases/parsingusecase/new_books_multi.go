@@ -15,6 +15,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
+//nolint:gocognit,cyclop // будет исправлено позднее
 func (uc *UseCase) NewBooksMulti(
 	ctx context.Context,
 	urls []url.URL,
@@ -36,15 +37,15 @@ func (uc *UseCase) NewBooksMulti(
 
 	result := parsing.MultiHandleMultipleResult{
 		Details: parsing.FirstHandleMultipleResult{
-			Details: make([]parsing.BookHandleResult, 0, len(urls)*100),
+			Details: make([]parsing.BookHandleResult, 0, len(urls)*100), //nolint:mnd // оптимизация
 		},
 	}
 
 urlLoop:
-	for _, multiUrl := range urls {
+	for _, multiURL := range urls {
 	agentLoop:
 		for _, agent := range agents {
-			booksInfo, err := uc.agentSystem.BooksCheckMultiple(ctx, agent.ID, multiUrl)
+			booksInfo, err := uc.agentSystem.BooksCheckMultiple(ctx, agent.ID, multiURL)
 
 			if errors.Is(err, agentmodel.AgentAPIOffline) {
 				uc.logger.DebugContext(
@@ -133,12 +134,12 @@ urlLoop:
 				result.Details.RegisterHandled(u, book.ID)
 			}
 
-			result.RegisterHandled(multiUrl)
+			result.RegisterHandled(multiURL)
 
 			continue urlLoop
 		}
 
-		result.RegisterError(multiUrl, "unsupported by all agents")
+		result.RegisterError(multiURL, "unsupported by all agents")
 	}
 
 	return result, nil
