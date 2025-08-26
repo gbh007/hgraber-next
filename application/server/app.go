@@ -11,7 +11,7 @@ import (
 	"go.opentelemetry.io/otel"
 
 	"github.com/gbh007/hgraber-next/adapters/agent"
-	"github.com/gbh007/hgraber-next/adapters/fileStorage"
+	"github.com/gbh007/hgraber-next/adapters/filestorage"
 	"github.com/gbh007/hgraber-next/adapters/postgresql"
 	"github.com/gbh007/hgraber-next/adapters/tmpdata"
 	"github.com/gbh007/hgraber-next/controllers/apiagent"
@@ -124,7 +124,7 @@ func Serve() {
 		os.Exit(1)
 	}
 
-	fileStorageAdapter := fileStorage.New(
+	fileStorageAdapter := filestorage.New(
 		logger,
 		agentSystem,
 		storage,

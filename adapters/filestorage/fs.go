@@ -1,7 +1,8 @@
-package fileStorage
+package filestorage
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -134,6 +135,6 @@ func (s *Storage) connect(_ context.Context, fs fsmodel.FileStorageSystem) (rawF
 		}, nil
 
 	default:
-		return rawFileStorageData{}, fmt.Errorf("no configuration for file storage")
+		return rawFileStorageData{}, errors.New("no configuration for file storage")
 	}
 }

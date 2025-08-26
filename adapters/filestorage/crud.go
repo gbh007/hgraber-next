@@ -1,4 +1,4 @@
-package fileStorage
+package filestorage
 
 import (
 	"context"
@@ -23,7 +23,7 @@ func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader, 
 		return fmt.Errorf("get fs: %w", err)
 	}
 
-	return storage.FS.Create(ctx, fileID, body)
+	return storage.FS.Create(ctx, fileID, body) //nolint:wrapcheck // простой проброс
 }
 
 func (s *Storage) Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) error {
@@ -43,7 +43,7 @@ func (s *Storage) Delete(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID)
 		return fmt.Errorf("get fs: %w", err)
 	}
 
-	return storage.FS.Delete(ctx, fileID)
+	return storage.FS.Delete(ctx, fileID) //nolint:wrapcheck // простой проброс
 }
 
 func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error) {
@@ -63,7 +63,7 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (i
 		return nil, fmt.Errorf("get fs: %w", err)
 	}
 
-	return storage.FS.Get(ctx, fileID)
+	return storage.FS.Get(ctx, fileID) //nolint:wrapcheck // простой проброс
 }
 
 func (s *Storage) State(
@@ -82,5 +82,5 @@ func (s *Storage) State(
 		return fsmodel.FSState{}, fmt.Errorf("get fs: %w", err)
 	}
 
-	return storage.FS.State(ctx, includeFileIDs, includeFileSizes)
+	return storage.FS.State(ctx, includeFileIDs, includeFileSizes) //nolint:wrapcheck // простой проброс
 }

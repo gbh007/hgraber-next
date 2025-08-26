@@ -1,4 +1,4 @@
-package fileStorage
+package filestorage
 
 import (
 	"context"
@@ -81,7 +81,7 @@ func New(
 
 		tryReconnect: tryReconnect,
 
-		storageMap:      make(map[uuid.UUID]rawFileStorageData, 10),
+		storageMap:      make(map[uuid.UUID]rawFileStorageData, 10), //nolint:mnd // оптимизация
 		storageMapMutex: &sync.RWMutex{},
 	}
 }

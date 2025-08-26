@@ -1,7 +1,8 @@
-package fileStorage
+package filestorage
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/url"
 	"time"
@@ -63,7 +64,7 @@ func (s *Storage) refreshHighwayToken(ctx context.Context, fsID uuid.UUID) (stri
 	}
 
 	if storage.AgentID == uuid.Nil {
-		return "", fmt.Errorf("can't refresh token without agent fs")
+		return "", errors.New("can't refresh token without agent fs")
 	}
 
 	token, validUntil, err := s.agentController.CreateHighwayToken(ctx, storage.AgentID)
