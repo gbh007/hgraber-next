@@ -16,7 +16,7 @@ func (c *Client) FSCreate(ctx context.Context, agentID, fileID uuid.UUID, body i
 		return err
 	}
 
-	return adapter.ToFS().Create(ctx, fileID, body)
+	return adapter.ToFS().Create(ctx, fileID, body) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) FSDelete(ctx context.Context, agentID, fileID uuid.UUID) error {
@@ -25,7 +25,7 @@ func (c *Client) FSDelete(ctx context.Context, agentID, fileID uuid.UUID) error 
 		return err
 	}
 
-	return adapter.ToFS().Delete(ctx, fileID)
+	return adapter.ToFS().Delete(ctx, fileID) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) FSGet(ctx context.Context, agentID, fileID uuid.UUID) (io.Reader, error) {
@@ -34,7 +34,7 @@ func (c *Client) FSGet(ctx context.Context, agentID, fileID uuid.UUID) (io.Reade
 		return nil, err
 	}
 
-	return adapter.ToFS().Get(ctx, fileID)
+	return adapter.ToFS().Get(ctx, fileID) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) FSState(
@@ -47,7 +47,7 @@ func (c *Client) FSState(
 		return fsmodel.FSState{}, err
 	}
 
-	return adapter.ToFS().State(ctx, includeFileIDs, includeFileSizes)
+	return adapter.ToFS().State(ctx, includeFileIDs, includeFileSizes) //nolint:wrapcheck,golines,lll // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) CreateHighwayToken(ctx context.Context, agentID uuid.UUID) (string, time.Time, error) {
@@ -56,5 +56,5 @@ func (c *Client) CreateHighwayToken(ctx context.Context, agentID uuid.UUID) (str
 		return "", time.Time{}, err
 	}
 
-	return adapter.ToFS().CreateHighwayToken(ctx)
+	return adapter.ToFS().CreateHighwayToken(ctx) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }

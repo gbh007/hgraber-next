@@ -22,23 +22,26 @@ func (a *Adapter) PagesCheck(
 		}),
 	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("request: %w", err)
 	}
 
 	var result []agentmodel.AgentPageCheckResult
 
 	switch typedRes := res.(type) {
 	case *agentapi.APIParsingPageCheckPostOK:
-		result = pkg.Map(typedRes.Result, func(v agentapi.APIParsingPageCheckPostOKResultItem) agentmodel.AgentPageCheckResult {
-			return agentmodel.AgentPageCheckResult{
-				BookURL:       v.BookURL,
-				ImageURL:      v.ImageURL,
-				IsUnsupported: v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultUnsupported,
-				IsPossible:    v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultOk,
-				HasError:      v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultError,
-				ErrorReason:   v.ErrorDetails.Value,
-			}
-		})
+		result = pkg.Map(
+			typedRes.Result,
+			func(v agentapi.APIParsingPageCheckPostOKResultItem) agentmodel.AgentPageCheckResult {
+				return agentmodel.AgentPageCheckResult{
+					BookURL:       v.BookURL,
+					ImageURL:      v.ImageURL,
+					IsUnsupported: v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultUnsupported,
+					IsPossible:    v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultOk,
+					HasError:      v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultError,
+					ErrorReason:   v.ErrorDetails.Value,
+				}
+			},
+		)
 
 	case *agentapi.APIParsingPageCheckPostBadRequest:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)

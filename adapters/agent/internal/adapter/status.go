@@ -12,7 +12,7 @@ import (
 func (a *Adapter) Status(ctx context.Context) (agentmodel.AgentStatus, error) {
 	res, err := a.rawClient.APICoreStatusGet(ctx)
 	if err != nil {
-		return agentmodel.AgentStatus{}, err
+		return agentmodel.AgentStatus{}, fmt.Errorf("request: %w", err)
 	}
 
 	switch typedRes := res.(type) {
@@ -22,14 +22,17 @@ func (a *Adapter) Status(ctx context.Context) (agentmodel.AgentStatus, error) {
 			IsOK:      typedRes.Status == agentapi.APICoreStatusGetOKStatusOk,
 			IsWarning: typedRes.Status == agentapi.APICoreStatusGetOKStatusWarning,
 			IsError:   typedRes.Status == agentapi.APICoreStatusGetOKStatusError,
-			Problems: pkg.Map(typedRes.Problems, func(p agentapi.APICoreStatusGetOKProblemsItem) agentmodel.AgentStatusProblem {
-				return agentmodel.AgentStatusProblem{
-					IsInfo:    p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeInfo,
-					IsWarning: p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeWarning,
-					IsError:   p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeError,
-					Details:   p.Details,
-				}
-			}),
+			Problems: pkg.Map(
+				typedRes.Problems,
+				func(p agentapi.APICoreStatusGetOKProblemsItem) agentmodel.AgentStatusProblem {
+					return agentmodel.AgentStatusProblem{
+						IsInfo:    p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeInfo,
+						IsWarning: p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeWarning,
+						IsError:   p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeError,
+						Details:   p.Details,
+					}
+				},
+			),
 		}, nil
 
 	case *agentapi.APICoreStatusGetBadRequest:

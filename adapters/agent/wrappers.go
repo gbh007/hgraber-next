@@ -11,13 +11,13 @@ import (
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
 )
 
-func (c *Client) BookParse(ctx context.Context, agentID uuid.UUID, url url.URL) (agentmodel.AgentBookDetails, error) {
+func (c *Client) BookParse(ctx context.Context, agentID uuid.UUID, u url.URL) (agentmodel.AgentBookDetails, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return agentmodel.AgentBookDetails{}, err
 	}
 
-	return adapter.BookParse(ctx, url)
+	return adapter.BookParse(ctx, u) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) BooksCheck(
@@ -30,7 +30,7 @@ func (c *Client) BooksCheck(
 		return nil, err
 	}
 
-	return adapter.BooksCheck(ctx, urls)
+	return adapter.BooksCheck(ctx, urls) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) BooksCheckMultiple(
@@ -43,7 +43,7 @@ func (c *Client) BooksCheckMultiple(
 		return nil, err
 	}
 
-	return adapter.BooksCheckMulti(ctx, u)
+	return adapter.BooksCheckMulti(ctx, u) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) ExportArchive(ctx context.Context, agentID uuid.UUID, data agentmodel.AgentExportData) error {
@@ -52,16 +52,16 @@ func (c *Client) ExportArchive(ctx context.Context, agentID uuid.UUID, data agen
 		return err
 	}
 
-	return adapter.ExportArchive(ctx, data)
+	return adapter.ExportArchive(ctx, data) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
-func (c *Client) PageLoad(ctx context.Context, agentID uuid.UUID, url agentmodel.AgentPageURL) (io.Reader, error) {
+func (c *Client) PageLoad(ctx context.Context, agentID uuid.UUID, u agentmodel.AgentPageURL) (io.Reader, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return nil, err
 	}
 
-	return adapter.PageLoad(ctx, url)
+	return adapter.PageLoad(ctx, u) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) PagesCheck(
@@ -74,7 +74,7 @@ func (c *Client) PagesCheck(
 		return nil, err
 	}
 
-	return adapter.PagesCheck(ctx, urls)
+	return adapter.PagesCheck(ctx, urls) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) Status(ctx context.Context, agentID uuid.UUID) (agentmodel.AgentStatus, error) {
@@ -83,7 +83,7 @@ func (c *Client) Status(ctx context.Context, agentID uuid.UUID) (agentmodel.Agen
 		return agentmodel.AgentStatus{}, err
 	}
 
-	return adapter.Status(ctx)
+	return adapter.Status(ctx) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) HProxyList(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.List, error) {
@@ -92,14 +92,19 @@ func (c *Client) HProxyList(ctx context.Context, agentID uuid.UUID, u url.URL) (
 		return hproxymodel.List{}, err
 	}
 
-	return adapter.HProxyList(ctx, u)
+	return adapter.HProxyList(ctx, u) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
-func (c *Client) HProxyBook(ctx context.Context, agentID uuid.UUID, u url.URL, pageLimit *int) (hproxymodel.Book, error) {
+func (c *Client) HProxyBook(
+	ctx context.Context,
+	agentID uuid.UUID,
+	u url.URL,
+	pageLimit *int,
+) (hproxymodel.Book, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
 		return hproxymodel.Book{}, err
 	}
 
-	return adapter.HProxyBook(ctx, u, pageLimit)
+	return adapter.HProxyBook(ctx, u, pageLimit) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }

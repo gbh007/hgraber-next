@@ -40,7 +40,7 @@ func (c *Client) SetAgent(agent core.Agent) error {
 
 	a, err := adapter.New(agent.Addr.String(), agent.Token, c.agentTimeout)
 	if err != nil {
-		return err
+		return fmt.Errorf("adapter new: %w", err)
 	}
 
 	// TODO: проверить отсутствие утечек соединений
