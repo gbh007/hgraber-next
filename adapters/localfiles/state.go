@@ -1,4 +1,4 @@
-package localFiles
+package localfiles
 
 import (
 	"context"

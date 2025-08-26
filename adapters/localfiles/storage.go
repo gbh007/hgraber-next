@@ -1,4 +1,4 @@
-package localFiles
+package localfiles
 
 import (
 	"errors"
@@ -16,14 +16,14 @@ type Storage struct {
 	logger *slog.Logger
 }
 
-func New(path string, logger *slog.Logger) (*Storage, error) {
-	err := createDir(path)
+func New(dirPath string, logger *slog.Logger) (*Storage, error) {
+	err := createDir(dirPath)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Storage{
-		fsPath: path,
+		fsPath: dirPath,
 		logger: logger,
 	}, nil
 }
@@ -35,16 +35,16 @@ func (s *Storage) filepath(fileID uuid.UUID) string {
 func createDir(dirPath string) error {
 	info, err := os.Stat(dirPath)
 	if err != nil && !errors.Is(err, os.ErrNotExist) {
-		return err
+		return fmt.Errorf("os stat: %w", err)
 	}
 
 	if info != nil && !info.IsDir() {
-		return fmt.Errorf("dir path is not dir")
+		return errors.New("dir path is not dir")
 	}
 
 	err = os.MkdirAll(dirPath, os.ModeDir|os.ModePerm)
 	if err != nil {
-		return err
+		return fmt.Errorf("mkdir: %w", err)
 	}
 
 	return nil

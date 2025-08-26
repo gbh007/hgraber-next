@@ -1,4 +1,4 @@
-package localFiles
+package localfiles
 
 import (
 	"context"
@@ -20,10 +20,10 @@ func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader) 
 	}
 
 	if info != nil {
-		return fmt.Errorf("local fs: file exists")
+		return errors.New("local fs: file exists")
 	}
 
-	f, err := os.Create(filepath)
+	f, err := os.Create(filepath) //nolint:gosec // не применимо
 	if err != nil {
 		return fmt.Errorf("local fs: create: %w", err)
 	}

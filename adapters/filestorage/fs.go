@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/agentFS"
-	"github.com/gbh007/hgraber-next/adapters/localFiles"
+	"github.com/gbh007/hgraber-next/adapters/localfiles"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
@@ -124,7 +124,7 @@ func (s *Storage) connect(_ context.Context, fs fsmodel.FileStorageSystem) (rawF
 		return raw, nil
 
 	case fs.Path != "":
-		storage, err = localFiles.New(fs.Path, s.logger)
+		storage, err = localfiles.New(fs.Path, s.logger)
 		if err != nil {
 			return rawFileStorageData{}, fmt.Errorf("fail init local file storage: %w", err)
 		}
