@@ -14,7 +14,7 @@ func (repo *MassloadRepo) MassloadFlags(ctx context.Context) ([]massloadmodel.Fl
 	builder := squirrel.Select(model.MassloadFlagColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("massload_flags").
-		OrderBy("created_at", "code")
+		OrderBy("order_weight DESC", "created_at", "code")
 
 	query, args, err := builder.ToSql()
 	if err != nil {

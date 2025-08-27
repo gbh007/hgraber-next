@@ -144,25 +144,33 @@ func MassloadFlagColumns() []string {
 		"code",
 		"name",
 		"description",
+		"order_weight",
+		"text_color",
+		"background_color",
 		"created_at",
 	}
 }
 
-func MassloadFlagScanner(ml *massloadmodel.Flag) RowScanner {
+func MassloadFlagScanner(flag *massloadmodel.Flag) RowScanner {
 	return func(rows pgx.Rows) error {
-		var description sql.NullString
+		var description, textColor, backgroundColor sql.NullString
 
 		err := rows.Scan(
-			&ml.Code,
-			&ml.Name,
+			&flag.Code,
+			&flag.Name,
 			&description,
-			&ml.CreatedAt,
+			&flag.OrderWeight,
+			&textColor,
+			&backgroundColor,
+			&flag.CreatedAt,
 		)
 		if err != nil {
 			return fmt.Errorf("scan to model: %w", err)
 		}
 
-		ml.Description = description.String
+		flag.Description = description.String
+		flag.TextColor = textColor.String
+		flag.BackgroundColor = backgroundColor.String
 
 		return nil
 	}

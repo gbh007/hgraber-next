@@ -1,5 +1,5 @@
 //go:build !linux
 
-package localFiles
+package localfiles
 
 func getAvailableSize(_ string) int64 { return 0 }

@@ -5448,6 +5448,12 @@ type APIMassloadFlagListGetOKFlagsItem struct {
 	Name string `json:"name"`
 	// Описание флага.
 	Description OptString `json:"description"`
+	// Вес флага при сортировке (больше = первее).
+	OrderWeight int `json:"order_weight"`
+	// Цвет текста.
+	TextColor OptString `json:"text_color"`
+	// Цвет фона.
+	BackgroundColor OptString `json:"background_color"`
 	// Время создания.
 	CreatedAt time.Time `json:"created_at"`
 }
@@ -5465,6 +5471,21 @@ func (s *APIMassloadFlagListGetOKFlagsItem) GetName() string {
 // GetDescription returns the value of Description.
 func (s *APIMassloadFlagListGetOKFlagsItem) GetDescription() OptString {
 	return s.Description
+}
+
+// GetOrderWeight returns the value of OrderWeight.
+func (s *APIMassloadFlagListGetOKFlagsItem) GetOrderWeight() int {
+	return s.OrderWeight
+}
+
+// GetTextColor returns the value of TextColor.
+func (s *APIMassloadFlagListGetOKFlagsItem) GetTextColor() OptString {
+	return s.TextColor
+}
+
+// GetBackgroundColor returns the value of BackgroundColor.
+func (s *APIMassloadFlagListGetOKFlagsItem) GetBackgroundColor() OptString {
+	return s.BackgroundColor
 }
 
 // GetCreatedAt returns the value of CreatedAt.
@@ -5485,6 +5506,21 @@ func (s *APIMassloadFlagListGetOKFlagsItem) SetName(val string) {
 // SetDescription sets the value of Description.
 func (s *APIMassloadFlagListGetOKFlagsItem) SetDescription(val OptString) {
 	s.Description = val
+}
+
+// SetOrderWeight sets the value of OrderWeight.
+func (s *APIMassloadFlagListGetOKFlagsItem) SetOrderWeight(val int) {
+	s.OrderWeight = val
+}
+
+// SetTextColor sets the value of TextColor.
+func (s *APIMassloadFlagListGetOKFlagsItem) SetTextColor(val OptString) {
+	s.TextColor = val
+}
+
+// SetBackgroundColor sets the value of BackgroundColor.
+func (s *APIMassloadFlagListGetOKFlagsItem) SetBackgroundColor(val OptString) {
+	s.BackgroundColor = val
 }
 
 // SetCreatedAt sets the value of CreatedAt.

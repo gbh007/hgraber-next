@@ -21,10 +21,13 @@ func (c *MassloadController) APIMassloadFlagListGet(ctx context.Context) (server
 	return &serverapi.APIMassloadFlagListGetOK{
 		Flags: pkg.Map(flags, func(flag massloadmodel.Flag) serverapi.APIMassloadFlagListGetOKFlagsItem {
 			return serverapi.APIMassloadFlagListGetOKFlagsItem{
-				Code:        flag.Code,
-				Name:        flag.Name,
-				Description: apiservercore.OptString(flag.Description),
-				CreatedAt:   flag.CreatedAt,
+				Code:            flag.Code,
+				Name:            flag.Name,
+				Description:     apiservercore.OptString(flag.Description),
+				OrderWeight:     flag.OrderWeight,
+				TextColor:       apiservercore.OptString(flag.TextColor),
+				BackgroundColor: apiservercore.OptString(flag.BackgroundColor),
+				CreatedAt:       flag.CreatedAt,
 			}
 		}),
 	}, nil

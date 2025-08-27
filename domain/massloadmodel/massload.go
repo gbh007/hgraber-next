@@ -5,6 +5,24 @@ import (
 	"time"
 )
 
+const (
+	FilterOrderByID FilterOrderBy = iota
+	FilterOrderByName
+	FilterOrderByPageSize
+	FilterOrderByFileSize
+)
+
+const (
+	FilterAttributeTypeNone FilterAttributeType = iota
+	FilterAttributeTypeLike
+	FilterAttributeTypeIn
+)
+
+type (
+	FilterOrderBy       byte
+	FilterAttributeType byte
+)
+
 type Massload struct {
 	ID          int
 	Name        string
@@ -34,28 +52,14 @@ type Attribute struct {
 }
 
 type Flag struct {
-	Code        string
-	Name        string
-	Description string
-	CreatedAt   time.Time
+	Code            string
+	Name            string
+	Description     string
+	TextColor       string
+	BackgroundColor string
+	OrderWeight     int
+	CreatedAt       time.Time
 }
-
-type FilterOrderBy byte
-
-const (
-	FilterOrderByID FilterOrderBy = iota
-	FilterOrderByName
-	FilterOrderByPageSize
-	FilterOrderByFileSize
-)
-
-type FilterAttributeType byte
-
-const (
-	FilterAttributeTypeNone FilterAttributeType = iota
-	FilterAttributeTypeLike
-	FilterAttributeTypeIn
-)
 
 type Filter struct {
 	OrderBy FilterOrderBy

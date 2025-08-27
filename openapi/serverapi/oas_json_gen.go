@@ -21248,16 +21248,35 @@ func (s *APIMassloadFlagListGetOKFlagsItem) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		e.FieldStart("order_weight")
+		e.Int(s.OrderWeight)
+	}
+	{
+		if s.TextColor.Set {
+			e.FieldStart("text_color")
+			s.TextColor.Encode(e)
+		}
+	}
+	{
+		if s.BackgroundColor.Set {
+			e.FieldStart("background_color")
+			s.BackgroundColor.Encode(e)
+		}
+	}
+	{
 		e.FieldStart("created_at")
 		json.EncodeDateTime(e, s.CreatedAt)
 	}
 }
 
-var jsonFieldsNameOfAPIMassloadFlagListGetOKFlagsItem = [4]string{
+var jsonFieldsNameOfAPIMassloadFlagListGetOKFlagsItem = [7]string{
 	0: "code",
 	1: "name",
 	2: "description",
-	3: "created_at",
+	3: "order_weight",
+	4: "text_color",
+	5: "background_color",
+	6: "created_at",
 }
 
 // Decode decodes APIMassloadFlagListGetOKFlagsItem from json.
@@ -21303,8 +21322,40 @@ func (s *APIMassloadFlagListGetOKFlagsItem) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"description\"")
 			}
-		case "created_at":
+		case "order_weight":
 			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int()
+				s.OrderWeight = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"order_weight\"")
+			}
+		case "text_color":
+			if err := func() error {
+				s.TextColor.Reset()
+				if err := s.TextColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"text_color\"")
+			}
+		case "background_color":
+			if err := func() error {
+				s.BackgroundColor.Reset()
+				if err := s.BackgroundColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"background_color\"")
+			}
+		case "created_at":
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreatedAt = v
@@ -21325,7 +21376,7 @@ func (s *APIMassloadFlagListGetOKFlagsItem) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001011,
+		0b01001011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
