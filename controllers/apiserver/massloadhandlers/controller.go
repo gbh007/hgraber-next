@@ -19,12 +19,16 @@ type MassloadUseCases interface {
 	Massloads(ctx context.Context, filter massloadmodel.Filter) ([]massloadmodel.Massload, error)
 
 	MassloadFlags(ctx context.Context) ([]massloadmodel.Flag, error)
+	CreateMassloadFlag(ctx context.Context, flag massloadmodel.Flag) error
+	UpdateMassloadFlag(ctx context.Context, flag massloadmodel.Flag) error
+	DeleteMassloadFlag(ctx context.Context, code string) error
+	MassloadFlag(ctx context.Context, code string) (massloadmodel.Flag, error)
 
 	CreateMassloadAttribute(ctx context.Context, massloadID int, code, value string) error
 	DeleteMassloadAttribute(ctx context.Context, massloadID int, code, value string) error
 
-	CreateMassloadExternalLink(ctx context.Context, massloadID int, url url.URL) error
-	DeleteMassloadExternalLink(ctx context.Context, massloadID int, url url.URL) error
+	CreateMassloadExternalLink(ctx context.Context, massloadID int, u url.URL) error
+	DeleteMassloadExternalLink(ctx context.Context, massloadID int, u url.URL) error
 }
 
 type MassloadController struct {

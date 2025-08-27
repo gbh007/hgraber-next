@@ -17,6 +17,10 @@ type storage interface {
 	DeleteMassload(ctx context.Context, id int) error
 
 	MassloadFlags(ctx context.Context) ([]massloadmodel.Flag, error)
+	MassloadFlag(ctx context.Context, code string) (massloadmodel.Flag, error)
+	CreateMassloadFlag(ctx context.Context, flag massloadmodel.Flag) error
+	UpdateMassloadFlag(ctx context.Context, flag massloadmodel.Flag) error
+	DeleteMassloadFlag(ctx context.Context, code string) error
 
 	CreateMassloadExternalLink(ctx context.Context, id int, link massloadmodel.ExternalLink) error
 	MassloadExternalLinks(ctx context.Context, id int) ([]massloadmodel.ExternalLink, error)

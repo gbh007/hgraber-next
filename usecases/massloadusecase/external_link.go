@@ -9,9 +9,9 @@ import (
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 )
 
-func (uc *UseCase) CreateMassloadExternalLink(ctx context.Context, massloadID int, url url.URL) error {
+func (uc *UseCase) CreateMassloadExternalLink(ctx context.Context, massloadID int, u url.URL) error {
 	err := uc.storage.CreateMassloadExternalLink(ctx, massloadID, massloadmodel.ExternalLink{
-		URL:       url,
+		URL:       u,
 		CreatedAt: time.Now(),
 	})
 	if err != nil {
@@ -21,8 +21,8 @@ func (uc *UseCase) CreateMassloadExternalLink(ctx context.Context, massloadID in
 	return nil
 }
 
-func (uc *UseCase) DeleteMassloadExternalLink(ctx context.Context, massloadID int, url url.URL) error {
-	err := uc.storage.DeleteMassloadExternalLink(ctx, massloadID, url)
+func (uc *UseCase) DeleteMassloadExternalLink(ctx context.Context, massloadID int, u url.URL) error {
+	err := uc.storage.DeleteMassloadExternalLink(ctx, massloadID, u)
 	if err != nil {
 		return fmt.Errorf("storage delete: %w", err)
 	}
