@@ -5416,6 +5416,174 @@ type APILabelSetPostUnauthorized ErrorResponse
 
 func (*APILabelSetPostUnauthorized) aPILabelSetPostRes() {}
 
+type APIMassloadFlagCreatePostBadRequest ErrorResponse
+
+func (*APIMassloadFlagCreatePostBadRequest) aPIMassloadFlagCreatePostRes() {}
+
+type APIMassloadFlagCreatePostForbidden ErrorResponse
+
+func (*APIMassloadFlagCreatePostForbidden) aPIMassloadFlagCreatePostRes() {}
+
+type APIMassloadFlagCreatePostInternalServerError ErrorResponse
+
+func (*APIMassloadFlagCreatePostInternalServerError) aPIMassloadFlagCreatePostRes() {}
+
+// APIMassloadFlagCreatePostNoContent is response for APIMassloadFlagCreatePost operation.
+type APIMassloadFlagCreatePostNoContent struct{}
+
+func (*APIMassloadFlagCreatePostNoContent) aPIMassloadFlagCreatePostRes() {}
+
+// Флаг для массовой загрузки.
+type APIMassloadFlagCreatePostReq struct {
+	// Код флага.
+	Code string `json:"code"`
+	// Название.
+	Name string `json:"name"`
+	// Описание.
+	Description OptString `json:"description"`
+	// Порядок сортировке (больше = раньше).
+	OrderWeight int `json:"order_weight"`
+	// Цвет текста.
+	TextColor OptString `json:"text_color"`
+	// Цвет фона.
+	BackgroundColor OptString `json:"background_color"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIMassloadFlagCreatePostReq) GetCode() string {
+	return s.Code
+}
+
+// GetName returns the value of Name.
+func (s *APIMassloadFlagCreatePostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *APIMassloadFlagCreatePostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetOrderWeight returns the value of OrderWeight.
+func (s *APIMassloadFlagCreatePostReq) GetOrderWeight() int {
+	return s.OrderWeight
+}
+
+// GetTextColor returns the value of TextColor.
+func (s *APIMassloadFlagCreatePostReq) GetTextColor() OptString {
+	return s.TextColor
+}
+
+// GetBackgroundColor returns the value of BackgroundColor.
+func (s *APIMassloadFlagCreatePostReq) GetBackgroundColor() OptString {
+	return s.BackgroundColor
+}
+
+// SetCode sets the value of Code.
+func (s *APIMassloadFlagCreatePostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// SetName sets the value of Name.
+func (s *APIMassloadFlagCreatePostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *APIMassloadFlagCreatePostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetOrderWeight sets the value of OrderWeight.
+func (s *APIMassloadFlagCreatePostReq) SetOrderWeight(val int) {
+	s.OrderWeight = val
+}
+
+// SetTextColor sets the value of TextColor.
+func (s *APIMassloadFlagCreatePostReq) SetTextColor(val OptString) {
+	s.TextColor = val
+}
+
+// SetBackgroundColor sets the value of BackgroundColor.
+func (s *APIMassloadFlagCreatePostReq) SetBackgroundColor(val OptString) {
+	s.BackgroundColor = val
+}
+
+type APIMassloadFlagCreatePostUnauthorized ErrorResponse
+
+func (*APIMassloadFlagCreatePostUnauthorized) aPIMassloadFlagCreatePostRes() {}
+
+type APIMassloadFlagDeletePostBadRequest ErrorResponse
+
+func (*APIMassloadFlagDeletePostBadRequest) aPIMassloadFlagDeletePostRes() {}
+
+type APIMassloadFlagDeletePostForbidden ErrorResponse
+
+func (*APIMassloadFlagDeletePostForbidden) aPIMassloadFlagDeletePostRes() {}
+
+type APIMassloadFlagDeletePostInternalServerError ErrorResponse
+
+func (*APIMassloadFlagDeletePostInternalServerError) aPIMassloadFlagDeletePostRes() {}
+
+// APIMassloadFlagDeletePostNoContent is response for APIMassloadFlagDeletePost operation.
+type APIMassloadFlagDeletePostNoContent struct{}
+
+func (*APIMassloadFlagDeletePostNoContent) aPIMassloadFlagDeletePostRes() {}
+
+type APIMassloadFlagDeletePostNotFound ErrorResponse
+
+func (*APIMassloadFlagDeletePostNotFound) aPIMassloadFlagDeletePostRes() {}
+
+type APIMassloadFlagDeletePostReq struct {
+	// Код флага.
+	Code string `json:"code"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIMassloadFlagDeletePostReq) GetCode() string {
+	return s.Code
+}
+
+// SetCode sets the value of Code.
+func (s *APIMassloadFlagDeletePostReq) SetCode(val string) {
+	s.Code = val
+}
+
+type APIMassloadFlagDeletePostUnauthorized ErrorResponse
+
+func (*APIMassloadFlagDeletePostUnauthorized) aPIMassloadFlagDeletePostRes() {}
+
+type APIMassloadFlagGetPostForbidden ErrorResponse
+
+func (*APIMassloadFlagGetPostForbidden) aPIMassloadFlagGetPostRes() {}
+
+type APIMassloadFlagGetPostInternalServerError ErrorResponse
+
+func (*APIMassloadFlagGetPostInternalServerError) aPIMassloadFlagGetPostRes() {}
+
+type APIMassloadFlagGetPostNotFound ErrorResponse
+
+func (*APIMassloadFlagGetPostNotFound) aPIMassloadFlagGetPostRes() {}
+
+type APIMassloadFlagGetPostReq struct {
+	// Код флага.
+	Code string `json:"code"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIMassloadFlagGetPostReq) GetCode() string {
+	return s.Code
+}
+
+// SetCode sets the value of Code.
+func (s *APIMassloadFlagGetPostReq) SetCode(val string) {
+	s.Code = val
+}
+
+type APIMassloadFlagGetPostUnauthorized ErrorResponse
+
+func (*APIMassloadFlagGetPostUnauthorized) aPIMassloadFlagGetPostRes() {}
+
 type APIMassloadFlagListGetForbidden ErrorResponse
 
 func (*APIMassloadFlagListGetForbidden) aPIMassloadFlagListGetRes() {}
@@ -5426,111 +5594,125 @@ func (*APIMassloadFlagListGetInternalServerError) aPIMassloadFlagListGetRes() {}
 
 type APIMassloadFlagListGetOK struct {
 	// Список флагов.
-	Flags []APIMassloadFlagListGetOKFlagsItem `json:"flags"`
+	Flags []MassloadFlag `json:"flags"`
 }
 
 // GetFlags returns the value of Flags.
-func (s *APIMassloadFlagListGetOK) GetFlags() []APIMassloadFlagListGetOKFlagsItem {
+func (s *APIMassloadFlagListGetOK) GetFlags() []MassloadFlag {
 	return s.Flags
 }
 
 // SetFlags sets the value of Flags.
-func (s *APIMassloadFlagListGetOK) SetFlags(val []APIMassloadFlagListGetOKFlagsItem) {
+func (s *APIMassloadFlagListGetOK) SetFlags(val []MassloadFlag) {
 	s.Flags = val
 }
 
 func (*APIMassloadFlagListGetOK) aPIMassloadFlagListGetRes() {}
 
-type APIMassloadFlagListGetOKFlagsItem struct {
+type APIMassloadFlagListGetUnauthorized ErrorResponse
+
+func (*APIMassloadFlagListGetUnauthorized) aPIMassloadFlagListGetRes() {}
+
+type APIMassloadFlagUpdatePostBadRequest ErrorResponse
+
+func (*APIMassloadFlagUpdatePostBadRequest) aPIMassloadFlagUpdatePostRes() {}
+
+type APIMassloadFlagUpdatePostForbidden ErrorResponse
+
+func (*APIMassloadFlagUpdatePostForbidden) aPIMassloadFlagUpdatePostRes() {}
+
+type APIMassloadFlagUpdatePostInternalServerError ErrorResponse
+
+func (*APIMassloadFlagUpdatePostInternalServerError) aPIMassloadFlagUpdatePostRes() {}
+
+// APIMassloadFlagUpdatePostNoContent is response for APIMassloadFlagUpdatePost operation.
+type APIMassloadFlagUpdatePostNoContent struct{}
+
+func (*APIMassloadFlagUpdatePostNoContent) aPIMassloadFlagUpdatePostRes() {}
+
+type APIMassloadFlagUpdatePostNotFound ErrorResponse
+
+func (*APIMassloadFlagUpdatePostNotFound) aPIMassloadFlagUpdatePostRes() {}
+
+// Флаг для массовой загрузки.
+type APIMassloadFlagUpdatePostReq struct {
 	// Код флага.
 	Code string `json:"code"`
-	// Название флага.
+	// Название.
 	Name string `json:"name"`
-	// Описание флага.
+	// Описание.
 	Description OptString `json:"description"`
-	// Вес флага при сортировке (больше = первее).
+	// Порядок сортировке (больше = раньше).
 	OrderWeight int `json:"order_weight"`
 	// Цвет текста.
 	TextColor OptString `json:"text_color"`
 	// Цвет фона.
 	BackgroundColor OptString `json:"background_color"`
-	// Время создания.
-	CreatedAt time.Time `json:"created_at"`
 }
 
 // GetCode returns the value of Code.
-func (s *APIMassloadFlagListGetOKFlagsItem) GetCode() string {
+func (s *APIMassloadFlagUpdatePostReq) GetCode() string {
 	return s.Code
 }
 
 // GetName returns the value of Name.
-func (s *APIMassloadFlagListGetOKFlagsItem) GetName() string {
+func (s *APIMassloadFlagUpdatePostReq) GetName() string {
 	return s.Name
 }
 
 // GetDescription returns the value of Description.
-func (s *APIMassloadFlagListGetOKFlagsItem) GetDescription() OptString {
+func (s *APIMassloadFlagUpdatePostReq) GetDescription() OptString {
 	return s.Description
 }
 
 // GetOrderWeight returns the value of OrderWeight.
-func (s *APIMassloadFlagListGetOKFlagsItem) GetOrderWeight() int {
+func (s *APIMassloadFlagUpdatePostReq) GetOrderWeight() int {
 	return s.OrderWeight
 }
 
 // GetTextColor returns the value of TextColor.
-func (s *APIMassloadFlagListGetOKFlagsItem) GetTextColor() OptString {
+func (s *APIMassloadFlagUpdatePostReq) GetTextColor() OptString {
 	return s.TextColor
 }
 
 // GetBackgroundColor returns the value of BackgroundColor.
-func (s *APIMassloadFlagListGetOKFlagsItem) GetBackgroundColor() OptString {
+func (s *APIMassloadFlagUpdatePostReq) GetBackgroundColor() OptString {
 	return s.BackgroundColor
 }
 
-// GetCreatedAt returns the value of CreatedAt.
-func (s *APIMassloadFlagListGetOKFlagsItem) GetCreatedAt() time.Time {
-	return s.CreatedAt
-}
-
 // SetCode sets the value of Code.
-func (s *APIMassloadFlagListGetOKFlagsItem) SetCode(val string) {
+func (s *APIMassloadFlagUpdatePostReq) SetCode(val string) {
 	s.Code = val
 }
 
 // SetName sets the value of Name.
-func (s *APIMassloadFlagListGetOKFlagsItem) SetName(val string) {
+func (s *APIMassloadFlagUpdatePostReq) SetName(val string) {
 	s.Name = val
 }
 
 // SetDescription sets the value of Description.
-func (s *APIMassloadFlagListGetOKFlagsItem) SetDescription(val OptString) {
+func (s *APIMassloadFlagUpdatePostReq) SetDescription(val OptString) {
 	s.Description = val
 }
 
 // SetOrderWeight sets the value of OrderWeight.
-func (s *APIMassloadFlagListGetOKFlagsItem) SetOrderWeight(val int) {
+func (s *APIMassloadFlagUpdatePostReq) SetOrderWeight(val int) {
 	s.OrderWeight = val
 }
 
 // SetTextColor sets the value of TextColor.
-func (s *APIMassloadFlagListGetOKFlagsItem) SetTextColor(val OptString) {
+func (s *APIMassloadFlagUpdatePostReq) SetTextColor(val OptString) {
 	s.TextColor = val
 }
 
 // SetBackgroundColor sets the value of BackgroundColor.
-func (s *APIMassloadFlagListGetOKFlagsItem) SetBackgroundColor(val OptString) {
+func (s *APIMassloadFlagUpdatePostReq) SetBackgroundColor(val OptString) {
 	s.BackgroundColor = val
 }
 
-// SetCreatedAt sets the value of CreatedAt.
-func (s *APIMassloadFlagListGetOKFlagsItem) SetCreatedAt(val time.Time) {
-	s.CreatedAt = val
-}
+type APIMassloadFlagUpdatePostUnauthorized ErrorResponse
 
-type APIMassloadFlagListGetUnauthorized ErrorResponse
-
-func (*APIMassloadFlagListGetUnauthorized) aPIMassloadFlagListGetRes() {}
+func (*APIMassloadFlagUpdatePostUnauthorized) aPIMassloadFlagUpdatePostRes() {}
 
 type APIMassloadInfoAttributeCreatePostBadRequest ErrorResponse
 
@@ -9215,6 +9397,97 @@ func (s *HeaderAuth) SetAPIKey(val string) {
 func (s *HeaderAuth) SetRoles(val []string) {
 	s.Roles = val
 }
+
+// Данные флага массовой загрузки.
+// Ref: #/components/schemas/MassloadFlag
+type MassloadFlag struct {
+	// Код флага.
+	Code string `json:"code"`
+	// Название флага.
+	Name string `json:"name"`
+	// Описание флага.
+	Description OptString `json:"description"`
+	// Вес флага при сортировке (больше = раньше).
+	OrderWeight int `json:"order_weight"`
+	// Цвет текста.
+	TextColor OptString `json:"text_color"`
+	// Цвет фона.
+	BackgroundColor OptString `json:"background_color"`
+	// Время создания.
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// GetCode returns the value of Code.
+func (s *MassloadFlag) GetCode() string {
+	return s.Code
+}
+
+// GetName returns the value of Name.
+func (s *MassloadFlag) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *MassloadFlag) GetDescription() OptString {
+	return s.Description
+}
+
+// GetOrderWeight returns the value of OrderWeight.
+func (s *MassloadFlag) GetOrderWeight() int {
+	return s.OrderWeight
+}
+
+// GetTextColor returns the value of TextColor.
+func (s *MassloadFlag) GetTextColor() OptString {
+	return s.TextColor
+}
+
+// GetBackgroundColor returns the value of BackgroundColor.
+func (s *MassloadFlag) GetBackgroundColor() OptString {
+	return s.BackgroundColor
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *MassloadFlag) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetCode sets the value of Code.
+func (s *MassloadFlag) SetCode(val string) {
+	s.Code = val
+}
+
+// SetName sets the value of Name.
+func (s *MassloadFlag) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *MassloadFlag) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetOrderWeight sets the value of OrderWeight.
+func (s *MassloadFlag) SetOrderWeight(val int) {
+	s.OrderWeight = val
+}
+
+// SetTextColor sets the value of TextColor.
+func (s *MassloadFlag) SetTextColor(val OptString) {
+	s.TextColor = val
+}
+
+// SetBackgroundColor sets the value of BackgroundColor.
+func (s *MassloadFlag) SetBackgroundColor(val OptString) {
+	s.BackgroundColor = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *MassloadFlag) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+func (*MassloadFlag) aPIMassloadFlagGetPostRes() {}
 
 // Данные массовой загрузки.
 // Ref: #/components/schemas/MassloadInfo

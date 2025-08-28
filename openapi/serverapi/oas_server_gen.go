@@ -353,12 +353,36 @@ type Handler interface {
 	//
 	// POST /api/label/set
 	APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) (APILabelSetPostRes, error)
+	// APIMassloadFlagCreatePost implements POST /api/massload/flag/create operation.
+	//
+	// Создание информации о флаге массовой загрузке.
+	//
+	// POST /api/massload/flag/create
+	APIMassloadFlagCreatePost(ctx context.Context, req *APIMassloadFlagCreatePostReq) (APIMassloadFlagCreatePostRes, error)
+	// APIMassloadFlagDeletePost implements POST /api/massload/flag/delete operation.
+	//
+	// Удаление флага массовой загрузки.
+	//
+	// POST /api/massload/flag/delete
+	APIMassloadFlagDeletePost(ctx context.Context, req *APIMassloadFlagDeletePostReq) (APIMassloadFlagDeletePostRes, error)
+	// APIMassloadFlagGetPost implements POST /api/massload/flag/get operation.
+	//
+	// Получение флага массовой загрузки.
+	//
+	// POST /api/massload/flag/get
+	APIMassloadFlagGetPost(ctx context.Context, req *APIMassloadFlagGetPostReq) (APIMassloadFlagGetPostRes, error)
 	// APIMassloadFlagListGet implements GET /api/massload/flag/list operation.
 	//
 	// Флаги для массовых загрузок.
 	//
 	// GET /api/massload/flag/list
 	APIMassloadFlagListGet(ctx context.Context) (APIMassloadFlagListGetRes, error)
+	// APIMassloadFlagUpdatePost implements POST /api/massload/flag/update operation.
+	//
+	// Обновление флага массовой загрузки.
+	//
+	// POST /api/massload/flag/update
+	APIMassloadFlagUpdatePost(ctx context.Context, req *APIMassloadFlagUpdatePostReq) (APIMassloadFlagUpdatePostRes, error)
 	// APIMassloadInfoAttributeCreatePost implements POST /api/massload/info/attribute/create operation.
 	//
 	// Привязка аттрибута к массовой загрузке.

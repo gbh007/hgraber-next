@@ -225,8 +225,24 @@ type APILabelSetPostRes interface {
 	aPILabelSetPostRes()
 }
 
+type APIMassloadFlagCreatePostRes interface {
+	aPIMassloadFlagCreatePostRes()
+}
+
+type APIMassloadFlagDeletePostRes interface {
+	aPIMassloadFlagDeletePostRes()
+}
+
+type APIMassloadFlagGetPostRes interface {
+	aPIMassloadFlagGetPostRes()
+}
+
 type APIMassloadFlagListGetRes interface {
 	aPIMassloadFlagListGetRes()
+}
+
+type APIMassloadFlagUpdatePostRes interface {
+	aPIMassloadFlagUpdatePostRes()
 }
 
 type APIMassloadInfoAttributeCreatePostRes interface {

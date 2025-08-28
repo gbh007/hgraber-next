@@ -679,6 +679,62 @@ func encodeAPILabelSetPostRequest(
 	return nil
 }
 
+func encodeAPIMassloadFlagCreatePostRequest(
+	req *APIMassloadFlagCreatePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIMassloadFlagDeletePostRequest(
+	req *APIMassloadFlagDeletePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIMassloadFlagGetPostRequest(
+	req *APIMassloadFlagGetPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIMassloadFlagUpdatePostRequest(
+	req *APIMassloadFlagUpdatePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIMassloadInfoAttributeCreatePostRequest(
 	req *APIMassloadInfoAttributeCreatePostReq,
 	r *http.Request,

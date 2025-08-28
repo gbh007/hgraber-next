@@ -526,12 +526,48 @@ func (UnimplementedHandler) APILabelSetPost(ctx context.Context, req *APILabelSe
 	return r, ht.ErrNotImplemented
 }
 
+// APIMassloadFlagCreatePost implements POST /api/massload/flag/create operation.
+//
+// Создание информации о флаге массовой загрузке.
+//
+// POST /api/massload/flag/create
+func (UnimplementedHandler) APIMassloadFlagCreatePost(ctx context.Context, req *APIMassloadFlagCreatePostReq) (r APIMassloadFlagCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadFlagDeletePost implements POST /api/massload/flag/delete operation.
+//
+// Удаление флага массовой загрузки.
+//
+// POST /api/massload/flag/delete
+func (UnimplementedHandler) APIMassloadFlagDeletePost(ctx context.Context, req *APIMassloadFlagDeletePostReq) (r APIMassloadFlagDeletePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadFlagGetPost implements POST /api/massload/flag/get operation.
+//
+// Получение флага массовой загрузки.
+//
+// POST /api/massload/flag/get
+func (UnimplementedHandler) APIMassloadFlagGetPost(ctx context.Context, req *APIMassloadFlagGetPostReq) (r APIMassloadFlagGetPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIMassloadFlagListGet implements GET /api/massload/flag/list operation.
 //
 // Флаги для массовых загрузок.
 //
 // GET /api/massload/flag/list
 func (UnimplementedHandler) APIMassloadFlagListGet(ctx context.Context) (r APIMassloadFlagListGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIMassloadFlagUpdatePost implements POST /api/massload/flag/update operation.
+//
+// Обновление флага массовой загрузки.
+//
+// POST /api/massload/flag/update
+func (UnimplementedHandler) APIMassloadFlagUpdatePost(ctx context.Context, req *APIMassloadFlagUpdatePostReq) (r APIMassloadFlagUpdatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

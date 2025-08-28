@@ -5164,6 +5164,242 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/massload/flag/create:
+    post:
+      description: Создание информации о флаге массовой загрузке
+      summary: Создание информации о флаге массовой загрузке
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Флаг для массовой загрузки
+              properties:
+                code:
+                  type: string
+                  description: Код флага
+                name:
+                  type: string
+                  description: Название
+                description:
+                  type: string
+                  description: Описание
+                order_weight:
+                  type: integer
+                  description: Порядок сортировке (больше = раньше)
+                text_color:
+                  type: string
+                  description: Цвет текста
+                background_color:
+                  type: string
+                  description: Цвет фона
+              required:
+                - code
+                - name
+                - order_weight
+      responses:
+        204:
+          description: Успешное создание
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/flag/update:
+    post:
+      description: Обновление флага массовой загрузки
+      summary: Обновление флага массовой загрузки
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Флаг для массовой загрузки
+              properties:
+                code:
+                  type: string
+                  description: Код флага
+                name:
+                  type: string
+                  description: Название
+                description:
+                  type: string
+                  description: Описание
+                order_weight:
+                  type: integer
+                  description: Порядок сортировке (больше = раньше)
+                text_color:
+                  type: string
+                  description: Цвет текста
+                background_color:
+                  type: string
+                  description: Цвет фона
+              required:
+                - code
+                - name
+                - order_weight
+      responses:
+        204:
+          description: Успешное обновление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/flag/delete:
+    post:
+      description: Удаление флага массовой загрузки
+      summary: Удаление флага массовой загрузки
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: Код флага
+              required:
+                - code
+      responses:
+        204:
+          description: Успешное удаление
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/flag/get:
+    post:
+      description: Получение флага массовой загрузки
+      summary: Получение флага массовой загрузки
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: Код флага
+              required:
+                - code
+      responses:
+        200:
+          description: Информация о загрузке
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MassloadFlag"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/massload/flag/list:
     get:
       description: Флаги для массовых загрузок
@@ -5182,35 +5418,7 @@ paths:
                     description: Список флагов
                     type: array
                     items:
-                      type: object
-                      properties:
-                        code:
-                          type: string
-                          description: Код флага
-                        name:
-                          type: string
-                          description: Название флага
-                        description:
-                          type: string
-                          description: Описание флага
-                        order_weight:
-                          type: integer
-                          description: Вес флага при сортировке (больше = первее)
-                        text_color:
-                          type: string
-                          description: Цвет текста
-                        background_color:
-                          type: string
-                          description: Цвет фона
-                        created_at:
-                          type: string
-                          format: date-time
-                          description: Время создания
-                      required:
-                        - code
-                        - name
-                        - order_weight
-                        - created_at
+                      $ref: "#/components/schemas/MassloadFlag"
         401:
           description: Пользователь не авторизован
           content:
@@ -6097,6 +6305,38 @@ components:
       required:
         - id
         - name
+        - created_at
+
+    MassloadFlag:
+      type: object
+      description: Данные флага массовой загрузки
+      properties:
+        code:
+          type: string
+          description: Код флага
+        name:
+          type: string
+          description: Название флага
+        description:
+          type: string
+          description: Описание флага
+        order_weight:
+          type: integer
+          description: Вес флага при сортировке (больше = раньше)
+        text_color:
+          type: string
+          description: Цвет текста
+        background_color:
+          type: string
+          description: Цвет фона
+        created_at:
+          type: string
+          format: date-time
+          description: Время создания
+      required:
+        - code
+        - name
+        - order_weight
         - created_at
 
   securitySchemes:
