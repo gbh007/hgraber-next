@@ -39,6 +39,14 @@ type BookAttributeValue struct {
 	ExtName string
 	Name    string
 	ExtURL  *url.URL
+
+	MassloadsByName []MassloadInfo
+	MassloadsByURL  []MassloadInfo
+}
+
+type MassloadInfo struct {
+	ID   int
+	Name string
 }
 
 type Book struct {

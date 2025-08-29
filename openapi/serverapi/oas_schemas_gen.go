@@ -4531,6 +4531,10 @@ type APIHproxyBookPostOKAttributesItemValuesItem struct {
 	Name OptString `json:"name"`
 	// Ссылка на фильтрацию по значению.
 	ExtURL OptURI `json:"ext_url"`
+	// Массовые загрузки содержащие атрибут.
+	MassloadsByName []APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem `json:"massloads_by_name"`
+	// Массовые загрузки содержащие внешнюю ссылку.
+	MassloadsByExtURL []APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem `json:"massloads_by_ext_url"`
 }
 
 // GetExtName returns the value of ExtName.
@@ -4548,6 +4552,16 @@ func (s *APIHproxyBookPostOKAttributesItemValuesItem) GetExtURL() OptURI {
 	return s.ExtURL
 }
 
+// GetMassloadsByName returns the value of MassloadsByName.
+func (s *APIHproxyBookPostOKAttributesItemValuesItem) GetMassloadsByName() []APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem {
+	return s.MassloadsByName
+}
+
+// GetMassloadsByExtURL returns the value of MassloadsByExtURL.
+func (s *APIHproxyBookPostOKAttributesItemValuesItem) GetMassloadsByExtURL() []APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem {
+	return s.MassloadsByExtURL
+}
+
 // SetExtName sets the value of ExtName.
 func (s *APIHproxyBookPostOKAttributesItemValuesItem) SetExtName(val string) {
 	s.ExtName = val
@@ -4561,6 +4575,70 @@ func (s *APIHproxyBookPostOKAttributesItemValuesItem) SetName(val OptString) {
 // SetExtURL sets the value of ExtURL.
 func (s *APIHproxyBookPostOKAttributesItemValuesItem) SetExtURL(val OptURI) {
 	s.ExtURL = val
+}
+
+// SetMassloadsByName sets the value of MassloadsByName.
+func (s *APIHproxyBookPostOKAttributesItemValuesItem) SetMassloadsByName(val []APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) {
+	s.MassloadsByName = val
+}
+
+// SetMassloadsByExtURL sets the value of MassloadsByExtURL.
+func (s *APIHproxyBookPostOKAttributesItemValuesItem) SetMassloadsByExtURL(val []APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) {
+	s.MassloadsByExtURL = val
+}
+
+type APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem struct {
+	// ID массовой загрузки.
+	ID int `json:"id"`
+	// Название массовой загрузки.
+	Name string `json:"name"`
+}
+
+// GetID returns the value of ID.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) GetName() string {
+	return s.Name
+}
+
+// SetID sets the value of ID.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) SetName(val string) {
+	s.Name = val
+}
+
+type APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem struct {
+	// ID массовой загрузки.
+	ID int `json:"id"`
+	// Название массовой загрузки.
+	Name string `json:"name"`
+}
+
+// GetID returns the value of ID.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) GetName() string {
+	return s.Name
+}
+
+// SetID sets the value of ID.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) SetName(val string) {
+	s.Name = val
 }
 
 type APIHproxyBookPostOKPagesItem struct {

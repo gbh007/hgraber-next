@@ -17125,12 +17125,34 @@ func (s *APIHproxyBookPostOKAttributesItemValuesItem) encodeFields(e *jx.Encoder
 			s.ExtURL.Encode(e)
 		}
 	}
+	{
+		if s.MassloadsByName != nil {
+			e.FieldStart("massloads_by_name")
+			e.ArrStart()
+			for _, elem := range s.MassloadsByName {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.MassloadsByExtURL != nil {
+			e.FieldStart("massloads_by_ext_url")
+			e.ArrStart()
+			for _, elem := range s.MassloadsByExtURL {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIHproxyBookPostOKAttributesItemValuesItem = [3]string{
+var jsonFieldsNameOfAPIHproxyBookPostOKAttributesItemValuesItem = [5]string{
 	0: "ext_name",
 	1: "name",
 	2: "ext_url",
+	3: "massloads_by_name",
+	4: "massloads_by_ext_url",
 }
 
 // Decode decodes APIHproxyBookPostOKAttributesItemValuesItem from json.
@@ -17173,6 +17195,40 @@ func (s *APIHproxyBookPostOKAttributesItemValuesItem) Decode(d *jx.Decoder) erro
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"ext_url\"")
+			}
+		case "massloads_by_name":
+			if err := func() error {
+				s.MassloadsByName = make([]APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.MassloadsByName = append(s.MassloadsByName, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"massloads_by_name\"")
+			}
+		case "massloads_by_ext_url":
+			if err := func() error {
+				s.MassloadsByExtURL = make([]APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.MassloadsByExtURL = append(s.MassloadsByExtURL, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"massloads_by_ext_url\"")
 			}
 		default:
 			return d.Skip()
@@ -17226,6 +17282,232 @@ func (s *APIHproxyBookPostOKAttributesItemValuesItem) MarshalJSON() ([]byte, err
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIHproxyBookPostOKAttributesItemValuesItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+}
+
+var jsonFieldsNameOfAPIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem = [2]string{
+	0: "id",
+	1: "name",
+}
+
+// Decode decodes APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem from json.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) {
+					name = jsonFieldsNameOfAPIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+}
+
+var jsonFieldsNameOfAPIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem = [2]string{
+	0: "id",
+	1: "name",
+}
+
+// Decode decodes APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem from json.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) {
+					name = jsonFieldsNameOfAPIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

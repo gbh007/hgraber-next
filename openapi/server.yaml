@@ -4736,6 +4736,36 @@ paths:
                                 type: string
                                 format: uri
                                 description: Ссылка на фильтрацию по значению
+                              massloads_by_name:
+                                type: array
+                                description: Массовые загрузки содержащие атрибут
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: integer
+                                      description: ID массовой загрузки
+                                    name:
+                                      type: string
+                                      description: Название массовой загрузки
+                                  required:
+                                    - id
+                                    - name
+                              massloads_by_ext_url:
+                                type: array
+                                description: Массовые загрузки содержащие внешнюю ссылку
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: integer
+                                      description: ID массовой загрузки
+                                    name:
+                                      type: string
+                                      description: Название массовой загрузки
+                                  required:
+                                    - id
+                                    - name
                             required:
                               - ext_name
                       required:

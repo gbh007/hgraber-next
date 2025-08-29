@@ -7,6 +7,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
+	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
@@ -91,6 +92,55 @@ func (uc *UseCase) handleAttributes(
 	})
 
 	return newAttrs, nil
+}
+
+func (uc *UseCase) setMassloadToAttributes(
+	ctx context.Context,
+	newAttrs []hproxymodel.BookAttribute,
+) error {
+	for i, attrs := range newAttrs {
+		for j, attr := range attrs.Values {
+			mlByAttr, err := uc.storage.MassloadsByAttribute(ctx, attrs.Code, attr.Name)
+			if err != nil {
+				return fmt.Errorf("storage: get massloads by attribute: %w", err)
+			}
+
+			if len(mlByAttr) > 0 {
+				newAttrs[i].Values[j].MassloadsByName = pkg.Map(
+					mlByAttr,
+					func(ml massloadmodel.Massload) hproxymodel.MassloadInfo {
+						return hproxymodel.MassloadInfo{
+							ID:   ml.ID,
+							Name: ml.Name,
+						}
+					},
+				)
+			}
+
+			if attr.ExtURL == nil {
+				continue
+			}
+
+			mlByURL, err := uc.storage.MassloadsByExternalLink(ctx, *attr.ExtURL)
+			if err != nil {
+				return fmt.Errorf("storage: get massloads by external link: %w", err)
+			}
+
+			if len(mlByURL) > 0 {
+				newAttrs[i].Values[j].MassloadsByURL = pkg.Map(
+					mlByURL,
+					func(ml massloadmodel.Massload) hproxymodel.MassloadInfo {
+						return hproxymodel.MassloadInfo{
+							ID:   ml.ID,
+							Name: ml.Name,
+						}
+					},
+				)
+			}
+		}
+	}
+
+	return nil
 }
 
 func convertAttributes(attributes []core.Attribute) map[string]core.Attribute {

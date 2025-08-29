@@ -14,6 +14,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
+	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
@@ -23,10 +24,13 @@ type storage interface {
 	Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error)
 
 	Mirrors(ctx context.Context) ([]parsing.URLMirror, error)
-	GetBookIDsByURL(ctx context.Context, url url.URL) ([]uuid.UUID, error)
+	GetBookIDsByURL(ctx context.Context, u url.URL) ([]uuid.UUID, error)
 
 	Attributes(ctx context.Context) ([]core.Attribute, error)
 	AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, error)
+
+	MassloadsByAttribute(ctx context.Context, code, value string) ([]massloadmodel.Massload, error)
+	MassloadsByExternalLink(ctx context.Context, u url.URL) ([]massloadmodel.Massload, error)
 }
 
 type agentSystem interface {
@@ -37,7 +41,7 @@ type agentSystem interface {
 		urls []agentmodel.AgentPageURL,
 	) ([]agentmodel.AgentPageCheckResult, error)
 
-	PageLoad(ctx context.Context, agentID uuid.UUID, url agentmodel.AgentPageURL) (io.Reader, error)
+	PageLoad(ctx context.Context, agentID uuid.UUID, u agentmodel.AgentPageURL) (io.Reader, error)
 
 	HProxyList(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.List, error)
 	HProxyBook(ctx context.Context, agentID uuid.UUID, u url.URL, pageLimit *int) (hproxymodel.Book, error)
@@ -75,7 +79,7 @@ func New(
 
 func (uc *UseCase) existsInStorage(ctx context.Context, urls []url.URL) ([]uuid.UUID, error) {
 	for _, u := range urls {
-		// FIXME: нужно сделать более оптимальный метод
+		// TODO: нужно сделать более оптимальный метод
 		ids, err := uc.storage.GetBookIDsByURL(ctx, u)
 		if err != nil {
 			return nil, fmt.Errorf("check exists by (%s): %w", u.String(), err)

@@ -56,6 +56,7 @@ func URLToDB(u *url.URL) sql.NullString {
 	}
 }
 
+// TODO: возможно стоит перенести в pkg
 func StringsPrefix(arr []string, prefix string) []string {
 	return pkg.Map(arr, func(s string) string {
 		return prefix + s

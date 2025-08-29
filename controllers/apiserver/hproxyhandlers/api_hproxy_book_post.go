@@ -52,6 +52,24 @@ func (c *HProxyHandlersController) APIHproxyBookPost(
 								ExtName: v.ExtName,
 								Name:    apiservercore.OptString(v.Name),
 								ExtURL:  apiservercore.OptURL(v.ExtURL),
+								MassloadsByName: pkg.Map(
+									v.MassloadsByName,
+									func(ml hproxymodel.MassloadInfo) serverapi.APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem { //nolint:lll // будет исправлено позднее
+										return serverapi.APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem{
+											ID:   ml.ID,
+											Name: ml.Name,
+										}
+									},
+								),
+								MassloadsByExtURL: pkg.Map(
+									v.MassloadsByURL,
+									func(ml hproxymodel.MassloadInfo) serverapi.APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem { //nolint:lll // будет исправлено позднее
+										return serverapi.APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem{ //nolint:lll // будет исправлено позднее
+											ID:   ml.ID,
+											Name: ml.Name,
+										}
+									},
+								),
 							}
 						},
 					),

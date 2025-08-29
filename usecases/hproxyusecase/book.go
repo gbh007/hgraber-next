@@ -13,6 +13,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
+//nolint:gocognit,cyclop,funlen // будет исправлено позднее
 func (uc *UseCase) Book(ctx context.Context, u url.URL, pageLimit *int) (hproxymodel.Book, error) {
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParse:  true,
@@ -58,6 +59,11 @@ func (uc *UseCase) Book(ctx context.Context, u url.URL, pageLimit *int) (hproxym
 			newAttrs, err := uc.handleAttributes(ctx, book.Attributes)
 			if err != nil {
 				return hproxymodel.Book{}, fmt.Errorf("handle attributes: %w", err)
+			}
+
+			err = uc.setMassloadToAttributes(ctx, newAttrs)
+			if err != nil {
+				return hproxymodel.Book{}, fmt.Errorf("set massload to attributes: %w", err)
 			}
 
 			book.Attributes = newAttrs
