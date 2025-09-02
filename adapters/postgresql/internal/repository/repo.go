@@ -4,11 +4,20 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
 	"go.opentelemetry.io/otel/trace"
 )
+
+type MetricProvider interface {
+	IncDBActiveRequest()
+	DecDBActiveRequest()
+	IncDBOpenConnection()
+	DecDBOpenConnection()
+	RegisterDBRequestDuration(stmt string, d time.Duration)
+}
 
 type Repository struct {
 	Logger        *slog.Logger
@@ -22,6 +31,7 @@ func New(
 	ctx context.Context,
 	logger *slog.Logger,
 	tracer trace.Tracer,
+	metricProvider MetricProvider,
 	debugPgx bool,
 	debugSquirrel bool,
 	dataSourceName string,
@@ -37,9 +47,10 @@ func New(
 	}
 
 	pgxConfig.ConnConfig.Tracer = pgxTracer{
-		logger: logger,
-		tracer: tracer,
-		debug:  debugPgx,
+		logger:         logger,
+		tracer:         tracer,
+		metricProvider: metricProvider,
+		debug:          debugPgx,
 	}
 
 	dbpool, err := pgxpool.NewWithConfig(ctx, pgxConfig)
