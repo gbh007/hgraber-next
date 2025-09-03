@@ -1,21 +1,10 @@
 local config = import 'config.libsonnet';
 local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
+local template = import 'template.libsonnet';
 
 local panel = grafonnet.panel;
 local query = grafonnet.query;
 local prometheus = grafonnet.query.prometheus;
-
-local greenSteps() = { color: 'green', value: null };
-local simpleTSLegend() =
-  panel.timeSeries.options.legend.withDisplayMode('table')
-  + panel.timeSeries.options.legend.withPlacement('bottom')
-  + panel.timeSeries.options.legend.withCalcs(['mean', 'lastNotNull'])
-  + panel.timeSeries.options.legend.withSortBy('Mean')
-  + panel.timeSeries.options.legend.withSortDesc();
-local heatmapDefaultColor() =
-  panel.heatmap.options.color.withFill('semi-dark-blue')
-  + panel.heatmap.options.color.withScheme('Blues')
-  + panel.heatmap.options.color.withMode('scheme');
 
 {
   core: {
@@ -31,7 +20,7 @@ local heatmapDefaultColor() =
           + prometheus.withInstant(),
         ])
         + panel.stat.standardOptions.withUnit('short')
-        + panel.stat.standardOptions.thresholds.withSteps([greenSteps()])
+        + panel.stat.standardOptions.thresholds.withSteps([template.greenSteps()])
         + panel.stat.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -46,7 +35,7 @@ local heatmapDefaultColor() =
           + prometheus.withInstant(),
         ])
         + panel.stat.standardOptions.withUnit('short')
-        + panel.stat.standardOptions.thresholds.withSteps([greenSteps()])
+        + panel.stat.standardOptions.thresholds.withSteps([template.greenSteps()])
         + panel.stat.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -67,7 +56,7 @@ local heatmapDefaultColor() =
           + prometheus.withInstant(),
         ])
         + panel.stat.standardOptions.withUnit('bytes')
-        + panel.stat.standardOptions.thresholds.withSteps([greenSteps()])
+        + panel.stat.standardOptions.thresholds.withSteps([template.greenSteps()])
         + panel.stat.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -90,7 +79,7 @@ local heatmapDefaultColor() =
           + prometheus.withInstant(),
         ])
         + panel.stat.standardOptions.withUnit('percentunit')
-        + panel.stat.standardOptions.thresholds.withSteps([greenSteps()])
+        + panel.stat.standardOptions.thresholds.withSteps([template.greenSteps()])
         + panel.stat.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -205,7 +194,7 @@ local heatmapDefaultColor() =
           + prometheus.withLegendFormat('agent/{{action}}'),
         ])
         + panel.timeSeries.standardOptions.withUnit('s')
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -228,7 +217,7 @@ local heatmapDefaultColor() =
           + prometheus.withLegendFormat('agent/{{action}}'),
         ])
         + panel.timeSeries.standardOptions.withUnit('reqps')
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -251,7 +240,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{type}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -266,7 +255,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{type}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -281,7 +270,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{type}} -> {{fs_id}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -296,7 +285,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{type}} -> {{fs_id}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('bytes')
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
@@ -312,7 +301,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{type}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -327,7 +316,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{type}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -342,7 +331,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{type}} -> {{fs_id}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -357,7 +346,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{type}} -> {{fs_id}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('bytes')
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
@@ -381,7 +370,7 @@ local heatmapDefaultColor() =
         + prometheus.withLegendFormat('__auto'),
       ])
       + panel.heatmap.options.cellValues.withUnit('short')
-      + heatmapDefaultColor()
+      + template.heatmapDefaultColor()
       + panel.heatmap.options.filterValues.withLe(1)
       + panel.heatmap.options.yAxis.withUnit(yUnit)
       + panel.heatmap.queryOptions.withDatasource(
@@ -467,7 +456,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{parser_name}} -> {{action}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('s')
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
@@ -483,7 +472,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{parser_name}} -> {{action}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('reqps')
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
@@ -504,7 +493,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{worker_name}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('s')
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
@@ -520,7 +509,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{worker_name}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('reqps')
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
@@ -536,7 +525,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{worker_name}} -> {{counter}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
@@ -551,7 +540,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{action}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('reqps')
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
@@ -581,7 +570,7 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{fs_id}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('percentunit')
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
@@ -597,11 +586,81 @@ local heatmapDefaultColor() =
           )
           + prometheus.withLegendFormat('{{scrape_name}}'),
         ])
-        + simpleTSLegend()
+        + template.simpleTSLegend()
         + panel.timeSeries.standardOptions.withUnit('s')
         + panel.timeSeries.queryOptions.withDatasource(
           config.datasource.metrics.type,
           config.datasource.metrics.uid,
+        ),
+      ], 12, 9, y + 1)),
+    ],
+  httpServer(y):
+    [
+      panel.row.new('HTTP server')
+      + panel.row.gridPos.withY(y)
+      + panel.row.withCollapsed()
+      + panel.row.withPanels(grafonnet.util.grid.wrapPanels([
+        template.timeSeries(
+          'Latency Q95',
+          'histogram_quantile(0.95, sum(rate(hgraber_next_http_server_handle_duration_bucket{%s}[$__rate_interval])) by (server_addr, operation, status, le))' % [
+            config.label.filter.service,
+          ],
+          's',
+          '{{server_addr}}/{{operation}} -> {{status}}',
+        ),
+        template.timeSeries(
+          'RPS',
+          'sum(irate(hgraber_next_http_server_handle_duration_count{%s}[$__rate_interval])) by (server_addr, operation, status)' % [
+            config.label.filter.service,
+          ],
+          'reqps',
+          '{{server_addr}}/{{operation}} -> {{status}}',
+        ),
+        template.timeSeries(
+          'Active request',
+          'sum(hgraber_next_http_server_active_handlers_total{%s}) by (server_addr, operation)' % [
+            config.label.filter.service,
+          ],
+          'short',
+          '{{server_addr}}/{{operation}}',
+        ),
+      ], 12, 9, y + 1)),
+    ],
+  database(y):
+    [
+      panel.row.new('Database')
+      + panel.row.gridPos.withY(y)
+      + panel.row.withCollapsed()
+      + panel.row.withPanels(grafonnet.util.grid.wrapPanels([
+        template.timeSeries(
+          'Latency Q95',
+          'histogram_quantile(0.95, sum(rate(hgraber_next_database_request_duration_bucket{%s}[$__rate_interval])) by (stmt, le))' % [
+            config.label.filter.service,
+          ],
+          's',
+          '{{stmt}}',
+        ),
+        template.timeSeries(
+          'RPS',
+          'sum(irate(hgraber_next_database_request_duration_count{%s}[$__rate_interval])) by (stmt)' % [
+            config.label.filter.service,
+          ],
+          'reqps',
+          '{{stmt}}',
+        ),
+        template.timeSeries(
+          'Active request',
+          'sum(hgraber_next_database_active_request{%s})' % [
+            config.label.filter.service,
+          ],
+          'short',
+        ),
+        template.timeSeries(
+          'Open connection',
+          'sum(hgraber_next_database_open_connection{%s})' % [
+            config.label.filter.service,
+          ],
+          'short',
         ),
       ], 12, 9, y + 1)),
     ],
@@ -616,5 +675,7 @@ local heatmapDefaultColor() =
     + self.booksAndPages(32)
     + self.statistic(33)
     + self.workersAndAgents(34)
-    + self.other(35),
+    + self.other(35)
+    + self.httpServer(36)
+    + self.database(37),
 }

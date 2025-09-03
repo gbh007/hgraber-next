@@ -1318,6 +1318,49 @@
                ],
                "title": "Workers stat",
                "type": "timeseries"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "reqps"
+                  }
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 12,
+                  "y": 53
+               },
+               "id": 36,
+               "options": {
+                  "legend": {
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ],
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "sortBy": "Mean",
+                     "sortDesc": true
+                  }
+               },
+               "pluginVersion": "v11.4.0",
+               "targets": [
+                  {
+                     "datasource": {
+                        "type": "prometheus",
+                        "uid": "${metrics}"
+                     },
+                     "expr": "sum(rate(hgraber_next_agent_web_cache_total{service_name=~\"$service_name\"}[$__rate_interval])) by (action)",
+                     "legendFormat": "{{action}}"
+                  }
+               ],
+               "title": "Web cache RPS",
+               "type": "timeseries"
             }
          ],
          "title": "Workers and agents",
@@ -1331,7 +1374,7 @@
             "x": 0,
             "y": 35
          },
-         "id": 36,
+         "id": 37,
          "panels": [
             {
                "datasource": {
@@ -1349,7 +1392,7 @@
                   "x": 0,
                   "y": 36
                },
-               "id": 37,
+               "id": 38,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1392,7 +1435,7 @@
                   "x": 12,
                   "y": 36
                },
-               "id": 38,
+               "id": 39,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1421,6 +1464,335 @@
             }
          ],
          "title": "Other",
+         "type": "row"
+      },
+      {
+         "collapsed": true,
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 36
+         },
+         "id": 40,
+         "panels": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "s"
+                  }
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 37
+               },
+               "id": 41,
+               "options": {
+                  "legend": {
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ],
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "sortBy": "Mean",
+                     "sortDesc": true
+                  }
+               },
+               "pluginVersion": "v11.4.0",
+               "targets": [
+                  {
+                     "datasource": {
+                        "type": "prometheus",
+                        "uid": "${metrics}"
+                     },
+                     "expr": "histogram_quantile(0.95, sum(rate(hgraber_next_http_server_handle_duration_bucket{service_name=~\"$service_name\"}[$__rate_interval])) by (server_addr, operation, status, le))",
+                     "legendFormat": "{{server_addr}}/{{operation}} -> {{status}}"
+                  }
+               ],
+               "title": "Latency Q95",
+               "type": "timeseries"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "reqps"
+                  }
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 12,
+                  "y": 37
+               },
+               "id": 42,
+               "options": {
+                  "legend": {
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ],
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "sortBy": "Mean",
+                     "sortDesc": true
+                  }
+               },
+               "pluginVersion": "v11.4.0",
+               "targets": [
+                  {
+                     "datasource": {
+                        "type": "prometheus",
+                        "uid": "${metrics}"
+                     },
+                     "expr": "sum(irate(hgraber_next_http_server_handle_duration_count{service_name=~\"$service_name\"}[$__rate_interval])) by (server_addr, operation, status)",
+                     "legendFormat": "{{server_addr}}/{{operation}} -> {{status}}"
+                  }
+               ],
+               "title": "RPS",
+               "type": "timeseries"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short"
+                  }
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 46
+               },
+               "id": 43,
+               "options": {
+                  "legend": {
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ],
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "sortBy": "Mean",
+                     "sortDesc": true
+                  }
+               },
+               "pluginVersion": "v11.4.0",
+               "targets": [
+                  {
+                     "datasource": {
+                        "type": "prometheus",
+                        "uid": "${metrics}"
+                     },
+                     "expr": "sum(hgraber_next_http_server_active_handlers_total{service_name=~\"$service_name\"}) by (server_addr, operation)",
+                     "legendFormat": "{{server_addr}}/{{operation}}"
+                  }
+               ],
+               "title": "Active request",
+               "type": "timeseries"
+            }
+         ],
+         "title": "HTTP server",
+         "type": "row"
+      },
+      {
+         "collapsed": true,
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 37
+         },
+         "id": 44,
+         "panels": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "s"
+                  }
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 38
+               },
+               "id": 45,
+               "options": {
+                  "legend": {
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ],
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "sortBy": "Mean",
+                     "sortDesc": true
+                  }
+               },
+               "pluginVersion": "v11.4.0",
+               "targets": [
+                  {
+                     "datasource": {
+                        "type": "prometheus",
+                        "uid": "${metrics}"
+                     },
+                     "expr": "histogram_quantile(0.95, sum(rate(hgraber_next_database_request_duration_bucket{service_name=~\"$service_name\"}[$__rate_interval])) by (stmt, le))",
+                     "legendFormat": "{{stmt}}"
+                  }
+               ],
+               "title": "Latency Q95",
+               "type": "timeseries"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "reqps"
+                  }
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 12,
+                  "y": 38
+               },
+               "id": 46,
+               "options": {
+                  "legend": {
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ],
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "sortBy": "Mean",
+                     "sortDesc": true
+                  }
+               },
+               "pluginVersion": "v11.4.0",
+               "targets": [
+                  {
+                     "datasource": {
+                        "type": "prometheus",
+                        "uid": "${metrics}"
+                     },
+                     "expr": "sum(irate(hgraber_next_database_request_duration_count{service_name=~\"$service_name\"}[$__rate_interval])) by (stmt)",
+                     "legendFormat": "{{stmt}}"
+                  }
+               ],
+               "title": "RPS",
+               "type": "timeseries"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short"
+                  }
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 47
+               },
+               "id": 47,
+               "options": {
+                  "legend": {
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ],
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "sortBy": "Mean",
+                     "sortDesc": true
+                  }
+               },
+               "pluginVersion": "v11.4.0",
+               "targets": [
+                  {
+                     "datasource": {
+                        "type": "prometheus",
+                        "uid": "${metrics}"
+                     },
+                     "expr": "sum(hgraber_next_database_active_request{service_name=~\"$service_name\"})",
+                     "legendFormat": "__auto"
+                  }
+               ],
+               "title": "Active request",
+               "type": "timeseries"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short"
+                  }
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 12,
+                  "y": 47
+               },
+               "id": 48,
+               "options": {
+                  "legend": {
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ],
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "sortBy": "Mean",
+                     "sortDesc": true
+                  }
+               },
+               "pluginVersion": "v11.4.0",
+               "targets": [
+                  {
+                     "datasource": {
+                        "type": "prometheus",
+                        "uid": "${metrics}"
+                     },
+                     "expr": "sum(hgraber_next_database_open_connection{service_name=~\"$service_name\"})",
+                     "legendFormat": "__auto"
+                  }
+               ],
+               "title": "Open connection",
+               "type": "timeseries"
+            }
+         ],
+         "title": "Database",
          "type": "row"
       }
    ],
