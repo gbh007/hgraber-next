@@ -3,6 +3,7 @@ package apiserver
 import (
 	"fmt"
 	"log/slog"
+	"time"
 
 	"go.opentelemetry.io/otel/trace"
 
@@ -88,6 +89,12 @@ type config interface {
 	GetDebug() bool
 }
 
+type metricProvider interface {
+	HTTPServerAddHandle(addr, operation string, status bool, d time.Duration)
+	HTTPServerIncActive(addr, operation string)
+	HTTPServerDecActive(addr, operation string)
+}
+
 type Controller struct {
 	*agenthandlers.AgentHandlersController
 	*attributehandlers.AttributeHandlersController
@@ -101,6 +108,7 @@ type Controller struct {
 
 	logger          *slog.Logger
 	tracer          trace.Tracer
+	metricProvider  metricProvider
 	debug           bool
 	logErrorHandler bool
 
@@ -115,6 +123,7 @@ func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	config config,
+	metricProvider metricProvider,
 	parseUseCases ParseUseCases,
 	agentUseCases AgentUseCases,
 	exportUseCases ExportUseCases,
@@ -218,6 +227,7 @@ func New(
 
 		logger:          logger,
 		tracer:          tracer,
+		metricProvider:  metricProvider,
 		serverAddr:      config.GetAddr(),
 		debug:           config.GetDebug(),
 		logErrorHandler: config.GetLogErrorHandler(),
@@ -230,7 +240,10 @@ func New(
 		serverapi.WithErrorHandler(c.methodErrorHandler),
 		serverapi.WithMethodNotAllowed(methodNotAllowed),
 		serverapi.WithNotFound(methodNotFound),
-		serverapi.WithMiddleware(c.simplePanicRecover),
+		serverapi.WithMiddleware(
+			c.metricsMiddleware,
+			c.simplePanicRecover,
+		),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("create ogen server: %w", err)

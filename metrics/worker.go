@@ -15,13 +15,5 @@ var workerExecutionTaskTime = promauto.NewSummaryVec(prometheus.SummaryOpts{
 }, []string{"worker_name", "success"})
 
 func (MetricProvider) RegisterWorkerExecutionTaskTime(name string, d time.Duration, success bool) {
-	var l string
-
-	if success {
-		l = OkLabelValue
-	} else {
-		l = ErrorLabelValue
-	}
-
-	workerExecutionTaskTime.WithLabelValues(name, l).Observe(d.Seconds())
+	workerExecutionTaskTime.WithLabelValues(name, errorLabel(success)).Observe(d.Seconds())
 }

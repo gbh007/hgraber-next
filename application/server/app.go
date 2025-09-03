@@ -223,6 +223,7 @@ func Serve() {
 		logger,
 		tracer,
 		cfg.API,
+		metricProvider,
 		parsingUseCases,
 		agentUseCases,
 		exportUseCases,

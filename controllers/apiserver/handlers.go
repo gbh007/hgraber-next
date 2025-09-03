@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"runtime"
 	"strconv"
+	"time"
 
 	"github.com/ogen-go/ogen/middleware"
 	"github.com/ogen-go/ogen/ogenerrors"
@@ -141,6 +142,29 @@ func (c *Controller) simplePanicRecover(
 			returnedResponse = middleware.Response{}
 			returnedError = fmt.Errorf("%w: %v", errPanicDetected, p)
 		}
+	}()
+
+	return next(req)
+}
+
+func (c *Controller) metricsMiddleware(
+	req middleware.Request,
+	next middleware.Next,
+) (returnedResponse middleware.Response, returnedError error) {
+	tStart := time.Now()
+	operation := req.OperationName
+	addr := c.serverAddr
+
+	c.metricProvider.HTTPServerIncActive(addr, operation)
+
+	defer func() {
+		c.metricProvider.HTTPServerDecActive(addr, operation)
+
+		// FIXME: Каст не сможет сработать из-за особеностей Go, необходимо реализовать другой подход.
+		_, hasError := returnedResponse.Type.(*serverapi.ErrorResponse)
+		success := !hasError && returnedError == nil
+
+		c.metricProvider.HTTPServerAddHandle(addr, operation, success, time.Since(tStart))
 	}()
 
 	return next(req)
