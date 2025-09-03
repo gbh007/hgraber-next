@@ -14,8 +14,7 @@ import (
 type MetricProvider interface {
 	IncDBActiveRequest()
 	DecDBActiveRequest()
-	IncDBOpenConnection()
-	DecDBOpenConnection()
+	SetDBOpenConnection(n int32)
 	RegisterDBRequestDuration(stmt string, d time.Duration)
 }
 
@@ -57,6 +56,12 @@ func New(
 	if err != nil {
 		return nil, fmt.Errorf("create pool: %w", err)
 	}
+
+	go func() {
+		for range time.NewTicker(time.Second * 5).C { //nolint:mnd // будет исправлено позднее
+			metricProvider.SetDBOpenConnection(dbpool.Stat().TotalConns())
+		}
+	}()
 
 	err = migrate(ctx, logger, stdlib.OpenDBFromPool(dbpool))
 	if err != nil {

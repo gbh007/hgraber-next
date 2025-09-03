@@ -40,8 +40,8 @@ func (MetricProvider) DecDBActiveRequest() {
 	dbActiveRequest.Dec()
 }
 
-func (MetricProvider) IncDBOpenConnection() {
-	dbOpenConnection.Inc()
+func (MetricProvider) SetDBOpenConnection(n int32) {
+	dbOpenConnection.Set(float64(n))
 }
 
 func (MetricProvider) DecDBOpenConnection() {

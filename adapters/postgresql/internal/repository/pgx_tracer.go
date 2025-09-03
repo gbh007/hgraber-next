@@ -14,9 +14,8 @@ import (
 )
 
 var (
-	_ pgx.QueryTracer   = (*pgxTracer)(nil)
-	_ pgx.BatchTracer   = (*pgxTracer)(nil)
-	_ pgx.ConnectTracer = (*pgxTracer)(nil)
+	_ pgx.QueryTracer = (*pgxTracer)(nil)
+	_ pgx.BatchTracer = (*pgxTracer)(nil)
 )
 
 var (
@@ -140,16 +139,6 @@ func (t pgxTracer) TraceBatchQuery(ctx context.Context, conn *pgx.Conn, data pgx
 func (t pgxTracer) TraceBatchEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchEndData) {
 	span := trace.SpanFromContext(ctx)
 	span.End()
-}
-
-func (t pgxTracer) TraceConnectStart(ctx context.Context, data pgx.TraceConnectStartData) context.Context {
-	t.metricProvider.IncDBOpenConnection()
-
-	return ctx
-}
-
-func (t pgxTracer) TraceConnectEnd(ctx context.Context, data pgx.TraceConnectEndData) {
-	t.metricProvider.DecDBOpenConnection()
 }
 
 func filterStmt(s string) string {
