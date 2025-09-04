@@ -34,4 +34,29 @@ local prometheus = grafonnet.query.prometheus;
       config.datasource.metrics.type,
       config.datasource.metrics.uid,
     ),
+  table(title, request, unit, legend='__auto'):
+    panel.table.new(title)
+    + panel.table.queryOptions.withTargets([
+      prometheus.new(
+        config.datasource.metrics.uid,
+        request,
+      )
+      + prometheus.withLegendFormat(legend)
+      + prometheus.withFormat('table')
+      + prometheus.withInstant(true),
+    ])
+    + panel.table.standardOptions.withUnit(unit)
+    + panel.table.options.withSortBy([
+      panel.table.options.sortBy.withDisplayName('Value')
+      + panel.table.options.sortBy.withDesc(true),
+    ])
+    + panel.table.queryOptions.withDatasource(
+      config.datasource.metrics.type,
+      config.datasource.metrics.uid,
+    ),
+  tableTimeOverride():
+    panel.table.standardOptions.withOverrides([
+      panel.table.standardOptions.override.byName.new('Time')
+      + panel.table.standardOptions.override.byName.withProperty('custom.hidden', true),
+    ]),
 }

@@ -1604,6 +1604,61 @@
                ],
                "title": "Active request",
                "type": "timeseries"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "s"
+                  },
+                  "overrides": [
+                     {
+                        "matcher": {
+                           "id": "byName",
+                           "options": "Time"
+                        },
+                        "properties": [
+                           {
+                              "id": "custom.hidden",
+                              "value": true
+                           }
+                        ]
+                     }
+                  ]
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 12,
+                  "y": 46
+               },
+               "id": 44,
+               "options": {
+                  "sortBy": [
+                     {
+                        "desc": true,
+                        "displayName": "Value"
+                     }
+                  ]
+               },
+               "pluginVersion": "v11.4.0",
+               "targets": [
+                  {
+                     "datasource": {
+                        "type": "prometheus",
+                        "uid": "${metrics}"
+                     },
+                     "expr": "sum(hgraber_next_http_server_handle_duration_sum{service_name=~\"$service_name\"} / hgraber_next_http_server_handle_duration_count{service_name=~\"$service_name\"}) by (server_addr, operation, status)",
+                     "format": "table",
+                     "instant": true,
+                     "legendFormat": "{{server_addr}}/{{operation}} -> {{status}}"
+                  }
+               ],
+               "title": "Slow request",
+               "type": "table"
             }
          ],
          "title": "HTTP server",
@@ -1617,7 +1672,7 @@
             "x": 0,
             "y": 37
          },
-         "id": 44,
+         "id": 45,
          "panels": [
             {
                "datasource": {
@@ -1635,7 +1690,7 @@
                   "x": 0,
                   "y": 38
                },
-               "id": 45,
+               "id": 46,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1678,7 +1733,7 @@
                   "x": 12,
                   "y": 38
                },
-               "id": 46,
+               "id": 47,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1721,7 +1776,7 @@
                   "x": 0,
                   "y": 47
                },
-               "id": 47,
+               "id": 48,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1764,7 +1819,7 @@
                   "x": 12,
                   "y": 47
                },
-               "id": 48,
+               "id": 49,
                "options": {
                   "legend": {
                      "calcs": [
@@ -1790,6 +1845,61 @@
                ],
                "title": "Open connection",
                "type": "timeseries"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "s"
+                  },
+                  "overrides": [
+                     {
+                        "matcher": {
+                           "id": "byName",
+                           "options": "Time"
+                        },
+                        "properties": [
+                           {
+                              "id": "custom.hidden",
+                              "value": true
+                           }
+                        ]
+                     }
+                  ]
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 56
+               },
+               "id": 50,
+               "options": {
+                  "sortBy": [
+                     {
+                        "desc": true,
+                        "displayName": "Value"
+                     }
+                  ]
+               },
+               "pluginVersion": "v11.4.0",
+               "targets": [
+                  {
+                     "datasource": {
+                        "type": "prometheus",
+                        "uid": "${metrics}"
+                     },
+                     "expr": "sum(hgraber_next_database_request_duration_sum{service_name=~\"$service_name\"} / hgraber_next_database_request_duration_count{service_name=~\"$service_name\"}) by (stmt)",
+                     "format": "table",
+                     "instant": true,
+                     "legendFormat": "{{stmt}}"
+                  }
+               ],
+               "title": "Slow request",
+               "type": "table"
             }
          ],
          "title": "Database",

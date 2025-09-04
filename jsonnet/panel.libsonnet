@@ -624,6 +624,16 @@ local prometheus = grafonnet.query.prometheus;
           'short',
           '{{server_addr}}/{{operation}}',
         ),
+        template.table(
+          'Slow request',
+          'sum(hgraber_next_http_server_handle_duration_sum{%s} / hgraber_next_http_server_handle_duration_count{%s}) by (server_addr, operation, status)' % [
+            config.label.filter.service,
+            config.label.filter.service,
+          ],
+          's',
+          '{{server_addr}}/{{operation}} -> {{status}}',
+        )
+        + template.tableTimeOverride(),
       ], 12, 9, y + 1)),
     ],
   database(y):
@@ -662,6 +672,16 @@ local prometheus = grafonnet.query.prometheus;
           ],
           'short',
         ),
+        template.table(
+          'Slow request',
+          'sum(hgraber_next_database_request_duration_sum{%s} / hgraber_next_database_request_duration_count{%s}) by (stmt)' % [
+            config.label.filter.service,
+            config.label.filter.service,
+          ],
+          's',
+          '{{stmt}}',
+        )
+        + template.tableTimeOverride(),
       ], 12, 9, y + 1)),
     ],
   panels:
