@@ -5,15 +5,15 @@ import (
 )
 
 type Config struct {
-	Log            Log            `yaml:"log" envconfig:"LOG"`
-	Application    Application    `yaml:"application" envconfig:"APPLICATION"`
-	Parsing        Parsing        `yaml:"parsing" envconfig:"PARSING"`
-	Workers        Workers        `yaml:"workers" envconfig:"WORKERS"`
-	Storage        Storage        `yaml:"storage" envconfig:"STORAGE"`
-	FileStorage    FileStorage    `yaml:"file_storage" envconfig:"FILE_STORAGE"`
-	API            API            `yaml:"api" envconfig:"API"`
-	AgentServer    AgentServer    `yaml:"agent_server" envconfig:"AGENT_SERVER"`
-	AttributeRemap AttributeRemap `yaml:"attribute_remap" envconfig:"ATTRIBUTE_REMAP"`
+	Log            Log            `toml:"log" yaml:"log" envconfig:"LOG"`
+	Application    Application    `toml:"application" yaml:"application" envconfig:"APPLICATION"`
+	Parsing        Parsing        `toml:"parsing" yaml:"parsing" envconfig:"PARSING"`
+	Workers        Workers        `toml:"workers" yaml:"workers" envconfig:"WORKERS"`
+	Storage        Storage        `toml:"storage" yaml:"storage" envconfig:"STORAGE"`
+	FileStorage    FileStorage    `toml:"file_storage" yaml:"file_storage" envconfig:"FILE_STORAGE"`
+	API            API            `toml:"api" yaml:"api" envconfig:"API"`
+	AgentServer    AgentServer    `toml:"agent_server" yaml:"agent_server" envconfig:"AGENT_SERVER"`
+	AttributeRemap AttributeRemap `toml:"attribute_remap" yaml:"attribute_remap" envconfig:"ATTRIBUTE_REMAP"`
 }
 
 func ConfigDefault() Config {
@@ -30,8 +30,8 @@ func ConfigDefault() Config {
 }
 
 type Parsing struct {
-	ParseBookTimeout time.Duration `yaml:"parse_book_timeout" envconfig:"PARSE_BOOK_TIMEOUT"`
-	AgentTimeout     time.Duration `yaml:"agent_timeout" envconfig:"AGENT_TIMEOUT"`
+	ParseBookTimeout time.Duration `toml:"parse_book_timeout" yaml:"parse_book_timeout" envconfig:"PARSE_BOOK_TIMEOUT"`
+	AgentTimeout     time.Duration `toml:"agent_timeout" yaml:"agent_timeout" envconfig:"AGENT_TIMEOUT"`
 }
 
 func ParsingDefault() Parsing {
@@ -42,8 +42,8 @@ func ParsingDefault() Parsing {
 }
 
 type AttributeRemap struct {
-	Auto     bool `yaml:"auto" envconfig:"AUTO"`
-	AllLower bool `yaml:"all_lower" envconfig:"ALL_LOWER"`
+	Auto     bool `toml:"auto" yaml:"auto" envconfig:"AUTO"`
+	AllLower bool `toml:"all_lower" yaml:"all_lower" envconfig:"ALL_LOWER"`
 }
 
 func AttributeRemapDefault() AttributeRemap {

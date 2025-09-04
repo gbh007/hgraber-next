@@ -1,10 +1,10 @@
 package config
 
 type AgentServer struct {
-	Addr            string `yaml:"addr" envconfig:"ADDR"`
-	Token           string `yaml:"token" envconfig:"TOKEN"`
-	LogErrorHandler bool   `yaml:"log_error_handler" envconfig:"LOG_ERROR_HANDLER"`
-	Debug           bool   `yaml:"debug" envconfig:"DEBUG"`
+	Addr            string `toml:"addr" yaml:"addr" envconfig:"ADDR"`
+	Token           string `toml:"token" yaml:"token" envconfig:"TOKEN"`
+	LogErrorHandler bool   `toml:"log_error_handler" yaml:"log_error_handler" envconfig:"LOG_ERROR_HANDLER"`
+	Debug           bool   `toml:"debug" yaml:"debug" envconfig:"DEBUG"`
 }
 
 func (a AgentServer) GetAddr() string {

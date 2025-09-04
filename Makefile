@@ -68,9 +68,11 @@ run: create_build_dir
 
 .PHONY: config
 config: create_build_dir
-	go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server  ./cmd/server
+	go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/configremaper  ./cmd/configremaper
 
-	$(SERVICE_BIN)/server --generate-config config-generated.yaml
+	$(SERVICE_BIN)/configremaper --out config-generated.yaml
+	$(SERVICE_BIN)/configremaper --out config-generated.env
+	$(SERVICE_BIN)/configremaper --out config-generated.toml
 
 
 .PHONY: build

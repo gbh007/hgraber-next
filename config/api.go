@@ -1,12 +1,12 @@
 package config
 
 type API struct {
-	Addr            string `yaml:"addr" envconfig:"ADDR"`
-	ExternalAddr    string `yaml:"external_addr" envconfig:"EXTERNAL_ADDR"`
-	StaticDir       string `yaml:"static_dir" envconfig:"STATIC_DIR"`
-	Token           string `yaml:"token" envconfig:"TOKEN"`
-	LogErrorHandler bool   `yaml:"log_error_handler" envconfig:"LOG_ERROR_HANDLER"`
-	Debug           bool   `yaml:"debug" envconfig:"DEBUG"`
+	Addr            string `toml:"addr" yaml:"addr" envconfig:"ADDR"`
+	ExternalAddr    string `toml:"external_addr" yaml:"external_addr" envconfig:"EXTERNAL_ADDR"`
+	StaticDir       string `toml:"static_dir" yaml:"static_dir" envconfig:"STATIC_DIR"`
+	Token           string `toml:"token" yaml:"token" envconfig:"TOKEN"`
+	LogErrorHandler bool   `toml:"log_error_handler" yaml:"log_error_handler" envconfig:"LOG_ERROR_HANDLER"`
+	Debug           bool   `toml:"debug" yaml:"debug" envconfig:"DEBUG"`
 }
 
 func (a API) GetAddr() string {

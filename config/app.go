@@ -3,10 +3,10 @@ package config
 import "time"
 
 type Application struct {
-	Metric        Metric    `yaml:"metric" envconfig:"METRIC"`
-	ServiceName   string    `yaml:"service_name" envconfig:"SERVICE_NAME"`
-	TraceEndpoint string    `yaml:"trace_endpoint" envconfig:"TRACE_ENDPOINT"`
-	Pyroscope     Pyroscope `yaml:"pyroscope" envconfig:"PYROSCOPE"`
+	Metric        Metric    `toml:"metric" yaml:"metric" envconfig:"METRIC"`
+	ServiceName   string    `toml:"service_name" yaml:"service_name" envconfig:"SERVICE_NAME"`
+	TraceEndpoint string    `toml:"trace_endpoint" yaml:"trace_endpoint" envconfig:"TRACE_ENDPOINT"`
+	Pyroscope     Pyroscope `toml:"pyroscope" yaml:"pyroscope" envconfig:"PYROSCOPE"`
 }
 
 func ApplicationDefault() Application {
@@ -17,7 +17,7 @@ func ApplicationDefault() Application {
 }
 
 type Metric struct {
-	ScrapePeriod MetricScrapePeriod `yaml:"scrape_period" envconfig:"SCRAPE_PERIOD"`
+	ScrapePeriod MetricScrapePeriod `toml:"scrape_period" yaml:"scrape_period" envconfig:"SCRAPE_PERIOD"`
 }
 
 func MetricDefault() Metric {
@@ -42,12 +42,12 @@ func (m Metric) BookStatistic() time.Duration {
 }
 
 type MetricScrapePeriod struct {
-	MainInfo      time.Duration `yaml:"main_info" envconfig:"MAIN_INFO"`
-	BookStatistic time.Duration `yaml:"book_statistic" envconfig:"BOOK_STATISTIC"`
+	MainInfo      time.Duration `toml:"main_info" yaml:"main_info" envconfig:"MAIN_INFO"`
+	BookStatistic time.Duration `toml:"book_statistic" yaml:"book_statistic" envconfig:"BOOK_STATISTIC"`
 }
 
 type Pyroscope struct {
-	Endpoint string `yaml:"endpoint" envconfig:"ENDPOINT"`
-	Debug    bool   `yaml:"debug" envconfig:"DEBUG"`
-	Rate     int    `yaml:"rate" envconfig:"RATE"`
+	Endpoint string `toml:"endpoint" yaml:"endpoint" envconfig:"ENDPOINT"`
+	Debug    bool   `toml:"debug" yaml:"debug" envconfig:"DEBUG"`
+	Rate     int    `toml:"rate" yaml:"rate" envconfig:"RATE"`
 }
