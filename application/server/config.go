@@ -10,5 +10,5 @@ func parseConfig() (config.Config, error) {
 	configPath := flag.String("config", "config.yaml", "path to config")
 	flag.Parse()
 
-	return config.ImportConfig(*configPath, true)
+	return config.ImportConfig(*configPath, true, config.ConfigDefault)
 }

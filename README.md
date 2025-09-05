@@ -135,7 +135,7 @@ curl -X 'POST' \
 
 Для ее сборки
 
-> go build ./bin/build/configremaper ./cmd/configremaper
+> go build -o ./bin/build/configremaper ./cmd/configremaper
 
 Для генерации дефолтной конфигурации (поддерживается `.yaml`, `.yml`, `.toml`, `.env`)
 

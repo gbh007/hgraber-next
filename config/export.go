@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path"
 	"text/template"
@@ -19,25 +20,36 @@ func ExportToFile[T any](cfg *T, filename string) error {
 
 	defer f.Close()
 
-	switch path.Ext(filename) {
+	ext := path.Ext(filename)
+
+	err = ExportToWriter(f, cfg, ext)
+	if err != nil {
+		return fmt.Errorf("export to writer: %w", err)
+	}
+
+	return nil
+}
+
+func ExportToWriter[T any](w io.Writer, cfg *T, ext string) error {
+	switch ext {
 	case ".yml", ".yaml":
-		enc := yaml.NewEncoder(f)
+		enc := yaml.NewEncoder(w)
 		enc.SetIndent(2)
 
-		err = enc.Encode(cfg)
+		err := enc.Encode(cfg)
 		if err != nil {
 			return fmt.Errorf("encode yaml: %w", err)
 		}
 	case ".toml":
-		enc := toml.NewEncoder(f)
+		enc := toml.NewEncoder(w)
 		enc.Indent = ""
 
-		err = enc.Encode(cfg)
+		err := enc.Encode(cfg)
 		if err != nil {
 			return fmt.Errorf("encode toml: %w", err)
 		}
 	case ".env":
-		err = envconfig.Usaget("APP", cfg, f, template.Must(template.New("cfg").Parse(envTemplate)))
+		err := envconfig.Usaget("APP", cfg, w, template.Must(template.New("cfg").Parse(envTemplate)))
 		if err != nil {
 			return fmt.Errorf("encode env usage: %w", err)
 		}
