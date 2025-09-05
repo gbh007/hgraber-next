@@ -18,15 +18,19 @@ type metricProvider interface {
 	RegisterWorkerExecutionTaskTime(name string, d time.Duration, success bool)
 }
 
+type workerConfig interface {
+	GetName() string
+	GetCount() int32
+	GetQueueSize() int
+	GetInterval() time.Duration
+}
+
 type Worker[T any] struct {
-	name  string
+	cfg   workerConfig
 	queue *pkg.DataQueue[T]
 
-	inWorkRunnersCount  atomic.Int32
-	runnersCount        atomic.Int32
-	defaultRunnersCount int
-
-	interval time.Duration
+	inWorkRunnersCount atomic.Int32
+	runnersCount       atomic.Int32
 
 	handler workerHandlerFunc[T]
 	getter  workerTaskGetterFunc[T]
@@ -42,28 +46,22 @@ type Worker[T any] struct {
 }
 
 func New[T any](
-	name string,
-	queueSize int,
-	interval time.Duration,
+	cfg workerConfig,
 	logger *slog.Logger,
 	handler workerHandlerFunc[T],
 	getter workerTaskGetterFunc[T],
-	runnersCount int32,
 	tracer trace.Tracer,
 	metricProvider metricProvider,
 ) *Worker[T] {
 	w := &Worker[T]{
-		name:     name,
-		queue:    pkg.NewDataQueue[T](queueSize),
-		interval: interval,
-		handler:  handler,
-		getter:   getter,
+		cfg:     cfg,
+		queue:   pkg.NewDataQueue[T](cfg.GetQueueSize()),
+		handler: handler,
+		getter:  getter,
 
 		logger:         logger,
 		tracer:         tracer,
 		metricProvider: metricProvider,
-
-		defaultRunnersCount: int(runnersCount),
 	}
 
 	return w
@@ -82,7 +80,7 @@ func (w *Worker[T]) RunnersCount() int {
 }
 
 func (w *Worker[T]) Name() string {
-	return w.name
+	return w.cfg.GetName()
 }
 
 func (w *Worker[T]) SetRunnersCount(newUnitCount int) {
@@ -99,7 +97,7 @@ func (w *Worker[T]) SetRunnersCount(newUnitCount int) {
 		if oldUnitCount < newUnitCount {
 			for i := oldUnitCount; i < newUnitCount; i++ {
 				unit := NewUnit(
-					w.name,
+					w.cfg.GetName(),
 					int32(i),
 					w.logger,
 					w.handler,
@@ -118,7 +116,7 @@ func (w *Worker[T]) SetRunnersCount(newUnitCount int) {
 							w.unitsWG.Done()
 						},
 					},
-					min(time.Minute, max(w.interval/2, time.Millisecond*100)),
+					min(time.Minute, max(w.cfg.GetInterval()/2, time.Millisecond*100)),
 				)
 
 				w.units = append(w.units, unit)
@@ -138,14 +136,14 @@ func (w *Worker[T]) SetRunnersCount(newUnitCount int) {
 }
 
 func (w *Worker[T]) Serve(ctx context.Context) {
-	w.logger.DebugContext(ctx, "worker start", slog.String("worker_name", w.name))
-	defer w.logger.DebugContext(ctx, "worker stop", slog.String("worker_name", w.name))
+	w.logger.DebugContext(ctx, "worker start", slog.String("worker_name", w.cfg.GetName()))
+	defer w.logger.DebugContext(ctx, "worker stop", slog.String("worker_name", w.cfg.GetName()))
 
 	w.unitCtx = ctx
 
-	w.SetRunnersCount(w.defaultRunnersCount)
+	w.SetRunnersCount(int(w.cfg.GetCount()))
 
-	timer := time.NewTicker(w.interval)
+	timer := time.NewTicker(w.cfg.GetInterval())
 
 handler:
 	for {
@@ -173,14 +171,14 @@ func (w *Worker[T]) fetch(ctx context.Context) {
 			w.logger.WarnContext(
 				ctx, "panic in worker fetch detected",
 				slog.Any("panic", p),
-				slog.String("worker_name", w.name),
+				slog.String("worker_name", w.cfg.GetName()),
 				slog.Any("trace", stackTrace(3, 50)),
 			)
 		}
 	}()
 
 	ctx, span := w.tracer.Start(
-		ctx, "worker-fetch/"+w.name,
+		ctx, "worker-fetch/"+w.cfg.GetName(),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 
@@ -191,7 +189,7 @@ func (w *Worker[T]) fetch(ctx context.Context) {
 		span.RecordError(err)
 		w.logger.ErrorContext(
 			ctx, "worker fetch",
-			slog.String("worker_name", w.name),
+			slog.String("worker_name", w.cfg.GetName()),
 			slog.Any("error", err),
 		)
 

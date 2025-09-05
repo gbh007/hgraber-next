@@ -16,6 +16,11 @@ type massloadSizeUnitUseCases interface {
 	UpdateSize(ctx context.Context, ml massloadmodel.Massload) error
 }
 
+type massloadAttributeSizeUnitUseCases interface {
+	MassloadAttributesForUpdate(ctx context.Context) ([]massloadmodel.Attribute, error)
+	UpdateAttributesSize(ctx context.Context, attr massloadmodel.Attribute) error
+}
+
 func NewMassloadSize(
 	useCases massloadSizeUnitUseCases,
 	logger *slog.Logger,
@@ -24,9 +29,7 @@ func NewMassloadSize(
 	metricProvider metricProvider,
 ) *worker.Worker[massloadmodel.Massload] {
 	return worker.New[massloadmodel.Massload](
-		"massload_sizer",
-		cfg.GetQueueSize(),
-		cfg.GetInterval(),
+		cfg,
 		logger,
 		func(ctx context.Context, ml massloadmodel.Massload) error {
 			err := useCases.UpdateSize(ctx, ml)
@@ -40,15 +43,9 @@ func NewMassloadSize(
 			return nil
 		},
 		useCases.MassloadForUpdate,
-		cfg.GetCount(),
 		tracer,
 		metricProvider,
 	)
-}
-
-type massloadAttributeSizeUnitUseCases interface {
-	MassloadAttributesForUpdate(ctx context.Context) ([]massloadmodel.Attribute, error)
-	UpdateAttributesSize(ctx context.Context, attr massloadmodel.Attribute) error
 }
 
 func NewMassloadAttributeSize(
@@ -59,9 +56,7 @@ func NewMassloadAttributeSize(
 	metricProvider metricProvider,
 ) *worker.Worker[massloadmodel.Attribute] {
 	return worker.New[massloadmodel.Attribute](
-		"massload_attribute_sizer",
-		cfg.GetQueueSize(),
-		cfg.GetInterval(),
+		cfg,
 		logger,
 		func(ctx context.Context, attr massloadmodel.Attribute) error {
 			err := useCases.UpdateAttributesSize(ctx, attr)
@@ -76,7 +71,6 @@ func NewMassloadAttributeSize(
 			return nil
 		},
 		useCases.MassloadAttributesForUpdate,
-		cfg.GetCount(),
 		tracer,
 		metricProvider,
 	)

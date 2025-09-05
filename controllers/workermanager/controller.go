@@ -21,6 +21,7 @@ type WorkerUnit interface {
 }
 
 type workerConfig interface {
+	GetName() string
 	GetCount() int32
 	GetQueueSize() int
 	GetInterval() time.Duration

@@ -24,9 +24,7 @@ func NewHasher(
 	metricProvider metricProvider,
 ) *worker.Worker[core.File] {
 	return worker.New[core.File](
-		"file_hash",
-		cfg.GetQueueSize(),
-		cfg.GetInterval(),
+		cfg,
 		logger,
 		func(ctx context.Context, file core.File) error {
 			err := useCases.HandleFileHash(ctx, file)
@@ -40,7 +38,6 @@ func NewHasher(
 			return nil
 		},
 		useCases.UnHashedFiles,
-		cfg.GetCount(),
 		tracer,
 		metricProvider,
 	)

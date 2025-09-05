@@ -8,7 +8,7 @@ type Config struct {
 	Log            Log            `toml:"log" yaml:"log" envconfig:"LOG"`
 	Application    Application    `toml:"application" yaml:"application" envconfig:"APPLICATION"`
 	Parsing        Parsing        `toml:"parsing" yaml:"parsing" envconfig:"PARSING"`
-	Workers        Workers        `toml:"workers" yaml:"workers" envconfig:"WORKERS"`
+	Workers        []Worker       `toml:"workers" yaml:"workers" envconfig:"WORKERS"`
 	Storage        Storage        `toml:"storage" yaml:"storage" envconfig:"STORAGE"`
 	FileStorage    FileStorage    `toml:"file_storage" yaml:"file_storage" envconfig:"FILE_STORAGE"`
 	API            API            `toml:"api" yaml:"api" envconfig:"API"`

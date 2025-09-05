@@ -24,9 +24,7 @@ func NewFileTransfer(
 	metricProvider metricProvider,
 ) *worker.Worker[fsmodel.FileTransfer] {
 	return worker.New[fsmodel.FileTransfer](
-		"transfer_file",
-		cfg.GetQueueSize(),
-		cfg.GetInterval(),
+		cfg,
 		logger,
 		func(ctx context.Context, transfer fsmodel.FileTransfer) error {
 			err := useCases.TransferFile(ctx, transfer)
@@ -43,7 +41,6 @@ func NewFileTransfer(
 		func(_ context.Context) ([]fsmodel.FileTransfer, error) {
 			return useCases.FileTransferList(), nil
 		},
-		cfg.GetCount(),
 		tracer,
 		metricProvider,
 	)

@@ -16,39 +16,39 @@ parsing:
   parse_book_timeout: 5m
   agent_timeout: 10m
 workers:
-  page:
+  - name: page
     count: 1
     queue_size: 100
     interval: 3s
-  book:
+  - name: book
     count: 1
     queue_size: 100
     interval: 3s
-  hasher:
+  - name: hasher
     count: 1
     queue_size: 100
     interval: 3s
-  exporter:
+  - name: exporter
     count: 1
     queue_size: 100
     interval: 3s
-  tasker:
+  - name: tasker
     count: 1
     queue_size: 100
     interval: 10s
-  file_validator:
+  - name: file_validator
     count: 1
     queue_size: 100
     interval: 3s
-  file_transferer:
+  - name: file_transferer
     count: 1
     queue_size: 100
     interval: 3s
-  massload_sizer:
+  - name: massload_sizer
     count: 1
     queue_size: 100
     interval: 1h
-  massload_attribute_sizer:
+  - name: massload_attribute_sizer
     count: 1
     queue_size: 100
     interval: 1h

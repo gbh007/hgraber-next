@@ -24,9 +24,7 @@ func NewFileValidator(
 	metricProvider metricProvider,
 ) *worker.Worker[uuid.UUID] {
 	return worker.New[uuid.UUID](
-		"validate_file",
-		cfg.GetQueueSize(),
-		cfg.GetInterval(),
+		cfg,
 		logger,
 		func(ctx context.Context, fileID uuid.UUID) error {
 			err := useCases.ValidateFile(ctx, fileID)
@@ -42,7 +40,6 @@ func NewFileValidator(
 		func(_ context.Context) ([]uuid.UUID, error) {
 			return useCases.FileIDsToValidate(), nil
 		},
-		cfg.GetCount(),
 		tracer,
 		metricProvider,
 	)

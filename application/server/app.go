@@ -18,6 +18,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver"
 	"github.com/gbh007/hgraber-next/controllers/workermanager"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 	"github.com/gbh007/hgraber-next/metrics"
 	"github.com/gbh007/hgraber-next/usecases/agentusecase"
 	"github.com/gbh007/hgraber-next/usecases/attributeusecase"
@@ -179,24 +180,47 @@ func Serve() {
 	labelUseCases := labelusecase.New(logger, storage)
 	massloadUseCases := massloadusecase.New(logger, storage)
 
-	workersController := workermanager.New(
-		logger,
-		workermanager.NewBookParser(parsingUseCases, logger, tracer, cfg.Workers.Book, metricProvider),
-		workermanager.NewPageDownloader(parsingUseCases, logger, tracer, cfg.Workers.Page, metricProvider),
-		workermanager.NewHasher(fsUseCases, logger, tracer, cfg.Workers.Hasher, metricProvider),
-		workermanager.NewExporter(exportUseCases, logger, tracer, cfg.Workers.Exporter, metricProvider),
-		workermanager.NewTasker(tmpStorage, logger, tracer, cfg.Workers.Tasker, metricProvider),
-		workermanager.NewFileValidator(fsUseCases, logger, tracer, cfg.Workers.FileValidator, metricProvider),
-		workermanager.NewFileTransfer(fsUseCases, logger, tracer, cfg.Workers.FileTransferer, metricProvider),
-		workermanager.NewMassloadSize(massloadUseCases, logger, tracer, cfg.Workers.MassloadSizer, metricProvider),
-		workermanager.NewMassloadAttributeSize(
-			massloadUseCases,
-			logger,
-			tracer,
-			cfg.Workers.MassloadAttributeSizer,
-			metricProvider,
-		),
-	)
+	workerUnits := make([]workermanager.WorkerUnit, 0, len(cfg.Workers))
+
+	for _, wCfg := range cfg.Workers {
+		var unit workermanager.WorkerUnit
+
+		switch wCfg.GetName() {
+		case systemmodel.WorkerNameBook:
+			unit = workermanager.NewBookParser(parsingUseCases, logger, tracer, wCfg, metricProvider)
+
+		case systemmodel.WorkerNamePage:
+			unit = workermanager.NewPageDownloader(parsingUseCases, logger, tracer, wCfg, metricProvider)
+
+		case systemmodel.WorkerNameHasher:
+			unit = workermanager.NewHasher(fsUseCases, logger, tracer, wCfg, metricProvider)
+
+		case systemmodel.WorkerNameExporter:
+			unit = workermanager.NewExporter(exportUseCases, logger, tracer, wCfg, metricProvider)
+
+		case systemmodel.WorkerNameTasker:
+			unit = workermanager.NewTasker(tmpStorage, logger, tracer, wCfg, metricProvider)
+
+		case systemmodel.WorkerNameFileValidator:
+			unit = workermanager.NewFileValidator(fsUseCases, logger, tracer, wCfg, metricProvider)
+
+		case systemmodel.WorkerNameFileTransferer:
+			unit = workermanager.NewFileTransfer(fsUseCases, logger, tracer, wCfg, metricProvider)
+
+		case systemmodel.WorkerNameMassloadSizer:
+			unit = workermanager.NewMassloadSize(massloadUseCases, logger, tracer, wCfg, metricProvider)
+
+		case systemmodel.WorkerNameMassloadAttributeSizer:
+			unit = workermanager.NewMassloadAttributeSize(massloadUseCases, logger, tracer, wCfg, metricProvider)
+
+		default:
+			continue
+		}
+
+		workerUnits = append(workerUnits, unit)
+	}
+
+	workersController := workermanager.New(logger, workerUnits...)
 	asyncController.RegisterRunner(workersController)
 
 	systemUseCases := systemusecase.New(

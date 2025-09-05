@@ -23,9 +23,7 @@ func NewTasker(
 	metricProvider metricProvider,
 ) *worker.Worker[systemmodel.RunnableTask] {
 	return worker.New[systemmodel.RunnableTask](
-		"task",
-		cfg.GetQueueSize(),
-		cfg.GetInterval(),
+		cfg,
 		logger,
 		func(ctx context.Context, task systemmodel.RunnableTask) error {
 			tr := new(systemmodel.TaskResult)
@@ -38,7 +36,6 @@ func NewTasker(
 		func(ctx context.Context) ([]systemmodel.RunnableTask, error) {
 			return useCases.GetTask(), nil
 		},
-		cfg.GetCount(),
 		tracer,
 		metricProvider,
 	)

@@ -1,34 +1,28 @@
 package config
 
-import "time"
+import (
+	"time"
 
-type Workers struct {
-	Page                   Worker `toml:"page" yaml:"page" envconfig:"PAGE"`
-	Book                   Worker `toml:"book" yaml:"book" envconfig:"BOOK"`
-	Hasher                 Worker `toml:"hasher" yaml:"hasher" envconfig:"HASHER"`
-	Exporter               Worker `toml:"exporter" yaml:"exporter" envconfig:"EXPORTER"`
-	Tasker                 Worker `toml:"tasker" yaml:"tasker" envconfig:"TASKER"`
-	FileValidator          Worker `toml:"file_validator" yaml:"file_validator" envconfig:"FILE_VALIDATOR"`
-	FileTransferer         Worker `toml:"file_transferer" yaml:"file_transferer" envconfig:"FILE_TRANSFERER"`
-	MassloadSizer          Worker `toml:"massload_sizer" yaml:"massload_sizer" envconfig:"MASSLOAD_SIZER"`
-	MassloadAttributeSizer Worker `toml:"massload_attribute_sizer" yaml:"massload_attribute_sizer" envconfig:"MASSLOAD_ATTRIBUTE_SIZER"`
-}
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
+)
 
-func WorkersDefault() Workers {
-	return Workers{
-		Page:           WorkerDefault(),
-		Book:           WorkerDefault(),
-		Hasher:         WorkerDefault(),
-		Exporter:       WorkerDefault(),
-		Tasker:         WorkerDefault(),
-		FileValidator:  WorkerDefault(),
-		FileTransferer: WorkerDefault(),
-		MassloadSizer: Worker{
+func WorkersDefault() []Worker {
+	return []Worker{
+		WorkerDefault(systemmodel.WorkerNamePage),
+		WorkerDefault(systemmodel.WorkerNameBook),
+		WorkerDefault(systemmodel.WorkerNameHasher),
+		WorkerDefault(systemmodel.WorkerNameExporter),
+		WorkerDefault(systemmodel.WorkerNameTasker),
+		WorkerDefault(systemmodel.WorkerNameFileValidator),
+		WorkerDefault(systemmodel.WorkerNameFileTransferer),
+		{
+			Name:      systemmodel.WorkerNameMassloadSizer,
 			Count:     1,
 			QueueSize: 100,
 			Interval:  time.Hour,
 		},
-		MassloadAttributeSizer: Worker{
+		{
+			Name:      systemmodel.WorkerNameMassloadAttributeSizer,
 			Count:     1,
 			QueueSize: 100,
 			Interval:  time.Hour,
@@ -37,17 +31,23 @@ func WorkersDefault() Workers {
 }
 
 type Worker struct {
+	Name      string        `toml:"name" yaml:"name" envconfig:"NAME"`
 	Count     int32         `toml:"count" yaml:"count" envconfig:"COUNT"`
 	QueueSize int           `toml:"queue_size" yaml:"queue_size" envconfig:"QUEUE_SIZE"`
 	Interval  time.Duration `toml:"interval" yaml:"interval" envconfig:"INTERVAL"`
 }
 
-func WorkerDefault() Worker {
+func WorkerDefault(name string) Worker {
 	return Worker{
+		Name:      name,
 		Count:     1,
 		QueueSize: 100,
 		Interval:  time.Minute,
 	}
+}
+
+func (w Worker) GetName() string {
+	return w.Name
 }
 
 func (w Worker) GetCount() int32 {

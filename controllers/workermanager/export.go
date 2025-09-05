@@ -24,9 +24,7 @@ func NewExporter(
 	metricProvider metricProvider,
 ) *worker.Worker[agentmodel.BookToExport] {
 	return worker.New[agentmodel.BookToExport](
-		"export",
-		cfg.GetQueueSize(),
-		cfg.GetInterval(),
+		cfg,
 		logger,
 		func(ctx context.Context, toExport agentmodel.BookToExport) error {
 			err := useCases.ExportArchive(ctx, toExport, true)
@@ -43,7 +41,6 @@ func NewExporter(
 		func(_ context.Context) ([]agentmodel.BookToExport, error) {
 			return useCases.ExportList(), nil
 		},
-		cfg.GetCount(),
 		tracer,
 		metricProvider,
 	)

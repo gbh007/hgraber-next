@@ -26,9 +26,7 @@ func NewBookParser(
 	metricProvider metricProvider,
 ) *worker.Worker[agentmodel.BookWithAgent] {
 	return worker.New[agentmodel.BookWithAgent](
-		"book",
-		cfg.GetQueueSize(),
-		cfg.GetInterval(),
+		cfg,
 		logger,
 		func(ctx context.Context, book agentmodel.BookWithAgent) error {
 			err := useCases.ParseBook(ctx, book.AgentID, book.Book)
@@ -42,7 +40,6 @@ func NewBookParser(
 			return nil
 		},
 		useCases.BooksToParse,
-		cfg.GetCount(),
 		tracer,
 		metricProvider,
 	)

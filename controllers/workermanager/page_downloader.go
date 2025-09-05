@@ -26,9 +26,7 @@ func NewPageDownloader(
 	metricProvider metricProvider,
 ) *worker.Worker[parsing.PageForDownloadWithAgent] {
 	return worker.New[parsing.PageForDownloadWithAgent](
-		"page",
-		cfg.GetQueueSize(),
-		cfg.GetInterval(),
+		cfg,
 		logger,
 		func(ctx context.Context, page parsing.PageForDownloadWithAgent) error {
 			err := useCases.DownloadPage(ctx, page.AgentID, page.PageForDownload)
@@ -43,7 +41,6 @@ func NewPageDownloader(
 			return nil
 		},
 		useCases.PagesToDownload,
-		cfg.GetCount(),
 		tracer,
 		metricProvider,
 	)
