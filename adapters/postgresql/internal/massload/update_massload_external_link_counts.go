@@ -10,19 +10,22 @@ import (
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 )
 
-func (repo *MassloadRepo) UpdateMassloadSize(ctx context.Context, ml massloadmodel.Massload) error {
-	builder := squirrel.Update("massloads").
+func (repo *MassloadRepo) UpdateMassloadExternalLinkCounts(
+	ctx context.Context,
+	id int,
+	link massloadmodel.ExternalLink,
+) error {
+	builder := squirrel.Update("massload_external_links").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"page_size":       model.NilInt64ToDB(ml.PageSize),
-			"file_size":       model.NilInt64ToDB(ml.FileSize),
-			"page_count":      model.NilInt64ToDB(ml.PageCount),
-			"file_count":      model.NilInt64ToDB(ml.FileCount),
-			"books_in_system": model.NilInt64ToDB(ml.BookInSystem),
-			"updated_at":      model.TimeToDB(ml.UpdatedAt),
+			"books_ahead":    model.NilInt64ToDB(link.BooksAhead),
+			"new_books":      model.NilInt64ToDB(link.NewBooks),
+			"existing_books": model.NilInt64ToDB(link.ExistingBooks),
+			"updated_at":     link.UpdatedAt,
 		}).
 		Where(squirrel.Eq{
-			"id": ml.ID,
+			"massload_id": id,
+			"url":         link.URL.String(),
 		})
 
 	query, args, err := builder.ToSql()

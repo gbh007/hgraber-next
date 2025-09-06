@@ -7,9 +7,14 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (repo *AttributeRepo) AttributesFileSize(ctx context.Context, attrs map[string][]string) (int64, error) {
+func (repo *AttributeRepo) AttributesFileSize(
+	ctx context.Context,
+	attrs map[string][]string,
+) (core.SizeWithCount, error) {
 	whereCond := squirrel.Or{}
 
 	for code, values := range attrs {
@@ -24,7 +29,7 @@ func (repo *AttributeRepo) AttributesFileSize(ctx context.Context, attrs map[str
 	}
 
 	if len(whereCond) == 0 {
-		return 0, errors.New("incorrect condition: empty attributes")
+		return core.SizeWithCount{}, errors.New("incorrect condition: empty attributes")
 	}
 
 	subBuilder := squirrel.Select(
@@ -44,25 +49,28 @@ func (repo *AttributeRepo) AttributesFileSize(ctx context.Context, attrs map[str
 			`f.sha256_sum`,
 		)
 
-	builder := squirrel.Select(`sum(uf."size")`).
+	builder := squirrel.Select(`SUM(uf."size")`, `COUNT(*)`).
 		PlaceholderFormat(squirrel.Dollar).
 		FromSelect(subBuilder, "uf")
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return 0, fmt.Errorf("build query: %w", err)
+		return core.SizeWithCount{}, fmt.Errorf("build query: %w", err)
 	}
 
 	repo.SquirrelDebugLog(ctx, query, args)
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	var size sql.NullInt64
+	var size, count sql.NullInt64
 
-	err = row.Scan(&size)
+	err = row.Scan(&size, &count)
 	if err != nil {
-		return 0, fmt.Errorf("exec query: %w", err)
+		return core.SizeWithCount{}, fmt.Errorf("exec query: %w", err)
 	}
 
-	return size.Int64, nil
+	return core.SizeWithCount{
+		Count: count.Int64,
+		Size:  size.Int64,
+	}, nil
 }

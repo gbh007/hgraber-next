@@ -14,9 +14,12 @@ func (repo *MassloadRepo) UpdateMassloadAttributeSize(ctx context.Context, attr 
 	builder := squirrel.Update("massload_attributes").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"page_size":  model.NilInt64ToDB(attr.PageSize),
-			"file_size":  model.NilInt64ToDB(attr.FileSize),
-			"updated_at": model.TimeToDB(attr.UpdatedAt),
+			"page_size":       model.NilInt64ToDB(attr.PageSize),
+			"file_size":       model.NilInt64ToDB(attr.FileSize),
+			"page_count":      model.NilInt64ToDB(attr.PageCount),
+			"file_count":      model.NilInt64ToDB(attr.FileCount),
+			"books_in_system": model.NilInt64ToDB(attr.BookInSystem),
+			"updated_at":      model.TimeToDB(attr.UpdatedAt),
 		}).
 		Where(squirrel.Eq{
 			"attr_code":  attr.Code,

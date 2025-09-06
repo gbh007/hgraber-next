@@ -10,16 +10,14 @@ import (
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 )
 
-func (repo *MassloadRepo) UpdateMassloadSize(ctx context.Context, ml massloadmodel.Massload) error {
+func (repo *MassloadRepo) UpdateMassloadCounts(ctx context.Context, ml massloadmodel.Massload) error {
 	builder := squirrel.Update("massloads").
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"page_size":       model.NilInt64ToDB(ml.PageSize),
-			"file_size":       model.NilInt64ToDB(ml.FileSize),
-			"page_count":      model.NilInt64ToDB(ml.PageCount),
-			"file_count":      model.NilInt64ToDB(ml.FileCount),
-			"books_in_system": model.NilInt64ToDB(ml.BookInSystem),
-			"updated_at":      model.TimeToDB(ml.UpdatedAt),
+			"books_ahead":    model.NilInt64ToDB(ml.BooksAhead),
+			"new_books":      model.NilInt64ToDB(ml.NewBooks),
+			"existing_books": model.NilInt64ToDB(ml.ExistingBooks),
+			"updated_at":     model.TimeToDB(ml.UpdatedAt),
 		}).
 		Where(squirrel.Eq{
 			"id": ml.ID,

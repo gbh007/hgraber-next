@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/pkg"
 )
@@ -34,21 +35,41 @@ func (uc *UseCase) UpdateSize(ctx context.Context, ml massloadmodel.Massload) er
 		attrMap[code] = pkg.Unique(values)
 	}
 
-	fileSize, err := uc.storage.AttributesFileSize(ctx, attrMap)
+	filesInfo, err := uc.storage.AttributesFileSize(ctx, attrMap)
 	if err != nil {
 		return fmt.Errorf("storage get file size: %w", err)
 	}
 
-	pageSize, err := uc.storage.AttributesPageSize(ctx, attrMap)
+	pagesInfo, err := uc.storage.AttributesPageSize(ctx, attrMap)
 	if err != nil {
 		return fmt.Errorf("storage get page size: %w", err)
 	}
 
+	bookCount, err := uc.storage.BookCount(ctx, core.BookFilter{
+		Fields: core.BookFilterFields{
+			Attributes: pkg.MapToSlice(attrMap, func(k string, v []string) core.BookFilterAttribute {
+				return core.BookFilterAttribute{
+					Code:   k,
+					Type:   core.BookFilterAttributeTypeIn,
+					Values: v,
+				}
+			}),
+		},
+	})
+	if err != nil {
+		return fmt.Errorf("storage get book count: %w", err)
+	}
+
+	bookInSystem := int64(bookCount)
+
 	err = uc.storage.UpdateMassloadSize(ctx, massloadmodel.Massload{
-		ID:        ml.ID,
-		PageSize:  &pageSize,
-		FileSize:  &fileSize,
-		UpdatedAt: time.Now(),
+		ID:           ml.ID,
+		PageSize:     &pagesInfo.Size,
+		FileSize:     &filesInfo.Size,
+		PageCount:    &pagesInfo.Count,
+		FileCount:    &filesInfo.Count,
+		BookInSystem: &bookInSystem,
+		UpdatedAt:    time.Now(),
 	})
 	if err != nil {
 		return fmt.Errorf("storage update size: %w", err)
@@ -73,22 +94,42 @@ func (uc *UseCase) UpdateAttributesSize(ctx context.Context, attr massloadmodel.
 		},
 	}
 
-	fileSize, err := uc.storage.AttributesFileSize(ctx, attrMap)
+	filesInfo, err := uc.storage.AttributesFileSize(ctx, attrMap)
 	if err != nil {
 		return fmt.Errorf("storage get file size: %w", err)
 	}
 
-	pageSize, err := uc.storage.AttributesPageSize(ctx, attrMap)
+	pagesInfo, err := uc.storage.AttributesPageSize(ctx, attrMap)
 	if err != nil {
 		return fmt.Errorf("storage get page size: %w", err)
 	}
 
+	bookCount, err := uc.storage.BookCount(ctx, core.BookFilter{
+		Fields: core.BookFilterFields{
+			Attributes: pkg.MapToSlice(attrMap, func(k string, v []string) core.BookFilterAttribute {
+				return core.BookFilterAttribute{
+					Code:   k,
+					Type:   core.BookFilterAttributeTypeIn,
+					Values: v,
+				}
+			}),
+		},
+	})
+	if err != nil {
+		return fmt.Errorf("storage get book count: %w", err)
+	}
+
+	bookInSystem := int64(bookCount)
+
 	err = uc.storage.UpdateMassloadAttributeSize(ctx, massloadmodel.Attribute{
-		Code:      attr.Code,
-		Value:     attr.Value,
-		PageSize:  &pageSize,
-		FileSize:  &fileSize,
-		UpdatedAt: time.Now(),
+		Code:         attr.Code,
+		Value:        attr.Value,
+		PageSize:     &pagesInfo.Size,
+		FileSize:     &filesInfo.Size,
+		PageCount:    &pagesInfo.Count,
+		FileCount:    &filesInfo.Count,
+		BookInSystem: &bookInSystem,
+		UpdatedAt:    time.Now(),
 	})
 	if err != nil {
 		return fmt.Errorf("storage update size: %w", err)

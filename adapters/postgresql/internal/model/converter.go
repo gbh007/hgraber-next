@@ -73,3 +73,11 @@ func NilInt64ToDB(i *int64) sql.NullInt64 {
 		Valid: true,
 	}
 }
+
+func NilInt64FromDB(i sql.NullInt64) *int64 {
+	if !i.Valid {
+		return nil
+	}
+
+	return &i.Int64
+}

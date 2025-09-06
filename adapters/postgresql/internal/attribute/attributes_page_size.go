@@ -7,9 +7,14 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func (repo *AttributeRepo) AttributesPageSize(ctx context.Context, attrs map[string][]string) (int64, error) {
+func (repo *AttributeRepo) AttributesPageSize(
+	ctx context.Context,
+	attrs map[string][]string,
+) (core.SizeWithCount, error) {
 	whereCond := squirrel.Or{}
 
 	for code, values := range attrs {
@@ -24,10 +29,10 @@ func (repo *AttributeRepo) AttributesPageSize(ctx context.Context, attrs map[str
 	}
 
 	if len(whereCond) == 0 {
-		return 0, errors.New("incorrect condition: empty attributes")
+		return core.SizeWithCount{}, errors.New("incorrect condition: empty attributes")
 	}
 
-	builder := squirrel.Select(`sum(f."size")`).
+	builder := squirrel.Select(`SUM(f."size")`, `COUNT(*)`).
 		PlaceholderFormat(squirrel.Dollar).
 		From(`files f`).
 		InnerJoin(`pages p ON f.id = p.file_id`).
@@ -36,19 +41,22 @@ func (repo *AttributeRepo) AttributesPageSize(ctx context.Context, attrs map[str
 
 	query, args, err := builder.ToSql()
 	if err != nil {
-		return 0, fmt.Errorf("build query: %w", err)
+		return core.SizeWithCount{}, fmt.Errorf("build query: %w", err)
 	}
 
 	repo.SquirrelDebugLog(ctx, query, args)
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	var size sql.NullInt64
+	var size, count sql.NullInt64
 
-	err = row.Scan(&size)
+	err = row.Scan(&size, &count)
 	if err != nil {
-		return 0, fmt.Errorf("exec query: %w", err)
+		return core.SizeWithCount{}, fmt.Errorf("exec query: %w", err)
 	}
 
-	return size.Int64, nil
+	return core.SizeWithCount{
+		Count: count.Int64,
+		Size:  size.Int64,
+	}, nil
 }

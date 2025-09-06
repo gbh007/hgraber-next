@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"net/url"
 
+	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 )
 
@@ -12,6 +13,7 @@ type storage interface {
 	CreateMassload(ctx context.Context, ml massloadmodel.Massload) (int, error)
 	UpdateMassload(ctx context.Context, ml massloadmodel.Massload) error
 	UpdateMassloadSize(ctx context.Context, ml massloadmodel.Massload) error
+	UpdateMassloadCounts(ctx context.Context, ml massloadmodel.Massload) error
 	Massload(ctx context.Context, id int) (massloadmodel.Massload, error)
 	Massloads(ctx context.Context, filter massloadmodel.Filter) ([]massloadmodel.Massload, error)
 	DeleteMassload(ctx context.Context, id int) error
@@ -23,6 +25,8 @@ type storage interface {
 	DeleteMassloadFlag(ctx context.Context, code string) error
 
 	CreateMassloadExternalLink(ctx context.Context, id int, link massloadmodel.ExternalLink) error
+	UpdateMassloadExternalLink(ctx context.Context, id int, link massloadmodel.ExternalLink) error
+	UpdateMassloadExternalLinkCounts(ctx context.Context, id int, link massloadmodel.ExternalLink) error
 	MassloadExternalLinks(ctx context.Context, id int) ([]massloadmodel.ExternalLink, error)
 	DeleteMassloadExternalLink(ctx context.Context, id int, u url.URL) error
 
@@ -33,8 +37,10 @@ type storage interface {
 	MassloadsAttributes(ctx context.Context) ([]massloadmodel.Attribute, error)
 	UpdateMassloadAttributeSize(ctx context.Context, attr massloadmodel.Attribute) error
 
-	AttributesPageSize(ctx context.Context, attrs map[string][]string) (int64, error)
-	AttributesFileSize(ctx context.Context, attrs map[string][]string) (int64, error)
+	AttributesPageSize(ctx context.Context, attrs map[string][]string) (core.SizeWithCount, error)
+	AttributesFileSize(ctx context.Context, attrs map[string][]string) (core.SizeWithCount, error)
+
+	BookCount(ctx context.Context, filter core.BookFilter) (int, error)
 }
 
 type UseCase struct {

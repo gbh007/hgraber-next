@@ -28,27 +28,48 @@ type Massload struct {
 	Name        string
 	Description string
 	Flags       []string
-	PageSize    *int64
-	FileSize    *int64
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+
+	PageSize  *int64
+	FileSize  *int64
+	PageCount *int64
+	FileCount *int64
+
+	BooksAhead    *int64
+	NewBooks      *int64
+	ExistingBooks *int64
+
+	BookInSystem *int64
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
 
 	ExternalLinks []ExternalLink
 	Attributes    []Attribute
 }
 
 type ExternalLink struct {
-	URL       url.URL
+	URL url.URL
+
+	BooksAhead    *int64
+	NewBooks      *int64
+	ExistingBooks *int64
+
+	AutoCheck bool
+
 	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type Attribute struct {
-	Code      string
-	Value     string
-	PageSize  *int64
-	FileSize  *int64
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Code         string
+	Value        string
+	PageSize     *int64
+	FileSize     *int64
+	PageCount    *int64
+	FileCount    *int64
+	BookInSystem *int64
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
 
 type Flag struct {
