@@ -353,6 +353,12 @@ type Handler interface {
 	//
 	// POST /api/label/set
 	APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) (APILabelSetPostRes, error)
+	// APIMassloadCalculatePost implements POST /api/massload/calculate operation.
+	//
+	// Расчет массовых загрузок.
+	//
+	// POST /api/massload/calculate
+	APIMassloadCalculatePost(ctx context.Context, req *APIMassloadCalculatePostReq) (APIMassloadCalculatePostRes, error)
 	// APIMassloadFlagCreatePost implements POST /api/massload/flag/create operation.
 	//
 	// Создание информации о флаге массовой загрузке.

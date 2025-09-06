@@ -526,6 +526,15 @@ func (UnimplementedHandler) APILabelSetPost(ctx context.Context, req *APILabelSe
 	return r, ht.ErrNotImplemented
 }
 
+// APIMassloadCalculatePost implements POST /api/massload/calculate operation.
+//
+// Расчет массовых загрузок.
+//
+// POST /api/massload/calculate
+func (UnimplementedHandler) APIMassloadCalculatePost(ctx context.Context, req *APIMassloadCalculatePostReq) (r APIMassloadCalculatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIMassloadFlagCreatePost implements POST /api/massload/flag/create operation.
 //
 // Создание информации о флаге массовой загрузке.

@@ -225,6 +225,10 @@ type APILabelSetPostRes interface {
 	aPILabelSetPostRes()
 }
 
+type APIMassloadCalculatePostRes interface {
+	aPIMassloadCalculatePostRes()
+}
+
 type APIMassloadFlagCreatePostRes interface {
 	aPIMassloadFlagCreatePostRes()
 }

@@ -1468,6 +1468,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
+				case 'c': // Prefix: "calculate"
+
+					if l := len("calculate"); len(elem) >= l && elem[0:l] == "calculate" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIMassloadCalculatePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
 				case 'f': // Prefix: "flag/"
 
 					if l := len("flag/"); len(elem) >= l && elem[0:l] == "flag/" {
@@ -3891,6 +3911,30 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
+				case 'c': // Prefix: "calculate"
+
+					if l := len("calculate"); len(elem) >= l && elem[0:l] == "calculate" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIMassloadCalculatePostOperation
+							r.summary = "Расчет массовых загрузок"
+							r.operationID = ""
+							r.pathPattern = "/api/massload/calculate"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
 				case 'f': // Prefix: "flag/"
 
 					if l := len("flag/"); len(elem) >= l && elem[0:l] == "flag/" {

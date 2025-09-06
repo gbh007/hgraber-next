@@ -12,7 +12,12 @@ import (
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/domain/parsing"
+	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
+
+type tmpStorage interface {
+	SaveTask(task systemmodel.RunnableTask)
+}
 
 type storage interface {
 	CreateMassload(ctx context.Context, ml massloadmodel.Massload) (int, error)
@@ -60,17 +65,20 @@ type UseCase struct {
 	logger *slog.Logger
 
 	storage     storage
+	tmpStorage  tmpStorage
 	agentSystem agentSystem
 }
 
 func New(
 	logger *slog.Logger,
 	storage storage,
+	tmpStorage tmpStorage,
 	agentSystem agentSystem,
 ) *UseCase {
 	return &UseCase{
 		logger:      logger,
 		storage:     storage,
+		tmpStorage:  tmpStorage,
 		agentSystem: agentSystem,
 	}
 }

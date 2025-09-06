@@ -5494,6 +5494,70 @@ type APILabelSetPostUnauthorized ErrorResponse
 
 func (*APILabelSetPostUnauthorized) aPILabelSetPostRes() {}
 
+type APIMassloadCalculatePostBadRequest ErrorResponse
+
+func (*APIMassloadCalculatePostBadRequest) aPIMassloadCalculatePostRes() {}
+
+type APIMassloadCalculatePostForbidden ErrorResponse
+
+func (*APIMassloadCalculatePostForbidden) aPIMassloadCalculatePostRes() {}
+
+type APIMassloadCalculatePostInternalServerError ErrorResponse
+
+func (*APIMassloadCalculatePostInternalServerError) aPIMassloadCalculatePostRes() {}
+
+// APIMassloadCalculatePostNoContent is response for APIMassloadCalculatePost operation.
+type APIMassloadCalculatePostNoContent struct{}
+
+func (*APIMassloadCalculatePostNoContent) aPIMassloadCalculatePostRes() {}
+
+type APIMassloadCalculatePostNotFound ErrorResponse
+
+func (*APIMassloadCalculatePostNotFound) aPIMassloadCalculatePostRes() {}
+
+type APIMassloadCalculatePostReq struct {
+	// ИД массовой загрузки.
+	ID OptInt `json:"id"`
+	// Применить ко всем загрузкам.
+	All OptBool `json:"all"`
+	// Игнорировать параметр auto check.
+	Force OptBool `json:"force"`
+}
+
+// GetID returns the value of ID.
+func (s *APIMassloadCalculatePostReq) GetID() OptInt {
+	return s.ID
+}
+
+// GetAll returns the value of All.
+func (s *APIMassloadCalculatePostReq) GetAll() OptBool {
+	return s.All
+}
+
+// GetForce returns the value of Force.
+func (s *APIMassloadCalculatePostReq) GetForce() OptBool {
+	return s.Force
+}
+
+// SetID sets the value of ID.
+func (s *APIMassloadCalculatePostReq) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetAll sets the value of All.
+func (s *APIMassloadCalculatePostReq) SetAll(val OptBool) {
+	s.All = val
+}
+
+// SetForce sets the value of Force.
+func (s *APIMassloadCalculatePostReq) SetForce(val OptBool) {
+	s.Force = val
+}
+
+type APIMassloadCalculatePostUnauthorized ErrorResponse
+
+func (*APIMassloadCalculatePostUnauthorized) aPIMassloadCalculatePostRes() {}
+
 type APIMassloadFlagCreatePostBadRequest ErrorResponse
 
 func (*APIMassloadFlagCreatePostBadRequest) aPIMassloadFlagCreatePostRes() {}

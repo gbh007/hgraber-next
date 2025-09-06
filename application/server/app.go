@@ -179,7 +179,7 @@ func Serve() {
 	bffUseCases := bffusecase.New(logger, storage, deduplicateUseCases)
 	attributeUseCases := attributeusecase.New(logger, storage, cfg.AttributeRemap.AllLower)
 	labelUseCases := labelusecase.New(logger, storage)
-	massloadUseCases := massloadusecase.New(logger, storage, agentSystem)
+	massloadUseCases := massloadusecase.New(logger, storage, tmpStorage, agentSystem)
 
 	workerUnits := make([]workermanager.WorkerUnit, 0, len(cfg.Workers))
 

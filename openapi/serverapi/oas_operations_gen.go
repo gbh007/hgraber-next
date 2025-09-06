@@ -62,6 +62,7 @@ const (
 	APILabelPresetListGetOperation                 OperationName = "APILabelPresetListGet"
 	APILabelPresetUpdatePostOperation              OperationName = "APILabelPresetUpdatePost"
 	APILabelSetPostOperation                       OperationName = "APILabelSetPost"
+	APIMassloadCalculatePostOperation              OperationName = "APIMassloadCalculatePost"
 	APIMassloadFlagCreatePostOperation             OperationName = "APIMassloadFlagCreatePost"
 	APIMassloadFlagDeletePostOperation             OperationName = "APIMassloadFlagDeletePost"
 	APIMassloadFlagGetPostOperation                OperationName = "APIMassloadFlagGetPost"

@@ -30,6 +30,9 @@ type MassloadUseCases interface {
 	CreateMassloadExternalLink(ctx context.Context, massloadID int, link massloadmodel.ExternalLink) error
 	UpdateMassloadExternalLink(ctx context.Context, massloadID int, link massloadmodel.ExternalLink) error
 	DeleteMassloadExternalLink(ctx context.Context, massloadID int, u url.URL) error
+
+	CalculateMassload(ctx context.Context, id int, force bool) error
+	CalculateMassloads(ctx context.Context, force bool) error
 }
 
 type MassloadController struct {
