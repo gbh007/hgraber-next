@@ -57,13 +57,13 @@ create_build_dir:
 run-example: create_build_dir
 	go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server  ./cmd/server
 
-	$(SERVICE_BIN)/server --config config-example.yaml
+	$(SERVICE_BIN)/server --config config-example.toml
  
 .PHONY: run
 run: create_build_dir
 	go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server  ./cmd/server
 
-	$(SERVICE_BIN)/server
+	$(SERVICE_BIN)/server --config config.toml
 
 
 .PHONY: config

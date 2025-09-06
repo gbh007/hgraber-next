@@ -1,5 +1,5 @@
 .hidden
 _build
 .env
-config.yaml
+config.*
 bin

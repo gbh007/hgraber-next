@@ -1,0 +1,101 @@
+[log]
+include_source = false
+level = "info"
+
+[application]
+service_name = "hgraber-next-local-test"
+trace_endpoint = ""
+
+[application.metric.scrape_period]
+main_info = "10s"
+book_statistic = "1h"
+
+[application.pyroscope]
+endpoint = ""
+debug = false
+rate = 5
+
+[parsing]
+parse_book_timeout = "5m"
+agent_timeout = "10m"
+
+[[workers]]
+name = "page"
+count = 1
+queue_size = 100
+interval = "3s"
+
+[[workers]]
+name = "book"
+count = 1
+queue_size = 100
+interval = "3s"
+
+[[workers]]
+name = "hasher"
+count = 1
+queue_size = 100
+interval = "3s"
+
+[[workers]]
+name = "exporter"
+count = 1
+queue_size = 100
+interval = "3s"
+
+[[workers]]
+name = "tasker"
+count = 1
+queue_size = 100
+interval = "10s"
+
+[[workers]]
+name = "file_validator"
+count = 1
+queue_size = 100
+interval = "3s"
+
+[[workers]]
+name = "file_transferer"
+count = 1
+queue_size = 100
+interval = "3s"
+
+[[workers]]
+name = "massload_sizer"
+count = 1
+queue_size = 100
+interval = "1h"
+
+[[workers]]
+name = "massload_attribute_sizer"
+count = 1
+queue_size = 100
+interval = "1h"
+
+[storage]
+debug_squirrel = false
+debug_pgx = false
+connection = "postgres://hgrabernextuser:hgrabernextpass@localhost:5432/hgrabernext?sslmode=disable"
+max_connections = 10
+
+[file_storage]
+try_reconnect = true
+
+[api]
+addr = "127.0.0.1:8080"
+external_addr = "http://localhost:8080"
+static_dir = "internal/controllers/apiserver/internal/static"
+token = "local-next"
+log_error_handler = false
+debug = false
+
+[agent_server]
+addr = "127.0.0.1:8085"
+token = "local-cache"
+log_error_handler = false
+debug = false
+
+[attribute_remap]
+auto = true
+all_lower = true
