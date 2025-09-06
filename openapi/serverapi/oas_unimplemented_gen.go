@@ -625,6 +625,15 @@ func (UnimplementedHandler) APIMassloadInfoExternalLinkDeletePost(ctx context.Co
 	return r, ht.ErrNotImplemented
 }
 
+// APIMassloadInfoExternalLinkUpdatePost implements POST /api/massload/info/external_link/update operation.
+//
+// Обновление внешней ссылки массовой загрузки.
+//
+// POST /api/massload/info/external_link/update
+func (UnimplementedHandler) APIMassloadInfoExternalLinkUpdatePost(ctx context.Context, req *APIMassloadInfoExternalLinkUpdatePostReq) (r APIMassloadInfoExternalLinkUpdatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIMassloadInfoGetPost implements POST /api/massload/info/get operation.
 //
 // Получение массовой загрузки.

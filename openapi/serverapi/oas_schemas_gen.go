@@ -6062,6 +6062,8 @@ type APIMassloadInfoExternalLinkCreatePostReq struct {
 	MassloadID int `json:"massload_id"`
 	// Ссылка.
 	URL url.URL `json:"url"`
+	// Включение автоматической проверки новых книг.
+	AutoCheck OptBool `json:"auto_check"`
 }
 
 // GetMassloadID returns the value of MassloadID.
@@ -6074,6 +6076,11 @@ func (s *APIMassloadInfoExternalLinkCreatePostReq) GetURL() url.URL {
 	return s.URL
 }
 
+// GetAutoCheck returns the value of AutoCheck.
+func (s *APIMassloadInfoExternalLinkCreatePostReq) GetAutoCheck() OptBool {
+	return s.AutoCheck
+}
+
 // SetMassloadID sets the value of MassloadID.
 func (s *APIMassloadInfoExternalLinkCreatePostReq) SetMassloadID(val int) {
 	s.MassloadID = val
@@ -6082,6 +6089,11 @@ func (s *APIMassloadInfoExternalLinkCreatePostReq) SetMassloadID(val int) {
 // SetURL sets the value of URL.
 func (s *APIMassloadInfoExternalLinkCreatePostReq) SetURL(val url.URL) {
 	s.URL = val
+}
+
+// SetAutoCheck sets the value of AutoCheck.
+func (s *APIMassloadInfoExternalLinkCreatePostReq) SetAutoCheck(val OptBool) {
+	s.AutoCheck = val
 }
 
 type APIMassloadInfoExternalLinkCreatePostUnauthorized ErrorResponse
@@ -6141,6 +6153,72 @@ func (s *APIMassloadInfoExternalLinkDeletePostReq) SetURL(val url.URL) {
 type APIMassloadInfoExternalLinkDeletePostUnauthorized ErrorResponse
 
 func (*APIMassloadInfoExternalLinkDeletePostUnauthorized) aPIMassloadInfoExternalLinkDeletePostRes() {
+}
+
+type APIMassloadInfoExternalLinkUpdatePostBadRequest ErrorResponse
+
+func (*APIMassloadInfoExternalLinkUpdatePostBadRequest) aPIMassloadInfoExternalLinkUpdatePostRes() {}
+
+type APIMassloadInfoExternalLinkUpdatePostForbidden ErrorResponse
+
+func (*APIMassloadInfoExternalLinkUpdatePostForbidden) aPIMassloadInfoExternalLinkUpdatePostRes() {}
+
+type APIMassloadInfoExternalLinkUpdatePostInternalServerError ErrorResponse
+
+func (*APIMassloadInfoExternalLinkUpdatePostInternalServerError) aPIMassloadInfoExternalLinkUpdatePostRes() {
+}
+
+// APIMassloadInfoExternalLinkUpdatePostNoContent is response for APIMassloadInfoExternalLinkUpdatePost operation.
+type APIMassloadInfoExternalLinkUpdatePostNoContent struct{}
+
+func (*APIMassloadInfoExternalLinkUpdatePostNoContent) aPIMassloadInfoExternalLinkUpdatePostRes() {}
+
+type APIMassloadInfoExternalLinkUpdatePostNotFound ErrorResponse
+
+func (*APIMassloadInfoExternalLinkUpdatePostNotFound) aPIMassloadInfoExternalLinkUpdatePostRes() {}
+
+type APIMassloadInfoExternalLinkUpdatePostReq struct {
+	// ИД массовой загрузки.
+	MassloadID int `json:"massload_id"`
+	// Ссылка.
+	URL url.URL `json:"url"`
+	// Включение автоматической проверки новых книг.
+	AutoCheck OptBool `json:"auto_check"`
+}
+
+// GetMassloadID returns the value of MassloadID.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) GetMassloadID() int {
+	return s.MassloadID
+}
+
+// GetURL returns the value of URL.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) GetURL() url.URL {
+	return s.URL
+}
+
+// GetAutoCheck returns the value of AutoCheck.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) GetAutoCheck() OptBool {
+	return s.AutoCheck
+}
+
+// SetMassloadID sets the value of MassloadID.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) SetMassloadID(val int) {
+	s.MassloadID = val
+}
+
+// SetURL sets the value of URL.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) SetURL(val url.URL) {
+	s.URL = val
+}
+
+// SetAutoCheck sets the value of AutoCheck.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) SetAutoCheck(val OptBool) {
+	s.AutoCheck = val
+}
+
+type APIMassloadInfoExternalLinkUpdatePostUnauthorized ErrorResponse
+
+func (*APIMassloadInfoExternalLinkUpdatePostUnauthorized) aPIMassloadInfoExternalLinkUpdatePostRes() {
 }
 
 type APIMassloadInfoGetPostForbidden ErrorResponse
@@ -9582,14 +9660,26 @@ type MassloadInfo struct {
 	PageSize OptInt64 `json:"page_size"`
 	// Размер файлов страниц в человеко читаемом виде.
 	PageSizeFormatted OptString `json:"page_size_formatted"`
+	// Количество страниц.
+	PageCount OptInt64 `json:"page_count"`
 	// Размер файлов в файловой системе.
 	FileSize OptInt64 `json:"file_size"`
 	// Размер файлов в файловой системе в человеко читаемом
 	// виде.
 	FileSizeFormatted OptString `json:"file_size_formatted"`
+	// Количество файлов в файловой системе.
+	FileCount OptInt64 `json:"file_count"`
+	// Количество книг.
+	BooksInSystem OptInt64 `json:"books_in_system"`
+	// Количество книг перед последней загруженной.
+	BooksAhead OptInt64 `json:"books_ahead"`
+	// Количество незагруженных книг.
+	NewBooks OptInt64 `json:"new_books"`
+	// Количество зашруженных книг.
+	ExistingBooks OptInt64 `json:"existing_books"`
 	// Время создания.
 	CreatedAt time.Time `json:"created_at"`
-	// Время создания.
+	// Время обновления.
 	UpdatedAt OptDateTime `json:"updated_at"`
 	// Внешние ссылки для массовой загрузки.
 	ExternalLinks []MassloadInfoExternalLinksItem `json:"external_links"`
@@ -9628,6 +9718,11 @@ func (s *MassloadInfo) GetPageSizeFormatted() OptString {
 	return s.PageSizeFormatted
 }
 
+// GetPageCount returns the value of PageCount.
+func (s *MassloadInfo) GetPageCount() OptInt64 {
+	return s.PageCount
+}
+
 // GetFileSize returns the value of FileSize.
 func (s *MassloadInfo) GetFileSize() OptInt64 {
 	return s.FileSize
@@ -9636,6 +9731,31 @@ func (s *MassloadInfo) GetFileSize() OptInt64 {
 // GetFileSizeFormatted returns the value of FileSizeFormatted.
 func (s *MassloadInfo) GetFileSizeFormatted() OptString {
 	return s.FileSizeFormatted
+}
+
+// GetFileCount returns the value of FileCount.
+func (s *MassloadInfo) GetFileCount() OptInt64 {
+	return s.FileCount
+}
+
+// GetBooksInSystem returns the value of BooksInSystem.
+func (s *MassloadInfo) GetBooksInSystem() OptInt64 {
+	return s.BooksInSystem
+}
+
+// GetBooksAhead returns the value of BooksAhead.
+func (s *MassloadInfo) GetBooksAhead() OptInt64 {
+	return s.BooksAhead
+}
+
+// GetNewBooks returns the value of NewBooks.
+func (s *MassloadInfo) GetNewBooks() OptInt64 {
+	return s.NewBooks
+}
+
+// GetExistingBooks returns the value of ExistingBooks.
+func (s *MassloadInfo) GetExistingBooks() OptInt64 {
+	return s.ExistingBooks
 }
 
 // GetCreatedAt returns the value of CreatedAt.
@@ -9688,6 +9808,11 @@ func (s *MassloadInfo) SetPageSizeFormatted(val OptString) {
 	s.PageSizeFormatted = val
 }
 
+// SetPageCount sets the value of PageCount.
+func (s *MassloadInfo) SetPageCount(val OptInt64) {
+	s.PageCount = val
+}
+
 // SetFileSize sets the value of FileSize.
 func (s *MassloadInfo) SetFileSize(val OptInt64) {
 	s.FileSize = val
@@ -9696,6 +9821,31 @@ func (s *MassloadInfo) SetFileSize(val OptInt64) {
 // SetFileSizeFormatted sets the value of FileSizeFormatted.
 func (s *MassloadInfo) SetFileSizeFormatted(val OptString) {
 	s.FileSizeFormatted = val
+}
+
+// SetFileCount sets the value of FileCount.
+func (s *MassloadInfo) SetFileCount(val OptInt64) {
+	s.FileCount = val
+}
+
+// SetBooksInSystem sets the value of BooksInSystem.
+func (s *MassloadInfo) SetBooksInSystem(val OptInt64) {
+	s.BooksInSystem = val
+}
+
+// SetBooksAhead sets the value of BooksAhead.
+func (s *MassloadInfo) SetBooksAhead(val OptInt64) {
+	s.BooksAhead = val
+}
+
+// SetNewBooks sets the value of NewBooks.
+func (s *MassloadInfo) SetNewBooks(val OptInt64) {
+	s.NewBooks = val
+}
+
+// SetExistingBooks sets the value of ExistingBooks.
+func (s *MassloadInfo) SetExistingBooks(val OptInt64) {
+	s.ExistingBooks = val
 }
 
 // SetCreatedAt sets the value of CreatedAt.
@@ -9729,14 +9879,20 @@ type MassloadInfoAttributesItem struct {
 	PageSize OptInt64 `json:"page_size"`
 	// Размер файлов страниц в человеко читаемом виде.
 	PageSizeFormatted OptString `json:"page_size_formatted"`
+	// Количество страниц.
+	PageCount OptInt64 `json:"page_count"`
 	// Размер файлов в файловой системе.
 	FileSize OptInt64 `json:"file_size"`
 	// Размер файлов в файловой системе в человеко читаемом
 	// виде.
 	FileSizeFormatted OptString `json:"file_size_formatted"`
+	// Количество файлов в файловой системе.
+	FileCount OptInt64 `json:"file_count"`
+	// Количество книг.
+	BooksInSystem OptInt64 `json:"books_in_system"`
 	// Время создания.
 	CreatedAt time.Time `json:"created_at"`
-	// Время создания.
+	// Время обновления.
 	UpdatedAt OptDateTime `json:"updated_at"`
 }
 
@@ -9760,6 +9916,11 @@ func (s *MassloadInfoAttributesItem) GetPageSizeFormatted() OptString {
 	return s.PageSizeFormatted
 }
 
+// GetPageCount returns the value of PageCount.
+func (s *MassloadInfoAttributesItem) GetPageCount() OptInt64 {
+	return s.PageCount
+}
+
 // GetFileSize returns the value of FileSize.
 func (s *MassloadInfoAttributesItem) GetFileSize() OptInt64 {
 	return s.FileSize
@@ -9768,6 +9929,16 @@ func (s *MassloadInfoAttributesItem) GetFileSize() OptInt64 {
 // GetFileSizeFormatted returns the value of FileSizeFormatted.
 func (s *MassloadInfoAttributesItem) GetFileSizeFormatted() OptString {
 	return s.FileSizeFormatted
+}
+
+// GetFileCount returns the value of FileCount.
+func (s *MassloadInfoAttributesItem) GetFileCount() OptInt64 {
+	return s.FileCount
+}
+
+// GetBooksInSystem returns the value of BooksInSystem.
+func (s *MassloadInfoAttributesItem) GetBooksInSystem() OptInt64 {
+	return s.BooksInSystem
 }
 
 // GetCreatedAt returns the value of CreatedAt.
@@ -9800,6 +9971,11 @@ func (s *MassloadInfoAttributesItem) SetPageSizeFormatted(val OptString) {
 	s.PageSizeFormatted = val
 }
 
+// SetPageCount sets the value of PageCount.
+func (s *MassloadInfoAttributesItem) SetPageCount(val OptInt64) {
+	s.PageCount = val
+}
+
 // SetFileSize sets the value of FileSize.
 func (s *MassloadInfoAttributesItem) SetFileSize(val OptInt64) {
 	s.FileSize = val
@@ -9808,6 +9984,16 @@ func (s *MassloadInfoAttributesItem) SetFileSize(val OptInt64) {
 // SetFileSizeFormatted sets the value of FileSizeFormatted.
 func (s *MassloadInfoAttributesItem) SetFileSizeFormatted(val OptString) {
 	s.FileSizeFormatted = val
+}
+
+// SetFileCount sets the value of FileCount.
+func (s *MassloadInfoAttributesItem) SetFileCount(val OptInt64) {
+	s.FileCount = val
+}
+
+// SetBooksInSystem sets the value of BooksInSystem.
+func (s *MassloadInfoAttributesItem) SetBooksInSystem(val OptInt64) {
+	s.BooksInSystem = val
 }
 
 // SetCreatedAt sets the value of CreatedAt.
@@ -9823,8 +10009,18 @@ func (s *MassloadInfoAttributesItem) SetUpdatedAt(val OptDateTime) {
 type MassloadInfoExternalLinksItem struct {
 	// Адрес.
 	URL url.URL `json:"url"`
+	// Включение автоматической проверки новых книг.
+	AutoCheck bool `json:"auto_check"`
+	// Количество книг перед последней загруженной.
+	BooksAhead OptInt64 `json:"books_ahead"`
+	// Количество незагруженных книг.
+	NewBooks OptInt64 `json:"new_books"`
+	// Количество зашруженных книг.
+	ExistingBooks OptInt64 `json:"existing_books"`
 	// Время создания.
 	CreatedAt time.Time `json:"created_at"`
+	// Время обновления.
+	UpdatedAt OptDateTime `json:"updated_at"`
 }
 
 // GetURL returns the value of URL.
@@ -9832,9 +10028,34 @@ func (s *MassloadInfoExternalLinksItem) GetURL() url.URL {
 	return s.URL
 }
 
+// GetAutoCheck returns the value of AutoCheck.
+func (s *MassloadInfoExternalLinksItem) GetAutoCheck() bool {
+	return s.AutoCheck
+}
+
+// GetBooksAhead returns the value of BooksAhead.
+func (s *MassloadInfoExternalLinksItem) GetBooksAhead() OptInt64 {
+	return s.BooksAhead
+}
+
+// GetNewBooks returns the value of NewBooks.
+func (s *MassloadInfoExternalLinksItem) GetNewBooks() OptInt64 {
+	return s.NewBooks
+}
+
+// GetExistingBooks returns the value of ExistingBooks.
+func (s *MassloadInfoExternalLinksItem) GetExistingBooks() OptInt64 {
+	return s.ExistingBooks
+}
+
 // GetCreatedAt returns the value of CreatedAt.
 func (s *MassloadInfoExternalLinksItem) GetCreatedAt() time.Time {
 	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *MassloadInfoExternalLinksItem) GetUpdatedAt() OptDateTime {
+	return s.UpdatedAt
 }
 
 // SetURL sets the value of URL.
@@ -9842,9 +10063,34 @@ func (s *MassloadInfoExternalLinksItem) SetURL(val url.URL) {
 	s.URL = val
 }
 
+// SetAutoCheck sets the value of AutoCheck.
+func (s *MassloadInfoExternalLinksItem) SetAutoCheck(val bool) {
+	s.AutoCheck = val
+}
+
+// SetBooksAhead sets the value of BooksAhead.
+func (s *MassloadInfoExternalLinksItem) SetBooksAhead(val OptInt64) {
+	s.BooksAhead = val
+}
+
+// SetNewBooks sets the value of NewBooks.
+func (s *MassloadInfoExternalLinksItem) SetNewBooks(val OptInt64) {
+	s.NewBooks = val
+}
+
+// SetExistingBooks sets the value of ExistingBooks.
+func (s *MassloadInfoExternalLinksItem) SetExistingBooks(val OptInt64) {
+	s.ExistingBooks = val
+}
+
 // SetCreatedAt sets the value of CreatedAt.
 func (s *MassloadInfoExternalLinksItem) SetCreatedAt(val time.Time) {
 	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *MassloadInfoExternalLinksItem) SetUpdatedAt(val OptDateTime) {
+	s.UpdatedAt = val
 }
 
 // NewOptAPIAgentListPostOKItemStatus returns new OptAPIAgentListPostOKItemStatus with value set to v.

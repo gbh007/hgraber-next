@@ -27,7 +27,8 @@ type MassloadUseCases interface {
 	CreateMassloadAttribute(ctx context.Context, massloadID int, code, value string) error
 	DeleteMassloadAttribute(ctx context.Context, massloadID int, code, value string) error
 
-	CreateMassloadExternalLink(ctx context.Context, massloadID int, u url.URL) error
+	CreateMassloadExternalLink(ctx context.Context, massloadID int, link massloadmodel.ExternalLink) error
+	UpdateMassloadExternalLink(ctx context.Context, massloadID int, link massloadmodel.ExternalLink) error
 	DeleteMassloadExternalLink(ctx context.Context, massloadID int, u url.URL) error
 }
 

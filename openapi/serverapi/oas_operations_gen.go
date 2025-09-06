@@ -73,6 +73,7 @@ const (
 	APIMassloadInfoDeletePostOperation             OperationName = "APIMassloadInfoDeletePost"
 	APIMassloadInfoExternalLinkCreatePostOperation OperationName = "APIMassloadInfoExternalLinkCreatePost"
 	APIMassloadInfoExternalLinkDeletePostOperation OperationName = "APIMassloadInfoExternalLinkDeletePost"
+	APIMassloadInfoExternalLinkUpdatePostOperation OperationName = "APIMassloadInfoExternalLinkUpdatePost"
 	APIMassloadInfoGetPostOperation                OperationName = "APIMassloadInfoGetPost"
 	APIMassloadInfoListPostOperation               OperationName = "APIMassloadInfoListPost"
 	APIMassloadInfoUpdatePostOperation             OperationName = "APIMassloadInfoUpdatePost"

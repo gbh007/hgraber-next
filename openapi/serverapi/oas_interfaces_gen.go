@@ -269,6 +269,10 @@ type APIMassloadInfoExternalLinkDeletePostRes interface {
 	aPIMassloadInfoExternalLinkDeletePostRes()
 }
 
+type APIMassloadInfoExternalLinkUpdatePostRes interface {
+	aPIMassloadInfoExternalLinkUpdatePostRes()
+}
+
 type APIMassloadInfoGetPostRes interface {
 	aPIMassloadInfoGetPostRes()
 }

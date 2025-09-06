@@ -24268,11 +24268,18 @@ func (s *APIMassloadInfoExternalLinkCreatePostReq) encodeFields(e *jx.Encoder) {
 		e.FieldStart("url")
 		json.EncodeURI(e, s.URL)
 	}
+	{
+		if s.AutoCheck.Set {
+			e.FieldStart("auto_check")
+			s.AutoCheck.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIMassloadInfoExternalLinkCreatePostReq = [2]string{
+var jsonFieldsNameOfAPIMassloadInfoExternalLinkCreatePostReq = [3]string{
 	0: "massload_id",
 	1: "url",
+	2: "auto_check",
 }
 
 // Decode decodes APIMassloadInfoExternalLinkCreatePostReq from json.
@@ -24307,6 +24314,16 @@ func (s *APIMassloadInfoExternalLinkCreatePostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"url\"")
+			}
+		case "auto_check":
+			if err := func() error {
+				s.AutoCheck.Reset()
+				if err := s.AutoCheck.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"auto_check\"")
 			}
 		default:
 			return d.Skip()
@@ -24701,6 +24718,326 @@ func (s *APIMassloadInfoExternalLinkDeletePostUnauthorized) MarshalJSON() ([]byt
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIMassloadInfoExternalLinkDeletePostUnauthorized) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoExternalLinkUpdatePostBadRequest as json.
+func (s *APIMassloadInfoExternalLinkUpdatePostBadRequest) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIMassloadInfoExternalLinkUpdatePostBadRequest from json.
+func (s *APIMassloadInfoExternalLinkUpdatePostBadRequest) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoExternalLinkUpdatePostBadRequest to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIMassloadInfoExternalLinkUpdatePostBadRequest(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostBadRequest) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostBadRequest) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoExternalLinkUpdatePostForbidden as json.
+func (s *APIMassloadInfoExternalLinkUpdatePostForbidden) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIMassloadInfoExternalLinkUpdatePostForbidden from json.
+func (s *APIMassloadInfoExternalLinkUpdatePostForbidden) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoExternalLinkUpdatePostForbidden to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIMassloadInfoExternalLinkUpdatePostForbidden(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostForbidden) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostForbidden) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoExternalLinkUpdatePostInternalServerError as json.
+func (s *APIMassloadInfoExternalLinkUpdatePostInternalServerError) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIMassloadInfoExternalLinkUpdatePostInternalServerError from json.
+func (s *APIMassloadInfoExternalLinkUpdatePostInternalServerError) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoExternalLinkUpdatePostInternalServerError to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIMassloadInfoExternalLinkUpdatePostInternalServerError(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostInternalServerError) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostInternalServerError) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoExternalLinkUpdatePostNotFound as json.
+func (s *APIMassloadInfoExternalLinkUpdatePostNotFound) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIMassloadInfoExternalLinkUpdatePostNotFound from json.
+func (s *APIMassloadInfoExternalLinkUpdatePostNotFound) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoExternalLinkUpdatePostNotFound to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIMassloadInfoExternalLinkUpdatePostNotFound(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostNotFound) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostNotFound) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("massload_id")
+		e.Int(s.MassloadID)
+	}
+	{
+		e.FieldStart("url")
+		json.EncodeURI(e, s.URL)
+	}
+	{
+		if s.AutoCheck.Set {
+			e.FieldStart("auto_check")
+			s.AutoCheck.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAPIMassloadInfoExternalLinkUpdatePostReq = [3]string{
+	0: "massload_id",
+	1: "url",
+	2: "auto_check",
+}
+
+// Decode decodes APIMassloadInfoExternalLinkUpdatePostReq from json.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoExternalLinkUpdatePostReq to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "massload_id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.MassloadID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"massload_id\"")
+			}
+		case "url":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := json.DecodeURI(d)
+				s.URL = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"url\"")
+			}
+		case "auto_check":
+			if err := func() error {
+				s.AutoCheck.Reset()
+				if err := s.AutoCheck.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"auto_check\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIMassloadInfoExternalLinkUpdatePostReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIMassloadInfoExternalLinkUpdatePostReq) {
+					name = jsonFieldsNameOfAPIMassloadInfoExternalLinkUpdatePostReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIMassloadInfoExternalLinkUpdatePostUnauthorized as json.
+func (s *APIMassloadInfoExternalLinkUpdatePostUnauthorized) Encode(e *jx.Encoder) {
+	unwrapped := (*ErrorResponse)(s)
+
+	unwrapped.Encode(e)
+}
+
+// Decode decodes APIMassloadInfoExternalLinkUpdatePostUnauthorized from json.
+func (s *APIMassloadInfoExternalLinkUpdatePostUnauthorized) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIMassloadInfoExternalLinkUpdatePostUnauthorized to nil")
+	}
+	var unwrapped ErrorResponse
+	if err := func() error {
+		if err := unwrapped.Decode(d); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = APIMassloadInfoExternalLinkUpdatePostUnauthorized(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostUnauthorized) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIMassloadInfoExternalLinkUpdatePostUnauthorized) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -34798,6 +35135,12 @@ func (s *MassloadInfo) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.PageCount.Set {
+			e.FieldStart("page_count")
+			s.PageCount.Encode(e)
+		}
+	}
+	{
 		if s.FileSize.Set {
 			e.FieldStart("file_size")
 			s.FileSize.Encode(e)
@@ -34807,6 +35150,36 @@ func (s *MassloadInfo) encodeFields(e *jx.Encoder) {
 		if s.FileSizeFormatted.Set {
 			e.FieldStart("file_size_formatted")
 			s.FileSizeFormatted.Encode(e)
+		}
+	}
+	{
+		if s.FileCount.Set {
+			e.FieldStart("file_count")
+			s.FileCount.Encode(e)
+		}
+	}
+	{
+		if s.BooksInSystem.Set {
+			e.FieldStart("books_in_system")
+			s.BooksInSystem.Encode(e)
+		}
+	}
+	{
+		if s.BooksAhead.Set {
+			e.FieldStart("books_ahead")
+			s.BooksAhead.Encode(e)
+		}
+	}
+	{
+		if s.NewBooks.Set {
+			e.FieldStart("new_books")
+			s.NewBooks.Encode(e)
+		}
+	}
+	{
+		if s.ExistingBooks.Set {
+			e.FieldStart("existing_books")
+			s.ExistingBooks.Encode(e)
 		}
 	}
 	{
@@ -34841,19 +35214,25 @@ func (s *MassloadInfo) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfMassloadInfo = [12]string{
+var jsonFieldsNameOfMassloadInfo = [18]string{
 	0:  "id",
 	1:  "name",
 	2:  "description",
 	3:  "flags",
 	4:  "page_size",
 	5:  "page_size_formatted",
-	6:  "file_size",
-	7:  "file_size_formatted",
-	8:  "created_at",
-	9:  "updated_at",
-	10: "external_links",
-	11: "attributes",
+	6:  "page_count",
+	7:  "file_size",
+	8:  "file_size_formatted",
+	9:  "file_count",
+	10: "books_in_system",
+	11: "books_ahead",
+	12: "new_books",
+	13: "existing_books",
+	14: "created_at",
+	15: "updated_at",
+	16: "external_links",
+	17: "attributes",
 }
 
 // Decode decodes MassloadInfo from json.
@@ -34861,7 +35240,7 @@ func (s *MassloadInfo) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode MassloadInfo to nil")
 	}
-	var requiredBitSet [2]uint8
+	var requiredBitSet [3]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -34938,6 +35317,16 @@ func (s *MassloadInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"page_size_formatted\"")
 			}
+		case "page_count":
+			if err := func() error {
+				s.PageCount.Reset()
+				if err := s.PageCount.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_count\"")
+			}
 		case "file_size":
 			if err := func() error {
 				s.FileSize.Reset()
@@ -34958,8 +35347,58 @@ func (s *MassloadInfo) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"file_size_formatted\"")
 			}
+		case "file_count":
+			if err := func() error {
+				s.FileCount.Reset()
+				if err := s.FileCount.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"file_count\"")
+			}
+		case "books_in_system":
+			if err := func() error {
+				s.BooksInSystem.Reset()
+				if err := s.BooksInSystem.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"books_in_system\"")
+			}
+		case "books_ahead":
+			if err := func() error {
+				s.BooksAhead.Reset()
+				if err := s.BooksAhead.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"books_ahead\"")
+			}
+		case "new_books":
+			if err := func() error {
+				s.NewBooks.Reset()
+				if err := s.NewBooks.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"new_books\"")
+			}
+		case "existing_books":
+			if err := func() error {
+				s.ExistingBooks.Reset()
+				if err := s.ExistingBooks.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"existing_books\"")
+			}
 		case "created_at":
-			requiredBitSet[1] |= 1 << 0
+			requiredBitSet[1] |= 1 << 6
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreatedAt = v
@@ -35023,9 +35462,10 @@ func (s *MassloadInfo) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [2]uint8{
+	for i, mask := range [3]uint8{
 		0b00000011,
-		0b00000001,
+		0b01000000,
+		0b00000000,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -35101,6 +35541,12 @@ func (s *MassloadInfoAttributesItem) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.PageCount.Set {
+			e.FieldStart("page_count")
+			s.PageCount.Encode(e)
+		}
+	}
+	{
 		if s.FileSize.Set {
 			e.FieldStart("file_size")
 			s.FileSize.Encode(e)
@@ -35110,6 +35556,18 @@ func (s *MassloadInfoAttributesItem) encodeFields(e *jx.Encoder) {
 		if s.FileSizeFormatted.Set {
 			e.FieldStart("file_size_formatted")
 			s.FileSizeFormatted.Encode(e)
+		}
+	}
+	{
+		if s.FileCount.Set {
+			e.FieldStart("file_count")
+			s.FileCount.Encode(e)
+		}
+	}
+	{
+		if s.BooksInSystem.Set {
+			e.FieldStart("books_in_system")
+			s.BooksInSystem.Encode(e)
 		}
 	}
 	{
@@ -35124,15 +35582,18 @@ func (s *MassloadInfoAttributesItem) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfMassloadInfoAttributesItem = [8]string{
-	0: "code",
-	1: "value",
-	2: "page_size",
-	3: "page_size_formatted",
-	4: "file_size",
-	5: "file_size_formatted",
-	6: "created_at",
-	7: "updated_at",
+var jsonFieldsNameOfMassloadInfoAttributesItem = [11]string{
+	0:  "code",
+	1:  "value",
+	2:  "page_size",
+	3:  "page_size_formatted",
+	4:  "page_count",
+	5:  "file_size",
+	6:  "file_size_formatted",
+	7:  "file_count",
+	8:  "books_in_system",
+	9:  "created_at",
+	10: "updated_at",
 }
 
 // Decode decodes MassloadInfoAttributesItem from json.
@@ -35140,7 +35601,7 @@ func (s *MassloadInfoAttributesItem) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode MassloadInfoAttributesItem to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -35188,6 +35649,16 @@ func (s *MassloadInfoAttributesItem) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"page_size_formatted\"")
 			}
+		case "page_count":
+			if err := func() error {
+				s.PageCount.Reset()
+				if err := s.PageCount.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_count\"")
+			}
 		case "file_size":
 			if err := func() error {
 				s.FileSize.Reset()
@@ -35208,8 +35679,28 @@ func (s *MassloadInfoAttributesItem) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"file_size_formatted\"")
 			}
+		case "file_count":
+			if err := func() error {
+				s.FileCount.Reset()
+				if err := s.FileCount.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"file_count\"")
+			}
+		case "books_in_system":
+			if err := func() error {
+				s.BooksInSystem.Reset()
+				if err := s.BooksInSystem.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"books_in_system\"")
+			}
 		case "created_at":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreatedAt = v
@@ -35239,8 +35730,9 @@ func (s *MassloadInfoAttributesItem) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b01000011,
+	for i, mask := range [2]uint8{
+		0b00000011,
+		0b00000010,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -35300,14 +35792,47 @@ func (s *MassloadInfoExternalLinksItem) encodeFields(e *jx.Encoder) {
 		json.EncodeURI(e, s.URL)
 	}
 	{
+		e.FieldStart("auto_check")
+		e.Bool(s.AutoCheck)
+	}
+	{
+		if s.BooksAhead.Set {
+			e.FieldStart("books_ahead")
+			s.BooksAhead.Encode(e)
+		}
+	}
+	{
+		if s.NewBooks.Set {
+			e.FieldStart("new_books")
+			s.NewBooks.Encode(e)
+		}
+	}
+	{
+		if s.ExistingBooks.Set {
+			e.FieldStart("existing_books")
+			s.ExistingBooks.Encode(e)
+		}
+	}
+	{
 		e.FieldStart("created_at")
 		json.EncodeDateTime(e, s.CreatedAt)
 	}
+	{
+		if s.UpdatedAt.Set {
+			e.FieldStart("updated_at")
+			s.UpdatedAt.Encode(e, json.EncodeDateTime)
+		}
+	}
 }
 
-var jsonFieldsNameOfMassloadInfoExternalLinksItem = [2]string{
+var jsonFieldsNameOfMassloadInfoExternalLinksItem = [7]string{
 	0: "url",
-	1: "created_at",
+	1: "auto_check",
+	2: "books_ahead",
+	3: "new_books",
+	4: "existing_books",
+	5: "created_at",
+	6: "updated_at",
 }
 
 // Decode decodes MassloadInfoExternalLinksItem from json.
@@ -35331,8 +35856,50 @@ func (s *MassloadInfoExternalLinksItem) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"url\"")
 			}
-		case "created_at":
+		case "auto_check":
 			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Bool()
+				s.AutoCheck = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"auto_check\"")
+			}
+		case "books_ahead":
+			if err := func() error {
+				s.BooksAhead.Reset()
+				if err := s.BooksAhead.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"books_ahead\"")
+			}
+		case "new_books":
+			if err := func() error {
+				s.NewBooks.Reset()
+				if err := s.NewBooks.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"new_books\"")
+			}
+		case "existing_books":
+			if err := func() error {
+				s.ExistingBooks.Reset()
+				if err := s.ExistingBooks.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"existing_books\"")
+			}
+		case "created_at":
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreatedAt = v
@@ -35342,6 +35909,16 @@ func (s *MassloadInfoExternalLinksItem) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"created_at\"")
+			}
+		case "updated_at":
+			if err := func() error {
+				s.UpdatedAt.Reset()
+				if err := s.UpdatedAt.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"updated_at\"")
 			}
 		default:
 			return d.Skip()
@@ -35353,7 +35930,7 @@ func (s *MassloadInfoExternalLinksItem) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00100011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

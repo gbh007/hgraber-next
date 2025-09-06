@@ -5489,12 +5489,76 @@ paths:
                   description: Ссылка
                   format: uri
                   example: http://example.com
+                auto_check:
+                  type: boolean
+                  description: Включение автоматической проверки новых книг
               required:
                 - massload_id
                 - url
       responses:
         204:
           description: Успешное создание
+        400:
+          description: Некорректный запрос данных
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        401:
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        403:
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        404:
+          description: Данные не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        500:
+          description: Серверная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/massload/info/external_link/update:
+    post:
+      description: Обновление внешней ссылки массовой загрузки
+      summary: Обновление внешней ссылки массовой загрузки
+      tags:
+        - massload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                massload_id:
+                  type: integer
+                  description: ИД массовой загрузки
+                url:
+                  type: string
+                  description: Ссылка
+                  format: uri
+                  example: http://example.com
+                auto_check:
+                  type: boolean
+                  description: Включение автоматической проверки новых книг
+              required:
+                - massload_id
+                - url
+      responses:
+        204:
+          description: Успешное обновление
         400:
           description: Некорректный запрос данных
           content:
@@ -6261,6 +6325,10 @@ components:
         page_size_formatted:
           type: string
           description: Размер файлов страниц в человеко читаемом виде
+        page_count:
+          type: integer
+          format: int64
+          description: Количество страниц
         file_size:
           type: integer
           format: int64
@@ -6268,6 +6336,26 @@ components:
         file_size_formatted:
           type: string
           description: Размер файлов в файловой системе в человеко читаемом виде
+        file_count:
+          type: integer
+          format: int64
+          description: Количество файлов в файловой системе
+        books_in_system:
+          type: integer
+          format: int64
+          description: Количество книг
+        books_ahead:
+          type: integer
+          format: int64
+          description: Количество книг перед последней загруженной
+        new_books:
+          type: integer
+          format: int64
+          description: Количество незагруженных книг
+        existing_books:
+          type: integer
+          format: int64
+          description: Количество зашруженных книг
         created_at:
           type: string
           format: date-time
@@ -6275,7 +6363,7 @@ components:
         updated_at:
           type: string
           format: date-time
-          description: Время создания
+          description: Время обновления
         external_links:
           type: array
           description: Внешние ссылки для массовой загрузки
@@ -6287,12 +6375,32 @@ components:
                 description: Адрес
                 format: uri
                 example: http://example.com
+              auto_check:
+                type: boolean
+                description: Включение автоматической проверки новых книг
+              books_ahead:
+                type: integer
+                format: int64
+                description: Количество книг перед последней загруженной
+              new_books:
+                type: integer
+                format: int64
+                description: Количество незагруженных книг
+              existing_books:
+                type: integer
+                format: int64
+                description: Количество зашруженных книг
               created_at:
                 type: string
                 format: date-time
                 description: Время создания
+              updated_at:
+                type: string
+                format: date-time
+                description: Время обновления
             required:
               - url
+              - auto_check
               - created_at
         attributes:
           type: array
@@ -6313,6 +6421,10 @@ components:
               page_size_formatted:
                 type: string
                 description: Размер файлов страниц в человеко читаемом виде
+              page_count:
+                type: integer
+                format: int64
+                description: Количество страниц
               file_size:
                 type: integer
                 format: int64
@@ -6320,6 +6432,14 @@ components:
               file_size_formatted:
                 type: string
                 description: Размер файлов в файловой системе в человеко читаемом виде
+              file_count:
+                type: integer
+                format: int64
+                description: Количество файлов в файловой системе
+              books_in_system:
+                type: integer
+                format: int64
+                description: Количество книг
               created_at:
                 type: string
                 format: date-time
@@ -6327,7 +6447,7 @@ components:
               updated_at:
                 type: string
                 format: date-time
-                description: Время создания
+                description: Время обновления
             required:
               - code
               - value

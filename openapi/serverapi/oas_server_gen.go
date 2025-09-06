@@ -419,6 +419,12 @@ type Handler interface {
 	//
 	// POST /api/massload/info/external_link/delete
 	APIMassloadInfoExternalLinkDeletePost(ctx context.Context, req *APIMassloadInfoExternalLinkDeletePostReq) (APIMassloadInfoExternalLinkDeletePostRes, error)
+	// APIMassloadInfoExternalLinkUpdatePost implements POST /api/massload/info/external_link/update operation.
+	//
+	// Обновление внешней ссылки массовой загрузки.
+	//
+	// POST /api/massload/info/external_link/update
+	APIMassloadInfoExternalLinkUpdatePost(ctx context.Context, req *APIMassloadInfoExternalLinkUpdatePostReq) (APIMassloadInfoExternalLinkUpdatePostRes, error)
 	// APIMassloadInfoGetPost implements POST /api/massload/info/get operation.
 	//
 	// Получение массовой загрузки.

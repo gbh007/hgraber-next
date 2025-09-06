@@ -1740,6 +1740,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								return
 							}
 
+						case 'u': // Prefix: "update"
+
+							if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIMassloadInfoExternalLinkUpdatePostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
 						}
 
 					case 'g': // Prefix: "get"
@@ -4179,6 +4199,30 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.summary = "Удаление внешней ссылки для массовой загрузки"
 									r.operationID = ""
 									r.pathPattern = "/api/massload/info/external_link/delete"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+						case 'u': // Prefix: "update"
+
+							if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = APIMassloadInfoExternalLinkUpdatePostOperation
+									r.summary = "Обновление внешней ссылки массовой загрузки"
+									r.operationID = ""
+									r.pathPattern = "/api/massload/info/external_link/update"
 									r.args = args
 									r.count = 0
 									return r, true
