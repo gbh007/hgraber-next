@@ -1,3 +1,4 @@
+//revive:disable:file-length-limit
 package server
 
 import (
@@ -178,7 +179,7 @@ func Serve() {
 	bffUseCases := bffusecase.New(logger, storage, deduplicateUseCases)
 	attributeUseCases := attributeusecase.New(logger, storage, cfg.AttributeRemap.AllLower)
 	labelUseCases := labelusecase.New(logger, storage)
-	massloadUseCases := massloadusecase.New(logger, storage)
+	massloadUseCases := massloadusecase.New(logger, storage, agentSystem)
 
 	workerUnits := make([]workermanager.WorkerUnit, 0, len(cfg.Workers))
 
@@ -212,6 +213,9 @@ func Serve() {
 
 		case systemmodel.WorkerNameMassloadAttributeSizer:
 			unit = workermanager.NewMassloadAttributeSize(massloadUseCases, logger, tracer, wCfg, metricProvider)
+
+		case systemmodel.WorkerNameMassloadCalculation:
+			unit = workermanager.NewMassloadCalculation(massloadUseCases, logger, tracer, wCfg, metricProvider)
 
 		default:
 			continue

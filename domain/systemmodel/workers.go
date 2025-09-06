@@ -10,4 +10,5 @@ const (
 	WorkerNameFileTransferer         = "file_transferer"
 	WorkerNameMassloadSizer          = "massload_sizer"
 	WorkerNameMassloadAttributeSizer = "massload_attribute_sizer"
+	WorkerNameMassloadCalculation    = "massload_calculation"
 )

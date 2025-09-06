@@ -73,6 +73,12 @@ count = 1
 queue_size = 100
 interval = "1h"
 
+[[workers]]
+name = "massload_calculation"
+count = 1
+queue_size = 100
+interval = "24h"
+
 [storage]
 debug_squirrel = false
 debug_pgx = false

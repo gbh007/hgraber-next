@@ -27,6 +27,12 @@ func WorkersDefault() []Worker {
 			QueueSize: 100,
 			Interval:  time.Hour,
 		},
+		{
+			Name:      systemmodel.WorkerNameMassloadCalculation,
+			Count:     1,
+			QueueSize: 100,
+			Interval:  time.Hour * 24,
+		},
 	}
 }
 

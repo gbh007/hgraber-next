@@ -5,8 +5,13 @@ import (
 	"log/slog"
 	"net/url"
 
+	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
 type storage interface {
@@ -41,20 +46,31 @@ type storage interface {
 	AttributesFileSize(ctx context.Context, attrs map[string][]string) (core.SizeWithCount, error)
 
 	BookCount(ctx context.Context, filter core.BookFilter) (int, error)
+	Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error)
+	Mirrors(ctx context.Context) ([]parsing.URLMirror, error)
+	GetBookIDsByURL(ctx context.Context, u url.URL) ([]uuid.UUID, error)
+}
+
+type agentSystem interface {
+	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
+	HProxyList(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.List, error)
 }
 
 type UseCase struct {
 	logger *slog.Logger
 
-	storage storage
+	storage     storage
+	agentSystem agentSystem
 }
 
 func New(
 	logger *slog.Logger,
 	storage storage,
+	agentSystem agentSystem,
 ) *UseCase {
 	return &UseCase{
-		logger:  logger,
-		storage: storage,
+		logger:      logger,
+		storage:     storage,
+		agentSystem: agentSystem,
 	}
 }
