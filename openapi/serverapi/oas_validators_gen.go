@@ -1385,6 +1385,18 @@ func (s APIMassloadInfoListPostReqSortField) Validate() error {
 		return nil
 	case "file_size":
 		return nil
+	case "page_count":
+		return nil
+	case "file_count":
+		return nil
+	case "books_ahead":
+		return nil
+	case "new_books":
+		return nil
+	case "existing_books":
+		return nil
+	case "books_in_system":
+		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}

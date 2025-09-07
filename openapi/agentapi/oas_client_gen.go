@@ -332,7 +332,7 @@ func (c *Client) sendAPIFsCreatePost(ctx context.Context, request APIFsCreatePos
 	h := uri.NewHeaderEncoder(r.Header)
 	{
 		cfg := uri.HeaderParameterEncodingConfig{
-			Name:    "file-id",
+			Name:    "File-Id",
 			Explode: false,
 		}
 		if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
@@ -1233,7 +1233,7 @@ func (c *Client) sendAPIImportArchivePost(ctx context.Context, request APIImport
 	h := uri.NewHeaderEncoder(r.Header)
 	{
 		cfg := uri.HeaderParameterEncodingConfig{
-			Name:    "book-id",
+			Name:    "Book-Id",
 			Explode: false,
 		}
 		if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
@@ -1244,7 +1244,7 @@ func (c *Client) sendAPIImportArchivePost(ctx context.Context, request APIImport
 	}
 	{
 		cfg := uri.HeaderParameterEncodingConfig{
-			Name:    "book-url",
+			Name:    "Book-Url",
 			Explode: false,
 		}
 		if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
@@ -1258,7 +1258,7 @@ func (c *Client) sendAPIImportArchivePost(ctx context.Context, request APIImport
 	}
 	{
 		cfg := uri.HeaderParameterEncodingConfig{
-			Name:    "book-name",
+			Name:    "Book-Name",
 			Explode: false,
 		}
 		if err := h.EncodeParam(cfg, func(e uri.Encoder) error {

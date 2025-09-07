@@ -6546,10 +6546,16 @@ func (s *APIMassloadInfoListPostReqSort) SetField(val OptAPIMassloadInfoListPost
 type APIMassloadInfoListPostReqSortField string
 
 const (
-	APIMassloadInfoListPostReqSortFieldID       APIMassloadInfoListPostReqSortField = "id"
-	APIMassloadInfoListPostReqSortFieldName     APIMassloadInfoListPostReqSortField = "name"
-	APIMassloadInfoListPostReqSortFieldPageSize APIMassloadInfoListPostReqSortField = "page_size"
-	APIMassloadInfoListPostReqSortFieldFileSize APIMassloadInfoListPostReqSortField = "file_size"
+	APIMassloadInfoListPostReqSortFieldID            APIMassloadInfoListPostReqSortField = "id"
+	APIMassloadInfoListPostReqSortFieldName          APIMassloadInfoListPostReqSortField = "name"
+	APIMassloadInfoListPostReqSortFieldPageSize      APIMassloadInfoListPostReqSortField = "page_size"
+	APIMassloadInfoListPostReqSortFieldFileSize      APIMassloadInfoListPostReqSortField = "file_size"
+	APIMassloadInfoListPostReqSortFieldPageCount     APIMassloadInfoListPostReqSortField = "page_count"
+	APIMassloadInfoListPostReqSortFieldFileCount     APIMassloadInfoListPostReqSortField = "file_count"
+	APIMassloadInfoListPostReqSortFieldBooksAhead    APIMassloadInfoListPostReqSortField = "books_ahead"
+	APIMassloadInfoListPostReqSortFieldNewBooks      APIMassloadInfoListPostReqSortField = "new_books"
+	APIMassloadInfoListPostReqSortFieldExistingBooks APIMassloadInfoListPostReqSortField = "existing_books"
+	APIMassloadInfoListPostReqSortFieldBooksInSystem APIMassloadInfoListPostReqSortField = "books_in_system"
 )
 
 // AllValues returns all APIMassloadInfoListPostReqSortField values.
@@ -6559,6 +6565,12 @@ func (APIMassloadInfoListPostReqSortField) AllValues() []APIMassloadInfoListPost
 		APIMassloadInfoListPostReqSortFieldName,
 		APIMassloadInfoListPostReqSortFieldPageSize,
 		APIMassloadInfoListPostReqSortFieldFileSize,
+		APIMassloadInfoListPostReqSortFieldPageCount,
+		APIMassloadInfoListPostReqSortFieldFileCount,
+		APIMassloadInfoListPostReqSortFieldBooksAhead,
+		APIMassloadInfoListPostReqSortFieldNewBooks,
+		APIMassloadInfoListPostReqSortFieldExistingBooks,
+		APIMassloadInfoListPostReqSortFieldBooksInSystem,
 	}
 }
 
@@ -6572,6 +6584,18 @@ func (s APIMassloadInfoListPostReqSortField) MarshalText() ([]byte, error) {
 	case APIMassloadInfoListPostReqSortFieldPageSize:
 		return []byte(s), nil
 	case APIMassloadInfoListPostReqSortFieldFileSize:
+		return []byte(s), nil
+	case APIMassloadInfoListPostReqSortFieldPageCount:
+		return []byte(s), nil
+	case APIMassloadInfoListPostReqSortFieldFileCount:
+		return []byte(s), nil
+	case APIMassloadInfoListPostReqSortFieldBooksAhead:
+		return []byte(s), nil
+	case APIMassloadInfoListPostReqSortFieldNewBooks:
+		return []byte(s), nil
+	case APIMassloadInfoListPostReqSortFieldExistingBooks:
+		return []byte(s), nil
+	case APIMassloadInfoListPostReqSortFieldBooksInSystem:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -6592,6 +6616,24 @@ func (s *APIMassloadInfoListPostReqSortField) UnmarshalText(data []byte) error {
 		return nil
 	case APIMassloadInfoListPostReqSortFieldFileSize:
 		*s = APIMassloadInfoListPostReqSortFieldFileSize
+		return nil
+	case APIMassloadInfoListPostReqSortFieldPageCount:
+		*s = APIMassloadInfoListPostReqSortFieldPageCount
+		return nil
+	case APIMassloadInfoListPostReqSortFieldFileCount:
+		*s = APIMassloadInfoListPostReqSortFieldFileCount
+		return nil
+	case APIMassloadInfoListPostReqSortFieldBooksAhead:
+		*s = APIMassloadInfoListPostReqSortFieldBooksAhead
+		return nil
+	case APIMassloadInfoListPostReqSortFieldNewBooks:
+		*s = APIMassloadInfoListPostReqSortFieldNewBooks
+		return nil
+	case APIMassloadInfoListPostReqSortFieldExistingBooks:
+		*s = APIMassloadInfoListPostReqSortFieldExistingBooks
+		return nil
+	case APIMassloadInfoListPostReqSortFieldBooksInSystem:
+		*s = APIMassloadInfoListPostReqSortFieldBooksInSystem
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)

@@ -10,6 +10,12 @@ const (
 	FilterOrderByName
 	FilterOrderByPageSize
 	FilterOrderByFileSize
+	FilterOrderByPageCount
+	FilterOrderByFileCount
+	FilterOrderByBooksAhead
+	FilterOrderByNewBooks
+	FilterOrderByExistingBooks
+	FilterOrderByBooksInSystem
 )
 
 const (

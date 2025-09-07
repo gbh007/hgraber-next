@@ -26259,6 +26259,18 @@ func (s *APIMassloadInfoListPostReqSortField) Decode(d *jx.Decoder) error {
 		*s = APIMassloadInfoListPostReqSortFieldPageSize
 	case APIMassloadInfoListPostReqSortFieldFileSize:
 		*s = APIMassloadInfoListPostReqSortFieldFileSize
+	case APIMassloadInfoListPostReqSortFieldPageCount:
+		*s = APIMassloadInfoListPostReqSortFieldPageCount
+	case APIMassloadInfoListPostReqSortFieldFileCount:
+		*s = APIMassloadInfoListPostReqSortFieldFileCount
+	case APIMassloadInfoListPostReqSortFieldBooksAhead:
+		*s = APIMassloadInfoListPostReqSortFieldBooksAhead
+	case APIMassloadInfoListPostReqSortFieldNewBooks:
+		*s = APIMassloadInfoListPostReqSortFieldNewBooks
+	case APIMassloadInfoListPostReqSortFieldExistingBooks:
+		*s = APIMassloadInfoListPostReqSortFieldExistingBooks
+	case APIMassloadInfoListPostReqSortFieldBooksInSystem:
+		*s = APIMassloadInfoListPostReqSortFieldBooksInSystem
 	default:
 		*s = APIMassloadInfoListPostReqSortField(v)
 	}

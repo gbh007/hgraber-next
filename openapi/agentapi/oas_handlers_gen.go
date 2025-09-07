@@ -348,7 +348,7 @@ func (s *Server) handleAPIFsCreatePostRequest(args [0]string, argsEscaped bool, 
 			Body:             request,
 			Params: middleware.Parameters{
 				{
-					Name: "file-id",
+					Name: "File-Id",
 					In:   "header",
 				}: params.FileID,
 			},
@@ -1760,15 +1760,15 @@ func (s *Server) handleAPIImportArchivePostRequest(args [0]string, argsEscaped b
 			Body:             request,
 			Params: middleware.Parameters{
 				{
-					Name: "book-id",
+					Name: "Book-Id",
 					In:   "header",
 				}: params.BookID,
 				{
-					Name: "book-url",
+					Name: "Book-Url",
 					In:   "header",
 				}: params.BookURL,
 				{
-					Name: "book-name",
+					Name: "Book-Name",
 					In:   "header",
 				}: params.BookName,
 			},

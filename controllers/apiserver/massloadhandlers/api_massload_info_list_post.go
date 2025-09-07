@@ -9,6 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
+//nolint:cyclop,funlen // будет исправлено позднее
 func (c *MassloadController) APIMassloadInfoListPost(
 	ctx context.Context,
 	req *serverapi.APIMassloadInfoListPostReq,
@@ -27,6 +28,18 @@ func (c *MassloadController) APIMassloadInfoListPost(
 			filter.OrderBy = massloadmodel.FilterOrderByPageSize
 		case serverapi.APIMassloadInfoListPostReqSortFieldFileSize:
 			filter.OrderBy = massloadmodel.FilterOrderByFileSize
+		case serverapi.APIMassloadInfoListPostReqSortFieldPageCount:
+			filter.OrderBy = massloadmodel.FilterOrderByPageCount
+		case serverapi.APIMassloadInfoListPostReqSortFieldFileCount:
+			filter.OrderBy = massloadmodel.FilterOrderByFileCount
+		case serverapi.APIMassloadInfoListPostReqSortFieldBooksAhead:
+			filter.OrderBy = massloadmodel.FilterOrderByBooksAhead
+		case serverapi.APIMassloadInfoListPostReqSortFieldNewBooks:
+			filter.OrderBy = massloadmodel.FilterOrderByNewBooks
+		case serverapi.APIMassloadInfoListPostReqSortFieldExistingBooks:
+			filter.OrderBy = massloadmodel.FilterOrderByExistingBooks
+		case serverapi.APIMassloadInfoListPostReqSortFieldBooksInSystem:
+			filter.OrderBy = massloadmodel.FilterOrderByBooksInSystem
 		default:
 			filter.OrderBy = massloadmodel.FilterOrderByID
 		}

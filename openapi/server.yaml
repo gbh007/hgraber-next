@@ -5162,6 +5162,12 @@ paths:
                         - name
                         - page_size
                         - file_size
+                        - page_count
+                        - file_count
+                        - books_ahead
+                        - new_books
+                        - existing_books
+                        - books_in_system
       responses:
         200:
           description: Информация о загрузках
@@ -5249,7 +5255,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-
 
   /api/massload/flag/create:
     post:
@@ -6548,7 +6553,7 @@ components:
 
   securitySchemes:
     headerAuth:
-      name: X-HG-Token
+      name: X-Hg-Token
       in: header
       type: apiKey
       description: Авторизация через заголовок

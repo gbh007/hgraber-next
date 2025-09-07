@@ -410,21 +410,21 @@ paths:
       tags:
         - import
       parameters:
-        - name: book-id
+        - name: Book-Id
           description: ID книги в системе
           in: header
           required: true
           schema:
             type: string
             format: uuid
-        - name: book-url
+        - name: Book-Url
           description: URL книги в системе
           in: header
           required: false
           schema:
             type: string
             format: uri
-        - name: book-name
+        - name: Book-Name
           description: Название книги
           in: header
           required: true
@@ -472,7 +472,7 @@ paths:
       tags:
         - fs
       parameters:
-        - name: file-id
+        - name: File-Id
           description: ID файла в системе
           in: header
           required: true
@@ -1158,7 +1158,7 @@ components:
 
   securitySchemes:
     headerAuth:
-      name: X-HG-Agent-Token
+      name: X-Hg-Agent-Token
       in: header
       type: apiKey
       description: Авторизация через заголовок

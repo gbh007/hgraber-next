@@ -1,3 +1,4 @@
+//revive:disable:file-length-limit
 package massload
 
 import (
@@ -90,6 +91,42 @@ func (repo *MassloadRepo) massloadsBuilder(
 	case massloadmodel.FilterOrderByFileSize:
 		orderBy = []string{
 			"file_size" + orderBySuffix + " NULLS LAST",
+			"id" + orderBySuffix,
+		}
+
+	case massloadmodel.FilterOrderByPageCount:
+		orderBy = []string{
+			"page_count" + orderBySuffix + " NULLS LAST",
+			"id" + orderBySuffix,
+		}
+
+	case massloadmodel.FilterOrderByFileCount:
+		orderBy = []string{
+			"file_count" + orderBySuffix + " NULLS LAST",
+			"id" + orderBySuffix,
+		}
+
+	case massloadmodel.FilterOrderByBooksAhead:
+		orderBy = []string{
+			"books_ahead" + orderBySuffix + " NULLS LAST",
+			"id" + orderBySuffix,
+		}
+
+	case massloadmodel.FilterOrderByNewBooks:
+		orderBy = []string{
+			"new_books" + orderBySuffix + " NULLS LAST",
+			"id" + orderBySuffix,
+		}
+
+	case massloadmodel.FilterOrderByExistingBooks:
+		orderBy = []string{
+			"existing_books" + orderBySuffix + " NULLS LAST",
+			"id" + orderBySuffix,
+		}
+
+	case massloadmodel.FilterOrderByBooksInSystem:
+		orderBy = []string{
+			"books_in_system" + orderBySuffix + " NULLS LAST",
 			"id" + orderBySuffix,
 		}
 	}

@@ -53,7 +53,7 @@ var operationRolesHeaderAuth = map[string][]string{
 
 func (s *Server) securityHeaderAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
 	var t HeaderAuth
-	const parameterName = "X-HG-Agent-Token"
+	const parameterName = "X-Hg-Agent-Token"
 	value := req.Header.Get(parameterName)
 	if value == "" {
 		return ctx, false, nil
@@ -81,6 +81,6 @@ func (s *Client) securityHeaderAuth(ctx context.Context, operationName Operation
 	if err != nil {
 		return errors.Wrap(err, "security source \"HeaderAuth\"")
 	}
-	req.Header.Set("X-HG-Agent-Token", t.APIKey)
+	req.Header.Set("X-Hg-Agent-Token", t.APIKey)
 	return nil
 }

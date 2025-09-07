@@ -25,7 +25,7 @@ type APIFsCreatePostParams struct {
 func unpackAPIFsCreatePostParams(packed middleware.Parameters) (params APIFsCreatePostParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "file-id",
+			Name: "File-Id",
 			In:   "header",
 		}
 		params.FileID = packed[key].(uuid.UUID)
@@ -35,10 +35,10 @@ func unpackAPIFsCreatePostParams(packed middleware.Parameters) (params APIFsCrea
 
 func decodeAPIFsCreatePostParams(args [0]string, argsEscaped bool, r *http.Request) (params APIFsCreatePostParams, _ error) {
 	h := uri.NewHeaderDecoder(r.Header)
-	// Decode header: file-id.
+	// Decode header: File-Id.
 	if err := func() error {
 		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "file-id",
+			Name:    "File-Id",
 			Explode: false,
 		}
 		if err := h.HasParam(cfg); err == nil {
@@ -64,7 +64,7 @@ func decodeAPIFsCreatePostParams(args [0]string, argsEscaped bool, r *http.Reque
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "file-id",
+			Name: "File-Id",
 			In:   "header",
 			Err:  err,
 		}
@@ -309,14 +309,14 @@ type APIImportArchivePostParams struct {
 func unpackAPIImportArchivePostParams(packed middleware.Parameters) (params APIImportArchivePostParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "book-id",
+			Name: "Book-Id",
 			In:   "header",
 		}
 		params.BookID = packed[key].(uuid.UUID)
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "book-url",
+			Name: "Book-Url",
 			In:   "header",
 		}
 		if v, ok := packed[key]; ok {
@@ -325,7 +325,7 @@ func unpackAPIImportArchivePostParams(packed middleware.Parameters) (params APII
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "book-name",
+			Name: "Book-Name",
 			In:   "header",
 		}
 		params.BookName = packed[key].(string)
@@ -335,10 +335,10 @@ func unpackAPIImportArchivePostParams(packed middleware.Parameters) (params APII
 
 func decodeAPIImportArchivePostParams(args [0]string, argsEscaped bool, r *http.Request) (params APIImportArchivePostParams, _ error) {
 	h := uri.NewHeaderDecoder(r.Header)
-	// Decode header: book-id.
+	// Decode header: Book-Id.
 	if err := func() error {
 		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "book-id",
+			Name:    "Book-Id",
 			Explode: false,
 		}
 		if err := h.HasParam(cfg); err == nil {
@@ -364,15 +364,15 @@ func decodeAPIImportArchivePostParams(args [0]string, argsEscaped bool, r *http.
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "book-id",
+			Name: "Book-Id",
 			In:   "header",
 			Err:  err,
 		}
 	}
-	// Decode header: book-url.
+	// Decode header: Book-Url.
 	if err := func() error {
 		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "book-url",
+			Name:    "Book-Url",
 			Explode: false,
 		}
 		if err := h.HasParam(cfg); err == nil {
@@ -403,15 +403,15 @@ func decodeAPIImportArchivePostParams(args [0]string, argsEscaped bool, r *http.
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "book-url",
+			Name: "Book-Url",
 			In:   "header",
 			Err:  err,
 		}
 	}
-	// Decode header: book-name.
+	// Decode header: Book-Name.
 	if err := func() error {
 		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "book-name",
+			Name:    "Book-Name",
 			Explode: false,
 		}
 		if err := h.HasParam(cfg); err == nil {
@@ -437,7 +437,7 @@ func decodeAPIImportArchivePostParams(args [0]string, argsEscaped bool, r *http.
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "book-name",
+			Name: "Book-Name",
 			In:   "header",
 			Err:  err,
 		}
