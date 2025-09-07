@@ -2,12 +2,12 @@ package generator
 
 import (
 	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
+
+	"github.com/gbh007/hgraber-next/experimental/generator/simpleinfo"
 )
 
 func (g Generator) WithPanels(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
-	builder.WithRow(dashboard.NewRowBuilder("Simple info"))
-
-	g.withStatPanels(builder)
+	simpleinfo.WithRow(builder)
 
 	return builder
 }

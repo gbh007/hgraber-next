@@ -3,29 +3,29 @@ package generator
 import (
 	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
 
-	"github.com/gbh007/hgraber-next/experimental/generator/core"
+	"github.com/gbh007/hgraber-next/experimental/generator/generatorcore"
 )
 
 //nolint:lll // будет исправлено позднее
 func (g Generator) WithVariables(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
 	builder.WithVariable(
 		dashboard.
-			NewDatasourceVariableBuilder(core.LogsVariableName).
-			Type(core.LogsVariableType),
+			NewDatasourceVariableBuilder(generatorcore.LogsVariableName).
+			Type(generatorcore.LogsVariableType),
 	)
 	builder.WithVariable(
 		dashboard.
-			NewDatasourceVariableBuilder(core.MetricVariableName).
-			Type(core.MetricVariableType),
+			NewDatasourceVariableBuilder(generatorcore.MetricVariableName).
+			Type(generatorcore.MetricVariableType),
 	)
 	builder.WithVariable(
 		dashboard.
-			NewQueryVariableBuilder(core.ServiceVariableName).
-			Query(core.ValuesFromString(`label_values({__name__=~ "hgraber_next_server_version_info|hgraber_next_agent_version_info"}, service_name)`)).
-			Datasource(core.MetricDatasource).
+			NewQueryVariableBuilder(generatorcore.ServiceVariableName).
+			Query(generatorcore.ValuesFromString(`label_values({__name__=~ "hgraber_next_server_version_info|hgraber_next_agent_version_info"}, service_name)`)).
+			Datasource(generatorcore.MetricDatasource).
 			Multi(true).
 			Current(dashboard.VariableOption{
-				Selected: core.BoolToPtr(true),
+				Selected: generatorcore.BoolToPtr(true),
 				Text: dashboard.StringOrArrayOfString{
 					ArrayOfString: g.services,
 				},
@@ -37,15 +37,15 @@ func (g Generator) WithVariables(builder *dashboard.DashboardBuilder) *dashboard
 	)
 	builder.WithVariable(
 		dashboard.
-			NewIntervalVariableBuilder(core.DeltaVariableName).
-			Values(core.ValuesFromArray(core.DeltaVariableValues)).
+			NewIntervalVariableBuilder(generatorcore.DeltaVariableName).
+			Values(generatorcore.ValuesFromArray(generatorcore.DeltaVariableValues)).
 			Current(dashboard.VariableOption{
-				Selected: core.BoolToPtr(true),
+				Selected: generatorcore.BoolToPtr(true),
 				Text: dashboard.StringOrArrayOfString{
-					String: core.StrToPtr(core.DeltaVariableCurrent),
+					String: generatorcore.StrToPtr(generatorcore.DeltaVariableCurrent),
 				},
 				Value: dashboard.StringOrArrayOfString{
-					String: core.StrToPtr(core.DeltaVariableCurrent),
+					String: generatorcore.StrToPtr(generatorcore.DeltaVariableCurrent),
 				},
 			}).
 			Auto(true),

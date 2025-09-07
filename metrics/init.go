@@ -6,12 +6,13 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
+	"github.com/gbh007/hgraber-next/metrics/metriccore"
 	"github.com/gbh007/hgraber-next/version"
 )
 
 var versionInfo = promauto.NewGauge(prometheus.GaugeOpts{
-	Namespace: SystemName,
-	Subsystem: SubSystemName,
+	Namespace: metriccore.SystemName,
+	Subsystem: metriccore.SubSystemName,
 	Name:      "version_info",
 	Help:      "Информация о приложении",
 	ConstLabels: prometheus.Labels{

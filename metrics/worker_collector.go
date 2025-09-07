@@ -8,6 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
+	"github.com/gbh007/hgraber-next/metrics/metriccore"
 )
 
 type workerInfoProvider interface {
@@ -15,7 +16,7 @@ type workerInfoProvider interface {
 }
 
 var workerDesc = prometheus.NewDesc(
-	prometheus.BuildFQName(SystemName, SubSystemName, "worker_total"),
+	prometheus.BuildFQName(metriccore.SystemName, metriccore.SubSystemName, "worker_total"),
 	"Данные воркеров",
 	[]string{"worker_name", "counter"}, nil,
 )

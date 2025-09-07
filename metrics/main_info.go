@@ -13,6 +13,8 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
+	"github.com/gbh007/hgraber-next/metrics/metriccore"
+	"github.com/gbh007/hgraber-next/metrics/metricserver"
 )
 
 type infoProvider interface {
@@ -33,35 +35,25 @@ type config interface {
 
 var (
 	bookTotal = promauto.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: SystemName,
-		Subsystem: SubSystemName,
-		Name:      "book_total",
-		Help:      "Количество книг по статусам",
-	}, []string{"type"})
+		Name: metricserver.BookTotalName,
+		Help: "Количество книг по статусам",
+	}, []string{metricserver.TypeLabel})
 	pageTotal = promauto.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: SystemName,
-		Subsystem: SubSystemName,
-		Name:      "page_total",
-		Help:      "Количество страниц по статусам",
-	}, []string{"type"})
+		Name: metricserver.PageTotalName,
+		Help: "Количество страниц по статусам",
+	}, []string{metricserver.TypeLabel})
 	fileTotal = promauto.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: SystemName,
-		Subsystem: SubSystemName,
-		Name:      "file_total",
-		Help:      "Количество файлов по статусам",
-	}, []string{"type", "fs_id"})
+		Name: metricserver.FileTotalName,
+		Help: "Количество файлов по статусам",
+	}, []string{metricserver.TypeLabel, metriccore.FSIDLabel})
 	fileBytes = promauto.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: SystemName,
-		Subsystem: SubSystemName,
-		Name:      "file_bytes",
-		Help:      "Размер файлов по статусам",
-	}, []string{"type", "fs_id"})
+		Name: metricserver.FileBytesName,
+		Help: "Размер файлов по статусам",
+	}, []string{metricserver.TypeLabel, metriccore.FSIDLabel})
 	lastCollectorScrapeDuration = promauto.NewGaugeVec(prometheus.GaugeOpts{
-		Namespace: SystemName,
-		Subsystem: SubSystemName,
-		Name:      "info_scrape_duration_seconds",
-		Help:      "Время последней сборки данных",
-	}, []string{"scrape_name"})
+		Name: metricserver.LastCollectorScrapeDurationName,
+		Help: "Время последней сборки данных",
+	}, []string{metricserver.ScrapeNameLabel})
 )
 
 // TODO: это по факту уже контроллер, надо вынести в контроллеры

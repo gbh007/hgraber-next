@@ -1,4 +1,4 @@
-package metrics
+package metriccore
 
 const (
 	SystemName    = "hgraber_next"

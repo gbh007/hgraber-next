@@ -3,14 +3,15 @@ package metrics
 import (
 	"time"
 
+	"github.com/gbh007/hgraber-next/metrics/metriccore"
 	"github.com/google/uuid"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
 
 var fsActionTime = promauto.NewSummaryVec(prometheus.SummaryOpts{
-	Namespace: SystemName,
-	Subsystem: SubSystemName,
+	Namespace: metriccore.SystemName,
+	Subsystem: metriccore.SubSystemName,
 	Name:      "fs_action_seconds",
 	Help:      "Время действий с файловой системой",
 }, []string{"action", "fs_id"})

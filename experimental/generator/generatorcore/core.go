@@ -1,4 +1,4 @@
-package core
+package generatorcore
 
 import (
 	"github.com/grafana/grafana-foundation-sdk/go/dashboard"

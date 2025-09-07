@@ -3,6 +3,7 @@ package metrics
 import (
 	"sync/atomic"
 
+	"github.com/gbh007/hgraber-next/metrics/metriccore"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -14,13 +15,13 @@ const (
 
 var (
 	pageInBookDesc = prometheus.NewDesc(
-		prometheus.BuildFQName(SystemName, SubSystemName, "statistic_page_in_book"),
+		prometheus.BuildFQName(metriccore.SystemName, metriccore.SubSystemName, "statistic_page_in_book"),
 		"Данные количества страниц в книге",
 		nil, nil,
 	)
 	pageInBookBucket = []float64{5, 10, 20, 30, 50, 100, 250, 500, 1000, 2000}
 	bookSizeDesc     = prometheus.NewDesc(
-		prometheus.BuildFQName(SystemName, SubSystemName, "statistic_book_size"),
+		prometheus.BuildFQName(metriccore.SystemName, metriccore.SubSystemName, "statistic_book_size"),
 		"Данные размера книг",
 		nil, nil,
 	)
@@ -36,7 +37,7 @@ var (
 		gigabyte,
 	}
 	pageSizeDesc = prometheus.NewDesc(
-		prometheus.BuildFQName(SystemName, SubSystemName, "statistic_page_size"),
+		prometheus.BuildFQName(metriccore.SystemName, metriccore.SubSystemName, "statistic_page_size"),
 		"Данные размера страниц",
 		nil, nil,
 	)
@@ -50,19 +51,19 @@ var (
 		10 * megabyte,
 	}
 	bookCountByAuthorDesc = prometheus.NewDesc(
-		prometheus.BuildFQName(SystemName, SubSystemName, "statistic_books_by_author"),
+		prometheus.BuildFQName(metriccore.SystemName, metriccore.SubSystemName, "statistic_books_by_author"),
 		"Данные количества книг у одного автора",
 		nil, nil,
 	)
 	bookCountByAuthorBucket = []float64{5, 10, 30, 50, 100, 250, 500}
 	pagesByAuthorDesc       = prometheus.NewDesc(
-		prometheus.BuildFQName(SystemName, SubSystemName, "statistic_pages_by_author"),
+		prometheus.BuildFQName(metriccore.SystemName, metriccore.SubSystemName, "statistic_pages_by_author"),
 		"Данные количества страниц у одного автора",
 		nil, nil,
 	)
 	pagesByAuthorBucket   = []float64{50, 100, 500, 1000, 5_000, 10_000, 20_000}
 	pagesSizeByAuthorDesc = prometheus.NewDesc(
-		prometheus.BuildFQName(SystemName, SubSystemName, "statistic_pages_size_by_author"),
+		prometheus.BuildFQName(metriccore.SystemName, metriccore.SubSystemName, "statistic_pages_size_by_author"),
 		"Данные размера страниц у одного автора",
 		nil, nil,
 	)
