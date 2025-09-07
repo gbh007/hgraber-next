@@ -10,6 +10,8 @@ func WithRow(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
 	builder.WithRow(dashboard.NewRowBuilder("Simple info"))
 	builder.WithPanel(generatorcore.WithPanelSize(BookCount(), generatorcore.PanelSizeSlim))
 	builder.WithPanel(generatorcore.WithPanelSize(PageCount(), generatorcore.PanelSizeSlim))
+	builder.WithPanel(generatorcore.WithPanelSize(FileSize(), generatorcore.PanelSizeSlim))
+	builder.WithPanel(generatorcore.WithPanelSize(FSCompression(), generatorcore.PanelSizeSlim))
 
 	return builder
 }

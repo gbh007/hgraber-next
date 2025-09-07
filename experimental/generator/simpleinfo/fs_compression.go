@@ -10,27 +10,34 @@ import (
 	"github.com/grafana/grafana-foundation-sdk/go/stat"
 
 	"github.com/gbh007/hgraber-next/experimental/generator/generatorcore"
+	"github.com/gbh007/hgraber-next/metrics/metriccore"
 	"github.com/gbh007/hgraber-next/metrics/metricserver"
 )
 
-func BookCount() *stat.PanelBuilder {
+func FSCompression() *stat.PanelBuilder {
 	return stat.
 		NewPanelBuilder().
-		Title("Book count").
+		Title("FS Compression").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().
 				Expr(fmt.Sprintf(
-					`sum(%s{%s}) by (%s)`,
-					metricserver.BookTotalName,
-					generatorcore.ServiceFilter,
+					`1 - 
+              sum(%[1]s{%[2]s="%[5]s", %[3]s}) by (%[4]s)
+              /
+              sum(%[1]s{%[2]s="%[6]s", %[3]s}) by (%[4]s)`,
+					metricserver.FileBytesName,
 					metricserver.TypeLabel,
+					generatorcore.ServiceFilter,
+					metriccore.FSIDLabel,
+					metricserver.TypeLabelValueFS,
+					metricserver.TypeLabelValuePage,
 				)).
 				Instant().
-				LegendFormat(fmt.Sprintf("{{%s}}", metricserver.TypeLabel)).
+				LegendFormat(fmt.Sprintf("{{%s}}", metriccore.FSIDLabel)).
 				Datasource(generatorcore.MetricDatasource),
 		}).
-		Unit(generatorcore.UnitShort).
+		Unit(generatorcore.UnitPercent0_1).
 		Thresholds(
 			dashboard.
 				NewThresholdsConfigBuilder().

@@ -26,6 +26,7 @@ func PageCount() *stat.PanelBuilder {
 					generatorcore.ServiceFilter,
 					metricserver.TypeLabel,
 				)).
+				Instant().
 				LegendFormat(fmt.Sprintf("{{%s}}", metricserver.TypeLabel)).
 				Datasource(generatorcore.MetricDatasource),
 		}).

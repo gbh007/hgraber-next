@@ -216,11 +216,11 @@ func (c *SystemInfoCollector) collectMainInfo(ctx context.Context) {
 	}
 
 	for fsID, v := range res.PageFileSizeByFS {
-		fileBytes.WithLabelValues("page", fsID.String()).Set(float64(v))
+		fileBytes.WithLabelValues(metricserver.TypeLabelValuePage, fsID.String()).Set(float64(v))
 	}
 
 	for fsID, v := range res.FileSizeByFS {
-		fileBytes.WithLabelValues("fs", fsID.String()).Set(float64(v))
+		fileBytes.WithLabelValues(metricserver.TypeLabelValueFS, fsID.String()).Set(float64(v))
 	}
 }
 

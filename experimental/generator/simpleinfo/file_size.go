@@ -13,24 +13,37 @@ import (
 	"github.com/gbh007/hgraber-next/metrics/metricserver"
 )
 
-func BookCount() *stat.PanelBuilder {
+func FileSize() *stat.PanelBuilder {
 	return stat.
 		NewPanelBuilder().
-		Title("Book count").
+		Title("File size").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().
 				Expr(fmt.Sprintf(
-					`sum(%s{%s}) by (%s)`,
-					metricserver.BookTotalName,
-					generatorcore.ServiceFilter,
+					`sum(%s{%s="%s", %s})`,
+					metricserver.FileBytesName,
 					metricserver.TypeLabel,
+					metricserver.TypeLabelValueFS,
+					generatorcore.ServiceFilter,
 				)).
 				Instant().
-				LegendFormat(fmt.Sprintf("{{%s}}", metricserver.TypeLabel)).
+				LegendFormat("На диске").
+				Datasource(generatorcore.MetricDatasource),
+			prometheus.
+				NewDataqueryBuilder().
+				Expr(fmt.Sprintf(
+					`sum(%s{%s="%s", %s})`,
+					metricserver.FileBytesName,
+					metricserver.TypeLabel,
+					metricserver.TypeLabelValuePage,
+					generatorcore.ServiceFilter,
+				)).
+				Instant().
+				LegendFormat("В страницах").
 				Datasource(generatorcore.MetricDatasource),
 		}).
-		Unit(generatorcore.UnitShort).
+		Unit(generatorcore.UnitBytes).
 		Thresholds(
 			dashboard.
 				NewThresholdsConfigBuilder().

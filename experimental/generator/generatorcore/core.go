@@ -19,7 +19,9 @@ const (
 
 	ServiceFilter = `service_name=~"$` + ServiceVariableName + `"`
 
-	UnitShort = units.Short
+	UnitShort      = units.Short
+	UnitBytes      = units.BytesIEC
+	UnitPercent0_1 = units.PercentUnit
 )
 
 const (
