@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -12,13 +13,26 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func ExportToFile[T any](cfg *T, filename string) error {
-	f, err := os.Create(filename)
+const envTemplate = `{{ range . }}{{ .Key }}={{ .Field }}
+{{ end }}`
+
+func ExportToFile[T any](cfg *T, filename string) (returnedErr error) {
+	f, err := os.Create(filename) //nolint:gosec // путь может быть любым доступным
 	if err != nil {
 		return fmt.Errorf("create file: %w", err)
 	}
 
-	defer f.Close()
+	defer func() {
+		err := f.Close()
+
+		switch {
+		case returnedErr != nil && err != nil:
+			returnedErr = errors.Join(returnedErr, fmt.Errorf("close file: %w", err))
+		case err != nil:
+			returnedErr = fmt.Errorf("close file: %w", err)
+		default:
+		}
+	}()
 
 	ext := path.Ext(filename)
 
@@ -32,15 +46,16 @@ func ExportToFile[T any](cfg *T, filename string) error {
 
 func ExportToWriter[T any](w io.Writer, cfg *T, ext string) error {
 	switch ext {
-	case ".yml", ".yaml":
+	case ConfigExtYml, ConfigExtYaml:
 		enc := yaml.NewEncoder(w)
-		enc.SetIndent(2)
+		enc.SetIndent(YamlIndent)
 
 		err := enc.Encode(cfg)
 		if err != nil {
 			return fmt.Errorf("encode yaml: %w", err)
 		}
-	case ".toml":
+
+	case ConfigExtToml:
 		enc := toml.NewEncoder(w)
 		enc.Indent = ""
 
@@ -48,7 +63,8 @@ func ExportToWriter[T any](w io.Writer, cfg *T, ext string) error {
 		if err != nil {
 			return fmt.Errorf("encode toml: %w", err)
 		}
-	case ".env":
+
+	case ConfigExtEnv:
 		err := envconfig.Usaget("APP", cfg, w, template.Must(template.New("cfg").Parse(envTemplate)))
 		if err != nil {
 			return fmt.Errorf("encode env usage: %w", err)
@@ -57,6 +73,3 @@ func ExportToWriter[T any](w io.Writer, cfg *T, ext string) error {
 
 	return nil
 }
-
-const envTemplate = `{{ range . }}{{ .Key }}={{ .Field }}
-{{ end }}`

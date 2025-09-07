@@ -16,34 +16,33 @@ type Config struct {
 	AttributeRemap AttributeRemap `toml:"attribute_remap" yaml:"attribute_remap" envconfig:"ATTRIBUTE_REMAP"`
 }
 
+type Parsing struct {
+	ParseBookTimeout time.Duration `toml:"parse_book_timeout" yaml:"parse_book_timeout" envconfig:"PARSE_BOOK_TIMEOUT"`
+	AgentTimeout     time.Duration `toml:"agent_timeout" yaml:"agent_timeout" envconfig:"AGENT_TIMEOUT"`
+}
+
+type AttributeRemap struct {
+	Auto     bool `toml:"auto" yaml:"auto" envconfig:"AUTO"`
+	AllLower bool `toml:"all_lower" yaml:"all_lower" envconfig:"ALL_LOWER"`
+}
+
 func ConfigDefault() Config {
 	return Config{
 		Log:         LogDefault(),
 		Application: ApplicationDefault(),
 		Parsing:     ParsingDefault(),
 		API:         APIDefault(),
-		Workers:     WorkersDefault(),
 		Storage:     StorageDefault(),
 		FileStorage: FileStorageDefault(),
 		AgentServer: AgentServerDefault(),
 	}
 }
 
-type Parsing struct {
-	ParseBookTimeout time.Duration `toml:"parse_book_timeout" yaml:"parse_book_timeout" envconfig:"PARSE_BOOK_TIMEOUT"`
-	AgentTimeout     time.Duration `toml:"agent_timeout" yaml:"agent_timeout" envconfig:"AGENT_TIMEOUT"`
-}
-
 func ParsingDefault() Parsing {
 	return Parsing{
-		ParseBookTimeout: time.Minute * 5,
-		AgentTimeout:     time.Minute * 10,
+		ParseBookTimeout: DefaultParsingBookTimeout,
+		AgentTimeout:     DefaultParsingAgentTimeout,
 	}
-}
-
-type AttributeRemap struct {
-	Auto     bool `toml:"auto" yaml:"auto" envconfig:"AUTO"`
-	AllLower bool `toml:"all_lower" yaml:"all_lower" envconfig:"ALL_LOWER"`
 }
 
 func AttributeRemapDefault() AttributeRemap {

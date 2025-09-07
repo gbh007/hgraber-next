@@ -18,13 +18,13 @@ func LogDefault() Log {
 
 func (l Log) SlogLevel() slog.Level {
 	switch strings.ToLower(l.Level) {
-	case "debug":
+	case "debug", "dbg":
 		return slog.LevelDebug
-	case "info":
+	case "info", "inf":
 		return slog.LevelInfo
-	case "warn", "warning":
+	case "warn", "warning", "wrn":
 		return slog.LevelWarn
-	case "error":
+	case "error", "err":
 		return slog.LevelError
 	default:
 		return slog.LevelInfo
