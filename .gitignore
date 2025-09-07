@@ -1,5 +1,6 @@
-.hidden
-_build
-.env
-config.*
-bin
+/.hidden
+/_build
+/.env
+/config.*
+/experimental/config.*
+/bin
