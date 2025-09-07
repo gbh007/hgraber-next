@@ -3,4 +3,5 @@
 /.env
 /config.*
 /experimental/config.*
+/experimental/*.json
 /bin

@@ -14,8 +14,12 @@ func BoolToPtr(b bool) *bool {
 	return &b
 }
 
-func NameToVar(s string) string {
+func NameToVarDS(s string) string {
 	return "${" + s + "}"
+}
+
+func NameToVar(s string) string {
+	return "$" + s
 }
 
 func ValuesFromString(s string) dashboard.StringOrMap {

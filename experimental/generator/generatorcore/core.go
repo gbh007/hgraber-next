@@ -34,7 +34,7 @@ const (
 var (
 	MetricDatasource = dashboard.DataSourceRef{
 		Type: StrToPtr(MetricVariableType),
-		Uid:  StrToPtr(NameToVar(MetricVariableName)),
+		Uid:  StrToPtr(NameToVarDS(MetricVariableName)),
 	}
 	DeltaVariableValues = []string{"1m", "5m", "10m", "30m", "1h", "4h", "8h", "1d", "7d"}
 	GreenSteps          = []dashboard.Threshold{

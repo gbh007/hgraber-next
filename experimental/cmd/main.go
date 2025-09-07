@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"net/url"
+	"os"
 
 	"github.com/go-openapi/strfmt"
 	goapi "github.com/grafana/grafana-openapi-client-go/client"
@@ -74,5 +76,23 @@ func main() {
 
 	if *response.Payload.Status != "success" {
 		panic(*response.Payload.Status)
+	}
+
+	out, err := os.Create("grafana-dashboard (experimental).json")
+	if err != nil {
+		panic(err)
+	}
+
+	enc := json.NewEncoder(out)
+	enc.SetIndent("", "   ")
+
+	err = enc.Encode(dashboardModel)
+	if err != nil {
+		panic(err)
+	}
+
+	err = out.Close()
+	if err != nil {
+		panic(err)
 	}
 }
