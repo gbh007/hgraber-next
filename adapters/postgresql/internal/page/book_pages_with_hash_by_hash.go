@@ -21,12 +21,7 @@ func (repo *PageRepo) BookPagesWithHashByHash(ctx context.Context, hash core.Fil
 			"f.size":       hash.Size,
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	out := make([]core.PageWithHash, 0, 10) //nolint:mnd // оптимизация
 

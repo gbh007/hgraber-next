@@ -53,18 +53,13 @@ func (repo *AttributeRepo) AttributesFileSize(
 		PlaceholderFormat(squirrel.Dollar).
 		FromSelect(subBuilder, "uf")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return core.SizeWithCount{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
 	var size, count sql.NullInt64
 
-	err = row.Scan(&size, &count)
+	err := row.Scan(&size, &count)
 	if err != nil {
 		return core.SizeWithCount{}, fmt.Errorf("exec query: %w", err)
 	}

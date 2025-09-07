@@ -19,12 +19,7 @@ func (repo *BookRepo) BookIDsByMD5(ctx context.Context, md5Sums []string) ([]uui
 		}).
 		GroupBy("b.id")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := []uuid.UUID{}
 

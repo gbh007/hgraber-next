@@ -20,12 +20,7 @@ func (repo *PageRepo) PagesByURL(ctx context.Context, u url.URL) ([]core.Page, e
 		}).
 		OrderBy("book_id", "page_number")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]core.Page, 0)
 

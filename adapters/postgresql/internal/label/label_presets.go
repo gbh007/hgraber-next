@@ -21,12 +21,7 @@ func (repo *LabelRepo) LabelPresets(ctx context.Context) ([]core.BookLabelPreset
 		From("label_presets").
 		PlaceholderFormat(squirrel.Dollar)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	rows, err := repo.Pool.Query(ctx, query, args...)
 	if err != nil {

@@ -19,12 +19,7 @@ func (repo *PageRepo) BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []
 			"f.md5_sum": md5Sums,
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	out := make([]core.PageWithHash, 0, 10) //nolint:mnd // оптимизация
 

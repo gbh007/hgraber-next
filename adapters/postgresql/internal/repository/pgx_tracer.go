@@ -127,7 +127,6 @@ func (t pgxTracer) TraceBatchQuery(ctx context.Context, conn *pgx.Conn, data pgx
 		)
 	}
 
-	// FIXME: проверить что будет корректно отрабатывать (если будут проблемы использовать TraceBatchEnd)
 	v, ok := ctx.Value(batchRequestCtxKey{}).(batchRequestInfo)
 	if ok {
 		t.metricProvider.RegisterDBRequestDuration(filterStmt(data.SQL), time.Since(v.startAt))

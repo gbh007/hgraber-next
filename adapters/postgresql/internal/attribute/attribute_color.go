@@ -25,18 +25,13 @@ func (repo *AttributeRepo) AttributeColor(ctx context.Context, code, value strin
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return core.AttributeColor{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
 	color := core.AttributeColor{}
 
-	err = row.Scan(
+	err := row.Scan(
 		&color.Code,
 		&color.Value,
 		&color.TextColor,

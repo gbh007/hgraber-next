@@ -16,12 +16,7 @@ func (repo *URLMirrorRepo) Mirrors(ctx context.Context) ([]parsing.URLMirror, er
 		From("url_mirrors").
 		OrderBy("id")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	out := make([]parsing.URLMirror, 0, 10) //nolint:mnd // оптимизация
 

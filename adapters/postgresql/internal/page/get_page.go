@@ -21,18 +21,13 @@ func (repo *PageRepo) GetPage(ctx context.Context, id uuid.UUID, pageNumber int)
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return core.Page{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	page := core.Page{}
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(model.PageScanner(&page))
+	err := row.Scan(model.PageScanner(&page))
 	if err != nil {
 		return core.Page{}, fmt.Errorf("exec query: %w", err)
 	}

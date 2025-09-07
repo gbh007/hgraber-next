@@ -48,12 +48,7 @@ func (repo *FileRepo) FileIDsByFilter(ctx context.Context, filter fsmodel.FileFi
 		builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
 	}
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	rows, err := repo.Pool.Query(ctx, query, args...)
 	if err != nil {

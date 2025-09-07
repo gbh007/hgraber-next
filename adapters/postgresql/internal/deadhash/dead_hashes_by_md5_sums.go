@@ -22,12 +22,7 @@ func (repo *DeadHashRepo) DeadHashesByMD5Sums(ctx context.Context, md5Sums []str
 			"md5_sum": md5Sums,
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	rows, err := repo.Pool.Query(ctx, query, args...)
 	if err != nil {

@@ -19,12 +19,7 @@ func (repo *MassloadRepo) MassloadExternalLinks(ctx context.Context, id int) ([]
 		}).
 		OrderBy("created_at")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]massloadmodel.ExternalLink, 0)
 

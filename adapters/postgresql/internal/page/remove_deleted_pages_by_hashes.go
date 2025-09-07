@@ -25,12 +25,8 @@ func (repo *PageRepo) RemoveDeletedPagesByHashes(ctx context.Context, hashes []c
 				"\"size\"":   hash.Size,
 			})
 
-		query, args, err := builder.ToSql()
-		if err != nil {
-			return fmt.Errorf("build query: %w", err)
-		}
+		query, args := builder.MustSql()
 
-		repo.SquirrelDebugLog(ctx, query, args)
 		batch.Queue(query, args...)
 
 		resultCount++

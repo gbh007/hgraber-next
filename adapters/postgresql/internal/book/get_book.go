@@ -22,18 +22,13 @@ func (repo *BookRepo) GetBook(ctx context.Context, bookID uuid.UUID) (core.Book,
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return core.Book{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	book := core.Book{}
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(model.BookScanner(&book))
+	err := row.Scan(model.BookScanner(&book))
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return core.Book{}, core.BookNotFoundError

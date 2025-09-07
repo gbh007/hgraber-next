@@ -19,12 +19,7 @@ func (repo *MassloadRepo) MassloadAttributes(ctx context.Context, id int) ([]mas
 		}).
 		OrderBy("created_at")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]massloadmodel.Attribute, 0)
 

@@ -42,7 +42,6 @@ func New(
 	tracer trace.Tracer,
 	metricProvider repository.MetricProvider,
 	debugPgx bool,
-	debugSquirrel bool,
 	dataSourceName string,
 	maxConn int32,
 ) (*Repo, error) {
@@ -52,7 +51,6 @@ func New(
 		tracer,
 		metricProvider,
 		debugPgx,
-		debugSquirrel,
 		dataSourceName,
 		maxConn,
 	)

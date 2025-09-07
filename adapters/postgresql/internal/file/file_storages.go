@@ -15,12 +15,7 @@ func (repo *FileRepo) FileStorages(ctx context.Context) ([]fsmodel.FileStorageSy
 		PlaceholderFormat(squirrel.Dollar).
 		From("file_storages")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	out := make([]fsmodel.FileStorageSystem, 0, 10) //nolint:mnd // будет исправлено позднее
 

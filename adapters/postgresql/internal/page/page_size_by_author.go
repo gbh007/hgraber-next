@@ -21,12 +21,7 @@ func (repo *PageRepo) PageSizeByAuthor(ctx context.Context) (map[string]core.Siz
 		}).
 		GroupBy("ba.value")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	out := make(map[string]core.SizeWithCount, 100) //nolint:mnd // оптимизация
 

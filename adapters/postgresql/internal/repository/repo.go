@@ -19,9 +19,8 @@ type MetricProvider interface {
 }
 
 type Repository struct {
-	Logger        *slog.Logger
-	Tracer        trace.Tracer
-	debugSquirrel bool
+	Logger *slog.Logger
+	Tracer trace.Tracer
 
 	Pool *pgxpool.Pool
 }
@@ -32,7 +31,6 @@ func New(
 	tracer trace.Tracer,
 	metricProvider MetricProvider,
 	debugPgx bool,
-	debugSquirrel bool,
 	dataSourceName string,
 	maxConn int32,
 ) (*Repository, error) {
@@ -69,21 +67,8 @@ func New(
 	}
 
 	return &Repository{
-		Logger:        logger,
-		Tracer:        tracer,
-		debugSquirrel: debugSquirrel,
-		Pool:          dbpool,
+		Logger: logger,
+		Tracer: tracer,
+		Pool:   dbpool,
 	}, nil
-}
-
-func (r *Repository) SquirrelDebugLog(ctx context.Context, query string, args []any) {
-	if !r.debugSquirrel {
-		return
-	}
-
-	r.Logger.DebugContext(
-		ctx, "squirrel build request",
-		slog.String("query", query),
-		slog.Any("args", args),
-	)
 }

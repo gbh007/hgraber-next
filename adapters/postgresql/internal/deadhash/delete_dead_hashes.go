@@ -24,12 +24,7 @@ func (repo *DeadHashRepo) DeleteDeadHashes(ctx context.Context, hashes []core.De
 				"size":       hash.Size,
 			})
 
-		query, args, err := builder.ToSql()
-		if err != nil {
-			return fmt.Errorf("build query: %w", err)
-		}
-
-		repo.SquirrelDebugLog(ctx, query, args)
+		query, args := builder.MustSql()
 		batch.Queue(query, args...)
 
 		resultCount++

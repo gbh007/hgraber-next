@@ -20,18 +20,13 @@ func (repo *URLMirrorRepo) Mirror(ctx context.Context, id uuid.UUID) (parsing.UR
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return parsing.URLMirror{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
 	mirror := parsing.URLMirror{}
 
-	err = row.Scan(model.URLMirrorScanner(&mirror))
+	err := row.Scan(model.URLMirrorScanner(&mirror))
 	if err != nil {
 		return parsing.URLMirror{}, fmt.Errorf("scan: %w", err)
 	}

@@ -20,18 +20,13 @@ func (repo *FileRepo) FileStorage(ctx context.Context, id uuid.UUID) (fsmodel.Fi
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return fsmodel.FileStorageSystem{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	fs := fsmodel.FileStorageSystem{}
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(model.FileStorageScanner(&fs))
+	err := row.Scan(model.FileStorageScanner(&fs))
 	if err != nil {
 		return fsmodel.FileStorageSystem{}, fmt.Errorf("scan: %w", err)
 	}

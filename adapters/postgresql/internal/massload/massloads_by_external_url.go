@@ -25,12 +25,7 @@ func (repo *MassloadRepo) MassloadsByExternalLink(
 			),
 		)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]massloadmodel.Massload, 0)
 

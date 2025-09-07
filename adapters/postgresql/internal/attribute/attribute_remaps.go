@@ -15,12 +15,7 @@ func (repo *AttributeRepo) AttributeRemaps(ctx context.Context) ([]core.Attribut
 		From("attribute_remaps").
 		PlaceholderFormat(squirrel.Dollar)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	rows, err := repo.Pool.Query(ctx, query, args...)
 	if err != nil {

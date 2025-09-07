@@ -16,12 +16,7 @@ func (repo *FileRepo) DetachedFiles(ctx context.Context) ([]core.File, error) {
 		From("files").
 		Where(squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE pages.file_id = files.id)`))
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]core.File, 0)
 

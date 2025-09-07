@@ -22,17 +22,12 @@ func (repo *AgentRepo) Agent(ctx context.Context, id uuid.UUID) (core.Agent, err
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return core.Agent{}, fmt.Errorf("storage: build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := core.Agent{}
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(model.AgentScanner(&result))
+	err := row.Scan(model.AgentScanner(&result))
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return core.Agent{}, core.AgentNotFoundError

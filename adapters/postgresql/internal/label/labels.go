@@ -19,12 +19,7 @@ func (repo *LabelRepo) Labels(ctx context.Context, bookID uuid.UUID) ([]core.Boo
 			"book_id": bookID,
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]core.BookLabel, 0)
 

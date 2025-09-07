@@ -25,12 +25,7 @@ func (repo *LabelRepo) LabelPreset(ctx context.Context, name string) (core.BookL
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return core.BookLabelPreset{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
@@ -40,7 +35,7 @@ func (repo *LabelRepo) LabelPreset(ctx context.Context, name string) (core.BookL
 		description sql.NullString
 	)
 
-	err = row.Scan(
+	err := row.Scan(
 		&preset.Name,
 		&description,
 		&preset.Values,

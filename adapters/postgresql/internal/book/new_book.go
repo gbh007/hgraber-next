@@ -26,14 +26,9 @@ func (repo *BookRepo) NewBook(ctx context.Context, book core.Book) error {
 		},
 	)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return fmt.Errorf("storage: build query: %w", err)
-	}
+	query, args := builder.MustSql()
 
-	repo.SquirrelDebugLog(ctx, query, args)
-
-	_, err = repo.Pool.Exec(ctx, query, args...)
+	_, err := repo.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("storage: exec query: %w", err)
 	}

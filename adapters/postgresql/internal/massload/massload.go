@@ -19,18 +19,13 @@ func (repo *MassloadRepo) Massload(ctx context.Context, id int) (massloadmodel.M
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return massloadmodel.Massload{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	ml := massloadmodel.Massload{}
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(model.MassloadScanner(&ml))
+	err := row.Scan(model.MassloadScanner(&ml))
 	if err != nil {
 		return massloadmodel.Massload{}, fmt.Errorf("exec: %w", err)
 	}

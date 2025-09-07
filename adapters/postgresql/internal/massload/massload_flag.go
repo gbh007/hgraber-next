@@ -19,18 +19,13 @@ func (repo *MassloadRepo) MassloadFlag(ctx context.Context, code string) (masslo
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return massloadmodel.Flag{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	flag := massloadmodel.Flag{}
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(model.MassloadFlagScanner(&flag))
+	err := row.Scan(model.MassloadFlagScanner(&flag))
 	if err != nil {
 		return massloadmodel.Flag{}, fmt.Errorf("exec: %w", err)
 	}

@@ -17,12 +17,7 @@ func (repo *BookRepo) BookIDsWithDeletedRebuilds(ctx context.Context) ([]uuid.UU
 			"is_rebuild": true,
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := []uuid.UUID{}
 

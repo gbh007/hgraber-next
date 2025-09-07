@@ -21,18 +21,13 @@ func (repo *MassloadRepo) CreateMassload(ctx context.Context, ml massloadmodel.M
 		}).
 		Suffix("RETURNING id")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return 0, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	var id int
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(&id)
+	err := row.Scan(&id)
 	if err != nil {
 		return 0, fmt.Errorf("exec query: %w", err)
 	}

@@ -22,18 +22,13 @@ func (repo *AttributeRepo) AttributeRemap(ctx context.Context, code, value strin
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return core.AttributeRemap{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
 	ar := core.AttributeRemap{}
 
-	err = row.Scan(model.AttributeRemapScanner(&ar))
+	err := row.Scan(model.AttributeRemapScanner(&ar))
 	if errors.Is(err, sql.ErrNoRows) {
 		return core.AttributeRemap{}, core.AttributeRemapNotFoundError
 	}

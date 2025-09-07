@@ -38,18 +38,13 @@ func (repo *FileRepo) FSFilesInfo(
 		)
 	}
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return core.SizeWithCount{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	var count, size sql.NullInt64
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(&count, &size)
+	err := row.Scan(&count, &size)
 	if err != nil {
 		return core.SizeWithCount{}, fmt.Errorf("scan: %w", err)
 	}

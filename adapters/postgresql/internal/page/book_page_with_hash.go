@@ -28,17 +28,12 @@ func (repo *PageRepo) BookPageWithHash(
 		}).
 		Limit(1)
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return core.PageWithHash{}, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	page := core.PageWithHash{}
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(model.PageWithHashScanner(&page))
+	err := row.Scan(model.PageWithHashScanner(&page))
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return core.PageWithHash{}, core.PageNotFoundError

@@ -16,12 +16,7 @@ func (repo *MassloadRepo) MassloadFlags(ctx context.Context) ([]massloadmodel.Fl
 		From("massload_flags").
 		OrderBy("order_weight DESC", "created_at", "code")
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]massloadmodel.Flag, 0)
 

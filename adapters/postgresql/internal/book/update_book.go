@@ -28,12 +28,7 @@ func (repo *BookRepo) UpdateBook(ctx context.Context, book core.Book) error {
 			"id": book.ID,
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return fmt.Errorf("storage: build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	res, err := repo.Pool.Exec(ctx, query, args...)
 	if err != nil {

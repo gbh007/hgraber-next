@@ -17,17 +17,12 @@ func (repo *PageRepo) BookPagesCount(ctx context.Context, bookID uuid.UUID) (int
 			"book_id": bookID,
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return 0, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	count := sql.NullInt64{}
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err = row.Scan(&count)
+	err := row.Scan(&count)
 	if err != nil {
 		return 0, fmt.Errorf("get count: %w", err)
 	}

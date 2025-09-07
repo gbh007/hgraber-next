@@ -18,12 +18,7 @@ func (repo *FileRepo) FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]c
 			"md5_sum": md5Sums,
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]core.File, 0)
 

@@ -21,12 +21,7 @@ func (repo *FileRepo) GetUnHashedFiles(ctx context.Context) ([]core.File, error)
 			squirrel.Expr(`"size" IS NULL`),
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("storage: build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]core.File, 0)
 

@@ -35,10 +35,7 @@ func (repo *LabelRepo) SetLabels(ctx context.Context, labels []core.BookLabel) e
 		)
 	}
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return fmt.Errorf("build query: %w", err)
-	}
+	query, args := builder.MustSql()
 
 	tx, err := repo.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
@@ -54,8 +51,6 @@ func (repo *LabelRepo) SetLabels(ctx context.Context, labels []core.BookLabel) e
 			)
 		}
 	}()
-
-	repo.SquirrelDebugLog(ctx, query, args)
 
 	_, err = tx.Exec(ctx, query, args...)
 	if err != nil {

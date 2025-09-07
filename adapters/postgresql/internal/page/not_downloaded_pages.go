@@ -27,12 +27,7 @@ func (repo *PageRepo) NotDownloadedPages(ctx context.Context) ([]core.PageForDow
 			"p.downloaded": false,
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]core.PageForDownload, 0)
 

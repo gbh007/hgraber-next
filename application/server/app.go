@@ -94,7 +94,6 @@ func Serve() {
 		tracer,
 		metricProvider,
 		cfg.Storage.DebugPGX,
-		cfg.Storage.DebugSquirrel,
 		cfg.Storage.Connection,
 		cfg.Storage.MaxConnections,
 	)

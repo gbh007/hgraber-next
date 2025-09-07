@@ -49,12 +49,7 @@ func (repo *AttributeRepo) UpdateOriginAttributes(
 		builder = builder.Values(bookID, code, values)
 	}
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	_, err = tx.Exec(ctx, query, args...)
 	if err != nil {

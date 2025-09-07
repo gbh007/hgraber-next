@@ -18,14 +18,9 @@ func (repo *MassloadRepo) DeleteMassloadAttribute(ctx context.Context, id int, a
 			"attr_value":  attr.Value,
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return fmt.Errorf("build query: %w", err)
-	}
+	query, args := builder.MustSql()
 
-	repo.SquirrelDebugLog(ctx, query, args)
-
-	_, err = repo.Pool.Exec(ctx, query, args...)
+	_, err := repo.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}

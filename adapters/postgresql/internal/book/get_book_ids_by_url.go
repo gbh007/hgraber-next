@@ -17,12 +17,7 @@ func (repo *BookRepo) GetBookIDsByURL(ctx context.Context, u url.URL) ([]uuid.UU
 			"origin_url": u.String(),
 		})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := []uuid.UUID{}
 

@@ -46,12 +46,7 @@ func (repo *AgentRepo) Agents(ctx context.Context, filter core.AgentFilter) ([]c
 		})
 	}
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return nil, fmt.Errorf("storage: build query: %w", err)
-	}
-
-	repo.SquirrelDebugLog(ctx, query, args)
+	query, args := builder.MustSql()
 
 	result := make([]core.Agent, 0)
 
