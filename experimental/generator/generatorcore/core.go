@@ -3,6 +3,8 @@ package generatorcore
 import (
 	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
 	"github.com/grafana/grafana-foundation-sdk/go/units"
+	promcog "github.com/grafana/promql-builder/go/cog"
+	"github.com/grafana/promql-builder/go/promql"
 )
 
 const (
@@ -16,8 +18,6 @@ const (
 
 	DeltaVariableName    = "deltaInterval"
 	DeltaVariableCurrent = "4h"
-
-	ServiceFilter = `service_name=~"$` + ServiceVariableName + `"`
 
 	UnitShort      = units.Short
 	UnitBytes      = units.BytesIEC
@@ -41,6 +41,13 @@ var (
 		{
 			Color: "green",
 		},
+	}
+	ServiceFilterPromQL = []promcog.Builder[promql.LabelSelector]{
+		promql.
+			NewLabelSelectorBuilder().
+			Name("service_name"). // TODO: в константу?
+			Operator(promql.LabelMatchingOperatorMatchRegexp).
+			Value(NameToVar(ServiceVariableName)),
 	}
 )
 

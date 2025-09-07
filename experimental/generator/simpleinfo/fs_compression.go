@@ -8,6 +8,7 @@ import (
 	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
 	"github.com/grafana/grafana-foundation-sdk/go/prometheus"
 	"github.com/grafana/grafana-foundation-sdk/go/stat"
+	"github.com/grafana/promql-builder/go/promql"
 
 	"github.com/gbh007/hgraber-next/experimental/generator/generatorcore"
 	"github.com/gbh007/hgraber-next/metrics/metriccore"
@@ -15,24 +16,31 @@ import (
 )
 
 func FSCompression() *stat.PanelBuilder {
+	query := promql.Sub(
+		promql.N(1),
+		promql.Div(
+			promql.Sum(
+				promql.
+					Vector(metricserver.FileBytesName).
+					Labels(generatorcore.ServiceFilterPromQL).
+					Label(metricserver.TypeLabel, metricserver.TypeLabelValueFS),
+			).By([]string{metriccore.FSIDLabel}),
+			promql.Sum(
+				promql.
+					Vector(metricserver.FileBytesName).
+					Labels(generatorcore.ServiceFilterPromQL).
+					Label(metricserver.TypeLabel, metricserver.TypeLabelValuePage),
+			).By([]string{metriccore.FSIDLabel}),
+		),
+	)
+
 	return stat.
 		NewPanelBuilder().
 		Title("FS Compression").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().
-				Expr(fmt.Sprintf(
-					`1 - 
-              sum(%[1]s{%[2]s="%[5]s", %[3]s}) by (%[4]s)
-              /
-              sum(%[1]s{%[2]s="%[6]s", %[3]s}) by (%[4]s)`,
-					metricserver.FileBytesName,
-					metricserver.TypeLabel,
-					generatorcore.ServiceFilter,
-					metriccore.FSIDLabel,
-					metricserver.TypeLabelValueFS,
-					metricserver.TypeLabelValuePage,
-				)).
+				Expr(query.String()).
 				Instant().
 				LegendFormat(fmt.Sprintf("{{%s}}", metriccore.FSIDLabel)).
 				Datasource(generatorcore.MetricDatasource),

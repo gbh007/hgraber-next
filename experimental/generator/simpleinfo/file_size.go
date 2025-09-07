@@ -1,43 +1,45 @@
 package simpleinfo
 
 import (
-	"fmt"
-
 	"github.com/grafana/grafana-foundation-sdk/go/cog"
 	"github.com/grafana/grafana-foundation-sdk/go/cog/variants"
 	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
 	"github.com/grafana/grafana-foundation-sdk/go/prometheus"
 	"github.com/grafana/grafana-foundation-sdk/go/stat"
+	"github.com/grafana/promql-builder/go/promql"
 
 	"github.com/gbh007/hgraber-next/experimental/generator/generatorcore"
 	"github.com/gbh007/hgraber-next/metrics/metricserver"
 )
 
 func FileSize() *stat.PanelBuilder {
+	query := func(k, v string) string {
+		return promql.Sum(
+			promql.
+				Vector(metricserver.FileBytesName).
+				Labels(generatorcore.ServiceFilterPromQL).
+				Label(k, v),
+		).By([]string{metricserver.TypeLabel}).String()
+	}
+
 	return stat.
 		NewPanelBuilder().
 		Title("File size").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().
-				Expr(fmt.Sprintf(
-					`sum(%s{%s="%s", %s})`,
-					metricserver.FileBytesName,
+				Expr(query(
 					metricserver.TypeLabel,
 					metricserver.TypeLabelValueFS,
-					generatorcore.ServiceFilter,
 				)).
 				Instant().
 				LegendFormat("На диске").
 				Datasource(generatorcore.MetricDatasource),
 			prometheus.
 				NewDataqueryBuilder().
-				Expr(fmt.Sprintf(
-					`sum(%s{%s="%s", %s})`,
-					metricserver.FileBytesName,
+				Expr(query(
 					metricserver.TypeLabel,
 					metricserver.TypeLabelValuePage,
-					generatorcore.ServiceFilter,
 				)).
 				Instant().
 				LegendFormat("В страницах").

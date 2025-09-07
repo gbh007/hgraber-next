@@ -13,6 +13,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/grafana/grafana-foundation-sdk/go v0.0.0-20250731161834-8eb3d93f8867
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20250828163705-969607f81baa
+	github.com/grafana/promql-builder/go v0.0.0-20250429090210-0ece37f60698
 	github.com/grafana/pyroscope-go v1.2.4
 	github.com/jackc/pgx/v5 v5.7.5
 	github.com/joho/godotenv v1.5.1
