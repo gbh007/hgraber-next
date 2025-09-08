@@ -35,5 +35,6 @@ func BookCountDelta() *barchart.PanelBuilder {
 				Datasource(generatorcore.MetricDatasource),
 		}).
 		Unit(generatorcore.UnitShort).
+		Thresholds(generatorcore.GreenTrashHold()).
 		Datasource(generatorcore.MetricDatasource)
 }

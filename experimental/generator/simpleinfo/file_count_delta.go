@@ -6,7 +6,6 @@ import (
 	"github.com/grafana/grafana-foundation-sdk/go/barchart"
 	"github.com/grafana/grafana-foundation-sdk/go/cog"
 	"github.com/grafana/grafana-foundation-sdk/go/cog/variants"
-	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
 	"github.com/grafana/grafana-foundation-sdk/go/prometheus"
 	"github.com/grafana/promql-builder/go/promql"
 
@@ -36,10 +35,6 @@ func FileCountDelta() *barchart.PanelBuilder {
 				Datasource(generatorcore.MetricDatasource),
 		}).
 		Unit(generatorcore.UnitShort).
-		Thresholds(
-			dashboard.
-				NewThresholdsConfigBuilder().
-				Steps(generatorcore.GreenSteps),
-		).
+		Thresholds(generatorcore.GreenTrashHold()).
 		Datasource(generatorcore.MetricDatasource)
 }

@@ -19,9 +19,13 @@ const (
 	DeltaVariableName    = "deltaInterval"
 	DeltaVariableCurrent = "4h"
 
+	RateIntervalVar = "$__rate_interval" // TODO: возможно где-то есть готовый
+
 	UnitShort      = units.Short
 	UnitBytes      = units.BytesIEC
 	UnitPercent0_1 = units.PercentUnit
+	UnitSecond     = units.Seconds
+	UnitRPS        = units.RequestsPerSecond
 )
 
 const (
@@ -35,6 +39,10 @@ var (
 	MetricDatasource = dashboard.DataSourceRef{
 		Type: StrToPtr(MetricVariableType),
 		Uid:  StrToPtr(NameToVarDS(MetricVariableName)),
+	}
+	LogsDatasource = dashboard.DataSourceRef{
+		Type: StrToPtr(LogsVariableType),
+		Uid:  StrToPtr(NameToVarDS(LogsVariableName)),
 	}
 	DeltaVariableValues = []string{"1m", "5m", "10m", "30m", "1h", "4h", "8h", "1d", "7d"}
 	GreenSteps          = []dashboard.Threshold{

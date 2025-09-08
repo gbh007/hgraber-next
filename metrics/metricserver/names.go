@@ -32,4 +32,9 @@ var (
 		metriccore.SubSystemName,
 		"info_scrape_duration_seconds",
 	)
+	FSActionSecondsName = prometheus.BuildFQName(
+		metriccore.SystemName,
+		metriccore.SubSystemName,
+		"fs_action_seconds",
+	)
 )

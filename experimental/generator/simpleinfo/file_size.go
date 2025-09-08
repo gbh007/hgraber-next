@@ -3,7 +3,6 @@ package simpleinfo
 import (
 	"github.com/grafana/grafana-foundation-sdk/go/cog"
 	"github.com/grafana/grafana-foundation-sdk/go/cog/variants"
-	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
 	"github.com/grafana/grafana-foundation-sdk/go/prometheus"
 	"github.com/grafana/grafana-foundation-sdk/go/stat"
 	"github.com/grafana/promql-builder/go/promql"
@@ -46,10 +45,6 @@ func FileSize() *stat.PanelBuilder {
 				Datasource(generatorcore.MetricDatasource),
 		}).
 		Unit(generatorcore.UnitBytes).
-		Thresholds(
-			dashboard.
-				NewThresholdsConfigBuilder().
-				Steps(generatorcore.GreenSteps),
-		).
+		Thresholds(generatorcore.GreenTrashHold()).
 		Datasource(generatorcore.MetricDatasource)
 }

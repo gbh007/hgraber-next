@@ -3,53 +3,53 @@ package simpleinfo
 import (
 	"fmt"
 
-	"github.com/grafana/grafana-foundation-sdk/go/barchart"
 	"github.com/grafana/grafana-foundation-sdk/go/cog"
 	"github.com/grafana/grafana-foundation-sdk/go/cog/variants"
 	"github.com/grafana/grafana-foundation-sdk/go/prometheus"
+	"github.com/grafana/grafana-foundation-sdk/go/timeseries"
 	"github.com/grafana/promql-builder/go/promql"
 
 	"github.com/gbh007/hgraber-next/experimental/generator/generatorcore"
+	"github.com/gbh007/hgraber-next/metrics/metricagent"
+	"github.com/gbh007/hgraber-next/metrics/metriccore"
 	"github.com/gbh007/hgraber-next/metrics/metricserver"
 )
 
-func FileSizeDelta() *barchart.PanelBuilder {
-	query := func(k, v string) string {
+func FSRPS() *timeseries.PanelBuilder {
+	query := func(metric string, by []string) string {
 		return promql.Sum(
-			promql.Delta(
+			promql.Rate(
 				promql.
-					Vector(metricserver.FileBytesName).
+					Vector(metric + "_count").
 					Labels(generatorcore.ServiceFilterPromQL).
-					Label(k, v).
-					Range(generatorcore.NameToVar(generatorcore.DeltaVariableName)),
+					Range(generatorcore.RateIntervalVar),
 			),
-		).By([]string{metricserver.TypeLabel}).String()
+		).By(by).String()
 	}
 
-	return barchart.
+	return timeseries.
 		NewPanelBuilder().
-		Title(fmt.Sprintf(`File delta size at %s`, generatorcore.NameToVar(generatorcore.DeltaVariableName))).
+		Title("FS RPS").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().
 				Expr(query(
-					metricserver.TypeLabel,
-					metricserver.TypeLabelValueFS,
+					metricserver.FSActionSecondsName,
+					[]string{metriccore.ActionLabel, metriccore.FSIDLabel},
 				)).
-				Instant().
-				LegendFormat("На диске").
+				LegendFormat(fmt.Sprintf("server/{{%s}} -> {{%s}}", metriccore.ActionLabel, metriccore.FSIDLabel)).
 				Datasource(generatorcore.MetricDatasource),
 			prometheus.
 				NewDataqueryBuilder().
 				Expr(query(
-					metricserver.TypeLabel,
-					metricserver.TypeLabelValuePage,
+					metricagent.FSActionSecondsName,
+					[]string{metriccore.ActionLabel},
 				)).
-				Instant().
-				LegendFormat("В страницах").
+				LegendFormat(fmt.Sprintf("agent/{{%s}}", metriccore.ActionLabel)).
 				Datasource(generatorcore.MetricDatasource),
 		}).
-		Unit(generatorcore.UnitBytes).
+		Legend(generatorcore.SimpleLegend()).
+		Unit(generatorcore.UnitRPS).
 		Thresholds(generatorcore.GreenTrashHold()).
 		Datasource(generatorcore.MetricDatasource)
 }

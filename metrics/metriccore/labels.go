@@ -1,7 +1,8 @@
 package metriccore
 
 const (
-	FSIDLabel = "fs_id"
+	FSIDLabel   = "fs_id"
+	ActionLabel = "action"
 )
 
 func ErrorLabel(ok bool) string {
