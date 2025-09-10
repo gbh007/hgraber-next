@@ -9,18 +9,18 @@ import (
 func WithRow(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
 	builder.WithRow(dashboard.NewRowBuilder("Simple info"))
 
-	builder.WithPanel(generatorcore.WithPanelSize(BookCount(), generatorcore.PanelSizeSlim))
-	builder.WithPanel(generatorcore.WithPanelSize(PageCount(), generatorcore.PanelSizeSlim))
-	builder.WithPanel(generatorcore.WithPanelSize(FileSize(), generatorcore.PanelSizeSlim))
-	builder.WithPanel(generatorcore.WithPanelSize(FSCompression(), generatorcore.PanelSizeSlim))
+	builder.WithPanel(generatorcore.WithPanelSize(BookCount(), generatorcore.PanelSizeQuarterSlim))
+	builder.WithPanel(generatorcore.WithPanelSize(PageCount(), generatorcore.PanelSizeQuarterSlim))
+	builder.WithPanel(generatorcore.WithPanelSize(FileSize(), generatorcore.PanelSizeQuarterSlim))
+	builder.WithPanel(generatorcore.WithPanelSize(FSCompression(), generatorcore.PanelSizeQuarterSlim))
 
-	builder.WithPanel(generatorcore.WithPanelSize(BookCountDelta(), generatorcore.PanelSizeHalf))
-	builder.WithPanel(generatorcore.WithPanelSize(PageCountDelta(), generatorcore.PanelSizeHalf))
-	builder.WithPanel(generatorcore.WithPanelSize(FileCountDelta(), generatorcore.PanelSizeHalf))
-	builder.WithPanel(generatorcore.WithPanelSize(FileSizeDelta(), generatorcore.PanelSizeHalf))
+	builder.WithPanel(generatorcore.WithPanelSize(BookCountDelta(), generatorcore.PanelSizeQuarter))
+	builder.WithPanel(generatorcore.WithPanelSize(PageCountDelta(), generatorcore.PanelSizeQuarter))
+	builder.WithPanel(generatorcore.WithPanelSize(FileCountDelta(), generatorcore.PanelSizeQuarter))
+	builder.WithPanel(generatorcore.WithPanelSize(FileSizeDelta(), generatorcore.PanelSizeQuarter))
 
-	builder.WithPanel(generatorcore.WithPanelSize(FSLatency(), generatorcore.PanelSizeCommon))
-	builder.WithPanel(generatorcore.WithPanelSize(FSRPS(), generatorcore.PanelSizeCommon))
+	builder.WithPanel(generatorcore.WithPanelSize(FSLatency(), generatorcore.PanelSizeHalf))
+	builder.WithPanel(generatorcore.WithPanelSize(FSRPS(), generatorcore.PanelSizeHalf))
 
 	return builder
 }

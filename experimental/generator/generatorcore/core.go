@@ -21,6 +21,9 @@ const (
 
 	RateIntervalVar = "$__rate_interval" // TODO: возможно где-то есть готовый
 
+	LegendAuto = "__auto"
+	LELabel    = "le"
+
 	UnitShort      = units.Short
 	UnitBytes      = units.BytesIEC
 	UnitPercent0_1 = units.PercentUnit
@@ -29,9 +32,10 @@ const (
 )
 
 const (
-	PanelSizeCommon = iota
-	PanelSizeHalf
-	PanelSizeSlim
+	PanelSizeHalf = iota
+	PanelSizeQuarter
+	PanelSizeQuarterSlim
+	PanelSizeThird
 	PanelSizeFull
 )
 
@@ -68,15 +72,18 @@ func WithPanelSize[T interface {
 	var h, w uint32
 
 	switch size {
-	case PanelSizeCommon:
-		h = 9
-		w = 12
-	case PanelSizeHalf:
-		h = 6
-		w = 6
-	case PanelSizeSlim:
+	case PanelSizeQuarterSlim:
 		h = 3
 		w = 6
+	case PanelSizeQuarter:
+		h = 6
+		w = 6
+	case PanelSizeThird:
+		h = 9
+		w = 8
+	case PanelSizeHalf:
+		h = 9
+		w = 12
 	case PanelSizeFull:
 		h = 12
 		w = 24

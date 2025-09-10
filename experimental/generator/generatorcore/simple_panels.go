@@ -19,7 +19,7 @@ func SimpleTSPanel(exprs []PromQLExpr, title, unit string) *timeseries.PanelBuil
 		NewPanelBuilder().
 		Title(title).
 		Targets(pkg.Map(exprs, func(expr PromQLExpr) cog.Builder[variants.Dataquery] {
-			legend := "__auto"
+			legend := LegendAuto
 			if expr.Legend != "" {
 				legend = expr.Legend
 			}
