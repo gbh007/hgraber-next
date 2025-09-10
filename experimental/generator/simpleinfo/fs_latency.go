@@ -3,9 +3,6 @@ package simpleinfo
 import (
 	"fmt"
 
-	"github.com/grafana/grafana-foundation-sdk/go/cog"
-	"github.com/grafana/grafana-foundation-sdk/go/cog/variants"
-	"github.com/grafana/grafana-foundation-sdk/go/prometheus"
 	"github.com/grafana/grafana-foundation-sdk/go/timeseries"
 	"github.com/grafana/promql-builder/go/promql"
 
@@ -37,29 +34,24 @@ func FSLatency() *timeseries.PanelBuilder {
 		).String()
 	}
 
-	return timeseries.
-		NewPanelBuilder().
-		Title("FS latency").
-		Targets([]cog.Builder[variants.Dataquery]{
-			prometheus.
-				NewDataqueryBuilder().
-				Expr(query(
+	return generatorcore.SimpleTSPanel(
+		[]generatorcore.PromQLExpr{
+			{
+				Query: query(
 					metricserver.FSActionSecondsName,
 					[]string{metriccore.ActionLabel, metriccore.FSIDLabel},
-				)).
-				LegendFormat(fmt.Sprintf("server/{{%s}} -> {{%s}}", metriccore.ActionLabel, metriccore.FSIDLabel)).
-				Datasource(generatorcore.MetricDatasource),
-			prometheus.
-				NewDataqueryBuilder().
-				Expr(query(
+				),
+				Legend: fmt.Sprintf("server/{{%s}} -> {{%s}}", metriccore.ActionLabel, metriccore.FSIDLabel),
+			},
+			{
+				Query: query(
 					metricagent.FSActionSecondsName,
 					[]string{metriccore.ActionLabel},
-				)).
-				LegendFormat(fmt.Sprintf("agent/{{%s}}", metriccore.ActionLabel)).
-				Datasource(generatorcore.MetricDatasource),
-		}).
-		Legend(generatorcore.SimpleLegend()).
-		Unit(generatorcore.UnitSecond).
-		Thresholds(generatorcore.GreenTrashHold()).
-		Datasource(generatorcore.MetricDatasource)
+				),
+				Legend: fmt.Sprintf("agent/{{%s}}", metriccore.ActionLabel),
+			},
+		},
+		"FS latency",
+		generatorcore.UnitSecond,
+	)
 }

@@ -3,11 +3,7 @@ package simpleinfo
 import (
 	"fmt"
 
-	"github.com/grafana/grafana-foundation-sdk/go/cog"
-	"github.com/grafana/grafana-foundation-sdk/go/cog/variants"
-	"github.com/grafana/grafana-foundation-sdk/go/prometheus"
 	"github.com/grafana/grafana-foundation-sdk/go/timeseries"
-	"github.com/grafana/promql-builder/go/promql"
 
 	"github.com/gbh007/hgraber-next/experimental/generator/generatorcore"
 	"github.com/gbh007/hgraber-next/metrics/metricagent"
@@ -16,40 +12,24 @@ import (
 )
 
 func FSRPS() *timeseries.PanelBuilder {
-	query := func(metric string, by []string) string {
-		return promql.Sum(
-			promql.Rate(
-				promql.
-					Vector(metric + "_count").
-					Labels(generatorcore.ServiceFilterPromQL).
-					Range(generatorcore.RateIntervalVar),
-			),
-		).By(by).String()
-	}
-
-	return timeseries.
-		NewPanelBuilder().
-		Title("FS RPS").
-		Targets([]cog.Builder[variants.Dataquery]{
-			prometheus.
-				NewDataqueryBuilder().
-				Expr(query(
-					metricserver.FSActionSecondsName,
+	return generatorcore.SimpleTSPanel(
+		[]generatorcore.PromQLExpr{
+			{
+				Query: generatorcore.RPSExpr(
+					metricserver.FSActionSecondsName+"_count",
 					[]string{metriccore.ActionLabel, metriccore.FSIDLabel},
-				)).
-				LegendFormat(fmt.Sprintf("server/{{%s}} -> {{%s}}", metriccore.ActionLabel, metriccore.FSIDLabel)).
-				Datasource(generatorcore.MetricDatasource),
-			prometheus.
-				NewDataqueryBuilder().
-				Expr(query(
-					metricagent.FSActionSecondsName,
+				),
+				Legend: fmt.Sprintf("server/{{%s}} -> {{%s}}", metriccore.ActionLabel, metriccore.FSIDLabel),
+			},
+			{
+				Query: generatorcore.RPSExpr(
+					metricagent.FSActionSecondsName+"_count",
 					[]string{metriccore.ActionLabel},
-				)).
-				LegendFormat(fmt.Sprintf("agent/{{%s}}", metriccore.ActionLabel)).
-				Datasource(generatorcore.MetricDatasource),
-		}).
-		Legend(generatorcore.SimpleLegend()).
-		Unit(generatorcore.UnitRPS).
-		Thresholds(generatorcore.GreenTrashHold()).
-		Datasource(generatorcore.MetricDatasource)
+				),
+				Legend: fmt.Sprintf("agent/{{%s}}", metriccore.ActionLabel),
+			},
+		},
+		"FS RPS",
+		generatorcore.UnitRPS,
+	)
 }
