@@ -70,3 +70,19 @@ func AvgSummary(metric string, by []string) string {
 		).By(by),
 	).String()
 }
+
+func RateQuantile(metric string, by []string, quantile float64) string {
+	return promql.HistogramQuantile(
+		quantile,
+		promql.
+			Sum(
+				promql.Rate(
+					promql.
+						Vector(metric+"_bucket").
+						Labels(ServiceFilterPromQL).
+						Range(RateIntervalVar),
+				),
+			).
+			By(append([]string{LELabel}, by...)),
+	).String()
+}

@@ -1,0 +1,20 @@
+package httpserverpanel
+
+import (
+	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
+
+	"github.com/gbh007/hgraber-next/experimental/generator/generatorcore"
+)
+
+func WithRow(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
+	builder.WithRow(
+		dashboard.NewRowBuilder("HTTP server").
+			WithPanel(generatorcore.WithPanelSize(LatencyQ95(), generatorcore.PanelSizeHalf)).
+			WithPanel(generatorcore.WithPanelSize(RPS(), generatorcore.PanelSizeHalf)).
+			WithPanel(generatorcore.WithPanelSize(ActiveRequest(), generatorcore.PanelSizeHalf)).
+			WithPanel(generatorcore.WithPanelSize(SlowRequest(), generatorcore.PanelSizeHalf)).
+			Collapsed(true),
+	)
+
+	return builder
+}

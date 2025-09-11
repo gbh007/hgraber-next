@@ -24,6 +24,8 @@ const (
 	LegendAuto = "__auto"
 	LELabel    = "le"
 
+	Q95 = 0.95
+
 	UnitShort      = units.Short
 	UnitBytes      = units.BytesIEC
 	UnitPercent0_1 = units.PercentUnit
