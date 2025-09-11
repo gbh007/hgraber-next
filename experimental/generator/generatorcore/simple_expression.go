@@ -49,3 +49,24 @@ func SumExpr(metric string, by []string) string {
 
 	return builder.String()
 }
+
+func AvgSummary(metric string, by []string) string {
+	return promql.Div(
+		promql.Sum(
+			promql.Rate(
+				promql.
+					Vector(metric+"_sum").
+					Labels(ServiceFilterPromQL).
+					Range(RateIntervalVar),
+			),
+		).By(by),
+		promql.Sum(
+			promql.Rate(
+				promql.
+					Vector(metric+"_count").
+					Labels(ServiceFilterPromQL).
+					Range(RateIntervalVar),
+			),
+		).By(by),
+	).String()
+}

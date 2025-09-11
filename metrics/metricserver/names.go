@@ -37,4 +37,14 @@ var (
 		metriccore.SubSystemName,
 		"fs_action_seconds",
 	)
+	WorkerExecutionTaskSecondsName = prometheus.BuildFQName(
+		metriccore.SystemName,
+		metriccore.SubSystemName,
+		"worker_execution_task_seconds",
+	)
+	WorkerTotalName = prometheus.BuildFQName(
+		metriccore.SystemName,
+		metriccore.SubSystemName,
+		"worker_total",
+	)
 )

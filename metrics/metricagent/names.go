@@ -7,11 +7,24 @@ import (
 )
 
 const (
-	SubSystemName = "agent"
+	SubSystemName   = "agent"
+	ParserNameLabel = "parser_name"
 )
 
-var FSActionSecondsName = prometheus.BuildFQName(
-	metriccore.SystemName,
-	SubSystemName,
-	"fs_action_seconds",
+var (
+	FSActionSecondsName = prometheus.BuildFQName(
+		metriccore.SystemName,
+		SubSystemName,
+		"fs_action_seconds",
+	)
+	ParserActionSecondsName = prometheus.BuildFQName(
+		metriccore.SystemName,
+		SubSystemName,
+		"parser_action_seconds",
+	)
+	WebCacheTotalName = prometheus.BuildFQName(
+		metriccore.SystemName,
+		SubSystemName,
+		"web_cache_total",
+	)
 )
