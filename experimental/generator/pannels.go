@@ -4,6 +4,7 @@ import (
 	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
 
 	"github.com/gbh007/hgraber-next/experimental/generator/bookandpages"
+	"github.com/gbh007/hgraber-next/experimental/generator/databasepanel"
 	"github.com/gbh007/hgraber-next/experimental/generator/httpserverpanel"
 	"github.com/gbh007/hgraber-next/experimental/generator/logspannel"
 	"github.com/gbh007/hgraber-next/experimental/generator/otherpanel"
@@ -20,6 +21,7 @@ func (g Generator) WithPanels(builder *dashboard.DashboardBuilder) *dashboard.Da
 	workersandagents.WithRow(builder)
 	otherpanel.WithRow(builder)
 	httpserverpanel.WithRow(builder)
+	databasepanel.WithRow(builder)
 
 	return builder
 }
