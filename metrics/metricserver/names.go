@@ -47,4 +47,9 @@ var (
 		metriccore.SubSystemName,
 		"worker_total",
 	)
+	VersionInfoName = prometheus.BuildFQName(
+		metriccore.SystemName,
+		metriccore.SubSystemName,
+		"version_info",
+	)
 )

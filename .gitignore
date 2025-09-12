@@ -2,6 +2,7 @@
 /_build
 /.env
 /config.*
+/config-dashboard.*
 /experimental/config.*
 /experimental/*.json
 /bin

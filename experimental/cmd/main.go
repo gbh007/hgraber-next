@@ -36,9 +36,10 @@ func main() {
 		panic(err)
 	}
 
-	if cfg.Grafana.Folder == "" {
-		panic("empty folder")
-	}
+	// TODO: подумать о необходимости
+	// if cfg.Grafana.Folder == "" {
+	// 	panic("empty folder")
+	// }
 
 	if cfg.Grafana.UID == "" {
 		panic("empty uid")

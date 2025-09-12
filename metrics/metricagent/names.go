@@ -27,4 +27,9 @@ var (
 		SubSystemName,
 		"web_cache_total",
 	)
+	VersionInfoName = prometheus.BuildFQName(
+		metriccore.SystemName,
+		SubSystemName,
+		"version_info",
+	)
 )
