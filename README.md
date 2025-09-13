@@ -147,6 +147,7 @@ timeline
     Сентябрь : 🛠️ Конфигурация через toml
              : 🛠️ Генерации борды Grafana через go-sdk
              : 📢 Сокрытие выбранных страниц в ребилдере
+             : 🗑️ Отказ от jsonnet
 ```
 
 ## Словарь терминов используемых в приложении
@@ -193,9 +194,11 @@ timeline
 
 ## Пример настройка логов и метрик (Grafana stack)
 
-Генерация борды (`jsonnet/dashboard.json`) с кастомной конфигурацией
+Генерация борды с кастомной конфигурацией:
 
-> HG_SERVICES="a,b,c" make jsonnet-custom
+1. Скопировать файл `config-dashboard-example.toml` в `config-dashboard.toml`
+2. Изменить настройки `config-dashboard.toml` на нужные
+3. Запустить генерацию `make grafana`
 
 Docker compose
 
@@ -246,18 +249,7 @@ bash build.bash
 docker build --build-arg "BINARY_PATH=_build/server-linux-amd64" -t hgraber-next-server:latest .
 docker compose -f "${DC_PATH}/docker-compose.yml" up -d --remove-orphans
 
-cd jsonnet
-go run github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest install github.com/grafana/grafonnet/gen/grafonnet-latest@main
-
-curl -X 'POST' \
-  "${GRAFANA_API_HOST}/api/dashboards/import" \
-  -H 'accept: application/json' \
-  -H "Authorization: Bearer ${GRAFANA_API_TOKEN}" \
-  -H 'Content-Type: application/json' \
-  -d "{
-  \"dashboard\": $(go run github.com/google/go-jsonnet/cmd/jsonnet@latest --ext-str services="${HG_SERVICES}" -J vendor dashboard.jsonnet),
-  \"overwrite\": true
-}"
+go run cmd/grafanagenerator/main.go --config "${DC_PATH}/dashboard.toml"
 ```
 
 ## Дефолтная конфигурация и перекодировании конфигурации
