@@ -36,6 +36,23 @@ func DeltaExpr(metric string, by []string) string {
 	return builder.String()
 }
 
+func IncreaseIntervalExpr(metric string, by []string) string {
+	builder := promql.Sum(
+		promql.Increase(
+			promql.
+				Vector(metric).
+				Labels(ServiceFilterPromQL).
+				Range(NameToVar(DeltaVariableName)),
+		),
+	)
+
+	if len(by) > 0 {
+		builder.By(by)
+	}
+
+	return builder.String()
+}
+
 func SumExpr(metric string, by []string) string {
 	builder := promql.Sum(
 		promql.

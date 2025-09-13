@@ -396,20 +396,21 @@
          }
       },
       {
-         "type": "timeseries",
+         "type": "piechart",
          "targets": [
             {
-               "expr": "(sum by (action, fs_id) (rate(hgraber_next_server_fs_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (action, fs_id) (rate(hgraber_next_server_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
-               "legendFormat": "server/{{action}} -\u003e {{fs_id}}",
-               "refId": ""
-            },
-            {
-               "expr": "(sum by (action) (rate(hgraber_next_agent_fs_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (action) (rate(hgraber_next_agent_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
-               "legendFormat": "agent/{{action}}",
-               "refId": ""
+               "expr": "sum by (success) (increase(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$deltaInterval]))",
+               "instant": true,
+               "range": false,
+               "legendFormat": "{{success}}",
+               "refId": "",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               }
             }
          ],
-         "title": "FS latency",
+         "title": "Worker errors at $deltaInterval",
          "transparent": false,
          "datasource": {
             "type": "prometheus",
@@ -417,30 +418,129 @@
          },
          "gridPos": {
             "h": 9,
-            "w": 12,
+            "w": 6,
             "x": 0,
             "y": 10
          },
          "options": {
-            "legend": {
-               "displayMode": "table",
-               "placement": "bottom",
-               "showLegend": true,
-               "sortBy": "Mean",
-               "sortDesc": true,
-               "calcs": [
-                  "mean",
-                  "lastNotNull"
-               ]
-            },
+            "pieType": "donut",
             "tooltip": {
                "mode": "",
                "sort": ""
-            }
+            },
+            "reduceOptions": {
+               "calcs": []
+            },
+            "legend": {
+               "values": [
+                  "value",
+                  "percent"
+               ],
+               "displayMode": "table",
+               "placement": "right",
+               "showLegend": true,
+               "calcs": []
+            },
+            "orientation": ""
          },
          "fieldConfig": {
             "defaults": {
-               "unit": "s",
+               "unit": "short",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
+            },
+            "overrides": [
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "ok"
+                  },
+                  "properties": [
+                     {
+                        "id": "color",
+                        "value": {
+                           "fixedColor": "green",
+                           "mode": "fixed"
+                        }
+                     }
+                  ]
+               },
+               {
+                  "matcher": {
+                     "id": "byName",
+                     "options": "error"
+                  },
+                  "properties": [
+                     {
+                        "id": "color",
+                        "value": {
+                           "fixedColor": "red",
+                           "mode": "fixed"
+                        }
+                     }
+                  ]
+               }
+            ]
+         }
+      },
+      {
+         "type": "piechart",
+         "targets": [
+            {
+               "expr": "sum by (fs_id) (hgraber_next_server_file_bytes{service_name=~\"$service_name\",type=\"fs\"})",
+               "instant": true,
+               "range": false,
+               "legendFormat": "{{fs_id}}",
+               "refId": "",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               }
+            }
+         ],
+         "title": "FS size",
+         "transparent": false,
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${metrics}"
+         },
+         "gridPos": {
+            "h": 9,
+            "w": 6,
+            "x": 6,
+            "y": 10
+         },
+         "options": {
+            "pieType": "donut",
+            "tooltip": {
+               "mode": "",
+               "sort": ""
+            },
+            "reduceOptions": {
+               "calcs": []
+            },
+            "legend": {
+               "values": [
+                  "value",
+                  "percent"
+               ],
+               "displayMode": "table",
+               "placement": "bottom",
+               "showLegend": true,
+               "calcs": []
+            },
+            "orientation": ""
+         },
+         "fieldConfig": {
+            "defaults": {
+               "unit": "bytes",
                "thresholds": {
                   "mode": "",
                   "steps": [
@@ -455,20 +555,21 @@
          }
       },
       {
-         "type": "timeseries",
+         "type": "barchart",
          "targets": [
             {
-               "expr": "sum by (action, fs_id) (rate(hgraber_next_server_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
-               "legendFormat": "server/{{action}} -\u003e {{fs_id}}",
-               "refId": ""
-            },
-            {
-               "expr": "sum by (action) (rate(hgraber_next_agent_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
-               "legendFormat": "agent/{{action}}",
-               "refId": ""
+               "expr": "sum by (worker_name, success) (increase(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$deltaInterval]))",
+               "instant": true,
+               "range": false,
+               "legendFormat": "{{worker_name}}/{{success}}",
+               "refId": "",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               }
             }
          ],
-         "title": "FS RPS",
+         "title": "Worker handle at $deltaInterval",
          "transparent": false,
          "datasource": {
             "type": "prometheus",
@@ -476,30 +577,108 @@
          },
          "gridPos": {
             "h": 9,
-            "w": 12,
+            "w": 6,
             "x": 12,
             "y": 10
          },
          "options": {
+            "orientation": "auto",
+            "barRadius": 0,
+            "xTickLabelRotation": 0,
+            "xTickLabelMaxLength": 0,
+            "xTickLabelSpacing": 0,
+            "stacking": "none",
+            "showValue": "auto",
+            "barWidth": 0.97,
+            "groupWidth": 0.7,
             "legend": {
                "displayMode": "table",
                "placement": "bottom",
                "showLegend": true,
-               "sortBy": "Mean",
+               "sortBy": "Last *",
                "sortDesc": true,
                "calcs": [
-                  "mean",
                   "lastNotNull"
                ]
             },
             "tooltip": {
                "mode": "",
                "sort": ""
-            }
+            },
+            "fullHighlight": false
          },
          "fieldConfig": {
             "defaults": {
-               "unit": "reqps",
+               "unit": "short",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
+            },
+            "overrides": []
+         }
+      },
+      {
+         "type": "barchart",
+         "targets": [
+            {
+               "expr": "sum by (action, parser_name) (increase(hgraber_next_agent_parser_action_seconds_count{service_name=~\"$service_name\"}[$deltaInterval]))",
+               "instant": true,
+               "range": false,
+               "legendFormat": "{{parser_name}} -\u003e {{action}}",
+               "refId": "",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               }
+            }
+         ],
+         "title": "Parser handle at $deltaInterval",
+         "transparent": false,
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${metrics}"
+         },
+         "gridPos": {
+            "h": 9,
+            "w": 6,
+            "x": 18,
+            "y": 10
+         },
+         "options": {
+            "orientation": "auto",
+            "barRadius": 0,
+            "xTickLabelRotation": 0,
+            "xTickLabelMaxLength": 0,
+            "xTickLabelSpacing": 0,
+            "stacking": "none",
+            "showValue": "auto",
+            "barWidth": 0.97,
+            "groupWidth": 0.7,
+            "legend": {
+               "displayMode": "table",
+               "placement": "bottom",
+               "showLegend": true,
+               "sortBy": "Last *",
+               "sortDesc": true,
+               "calcs": [
+                  "lastNotNull"
+               ]
+            },
+            "tooltip": {
+               "mode": "",
+               "sort": ""
+            },
+            "fullHighlight": false
+         },
+         "fieldConfig": {
+            "defaults": {
+               "unit": "short",
                "thresholds": {
                   "mode": "",
                   "steps": [
@@ -1899,6 +2078,124 @@
                   },
                   "overrides": []
                }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "(sum by (action, fs_id) (rate(hgraber_next_server_fs_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (action, fs_id) (rate(hgraber_next_server_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
+                     "legendFormat": "server/{{action}} -\u003e {{fs_id}}",
+                     "refId": ""
+                  },
+                  {
+                     "expr": "(sum by (action) (rate(hgraber_next_agent_fs_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (action) (rate(hgraber_next_agent_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
+                     "legendFormat": "agent/{{action}}",
+                     "refId": ""
+                  }
+               ],
+               "title": "FS latency",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 126
+               },
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "s",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (action, fs_id) (rate(hgraber_next_server_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "server/{{action}} -\u003e {{fs_id}}",
+                     "refId": ""
+                  },
+                  {
+                     "expr": "sum by (action) (rate(hgraber_next_agent_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "agent/{{action}}",
+                     "refId": ""
+                  }
+               ],
+               "title": "FS RPS",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 12,
+                  "y": 126
+               },
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "reqps",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             }
          ]
       },
@@ -1910,7 +2207,7 @@
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 126
+            "y": 135
          },
          "id": 0,
          "panels": [
@@ -1933,7 +2230,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 127
+                  "y": 136
                },
                "options": {
                   "legend": {
@@ -1987,7 +2284,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 127
+                  "y": 136
                },
                "options": {
                   "legend": {
@@ -2041,7 +2338,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 136
+                  "y": 145
                },
                "options": {
                   "legend": {
@@ -2098,7 +2395,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 136
+                  "y": 145
                },
                "options": {
                   "frameIndex": 0,
@@ -2147,7 +2444,7 @@
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 145
+            "y": 154
          },
          "id": 0,
          "panels": [
@@ -2170,7 +2467,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 146
+                  "y": 155
                },
                "options": {
                   "legend": {
@@ -2224,7 +2521,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 146
+                  "y": 155
                },
                "options": {
                   "legend": {
@@ -2278,7 +2575,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 155
+                  "y": 164
                },
                "options": {
                   "legend": {
@@ -2332,7 +2629,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 155
+                  "y": 164
                },
                "options": {
                   "legend": {
@@ -2389,7 +2686,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 164
+                  "y": 173
                },
                "options": {
                   "frameIndex": 0,

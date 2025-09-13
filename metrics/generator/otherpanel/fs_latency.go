@@ -1,4 +1,4 @@
-package simpleinfo
+package otherpanel
 
 import (
 	"fmt"

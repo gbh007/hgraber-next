@@ -37,6 +37,7 @@ const (
 	PanelSizeHalf = iota
 	PanelSizeQuarter
 	PanelSizeQuarterSlim
+	PanelSizeQuarterHigh
 	PanelSizeThird
 	PanelSizeFull
 )
@@ -79,6 +80,9 @@ func WithPanelSize[T interface {
 		w = 6
 	case PanelSizeQuarter:
 		h = 6
+		w = 6
+	case PanelSizeQuarterHigh:
+		h = 9
 		w = 6
 	case PanelSizeThird:
 		h = 9

@@ -11,6 +11,8 @@ func WithRow(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
 		dashboard.NewRowBuilder("Other").
 			WithPanel(generatorcore.WithPanelSize(FSCompression(), generatorcore.PanelSizeHalf)).
 			WithPanel(generatorcore.WithPanelSize(MetricCollectInfo(), generatorcore.PanelSizeHalf)).
+			WithPanel(generatorcore.WithPanelSize(FSLatency(), generatorcore.PanelSizeHalf)).
+			WithPanel(generatorcore.WithPanelSize(FSRPS(), generatorcore.PanelSizeHalf)).
 			Collapsed(true),
 	)
 

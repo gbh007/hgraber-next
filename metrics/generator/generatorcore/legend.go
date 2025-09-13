@@ -12,3 +12,14 @@ func SimpleLegend() *common.VizLegendOptionsBuilder {
 		SortDesc(true).
 		ShowLegend(true)
 }
+
+func SimpleLegendLast() *common.VizLegendOptionsBuilder {
+	return common.
+		NewVizLegendOptionsBuilder().
+		DisplayMode(common.LegendDisplayModeTable).
+		Placement(common.LegendPlacementBottom).
+		Calcs([]string{"lastNotNull"}).
+		SortBy("Last *").
+		SortDesc(true).
+		ShowLegend(true)
+}

@@ -19,8 +19,10 @@ func WithRow(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
 	builder.WithPanel(generatorcore.WithPanelSize(FileCountDelta(), generatorcore.PanelSizeQuarter))
 	builder.WithPanel(generatorcore.WithPanelSize(FileSizeDelta(), generatorcore.PanelSizeQuarter))
 
-	builder.WithPanel(generatorcore.WithPanelSize(FSLatency(), generatorcore.PanelSizeHalf))
-	builder.WithPanel(generatorcore.WithPanelSize(FSRPS(), generatorcore.PanelSizeHalf))
+	builder.WithPanel(generatorcore.WithPanelSize(WorkerErrorsDelta(), generatorcore.PanelSizeQuarterHigh))
+	builder.WithPanel(generatorcore.WithPanelSize(FSSize(), generatorcore.PanelSizeQuarterHigh))
+	builder.WithPanel(generatorcore.WithPanelSize(WorkerHandleDelta(), generatorcore.PanelSizeQuarterHigh))
+	builder.WithPanel(generatorcore.WithPanelSize(ParserHandleDelta(), generatorcore.PanelSizeQuarterHigh))
 
 	return builder
 }
