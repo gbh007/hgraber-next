@@ -74,6 +74,12 @@ config: create_build_dir
 	$(SERVICE_BIN)/configremaper --out config-generated.env
 	$(SERVICE_BIN)/configremaper --out config-generated.toml
 
+.PHONY: grafana
+grafana: create_build_dir
+	go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/grafanagenerator  ./cmd/grafanagenerator
+
+	$(SERVICE_BIN)/grafanagenerator --config config-dashboard.toml
+
 
 .PHONY: build
 build: create_build_dir

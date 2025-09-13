@@ -1,162 +1,151 @@
 {
-   "annotations": {
-      "list": [
-         {
-            "datasource": {
-               "type": "loki",
-               "uid": "${logs}"
-            },
-            "enable": false,
-            "expr": "{service_name=~\"$service_name\"} |= `application start`",
-            "iconColor": "super-light-purple",
-            "name": "app started (logs)",
-            "tagKeys": "{{host}}",
-            "textFormat": "started",
-            "titleFormat": "{{service_name}}"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${metrics}"
-            },
-            "enable": true,
-            "expr": "hgraber_next_agent_version_info{service_name=~\"$service_name\"} * 1000 or hgraber_next_server_version_info{service_name=~\"$service_name\"} * 1000",
-            "iconColor": "super-light-blue",
-            "name": "app started (metrics)",
-            "tagKeys": "{{host}}",
-            "textFormat": "started",
-            "titleFormat": "{{service_name}}",
-            "useValueForTime": "on"
-         }
-      ]
-   },
-   "graphTooltip": 1,
-   "links": [
-      {
-         "targetBlank": true,
-         "title": "GitHub",
-         "type": "link",
-         "url": "https://github.com/gbh007/hgraber-next"
-      },
-      {
-         "asDropdown": true,
-         "keepTime": true,
-         "tags": [
-            "hgnext"
-         ],
-         "title": "HG next boards",
-         "type": "dashboards"
-      }
+   "uid": "bexc49h794pogd",
+   "title": "Hgraber next",
+   "tags": [
+      "hgnext"
    ],
+   "timezone": "Asia/Krasnoyarsk",
+   "editable": true,
+   "graphTooltip": 1,
+   "time": {
+      "from": "now-6h",
+      "to": "now"
+   },
+   "fiscalYearStartMonth": 0,
+   "weekStart": "monday",
+   "refresh": "1m",
+   "schemaVersion": 39,
    "panels": [
       {
+         "type": "row",
          "collapsed": false,
+         "title": "Simple info",
          "gridPos": {
             "h": 1,
             "w": 24,
-            "x": 0
+            "x": 0,
+            "y": 0
          },
-         "id": 1,
-         "title": "Simple info",
-         "type": "row"
+         "id": 0,
+         "panels": []
       },
       {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${metrics}"
-         },
-         "fieldConfig": {
-            "defaults": {
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": null
-                     }
-                  ]
-               },
-               "unit": "short"
-            }
-         },
-         "gridPos": {
-            "h": 3,
-            "w": 6,
-            "x": 0,
-            "y": 1
-         },
-         "id": 2,
-         "pluginVersion": "v11.4.0",
+         "type": "stat",
          "targets": [
             {
+               "expr": "sum by (type) (hgraber_next_server_book_total{service_name=~\"$service_name\"})",
+               "instant": true,
+               "range": false,
+               "legendFormat": "{{type}}",
+               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
-               },
-               "expr": "sum(hgraber_next_server_book_total{service_name=~\"$service_name\"}) by (type)",
-               "instant": true,
-               "legendFormat": "{{type}}"
+               }
             }
          ],
          "title": "Book count",
-         "type": "stat"
-      },
-      {
+         "transparent": false,
          "datasource": {
             "type": "prometheus",
             "uid": "${metrics}"
          },
-         "fieldConfig": {
-            "defaults": {
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": null
-                     }
-                  ]
-               },
-               "unit": "short"
-            }
-         },
          "gridPos": {
             "h": 3,
             "w": 6,
-            "x": 6,
+            "x": 0,
             "y": 1
          },
-         "id": 3,
-         "pluginVersion": "v11.4.0",
+         "fieldConfig": {
+            "defaults": {
+               "unit": "short",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
+            },
+            "overrides": []
+         }
+      },
+      {
+         "type": "stat",
          "targets": [
             {
+               "expr": "sum by (type) (hgraber_next_server_page_total{service_name=~\"$service_name\"})",
+               "instant": true,
+               "range": false,
+               "legendFormat": "{{type}}",
+               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
-               },
-               "expr": "sum(hgraber_next_server_page_total{service_name=~\"$service_name\"}) by (type)",
-               "instant": true,
-               "legendFormat": "{{type}}"
+               }
             }
          ],
          "title": "Page count",
-         "type": "stat"
-      },
-      {
+         "transparent": false,
          "datasource": {
             "type": "prometheus",
             "uid": "${metrics}"
          },
+         "gridPos": {
+            "h": 3,
+            "w": 6,
+            "x": 6,
+            "y": 1
+         },
          "fieldConfig": {
             "defaults": {
+               "unit": "short",
                "thresholds": {
+                  "mode": "",
                   "steps": [
                      {
-                        "color": "green",
-                        "value": null
+                        "value": null,
+                        "color": "green"
                      }
                   ]
-               },
-               "unit": "bytes"
+               }
+            },
+            "overrides": []
+         }
+      },
+      {
+         "type": "stat",
+         "targets": [
+            {
+               "expr": "sum by (type) (hgraber_next_server_file_bytes{service_name=~\"$service_name\",type=\"fs\"})",
+               "instant": true,
+               "range": false,
+               "legendFormat": "На диске",
+               "refId": "",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               }
+            },
+            {
+               "expr": "sum by (type) (hgraber_next_server_file_bytes{service_name=~\"$service_name\",type=\"page\"})",
+               "instant": true,
+               "range": false,
+               "legendFormat": "В страницах",
+               "refId": "",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               }
             }
+         ],
+         "title": "File size",
+         "transparent": false,
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${metrics}"
          },
          "gridPos": {
             "h": 3,
@@ -164,48 +153,42 @@
             "x": 12,
             "y": 1
          },
-         "id": 4,
-         "pluginVersion": "v11.4.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "expr": "sum(hgraber_next_server_file_bytes{type=\"fs\",service_name=~\"$service_name\"})",
-               "instant": true,
-               "legendFormat": "На диске"
+         "fieldConfig": {
+            "defaults": {
+               "unit": "bytes",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
             },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "expr": "sum(hgraber_next_server_file_bytes{type=\"page\",service_name=~\"$service_name\"})",
-               "instant": true,
-               "legendFormat": "В страницах"
-            }
-         ],
-         "title": "File size",
-         "type": "stat"
+            "overrides": []
+         }
       },
       {
+         "type": "stat",
+         "targets": [
+            {
+               "expr": "(1) - ((sum by (fs_id) (hgraber_next_server_file_bytes{service_name=~\"$service_name\",type=\"fs\"})) / (sum by (fs_id) (hgraber_next_server_file_bytes{service_name=~\"$service_name\",type=\"page\"})))",
+               "instant": true,
+               "range": false,
+               "legendFormat": "{{fs_id}}",
+               "refId": "",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               }
+            }
+         ],
+         "title": "FS Compression",
+         "transparent": false,
          "datasource": {
             "type": "prometheus",
             "uid": "${metrics}"
-         },
-         "fieldConfig": {
-            "defaults": {
-               "thresholds": {
-                  "steps": [
-                     {
-                        "color": "green",
-                        "value": null
-                     }
-                  ]
-               },
-               "unit": "percentunit"
-            }
          },
          "gridPos": {
             "h": 3,
@@ -213,23 +196,39 @@
             "x": 18,
             "y": 1
          },
-         "id": 5,
-         "pluginVersion": "v11.4.0",
+         "fieldConfig": {
+            "defaults": {
+               "unit": "percentunit",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
+            },
+            "overrides": []
+         }
+      },
+      {
+         "type": "barchart",
          "targets": [
             {
+               "expr": "sum by (type) (delta(hgraber_next_server_book_total{service_name=~\"$service_name\"}[$deltaInterval]))",
+               "instant": true,
+               "range": false,
+               "legendFormat": "{{type}}",
+               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
-               },
-               "expr": "1 - \nsum(hgraber_next_server_file_bytes{type=\"fs\", service_name=~\"$service_name\"}) by (fs_id)\n/\nsum(hgraber_next_server_file_bytes{type=\"page\", service_name=~\"$service_name\"}) by (fs_id)\n",
-               "instant": true,
-               "legendFormat": "{{fs_id}}"
+               }
             }
          ],
-         "title": "FS Compression",
-         "type": "stat"
-      },
-      {
+         "title": "Book delta count at $deltaInterval",
+         "transparent": false,
          "datasource": {
             "type": "prometheus",
             "uid": "${metrics}"
@@ -240,23 +239,39 @@
             "x": 0,
             "y": 4
          },
-         "id": 6,
-         "pluginVersion": "v11.4.0",
+         "fieldConfig": {
+            "defaults": {
+               "unit": "short",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
+            },
+            "overrides": []
+         }
+      },
+      {
+         "type": "barchart",
          "targets": [
             {
+               "expr": "sum by (type) (delta(hgraber_next_server_page_total{service_name=~\"$service_name\"}[$deltaInterval]))",
+               "instant": true,
+               "range": false,
+               "legendFormat": "{{type}}",
+               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
-               },
-               "expr": "sum(delta(hgraber_next_server_book_total{service_name=~\"$service_name\"}[$deltaInterval])) by (type)",
-               "instant": true,
-               "legendFormat": "{{type}}"
+               }
             }
          ],
-         "title": "Book delta count at $deltaInterval",
-         "type": "barchart"
-      },
-      {
+         "title": "Page delta count at $deltaInterval",
+         "transparent": false,
          "datasource": {
             "type": "prometheus",
             "uid": "${metrics}"
@@ -267,23 +282,39 @@
             "x": 6,
             "y": 4
          },
-         "id": 7,
-         "pluginVersion": "v11.4.0",
+         "fieldConfig": {
+            "defaults": {
+               "unit": "short",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
+            },
+            "overrides": []
+         }
+      },
+      {
+         "type": "barchart",
          "targets": [
             {
+               "expr": "sum by (type) (delta(hgraber_next_server_file_total{service_name=~\"$service_name\"}[$deltaInterval]))",
+               "instant": true,
+               "range": false,
+               "legendFormat": "{{type}}",
+               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
-               },
-               "expr": "sum(delta(hgraber_next_server_page_total{service_name=~\"$service_name\"}[$deltaInterval])) by (type)",
-               "instant": true,
-               "legendFormat": "{{type}}"
+               }
             }
          ],
-         "title": "Page delta count at $deltaInterval",
-         "type": "barchart"
-      },
-      {
+         "title": "File delta count at $deltaInterval",
+         "transparent": false,
          "datasource": {
             "type": "prometheus",
             "uid": "${metrics}"
@@ -294,31 +325,53 @@
             "x": 12,
             "y": 4
          },
-         "id": 8,
-         "pluginVersion": "v11.4.0",
+         "fieldConfig": {
+            "defaults": {
+               "unit": "short",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
+            },
+            "overrides": []
+         }
+      },
+      {
+         "type": "barchart",
          "targets": [
             {
+               "expr": "sum by (type) (delta(hgraber_next_server_file_bytes{service_name=~\"$service_name\",type=\"fs\"}[$deltaInterval]))",
+               "instant": true,
+               "range": false,
+               "legendFormat": "На диске",
+               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
-               },
-               "expr": "sum(delta(hgraber_next_server_file_total{service_name=~\"$service_name\"}[$deltaInterval])) by (type)",
+               }
+            },
+            {
+               "expr": "sum by (type) (delta(hgraber_next_server_file_bytes{service_name=~\"$service_name\",type=\"page\"}[$deltaInterval]))",
                "instant": true,
-               "legendFormat": "{{type}}"
+               "range": false,
+               "legendFormat": "В страницах",
+               "refId": "",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               }
             }
          ],
-         "title": "File delta count at $deltaInterval",
-         "type": "barchart"
-      },
-      {
+         "title": "File delta size at $deltaInterval",
+         "transparent": false,
          "datasource": {
             "type": "prometheus",
             "uid": "${metrics}"
-         },
-         "fieldConfig": {
-            "defaults": {
-               "unit": "bytes"
-            }
          },
          "gridPos": {
             "h": 6,
@@ -326,222 +379,266 @@
             "x": 18,
             "y": 4
          },
-         "id": 9,
-         "pluginVersion": "v11.4.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "expr": "sum(delta(hgraber_next_server_file_bytes{type=\"fs\", service_name=~\"$service_name\"}[$deltaInterval]))",
-               "instant": true,
-               "legendFormat": "На диске"
+         "fieldConfig": {
+            "defaults": {
+               "unit": "bytes",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
             },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "expr": "sum(delta(hgraber_next_server_file_bytes{type=\"page\", service_name=~\"$service_name\"}[$deltaInterval]))",
-               "instant": true,
-               "legendFormat": "В страницах"
-            }
-         ],
-         "title": "File delta size at $deltaInterval",
-         "type": "barchart"
+            "overrides": []
+         }
       },
       {
+         "type": "timeseries",
+         "targets": [
+            {
+               "expr": "(sum by (action, fs_id) (rate(hgraber_next_server_fs_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (action, fs_id) (rate(hgraber_next_server_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
+               "legendFormat": "server/{{action}} -\u003e {{fs_id}}",
+               "refId": ""
+            },
+            {
+               "expr": "(sum by (action) (rate(hgraber_next_agent_fs_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (action) (rate(hgraber_next_agent_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
+               "legendFormat": "agent/{{action}}",
+               "refId": ""
+            }
+         ],
+         "title": "FS latency",
+         "transparent": false,
          "datasource": {
             "type": "prometheus",
             "uid": "${metrics}"
-         },
-         "fieldConfig": {
-            "defaults": {
-               "unit": "s"
-            }
          },
          "gridPos": {
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 13
+            "y": 10
          },
-         "id": 10,
          "options": {
             "legend": {
+               "displayMode": "table",
+               "placement": "bottom",
+               "showLegend": true,
+               "sortBy": "Mean",
+               "sortDesc": true,
                "calcs": [
                   "mean",
                   "lastNotNull"
-               ],
-               "displayMode": "table",
-               "placement": "bottom",
-               "sortBy": "Mean",
-               "sortDesc": true
-            }
-         },
-         "pluginVersion": "v11.4.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "expr": "sum(rate(hgraber_next_server_fs_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval])) by (action, fs_id)\n/\nsum(rate(hgraber_next_server_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])) by (action, fs_id)\n",
-               "legendFormat": "server/{{action}} -> {{fs_id}}"
+               ]
             },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "expr": "sum(rate(hgraber_next_agent_fs_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval])) by (action)\n/\nsum(rate(hgraber_next_agent_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])) by (action)\n",
-               "legendFormat": "agent/{{action}}"
+            "tooltip": {
+               "mode": "",
+               "sort": ""
             }
-         ],
-         "title": "FS latency",
-         "type": "timeseries"
-      },
-      {
-         "datasource": {
-            "type": "prometheus",
-            "uid": "${metrics}"
          },
          "fieldConfig": {
             "defaults": {
-               "unit": "reqps"
+               "unit": "s",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
+            },
+            "overrides": []
+         }
+      },
+      {
+         "type": "timeseries",
+         "targets": [
+            {
+               "expr": "sum by (action, fs_id) (rate(hgraber_next_server_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
+               "legendFormat": "server/{{action}} -\u003e {{fs_id}}",
+               "refId": ""
+            },
+            {
+               "expr": "sum by (action) (rate(hgraber_next_agent_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
+               "legendFormat": "agent/{{action}}",
+               "refId": ""
             }
+         ],
+         "title": "FS RPS",
+         "transparent": false,
+         "datasource": {
+            "type": "prometheus",
+            "uid": "${metrics}"
          },
          "gridPos": {
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 13
+            "y": 10
          },
-         "id": 11,
          "options": {
             "legend": {
+               "displayMode": "table",
+               "placement": "bottom",
+               "showLegend": true,
+               "sortBy": "Mean",
+               "sortDesc": true,
                "calcs": [
                   "mean",
                   "lastNotNull"
-               ],
-               "displayMode": "table",
-               "placement": "bottom",
-               "sortBy": "Mean",
-               "sortDesc": true
+               ]
+            },
+            "tooltip": {
+               "mode": "",
+               "sort": ""
             }
          },
-         "pluginVersion": "v11.4.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "expr": "sum(rate(hgraber_next_server_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])) by (action, fs_id)",
-               "legendFormat": "server/{{action}} -> {{fs_id}}"
+         "fieldConfig": {
+            "defaults": {
+               "unit": "reqps",
+               "thresholds": {
+                  "mode": "",
+                  "steps": [
+                     {
+                        "value": null,
+                        "color": "green"
+                     }
+                  ]
+               }
             },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "expr": "sum(rate(hgraber_next_agent_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])) by (action)",
-               "legendFormat": "agent/{{action}}"
-            }
-         ],
-         "title": "FS RPS",
-         "type": "timeseries"
+            "overrides": []
+         }
       },
       {
+         "type": "row",
          "collapsed": false,
+         "title": "Logs",
          "gridPos": {
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 22
+            "y": 19
          },
-         "id": 12,
-         "title": "Logs",
-         "type": "row"
+         "id": 0,
+         "panels": []
       },
       {
+         "type": "logs",
+         "targets": [
+            {
+               "expr": "{service_name=~\"$service_name\"}",
+               "refId": "",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${logs}"
+               }
+            }
+         ],
+         "title": "Logs",
+         "transparent": false,
          "datasource": {
             "type": "loki",
             "uid": "${logs}"
          },
          "gridPos": {
-            "h": 9,
+            "h": 12,
             "w": 24,
             "x": 0,
-            "y": 23
+            "y": 20
          },
-         "id": 13,
          "options": {
-            "sortOrder": "Descending"
-         },
-         "pluginVersion": "v11.4.0",
-         "targets": [
-            {
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${logs}"
-               },
-               "expr": "{service_name=~\"$service_name\"}"
-            }
-         ],
-         "title": "Logs",
-         "type": "logs"
+            "showLabels": false,
+            "showCommonLabels": false,
+            "showTime": false,
+            "showLogContextToggle": false,
+            "wrapLogMessage": false,
+            "prettifyLogMessage": false,
+            "enableLogDetails": true,
+            "sortOrder": "Descending",
+            "dedupStrategy": ""
+         }
       },
       {
+         "type": "row",
          "collapsed": true,
+         "title": "Books and pages",
          "gridPos": {
             "h": 1,
             "w": 24,
             "x": 0,
             "y": 32
          },
-         "id": 14,
+         "id": 0,
          "panels": [
             {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 12,
-                  "x": 0,
-                  "y": 33
-               },
-               "id": 15,
-               "options": {
-                  "legend": {
-                     "calcs": [
-                        "mean",
-                        "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
-                  }
-               },
-               "pluginVersion": "v11.4.0",
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(delta(hgraber_next_server_book_total{service_name=~\"$service_name\"}[$__rate_interval])) by (type)",
-                     "legendFormat": "{{type}}"
+                     "expr": "sum by (type) (delta(hgraber_next_server_book_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "{{type}}",
+                     "refId": ""
                   }
                ],
                "title": "Book delta count",
-               "type": "timeseries"
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 33
+               },
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             },
             {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (type) (delta(hgraber_next_server_page_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "{{type}}",
+                     "refId": ""
+                  }
+               ],
+               "title": "Page delta count",
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -552,80 +649,107 @@
                   "x": 12,
                   "y": 33
                },
-               "id": 16,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(delta(hgraber_next_server_page_total{service_name=~\"$service_name\"}[$__rate_interval])) by (type)",
-                     "legendFormat": "{{type}}"
-                  }
-               ],
-               "title": "Page delta count",
-               "type": "timeseries"
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             },
             {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 12,
-                  "x": 0,
-                  "y": 42
-               },
-               "id": 17,
-               "options": {
-                  "legend": {
-                     "calcs": [
-                        "mean",
-                        "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
-                  }
-               },
-               "pluginVersion": "v11.4.0",
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(delta(hgraber_next_server_file_total{service_name=~\"$service_name\"}[$__rate_interval])) by (type, fs_id)",
-                     "legendFormat": "{{type}} -> {{fs_id}}"
+                     "expr": "sum by (type, fs_id) (delta(hgraber_next_server_file_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "{{type}} -\u003e {{fs_id}}",
+                     "refId": ""
                   }
                ],
                "title": "File delta count",
-               "type": "timeseries"
-            },
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
                },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 42
+               },
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
                "fieldConfig": {
                   "defaults": {
-                     "unit": "bytes"
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (type, fs_id) (delta(hgraber_next_server_file_bytes{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "{{type}} -\u003e {{fs_id}}",
+                     "refId": ""
                   }
+               ],
+               "title": "File delta size",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
                },
                "gridPos": {
                   "h": 9,
@@ -633,72 +757,104 @@
                   "x": 12,
                   "y": 42
                },
-               "id": 18,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(delta(hgraber_next_server_file_bytes{service_name=~\"$service_name\"}[$__rate_interval])) by (type, fs_id)",
-                     "legendFormat": "{{type}} -> {{fs_id}}"
-                  }
-               ],
-               "title": "File delta size",
-               "type": "timeseries"
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "bytes",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             },
             {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 12,
-                  "x": 0,
-                  "y": 51
-               },
-               "id": 19,
-               "options": {
-                  "legend": {
-                     "calcs": [
-                        "mean",
-                        "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
-                  }
-               },
-               "pluginVersion": "v11.4.0",
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_book_total{service_name=~\"$service_name\"}) by (type)",
-                     "legendFormat": "{{type}}"
+                     "expr": "sum by (type) (hgraber_next_server_book_total{service_name=~\"$service_name\"})",
+                     "legendFormat": "{{type}}",
+                     "refId": ""
                   }
                ],
                "title": "Book count",
-               "type": "timeseries"
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 51
+               },
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             },
             {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (type) (hgraber_next_server_page_total{service_name=~\"$service_name\"})",
+                     "legendFormat": "{{type}}",
+                     "refId": ""
+                  }
+               ],
+               "title": "Page count",
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -709,80 +865,107 @@
                   "x": 12,
                   "y": 51
                },
-               "id": 20,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_page_total{service_name=~\"$service_name\"}) by (type)",
-                     "legendFormat": "{{type}}"
-                  }
-               ],
-               "title": "Page count",
-               "type": "timeseries"
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             },
             {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 12,
-                  "x": 0,
-                  "y": 60
-               },
-               "id": 21,
-               "options": {
-                  "legend": {
-                     "calcs": [
-                        "mean",
-                        "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
-                  }
-               },
-               "pluginVersion": "v11.4.0",
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_file_total{service_name=~\"$service_name\"}) by (type, fs_id)",
-                     "legendFormat": "{{type}} -> {{fs_id}}"
+                     "expr": "sum by (type, fs_id) (hgraber_next_server_file_total{service_name=~\"$service_name\"})",
+                     "legendFormat": "{{type}} -\u003e {{fs_id}}",
+                     "refId": ""
                   }
                ],
                "title": "File count",
-               "type": "timeseries"
-            },
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
                },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 60
+               },
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
                "fieldConfig": {
                   "defaults": {
-                     "unit": "bytes"
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (type, fs_id) (hgraber_next_server_file_bytes{service_name=~\"$service_name\"})",
+                     "legendFormat": "{{type}} -\u003e {{fs_id}}",
+                     "refId": ""
                   }
+               ],
+               "title": "File size",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
                },
                "gridPos": {
                   "h": 9,
@@ -790,92 +973,66 @@
                   "x": 12,
                   "y": 60
                },
-               "id": 22,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_file_bytes{service_name=~\"$service_name\"}) by (type, fs_id)",
-                     "legendFormat": "{{type}} -> {{fs_id}}"
-                  }
-               ],
-               "title": "File size",
-               "type": "timeseries"
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "bytes",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             }
-         ],
-         "title": "Books and pages",
-         "type": "row"
+         ]
       },
       {
+         "type": "row",
          "collapsed": true,
+         "title": "Statistic",
          "gridPos": {
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 33
+            "y": 69
          },
-         "id": 23,
+         "id": 0,
          "panels": [
             {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 8,
-                  "x": 0,
-                  "y": 34
-               },
-               "id": 24,
-               "options": {
-                  "cellValues": {
-                     "unit": "short"
-                  },
-                  "color": {
-                     "fill": "semi-dark-blue",
-                     "mode": "scheme",
-                     "scheme": "Blues"
-                  },
-                  "filterValues": {
-                     "le": 1
-                  },
-                  "yAxis": {
-                     "unit": "bytes"
-                  }
-               },
-               "pluginVersion": "v11.4.0",
+               "type": "heatmap",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_statistic_book_size_bucket{service_name=~\"$service_name\"}) by (le)",
+                     "expr": "sum by (le) (hgraber_next_server_statistic_book_size_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
-                     "interval": "$deltaInterval",
-                     "legendFormat": "__auto"
+                     "legendFormat": "__auto",
+                     "refId": "",
+                     "interval": "$deltaInterval"
                   }
                ],
                "title": "Book sizes",
-               "type": "heatmap"
-            },
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -883,131 +1040,69 @@
                "gridPos": {
                   "h": 9,
                   "w": 8,
-                  "x": 8,
-                  "y": 34
+                  "x": 0,
+                  "y": 70
                },
-               "id": 25,
                "options": {
-                  "cellValues": {
-                     "unit": "short"
-                  },
+                  "calculate": false,
                   "color": {
-                     "fill": "semi-dark-blue",
                      "mode": "scheme",
-                     "scheme": "Blues"
+                     "scheme": "Blues",
+                     "fill": "semi-dark-blue",
+                     "exponent": 0,
+                     "steps": 64,
+                     "reverse": false
                   },
                   "filterValues": {
                      "le": 1
                   },
+                  "showValue": "auto",
+                  "cellGap": 1,
+                  "cellValues": {
+                     "unit": "short"
+                  },
                   "yAxis": {
                      "unit": "bytes"
-                  }
+                  },
+                  "legend": {
+                     "show": true
+                  },
+                  "tooltip": {
+                     "mode": ""
+                  },
+                  "exemplars": {
+                     "color": "rgba(255,0,255,0.7)"
+                  },
+                  "selectionMode": "x"
                },
-               "pluginVersion": "v11.4.0",
+               "fieldConfig": {
+                  "defaults": {
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "heatmap",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_statistic_page_size_bucket{service_name=~\"$service_name\"}) by (le)",
+                     "expr": "sum by (le) (hgraber_next_server_statistic_page_size_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
-                     "interval": "$deltaInterval",
-                     "legendFormat": "__auto"
+                     "legendFormat": "__auto",
+                     "refId": "",
+                     "interval": "$deltaInterval"
                   }
                ],
                "title": "Page sizes",
-               "type": "heatmap"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 8,
-                  "x": 16,
-                  "y": 34
-               },
-               "id": 26,
-               "options": {
-                  "cellValues": {
-                     "unit": "short"
-                  },
-                  "color": {
-                     "fill": "semi-dark-blue",
-                     "mode": "scheme",
-                     "scheme": "Blues"
-                  },
-                  "filterValues": {
-                     "le": 1
-                  },
-                  "yAxis": {
-                     "unit": "short"
-                  }
-               },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_statistic_page_in_book_bucket{service_name=~\"$service_name\"}) by (le)",
-                     "format": "heatmap",
-                     "interval": "$deltaInterval",
-                     "legendFormat": "__auto"
-                  }
-               ],
-               "title": "Page in book",
-               "type": "heatmap"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 8,
-                  "x": 0,
-                  "y": 43
-               },
-               "id": 27,
-               "options": {
-                  "cellValues": {
-                     "unit": "short"
-                  },
-                  "color": {
-                     "fill": "semi-dark-blue",
-                     "mode": "scheme",
-                     "scheme": "Blues"
-                  },
-                  "filterValues": {
-                     "le": 1
-                  },
-                  "yAxis": {
-                     "unit": "bytes"
-                  }
-               },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_statistic_pages_size_by_author_bucket{service_name=~\"$service_name\"}) by (le)",
-                     "format": "heatmap",
-                     "interval": "$deltaInterval",
-                     "legendFormat": "__auto"
-                  }
-               ],
-               "title": "Page sizes by authors",
-               "type": "heatmap"
-            },
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -1016,42 +1111,68 @@
                   "h": 9,
                   "w": 8,
                   "x": 8,
-                  "y": 43
+                  "y": 70
                },
-               "id": 28,
                "options": {
-                  "cellValues": {
-                     "unit": "short"
-                  },
+                  "calculate": false,
                   "color": {
-                     "fill": "semi-dark-blue",
                      "mode": "scheme",
-                     "scheme": "Blues"
+                     "scheme": "Blues",
+                     "fill": "semi-dark-blue",
+                     "exponent": 0,
+                     "steps": 64,
+                     "reverse": false
                   },
                   "filterValues": {
                      "le": 1
                   },
-                  "yAxis": {
+                  "showValue": "auto",
+                  "cellGap": 1,
+                  "cellValues": {
                      "unit": "short"
-                  }
+                  },
+                  "yAxis": {
+                     "unit": "bytes"
+                  },
+                  "legend": {
+                     "show": true
+                  },
+                  "tooltip": {
+                     "mode": ""
+                  },
+                  "exemplars": {
+                     "color": "rgba(255,0,255,0.7)"
+                  },
+                  "selectionMode": "x"
                },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_statistic_books_by_author_bucket{service_name=~\"$service_name\"}) by (le)",
-                     "format": "heatmap",
-                     "interval": "$deltaInterval",
-                     "legendFormat": "__auto"
-                  }
-               ],
-               "title": "Book by authors",
-               "type": "heatmap"
+               "fieldConfig": {
+                  "defaults": {
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             },
             {
+               "type": "heatmap",
+               "targets": [
+                  {
+                     "expr": "sum by (le) (hgraber_next_server_statistic_page_in_book_bucket{service_name=~\"$service_name\"})",
+                     "format": "heatmap",
+                     "legendFormat": "__auto",
+                     "refId": "",
+                     "interval": "$deltaInterval"
+                  }
+               ],
+               "title": "Page in book",
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -1060,228 +1181,506 @@
                   "h": 9,
                   "w": 8,
                   "x": 16,
-                  "y": 43
+                  "y": 70
                },
-               "id": 29,
                "options": {
-                  "cellValues": {
-                     "unit": "short"
-                  },
+                  "calculate": false,
                   "color": {
-                     "fill": "semi-dark-blue",
                      "mode": "scheme",
-                     "scheme": "Blues"
+                     "scheme": "Blues",
+                     "fill": "semi-dark-blue",
+                     "exponent": 0,
+                     "steps": 64,
+                     "reverse": false
                   },
                   "filterValues": {
                      "le": 1
                   },
+                  "showValue": "auto",
+                  "cellGap": 1,
+                  "cellValues": {
+                     "unit": "short"
+                  },
                   "yAxis": {
                      "unit": "short"
-                  }
+                  },
+                  "legend": {
+                     "show": true
+                  },
+                  "tooltip": {
+                     "mode": ""
+                  },
+                  "exemplars": {
+                     "color": "rgba(255,0,255,0.7)"
+                  },
+                  "selectionMode": "x"
                },
-               "pluginVersion": "v11.4.0",
+               "fieldConfig": {
+                  "defaults": {
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "heatmap",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_statistic_pages_by_author_bucket{service_name=~\"$service_name\"}) by (le)",
+                     "expr": "sum by (le) (hgraber_next_server_statistic_pages_size_by_author_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
-                     "interval": "$deltaInterval",
-                     "legendFormat": "__auto"
+                     "legendFormat": "__auto",
+                     "refId": "",
+                     "interval": "$deltaInterval"
+                  }
+               ],
+               "title": "Page sizes by authors",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 8,
+                  "x": 0,
+                  "y": 79
+               },
+               "options": {
+                  "calculate": false,
+                  "color": {
+                     "mode": "scheme",
+                     "scheme": "Blues",
+                     "fill": "semi-dark-blue",
+                     "exponent": 0,
+                     "steps": 64,
+                     "reverse": false
+                  },
+                  "filterValues": {
+                     "le": 1
+                  },
+                  "showValue": "auto",
+                  "cellGap": 1,
+                  "cellValues": {
+                     "unit": "short"
+                  },
+                  "yAxis": {
+                     "unit": "bytes"
+                  },
+                  "legend": {
+                     "show": true
+                  },
+                  "tooltip": {
+                     "mode": ""
+                  },
+                  "exemplars": {
+                     "color": "rgba(255,0,255,0.7)"
+                  },
+                  "selectionMode": "x"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "heatmap",
+               "targets": [
+                  {
+                     "expr": "sum by (le) (hgraber_next_server_statistic_books_by_author_bucket{service_name=~\"$service_name\"})",
+                     "format": "heatmap",
+                     "legendFormat": "__auto",
+                     "refId": "",
+                     "interval": "$deltaInterval"
+                  }
+               ],
+               "title": "Book by authors",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 8,
+                  "x": 8,
+                  "y": 79
+               },
+               "options": {
+                  "calculate": false,
+                  "color": {
+                     "mode": "scheme",
+                     "scheme": "Blues",
+                     "fill": "semi-dark-blue",
+                     "exponent": 0,
+                     "steps": 64,
+                     "reverse": false
+                  },
+                  "filterValues": {
+                     "le": 1
+                  },
+                  "showValue": "auto",
+                  "cellGap": 1,
+                  "cellValues": {
+                     "unit": "short"
+                  },
+                  "yAxis": {
+                     "unit": "short"
+                  },
+                  "legend": {
+                     "show": true
+                  },
+                  "tooltip": {
+                     "mode": ""
+                  },
+                  "exemplars": {
+                     "color": "rgba(255,0,255,0.7)"
+                  },
+                  "selectionMode": "x"
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "heatmap",
+               "targets": [
+                  {
+                     "expr": "sum by (le) (hgraber_next_server_statistic_pages_by_author_bucket{service_name=~\"$service_name\"})",
+                     "format": "heatmap",
+                     "legendFormat": "__auto",
+                     "refId": "",
+                     "interval": "$deltaInterval"
                   }
                ],
                "title": "Page by authors",
-               "type": "heatmap"
-            }
-         ],
-         "title": "Statistic",
-         "type": "row"
-      },
-      {
-         "collapsed": true,
-         "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 34
-         },
-         "id": 30,
-         "panels": [
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
                },
-               "fieldConfig": {
-                  "defaults": {
-                     "unit": "s"
-                  }
-               },
                "gridPos": {
                   "h": 9,
-                  "w": 12,
-                  "x": 0,
-                  "y": 35
+                  "w": 8,
+                  "x": 16,
+                  "y": 79
                },
-               "id": 31,
                "options": {
+                  "calculate": false,
+                  "color": {
+                     "mode": "scheme",
+                     "scheme": "Blues",
+                     "fill": "semi-dark-blue",
+                     "exponent": 0,
+                     "steps": 64,
+                     "reverse": false
+                  },
+                  "filterValues": {
+                     "le": 1
+                  },
+                  "showValue": "auto",
+                  "cellGap": 1,
+                  "cellValues": {
+                     "unit": "short"
+                  },
+                  "yAxis": {
+                     "unit": "short"
+                  },
                   "legend": {
-                     "calcs": [
-                        "mean",
-                        "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
-                  }
+                     "show": true
+                  },
+                  "tooltip": {
+                     "mode": ""
+                  },
+                  "exemplars": {
+                     "color": "rgba(255,0,255,0.7)"
+                  },
+                  "selectionMode": "x"
                },
-               "pluginVersion": "v11.4.0",
+               "fieldConfig": {
+                  "defaults": {
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            }
+         ]
+      },
+      {
+         "type": "row",
+         "collapsed": true,
+         "title": "Workers and agents",
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 88
+         },
+         "id": 0,
+         "panels": [
+            {
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(rate(hgraber_next_agent_parser_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval])) by (action, parser_name)\n/\nsum(rate(hgraber_next_agent_parser_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])) by (action, parser_name)\n",
-                     "legendFormat": "{{parser_name}} -> {{action}}"
+                     "expr": "(sum by (action, parser_name) (rate(hgraber_next_agent_parser_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (action, parser_name) (rate(hgraber_next_agent_parser_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
+                     "legendFormat": "{{parser_name}} -\u003e {{action}}",
+                     "refId": ""
                   }
                ],
                "title": "Agent parsing avg latency",
-               "type": "timeseries"
-            },
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
                },
-               "fieldConfig": {
-                  "defaults": {
-                     "unit": "reqps"
-                  }
-               },
                "gridPos": {
                   "h": 9,
                   "w": 12,
-                  "x": 12,
-                  "y": 35
+                  "x": 0,
+                  "y": 89
                },
-               "id": 32,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "s",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(rate(hgraber_next_agent_parser_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])) by (action, parser_name)",
-                     "legendFormat": "{{parser_name}} -> {{action}}"
+                     "expr": "sum by (action, parser_name) (rate(hgraber_next_agent_parser_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "{{parser_name}} -\u003e {{action}}",
+                     "refId": ""
                   }
                ],
                "title": "Agent parsing RPS",
-               "type": "timeseries"
-            },
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
                },
-               "fieldConfig": {
-                  "defaults": {
-                     "unit": "s"
-                  }
-               },
                "gridPos": {
                   "h": 9,
                   "w": 12,
-                  "x": 0,
-                  "y": 44
+                  "x": 12,
+                  "y": 89
                },
-               "id": 33,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "reqps",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(rate(hgraber_next_server_worker_execution_task_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval])) by (worker_name)\n/\nsum(rate(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])) by (worker_name)\n",
-                     "legendFormat": "{{worker_name}}"
+                     "expr": "(sum by (worker_name) (rate(hgraber_next_server_worker_execution_task_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (worker_name) (rate(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
+                     "legendFormat": "{{worker_name}}",
+                     "refId": ""
                   }
                ],
                "title": "Worker avg latency",
-               "type": "timeseries"
-            },
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
                },
-               "fieldConfig": {
-                  "defaults": {
-                     "unit": "reqps"
-                  }
-               },
                "gridPos": {
                   "h": 9,
                   "w": 12,
-                  "x": 12,
-                  "y": 44
+                  "x": 0,
+                  "y": 98
                },
-               "id": 34,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "s",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(rate(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])) by (worker_name)",
-                     "legendFormat": "{{worker_name}}"
+                     "expr": "sum by (worker_name) (rate(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "{{worker_name}}",
+                     "refId": ""
                   }
                ],
                "title": "Worker RPS",
-               "type": "timeseries"
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 12,
+                  "y": 98
+               },
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "reqps",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             },
             {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (worker_name, counter) (hgraber_next_server_worker_total{service_name=~\"$service_name\"})",
+                     "legendFormat": "{{worker_name}} -\u003e {{counter}}",
+                     "refId": ""
+                  }
+               ],
+               "title": "Worker stat",
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -1290,325 +1689,433 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 53
+                  "y": 107
                },
-               "id": 35,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
-               },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_worker_total{service_name=~\"$service_name\"}) by (worker_name, counter)",
-                     "legendFormat": "{{worker_name}} -> {{counter}}"
-                  }
-               ],
-               "title": "Workers stat",
-               "type": "timeseries"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
                },
                "fieldConfig": {
                   "defaults": {
-                     "unit": "reqps"
-                  }
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 12,
-                  "x": 12,
-                  "y": 53
-               },
-               "id": 36,
-               "options": {
-                  "legend": {
-                     "calcs": [
-                        "mean",
-                        "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
-                  }
-               },
-               "pluginVersion": "v11.4.0",
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(rate(hgraber_next_agent_web_cache_total{service_name=~\"$service_name\"}[$__rate_interval])) by (action)",
-                     "legendFormat": "{{action}}"
+                     "expr": "sum by (action) (rate(hgraber_next_agent_web_cache_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "{{action}}",
+                     "refId": ""
                   }
                ],
                "title": "Web cache RPS",
-               "type": "timeseries"
-            }
-         ],
-         "title": "Workers and agents",
-         "type": "row"
-      },
-      {
-         "collapsed": true,
-         "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 35
-         },
-         "id": 37,
-         "panels": [
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
                },
-               "fieldConfig": {
-                  "defaults": {
-                     "unit": "percentunit"
-                  }
-               },
                "gridPos": {
                   "h": 9,
                   "w": 12,
-                  "x": 0,
-                  "y": 36
+                  "x": 12,
+                  "y": 107
                },
-               "id": 38,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "reqps",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            }
+         ]
+      },
+      {
+         "type": "row",
+         "collapsed": true,
+         "title": "Other",
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 116
+         },
+         "id": 0,
+         "panels": [
+            {
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "1 - \nsum(hgraber_next_server_file_bytes{type=\"fs\", service_name=~\"$service_name\"}) by (fs_id)\n/\nsum(hgraber_next_server_file_bytes{type=\"page\", service_name=~\"$service_name\"}) by (fs_id)\n",
-                     "legendFormat": "{{fs_id}}"
+                     "expr": "(1) - ((sum by (fs_id) (hgraber_next_server_file_bytes{service_name=~\"$service_name\",type=\"fs\"})) / (sum by (fs_id) (hgraber_next_server_file_bytes{service_name=~\"$service_name\",type=\"page\"})))",
+                     "legendFormat": "{{fs_id}}",
+                     "refId": ""
                   }
                ],
                "title": "FS Compression",
-               "type": "timeseries"
-            },
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
                },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 117
+               },
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
                "fieldConfig": {
                   "defaults": {
-                     "unit": "s"
+                     "unit": "percentunit",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (scrape_name) (hgraber_next_server_info_scrape_duration_seconds{service_name=~\"$service_name\"})",
+                     "legendFormat": "{{scrape_name}}",
+                     "refId": ""
                   }
+               ],
+               "title": "Worker stat",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
                },
                "gridPos": {
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 36
+                  "y": 117
                },
-               "id": 39,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_server_info_scrape_duration_seconds{service_name=~\"$service_name\"}) by (scrape_name)",
-                     "legendFormat": "{{scrape_name}}"
-                  }
-               ],
-               "title": "Metric info collect time",
-               "type": "timeseries"
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "s",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             }
-         ],
-         "title": "Other",
-         "type": "row"
+         ]
       },
       {
+         "type": "row",
          "collapsed": true,
+         "title": "HTTP server",
          "gridPos": {
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 36
+            "y": 126
          },
-         "id": 40,
+         "id": 0,
          "panels": [
             {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.95, sum by (le, server_addr, operation, status) (rate(hgraber_next_http_server_handle_duration_bucket{service_name=~\"$service_name\"}[$__rate_interval])))",
+                     "legendFormat": "{{server_addr}}/{{operation}} -\u003e {{status}}",
+                     "refId": ""
+                  }
+               ],
+               "title": "Latency Q95",
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
-               },
-               "fieldConfig": {
-                  "defaults": {
-                     "unit": "s"
-                  }
                },
                "gridPos": {
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 37
+                  "y": 127
                },
-               "id": 41,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
-               },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "histogram_quantile(0.95, sum(rate(hgraber_next_http_server_handle_duration_bucket{service_name=~\"$service_name\"}[$__rate_interval])) by (server_addr, operation, status, le))",
-                     "legendFormat": "{{server_addr}}/{{operation}} -> {{status}}"
-                  }
-               ],
-               "title": "Latency Q95",
-               "type": "timeseries"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
                },
                "fieldConfig": {
                   "defaults": {
-                     "unit": "reqps"
+                     "unit": "s",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (server_addr, operation, status) (rate(hgraber_next_http_server_handle_duration_count{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "{{server_addr}}/{{operation}} -\u003e {{status}}",
+                     "refId": ""
                   }
+               ],
+               "title": "RPS",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
                },
                "gridPos": {
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 37
+                  "y": 127
                },
-               "id": 42,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
-               },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(irate(hgraber_next_http_server_handle_duration_count{service_name=~\"$service_name\"}[$__rate_interval])) by (server_addr, operation, status)",
-                     "legendFormat": "{{server_addr}}/{{operation}} -> {{status}}"
-                  }
-               ],
-               "title": "RPS",
-               "type": "timeseries"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
                },
                "fieldConfig": {
                   "defaults": {
-                     "unit": "short"
+                     "unit": "reqps",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (server_addr, operation) (hgraber_next_http_server_active_handlers_total{service_name=~\"$service_name\"})",
+                     "legendFormat": "{{server_addr}}/{{operation}}",
+                     "refId": ""
                   }
+               ],
+               "title": "Active request",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
                },
                "gridPos": {
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 46
+                  "y": 136
                },
-               "id": 43,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_http_server_active_handlers_total{service_name=~\"$service_name\"}) by (server_addr, operation)",
-                     "legendFormat": "{{server_addr}}/{{operation}}"
-                  }
-               ],
-               "title": "Active request",
-               "type": "timeseries"
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             },
             {
+               "type": "table",
+               "targets": [
+                  {
+                     "expr": "(sum by (server_addr, operation, status) (hgraber_next_http_server_handle_duration_sum{service_name=~\"$service_name\"})) / (sum by (server_addr, operation, status) (hgraber_next_http_server_handle_duration_count{service_name=~\"$service_name\"}))",
+                     "instant": true,
+                     "range": false,
+                     "format": "table",
+                     "legendFormat": "{{server_addr}}/{{operation}} -\u003e {{status}}",
+                     "refId": ""
+                  }
+               ],
+               "title": "Slow request",
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 12,
+                  "y": 136
+               },
+               "options": {
+                  "frameIndex": 0,
+                  "showHeader": true,
+                  "showTypeIcons": false,
+                  "sortBy": [
+                     {
+                        "displayName": "Value",
+                        "desc": true
+                     }
+                  ],
+                  "footer": {
+                     "show": false,
+                     "reducer": null,
+                     "countRows": false
+                  },
+                  "cellHeight": "sm"
                },
                "fieldConfig": {
                   "defaults": {
@@ -1628,228 +2135,278 @@
                         ]
                      }
                   ]
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 12,
-                  "x": 12,
-                  "y": 46
-               },
-               "id": 44,
-               "options": {
-                  "sortBy": [
-                     {
-                        "desc": true,
-                        "displayName": "Value"
-                     }
-                  ]
-               },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_http_server_handle_duration_sum{service_name=~\"$service_name\"} / hgraber_next_http_server_handle_duration_count{service_name=~\"$service_name\"}) by (server_addr, operation, status)",
-                     "format": "table",
-                     "instant": true,
-                     "legendFormat": "{{server_addr}}/{{operation}} -> {{status}}"
-                  }
-               ],
-               "title": "Slow request",
-               "type": "table"
+               }
             }
-         ],
-         "title": "HTTP server",
-         "type": "row"
+         ]
       },
       {
+         "type": "row",
          "collapsed": true,
+         "title": "Database",
          "gridPos": {
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 37
+            "y": 145
          },
-         "id": 45,
+         "id": 0,
          "panels": [
             {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "fieldConfig": {
-                  "defaults": {
-                     "unit": "s"
-                  }
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 12,
-                  "x": 0,
-                  "y": 38
-               },
-               "id": 46,
-               "options": {
-                  "legend": {
-                     "calcs": [
-                        "mean",
-                        "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
-                  }
-               },
-               "pluginVersion": "v11.4.0",
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "histogram_quantile(0.95, sum(rate(hgraber_next_database_request_duration_bucket{service_name=~\"$service_name\"}[$__rate_interval])) by (stmt, le))",
-                     "legendFormat": "{{stmt}}"
+                     "expr": "histogram_quantile(0.95, sum by (le, stmt) (rate(hgraber_next_database_request_duration_bucket{service_name=~\"$service_name\"}[$__rate_interval])))",
+                     "legendFormat": "{{stmt}}",
+                     "refId": ""
                   }
                ],
                "title": "Latency Q95",
-               "type": "timeseries"
-            },
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
-               },
-               "fieldConfig": {
-                  "defaults": {
-                     "unit": "reqps"
-                  }
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 12,
-                  "x": 12,
-                  "y": 38
-               },
-               "id": 47,
-               "options": {
-                  "legend": {
-                     "calcs": [
-                        "mean",
-                        "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
-                  }
-               },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(irate(hgraber_next_database_request_duration_count{service_name=~\"$service_name\"}[$__rate_interval])) by (stmt)",
-                     "legendFormat": "{{stmt}}"
-                  }
-               ],
-               "title": "RPS",
-               "type": "timeseries"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
-               },
-               "fieldConfig": {
-                  "defaults": {
-                     "unit": "short"
-                  }
                },
                "gridPos": {
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 47
+                  "y": 146
                },
-               "id": 48,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
-               },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_database_active_request{service_name=~\"$service_name\"})",
-                     "legendFormat": "__auto"
-                  }
-               ],
-               "title": "Active request",
-               "type": "timeseries"
-            },
-            {
-               "datasource": {
-                  "type": "prometheus",
-                  "uid": "${metrics}"
                },
                "fieldConfig": {
                   "defaults": {
-                     "unit": "short"
+                     "unit": "s",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (stmt) (rate(hgraber_next_database_request_duration_count{service_name=~\"$service_name\"}[$__rate_interval]))",
+                     "legendFormat": "{{stmt}}",
+                     "refId": ""
                   }
+               ],
+               "title": "RPS",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
                },
                "gridPos": {
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 47
+                  "y": 146
                },
-               "id": 49,
                "options": {
                   "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
                      "calcs": [
                         "mean",
                         "lastNotNull"
-                     ],
-                     "displayMode": "table",
-                     "placement": "bottom",
-                     "sortBy": "Mean",
-                     "sortDesc": true
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
                   }
                },
-               "pluginVersion": "v11.4.0",
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "reqps",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
                "targets": [
                   {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
+                     "expr": "sum(hgraber_next_database_active_request{service_name=~\"$service_name\"})",
+                     "legendFormat": "-",
+                     "refId": ""
+                  }
+               ],
+               "title": "Active request",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 155
+               },
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
                      "expr": "sum(hgraber_next_database_open_connection{service_name=~\"$service_name\"})",
-                     "legendFormat": "__auto"
+                     "legendFormat": "-",
+                     "refId": ""
                   }
                ],
                "title": "Open connection",
-               "type": "timeseries"
-            },
-            {
+               "transparent": false,
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 12,
+                  "y": 155
+               },
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "table",
+               "targets": [
+                  {
+                     "expr": "(sum by (stmt) (hgraber_next_database_request_duration_sum{service_name=~\"$service_name\"})) / (sum by (stmt) (hgraber_next_database_request_duration_count{service_name=~\"$service_name\"}))",
+                     "instant": true,
+                     "range": false,
+                     "format": "table",
+                     "legendFormat": "{{stmt}}",
+                     "refId": ""
+                  }
+               ],
+               "title": "Slow request",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 164
+               },
+               "options": {
+                  "frameIndex": 0,
+                  "showHeader": true,
+                  "showTypeIcons": false,
+                  "sortBy": [
+                     {
+                        "displayName": "Value",
+                        "desc": true
+                     }
+                  ],
+                  "footer": {
+                     "show": false,
+                     "reducer": null,
+                     "countRows": false
+                  },
+                  "cellHeight": "sm"
                },
                "fieldConfig": {
                   "defaults": {
@@ -1869,149 +2426,135 @@
                         ]
                      }
                   ]
-               },
-               "gridPos": {
-                  "h": 9,
-                  "w": 12,
-                  "x": 0,
-                  "y": 56
-               },
-               "id": 50,
-               "options": {
-                  "sortBy": [
-                     {
-                        "desc": true,
-                        "displayName": "Value"
-                     }
-                  ]
-               },
-               "pluginVersion": "v11.4.0",
-               "targets": [
-                  {
-                     "datasource": {
-                        "type": "prometheus",
-                        "uid": "${metrics}"
-                     },
-                     "expr": "sum(hgraber_next_database_request_duration_sum{service_name=~\"$service_name\"} / hgraber_next_database_request_duration_count{service_name=~\"$service_name\"}) by (stmt)",
-                     "format": "table",
-                     "instant": true,
-                     "legendFormat": "{{stmt}}"
-                  }
-               ],
-               "title": "Slow request",
-               "type": "table"
+               }
             }
-         ],
-         "title": "Database",
-         "type": "row"
+         ]
       }
-   ],
-   "refresh": "1m",
-   "schemaVersion": 39,
-   "tags": [
-      "hgnext"
    ],
    "templating": {
       "list": [
          {
+            "type": "datasource",
             "name": "logs",
+            "skipUrlSync": false,
             "query": "loki",
-            "type": "datasource"
+            "multi": false,
+            "includeAll": false,
+            "auto": false,
+            "auto_min": "10s",
+            "auto_count": 30
          },
          {
+            "type": "datasource",
             "name": "metrics",
+            "skipUrlSync": false,
             "query": "prometheus",
-            "type": "datasource"
+            "multi": false,
+            "includeAll": false,
+            "auto": false,
+            "auto_min": "10s",
+            "auto_count": 30
          },
          {
-            "current": {
-               "selected": false,
-               "text": [ ],
-               "value": [ ]
-            },
+            "type": "query",
+            "name": "service_name",
+            "skipUrlSync": false,
+            "query": "label_values({__name__=~ \"hgraber_next_server_version_info|hgraber_next_agent_version_info\"}, service_name)",
             "datasource": {
                "type": "prometheus",
                "uid": "${metrics}"
             },
+            "current": {
+               "selected": true,
+               "text": [
+                  "hgraber-next-agent",
+                  "hgraber-next-agentfs-nas",
+                  "hgraber-next-main"
+               ],
+               "value": [
+                  "hgraber-next-agent",
+                  "hgraber-next-agentfs-nas",
+                  "hgraber-next-main"
+               ]
+            },
             "multi": true,
-            "name": "service_name",
-            "query": "label_values({__name__=~ \"hgraber_next_server_version_info|hgraber_next_agent_version_info\"}, service_name)",
             "refresh": 2,
-            "type": "query"
+            "includeAll": false,
+            "auto": false,
+            "auto_min": "10s",
+            "auto_count": 30
          },
          {
-            "auto": true,
-            "auto_count": 30,
-            "auto_min": "10s",
+            "type": "interval",
+            "name": "deltaInterval",
+            "skipUrlSync": false,
+            "query": "1m,5m,10m,30m,1h,4h,8h,1d,7d",
             "current": {
-               "selected": false,
+               "selected": true,
                "text": "4h",
                "value": "4h"
             },
-            "name": "deltaInterval",
-            "options": [
-               {
-                  "selected": true,
-                  "text": "auto",
-                  "value": "$__auto_interval_deltaInterval"
-               },
-               {
-                  "selected": false,
-                  "text": "1m",
-                  "value": "1m"
-               },
-               {
-                  "selected": false,
-                  "text": "5m",
-                  "value": "5m"
-               },
-               {
-                  "selected": false,
-                  "text": "10m",
-                  "value": "10m"
-               },
-               {
-                  "selected": false,
-                  "text": "30m",
-                  "value": "30m"
-               },
-               {
-                  "selected": false,
-                  "text": "1h",
-                  "value": "1h"
-               },
-               {
-                  "selected": false,
-                  "text": "4h",
-                  "value": "4h"
-               },
-               {
-                  "selected": false,
-                  "text": "8h",
-                  "value": "8h"
-               },
-               {
-                  "selected": false,
-                  "text": "1d",
-                  "value": "1d"
-               },
-               {
-                  "selected": false,
-                  "text": "7d",
-                  "value": "7d"
-               }
-            ],
-            "query": "1m,5m,10m,30m,1h,4h,8h,1d,7d",
-            "type": "interval"
+            "multi": false,
+            "includeAll": false,
+            "auto": true,
+            "auto_min": "10s",
+            "auto_count": 30
          }
       ]
    },
-   "time": {
-      "from": "now-6h",
-      "to": "now"
+   "annotations": {
+      "list": [
+         {
+            "name": "app started (logs)",
+            "datasource": {
+               "type": "loki",
+               "uid": "${logs}"
+            },
+            "enable": true,
+            "hide": false,
+            "iconColor": "super-light-purple",
+            "builtIn": 0,
+            "expr": "{service_name=~\"$service_name\"} |= `application start`"
+         },
+         {
+            "name": "app started (metrics)",
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${metrics}"
+            },
+            "enable": false,
+            "hide": false,
+            "iconColor": "super-light-blue",
+            "builtIn": 0,
+            "expr": "((hgraber_next_agent_version_info{service_name=~\"$service_name\"}) * (1000)) or ((hgraber_next_server_version_info{service_name=~\"$service_name\"}) * (1000))"
+         }
+      ]
    },
-   "timezone": "Asia/Krasnoyarsk",
-   "title": "Hgraber next",
-   "uid": "fecigwx9lk1z4d",
-   "weekStart": "monday"
+   "links": [
+      {
+         "title": "GitHub",
+         "type": "link",
+         "icon": "",
+         "tooltip": "",
+         "url": "https://github.com/gbh007/hgraber-next",
+         "tags": [],
+         "asDropdown": false,
+         "targetBlank": true,
+         "includeVars": false,
+         "keepTime": false
+      },
+      {
+         "title": "HG next boards",
+         "type": "dashboards",
+         "icon": "",
+         "tooltip": "",
+         "tags": [
+            "hgnext"
+         ],
+         "asDropdown": true,
+         "targetBlank": true,
+         "includeVars": false,
+         "keepTime": true
+      }
+   ]
 }

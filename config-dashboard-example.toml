@@ -1,0 +1,11 @@
+[grafana]
+# addr = "http://localhost:3000/api"
+# token = ""
+# folder = ""
+uid = "bexc49h794pogd"
+
+[hgraber]
+services = ["hgraber-next-agent", "hgraber-next-server"]
+
+[file]
+to = "grafana-dasboard.json"
