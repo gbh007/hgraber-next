@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/gbh007/hgraber-next/adapters/metric/metricagent"
 	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 	"github.com/gbh007/hgraber-next/adapters/metric/metricdatabase"
 	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
@@ -134,6 +135,18 @@ func New(cfg Config) (p *MetricProvider, err error) {
 		err = reg.Register(metrichttp.ServerHandleRequest)
 		if err != nil {
 			return nil, fmt.Errorf("register http server request duration: %w", err)
+		}
+	}
+
+	if cfg.WithAgent {
+		err = reg.Register(metricagent.ParserActionTime)
+		if err != nil {
+			return nil, fmt.Errorf("register agent parser action time: %w", err)
+		}
+
+		err = reg.Register(metricagent.WebCacheCounter)
+		if err != nil {
+			return nil, fmt.Errorf("register agent web cache counter: %w", err)
 		}
 	}
 
