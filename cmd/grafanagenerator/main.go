@@ -10,8 +10,8 @@ import (
 	goapi "github.com/grafana/grafana-openapi-client-go/client"
 	"github.com/grafana/grafana-openapi-client-go/models"
 
+	"github.com/gbh007/hgraber-next/adapters/metric/generator"
 	"github.com/gbh007/hgraber-next/config"
-	"github.com/gbh007/hgraber-next/metrics/generator"
 )
 
 //nolint:revive // будет исправлено позднее

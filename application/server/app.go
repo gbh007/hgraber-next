@@ -13,6 +13,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/adapters/agent"
 	"github.com/gbh007/hgraber-next/adapters/filestorage"
+	"github.com/gbh007/hgraber-next/adapters/metric"
 	"github.com/gbh007/hgraber-next/adapters/postgresql"
 	"github.com/gbh007/hgraber-next/adapters/tmpdata"
 	"github.com/gbh007/hgraber-next/controllers/apiagent"
@@ -20,7 +21,6 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/workermanager"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
-	"github.com/gbh007/hgraber-next/metrics"
 	"github.com/gbh007/hgraber-next/usecases/agentusecase"
 	"github.com/gbh007/hgraber-next/usecases/attributeusecase"
 	"github.com/gbh007/hgraber-next/usecases/bffusecase"
@@ -47,8 +47,6 @@ func Serve() {
 	)
 	defer cancel()
 
-	metricProvider := metrics.MetricProvider{}
-
 	cfg, err := parseConfig()
 	if err != nil {
 		// Поскольку на этот момент нет ни логгера ни вообще ничего то выкидываем панику.
@@ -56,6 +54,16 @@ func Serve() {
 	}
 
 	logger := initLogger(cfg)
+
+	metricProvider, err := metric.New()
+	if err != nil {
+		logger.ErrorContext(
+			ctx, "fail init metrics",
+			slog.Any("error", err),
+		)
+
+		os.Exit(1)
+	}
 
 	if cfg.Application.Pyroscope.Endpoint != "" {
 		profiler, err := initPyroscope(logger, cfg)
@@ -298,7 +306,7 @@ func Serve() {
 	}
 
 	if cfg.Application.Metric.Enabled() {
-		infoCollector, err := metrics.NewSystemInfoCollector(
+		infoCollector, err := metric.NewSystemInfoCollector(
 			logger,
 			systemUseCases,
 			storage,
