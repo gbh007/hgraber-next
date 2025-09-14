@@ -15,10 +15,10 @@ func LatencyQ95() *timeseries.PanelBuilder {
 			{
 				Query: generatorcore.RateQuantile(
 					metricdatabase.RequestDurationName,
-					[]string{metricdatabase.StmtLabelName},
+					[]string{metricdatabase.StmtLabelName, metricdatabase.DBLabelName},
 					generatorcore.Q95,
 				),
-				Legend: fmt.Sprintf("{{%s}}", metricdatabase.StmtLabelName),
+				Legend: fmt.Sprintf("{{%s}} -> {{%s}}", metricdatabase.DBLabelName, metricdatabase.StmtLabelName),
 			},
 		},
 		"Latency Q95",

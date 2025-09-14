@@ -6,6 +6,7 @@ import (
 	"github.com/grafana/grafana-foundation-sdk/go/timeseries"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
+	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 	"github.com/gbh007/hgraber-next/adapters/metric/metrichttp"
 )
 
@@ -15,9 +16,18 @@ func ActiveRequest() *timeseries.PanelBuilder {
 			{
 				Query: generatorcore.SumExpr(
 					metrichttp.ServerActiveHandlersTotalName,
-					[]string{metrichttp.ServerAddrLabelName, metrichttp.OperationLabelName},
+					[]string{
+						metriccore.ServiceNameLabel,
+						metrichttp.ServerAddrLabelName,
+						metrichttp.OperationLabelName,
+					},
 				),
-				Legend: fmt.Sprintf("{{%s}}/{{%s}}", metrichttp.ServerAddrLabelName, metrichttp.OperationLabelName),
+				Legend: fmt.Sprintf(
+					"{{%s}} {{%s}}/{{%s}}",
+					metriccore.ServiceNameLabel,
+					metrichttp.ServerAddrLabelName,
+					metrichttp.OperationLabelName,
+				),
 			},
 		},
 		"Active request",

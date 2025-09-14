@@ -51,7 +51,7 @@ func (t pgxTracer) TraceQueryStart(ctx context.Context, conn *pgx.Conn, data pgx
 		attribute.String("pgx.query", data.SQL),
 	)
 
-	t.metricProvider.IncDBActiveRequest()
+	t.metricProvider.IncDBActiveRequest(dbName)
 
 	ctx = context.WithValue(ctx, requestCtxKey{}, requestInfo{
 		stmt:    filterStmt(data.SQL),
@@ -75,10 +75,10 @@ func (t pgxTracer) TraceQueryEnd(ctx context.Context, conn *pgx.Conn, data pgx.T
 
 	v, ok := ctx.Value(requestCtxKey{}).(requestInfo)
 	if ok {
-		t.metricProvider.RegisterDBRequestDuration(v.stmt, time.Since(v.startAt))
+		t.metricProvider.RegisterDBRequestDuration(dbName, v.stmt, time.Since(v.startAt))
 	}
 
-	t.metricProvider.DecDBActiveRequest()
+	t.metricProvider.DecDBActiveRequest(dbName)
 }
 
 func (t pgxTracer) TraceBatchStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchStartData) context.Context {
@@ -91,7 +91,7 @@ func (t pgxTracer) TraceBatchStart(ctx context.Context, conn *pgx.Conn, data pgx
 	})
 
 	for range data.Batch.QueuedQueries {
-		t.metricProvider.IncDBActiveRequest()
+		t.metricProvider.IncDBActiveRequest(dbName)
 	}
 
 	ctx = context.WithValue(ctx, batchRequestCtxKey{}, batchRequestInfo{
@@ -129,10 +129,10 @@ func (t pgxTracer) TraceBatchQuery(ctx context.Context, conn *pgx.Conn, data pgx
 
 	v, ok := ctx.Value(batchRequestCtxKey{}).(batchRequestInfo)
 	if ok {
-		t.metricProvider.RegisterDBRequestDuration(filterStmt(data.SQL), time.Since(v.startAt))
+		t.metricProvider.RegisterDBRequestDuration(dbName, filterStmt(data.SQL), time.Since(v.startAt))
 	}
 
-	t.metricProvider.DecDBActiveRequest()
+	t.metricProvider.DecDBActiveRequest(dbName)
 }
 
 func (t pgxTracer) TraceBatchEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchEndData) {

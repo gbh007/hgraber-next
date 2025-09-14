@@ -56,11 +56,15 @@ func Serve() {
 	logger := initLogger(cfg)
 
 	metricProvider, err := metric.New(metric.Config{
-		ServiceName: cfg.Application.ServiceName,
-		Type:        metric.ServerSystemType,
-		WithVersion: true,
-		WithFS:      true,
-		WithServer:  true,
+		ServiceName:    cfg.Application.ServiceName,
+		Type:           metric.ServerSystemType,
+		WithGo:         true,
+		WithVersion:    true,
+		WithFS:         true,
+		WithServer:     true,
+		WithDB:         true,
+		WithHTTPServer: true,
+		WithAgent:      false,
 	})
 	if err != nil {
 		logger.ErrorContext(
@@ -298,6 +302,7 @@ func Serve() {
 			tracer,
 			parsingUseCases,
 			exportUseCases,
+			metricProvider,
 		)
 		if err != nil {
 			logger.ErrorContext(

@@ -27,6 +27,12 @@ type exportUseCases interface {
 	ImportArchive(ctx context.Context, body io.Reader, deduplicate, autoVerify bool) (uuid.UUID, error)
 }
 
+type metricProvider interface {
+	HTTPServerAddHandle(addr, operation string, status bool, d time.Duration)
+	HTTPServerIncActive(addr, operation string)
+	HTTPServerDecActive(addr, operation string)
+}
+
 type Controller struct {
 	startAt         time.Time
 	logger          *slog.Logger
@@ -34,6 +40,8 @@ type Controller struct {
 	addr            string
 	debug           bool
 	logErrorHandler bool
+
+	metricProvider metricProvider
 
 	ogenServer *agentapi.Server
 
@@ -57,6 +65,7 @@ func New(
 	tracer trace.Tracer,
 	parsingUseCases parsingUseCases,
 	exportUseCases exportUseCases,
+	metricProvider metricProvider,
 ) (*Controller, error) {
 	c := &Controller{
 		startAt:         startAt,
@@ -66,6 +75,7 @@ func New(
 		debug:           config.GetDebug(),
 		logErrorHandler: config.GetLogErrorHandler(),
 		token:           config.GetToken(),
+		metricProvider:  metricProvider,
 
 		parsingUseCases: parsingUseCases,
 		exportUseCases:  exportUseCases,
@@ -76,7 +86,10 @@ func New(
 		agentapi.WithErrorHandler(c.methodErrorHandler),
 		agentapi.WithMethodNotAllowed(methodNotAllowed),
 		agentapi.WithNotFound(methodNotFound),
-		agentapi.WithMiddleware(c.simplePanicRecover),
+		agentapi.WithMiddleware(
+			c.metricsMiddleware,
+			c.simplePanicRecover,
+		),
 	)
 	if err != nil {
 		return nil, err

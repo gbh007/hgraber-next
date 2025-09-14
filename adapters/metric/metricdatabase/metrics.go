@@ -1,0 +1,28 @@
+package metricdatabase
+
+import (
+	"github.com/prometheus/client_golang/prometheus"
+)
+
+var (
+	ActiveRequest = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: ActiveRequestName,
+		Help: "Количество активных запросов",
+	},
+		[]string{DBLabelName},
+	)
+	OpenConnection = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: OpenConnectionName,
+		Help: "Количество открытых соединений",
+	},
+		[]string{DBLabelName},
+	)
+	RequestDuration = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    RequestDurationName,
+			Buckets: []float64{0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1, 0.2, 0.5, 1, 1.5, 2, 3, 5, 10},
+			Help:    "Время обработки запроса",
+		},
+		[]string{DBLabelName, StmtLabelName},
+	)
+)

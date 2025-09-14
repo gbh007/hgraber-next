@@ -17,20 +17,20 @@ func SlowRequest() *table.PanelBuilder {
 				Vector(metricdatabase.RequestDurationName+"_sum").
 				Labels(generatorcore.ServiceFilterPromQL),
 		).
-			By([]string{metricdatabase.StmtLabelName}),
+			By([]string{metricdatabase.StmtLabelName, metricdatabase.DBLabelName}),
 		promql.Sum(
 			promql.
 				Vector(metricdatabase.RequestDurationName+"_count").
 				Labels(generatorcore.ServiceFilterPromQL),
 		).
-			By([]string{metricdatabase.StmtLabelName}),
+			By([]string{metricdatabase.StmtLabelName, metricdatabase.DBLabelName}),
 	)
 
 	return generatorcore.SimpleTablePanel(
 		[]generatorcore.PromQLExpr{
 			{
 				Query:  query.String(),
-				Legend: fmt.Sprintf("{{%s}}", metricdatabase.StmtLabelName),
+				Legend: fmt.Sprintf("{{%s}} -> {{%s}}", metricdatabase.DBLabelName, metricdatabase.StmtLabelName),
 			},
 		},
 		"Slow request",

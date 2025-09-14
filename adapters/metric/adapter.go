@@ -5,9 +5,12 @@ import (
 	"time"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
+	"github.com/gbh007/hgraber-next/adapters/metric/metricdatabase"
 	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
+	"github.com/gbh007/hgraber-next/adapters/metric/metrichttp"
 	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
 )
 
 type SystemType byte
@@ -22,16 +25,18 @@ type Config struct {
 	ServiceName string
 	Type        SystemType
 
-	WithVersion bool
-	WithFS      bool
-	WithServer  bool
+	WithGo         bool
+	WithVersion    bool
+	WithFS         bool
+	WithServer     bool
+	WithDB         bool
+	WithHTTPServer bool
+	WithAgent      bool
 }
 
 func New(cfg Config) (p *MetricProvider, err error) {
 	p = &MetricProvider{
-		// reg: prometheus.NewRegistry(),
-		// FIXME: временная мера, пока не будет полного порта метрик
-		reg: prometheus.DefaultRegisterer.(*prometheus.Registry),
+		reg: prometheus.NewRegistry(),
 	}
 
 	defaultLabels := prometheus.Labels{}
@@ -95,6 +100,47 @@ func New(cfg Config) (p *MetricProvider, err error) {
 		err = reg.Register(metricserver.LastCollectorScrapeDuration)
 		if err != nil {
 			return nil, fmt.Errorf("register server collector scrape duration: %w", err)
+		}
+
+		err = reg.Register(metricserver.WorkerExecutionTaskTime)
+		if err != nil {
+			return nil, fmt.Errorf("register server worker execution: %w", err)
+		}
+	}
+
+	if cfg.WithDB {
+		err = reg.Register(metricdatabase.ActiveRequest)
+		if err != nil {
+			return nil, fmt.Errorf("register database active request: %w", err)
+		}
+
+		err = reg.Register(metricdatabase.OpenConnection)
+		if err != nil {
+			return nil, fmt.Errorf("register database open connection: %w", err)
+		}
+
+		err = reg.Register(metricdatabase.RequestDuration)
+		if err != nil {
+			return nil, fmt.Errorf("register database request duration: %w", err)
+		}
+	}
+
+	if cfg.WithHTTPServer {
+		err = reg.Register(metrichttp.ServerActiveRequest)
+		if err != nil {
+			return nil, fmt.Errorf("register http server active request: %w", err)
+		}
+
+		err = reg.Register(metrichttp.ServerHandleRequest)
+		if err != nil {
+			return nil, fmt.Errorf("register http server request duration: %w", err)
+		}
+	}
+
+	if cfg.WithGo {
+		err = reg.Register(collectors.NewGoCollector(collectors.WithGoCollectorRuntimeMetrics(collectors.MetricsAll)))
+		if err != nil {
+			return nil, fmt.Errorf("register go collector: %w", err)
 		}
 	}
 

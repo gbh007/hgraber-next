@@ -58,8 +58,8 @@ func (mp MetricProvider) NewSystemInfoCollector(
 		}
 	}
 
-	err := RegisterWorkerInfoCollector(
-		logger,
+	err := metricserver.RegisterWorkerInfoCollector(
+		mp.registerer,
 		infoProvider,
 		time.Millisecond*100, // TODO: настраивать таймаут через конфиг
 	)

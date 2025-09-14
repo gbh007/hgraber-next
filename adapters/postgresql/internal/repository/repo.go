@@ -11,11 +11,13 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
+const dbName = "postgres"
+
 type MetricProvider interface {
-	IncDBActiveRequest()
-	DecDBActiveRequest()
-	SetDBOpenConnection(n int32)
-	RegisterDBRequestDuration(stmt string, d time.Duration)
+	IncDBActiveRequest(db string)
+	DecDBActiveRequest(db string)
+	SetDBOpenConnection(db string, n int32)
+	RegisterDBRequestDuration(db, stmt string, d time.Duration)
 }
 
 type Repository struct {
@@ -57,7 +59,7 @@ func New(
 
 	go func() {
 		for range time.NewTicker(time.Second * 5).C { //nolint:mnd // будет исправлено позднее
-			metricProvider.SetDBOpenConnection(dbpool.Stat().TotalConns())
+			metricProvider.SetDBOpenConnection(dbName, dbpool.Stat().TotalConns())
 		}
 	}()
 

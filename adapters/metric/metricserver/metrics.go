@@ -19,4 +19,15 @@ var (
 		Name: LastCollectorScrapeDurationName,
 		Help: "Время последней сборки данных",
 	}, []string{ScrapeNameLabel})
+
+	WorkerExecutionTaskTime = prometheus.NewSummaryVec(prometheus.SummaryOpts{
+		Name: WorkerExecutionTaskSecondsName,
+		Help: "Время выполнения задачи воркером",
+	}, []string{WorkerNameLabel, metriccore.SuccessLabel})
+
+	WorkerDesc = prometheus.NewDesc(
+		WorkerTotalName,
+		"Данные воркеров",
+		[]string{WorkerNameLabel, CounterLabel}, nil,
+	)
 )

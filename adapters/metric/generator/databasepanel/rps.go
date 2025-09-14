@@ -15,9 +15,9 @@ func RPS() *timeseries.PanelBuilder {
 			{
 				Query: generatorcore.RPSExpr(
 					metricdatabase.RequestDurationName+"_count",
-					[]string{metricdatabase.StmtLabelName},
+					[]string{metricdatabase.StmtLabelName, metricdatabase.DBLabelName},
 				),
-				Legend: fmt.Sprintf("{{%s}}", metricdatabase.StmtLabelName),
+				Legend: fmt.Sprintf("{{%s}} -> {{%s}}", metricdatabase.DBLabelName, metricdatabase.StmtLabelName),
 			},
 		},
 		"RPS",

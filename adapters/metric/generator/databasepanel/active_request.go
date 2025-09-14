@@ -1,6 +1,8 @@
 package databasepanel
 
 import (
+	"fmt"
+
 	"github.com/grafana/grafana-foundation-sdk/go/timeseries"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
@@ -13,9 +15,9 @@ func ActiveRequest() *timeseries.PanelBuilder {
 			{
 				Query: generatorcore.SumExpr(
 					metricdatabase.ActiveRequestName,
-					nil,
+					[]string{metricdatabase.DBLabelName},
 				),
-				Legend: "-",
+				Legend: fmt.Sprintf("{{%s}}", metricdatabase.DBLabelName),
 			},
 		},
 		"Active request",
