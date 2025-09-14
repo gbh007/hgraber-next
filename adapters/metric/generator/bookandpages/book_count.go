@@ -6,6 +6,7 @@ import (
 	"github.com/grafana/grafana-foundation-sdk/go/timeseries"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
+	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
 )
 
@@ -15,9 +16,9 @@ func BookCount() *timeseries.PanelBuilder {
 			{
 				Query: generatorcore.SumExpr(
 					metricserver.BookTotalName,
-					[]string{metricserver.TypeLabel},
+					[]string{metriccore.TypeLabel},
 				),
-				Legend: fmt.Sprintf("{{%s}}", metricserver.TypeLabel),
+				Legend: fmt.Sprintf("{{%s}}", metriccore.TypeLabel),
 			},
 		},
 		"Book count",

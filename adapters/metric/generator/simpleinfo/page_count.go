@@ -10,6 +10,7 @@ import (
 	"github.com/grafana/promql-builder/go/promql"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
+	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
 )
 
@@ -18,7 +19,7 @@ func PageCount() *stat.PanelBuilder {
 		promql.
 			Vector(metricserver.PageTotalName).
 			Labels(generatorcore.ServiceFilterPromQL),
-	).By([]string{metricserver.TypeLabel})
+	).By([]string{metriccore.TypeLabel})
 
 	return stat.
 		NewPanelBuilder().
@@ -28,7 +29,7 @@ func PageCount() *stat.PanelBuilder {
 				NewDataqueryBuilder().
 				Expr(query.String()).
 				Instant().
-				LegendFormat(fmt.Sprintf("{{%s}}", metricserver.TypeLabel)).
+				LegendFormat(fmt.Sprintf("{{%s}}", metriccore.TypeLabel)).
 				Datasource(generatorcore.MetricDatasource),
 		}).
 		Unit(generatorcore.UnitShort).

@@ -18,6 +18,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/massloadhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/systemhandlers"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type ParseUseCases interface {
@@ -93,6 +94,7 @@ type metricProvider interface {
 	HTTPServerAddHandle(addr, operation string, status bool, d time.Duration)
 	HTTPServerIncActive(addr, operation string)
 	HTTPServerDecActive(addr, operation string)
+	Registry() *prometheus.Registry
 }
 
 type Controller struct {

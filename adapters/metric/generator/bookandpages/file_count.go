@@ -7,7 +7,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
 	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
+	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
 )
 
 func FileCount() *timeseries.PanelBuilder {
@@ -15,10 +15,10 @@ func FileCount() *timeseries.PanelBuilder {
 		[]generatorcore.PromQLExpr{
 			{
 				Query: generatorcore.SumExpr(
-					metricserver.FileTotalName,
-					[]string{metricserver.TypeLabel, metriccore.FSIDLabel},
+					metricfs.FileTotalName,
+					[]string{metriccore.TypeLabel, metricfs.FSIDLabel},
 				),
-				Legend: fmt.Sprintf("{{%s}} -> {{%s}}", metricserver.TypeLabel, metriccore.FSIDLabel),
+				Legend: fmt.Sprintf("{{%s}} -> {{%s}}", metriccore.TypeLabel, metricfs.FSIDLabel),
 			},
 		},
 		"File count",

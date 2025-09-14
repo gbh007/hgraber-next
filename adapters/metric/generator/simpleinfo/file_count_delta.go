@@ -10,18 +10,20 @@ import (
 	"github.com/grafana/promql-builder/go/promql"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
+	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
+	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
 )
 
 func FileCountDelta() *barchart.PanelBuilder {
 	query := promql.Sum(
 		promql.Delta(
 			promql.
-				Vector(metricserver.FileTotalName).
+				Vector(metricfs.FileTotalName).
 				Labels(generatorcore.ServiceFilterPromQL).
+				Label(metriccore.ServiceTypeLabel, metriccore.ServiceTypeLabelValueServer).
 				Range(generatorcore.NameToVar(generatorcore.DeltaVariableName)),
 		),
-	).By([]string{metricserver.TypeLabel})
+	).By([]string{metriccore.TypeLabel})
 
 	return barchart.
 		NewPanelBuilder().
@@ -31,7 +33,7 @@ func FileCountDelta() *barchart.PanelBuilder {
 				NewDataqueryBuilder().
 				Expr(query.String()).
 				Instant().
-				LegendFormat(fmt.Sprintf("{{%s}}", metricserver.TypeLabel)).
+				LegendFormat(fmt.Sprintf("{{%s}}", metriccore.TypeLabel)).
 				Datasource(generatorcore.MetricDatasource),
 		}).
 		Unit(generatorcore.UnitShort).

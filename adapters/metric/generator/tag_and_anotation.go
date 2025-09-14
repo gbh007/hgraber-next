@@ -5,8 +5,7 @@ import (
 	"github.com/grafana/promql-builder/go/promql"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricagent"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
+	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 )
 
 func (g Generator) WithTagAndAnnotation(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
@@ -46,19 +45,11 @@ func (g Generator) WithTagAndAnnotation(builder *dashboard.DashboardBuilder) *da
 		dashboard.
 			NewAnnotationQueryBuilder().
 			Enable(false).
-			Expr(promql.Or(
-				promql.Mul(
-					promql.
-						Vector(metricagent.VersionInfoName).
-						Labels(generatorcore.ServiceFilterPromQL),
-					promql.N(1000), //nolint:mnd // будет исправлено позднее
-				),
-				promql.Mul(
-					promql.
-						Vector(metricserver.VersionInfoName).
-						Labels(generatorcore.ServiceFilterPromQL),
-					promql.N(1000), //nolint:mnd // будет исправлено позднее
-				),
+			Expr(promql.Mul(
+				promql.
+					Vector(metriccore.VersionInfoName).
+					Labels(generatorcore.ServiceFilterPromQL),
+				promql.N(1000), //nolint:mnd // будет исправлено позднее
 			).String()).
 			IconColor("super-light-blue").
 			Name("app started (metrics)").

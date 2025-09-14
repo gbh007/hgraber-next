@@ -7,7 +7,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
 	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
+	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
 )
 
 func FileSizeDelta() *timeseries.PanelBuilder {
@@ -15,10 +15,10 @@ func FileSizeDelta() *timeseries.PanelBuilder {
 		[]generatorcore.PromQLExpr{
 			{
 				Query: generatorcore.DeltaExpr(
-					metricserver.FileBytesName,
-					[]string{metricserver.TypeLabel, metriccore.FSIDLabel},
+					metricfs.FileBytesName,
+					[]string{metriccore.TypeLabel, metricfs.FSIDLabel},
 				),
-				Legend: fmt.Sprintf("{{%s}} -> {{%s}}", metricserver.TypeLabel, metriccore.FSIDLabel),
+				Legend: fmt.Sprintf("{{%s}} -> {{%s}}", metriccore.TypeLabel, metricfs.FSIDLabel),
 			},
 		},
 		"File delta size",

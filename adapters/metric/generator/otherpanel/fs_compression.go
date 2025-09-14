@@ -8,7 +8,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
 	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
+	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
 )
 
 func FSCompression() *timeseries.PanelBuilder {
@@ -17,16 +17,18 @@ func FSCompression() *timeseries.PanelBuilder {
 		promql.Div(
 			promql.Sum(
 				promql.
-					Vector(metricserver.FileBytesName).
+					Vector(metricfs.FileBytesName).
 					Labels(generatorcore.ServiceFilterPromQL).
-					Label(metricserver.TypeLabel, metricserver.TypeLabelValueFS),
-			).By([]string{metriccore.FSIDLabel}),
+					Label(metriccore.TypeLabel, metricfs.TypeLabelValueFS).
+					Label(metriccore.ServiceTypeLabel, metriccore.ServiceTypeLabelValueServer),
+			).By([]string{metricfs.FSIDLabel}),
 			promql.Sum(
 				promql.
-					Vector(metricserver.FileBytesName).
+					Vector(metricfs.FileBytesName).
 					Labels(generatorcore.ServiceFilterPromQL).
-					Label(metricserver.TypeLabel, metricserver.TypeLabelValuePage),
-			).By([]string{metriccore.FSIDLabel}),
+					Label(metriccore.TypeLabel, metricfs.TypeLabelValuePage).
+					Label(metriccore.ServiceTypeLabel, metriccore.ServiceTypeLabelValueServer),
+			).By([]string{metricfs.FSIDLabel}),
 		),
 	)
 
@@ -34,7 +36,7 @@ func FSCompression() *timeseries.PanelBuilder {
 		[]generatorcore.PromQLExpr{
 			{
 				Query:  query.String(),
-				Legend: fmt.Sprintf("{{%s}}", metriccore.FSIDLabel),
+				Legend: fmt.Sprintf("{{%s}}", metricfs.FSIDLabel),
 			},
 		},
 		"FS Compression",

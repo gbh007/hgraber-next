@@ -1,17 +1,13 @@
-package metric
+package metriccore
 
 import (
-	"time"
-
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
 
-	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
 	"github.com/gbh007/hgraber-next/version"
 )
 
-var versionInfo = promauto.NewGauge(prometheus.GaugeOpts{
-	Name: metricserver.VersionInfoName,
+var VersionInfoMetric = prometheus.NewGauge(prometheus.GaugeOpts{
+	Name: VersionInfoName,
 	Help: "Информация о приложении",
 	ConstLabels: prometheus.Labels{
 		"go_version": version.GoVersion,
@@ -23,7 +19,3 @@ var versionInfo = promauto.NewGauge(prometheus.GaugeOpts{
 		"build":      version.BuildAt,
 	},
 })
-
-func init() {
-	versionInfo.Set(float64(time.Now().Unix()))
-}

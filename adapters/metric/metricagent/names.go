@@ -12,11 +12,6 @@ const (
 )
 
 var (
-	FSActionSecondsName = prometheus.BuildFQName(
-		metriccore.SystemName,
-		SubSystemName,
-		"fs_action_seconds",
-	)
 	ParserActionSecondsName = prometheus.BuildFQName(
 		metriccore.SystemName,
 		SubSystemName,
@@ -26,10 +21,5 @@ var (
 		metriccore.SystemName,
 		SubSystemName,
 		"web_cache_total",
-	)
-	VersionInfoName = prometheus.BuildFQName(
-		metriccore.SystemName,
-		SubSystemName,
-		"version_info",
 	)
 )

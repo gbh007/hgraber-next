@@ -1,6 +1,7 @@
 package generatorcore
 
 import (
+	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
 	"github.com/grafana/grafana-foundation-sdk/go/units"
 	promcog "github.com/grafana/promql-builder/go/cog"
@@ -60,7 +61,7 @@ var (
 	ServiceFilterPromQL = []promcog.Builder[promql.LabelSelector]{
 		promql.
 			NewLabelSelectorBuilder().
-			Name("service_name"). // TODO: в константу?
+			Name(metriccore.ServiceNameLabel).
 			Operator(promql.LabelMatchingOperatorMatchRegexp).
 			Value(NameToVar(ServiceVariableName)),
 	}

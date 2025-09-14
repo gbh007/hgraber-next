@@ -6,9 +6,8 @@ import (
 	"github.com/grafana/grafana-foundation-sdk/go/timeseries"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricagent"
 	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
+	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
 )
 
 func FSRPS() *timeseries.PanelBuilder {
@@ -16,17 +15,10 @@ func FSRPS() *timeseries.PanelBuilder {
 		[]generatorcore.PromQLExpr{
 			{
 				Query: generatorcore.RPSExpr(
-					metricserver.FSActionSecondsName+"_count",
-					[]string{metriccore.ActionLabel, metriccore.FSIDLabel},
+					metricfs.ActionSecondsName+"_count",
+					[]string{metriccore.ActionLabel, metricfs.FSIDLabel},
 				),
-				Legend: fmt.Sprintf("server/{{%s}} -> {{%s}}", metriccore.ActionLabel, metriccore.FSIDLabel),
-			},
-			{
-				Query: generatorcore.RPSExpr(
-					metricagent.FSActionSecondsName+"_count",
-					[]string{metriccore.ActionLabel},
-				),
-				Legend: fmt.Sprintf("agent/{{%s}}", metriccore.ActionLabel),
+				Legend: fmt.Sprintf("{{%s}}/{{%s}} -> {{%s}}", metriccore.ServiceTypeLabel, metriccore.ActionLabel, metricfs.FSIDLabel),
 			},
 		},
 		"FS RPS",

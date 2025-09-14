@@ -1,9 +1,12 @@
 package generator
 
 import (
+	"fmt"
+
 	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
+	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 )
 
 //nolint:lll // будет исправлено позднее
@@ -21,7 +24,11 @@ func (g Generator) WithVariables(builder *dashboard.DashboardBuilder) *dashboard
 	builder.WithVariable(
 		dashboard.
 			NewQueryVariableBuilder(generatorcore.ServiceVariableName).
-			Query(generatorcore.ValuesFromString(`label_values({__name__=~ "hgraber_next_server_version_info|hgraber_next_agent_version_info"}, service_name)`)).
+			Query(generatorcore.ValuesFromString(fmt.Sprintf(
+				"label_values(%s, %s)",
+				metriccore.VersionInfoName,
+				metriccore.ServiceNameLabel,
+			))).
 			Datasource(generatorcore.MetricDatasource).
 			Multi(true).
 			Current(dashboard.VariableOption{

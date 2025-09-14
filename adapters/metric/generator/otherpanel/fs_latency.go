@@ -6,9 +6,8 @@ import (
 	"github.com/grafana/grafana-foundation-sdk/go/timeseries"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricagent"
 	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
+	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
 )
 
 func FSLatency() *timeseries.PanelBuilder {
@@ -16,17 +15,10 @@ func FSLatency() *timeseries.PanelBuilder {
 		[]generatorcore.PromQLExpr{
 			{
 				Query: generatorcore.AvgSummary(
-					metricserver.FSActionSecondsName,
-					[]string{metriccore.ActionLabel, metriccore.FSIDLabel},
+					metricfs.ActionSecondsName,
+					[]string{metriccore.ServiceTypeLabel, metriccore.ActionLabel, metricfs.FSIDLabel},
 				),
-				Legend: fmt.Sprintf("server/{{%s}} -> {{%s}}", metriccore.ActionLabel, metriccore.FSIDLabel),
-			},
-			{
-				Query: generatorcore.AvgSummary(
-					metricagent.FSActionSecondsName,
-					[]string{metriccore.ActionLabel},
-				),
-				Legend: fmt.Sprintf("agent/{{%s}}", metriccore.ActionLabel),
+				Legend: fmt.Sprintf("{{%s}}/{{%s}} -> {{%s}}", metriccore.ServiceTypeLabel, metriccore.ActionLabel, metricfs.FSIDLabel),
 			},
 		},
 		"FS latency",

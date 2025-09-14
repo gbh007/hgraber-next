@@ -55,7 +55,13 @@ func Serve() {
 
 	logger := initLogger(cfg)
 
-	metricProvider, err := metric.New()
+	metricProvider, err := metric.New(metric.Config{
+		ServiceName: cfg.Application.ServiceName,
+		Type:        metric.ServerSystemType,
+		WithVersion: true,
+		WithFS:      true,
+		WithServer:  true,
+	})
 	if err != nil {
 		logger.ErrorContext(
 			ctx, "fail init metrics",
@@ -306,7 +312,7 @@ func Serve() {
 	}
 
 	if cfg.Application.Metric.Enabled() {
-		infoCollector, err := metric.NewSystemInfoCollector(
+		infoCollector, err := metricProvider.NewSystemInfoCollector(
 			logger,
 			systemUseCases,
 			storage,

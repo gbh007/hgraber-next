@@ -25,7 +25,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 		mux.Handle("/", http.FileServer(http.Dir(c.staticDir)))
 	}
 
-	mux.Handle("/metrics", promhttp.Handler())
+	mux.Handle("/metrics", promhttp.HandlerFor(c.metricProvider.Registry(), promhttp.HandlerOpts{}))
 	mux.Handle("/api/", otelPropagation(c.logIO(cors(c.ogenServer))))
 
 	server := &http.Server{

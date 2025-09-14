@@ -8,17 +8,19 @@ import (
 	"github.com/grafana/promql-builder/go/promql"
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
+	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
+	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
 )
 
 func FileSize() *stat.PanelBuilder {
 	query := func(k, v string) string {
 		return promql.Sum(
 			promql.
-				Vector(metricserver.FileBytesName).
+				Vector(metricfs.FileBytesName).
 				Labels(generatorcore.ServiceFilterPromQL).
+				Label(metriccore.ServiceTypeLabel, metriccore.ServiceTypeLabelValueServer).
 				Label(k, v),
-		).By([]string{metricserver.TypeLabel}).String()
+		).By([]string{metriccore.TypeLabel}).String()
 	}
 
 	return stat.
@@ -28,8 +30,8 @@ func FileSize() *stat.PanelBuilder {
 			prometheus.
 				NewDataqueryBuilder().
 				Expr(query(
-					metricserver.TypeLabel,
-					metricserver.TypeLabelValueFS,
+					metriccore.TypeLabel,
+					metricfs.TypeLabelValueFS,
 				)).
 				Instant().
 				LegendFormat("На диске").
@@ -37,8 +39,8 @@ func FileSize() *stat.PanelBuilder {
 			prometheus.
 				NewDataqueryBuilder().
 				Expr(query(
-					metricserver.TypeLabel,
-					metricserver.TypeLabelValuePage,
+					metriccore.TypeLabel,
+					metricfs.TypeLabelValuePage,
 				)).
 				Instant().
 				LegendFormat("В страницах").

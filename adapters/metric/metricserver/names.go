@@ -17,25 +17,10 @@ var (
 		metriccore.SubSystemName,
 		"page_total",
 	)
-	FileTotalName = prometheus.BuildFQName(
-		metriccore.SystemName,
-		metriccore.SubSystemName,
-		"file_total",
-	)
-	FileBytesName = prometheus.BuildFQName(
-		metriccore.SystemName,
-		metriccore.SubSystemName,
-		"file_bytes",
-	)
 	LastCollectorScrapeDurationName = prometheus.BuildFQName(
 		metriccore.SystemName,
 		metriccore.SubSystemName,
 		"info_scrape_duration_seconds",
-	)
-	FSActionSecondsName = prometheus.BuildFQName(
-		metriccore.SystemName,
-		metriccore.SubSystemName,
-		"fs_action_seconds",
 	)
 	WorkerExecutionTaskSecondsName = prometheus.BuildFQName(
 		metriccore.SystemName,
@@ -46,10 +31,5 @@ var (
 		metriccore.SystemName,
 		metriccore.SubSystemName,
 		"worker_total",
-	)
-	VersionInfoName = prometheus.BuildFQName(
-		metriccore.SystemName,
-		metriccore.SubSystemName,
-		"version_info",
 	)
 )

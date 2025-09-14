@@ -12,16 +12,17 @@ import (
 
 	"github.com/gbh007/hgraber-next/adapters/metric/generator/generatorcore"
 	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
-	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
+	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
 )
 
 func FSSize() *piechart.PanelBuilder {
 	query := promql.Sum(
 		promql.
-			Vector(metricserver.FileBytesName).
+			Vector(metricfs.FileBytesName).
 			Labels(generatorcore.ServiceFilterPromQL).
-			Label(metricserver.TypeLabel, metricserver.TypeLabelValueFS),
-	).By([]string{metriccore.FSIDLabel})
+			Label(metriccore.ServiceTypeLabel, metriccore.ServiceTypeLabelValueServer).
+			Label(metriccore.TypeLabel, metricfs.TypeLabelValueFS),
+	).By([]string{metricfs.FSIDLabel})
 
 	return piechart.
 		NewPanelBuilder().
@@ -31,7 +32,7 @@ func FSSize() *piechart.PanelBuilder {
 				NewDataqueryBuilder().
 				Expr(query.String()).
 				Instant().
-				LegendFormat(fmt.Sprintf("{{%s}}", metriccore.FSIDLabel)).
+				LegendFormat(fmt.Sprintf("{{%s}}", metricfs.FSIDLabel)).
 				Datasource(generatorcore.MetricDatasource),
 		}).
 		PieType(piechart.PieChartTypeDonut).
