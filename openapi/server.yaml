@@ -201,6 +201,7 @@ paths:
                   pages_size_formatted:
                     type: string
                     description: Объем загруженных изображений в человеко-читаемом формате
+                    deprecated: true
                   files_size:
                     type: integer
                     format: int64
@@ -208,6 +209,7 @@ paths:
                   files_size_formatted:
                     type: string
                     description: Объем файлов в человеко-читаемом формате
+                    deprecated: true
                 required:
                   - count
                   - downloaded_count
@@ -1148,18 +1150,22 @@ paths:
                       unique_formatted:
                         type: string
                         description: Размер уникальных файлов книги в человекочитаемом виде
+                        deprecated: true
                       unique_without_dead_hashes_formatted:
                         type: string
                         description: Размер уникальных файлов книги без учета мертвых хешей  в человекочитаемом виде
                       shared_formatted:
                         type: string
                         description: Размер файлов в книге что пересекаются с другими книгами в человекочитаемом виде
+                        deprecated: true
                       dead_hashes_formatted:
                         type: string
                         description: Размер мертвых хешей в книге  в человекочитаемом виде
+                        deprecated: true
                       total_formatted:
                         type: string
                         description: Общий размер файлов книги в человекочитаемом виде
+                        deprecated: true
                       unique_count:
                         type: integer
                         description: Количество уникальных файлов книги
@@ -1182,6 +1188,7 @@ paths:
                       avg_page_size_formatted:
                         type: string
                         description: Средний размер страницы в человекочитаемом виде
+                        deprecated: true
                     required:
                       - unique
                       - unique_without_dead_hashes
@@ -2428,12 +2435,15 @@ paths:
                         target_size_formatted:
                           type: string
                           description: Общий размер целевой книги
+                          deprecated: true
                         shared_size_formatted:
                           type: string
                           description: Общий размер книг без учета внутренних страниц дублей
+                          deprecated: true
                         shared_size_without_dead_hashes_formatted:
                           type: string
                           description: Общий размер книг без учета внутренних страниц дублей и мертвых хешей
+                          deprecated: true
                         target_avg_page_size:
                           type: integer
                           format: int64
@@ -2441,6 +2451,7 @@ paths:
                         target_avg_page_size_formatted:
                           type: string
                           description: Средний размер страницы цели в человекочитаемом виде
+                          deprecated: true
                         target_page_count:
                           type: integer
                           description: Фактическое количество страниц цели
@@ -2695,6 +2706,7 @@ paths:
                   origin_book_size_formatted:
                     type: string
                     description: Размер страниц в оригинальной книге в человеко читаемом виде
+                    deprecated: true
                   origin_page_avg_size:
                     type: integer
                     format: int64
@@ -2702,6 +2714,7 @@ paths:
                   origin_page_avg_size_formatted:
                     type: string
                     description: Средний размер страниц в оригинальной книге в человеко читаемом виде
+                    deprecated: true
                   target_book_size:
                     type: integer
                     format: int64
@@ -2709,6 +2722,7 @@ paths:
                   target_book_size_formatted:
                     type: string
                     description: Размер страниц в целевой книге в человеко читаемом виде
+                    deprecated: true
                   target_page_avg_size:
                     type: integer
                     format: int64
@@ -2716,6 +2730,7 @@ paths:
                   target_page_avg_size_formatted:
                     type: string
                     description: Средний размер страниц в целевой книге в человеко читаемом виде
+                    deprecated: true
                 required:
                   - origin
                   - target
@@ -4307,6 +4322,7 @@ paths:
                         available_size_formatted:
                           type: string
                           description: Доступное место в человеко читаемом виде
+                          deprecated: true
                       required:
                         - info
                         - is_legacy
@@ -6357,6 +6373,7 @@ components:
         size_formatted:
           type: string
           description: Размер файлов в человеко читаемом виде
+          deprecated: true
       required:
         - count
         - size
@@ -6387,6 +6404,7 @@ components:
         page_size_formatted:
           type: string
           description: Размер файлов страниц в человеко читаемом виде
+          deprecated: true
         page_count:
           type: integer
           format: int64
@@ -6398,6 +6416,7 @@ components:
         file_size_formatted:
           type: string
           description: Размер файлов в файловой системе в человеко читаемом виде
+          deprecated: true
         file_count:
           type: integer
           format: int64
@@ -6483,6 +6502,7 @@ components:
               page_size_formatted:
                 type: string
                 description: Размер файлов страниц в человеко читаемом виде
+                deprecated: true
               page_count:
                 type: integer
                 format: int64
@@ -6494,6 +6514,7 @@ components:
               file_size_formatted:
                 type: string
                 description: Размер файлов в файловой системе в человеко читаемом виде
+                deprecated: true
               file_count:
                 type: integer
                 format: int64

@@ -1778,16 +1778,24 @@ type APIBookDetailsPostOKSize struct {
 	Total int64 `json:"total"`
 	// Размер уникальных файлов книги в человекочитаемом
 	// виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	UniqueFormatted string `json:"unique_formatted"`
 	// Размер уникальных файлов книги без учета мертвых
 	// хешей  в человекочитаемом виде.
 	UniqueWithoutDeadHashesFormatted string `json:"unique_without_dead_hashes_formatted"`
 	// Размер файлов в книге что пересекаются с другими
 	// книгами в человекочитаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	SharedFormatted string `json:"shared_formatted"`
 	// Размер мертвых хешей в книге  в человекочитаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	DeadHashesFormatted string `json:"dead_hashes_formatted"`
 	// Общий размер файлов книги в человекочитаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	TotalFormatted string `json:"total_formatted"`
 	// Количество уникальных файлов книги.
 	UniqueCount int `json:"unique_count"`
@@ -1804,6 +1812,8 @@ type APIBookDetailsPostOKSize struct {
 	// Средний размер страницы.
 	AvgPageSize int64 `json:"avg_page_size"`
 	// Средний размер страницы в человекочитаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	AvgPageSizeFormatted string `json:"avg_page_size_formatted"`
 }
 
@@ -2970,15 +2980,23 @@ type APIDeduplicateBookByPageBodyPostOKResultItem struct {
 	// страниц дублей и мертвых хешей.
 	SharedPageCountWithoutDeadHashes int `json:"shared_page_count_without_dead_hashes"`
 	// Общий размер целевой книги.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	TargetSizeFormatted string `json:"target_size_formatted"`
 	// Общий размер книг без учета внутренних страниц дублей.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	SharedSizeFormatted string `json:"shared_size_formatted"`
 	// Общий размер книг без учета внутренних страниц
 	// дублей и мертвых хешей.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	SharedSizeWithoutDeadHashesFormatted string `json:"shared_size_without_dead_hashes_formatted"`
 	// Средний размер страницы цели.
 	TargetAvgPageSize int64 `json:"target_avg_page_size"`
 	// Средний размер страницы цели в человекочитаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	TargetAvgPageSizeFormatted string `json:"target_avg_page_size_formatted"`
 	// Фактическое количество страниц цели.
 	TargetPageCount int `json:"target_page_count"`
@@ -3265,21 +3283,29 @@ type APIDeduplicateComparePostOK struct {
 	OriginBookSize OptInt64 `json:"origin_book_size"`
 	// Размер страниц в оригинальной книге в человеко
 	// читаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	OriginBookSizeFormatted OptString `json:"origin_book_size_formatted"`
 	// Средний размер страниц в оригинальной книге.
 	OriginPageAvgSize OptInt64 `json:"origin_page_avg_size"`
 	// Средний размер страниц в оригинальной книге в
 	// человеко читаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	OriginPageAvgSizeFormatted OptString `json:"origin_page_avg_size_formatted"`
 	// Размер страниц в целевой книге.
 	TargetBookSize OptInt64 `json:"target_book_size"`
 	// Размер страниц в целевой книге в человеко читаемом
 	// виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	TargetBookSizeFormatted OptString `json:"target_book_size_formatted"`
 	// Средний размер страниц в целевой книге.
 	TargetPageAvgSize OptInt64 `json:"target_page_avg_size"`
 	// Средний размер страниц в целевой книге в человеко
 	// читаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	TargetPageAvgSizeFormatted OptString `json:"target_page_avg_size_formatted"`
 }
 
@@ -3938,6 +3964,8 @@ type APIFsListPostOKFileSystemsItem struct {
 	// Доступное место.
 	AvailableSize OptInt64 `json:"available_size"`
 	// Доступное место в человеко читаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	AvailableSizeFormatted OptString `json:"available_size_formatted"`
 }
 
@@ -7373,10 +7401,14 @@ type APISystemInfoSizeGetOK struct {
 	PagesSize int64 `json:"pages_size"`
 	// Объем загруженных изображений в человеко-читаемом
 	// формате.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	PagesSizeFormatted string `json:"pages_size_formatted"`
 	// Объем файлов в байтах.
 	FilesSize int64 `json:"files_size"`
 	// Объем файлов в человеко-читаемом формате.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	FilesSizeFormatted string `json:"files_size_formatted"`
 }
 
@@ -9474,6 +9506,8 @@ type FSDBFilesInfo struct {
 	// Размер файлов.
 	Size int64 `json:"size"`
 	// Размер файлов в человеко читаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	SizeFormatted string `json:"size_formatted"`
 }
 
@@ -9765,6 +9799,8 @@ type MassloadInfo struct {
 	// Размер файлов страниц.
 	PageSize OptInt64 `json:"page_size"`
 	// Размер файлов страниц в человеко читаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	PageSizeFormatted OptString `json:"page_size_formatted"`
 	// Количество страниц.
 	PageCount OptInt64 `json:"page_count"`
@@ -9772,6 +9808,8 @@ type MassloadInfo struct {
 	FileSize OptInt64 `json:"file_size"`
 	// Размер файлов в файловой системе в человеко читаемом
 	// виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	FileSizeFormatted OptString `json:"file_size_formatted"`
 	// Количество файлов в файловой системе.
 	FileCount OptInt64 `json:"file_count"`
@@ -9984,6 +10022,8 @@ type MassloadInfoAttributesItem struct {
 	// Размер файлов страниц.
 	PageSize OptInt64 `json:"page_size"`
 	// Размер файлов страниц в человеко читаемом виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	PageSizeFormatted OptString `json:"page_size_formatted"`
 	// Количество страниц.
 	PageCount OptInt64 `json:"page_count"`
@@ -9991,6 +10031,8 @@ type MassloadInfoAttributesItem struct {
 	FileSize OptInt64 `json:"file_size"`
 	// Размер файлов в файловой системе в человеко читаемом
 	// виде.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	FileSizeFormatted OptString `json:"file_size_formatted"`
 	// Количество файлов в файловой системе.
 	FileCount OptInt64 `json:"file_count"`
