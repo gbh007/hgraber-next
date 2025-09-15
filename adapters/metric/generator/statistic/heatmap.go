@@ -3,6 +3,7 @@ package statistic
 import (
 	"github.com/grafana/grafana-foundation-sdk/go/cog"
 	"github.com/grafana/grafana-foundation-sdk/go/cog/variants"
+	"github.com/grafana/grafana-foundation-sdk/go/common"
 	"github.com/grafana/grafana-foundation-sdk/go/heatmap"
 	"github.com/grafana/grafana-foundation-sdk/go/prometheus"
 	"github.com/grafana/promql-builder/go/promql"
@@ -31,6 +32,7 @@ func Heatmap(title, metric, unit string) *heatmap.PanelBuilder {
 				Interval(generatorcore.NameToVar(generatorcore.DeltaVariableName)).
 				LegendFormat(generatorcore.LegendAuto),
 		}).
+		Mode(common.TooltipDisplayModeSingle).
 		YAxis(heatmap.NewYAxisConfigBuilder().Unit(unit)).
 		CellValues(
 			heatmap.
