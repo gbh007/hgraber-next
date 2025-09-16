@@ -86,3 +86,13 @@ build: create_build_dir
 	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server-linux-arm64  ./cmd/server
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server-linux-amd64  ./cmd/server
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build $(LDFLAGS) -trimpath -o $(SERVICE_BIN)/server-windows-amd64.exe  ./cmd/server
+
+
+.PHONY: dbdoc
+dbdoc:
+# FIXME: Встроить как утилиту и сделать чистовую генерацию на пустой БД
+	tbls doc \
+		-t mermaid \
+		--force \
+		postgres://hgrabernextuser:hgrabernextpass@localhost:5432/hgrabernext?sslmode=disable \
+		doc/database

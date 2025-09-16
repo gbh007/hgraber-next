@@ -1,0 +1,1884 @@
+{
+  "name": "hgrabernext",
+  "tables": [
+    {
+      "name": "public.goose_db_version",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "nullable": false,
+          "default": "nextval('goose_db_version_id_seq'::regclass)"
+        },
+        {
+          "name": "version_id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "is_applied",
+          "type": "boolean",
+          "nullable": false
+        },
+        {
+          "name": "tstamp",
+          "type": "timestamp without time zone",
+          "nullable": true,
+          "default": "now()"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "goose_db_version_pkey",
+          "def": "CREATE UNIQUE INDEX goose_db_version_pkey ON public.goose_db_version USING btree (id)",
+          "table": "public.goose_db_version",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "goose_db_version_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.goose_db_version",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.books",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "origin_url",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "page_count",
+          "type": "integer",
+          "nullable": true
+        },
+        {
+          "name": "attributes_parsed",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "create_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "deleted",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "verified",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "verified_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "is_rebuild",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "books_pkey",
+          "def": "CREATE UNIQUE INDEX books_pkey ON public.books USING btree (id)",
+          "table": "public.books",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "unparsed_books",
+          "def": "CREATE INDEX unparsed_books ON public.books USING btree (id) WHERE (((name IS NULL) OR (page_count IS NULL) OR (attributes_parsed = false)) AND (origin_url IS NOT NULL) AND (deleted = false))",
+          "table": "public.books",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "unverified_books",
+          "def": "CREATE INDEX unverified_books ON public.books USING btree (id) WHERE (verified = false)",
+          "table": "public.books",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "book_origin_url",
+          "def": "CREATE INDEX book_origin_url ON public.books USING hash (origin_url) WHERE (origin_url IS NOT NULL)",
+          "table": "public.books",
+          "columns": [
+            "origin_url"
+          ]
+        },
+        {
+          "name": "book_is_rebuild",
+          "def": "CREATE INDEX book_is_rebuild ON public.books USING btree (id) WHERE (is_rebuild = true)",
+          "table": "public.books",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "book_is_deleted",
+          "def": "CREATE INDEX book_is_deleted ON public.books USING btree (id) WHERE (deleted = true)",
+          "table": "public.books",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "books_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.books",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.files",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "filename",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "ext",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "md5_sum",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "sha256_sum",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "size",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "create_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "fs_id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "invalid_data",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "files_pkey",
+          "def": "CREATE UNIQUE INDEX files_pkey ON public.files USING btree (id)",
+          "table": "public.files",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "file_unhandled",
+          "def": "CREATE INDEX file_unhandled ON public.files USING btree (id) WHERE ((md5_sum IS NULL) OR (sha256_sum IS NULL) OR (size IS NULL))",
+          "table": "public.files",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "file_md5_sum",
+          "def": "CREATE INDEX file_md5_sum ON public.files USING hash (md5_sum)",
+          "table": "public.files",
+          "columns": [
+            "md5_sum"
+          ]
+        },
+        {
+          "name": "file_invalid_data",
+          "def": "CREATE INDEX file_invalid_data ON public.files USING btree (id, fs_id) WHERE (invalid_data = true)",
+          "table": "public.files",
+          "columns": [
+            "id",
+            "fs_id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "files_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.files",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "files_fs_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (fs_id) REFERENCES file_storages(id) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.files",
+          "referenced_table": "file_storages",
+          "columns": [
+            "fs_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.pages",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "book_id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "page_number",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "ext",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "origin_url",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "create_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "downloaded",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "load_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "file_id",
+          "type": "uuid",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "pages_pkey",
+          "def": "CREATE UNIQUE INDEX pages_pkey ON public.pages USING btree (book_id, page_number)",
+          "table": "public.pages",
+          "columns": [
+            "book_id",
+            "page_number"
+          ]
+        },
+        {
+          "name": "unloaded_pages",
+          "def": "CREATE INDEX unloaded_pages ON public.pages USING btree (book_id, page_number) WHERE (downloaded = false)",
+          "table": "public.pages",
+          "columns": [
+            "book_id",
+            "page_number"
+          ]
+        },
+        {
+          "name": "page_without_file",
+          "def": "CREATE INDEX page_without_file ON public.pages USING btree (book_id, page_number) WHERE (file_id IS NULL)",
+          "table": "public.pages",
+          "columns": [
+            "book_id",
+            "page_number"
+          ]
+        },
+        {
+          "name": "page_with_file",
+          "def": "CREATE INDEX page_with_file ON public.pages USING btree (file_id, book_id, page_number) WHERE (file_id IS NOT NULL)",
+          "table": "public.pages",
+          "columns": [
+            "file_id",
+            "book_id",
+            "page_number"
+          ]
+        },
+        {
+          "name": "page_origin_url",
+          "def": "CREATE INDEX page_origin_url ON public.pages USING hash (origin_url) WHERE (origin_url IS NOT NULL)",
+          "table": "public.pages",
+          "columns": [
+            "origin_url"
+          ]
+        },
+        {
+          "name": "page_only_file_id",
+          "def": "CREATE INDEX page_only_file_id ON public.pages USING btree (file_id) WHERE (file_id IS NOT NULL)",
+          "table": "public.pages",
+          "columns": [
+            "file_id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "pages_book_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.pages",
+          "referenced_table": "books",
+          "columns": [
+            "book_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "pages_file_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (file_id) REFERENCES files(id) ON UPDATE CASCADE ON DELETE SET NULL",
+          "table": "public.pages",
+          "referenced_table": "files",
+          "columns": [
+            "file_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "pages_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (book_id, page_number)",
+          "table": "public.pages",
+          "referenced_table": "",
+          "columns": [
+            "book_id",
+            "page_number"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.attributes",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "code",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "plural_name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "order",
+          "type": "integer",
+          "nullable": false,
+          "default": "999"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "attributes_pkey",
+          "def": "CREATE UNIQUE INDEX attributes_pkey ON public.attributes USING btree (code)",
+          "table": "public.attributes",
+          "columns": [
+            "code"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "attributes_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (code)",
+          "table": "public.attributes",
+          "referenced_table": "",
+          "columns": [
+            "code"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.book_attributes",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "book_id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "attr",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "value",
+          "type": "text",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "attribute_book_id_code",
+          "def": "CREATE INDEX attribute_book_id_code ON public.book_attributes USING btree (book_id, attr)",
+          "table": "public.book_attributes",
+          "columns": [
+            "book_id",
+            "attr"
+          ]
+        },
+        {
+          "name": "book_attributes_value",
+          "def": "CREATE INDEX book_attributes_value ON public.book_attributes USING hash (value)",
+          "table": "public.book_attributes",
+          "columns": [
+            "value"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "book_attributes_book_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.book_attributes",
+          "referenced_table": "books",
+          "columns": [
+            "book_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "book_attributes_attr_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (attr) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.book_attributes",
+          "referenced_table": "attributes",
+          "columns": [
+            "attr"
+          ],
+          "referenced_columns": [
+            "code"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.book_labels",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "book_id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "page_number",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "value",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "create_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "book_labels_pkey",
+          "def": "CREATE UNIQUE INDEX book_labels_pkey ON public.book_labels USING btree (book_id, page_number, name)",
+          "table": "public.book_labels",
+          "columns": [
+            "book_id",
+            "page_number",
+            "name"
+          ]
+        },
+        {
+          "name": "book_labels_value",
+          "def": "CREATE INDEX book_labels_value ON public.book_labels USING hash (value)",
+          "table": "public.book_labels",
+          "columns": [
+            "value"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "book_labels_book_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.book_labels",
+          "referenced_table": "books",
+          "columns": [
+            "book_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "book_labels_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (book_id, page_number, name)",
+          "table": "public.book_labels",
+          "referenced_table": "",
+          "columns": [
+            "book_id",
+            "page_number",
+            "name"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.agents",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "addr",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "token",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "can_parse",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "can_export",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "priority",
+          "type": "integer",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "create_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "can_parse_multi",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "has_fs",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "has_hproxy",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "agents_pkey",
+          "def": "CREATE UNIQUE INDEX agents_pkey ON public.agents USING btree (id)",
+          "table": "public.agents",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "agents_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.agents",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.book_origin_attributes",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "book_id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "attr",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "values",
+          "type": "text[]",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "book_origin_attributes_pkey",
+          "def": "CREATE UNIQUE INDEX book_origin_attributes_pkey ON public.book_origin_attributes USING btree (book_id, attr)",
+          "table": "public.book_origin_attributes",
+          "columns": [
+            "book_id",
+            "attr"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "book_origin_attributes_book_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.book_origin_attributes",
+          "referenced_table": "books",
+          "columns": [
+            "book_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "book_origin_attributes_attr_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (attr) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.book_origin_attributes",
+          "referenced_table": "attributes",
+          "columns": [
+            "attr"
+          ],
+          "referenced_columns": [
+            "code"
+          ]
+        },
+        {
+          "name": "book_origin_attributes_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (book_id, attr)",
+          "table": "public.book_origin_attributes",
+          "referenced_table": "",
+          "columns": [
+            "book_id",
+            "attr"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.deleted_pages",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "book_id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "page_number",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "ext",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "origin_url",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "md5_sum",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "sha256_sum",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "size",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "downloaded",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "loaded_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "deleted_pages_pkey",
+          "def": "CREATE UNIQUE INDEX deleted_pages_pkey ON public.deleted_pages USING btree (book_id, page_number)",
+          "table": "public.deleted_pages",
+          "columns": [
+            "book_id",
+            "page_number"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "deleted_pages_book_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.deleted_pages",
+          "referenced_table": "books",
+          "columns": [
+            "book_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "deleted_pages_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (book_id, page_number)",
+          "table": "public.deleted_pages",
+          "referenced_table": "",
+          "columns": [
+            "book_id",
+            "page_number"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.label_presets",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "values",
+          "type": "text[]",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "label_presets_pkey",
+          "def": "CREATE UNIQUE INDEX label_presets_pkey ON public.label_presets USING btree (name)",
+          "table": "public.label_presets",
+          "columns": [
+            "name"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "label_presets_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (name)",
+          "table": "public.label_presets",
+          "referenced_table": "",
+          "columns": [
+            "name"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.dead_hashes",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "md5_sum",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "sha256_sum",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "size",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "dead_hashes_pkey",
+          "def": "CREATE UNIQUE INDEX dead_hashes_pkey ON public.dead_hashes USING btree (md5_sum, sha256_sum, size)",
+          "table": "public.dead_hashes",
+          "columns": [
+            "md5_sum",
+            "sha256_sum",
+            "size"
+          ]
+        },
+        {
+          "name": "dead_hash_md5_sum",
+          "def": "CREATE INDEX dead_hash_md5_sum ON public.dead_hashes USING hash (md5_sum)",
+          "table": "public.dead_hashes",
+          "columns": [
+            "md5_sum"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "dead_hashes_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (md5_sum, sha256_sum, size)",
+          "table": "public.dead_hashes",
+          "referenced_table": "",
+          "columns": [
+            "md5_sum",
+            "sha256_sum",
+            "size"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.attribute_colors",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "attr",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "value",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "text_color",
+          "type": "varchar(10)",
+          "nullable": false
+        },
+        {
+          "name": "background_color",
+          "type": "varchar(10)",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "attribute_colors_pkey",
+          "def": "CREATE UNIQUE INDEX attribute_colors_pkey ON public.attribute_colors USING btree (attr, value)",
+          "table": "public.attribute_colors",
+          "columns": [
+            "attr",
+            "value"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "attribute_colors_attr_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (attr) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.attribute_colors",
+          "referenced_table": "attributes",
+          "columns": [
+            "attr"
+          ],
+          "referenced_columns": [
+            "code"
+          ]
+        },
+        {
+          "name": "attribute_colors_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (attr, value)",
+          "table": "public.attribute_colors",
+          "referenced_table": "",
+          "columns": [
+            "attr",
+            "value"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.file_storages",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "agent_id",
+          "type": "uuid",
+          "nullable": true
+        },
+        {
+          "name": "path",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "download_priority",
+          "type": "integer",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "deduplicate_priority",
+          "type": "integer",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "highway_enabled",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "highway_addr",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "file_storages_pkey",
+          "def": "CREATE UNIQUE INDEX file_storages_pkey ON public.file_storages USING btree (id)",
+          "table": "public.file_storages",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "file_storages_agent_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (agent_id) REFERENCES agents(id) ON UPDATE CASCADE ON DELETE SET NULL",
+          "table": "public.file_storages",
+          "referenced_table": "agents",
+          "columns": [
+            "agent_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "file_storages_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.file_storages",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.url_mirrors",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "prefixes",
+          "type": "text[]",
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "url_mirrors_pkey",
+          "def": "CREATE UNIQUE INDEX url_mirrors_pkey ON public.url_mirrors USING btree (id)",
+          "table": "public.url_mirrors",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "url_mirrors_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.url_mirrors",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.attribute_remaps",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "attr",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "value",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "to_attr",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "to_value",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "attribute_remaps_pkey",
+          "def": "CREATE UNIQUE INDEX attribute_remaps_pkey ON public.attribute_remaps USING btree (attr, value)",
+          "table": "public.attribute_remaps",
+          "columns": [
+            "attr",
+            "value"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "attribute_remaps_attr_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (attr) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.attribute_remaps",
+          "referenced_table": "attributes",
+          "columns": [
+            "attr"
+          ],
+          "referenced_columns": [
+            "code"
+          ]
+        },
+        {
+          "name": "attribute_remaps_to_attr_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (to_attr) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.attribute_remaps",
+          "referenced_table": "attributes",
+          "columns": [
+            "to_attr"
+          ],
+          "referenced_columns": [
+            "code"
+          ]
+        },
+        {
+          "name": "attribute_remaps_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (attr, value)",
+          "table": "public.attribute_remaps",
+          "referenced_table": "",
+          "columns": [
+            "attr",
+            "value"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.massloads",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "nullable": false,
+          "default": "nextval('massloads_id_seq'::regclass)"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "page_size",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "file_size",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "flags",
+          "type": "text[]",
+          "nullable": true
+        },
+        {
+          "name": "page_count",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "file_count",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "books_ahead",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "new_books",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "existing_books",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "books_in_system",
+          "type": "bigint",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "massloads_pkey",
+          "def": "CREATE UNIQUE INDEX massloads_pkey ON public.massloads USING btree (id)",
+          "table": "public.massloads",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "massloads_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "public.massloads",
+          "referenced_table": "",
+          "columns": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.massload_external_links",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "massload_id",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "url",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "books_ahead",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "new_books",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "existing_books",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "auto_check",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "massload_external_links_url_unique",
+          "def": "CREATE UNIQUE INDEX massload_external_links_url_unique ON public.massload_external_links USING btree (url, massload_id)",
+          "table": "public.massload_external_links",
+          "columns": [
+            "url",
+            "massload_id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "massload_external_links_massload_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (massload_id) REFERENCES massloads(id) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.massload_external_links",
+          "referenced_table": "massloads",
+          "columns": [
+            "massload_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "massload_external_links_url_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE (url, massload_id)",
+          "table": "public.massload_external_links",
+          "referenced_table": "",
+          "columns": [
+            "url",
+            "massload_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.massload_attributes",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "massload_id",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "attr_code",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "attr_value",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "page_size",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "file_size",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "page_count",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "file_count",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "books_in_system",
+          "type": "bigint",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "massload_attributes_attr_unique",
+          "def": "CREATE UNIQUE INDEX massload_attributes_attr_unique ON public.massload_attributes USING btree (attr_code, attr_value, massload_id)",
+          "table": "public.massload_attributes",
+          "columns": [
+            "attr_code",
+            "attr_value",
+            "massload_id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "massload_attributes_attr_code_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (attr_code) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.massload_attributes",
+          "referenced_table": "attributes",
+          "columns": [
+            "attr_code"
+          ],
+          "referenced_columns": [
+            "code"
+          ]
+        },
+        {
+          "name": "massload_attributes_massload_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (massload_id) REFERENCES massloads(id) ON UPDATE CASCADE ON DELETE CASCADE",
+          "table": "public.massload_attributes",
+          "referenced_table": "massloads",
+          "columns": [
+            "massload_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "massload_attributes_attr_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE (attr_code, attr_value, massload_id)",
+          "table": "public.massload_attributes",
+          "referenced_table": "",
+          "columns": [
+            "attr_code",
+            "attr_value",
+            "massload_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.massload_flags",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "code",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false
+        },
+        {
+          "name": "order_weight",
+          "type": "integer",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "text_color",
+          "type": "varchar(10)",
+          "nullable": true
+        },
+        {
+          "name": "background_color",
+          "type": "varchar(10)",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "massload_flags_pkey",
+          "def": "CREATE UNIQUE INDEX massload_flags_pkey ON public.massload_flags USING btree (code)",
+          "table": "public.massload_flags",
+          "columns": [
+            "code"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "massload_flags_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (code)",
+          "table": "public.massload_flags",
+          "referenced_table": "",
+          "columns": [
+            "code"
+          ]
+        }
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "table": "public.files",
+      "columns": [
+        "fs_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.file_storages",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (fs_id) REFERENCES file_storages(id) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.pages",
+      "columns": [
+        "book_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.books",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.pages",
+      "columns": [
+        "file_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.files",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "zero_or_one",
+      "def": "FOREIGN KEY (file_id) REFERENCES files(id) ON UPDATE CASCADE ON DELETE SET NULL"
+    },
+    {
+      "table": "public.book_attributes",
+      "columns": [
+        "book_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.books",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.book_attributes",
+      "columns": [
+        "attr"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.attributes",
+      "parent_columns": [
+        "code"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (attr) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.book_labels",
+      "columns": [
+        "book_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.books",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.book_origin_attributes",
+      "columns": [
+        "book_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.books",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.book_origin_attributes",
+      "columns": [
+        "attr"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.attributes",
+      "parent_columns": [
+        "code"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (attr) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.deleted_pages",
+      "columns": [
+        "book_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.books",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.attribute_colors",
+      "columns": [
+        "attr"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.attributes",
+      "parent_columns": [
+        "code"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (attr) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.file_storages",
+      "columns": [
+        "agent_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.agents",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "zero_or_one",
+      "def": "FOREIGN KEY (agent_id) REFERENCES agents(id) ON UPDATE CASCADE ON DELETE SET NULL"
+    },
+    {
+      "table": "public.attribute_remaps",
+      "columns": [
+        "attr"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.attributes",
+      "parent_columns": [
+        "code"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (attr) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.attribute_remaps",
+      "columns": [
+        "to_attr"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.attributes",
+      "parent_columns": [
+        "code"
+      ],
+      "parent_cardinality": "zero_or_one",
+      "def": "FOREIGN KEY (to_attr) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.massload_external_links",
+      "columns": [
+        "massload_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.massloads",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (massload_id) REFERENCES massloads(id) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.massload_attributes",
+      "columns": [
+        "attr_code"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.attributes",
+      "parent_columns": [
+        "code"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (attr_code) REFERENCES attributes(code) ON UPDATE CASCADE ON DELETE CASCADE"
+    },
+    {
+      "table": "public.massload_attributes",
+      "columns": [
+        "massload_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.massloads",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (massload_id) REFERENCES massloads(id) ON UPDATE CASCADE ON DELETE CASCADE"
+    }
+  ],
+  "driver": {
+    "name": "postgres",
+    "database_version": "PostgreSQL 16.3 (Debian 16.3-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit",
+    "meta": {
+      "current_schema": "public",
+      "search_paths": [
+        "hgrabernextuser",
+        "public"
+      ],
+      "dict": {
+        "Functions": "Stored procedures and functions"
+      }
+    }
+  }
+}
