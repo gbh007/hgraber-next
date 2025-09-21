@@ -6,7 +6,7 @@
 [UI на React TS](https://github.com/gbh007/hgraber-next-react-ui)  
 [Вспомогательные инструменты](https://github.com/gbh007/hgraber-next-tools) для системы
 
-[Документация](./doc/database/README.md) по БД
+[Документация](docs/README.md)
 
 Оглавление:
 

@@ -16,6 +16,7 @@ $(GOLANGCI_LINT):
 .PHONY: lint
 lint: $(GOLANGCI_LINT)
 	$(GOLANGCI_LINT) run
+	go tool goarchlint run
 
 .PHONY: install-tools
 install-tools:
@@ -26,10 +27,12 @@ install-tools:
 	go get -u -tool mvdan.cc/gofumpt@v0.8.0
 	go get -u -tool golang.org/x/tools/cmd/goimports@v0.36.0
 	go get -u -tool github.com/daixiang0/gci@v0.13.7
+	go get -u -tool github.com/gbh007/goarchlint/cmd/goarchlint@v0.0.1
 
 # .PHONY: lint
 # lint:
 # 	go tool golangci-lint run
+# 	go tool goarchlint run
 
 .PHONY: deadcode
 deadcode:
@@ -95,4 +98,8 @@ dbdoc:
 		-t mermaid \
 		--force \
 		postgres://hgrabernextuser:hgrabernextpass@localhost:5432/hgrabernext?sslmode=disable \
-		doc/database
+		docs/database
+
+.PHONY: archdoc
+archdoc:
+	go tool goarchlint generate
