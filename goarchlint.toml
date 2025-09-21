@@ -1,0 +1,49 @@
+[generator]
+clean = true
+format = 'mermaid'
+only_inner = true
+out = 'docs/arch'
+prefer_inner_names = true
+scheme_file = 'plantuml'
+
+[[linter.rules]]
+path = "/usecases/**"
+deny = ["/adapters/**", "/usecases/**", "/controllers/**", "/application/**"]
+type = "strict"
+only_inner = true
+description = "use cases can't depend on other use case, adapter, controller, application"
+
+[[linter.rules]]
+path = "/usecases/**"
+allow = ["/domain/**", "/external", "/pkg"]
+type = "lax"
+only_inner = true
+description = "use cases can depend on domain only"
+
+[[linter.rules]]
+path = "/adapters/**"
+deny = ["/usecases/**", "/controllers/**", "/application/**"]
+type = "strict"
+only_inner = true
+description = "adapters can't depend on use case, controller, application"
+
+[[linter.rules]]
+path = "/adapters/**"
+allow = ["/domain/**", "/adapters/**", "/pkg", "/openapi/**", "/version"]
+type = "lax"
+only_inner = true
+description = "adapters can depend on domain only"
+
+[[linter.rules]]
+path = "/controllers/**"
+deny = ["/adapters/**", "/usecases/**", "/application/**"]
+type = "strict"
+only_inner = true
+description = "controllers can't depend on use case, adapter, application"
+
+[[linter.rules]]
+path = "/controllers/**"
+allow = ["/domain/**", "/controllers/**", "/pkg", "/openapi/**"]
+type = "lax"
+only_inner = true
+description = "controllers can depend on domain only"
