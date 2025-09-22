@@ -107,24 +107,46 @@ func (uc *UseCase) updateCalculation(ctx context.Context, ml massloadmodel.Massl
 		return fmt.Errorf("storage get external links: %w", err)
 	}
 
+	hasUpdate := false
+
 	for _, link := range links {
 		if !link.AutoCheck && !force {
 			continue
 		}
+
+		hasUpdate = true
 
 		info, err := uc.calcExternalLink(ctx, link.URL)
 		if err != nil {
 			return fmt.Errorf("storage calc external link (%s): %w", link.URL.String(), err)
 		}
 
+		needUpdate := false
 		link.UpdatedAt = time.Now()
-		link.BooksAhead = intToInt64Ptr(len(pkg.Unique(info.urlsAhead)))
-		link.NewBooks = intToInt64Ptr(len(pkg.Unique(info.urlsNew)))
-		link.ExistingBooks = intToInt64Ptr(len(pkg.Unique(info.urlsExisting)))
+		booksAhead := int64(len(pkg.Unique(info.urlsAhead)))
+		newBooks := int64(len(pkg.Unique(info.urlsNew)))
+		existingBooks := int64(len(pkg.Unique(info.urlsExisting)))
 
-		err = uc.storage.UpdateMassloadExternalLinkCounts(ctx, ml.ID, link)
-		if err != nil {
-			return fmt.Errorf("storage update external link (%s): %w", link.URL.String(), err)
+		if link.BooksAhead == nil || *link.BooksAhead != booksAhead {
+			link.BooksAhead = &booksAhead
+			needUpdate = true
+		}
+
+		if link.NewBooks == nil || *link.NewBooks != newBooks {
+			link.NewBooks = &newBooks
+			needUpdate = true
+		}
+
+		if link.ExistingBooks == nil || *link.ExistingBooks != existingBooks {
+			link.ExistingBooks = &existingBooks
+			needUpdate = true
+		}
+
+		if needUpdate {
+			err = uc.storage.UpdateMassloadExternalLinkCounts(ctx, ml.ID, link)
+			if err != nil {
+				return fmt.Errorf("storage update external link (%s): %w", link.URL.String(), err)
+			}
 		}
 
 		all.urlsAhead = append(all.urlsAhead, info.urlsAhead...)
@@ -132,21 +154,37 @@ func (uc *UseCase) updateCalculation(ctx context.Context, ml massloadmodel.Massl
 		all.urlsExisting = append(all.urlsExisting, info.urlsExisting...)
 	}
 
-	ml.UpdatedAt = time.Now()
-	ml.BooksAhead = intToInt64Ptr(len(pkg.Unique(all.urlsAhead)))
-	ml.NewBooks = intToInt64Ptr(len(pkg.Unique(all.urlsNew)))
-	ml.ExistingBooks = intToInt64Ptr(len(pkg.Unique(all.urlsExisting)))
+	if !hasUpdate {
+		return nil
+	}
 
-	err = uc.storage.UpdateMassloadCounts(ctx, ml)
-	if err != nil {
-		return fmt.Errorf("storage update massload: %w", err)
+	needUpdate := false
+	ml.UpdatedAt = time.Now()
+	booksAhead := int64(len(pkg.Unique(all.urlsAhead)))
+	newBooks := int64(len(pkg.Unique(all.urlsNew)))
+	existingBooks := int64(len(pkg.Unique(all.urlsExisting)))
+
+	if ml.BooksAhead == nil || *ml.BooksAhead != booksAhead {
+		ml.BooksAhead = &booksAhead
+		needUpdate = true
+	}
+
+	if ml.NewBooks == nil || *ml.NewBooks != newBooks {
+		ml.NewBooks = &newBooks
+		needUpdate = true
+	}
+
+	if ml.ExistingBooks == nil || *ml.ExistingBooks != existingBooks {
+		ml.ExistingBooks = &existingBooks
+		needUpdate = true
+	}
+
+	if needUpdate {
+		err = uc.storage.UpdateMassloadCounts(ctx, ml)
+		if err != nil {
+			return fmt.Errorf("storage update massload: %w", err)
+		}
 	}
 
 	return nil
-}
-
-func intToInt64Ptr(i int) *int64 {
-	v := int64(i)
-
-	return &v
 }
