@@ -32,12 +32,20 @@ func (repo *AttributeRepo) AttributesPageSize(
 		return core.SizeWithCount{}, errors.New("incorrect condition: empty attributes")
 	}
 
-	builder := squirrel.Select(`SUM(f."size")`, `COUNT(*)`).
+	subBuilder := squirrel.Select(`MAX(f."size") AS "size"`).
 		PlaceholderFormat(squirrel.Dollar).
 		From(`files f`).
 		InnerJoin(`pages p ON f.id = p.file_id`).
 		InnerJoin(`book_attributes ba ON ba.book_id = p.book_id`).
-		Where(whereCond)
+		Where(whereCond).
+		GroupBy(
+			`p.book_id`,
+			`p.page_number`,
+		)
+
+	builder := squirrel.Select(`SUM(uf."size")`, `COUNT(*)`).
+		PlaceholderFormat(squirrel.Dollar).
+		FromSelect(subBuilder, "uf")
 
 	query, args := builder.MustSql()
 
