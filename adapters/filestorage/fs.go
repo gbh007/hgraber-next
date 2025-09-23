@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/adapters/agentFS"
+	"github.com/gbh007/hgraber-next/adapters/agentfs"
 	"github.com/gbh007/hgraber-next/adapters/localfiles"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
@@ -108,7 +108,7 @@ func (s *Storage) connect(_ context.Context, fs fsmodel.FileStorageSystem) (rawF
 
 	switch {
 	case fs.AgentID != uuid.Nil:
-		storage = agentFS.New(fs.AgentID, s.logger, s.agentController)
+		storage = agentfs.New(fs.AgentID, s.logger, s.agentController)
 
 		raw := rawFileStorageData{
 			FS:      storage,

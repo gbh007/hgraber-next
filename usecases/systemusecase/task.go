@@ -2,6 +2,7 @@ package systemusecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 
@@ -33,10 +34,11 @@ func (uc *UseCase) RunTask(ctx context.Context, code systemmodel.TaskCode) error
 		task, err = uc.cleanuper.CleanAfterRebuild(ctx)
 	case systemmodel.CleanAfterParseTaskCode:
 		task, err = uc.cleanuper.CleanAfterParse(ctx)
+	case systemmodel.UnknownTaskCode:
 	}
 
 	if err != nil {
-		return err
+		return fmt.Errorf("create task: %w", err)
 	}
 
 	if task != nil {
@@ -53,7 +55,7 @@ func (uc *UseCase) TaskResults(ctx context.Context) ([]*systemmodel.TaskResult, 
 func (uc *UseCase) RemoveFilesInFSMismatch(ctx context.Context, fsID uuid.UUID) error {
 	task, err := uc.cleanuper.RemoveFilesInStoragesMismatch(ctx, fsID)
 	if err != nil {
-		return err
+		return fmt.Errorf("cleanup: %w", err)
 	}
 
 	uc.tmpStorage.SaveTask(task)

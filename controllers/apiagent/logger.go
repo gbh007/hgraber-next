@@ -35,7 +35,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			strings.Contains(strings.ToLower(r.Header.Get("Content-Type")), "text/") {
 			requestDataRaw, err := io.ReadAll(r.Body)
 			if err != nil {
-				c.logger.ErrorContext(
+				c.logger.ErrorContext( //nolint:contextcheck // ложное срабатывание
 					r.Context(), "read request to log",
 					slog.Any("error", err),
 				)
@@ -43,7 +43,14 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 
 			requestData = string(requestDataRaw)
 
-			r.Body.Close()
+			err = r.Body.Close()
+			if err != nil {
+				c.logger.ErrorContext( //nolint:contextcheck // ложное срабатывание
+					r.Context(), "close request body",
+					slog.Any("error", err),
+				)
+			}
+
 			r.Body = io.NopCloser(bytes.NewReader(requestDataRaw))
 		}
 
@@ -58,7 +65,7 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			responseData = rw.body.String()
 		}
 
-		c.logger.DebugContext(
+		c.logger.DebugContext( //nolint:contextcheck // ложное срабатывание
 			r.Context(), "http request",
 			slog.String("path", r.URL.Path),
 			slog.String("method", r.Method),
@@ -75,33 +82,4 @@ func (c *Controller) logIO(next http.Handler) http.Handler {
 			),
 		)
 	})
-}
-
-type responseWrapper struct {
-	origin http.ResponseWriter
-
-	statusCode int
-	body       *bytes.Buffer
-}
-
-func newResponseWrapper(origin http.ResponseWriter) *responseWrapper {
-	return &responseWrapper{
-		origin: origin,
-		body:   &bytes.Buffer{},
-	}
-}
-
-func (rw *responseWrapper) Header() http.Header {
-	return rw.origin.Header()
-}
-
-func (rw *responseWrapper) Write(data []byte) (int, error) {
-	_, _ = rw.body.Write(data)
-
-	return rw.origin.Write(data)
-}
-
-func (rw *responseWrapper) WriteHeader(statusCode int) {
-	rw.statusCode = statusCode
-	rw.origin.WriteHeader(statusCode)
 }

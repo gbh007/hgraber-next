@@ -18,7 +18,7 @@ func (c *Controller) Name() string {
 func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	done := make(chan struct{})
 
-	server := &http.Server{
+	server := &http.Server{ //nolint:gosec // будет исправлено позднее
 		Handler:  otelPropagation(c.logIO(cors(c.ogenServer))),
 		Addr:     c.addr,
 		ErrorLog: slog.NewLogLogger(c.logger.Handler(), slog.LevelError),
@@ -40,7 +40,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 		<-parentCtx.Done()
 		c.logger.InfoContext(parentCtx, "stopping api agent server")
 
-		shutdownCtx, cancel := context.WithTimeout(context.WithoutCancel(parentCtx), time.Second*10)
+		shutdownCtx, cancel := context.WithTimeout(context.WithoutCancel(parentCtx), time.Second*10) //nolint:mnd,lll,golines // будет исправлено позднее
 		defer cancel()
 
 		err := server.Shutdown(shutdownCtx)

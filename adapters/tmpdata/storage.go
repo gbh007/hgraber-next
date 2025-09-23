@@ -17,6 +17,7 @@ type Storage struct {
 	toFileTransfer *pkg.DataQueue[fsmodel.FileTransfer]
 }
 
+//nolint:mnd // будет исправлено позднее
 func New() *Storage {
 	return &Storage{
 		toExport:       pkg.NewDataQueue[agentmodel.BookToExport](100),

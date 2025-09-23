@@ -3,6 +3,7 @@ package apiagent
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/url"
@@ -15,6 +16,8 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
+
+var errAccessForbidden = errors.New("access forbidden")
 
 type parsingUseCases interface {
 	BooksExists(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
@@ -92,15 +95,13 @@ func New(
 		),
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ogen: %w", err)
 	}
 
 	c.ogenServer = ogenServer
 
 	return c, nil
 }
-
-var errorAccessForbidden = errors.New("access forbidden")
 
 func (c *Controller) HandleHeaderAuth(
 	ctx context.Context,
@@ -112,7 +113,7 @@ func (c *Controller) HandleHeaderAuth(
 	}
 
 	if c.token != t.APIKey {
-		return ctx, errorAccessForbidden
+		return ctx, errAccessForbidden
 	}
 
 	return ctx, nil

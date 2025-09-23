@@ -18,6 +18,8 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
+var errPanicDetected = errors.New("panic detected")
+
 func methodNotAllowed(w http.ResponseWriter, r *http.Request, allowed string) {
 	if r.Method == http.MethodOptions {
 		w.Header().Set("Access-Control-Allow-Methods", allowed)
@@ -51,8 +53,6 @@ func methodNotFound(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 }
-
-var errPanicDetected = errors.New("panic detected")
 
 func stackTrace(skip, count int) []string {
 	result := []string{}
@@ -101,7 +101,7 @@ func (c *Controller) methodErrorHandler(ctx context.Context, w http.ResponseWrit
 	case errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied):
 		httpCode = http.StatusUnauthorized
 		errorCode = "unauthorized"
-	case errors.Is(err, errorAccessForbidden):
+	case errors.Is(err, errAccessForbidden):
 		httpCode = http.StatusForbidden
 		errorCode = "forbidden"
 	case errors.Is(err, errPanicDetected):
@@ -136,7 +136,7 @@ func (c *Controller) simplePanicRecover(
 			c.logger.WarnContext(
 				req.Context, "panic detected",
 				slog.Any("panic", p),
-				slog.Any("trace", stackTrace(3, 50)),
+				slog.Any("trace", stackTrace(3, 50)), //nolint:mnd // будет исправлено позднее
 			)
 
 			returnedResponse = middleware.Response{}

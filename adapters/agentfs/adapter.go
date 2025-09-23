@@ -1,4 +1,4 @@
-package agentFS
+package agentfs
 
 import (
 	"context"
