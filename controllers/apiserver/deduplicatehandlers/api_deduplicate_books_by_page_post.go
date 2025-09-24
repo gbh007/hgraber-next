@@ -23,7 +23,7 @@ func (c *DeduplicateHandlersController) APIDeduplicateBooksByPagePost(
 
 	return &serverapi.APIDeduplicateBooksByPagePostOK{
 		Books: pkg.Map(data, func(raw bff.BookWithPreviewPage) serverapi.BookSimple {
-			return c.apiCore.ConvertSimpleBook(raw.Book, raw.PreviewPage)
+			return c.apiCore.ConvertSimpleBook(ctx, raw.Book, raw.PreviewPage)
 		}),
 	}, nil
 }

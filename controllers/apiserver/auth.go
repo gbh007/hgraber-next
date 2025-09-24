@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-var errorAccessForbidden = errors.New("access forbidden")
+var errAccessForbidden = errors.New("access forbidden")
 
 func (c *Controller) HandleHeaderAuth(
 	ctx context.Context,
@@ -20,7 +20,7 @@ func (c *Controller) HandleHeaderAuth(
 	}
 
 	if c.token != t.APIKey {
-		return ctx, errorAccessForbidden
+		return ctx, errAccessForbidden
 	}
 
 	return ctx, nil
@@ -36,7 +36,7 @@ func (c *Controller) HandleCookies(
 	}
 
 	if c.token != t.APIKey {
-		return ctx, errorAccessForbidden
+		return ctx, errAccessForbidden
 	}
 
 	return ctx, nil

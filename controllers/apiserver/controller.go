@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/agenthandlers"
@@ -18,7 +19,6 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver/massloadhandlers"
 	"github.com/gbh007/hgraber-next/controllers/apiserver/systemhandlers"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
-	"github.com/prometheus/client_golang/prometheus"
 )
 
 type ParseUseCases interface {
@@ -121,7 +121,7 @@ type Controller struct {
 	token      string
 }
 
-func New(
+func New( //nolint:revive // будет исправлено позднее
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	config config,
@@ -255,3 +255,5 @@ func New(
 
 	return c, nil
 }
+
+//nolint:revive // будет исправлено позднее

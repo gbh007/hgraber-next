@@ -33,7 +33,7 @@ func (c *BookHandlersController) APIBookDeletePost(
 		uc = apiservercore.DeduplicateUseCaseCode
 
 	default:
-		err = fmt.Errorf("unsupported type: %v", req.Type)
+		err = fmt.Errorf("unsupported type: %v", req.Type) //nolint:revive // правило не применимо
 		uc = apiservercore.ValidationCode
 	}
 

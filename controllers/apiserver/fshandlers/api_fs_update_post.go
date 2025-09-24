@@ -21,7 +21,7 @@ func (c *FSHandlersController) APIFsUpdatePost(
 		DownloadPriority:    req.DownloadPriority,
 		DeduplicatePriority: req.DeduplicatePriority,
 		HighwayEnabled:      req.HighwayEnabled,
-		HighwayAddr:         apiservercore.UrlFromOpt(req.HighwayAddr),
+		HighwayAddr:         apiservercore.URLFromOpt(req.HighwayAddr),
 	})
 	if err != nil {
 		return &serverapi.APIFsUpdatePostInternalServerError{

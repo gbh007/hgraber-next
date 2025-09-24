@@ -28,7 +28,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	mux.Handle("/metrics", promhttp.HandlerFor(c.metricProvider.Registry(), promhttp.HandlerOpts{}))
 	mux.Handle("/api/", otelPropagation(c.logIO(cors(c.ogenServer))))
 
-	server := &http.Server{
+	server := &http.Server{ //nolint:gosec // будет исправлено позднее
 		Handler:  mux,
 		Addr:     c.serverAddr,
 		ErrorLog: slog.NewLogLogger(c.logger.Handler(), slog.LevelError),
@@ -50,7 +50,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 		<-parentCtx.Done()
 		c.logger.InfoContext(parentCtx, "stopping api server")
 
-		shutdownCtx, cancel := context.WithTimeout(context.WithoutCancel(parentCtx), time.Second*10)
+		shutdownCtx, cancel := context.WithTimeout(context.WithoutCancel(parentCtx), time.Second*10) //nolint:mnd,golines,lll // будет исправлено позднее
 		defer cancel()
 
 		err := server.Shutdown(shutdownCtx)

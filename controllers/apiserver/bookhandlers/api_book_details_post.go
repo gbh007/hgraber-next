@@ -31,10 +31,12 @@ func (c *BookHandlersController) APIBookDetailsPost(
 	}
 
 	return &serverapi.APIBookDetailsPostOK{
-		Info:              c.apiCore.ConvertSimpleBook(book.Book, book.PreviewPage),
+		Info:              c.apiCore.ConvertSimpleBook(ctx, book.Book, book.PreviewPage),
 		PageLoadedPercent: book.PageDownloadPercent(),
 		Attributes:        pkg.Map(book.Attributes, apiservercore.ConvertBookAttribute),
-		Pages:             pkg.Map(book.Pages, c.apiCore.ConvertPreviewPage),
+		Pages: pkg.Map(book.Pages, func(page bff.PreviewPage) serverapi.PageSimple {
+			return c.apiCore.ConvertPreviewPage(ctx, page)
+		}),
 		Size: serverapi.OptAPIBookDetailsPostOKSize{
 			Value: serverapi.APIBookDetailsPostOKSize{
 				Unique:                           book.Size.Unique,

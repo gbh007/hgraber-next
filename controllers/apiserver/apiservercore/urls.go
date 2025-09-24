@@ -9,12 +9,12 @@ import (
 	"github.com/google/uuid"
 )
 
-func (c *Controller) GetFileURL(fileID uuid.UUID, ext string, fsID uuid.UUID) url.URL {
+func (c *Controller) GetFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) url.URL {
 	if c.fsUseCases != nil {
 		// FIXME: подумать над местом получше,
 		// или более явным пробросом контекста,
 		// или автообновлением токенов, чтобы не было надобности в ошибках.
-		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+		ctx, cancel := context.WithTimeout(ctx, time.Minute)
 		defer cancel()
 
 		u, ok, err := c.fsUseCases.HighwayFileURL(ctx, fileID, ext, fsID)

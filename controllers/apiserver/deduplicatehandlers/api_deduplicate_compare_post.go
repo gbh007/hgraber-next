@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
+	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
@@ -22,12 +23,18 @@ func (c *DeduplicateHandlersController) APIDeduplicateComparePost(
 	}
 
 	return &serverapi.APIDeduplicateComparePostOK{
-		Origin: c.apiCore.ConvertSimpleBook(data.OriginBook, data.OriginPreviewPage),
-		Target: c.apiCore.ConvertSimpleBook(data.TargetBook, data.TargetPreviewPage),
+		Origin: c.apiCore.ConvertSimpleBook(ctx, data.OriginBook, data.OriginPreviewPage),
+		Target: c.apiCore.ConvertSimpleBook(ctx, data.TargetBook, data.TargetPreviewPage),
 
-		OriginPages: pkg.Map(data.OriginPages, c.apiCore.ConvertPreviewPage),
-		BothPages:   pkg.Map(data.BothPages, c.apiCore.ConvertPreviewPage),
-		TargetPages: pkg.Map(data.TargetPages, c.apiCore.ConvertPreviewPage),
+		OriginPages: pkg.Map(data.OriginPages, func(page bff.PreviewPage) serverapi.PageSimple {
+			return c.apiCore.ConvertPreviewPage(ctx, page)
+		}),
+		BothPages: pkg.Map(data.BothPages, func(page bff.PreviewPage) serverapi.PageSimple {
+			return c.apiCore.ConvertPreviewPage(ctx, page)
+		}),
+		TargetPages: pkg.Map(data.TargetPages, func(page bff.PreviewPage) serverapi.PageSimple {
+			return c.apiCore.ConvertPreviewPage(ctx, page)
+		}),
 
 		OriginAttributes: pkg.Map(data.OriginAttributes, apiservercore.ConvertBookAttribute),
 		BothAttributes:   pkg.Map(data.BothAttributes, apiservercore.ConvertBookAttribute),

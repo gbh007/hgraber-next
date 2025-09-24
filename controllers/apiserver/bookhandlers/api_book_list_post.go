@@ -27,7 +27,7 @@ func (c *BookHandlersController) APIBookListPost(
 	return &serverapi.APIBookListPostOK{
 		Books: pkg.Map(bookList.Books, func(b bff.BookShort) serverapi.APIBookListPostOKBooksItem {
 			return serverapi.APIBookListPostOKBooksItem{
-				Info: c.apiCore.ConvertSimpleBook(b.Book, b.PreviewPage),
+				Info: c.apiCore.ConvertSimpleBook(ctx, b.Book, b.PreviewPage),
 				Tags: b.Tags,
 				ColorAttributes: pkg.Map(
 					b.ColorAttributes,

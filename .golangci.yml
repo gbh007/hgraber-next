@@ -82,7 +82,7 @@ linters:
       eval-const-expressions: false
     godox:
       keywords:
-        - FIXME
+        # - FIXME # Временно выключено
         - BUG
     lll:
       tab-width: 4

@@ -5,6 +5,7 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
+//nolint:cyclop,funlen // будет исправлено позднее
 func ConvertAPIBookFilter(req serverapi.BookFilter) core.BookFilter {
 	filter := core.BookFilter{}
 

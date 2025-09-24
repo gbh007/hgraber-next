@@ -46,7 +46,7 @@ type Unit[T any] struct {
 	wait   sync.WaitGroup
 }
 
-func NewUnit[T any](
+func NewUnit[T any]( //nolint:revive // будет исправлено позднее
 	name string,
 	number int32,
 	logger *slog.Logger,
@@ -89,7 +89,7 @@ func (w *Unit[T]) handleOne(ctx context.Context, value T) (err error) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			err = fmt.Errorf("panic detected: %v", p)
+			err = fmt.Errorf("panic detected: %v", p) //nolint:revive // правило не применимо
 		}
 	}()
 

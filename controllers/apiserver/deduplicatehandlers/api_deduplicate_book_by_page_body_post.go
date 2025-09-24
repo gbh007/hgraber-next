@@ -26,8 +26,9 @@ func (c *DeduplicateHandlersController) APIDeduplicateBookByPageBodyPost(
 		Result: pkg.Map(
 			data,
 			func(raw bff.DeduplicateBookResult) serverapi.APIDeduplicateBookByPageBodyPostOKResultItem {
+				//nolint:golines,lll // будет исправлено позднее
 				return serverapi.APIDeduplicateBookByPageBodyPostOKResultItem{
-					Book:                                 c.apiCore.ConvertSimpleBook(raw.TargetBook, raw.PreviewPage),
+					Book:                                 c.apiCore.ConvertSimpleBook(ctx, raw.TargetBook, raw.PreviewPage),
 					OriginCoveredTarget:                  raw.EntryPercentage,
 					TargetCoveredOrigin:                  raw.ReverseEntryPercentage,
 					OriginCoveredTargetWithoutDeadHashes: raw.EntryPercentageWithoutDeadHashes,

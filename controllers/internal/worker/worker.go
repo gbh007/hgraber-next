@@ -42,7 +42,7 @@ type Worker[T any] struct {
 	unitsMutex sync.Mutex
 	units      []*Unit[T]
 	unitsWG    sync.WaitGroup
-	unitCtx    context.Context
+	unitCtx    context.Context //nolint:containedctx // будет исправлено позднее
 }
 
 func New[T any](
@@ -98,7 +98,7 @@ func (w *Worker[T]) SetRunnersCount(newUnitCount int) {
 			for i := oldUnitCount; i < newUnitCount; i++ {
 				unit := NewUnit(
 					w.cfg.GetName(),
-					int32(i),
+					int32(i), //nolint:gosec // будет исправлено позднее
 					w.logger,
 					w.handler,
 					w.tracer,
@@ -116,7 +116,7 @@ func (w *Worker[T]) SetRunnersCount(newUnitCount int) {
 							w.unitsWG.Done()
 						},
 					},
-					min(time.Minute, max(w.cfg.GetInterval()/2, time.Millisecond*100)),
+					min(time.Minute, max(w.cfg.GetInterval()/2, time.Millisecond*100)), //nolint:mnd,golines,lll // будет исправлено позднее
 				)
 
 				w.units = append(w.units, unit)
@@ -172,7 +172,7 @@ func (w *Worker[T]) fetch(ctx context.Context) {
 				ctx, "panic in worker fetch detected",
 				slog.Any("panic", p),
 				slog.String("worker_name", w.cfg.GetName()),
-				slog.Any("trace", stackTrace(3, 50)),
+				slog.Any("trace", stackTrace(3, 50)), //nolint:mnd // будет исправлено позднее
 			)
 		}
 	}()

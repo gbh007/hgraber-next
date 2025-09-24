@@ -17,7 +17,7 @@ func OptURL(u *url.URL) serverapi.OptURI {
 	return serverapi.NewOptURI(*u)
 }
 
-func UrlFromOpt(u serverapi.OptURI) *url.URL {
+func URLFromOpt(u serverapi.OptURI) *url.URL {
 	if !u.Set {
 		return nil
 	}

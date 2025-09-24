@@ -1,6 +1,8 @@
 package apiservercore
 
 import (
+	"context"
+
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
@@ -8,11 +10,12 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *Controller) ConvertPreviewPageUrl(p bff.PreviewPage) serverapi.OptURI {
+func (c *Controller) ConvertPreviewPageURL(ctx context.Context, p bff.PreviewPage) serverapi.OptURI {
 	previewURL := serverapi.OptURI{}
 
 	if p.Downloaded {
 		previewURL = serverapi.NewOptURI(c.GetFileURL(
+			ctx,
 			p.FileID,
 			p.Ext,
 			p.FSID,
@@ -22,14 +25,18 @@ func (c *Controller) ConvertPreviewPageUrl(p bff.PreviewPage) serverapi.OptURI {
 	return previewURL
 }
 
-func (c *Controller) ConvertSimpleBook(book core.Book, previewPage bff.PreviewPage) serverapi.BookSimple {
+func (c *Controller) ConvertSimpleBook(
+	ctx context.Context,
+	book core.Book,
+	previewPage bff.PreviewPage,
+) serverapi.BookSimple {
 	return serverapi.BookSimple{
 		ID:         book.ID,
 		CreatedAt:  book.CreateAt,
 		OriginURL:  OptURL(book.OriginURL),
 		Name:       book.Name,
 		PageCount:  book.PageCount,
-		PreviewURL: c.ConvertPreviewPageUrl(previewPage),
+		PreviewURL: c.ConvertPreviewPageURL(ctx, previewPage),
 		Flags: serverapi.BookFlags{
 			ParsedName: book.ParsedName(),
 			ParsedPage: book.PageCount > 0, // FIXME: не самый надежный метод, мб стоит придумать что-то другое
@@ -40,10 +47,10 @@ func (c *Controller) ConvertSimpleBook(book core.Book, previewPage bff.PreviewPa
 	}
 }
 
-func (c *Controller) ConvertPreviewPage(page bff.PreviewPage) serverapi.PageSimple {
+func (c *Controller) ConvertPreviewPage(ctx context.Context, page bff.PreviewPage) serverapi.PageSimple {
 	return serverapi.PageSimple{
 		PageNumber:  page.PageNumber,
-		PreviewURL:  c.ConvertPreviewPageUrl(page),
+		PreviewURL:  c.ConvertPreviewPageURL(ctx, page),
 		HasDeadHash: ConvertStatusFlagToAPI(page.HasDeadHash),
 	}
 }
@@ -99,7 +106,7 @@ func ConvertBookRawToBookFull(book *serverapi.BookRaw) core.BookContainer {
 		Book: core.Book{
 			ID:        book.ID,
 			Name:      book.Name,
-			OriginURL: UrlFromOpt(book.OriginURL),
+			OriginURL: URLFromOpt(book.OriginURL),
 			PageCount: book.PageCount,
 			CreateAt:  book.CreateAt,
 			// FIXME: нет ряд полей, возможно стоит расширить api
@@ -109,7 +116,7 @@ func ConvertBookRawToBookFull(book *serverapi.BookRaw) core.BookContainer {
 				BookID:     book.ID,
 				PageNumber: raw.PageNumber,
 				Ext:        raw.Ext,
-				OriginURL:  UrlFromOpt(raw.OriginURL),
+				OriginURL:  URLFromOpt(raw.OriginURL),
 				CreateAt:   raw.CreateAt,
 				Downloaded: raw.Downloaded,
 				LoadAt:     raw.LoadAt.Value,
@@ -192,3 +199,5 @@ func ConvertAttributeRemapToAPI(raw core.AttributeRemap) serverapi.AttributeRema
 		UpdatedAt: OptTime(raw.UpdateAt),
 	}
 }
+
+//nolint:revive // будет исправлено позже
