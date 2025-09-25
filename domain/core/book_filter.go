@@ -1,3 +1,4 @@
+//nolint:decorder // будет исправлено позднее
 package core
 
 import "time"

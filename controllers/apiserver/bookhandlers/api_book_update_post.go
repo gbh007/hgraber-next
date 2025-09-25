@@ -15,7 +15,7 @@ func (c *BookHandlersController) APIBookUpdatePost(
 ) (serverapi.APIBookUpdatePostRes, error) {
 	err := c.rebuilderUseCases.UpdateBook(ctx, apiservercore.ConvertBookRawToBookFull(req))
 
-	if errors.Is(err, core.BookNotFoundError) {
+	if errors.Is(err, core.ErrBookNotFound) {
 		return &serverapi.APIBookUpdatePostNotFound{
 			InnerCode: apiservercore.RebuilderUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),

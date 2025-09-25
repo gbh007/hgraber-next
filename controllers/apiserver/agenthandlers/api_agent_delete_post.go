@@ -15,7 +15,7 @@ func (c *AgentHandlersController) APIAgentDeletePost(
 ) (serverapi.APIAgentDeletePostRes, error) {
 	err := c.agentUseCases.DeleteAgent(ctx, req.ID)
 
-	if errors.Is(err, core.AgentNotFoundError) {
+	if errors.Is(err, core.ErrAgentNotFound) {
 		return &serverapi.APIAgentDeletePostNotFound{
 			InnerCode: apiservercore.AgentUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),

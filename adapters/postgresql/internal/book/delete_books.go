@@ -25,7 +25,7 @@ func (repo *BookRepo) DeleteBooks(ctx context.Context, ids []uuid.UUID) error {
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.BookNotFoundError
+		return core.ErrBookNotFound
 	}
 
 	return nil

@@ -36,7 +36,7 @@ func (c *FSHandlersController) APIBookPageBodyPost(
 		}, nil
 	}
 
-	if errors.Is(err, core.PageNotFoundError) || errors.Is(err, core.FileNotFoundError) {
+	if errors.Is(err, core.ErrPageNotFound) || errors.Is(err, core.ErrFileNotFound) {
 		return &serverapi.APIBookPageBodyPostNotFound{
 			InnerCode: innerCode,
 			Details:   serverapi.NewOptString(err.Error()),

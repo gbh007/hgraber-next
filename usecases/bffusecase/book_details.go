@@ -12,6 +12,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
+//nolint:cyclop,funlen // будет исправлено позднее
 func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (bff.BookDetails, error) {
 	book, err := uc.storage.GetBook(ctx, bookID)
 	if err != nil {
@@ -29,7 +30,8 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (bff.BookD
 	for i, page := range bookPages {
 		md5Sums[i] = page.Md5Sum
 
-		fileCounts[page.FileHash] = 1 // Это условие (значение 1) нужно, чтобы дубликаты внутри книги не дали ложно-положительного срабатывания
+		// Это условие (значение 1) нужно, чтобы дубликаты внутри книги не дали ложно-положительного срабатывания
+		fileCounts[page.FileHash] = 1
 	}
 
 	pageDuplicates, err := uc.storage.BookPagesWithHashByMD5Sums(ctx, md5Sums)

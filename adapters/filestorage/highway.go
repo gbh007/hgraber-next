@@ -60,7 +60,7 @@ func (s *Storage) refreshHighwayToken(ctx context.Context, fsID uuid.UUID) (stri
 	s.storageMapMutex.RUnlock()
 
 	if !ok {
-		return "", core.MissingFSError
+		return "", core.ErrMissingFS
 	}
 
 	if storage.AgentID == uuid.Nil {

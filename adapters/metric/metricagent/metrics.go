@@ -1,8 +1,9 @@
 package metricagent
 
 import (
-	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 	"github.com/prometheus/client_golang/prometheus"
+
+	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 )
 
 var (

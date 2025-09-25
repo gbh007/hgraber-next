@@ -9,6 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
+//nolint:cyclop // будет исправлено позднее
 func (uc *UseCase) BookList(ctx context.Context, filter core.BookFilter) (bff.BookList, error) {
 	count, err := uc.storage.BookCount(ctx, filter)
 	if err != nil {
@@ -49,19 +50,19 @@ func (uc *UseCase) BookList(ctx context.Context, filter core.BookFilter) (bff.Bo
 
 	ids, err := uc.storage.BookIDs(ctx, filter)
 	if err != nil {
-		return bff.BookList{}, fmt.Errorf("get ids :%w", err)
+		return bff.BookList{}, fmt.Errorf("get ids: %w", err)
 	}
 
 	result.Books = make([]bff.BookShort, 0, len(ids))
 
 	for _, bookID := range ids {
 		book, err := uc.storage.GetBook(ctx, bookID)
-		if err != nil && !errors.Is(err, core.PageNotFoundError) {
+		if err != nil && !errors.Is(err, core.ErrPageNotFound) {
 			return bff.BookList{}, fmt.Errorf("storage: get book (%s): %w", bookID.String(), err)
 		}
 
 		page, err := uc.storage.BookPageWithHash(ctx, bookID, core.PageNumberForPreview)
-		if err != nil && !errors.Is(err, core.PageNotFoundError) {
+		if err != nil && !errors.Is(err, core.ErrPageNotFound) {
 			return bff.BookList{}, fmt.Errorf("storage: get page (%s): %w", bookID.String(), err)
 		}
 

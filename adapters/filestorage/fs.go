@@ -66,7 +66,7 @@ func (s *Storage) getFS(ctx context.Context, fsID uuid.UUID, tryReconnect bool) 
 		return storage, nil
 	}
 
-	return rawFileStorageData{}, core.MissingFSError
+	return rawFileStorageData{}, core.ErrMissingFS
 }
 
 func (s *Storage) FSChange(ctx context.Context, fsID uuid.UUID, deleted bool) error {

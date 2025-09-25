@@ -10,6 +10,11 @@ import (
 	"github.com/gbh007/hgraber-next/config"
 )
 
+// TODO: в случае использования групп реализовать более безопасно.
+type logHandler struct {
+	slog.Handler
+}
+
 func initLogger(cfg config.Config) *slog.Logger {
 	slogOpt := &slog.HandlerOptions{
 		AddSource: cfg.Log.IncludeSource,
@@ -32,18 +37,13 @@ func initLogger(cfg config.Config) *slog.Logger {
 	return logger
 }
 
-// TODO: в случае использования групп реализовать более безопасно.
-type logHandler struct {
-	slog.Handler
-}
-
 func (lh logHandler) Handle(ctx context.Context, r slog.Record) error {
 	snapContext := trace.SpanContextFromContext(ctx)
 	if snapContext.HasTraceID() {
 		r.AddAttrs(slog.String("trace_id", snapContext.TraceID().String()))
 	}
 
-	return lh.Handler.Handle(ctx, r)
+	return lh.Handler.Handle(ctx, r) //nolint:wrapcheck // обертка не нужна
 }
 
 func (lh logHandler) WithGroup(name string) slog.Handler {

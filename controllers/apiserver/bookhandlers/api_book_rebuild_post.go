@@ -36,7 +36,7 @@ func (c *BookHandlersController) APIBookRebuildPost(
 		},
 	})
 
-	if errors.Is(err, core.BookNotFoundError) {
+	if errors.Is(err, core.ErrBookNotFound) {
 		return &serverapi.APIBookRebuildPostNotFound{
 			InnerCode: apiservercore.RebuilderUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),

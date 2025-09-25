@@ -71,7 +71,7 @@ WHERE
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.BookNotFoundError
+		return core.ErrBookNotFound
 	}
 
 	err = tx.Commit(ctx)

@@ -35,7 +35,7 @@ func (repo *AgentRepo) UpdateAgent(ctx context.Context, agent core.Agent) error 
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.AgentNotFoundError
+		return core.ErrAgentNotFound
 	}
 
 	return nil

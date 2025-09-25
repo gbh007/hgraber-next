@@ -30,7 +30,7 @@ func (repo *AttributeRepo) AttributeRemap(ctx context.Context, code, value strin
 
 	err := row.Scan(model.AttributeRemapScanner(&ar))
 	if errors.Is(err, sql.ErrNoRows) {
-		return core.AttributeRemap{}, core.AttributeRemapNotFoundError
+		return core.AttributeRemap{}, core.ErrAttributeRemapNotFound
 	}
 
 	if err != nil {

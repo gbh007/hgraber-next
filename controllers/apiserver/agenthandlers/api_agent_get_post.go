@@ -15,7 +15,7 @@ func (c *AgentHandlersController) APIAgentGetPost(
 ) (serverapi.APIAgentGetPostRes, error) {
 	agent, err := c.agentUseCases.Agent(ctx, req.ID)
 
-	if errors.Is(err, core.AgentNotFoundError) {
+	if errors.Is(err, core.ErrAgentNotFound) {
 		return &serverapi.APIAgentGetPostNotFound{
 			InnerCode: apiservercore.AgentUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),

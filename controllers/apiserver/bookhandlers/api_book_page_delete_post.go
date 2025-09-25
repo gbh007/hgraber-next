@@ -33,8 +33,8 @@ func (c *BookHandlersController) APIBookPageDeletePost(
 		uc = apiservercore.ValidationCode
 	}
 
-	if errors.Is(err, core.BookNotFoundError) ||
-		errors.Is(err, core.PageNotFoundError) {
+	if errors.Is(err, core.ErrBookNotFound) ||
+		errors.Is(err, core.ErrPageNotFound) {
 		return &serverapi.APIBookPageDeletePostNotFound{
 			InnerCode: uc,
 			Details:   serverapi.NewOptString(err.Error()),

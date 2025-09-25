@@ -28,7 +28,7 @@ func (repo *FileRepo) UpdateFileInvalidData(ctx context.Context, fileID uuid.UUI
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.FileNotFoundError
+		return core.ErrFileNotFound
 	}
 
 	return nil

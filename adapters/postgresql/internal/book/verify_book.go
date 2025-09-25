@@ -22,7 +22,7 @@ func (repo *BookRepo) VerifyBook(ctx context.Context, bookID uuid.UUID, verified
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.BookNotFoundError
+		return core.ErrBookNotFound
 	}
 
 	return nil

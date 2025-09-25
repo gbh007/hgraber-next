@@ -37,7 +37,7 @@ func (c *BookHandlersController) APIBookDeletePost(
 		uc = apiservercore.ValidationCode
 	}
 
-	if errors.Is(err, core.BookNotFoundError) {
+	if errors.Is(err, core.ErrBookNotFound) {
 		return &serverapi.APIBookDeletePostNotFound{
 			InnerCode: uc,
 			Details:   serverapi.NewOptString(err.Error()),

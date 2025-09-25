@@ -4,14 +4,15 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
+
 	"github.com/gbh007/hgraber-next/adapters/metric/metricagent"
 	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 	"github.com/gbh007/hgraber-next/adapters/metric/metricdatabase"
 	"github.com/gbh007/hgraber-next/adapters/metric/metricfs"
 	"github.com/gbh007/hgraber-next/adapters/metric/metrichttp"
 	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/collectors"
 )
 
 type SystemType byte

@@ -1,11 +1,12 @@
 package generatorcore
 
 import (
-	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 	"github.com/grafana/grafana-foundation-sdk/go/dashboard"
 	"github.com/grafana/grafana-foundation-sdk/go/units"
 	promcog "github.com/grafana/promql-builder/go/cog"
 	"github.com/grafana/promql-builder/go/promql"
+
+	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 )
 
 const (

@@ -8,7 +8,7 @@ func totalToPages(total, onPageCount int) (pageCount int) {
 		pageCount++
 	}
 
-	return
+	return pageCount
 }
 
 // generatePagination - генерирует последовательность страниц
@@ -57,7 +57,7 @@ func generatePagination(currentPage, pageCount int) []int {
 		// Добавляем разделитель
 		pages = append(pages, separator)
 
-		startIndex := currentPage - middlePageCount/2
+		startIndex := currentPage - middlePageCount/2 //nolint:mnd // будет исправлено позднее
 
 		// Для нечетного числа страниц требуется дополнительный сдвиг
 		if middlePageCount%2 > 0 {

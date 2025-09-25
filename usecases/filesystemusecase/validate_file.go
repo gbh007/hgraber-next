@@ -40,7 +40,7 @@ func (uc *UseCase) ValidateFile(ctx context.Context, fileID uuid.UUID) error {
 func (uc *UseCase) validateFileBody(ctx context.Context, fileID uuid.UUID, hash core.FileHash, fsID uuid.UUID) error {
 	body, err := uc.fileStorage.Get(ctx, fileID, &fsID)
 
-	if errors.Is(err, core.FileNotFoundError) {
+	if errors.Is(err, core.ErrFileNotFound) {
 		uc.logger.DebugContext(
 			ctx, "missing file in fs",
 			slog.String("id", fileID.String()),

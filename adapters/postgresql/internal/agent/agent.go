@@ -30,7 +30,7 @@ func (repo *AgentRepo) Agent(ctx context.Context, id uuid.UUID) (core.Agent, err
 	err := row.Scan(model.AgentScanner(&result))
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return core.Agent{}, core.AgentNotFoundError
+		return core.Agent{}, core.ErrAgentNotFound
 	}
 
 	if err != nil {

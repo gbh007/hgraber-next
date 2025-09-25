@@ -60,7 +60,7 @@ func (uc *UseCase) ImportArchive(
 	)
 
 	if errors.Is(err, external.ErrBookInfoNotFound) {
-		return uuid.Nil, fmt.Errorf("missing book info: %w", core.BookNotFoundError)
+		return uuid.Nil, fmt.Errorf("missing book info: %w", core.ErrBookNotFound)
 	}
 
 	book, err := external.BookToEntity(info.Data)

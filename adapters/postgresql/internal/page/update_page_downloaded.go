@@ -28,7 +28,7 @@ func (repo *PageRepo) UpdatePageDownloaded(
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.PageNotFoundError
+		return core.ErrPageNotFound
 	}
 
 	return nil

@@ -55,7 +55,7 @@ func (c *Client) DeleteAgent(id uuid.UUID) error {
 
 	_, ok := c.agents[id]
 	if !ok {
-		return core.AgentNotFoundError
+		return core.ErrAgentNotFound
 	}
 
 	delete(c.agents, id)
@@ -69,7 +69,7 @@ func (c *Client) getAdapter(id uuid.UUID) (*adapter.Adapter, error) {
 
 	a, ok := c.agents[id]
 	if !ok || a == nil {
-		return nil, core.AgentNotFoundError
+		return nil, core.ErrAgentNotFound
 	}
 
 	return a, nil

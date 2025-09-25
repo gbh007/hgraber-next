@@ -1,3 +1,4 @@
+//nolint:decorder // будет исправлено позднее
 package core
 
 import (
@@ -78,7 +79,7 @@ func AttributesValuesDiff(a, b []string) (aUniq, both, bUniq []string) {
 		}
 	}
 
-	return
+	return aUniq, both, bUniq
 }
 
 type AttributeRemap struct {
@@ -148,7 +149,7 @@ func (rmp AttributeRemaper) Remap(origin map[string][]string) map[string][]strin
 	return attributes
 }
 
-func (rmp AttributeRemaper) RemapOne(code, value string) (string, string, bool) {
+func (rmp AttributeRemaper) RemapOne(code, value string) (toCode, toValue string, keep bool) {
 	v := value
 	if rmp.toLower {
 		v = strings.ToLower(v)

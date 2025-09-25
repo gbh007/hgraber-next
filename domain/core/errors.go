@@ -3,12 +3,12 @@ package core
 import "errors"
 
 var (
-	BookNotFoundError           = errors.New("book not found")
-	PageNotFoundError           = errors.New("page not found")
-	FileNotFoundError           = errors.New("file not found")
-	AgentNotFoundError          = errors.New("agent not found")
-	BookAlreadyExistsError      = errors.New("book already exists")
-	AttributeRemapNotFoundError = errors.New("attribute remap not found")
-	UnsupportedAttributeError   = errors.New("attribute is not supported")
-	MissingFSError              = errors.New("missing fs")
+	ErrBookNotFound           = errors.New("book not found")
+	ErrPageNotFound           = errors.New("page not found")
+	ErrFileNotFound           = errors.New("file not found")
+	ErrAgentNotFound          = errors.New("agent not found")
+	ErrBookAlreadyExists      = errors.New("book already exists")
+	ErrAttributeRemapNotFound = errors.New("attribute remap not found")
+	ErrUnsupportedAttribute   = errors.New("attribute is not supported")
+	ErrMissingFS              = errors.New("missing fs")
 )

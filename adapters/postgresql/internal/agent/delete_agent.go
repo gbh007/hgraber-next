@@ -25,7 +25,7 @@ func (repo *AgentRepo) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.AgentNotFoundError
+		return core.ErrAgentNotFound
 	}
 
 	return nil

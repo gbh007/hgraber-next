@@ -11,18 +11,18 @@ type Runner interface {
 	Name() string
 }
 
-func New(logger *slog.Logger) *Controller {
-	return &Controller{
-		logger: logger,
-	}
-}
-
 type Controller struct {
 	logger *slog.Logger
 
 	runnerChannels []chan struct{}
 	runners        []Runner
 	after          []func()
+}
+
+func New(logger *slog.Logger) *Controller {
+	return &Controller{
+		logger: logger,
+	}
 }
 
 func (c *Controller) RegisterRunner(runner Runner) {
@@ -40,11 +40,7 @@ func (c *Controller) Serve(parentCtx context.Context) error {
 	for _, r := range c.runners {
 		exitCh, err := r.Start(ctx)
 		if err != nil {
-			err = fmt.Errorf("start %s: %w", r.Name(), err)
-
-			c.logger.ErrorContext(ctx, err.Error())
-
-			return err
+			return fmt.Errorf("start %s: %w", r.Name(), err)
 		}
 
 		c.runnerChannels = append(c.runnerChannels, exitCh)

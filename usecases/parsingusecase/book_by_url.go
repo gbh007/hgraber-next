@@ -15,7 +15,7 @@ func (uc *UseCase) BookByURL(ctx context.Context, u url.URL) (core.BookContainer
 	}
 
 	if len(ids) == 0 {
-		return core.BookContainer{}, core.BookNotFoundError
+		return core.BookContainer{}, core.ErrBookNotFound
 	}
 
 	firstBook := core.BookContainer{}

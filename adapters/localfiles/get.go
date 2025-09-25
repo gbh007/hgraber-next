@@ -19,7 +19,7 @@ func (s *Storage) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error) 
 	f, err := os.Open(filepath) //nolint:gosec // не применимо
 
 	if os.IsNotExist(err) {
-		return nil, core.FileNotFoundError
+		return nil, core.ErrFileNotFound
 	}
 
 	if err != nil {

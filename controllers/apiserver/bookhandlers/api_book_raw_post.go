@@ -35,7 +35,7 @@ func (c *BookHandlersController) APIBookRawPost(
 		}, nil
 	}
 
-	if errors.Is(err, core.BookNotFoundError) {
+	if errors.Is(err, core.ErrBookNotFound) {
 		return &serverapi.APIBookRawPostNotFound{
 			InnerCode: innerCode,
 			Details:   serverapi.NewOptString(err.Error()),

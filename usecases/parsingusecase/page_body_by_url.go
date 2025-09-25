@@ -29,5 +29,5 @@ func (uc *UseCase) PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, err
 		return body, nil
 	}
 
-	return nil, core.PageNotFoundError
+	return nil, core.ErrPageNotFound
 }

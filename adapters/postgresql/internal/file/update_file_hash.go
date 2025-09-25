@@ -21,7 +21,7 @@ func (repo *FileRepo) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, 
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.FileNotFoundError
+		return core.ErrFileNotFound
 	}
 
 	return nil

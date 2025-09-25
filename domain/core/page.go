@@ -1,3 +1,4 @@
+//nolint:decorder // будет исправлено позднее
 package core
 
 import (
@@ -9,7 +10,10 @@ import (
 	"github.com/google/uuid"
 )
 
-const PageNumberForPreview int = 1
+const (
+	PageNumberForPreview = 1
+	AvgPageCountInBook   = 30
+)
 
 type Page struct {
 	BookID     uuid.UUID

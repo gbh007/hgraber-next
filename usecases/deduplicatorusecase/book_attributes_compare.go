@@ -46,12 +46,20 @@ func (uc *UseCase) BookAttributesCompare(
 	} else {
 		originBookAttributes, err = uc.storage.BookAttributes(ctx, originID)
 		if err != nil {
-			return bff.BookAttributesCompareResult{}, fmt.Errorf("get attributes (%s) from storage: %w", originID.String(), err)
+			return bff.BookAttributesCompareResult{}, fmt.Errorf(
+				"get attributes (%s) from storage: %w",
+				originID.String(),
+				err,
+			)
 		}
 
 		targetBookAttributes, err = uc.storage.BookAttributes(ctx, targetID)
 		if err != nil {
-			return bff.BookAttributesCompareResult{}, fmt.Errorf("get attributes (%s) from storage: %w", targetID.String(), err)
+			return bff.BookAttributesCompareResult{}, fmt.Errorf(
+				"get attributes (%s) from storage: %w",
+				targetID.String(),
+				err,
+			)
 		}
 	}
 

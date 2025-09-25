@@ -31,7 +31,7 @@ func (repo *BookRepo) UpdateBookDeletion(ctx context.Context, book core.Book) er
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.BookNotFoundError
+		return core.ErrBookNotFound
 	}
 
 	return nil

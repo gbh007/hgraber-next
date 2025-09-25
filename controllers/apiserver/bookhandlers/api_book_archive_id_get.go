@@ -14,7 +14,7 @@ func (c *BookHandlersController) APIBookArchiveIDGet(
 	params serverapi.APIBookArchiveIDGetParams,
 ) (serverapi.APIBookArchiveIDGetRes, error) {
 	body, book, err := c.exportUseCases.ExportBook(ctx, params.ID)
-	if errors.Is(err, core.BookNotFoundError) {
+	if errors.Is(err, core.ErrBookNotFound) {
 		return &serverapi.APIBookArchiveIDGetNotFound{
 			InnerCode: apiservercore.ExportUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),

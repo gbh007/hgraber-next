@@ -37,6 +37,7 @@ import (
 	"github.com/gbh007/hgraber-next/usecases/systemusecase"
 )
 
+//nolint:cyclop,funlen // будет исправлено позднее
 func Serve() {
 	ctx, cancel := signal.NotifyContext(
 		context.Background(),

@@ -12,6 +12,7 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
+//nolint:cyclop,funlen // будет исправлено позднее
 func (uc *UseCase) BookPagesCompare(
 	ctx context.Context,
 	originID, targetID uuid.UUID,

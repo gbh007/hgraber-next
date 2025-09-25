@@ -25,7 +25,7 @@ func (repo *FileRepo) DeleteFile(ctx context.Context, id uuid.UUID) error {
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.FileNotFoundError
+		return core.ErrFileNotFound
 	}
 
 	return nil

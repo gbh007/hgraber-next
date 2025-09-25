@@ -1,7 +1,8 @@
+//nolint:decorder // будет исправлено позднее
 package core
 
 import (
-	"crypto/md5"
+	"crypto/md5" //nolint:gosec // не используется для криптографии
 	"crypto/sha256"
 	"fmt"
 	"io"
@@ -44,7 +45,7 @@ func HashFile(body io.Reader) (FileHash, error) {
 
 	return FileHash{
 		Size:      int64(len(data)),
-		Md5Sum:    fmt.Sprintf("%x", md5.Sum(data)),
+		Md5Sum:    fmt.Sprintf("%x", md5.Sum(data)), //nolint:gosec // не используется для криптографии
 		Sha256Sum: fmt.Sprintf("%x", sha256.Sum256(data)),
 	}, nil
 }

@@ -60,7 +60,7 @@ func (a *FSAdapter) Delete(ctx context.Context, fileID uuid.UUID) error {
 		return nil
 
 	case *agentapi.APIFsDeletePostNotFound:
-		return fmt.Errorf("%w: %s", core.FileNotFoundError, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", core.ErrFileNotFound, typedRes.Details.Value)
 
 	case *agentapi.APIFsDeletePostBadRequest:
 		return fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
@@ -90,7 +90,7 @@ func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error
 		return typedRes.Data, nil
 
 	case *agentapi.APIFsGetGetNotFound:
-		return nil, fmt.Errorf("%w: %s", core.FileNotFoundError, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", core.ErrFileNotFound, typedRes.Details.Value)
 
 	case *agentapi.APIFsGetGetBadRequest:
 		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)

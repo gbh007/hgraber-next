@@ -20,7 +20,7 @@ func (repo *BookRepo) SetBookRebuild(ctx context.Context, bookID uuid.UUID, reBu
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.BookNotFoundError
+		return core.ErrBookNotFound
 	}
 
 	return nil

@@ -22,7 +22,7 @@ func (c *BookHandlersController) APIBookStatusSetPost(
 		err = c.bookUseCases.VerifyBook(ctx, req.ID, req.Value)
 	}
 
-	if errors.Is(err, core.BookNotFoundError) {
+	if errors.Is(err, core.ErrBookNotFound) {
 		return &serverapi.APIBookStatusSetPostNotFound{
 			InnerCode: apiservercore.WebAPIUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),

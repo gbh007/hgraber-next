@@ -17,7 +17,7 @@ func (uc *UseCase) PageBody(ctx context.Context, bookID uuid.UUID, pageNumber in
 	}
 
 	if !page.IsLoaded() {
-		return nil, fmt.Errorf("missing page body: %w", core.FileNotFoundError)
+		return nil, fmt.Errorf("missing page body: %w", core.ErrFileNotFound)
 	}
 
 	body, err := uc.fileStorage.Get(ctx, page.FileID, nil)

@@ -26,12 +26,13 @@ func PrettySize(raw int64) string {
 		step++
 
 		mod = div % divider
-		div = div / divider
+		div = div / divider //nolint:gocritic // сделано для наглядности
 	}
 
 	return strconv.FormatInt(div, 10) + "." + strconv.FormatInt(mod*10/1024, 10) + " " + SizeUnitFromStep(step)
 }
 
+//nolint:mnd // будет исправлено позднее
 func SizeUnitFromStep(step int) string {
 	switch step {
 	case 0:

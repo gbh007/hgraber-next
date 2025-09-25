@@ -36,7 +36,7 @@ func (repo *BookRepo) UpdateBook(ctx context.Context, book core.Book) error {
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.BookNotFoundError
+		return core.ErrBookNotFound
 	}
 
 	return nil

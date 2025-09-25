@@ -28,7 +28,7 @@ func (repo *FileRepo) UpdateFileFS(ctx context.Context, fileID, fsID uuid.UUID) 
 	}
 
 	if res.RowsAffected() < 1 {
-		return core.FileNotFoundError
+		return core.ErrFileNotFound
 	}
 
 	return nil

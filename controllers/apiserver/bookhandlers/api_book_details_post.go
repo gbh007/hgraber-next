@@ -16,7 +16,7 @@ func (c *BookHandlersController) APIBookDetailsPost(
 	req *serverapi.APIBookDetailsPostReq,
 ) (serverapi.APIBookDetailsPostRes, error) {
 	book, err := c.bffUseCases.BookDetails(ctx, req.ID)
-	if errors.Is(err, core.BookNotFoundError) {
+	if errors.Is(err, core.ErrBookNotFound) {
 		return &serverapi.APIBookDetailsPostNotFound{
 			InnerCode: apiservercore.BFFUseCaseCode,
 			Details:   serverapi.NewOptString(err.Error()),

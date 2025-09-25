@@ -36,7 +36,7 @@ func (repo *PageRepo) BookPageWithHash(
 	err := row.Scan(model.PageWithHashScanner(&page))
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return core.PageWithHash{}, core.PageNotFoundError
+		return core.PageWithHash{}, core.ErrPageNotFound
 	}
 
 	if err != nil {

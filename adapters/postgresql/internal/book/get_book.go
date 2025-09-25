@@ -31,7 +31,7 @@ func (repo *BookRepo) GetBook(ctx context.Context, bookID uuid.UUID) (core.Book,
 	err := row.Scan(model.BookScanner(&book))
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return core.Book{}, core.BookNotFoundError
+		return core.Book{}, core.ErrBookNotFound
 	}
 
 	if err != nil {

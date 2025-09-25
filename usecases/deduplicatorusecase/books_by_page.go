@@ -28,8 +28,8 @@ func (uc *UseCase) BooksByPage(
 		return nil, fmt.Errorf("get pages by hash: %w", err)
 	}
 
-	books := make([]bff.BookWithPreviewPage, 0, min(len(pages), 10))
-	booksHandled := make(map[uuid.UUID]struct{}, min(len(pages), 10))
+	books := make([]bff.BookWithPreviewPage, 0, len(pages))
+	booksHandled := make(map[uuid.UUID]struct{}, len(pages))
 
 	for _, page := range pages {
 		if _, ok := booksHandled[page.BookID]; ok {
@@ -42,7 +42,7 @@ func (uc *UseCase) BooksByPage(
 		}
 
 		previewPage, err := uc.storage.BookPageWithHash(ctx, book.ID, core.PageNumberForPreview)
-		if err != nil && !errors.Is(err, core.PageNotFoundError) { // Отсутствие превью это нормально
+		if err != nil && !errors.Is(err, core.ErrPageNotFound) { // Отсутствие превью это нормально
 			return nil, fmt.Errorf("get book %s preview page: %w", page.BookID.String(), err)
 		}
 

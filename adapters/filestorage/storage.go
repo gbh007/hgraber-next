@@ -120,7 +120,7 @@ func (s *Storage) FSIDForDownload(ctx context.Context) (uuid.UUID, error) {
 	}
 
 	if len(storages) == 0 {
-		return uuid.Nil, core.MissingFSError
+		return uuid.Nil, core.ErrMissingFS
 	}
 
 	slices.SortFunc(storages, func(a, b fsmodel.FileStorageSystem) int {

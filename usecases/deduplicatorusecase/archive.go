@@ -27,8 +27,8 @@ func (uc *UseCase) ArchiveEntryPercentage(
 		return nil, fmt.Errorf("create zip reader: %w", err)
 	}
 
-	archiveHashes := make([]core.PageWithHash, 0, 30) // Точный размер заранее не определить
-	md5Sums := make([]string, 0, 30)                  // Точный размер заранее не определить
+	archiveHashes := make([]core.PageWithHash, 0, core.AvgPageCountInBook) // Точный размер заранее не определить
+	md5Sums := make([]string, 0, core.AvgPageCountInBook)                  // Точный размер заранее не определить
 
 	_, err = external.ReadArchive(ctx, zipReader, external.ReadArchiveOptions{
 		HandlePageBody: func(ctx context.Context, pageNumber int, filename string, body io.Reader) error {
