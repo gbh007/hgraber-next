@@ -62,7 +62,7 @@ func (uc *UseCase) List(ctx context.Context, u url.URL) (hproxymodel.List, error
 				return hproxymodel.List{}, fmt.Errorf("get mirrors: %w", err)
 			}
 
-			mirrorCalculator := parsing.NewUrlCloner(mirrors)
+			mirrorCalculator := parsing.NewURLCloner(mirrors)
 
 			for i, book := range list.Books {
 				duplicates, err := mirrorCalculator.GetClones(book.ExtURL)

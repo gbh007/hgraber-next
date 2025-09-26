@@ -33,7 +33,7 @@ func (uc *UseCase) NewBooksMulti(
 		return parsing.MultiHandleMultipleResult{}, fmt.Errorf("get mirrors: %w", err)
 	}
 
-	mirrorCalculator := parsing.NewUrlCloner(mirrors)
+	mirrorCalculator := parsing.NewURLCloner(mirrors)
 
 	result := parsing.MultiHandleMultipleResult{
 		Details: parsing.FirstHandleMultipleResult{

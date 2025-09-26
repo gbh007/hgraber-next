@@ -18,7 +18,12 @@ func FSRPS() *timeseries.PanelBuilder {
 					metricfs.ActionSecondsName+"_count",
 					[]string{metriccore.ActionLabel, metricfs.FSIDLabel},
 				),
-				Legend: fmt.Sprintf("{{%s}}/{{%s}} -> {{%s}}", metriccore.ServiceTypeLabel, metriccore.ActionLabel, metricfs.FSIDLabel),
+				Legend: fmt.Sprintf(
+					"{{%s}}/{{%s}} -> {{%s}}",
+					metriccore.ServiceTypeLabel,
+					metriccore.ActionLabel,
+					metricfs.FSIDLabel,
+				),
 			},
 		},
 		"FS RPS",

@@ -14,7 +14,7 @@ func (uc *UseCase) rebuildBookLabels(
 	flags core.RebuildBookRequestFlags,
 	labelsFromRequest []core.BookLabel,
 	pagesInfo rebuildedPagesInfo,
-) ([]core.BookLabel, error) {
+) ([]core.BookLabel, error) { //nolint:unparam // ошибка специально оставлена в сигнатуре
 	type labelInBookKey struct {
 		Name       string
 		PageNumber int

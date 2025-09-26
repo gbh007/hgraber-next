@@ -20,6 +20,7 @@ type ReadArchiveOptions struct {
 	SkipInfo       bool
 }
 
+//nolint:gocognit,cyclop,funlen // будет исправлено позднее
 func ReadArchive(
 	ctx context.Context,
 	zipReader *zip.Reader,
@@ -33,7 +34,7 @@ func ReadArchive(
 	for _, f := range zipReader.File {
 		select {
 		case <-ctx.Done():
-			return Info{}, ctx.Err()
+			return Info{}, ctx.Err() //nolint:wrapcheck // оставляем оригинальные данные
 		default:
 		}
 

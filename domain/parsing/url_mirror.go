@@ -1,6 +1,7 @@
 package parsing
 
 import (
+	"fmt"
 	"net/url"
 	"strings"
 
@@ -14,12 +15,12 @@ type URLMirror struct {
 	Description string
 }
 
-type UrlCloner struct {
+type URLCloner struct {
 	mirrors map[string][]string
 }
 
-func NewUrlCloner(mirrors []URLMirror) UrlCloner {
-	uc := UrlCloner{
+func NewURLCloner(mirrors []URLMirror) URLCloner {
+	uc := URLCloner{
 		mirrors: make(map[string][]string),
 	}
 
@@ -44,7 +45,7 @@ func NewUrlCloner(mirrors []URLMirror) UrlCloner {
 	return uc
 }
 
-func (uc UrlCloner) GetClones(u url.URL) ([]url.URL, error) {
+func (uc URLCloner) GetClones(u url.URL) ([]url.URL, error) {
 	out := make([]url.URL, 0)
 
 	s := u.String()
@@ -54,7 +55,7 @@ func (uc UrlCloner) GetClones(u url.URL) ([]url.URL, error) {
 			for _, v := range replacements {
 				mirror, err := url.Parse(strings.Replace(s, prefix, v, 1))
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("parse prefix: %w", err)
 				}
 
 				out = append(out, *mirror)

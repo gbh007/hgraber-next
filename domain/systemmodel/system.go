@@ -2,6 +2,13 @@ package systemmodel
 
 import "github.com/google/uuid"
 
+type SystemWorkerStat struct {
+	Name         string
+	InQueueCount int
+	InWorkCount  int
+	RunnersCount int
+}
+
 type SystemSizeInfo struct {
 	BookCount           int
 	DownloadedBookCount int
@@ -84,11 +91,4 @@ func (info SystemSizeInfo) FileSizeByFSSum() int64 {
 	}
 
 	return s
-}
-
-type SystemWorkerStat struct {
-	Name         string
-	InQueueCount int
-	InWorkCount  int
-	RunnersCount int
 }

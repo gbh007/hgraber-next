@@ -1,7 +1,9 @@
+//revive:disable:file-length-limit
 package external
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"strconv"
 	"strings"
@@ -13,11 +15,56 @@ const (
 	HG4RatingLabel = "hg4:rating"
 )
 
+type HG4Title struct {
+	ID      int       `json:"id"`
+	Created time.Time `json:"created"`
+	URL     string    `json:"url"`
+
+	Pages []HG4Page    `json:"pages"`
+	Data  HG4TitleInfo `json:"info"`
+}
+
+type HG4TitleInfo struct {
+	Parsed     HG4TitleInfoParsed `json:"parsed,omitempty"`
+	Name       string             `json:"name,omitempty"`
+	Rate       int                `json:"rate,omitempty"` // 3.2.0+
+	Tags       []string           `json:"tags,omitempty"`
+	Authors    []string           `json:"authors,omitempty"`
+	Characters []string           `json:"characters,omitempty"`
+	Languages  []string           `json:"languages,omitempty"`
+	Categories []string           `json:"categories,omitempty"`
+	Parodies   []string           `json:"parodies,omitempty"`
+	Groups     []string           `json:"groups,omitempty"`
+}
+
+type HG4TitleInfoParsed struct {
+	Name       bool `json:"name,omitempty"`
+	Page       bool `json:"page,omitempty"`
+	Tags       bool `json:"tags,omitempty"`
+	Authors    bool `json:"authors,omitempty"`
+	Characters bool `json:"characters,omitempty"`
+	Languages  bool `json:"languages,omitempty"`
+	Categories bool `json:"categories,omitempty"`
+	Parodies   bool `json:"parodies,omitempty"`
+	Groups     bool `json:"groups,omitempty"`
+}
+
+type HG4Page struct {
+	TitleID    int       `json:"title_id"`    // 3.3.0+
+	PageNumber int       `json:"page_number"` // 3.3.0+
+	URL        string    `json:"url"`
+	URLtoView  string    `json:"url_to_view"` // 3.3.0 - 4.0.0
+	Ext        string    `json:"ext"`
+	Success    bool      `json:"success"`
+	LoadedAt   time.Time `json:"loaded_at"`
+	Rate       int       `json:"rate,omitempty"` // 3.2.0+
+}
+
 // info.txt
 func HG4ParseInfoTXT(body io.Reader) (Info, bool, error) {
 	rawData, err := io.ReadAll(body)
 	if err != nil {
-		return Info{}, false, err
+		return Info{}, false, fmt.Errorf("read body: %w", err)
 	}
 
 	info := Info{
@@ -30,6 +77,8 @@ func HG4ParseInfoTXT(body io.Reader) (Info, bool, error) {
 	}
 
 	found := false
+
+	const v1_0_0 = "v1.0.0"
 
 	for _, row := range strings.Split(string(rawData), "\n") {
 		switch {
@@ -45,11 +94,11 @@ func HG4ParseInfoTXT(body io.Reader) (Info, bool, error) {
 
 		case strings.HasPrefix(row, "NAME:"):
 			info.Data.Name = cleanupPrefix(row, "NAME:")
-			info.Meta.ServiceVersion = "v1.0.0"
+			info.Meta.ServiceVersion = v1_0_0
 
 		case strings.HasPrefix(row, "PAGE-COUNT:"):
 			info.Data.PageCount, _ = strconv.Atoi(cleanupPrefix(row, "PAGE-COUNT:"))
-			info.Meta.ServiceVersion = "v1.0.0"
+			info.Meta.ServiceVersion = v1_0_0
 
 		case strings.HasPrefix(row, "INNER-ID:"):
 			info.Data.Labels = append(info.Data.Labels, Label{
@@ -57,7 +106,7 @@ func HG4ParseInfoTXT(body io.Reader) (Info, bool, error) {
 				Value:    cleanupPrefix(row, "INNER-ID:"),
 				CreateAt: time.Now().UTC(),
 			})
-			info.Meta.ServiceVersion = "v1.0.0"
+			info.Meta.ServiceVersion = v1_0_0
 		}
 	}
 
@@ -69,6 +118,8 @@ func cleanupPrefix(s, prefix string) string {
 }
 
 // data.json
+//
+//nolint:cyclop,funlen // будет исправлено позднее
 func HG4ParseDataJSON(body io.Reader) (Info, bool, error) {
 	info := Info{
 		Version: CurrentVersion,
@@ -86,7 +137,7 @@ func HG4ParseDataJSON(body io.Reader) (Info, bool, error) {
 
 	err := json.NewDecoder(body).Decode(&rawInfo)
 	if err != nil {
-		return Info{}, false, err
+		return Info{}, false, fmt.Errorf("decode body: %w", err)
 	}
 
 	// Считаем что без ID данных не может быть
@@ -225,49 +276,4 @@ func HG4ParseDataJSON(body io.Reader) (Info, bool, error) {
 	}
 
 	return info, false, nil
-}
-
-type HG4Title struct {
-	ID      int       `json:"id"`
-	Created time.Time `json:"created"`
-	URL     string    `json:"url"`
-
-	Pages []HG4Page    `json:"pages"`
-	Data  HG4TitleInfo `json:"info"`
-}
-
-type HG4TitleInfo struct {
-	Parsed     HG4TitleInfoParsed `json:"parsed,omitempty"`
-	Name       string             `json:"name,omitempty"`
-	Rate       int                `json:"rate,omitempty"` // 3.2.0+
-	Tags       []string           `json:"tags,omitempty"`
-	Authors    []string           `json:"authors,omitempty"`
-	Characters []string           `json:"characters,omitempty"`
-	Languages  []string           `json:"languages,omitempty"`
-	Categories []string           `json:"categories,omitempty"`
-	Parodies   []string           `json:"parodies,omitempty"`
-	Groups     []string           `json:"groups,omitempty"`
-}
-
-type HG4TitleInfoParsed struct {
-	Name       bool `json:"name,omitempty"`
-	Page       bool `json:"page,omitempty"`
-	Tags       bool `json:"tags,omitempty"`
-	Authors    bool `json:"authors,omitempty"`
-	Characters bool `json:"characters,omitempty"`
-	Languages  bool `json:"languages,omitempty"`
-	Categories bool `json:"categories,omitempty"`
-	Parodies   bool `json:"parodies,omitempty"`
-	Groups     bool `json:"groups,omitempty"`
-}
-
-type HG4Page struct {
-	TitleID    int       `json:"title_id"`    // 3.3.0+
-	PageNumber int       `json:"page_number"` // 3.3.0+
-	URL        string    `json:"url"`
-	URLtoView  string    `json:"url_to_view"` // 3.3.0 - 4.0.0
-	Ext        string    `json:"ext"`
-	Success    bool      `json:"success"`
-	LoadedAt   time.Time `json:"loaded_at"`
-	Rate       int       `json:"rate,omitempty"` // 3.2.0+
 }

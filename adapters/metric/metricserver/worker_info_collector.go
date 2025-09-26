@@ -9,11 +9,11 @@ import (
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
+var _ prometheus.Collector = (*WorkerInfoCollector)(nil)
+
 type workerInfoProvider interface {
 	WorkersInfo(ctx context.Context) []systemmodel.SystemWorkerStat
 }
-
-var _ prometheus.Collector = (*WorkerInfoCollector)(nil)
 
 type WorkerInfoCollector struct {
 	workerInfoProvider workerInfoProvider
@@ -26,7 +26,7 @@ func RegisterWorkerInfoCollector(
 	workerInfoProvider workerInfoProvider,
 	timeout time.Duration,
 ) error {
-	return registerer.Register(&WorkerInfoCollector{
+	return registerer.Register(&WorkerInfoCollector{ //nolint:wrapcheck // не имеет смысла
 		workerInfoProvider: workerInfoProvider,
 		timeout:            timeout,
 	})
@@ -43,10 +43,28 @@ func (c *WorkerInfoCollector) Collect(metr chan<- prometheus.Metric) {
 	workers := c.workerInfoProvider.WorkersInfo(ctx)
 
 	for _, worker := range workers {
-		metr <- prometheus.MustNewConstMetric(WorkerDesc, prometheus.GaugeValue, float64(worker.InQueueCount), worker.Name, "in_queue")
+		metr <- prometheus.MustNewConstMetric(
+			WorkerDesc,
+			prometheus.GaugeValue,
+			float64(worker.InQueueCount),
+			worker.Name,
+			"in_queue",
+		)
 
-		metr <- prometheus.MustNewConstMetric(WorkerDesc, prometheus.GaugeValue, float64(worker.InWorkCount), worker.Name, "in_work")
+		metr <- prometheus.MustNewConstMetric(
+			WorkerDesc,
+			prometheus.GaugeValue,
+			float64(worker.InWorkCount),
+			worker.Name,
+			"in_work",
+		)
 
-		metr <- prometheus.MustNewConstMetric(WorkerDesc, prometheus.GaugeValue, float64(worker.RunnersCount), worker.Name, "runners")
+		metr <- prometheus.MustNewConstMetric(
+			WorkerDesc,
+			prometheus.GaugeValue,
+			float64(worker.RunnersCount),
+			worker.Name,
+			"runners",
+		)
 	}
 }

@@ -35,7 +35,7 @@ func (uc *UseCase) NewBooks(
 		return parsing.FirstHandleMultipleResult{}, fmt.Errorf("get mirrors: %w", err)
 	}
 
-	mirrorCalculator := parsing.NewUrlCloner(mirrors)
+	mirrorCalculator := parsing.NewURLCloner(mirrors)
 
 	result := parsing.FirstHandleMultipleResult{
 		Details: make([]parsing.BookHandleResult, 0, len(urls)),

@@ -18,7 +18,12 @@ func FSLatency() *timeseries.PanelBuilder {
 					metricfs.ActionSecondsName,
 					[]string{metriccore.ServiceTypeLabel, metriccore.ActionLabel, metricfs.FSIDLabel},
 				),
-				Legend: fmt.Sprintf("{{%s}}/{{%s}} -> {{%s}}", metriccore.ServiceTypeLabel, metriccore.ActionLabel, metricfs.FSIDLabel),
+				Legend: fmt.Sprintf(
+					"{{%s}}/{{%s}} -> {{%s}}",
+					metriccore.ServiceTypeLabel,
+					metriccore.ActionLabel,
+					metricfs.FSIDLabel,
+				),
 			},
 		},
 		"FS latency",

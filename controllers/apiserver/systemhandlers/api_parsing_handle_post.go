@@ -30,8 +30,9 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 			LoadedCount:    result.Details.LoadedCount,
 			DuplicateCount: result.Details.DuplicateCount,
 			ErrorCount:     result.Details.ErrorCount,
-			NotHandled:     result.NotHandled, // Поскольку в запросе адреса для массовой обработки, то как не обработанные отдаем их же.
-			Details:        convertAPIParsingHandlePostOKDetails(result.Details.Details),
+			// Поскольку в запросе адреса для массовой обработки, то как не обработанные отдаем их же.
+			NotHandled: result.NotHandled,
+			Details:    convertAPIParsingHandlePostOKDetails(result.Details.Details),
 		}, nil
 	}
 

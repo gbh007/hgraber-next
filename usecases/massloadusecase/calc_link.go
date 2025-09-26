@@ -27,7 +27,7 @@ func (uc *UseCase) calcExternalLink(ctx context.Context, u url.URL) (handledExte
 		return handledExternalURL{}, fmt.Errorf("get mirrors: %w", err)
 	}
 
-	mirrorCalculator := parsing.NewUrlCloner(mirrors)
+	mirrorCalculator := parsing.NewURLCloner(mirrors)
 
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
 		CanParseMulti: true,

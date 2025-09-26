@@ -9,6 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
+//nolint:cyclop // будет исправлено позднее
 func (uc *UseCase) rebuildBookPrepareResources(
 	ctx context.Context,
 	flags core.RebuildBookRequestFlags,

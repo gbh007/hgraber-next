@@ -46,7 +46,7 @@ type Unit[T any] struct {
 	wait   sync.WaitGroup
 }
 
-func NewUnit[T any]( //nolint:revive // будет исправлено позднее
+func NewUnit[T any]( //revive:disable:argument-limit // будет исправлено позднее
 	name string,
 	number int32,
 	logger *slog.Logger,

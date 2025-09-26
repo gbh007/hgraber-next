@@ -34,7 +34,7 @@ func WriteArchive(
 	for _, p := range info.Data.Pages {
 		select {
 		case <-ctx.Done():
-			return ctx.Err()
+			return ctx.Err() //nolint:wrapcheck // оставляем оригинальные данные
 		default:
 		}
 

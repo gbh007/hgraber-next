@@ -8,6 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
+//nolint:cyclop // будет исправлено позднее
 func (uc *UseCase) rebuildBookSave(
 	ctx context.Context,
 	isNewBook bool,

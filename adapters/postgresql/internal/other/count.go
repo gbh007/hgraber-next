@@ -1,3 +1,4 @@
+//revive:disable:file-length-limit
 package other
 
 import (
@@ -266,5 +267,3 @@ func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeIn
 
 	return systemSize, nil
 }
-
-//nolint:revive // будет исправлено позднее

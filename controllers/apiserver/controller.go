@@ -1,3 +1,4 @@
+//revive:disable:file-length-limit
 package apiserver
 
 import (
@@ -121,7 +122,7 @@ type Controller struct {
 	token      string
 }
 
-func New( //nolint:revive // будет исправлено позднее
+func New( //revive:disable:argument-limit // будет исправлено позднее
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	config config,
@@ -255,5 +256,3 @@ func New( //nolint:revive // будет исправлено позднее
 
 	return c, nil
 }
-
-//nolint:revive // будет исправлено позднее

@@ -1,3 +1,4 @@
+//revive:disable:file-length-limit
 package metric
 
 import (
@@ -239,7 +240,7 @@ func (c *SystemInfoCollector) collectBookSizeStatistic(ctx context.Context) {
 
 		pageAvgSize := float64(size.Size) / float64(size.Count)
 
-		pageSizeCount += uint64(size.Count)
+		pageSizeCount += uint64(size.Count) //nolint:gosec // переполнения не будет
 		pageSizeSum += pageAvgSize
 
 		for _, bucket := range metricstatistic.PageInBookBucket {
@@ -256,7 +257,7 @@ func (c *SystemInfoCollector) collectBookSizeStatistic(ctx context.Context) {
 
 		for _, bucket := range metricstatistic.PageSizeBucket {
 			if pageAvgSize <= bucket {
-				pageSizeBuckets[bucket] += uint64(size.Count)
+				pageSizeBuckets[bucket] += uint64(size.Count) //nolint:gosec // переполнения не будет
 			}
 		}
 	}

@@ -9,6 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
+//nolint:cyclop,funlen // будет исправлено позднее
 func (uc *UseCase) RestoreBook(ctx context.Context, bookID uuid.UUID, onlyPages bool) error {
 	deletedPages, err := uc.storage.DeletedPages(ctx, bookID)
 	if err != nil {

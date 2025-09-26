@@ -1,3 +1,4 @@
+//revive:disable:file-length-limit
 package apiservercore
 
 import (
@@ -199,5 +200,3 @@ func ConvertAttributeRemapToAPI(raw core.AttributeRemap) serverapi.AttributeRema
 		UpdatedAt: OptTime(raw.UpdateAt),
 	}
 }
-
-//nolint:revive // будет исправлено позже

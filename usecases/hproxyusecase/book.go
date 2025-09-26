@@ -87,7 +87,7 @@ func (uc *UseCase) Book(ctx context.Context, u url.URL, pageLimit *int) (hproxym
 				return hproxymodel.Book{}, fmt.Errorf("get mirrors: %w", err)
 			}
 
-			mirrorCalculator := parsing.NewUrlCloner(mirrors)
+			mirrorCalculator := parsing.NewURLCloner(mirrors)
 
 			duplicates, err := mirrorCalculator.GetClones(u)
 			if err != nil {

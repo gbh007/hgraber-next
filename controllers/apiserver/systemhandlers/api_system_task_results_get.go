@@ -33,6 +33,7 @@ func (c *SystemHandlersController) APISystemTaskResultsGet(
 				EndedAt:           raw.EndedAt,
 				Stages: pkg.Map(
 					raw.Stages,
+					//nolint:lll // будет исправлено позднее
 					func(rawStage *systemmodel.TaskResultStage) serverapi.APISystemTaskResultsGetOKResultsItemStagesItem {
 						return serverapi.APISystemTaskResultsGetOKResultsItemStagesItem{
 							Name:              rawStage.Name,
@@ -54,6 +55,7 @@ func (c *SystemHandlersController) APISystemTaskResultsGet(
 		return b.StartedAt.Compare(a.StartedAt)
 	})
 
+	//nolint:lll // текст для отдачи с сервера
 	return &serverapi.APISystemTaskResultsGetOK{
 		Results: responseResults,
 		Tasks: []serverapi.APISystemTaskResultsGetOKTasksItem{

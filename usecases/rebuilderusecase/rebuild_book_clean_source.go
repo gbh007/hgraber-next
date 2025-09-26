@@ -10,6 +10,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
+//nolint:cyclop,funlen,gocognit // будет исправлено позднее
 func (uc *UseCase) rebuildBookCleanSource(
 	ctx context.Context,
 	flags core.RebuildBookRequestFlags,

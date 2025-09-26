@@ -99,6 +99,7 @@ func (uc *UseCase) CalculateMassloads(_ context.Context, force bool) error {
 	return nil
 }
 
+//nolint:cyclop,funlen // будет исправлено позднее
 func (uc *UseCase) updateCalculation(ctx context.Context, ml massloadmodel.Massload, force bool) error {
 	all := handledExternalURL{}
 

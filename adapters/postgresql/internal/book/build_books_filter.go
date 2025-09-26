@@ -1,3 +1,4 @@
+//revive:disable:file-length-limit
 package book
 
 import (
@@ -315,5 +316,3 @@ func (repo *BookRepo) buildBooksFilter(
 
 	return query, args, nil
 }
-
-//nolint:revive // будет исправлено позднее

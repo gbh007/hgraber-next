@@ -15,13 +15,13 @@ import (
 	"github.com/gbh007/hgraber-next/adapters/metric/metricserver"
 )
 
-type SystemType byte
-
 const (
 	UnknownSystemType = iota
 	ServerSystemType
 	AgentSystemType
 )
+
+type SystemType byte
 
 type Config struct {
 	ServiceName string
@@ -36,6 +36,20 @@ type Config struct {
 	WithAgent      bool
 }
 
+type MetricProvider struct {
+	reg        *prometheus.Registry
+	registerer prometheus.Registerer
+}
+
+func (p MetricProvider) Registry() *prometheus.Registry {
+	return p.reg
+}
+
+func (p MetricProvider) Registerer() prometheus.Registerer {
+	return p.registerer
+}
+
+//nolint:gocognit,funlen,cyclop // будет исправлено позднее
 func New(cfg Config) (p *MetricProvider, err error) {
 	p = &MetricProvider{
 		reg: prometheus.NewRegistry(),
@@ -159,17 +173,4 @@ func New(cfg Config) (p *MetricProvider, err error) {
 	}
 
 	return p, nil
-}
-
-type MetricProvider struct {
-	reg        *prometheus.Registry
-	registerer prometheus.Registerer
-}
-
-func (p MetricProvider) Registry() *prometheus.Registry {
-	return p.reg
-}
-
-func (p MetricProvider) Registerer() prometheus.Registerer {
-	return p.registerer
 }
