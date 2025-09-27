@@ -8,6 +8,16 @@ import (
 	"github.com/google/uuid"
 )
 
+type BookCalc struct {
+	CalcPageCount     *int64
+	CalcFileCount     *int64
+	CalcDeadHashCount *int64
+	CalcPageSize      *int64
+	CalcFileSize      *int64
+	CalcDeadHashSize  *int64
+	CalculatedAt      time.Time
+}
+
 type Book struct {
 	ID               uuid.UUID
 	Name             string
@@ -22,6 +32,8 @@ type Book struct {
 	VerifiedAt time.Time
 
 	IsRebuild bool
+
+	Calc BookCalc
 }
 
 func (b Book) IsLoaded() bool {

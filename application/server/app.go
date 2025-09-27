@@ -235,6 +235,9 @@ func Serve() {
 		case systemmodel.WorkerNameMassloadCalculation:
 			unit = workermanager.NewMassloadCalculation(massloadUseCases, logger, tracer, wCfg, metricProvider)
 
+		case systemmodel.WorkerNameBookCalculation:
+			unit = workermanager.NewBookCalculation(bookUseCases, logger, tracer, wCfg, metricProvider)
+
 		default:
 			continue
 		}

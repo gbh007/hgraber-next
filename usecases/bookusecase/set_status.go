@@ -14,9 +14,9 @@ func (uc *UseCase) VerifyBook(ctx context.Context, bookID uuid.UUID, verified bo
 		verifiedAt = time.Now().UTC()
 	}
 
-	return uc.storage.VerifyBook(ctx, bookID, verified, verifiedAt)
+	return uc.storage.VerifyBook(ctx, bookID, verified, verifiedAt) //nolint:wrapcheck // нет смысла в врапинге
 }
 
 func (uc *UseCase) SetBookRebuild(ctx context.Context, bookID uuid.UUID, value bool) error {
-	return uc.storage.SetBookRebuild(ctx, bookID, value)
+	return uc.storage.SetBookRebuild(ctx, bookID, value) //nolint:wrapcheck // нет смысла в врапинге
 }

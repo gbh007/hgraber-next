@@ -79,6 +79,12 @@ count = 1
 queue_size = 100
 interval = "24h"
 
+[[workers]]
+name = "book_calculation"
+count = 1
+queue_size = 100
+interval = "1h"
+
 [storage]
 debug_pgx = false
 connection = "postgres://hgrabernextuser:hgrabernextpass@localhost:5432/hgrabernext?sslmode=disable"

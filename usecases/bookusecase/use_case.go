@@ -20,6 +20,11 @@ type storage interface {
 	BookOriginAttributes(ctx context.Context, bookID uuid.UUID) (map[string][]string, error)
 	BookPages(ctx context.Context, bookID uuid.UUID) ([]core.Page, error)
 	Labels(ctx context.Context, bookID uuid.UUID) ([]core.BookLabel, error)
+
+	BookIDs(ctx context.Context, filter core.BookFilter) ([]uuid.UUID, error)
+	BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]core.PageWithHash, error)
+	DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]core.DeadHash, error)
+	UpdateBookCalculation(ctx context.Context, id uuid.UUID, calc core.BookCalc) error
 }
 
 type UseCase struct {

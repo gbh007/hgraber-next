@@ -11,4 +11,5 @@ const (
 	WorkerNameMassloadSizer          = "massload_sizer"
 	WorkerNameMassloadAttributeSizer = "massload_attribute_sizer"
 	WorkerNameMassloadCalculation    = "massload_calculation"
+	WorkerNameBookCalculation        = "book_calculation"
 )
