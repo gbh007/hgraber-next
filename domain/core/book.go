@@ -18,6 +18,16 @@ type BookCalc struct {
 	CalculatedAt      time.Time
 }
 
+func (c BookCalc) IsZero() bool {
+	return c.CalculatedAt.IsZero() &&
+		c.CalcPageCount == nil &&
+		c.CalcFileCount == nil &&
+		c.CalcDeadHashCount == nil &&
+		c.CalcPageSize == nil &&
+		c.CalcFileSize == nil &&
+		c.CalcDeadHashSize == nil
+}
+
 type Book struct {
 	ID               uuid.UUID
 	Name             string

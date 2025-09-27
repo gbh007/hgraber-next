@@ -45,6 +45,18 @@ func (c *Controller) ConvertSimpleBook(
 			IsDeleted:  book.Deleted,
 			IsRebuild:  book.IsRebuild,
 		},
+		Calculation: serverapi.OptBookSimpleCalculation{
+			Value: serverapi.BookSimpleCalculation{
+				CalcPageCount:     OptInt64Pointer(book.Calc.CalcPageCount),
+				CalcFileCount:     OptInt64Pointer(book.Calc.CalcFileCount),
+				CalcDeadHashCount: OptInt64Pointer(book.Calc.CalcDeadHashCount),
+				CalcPageSize:      OptInt64Pointer(book.Calc.CalcPageSize),
+				CalcFileSize:      OptInt64Pointer(book.Calc.CalcFileSize),
+				CalcDeadHashSize:  OptInt64Pointer(book.Calc.CalcDeadHashSize),
+				CalculatedAt:      OptTime(book.Calc.CalculatedAt),
+			},
+			Set: !book.Calc.IsZero(),
+		},
 	}
 }
 

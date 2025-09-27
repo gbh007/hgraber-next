@@ -5900,6 +5900,37 @@ components:
           type: string
           format: uri
           description: Ссылка для предпросмотра изображения книги
+        calculation:
+          type: object
+          properties:
+            calc_page_count:
+              type: integer
+              format: int64
+              description: Текущее количество страниц
+            calc_file_count:
+              type: integer
+              format: int64
+              description: Текущее количество уникальных файлов
+            calc_dead_hash_count:
+              type: integer
+              format: int64
+              description: Текущее количество уникальных мертвых хешей
+            calc_page_size:
+              type: integer
+              format: int64
+              description: Текущий размер страниц
+            calc_file_size:
+              type: integer
+              format: int64
+              description: Текущий размер уникальных файлов
+            calc_dead_hash_size:
+              type: integer
+              format: int64
+              description: Текущий размер уникальных мертвых хешей
+            calculated_at:
+              type: string
+              format: date-time
+              description: Время изменения данных
         flags:
           $ref: "#/components/schemas/BookFlags"
       required:
@@ -6134,6 +6165,13 @@ components:
                 - name
                 - id
                 - page_count
+                - calc_page_count
+                - calc_file_count
+                - calc_dead_hash_count
+                - calc_page_size
+                - calc_file_size
+                - calc_dead_hash_size
+                - calculated_at
         pagination:
           type: object
           description: Параметры пагинации

@@ -2061,6 +2061,20 @@ func (s BookFilterSortField) Validate() error {
 		return nil
 	case "page_count":
 		return nil
+	case "calc_page_count":
+		return nil
+	case "calc_file_count":
+		return nil
+	case "calc_dead_hash_count":
+		return nil
+	case "calc_page_size":
+		return nil
+	case "calc_file_size":
+		return nil
+	case "calc_dead_hash_size":
+		return nil
+	case "calculated_at":
+		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}

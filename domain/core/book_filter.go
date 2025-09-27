@@ -18,6 +18,13 @@ const (
 	BookFilterOrderByName
 	BookFilterOrderByID
 	BookFilterOrderByPageCount
+	BookFilterOrderByCalcPageCount
+	BookFilterOrderByCalcFileCount
+	BookFilterOrderByCalcDeadHashCount
+	BookFilterOrderByCalcPageSize
+	BookFilterOrderByCalcFileSize
+	BookFilterOrderByCalcDeadHashSize
+	BookFilterOrderByCalculatedAt
 )
 
 type BookFilterAttributeType byte

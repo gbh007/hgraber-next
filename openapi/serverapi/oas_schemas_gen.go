@@ -8981,10 +8981,17 @@ func (s *BookFilterSort) SetField(val OptBookFilterSortField) {
 type BookFilterSortField string
 
 const (
-	BookFilterSortFieldCreatedAt BookFilterSortField = "created_at"
-	BookFilterSortFieldName      BookFilterSortField = "name"
-	BookFilterSortFieldID        BookFilterSortField = "id"
-	BookFilterSortFieldPageCount BookFilterSortField = "page_count"
+	BookFilterSortFieldCreatedAt         BookFilterSortField = "created_at"
+	BookFilterSortFieldName              BookFilterSortField = "name"
+	BookFilterSortFieldID                BookFilterSortField = "id"
+	BookFilterSortFieldPageCount         BookFilterSortField = "page_count"
+	BookFilterSortFieldCalcPageCount     BookFilterSortField = "calc_page_count"
+	BookFilterSortFieldCalcFileCount     BookFilterSortField = "calc_file_count"
+	BookFilterSortFieldCalcDeadHashCount BookFilterSortField = "calc_dead_hash_count"
+	BookFilterSortFieldCalcPageSize      BookFilterSortField = "calc_page_size"
+	BookFilterSortFieldCalcFileSize      BookFilterSortField = "calc_file_size"
+	BookFilterSortFieldCalcDeadHashSize  BookFilterSortField = "calc_dead_hash_size"
+	BookFilterSortFieldCalculatedAt      BookFilterSortField = "calculated_at"
 )
 
 // AllValues returns all BookFilterSortField values.
@@ -8994,6 +9001,13 @@ func (BookFilterSortField) AllValues() []BookFilterSortField {
 		BookFilterSortFieldName,
 		BookFilterSortFieldID,
 		BookFilterSortFieldPageCount,
+		BookFilterSortFieldCalcPageCount,
+		BookFilterSortFieldCalcFileCount,
+		BookFilterSortFieldCalcDeadHashCount,
+		BookFilterSortFieldCalcPageSize,
+		BookFilterSortFieldCalcFileSize,
+		BookFilterSortFieldCalcDeadHashSize,
+		BookFilterSortFieldCalculatedAt,
 	}
 }
 
@@ -9007,6 +9021,20 @@ func (s BookFilterSortField) MarshalText() ([]byte, error) {
 	case BookFilterSortFieldID:
 		return []byte(s), nil
 	case BookFilterSortFieldPageCount:
+		return []byte(s), nil
+	case BookFilterSortFieldCalcPageCount:
+		return []byte(s), nil
+	case BookFilterSortFieldCalcFileCount:
+		return []byte(s), nil
+	case BookFilterSortFieldCalcDeadHashCount:
+		return []byte(s), nil
+	case BookFilterSortFieldCalcPageSize:
+		return []byte(s), nil
+	case BookFilterSortFieldCalcFileSize:
+		return []byte(s), nil
+	case BookFilterSortFieldCalcDeadHashSize:
+		return []byte(s), nil
+	case BookFilterSortFieldCalculatedAt:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -9027,6 +9055,27 @@ func (s *BookFilterSortField) UnmarshalText(data []byte) error {
 		return nil
 	case BookFilterSortFieldPageCount:
 		*s = BookFilterSortFieldPageCount
+		return nil
+	case BookFilterSortFieldCalcPageCount:
+		*s = BookFilterSortFieldCalcPageCount
+		return nil
+	case BookFilterSortFieldCalcFileCount:
+		*s = BookFilterSortFieldCalcFileCount
+		return nil
+	case BookFilterSortFieldCalcDeadHashCount:
+		*s = BookFilterSortFieldCalcDeadHashCount
+		return nil
+	case BookFilterSortFieldCalcPageSize:
+		*s = BookFilterSortFieldCalcPageSize
+		return nil
+	case BookFilterSortFieldCalcFileSize:
+		*s = BookFilterSortFieldCalcFileSize
+		return nil
+	case BookFilterSortFieldCalcDeadHashSize:
+		*s = BookFilterSortFieldCalcDeadHashSize
+		return nil
+	case BookFilterSortFieldCalculatedAt:
+		*s = BookFilterSortFieldCalculatedAt
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -9370,8 +9419,9 @@ type BookSimple struct {
 	// Количество страниц.
 	PageCount int `json:"page_count"`
 	// Ссылка для предпросмотра изображения книги.
-	PreviewURL OptURI    `json:"preview_url"`
-	Flags      BookFlags `json:"flags"`
+	PreviewURL  OptURI                   `json:"preview_url"`
+	Calculation OptBookSimpleCalculation `json:"calculation"`
+	Flags       BookFlags                `json:"flags"`
 }
 
 // GetID returns the value of ID.
@@ -9402,6 +9452,11 @@ func (s *BookSimple) GetPageCount() int {
 // GetPreviewURL returns the value of PreviewURL.
 func (s *BookSimple) GetPreviewURL() OptURI {
 	return s.PreviewURL
+}
+
+// GetCalculation returns the value of Calculation.
+func (s *BookSimple) GetCalculation() OptBookSimpleCalculation {
+	return s.Calculation
 }
 
 // GetFlags returns the value of Flags.
@@ -9439,9 +9494,101 @@ func (s *BookSimple) SetPreviewURL(val OptURI) {
 	s.PreviewURL = val
 }
 
+// SetCalculation sets the value of Calculation.
+func (s *BookSimple) SetCalculation(val OptBookSimpleCalculation) {
+	s.Calculation = val
+}
+
 // SetFlags sets the value of Flags.
 func (s *BookSimple) SetFlags(val BookFlags) {
 	s.Flags = val
+}
+
+type BookSimpleCalculation struct {
+	// Текущее количество страниц.
+	CalcPageCount OptInt64 `json:"calc_page_count"`
+	// Текущее количество уникальных файлов.
+	CalcFileCount OptInt64 `json:"calc_file_count"`
+	// Текущее количество уникальных мертвых хешей.
+	CalcDeadHashCount OptInt64 `json:"calc_dead_hash_count"`
+	// Текущий размер страниц.
+	CalcPageSize OptInt64 `json:"calc_page_size"`
+	// Текущий размер уникальных файлов.
+	CalcFileSize OptInt64 `json:"calc_file_size"`
+	// Текущий размер уникальных мертвых хешей.
+	CalcDeadHashSize OptInt64 `json:"calc_dead_hash_size"`
+	// Время изменения данных.
+	CalculatedAt OptDateTime `json:"calculated_at"`
+}
+
+// GetCalcPageCount returns the value of CalcPageCount.
+func (s *BookSimpleCalculation) GetCalcPageCount() OptInt64 {
+	return s.CalcPageCount
+}
+
+// GetCalcFileCount returns the value of CalcFileCount.
+func (s *BookSimpleCalculation) GetCalcFileCount() OptInt64 {
+	return s.CalcFileCount
+}
+
+// GetCalcDeadHashCount returns the value of CalcDeadHashCount.
+func (s *BookSimpleCalculation) GetCalcDeadHashCount() OptInt64 {
+	return s.CalcDeadHashCount
+}
+
+// GetCalcPageSize returns the value of CalcPageSize.
+func (s *BookSimpleCalculation) GetCalcPageSize() OptInt64 {
+	return s.CalcPageSize
+}
+
+// GetCalcFileSize returns the value of CalcFileSize.
+func (s *BookSimpleCalculation) GetCalcFileSize() OptInt64 {
+	return s.CalcFileSize
+}
+
+// GetCalcDeadHashSize returns the value of CalcDeadHashSize.
+func (s *BookSimpleCalculation) GetCalcDeadHashSize() OptInt64 {
+	return s.CalcDeadHashSize
+}
+
+// GetCalculatedAt returns the value of CalculatedAt.
+func (s *BookSimpleCalculation) GetCalculatedAt() OptDateTime {
+	return s.CalculatedAt
+}
+
+// SetCalcPageCount sets the value of CalcPageCount.
+func (s *BookSimpleCalculation) SetCalcPageCount(val OptInt64) {
+	s.CalcPageCount = val
+}
+
+// SetCalcFileCount sets the value of CalcFileCount.
+func (s *BookSimpleCalculation) SetCalcFileCount(val OptInt64) {
+	s.CalcFileCount = val
+}
+
+// SetCalcDeadHashCount sets the value of CalcDeadHashCount.
+func (s *BookSimpleCalculation) SetCalcDeadHashCount(val OptInt64) {
+	s.CalcDeadHashCount = val
+}
+
+// SetCalcPageSize sets the value of CalcPageSize.
+func (s *BookSimpleCalculation) SetCalcPageSize(val OptInt64) {
+	s.CalcPageSize = val
+}
+
+// SetCalcFileSize sets the value of CalcFileSize.
+func (s *BookSimpleCalculation) SetCalcFileSize(val OptInt64) {
+	s.CalcFileSize = val
+}
+
+// SetCalcDeadHashSize sets the value of CalcDeadHashSize.
+func (s *BookSimpleCalculation) SetCalcDeadHashSize(val OptInt64) {
+	s.CalcDeadHashSize = val
+}
+
+// SetCalculatedAt sets the value of CalculatedAt.
+func (s *BookSimpleCalculation) SetCalculatedAt(val OptDateTime) {
+	s.CalculatedAt = val
 }
 
 type Cookies struct {
@@ -10833,6 +10980,52 @@ func (o OptBookFilterSortField) Get() (v BookFilterSortField, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptBookFilterSortField) Or(d BookFilterSortField) BookFilterSortField {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptBookSimpleCalculation returns new OptBookSimpleCalculation with value set to v.
+func NewOptBookSimpleCalculation(v BookSimpleCalculation) OptBookSimpleCalculation {
+	return OptBookSimpleCalculation{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookSimpleCalculation is optional BookSimpleCalculation.
+type OptBookSimpleCalculation struct {
+	Value BookSimpleCalculation
+	Set   bool
+}
+
+// IsSet returns true if OptBookSimpleCalculation was set.
+func (o OptBookSimpleCalculation) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookSimpleCalculation) Reset() {
+	var v BookSimpleCalculation
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookSimpleCalculation) SetTo(v BookSimpleCalculation) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookSimpleCalculation) Get() (v BookSimpleCalculation, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookSimpleCalculation) Or(d BookSimpleCalculation) BookSimpleCalculation {
 	if v, ok := o.Get(); ok {
 		return v
 	}

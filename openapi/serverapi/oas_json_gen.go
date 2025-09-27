@@ -33616,6 +33616,20 @@ func (s *BookFilterSortField) Decode(d *jx.Decoder) error {
 		*s = BookFilterSortFieldID
 	case BookFilterSortFieldPageCount:
 		*s = BookFilterSortFieldPageCount
+	case BookFilterSortFieldCalcPageCount:
+		*s = BookFilterSortFieldCalcPageCount
+	case BookFilterSortFieldCalcFileCount:
+		*s = BookFilterSortFieldCalcFileCount
+	case BookFilterSortFieldCalcDeadHashCount:
+		*s = BookFilterSortFieldCalcDeadHashCount
+	case BookFilterSortFieldCalcPageSize:
+		*s = BookFilterSortFieldCalcPageSize
+	case BookFilterSortFieldCalcFileSize:
+		*s = BookFilterSortFieldCalcFileSize
+	case BookFilterSortFieldCalcDeadHashSize:
+		*s = BookFilterSortFieldCalcDeadHashSize
+	case BookFilterSortFieldCalculatedAt:
+		*s = BookFilterSortFieldCalculatedAt
 	default:
 		*s = BookFilterSortField(v)
 	}
@@ -34539,19 +34553,26 @@ func (s *BookSimple) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.Calculation.Set {
+			e.FieldStart("calculation")
+			s.Calculation.Encode(e)
+		}
+	}
+	{
 		e.FieldStart("flags")
 		s.Flags.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfBookSimple = [7]string{
+var jsonFieldsNameOfBookSimple = [8]string{
 	0: "id",
 	1: "created_at",
 	2: "origin_url",
 	3: "name",
 	4: "page_count",
 	5: "preview_url",
-	6: "flags",
+	6: "calculation",
+	7: "flags",
 }
 
 // Decode decodes BookSimple from json.
@@ -34631,8 +34652,18 @@ func (s *BookSimple) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"preview_url\"")
 			}
+		case "calculation":
+			if err := func() error {
+				s.Calculation.Reset()
+				if err := s.Calculation.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"calculation\"")
+			}
 		case "flags":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
 				if err := s.Flags.Decode(d); err != nil {
 					return err
@@ -34651,7 +34682,7 @@ func (s *BookSimple) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b01011011,
+		0b10011011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -34693,6 +34724,171 @@ func (s *BookSimple) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *BookSimple) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *BookSimpleCalculation) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *BookSimpleCalculation) encodeFields(e *jx.Encoder) {
+	{
+		if s.CalcPageCount.Set {
+			e.FieldStart("calc_page_count")
+			s.CalcPageCount.Encode(e)
+		}
+	}
+	{
+		if s.CalcFileCount.Set {
+			e.FieldStart("calc_file_count")
+			s.CalcFileCount.Encode(e)
+		}
+	}
+	{
+		if s.CalcDeadHashCount.Set {
+			e.FieldStart("calc_dead_hash_count")
+			s.CalcDeadHashCount.Encode(e)
+		}
+	}
+	{
+		if s.CalcPageSize.Set {
+			e.FieldStart("calc_page_size")
+			s.CalcPageSize.Encode(e)
+		}
+	}
+	{
+		if s.CalcFileSize.Set {
+			e.FieldStart("calc_file_size")
+			s.CalcFileSize.Encode(e)
+		}
+	}
+	{
+		if s.CalcDeadHashSize.Set {
+			e.FieldStart("calc_dead_hash_size")
+			s.CalcDeadHashSize.Encode(e)
+		}
+	}
+	{
+		if s.CalculatedAt.Set {
+			e.FieldStart("calculated_at")
+			s.CalculatedAt.Encode(e, json.EncodeDateTime)
+		}
+	}
+}
+
+var jsonFieldsNameOfBookSimpleCalculation = [7]string{
+	0: "calc_page_count",
+	1: "calc_file_count",
+	2: "calc_dead_hash_count",
+	3: "calc_page_size",
+	4: "calc_file_size",
+	5: "calc_dead_hash_size",
+	6: "calculated_at",
+}
+
+// Decode decodes BookSimpleCalculation from json.
+func (s *BookSimpleCalculation) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BookSimpleCalculation to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "calc_page_count":
+			if err := func() error {
+				s.CalcPageCount.Reset()
+				if err := s.CalcPageCount.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"calc_page_count\"")
+			}
+		case "calc_file_count":
+			if err := func() error {
+				s.CalcFileCount.Reset()
+				if err := s.CalcFileCount.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"calc_file_count\"")
+			}
+		case "calc_dead_hash_count":
+			if err := func() error {
+				s.CalcDeadHashCount.Reset()
+				if err := s.CalcDeadHashCount.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"calc_dead_hash_count\"")
+			}
+		case "calc_page_size":
+			if err := func() error {
+				s.CalcPageSize.Reset()
+				if err := s.CalcPageSize.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"calc_page_size\"")
+			}
+		case "calc_file_size":
+			if err := func() error {
+				s.CalcFileSize.Reset()
+				if err := s.CalcFileSize.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"calc_file_size\"")
+			}
+		case "calc_dead_hash_size":
+			if err := func() error {
+				s.CalcDeadHashSize.Reset()
+				if err := s.CalcDeadHashSize.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"calc_dead_hash_size\"")
+			}
+		case "calculated_at":
+			if err := func() error {
+				s.CalculatedAt.Reset()
+				if err := s.CalculatedAt.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"calculated_at\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode BookSimpleCalculation")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *BookSimpleCalculation) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BookSimpleCalculation) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -36700,6 +36896,39 @@ func (s OptBookFilterSortField) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptBookFilterSortField) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes BookSimpleCalculation as json.
+func (o OptBookSimpleCalculation) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes BookSimpleCalculation from json.
+func (o *OptBookSimpleCalculation) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptBookSimpleCalculation to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptBookSimpleCalculation) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptBookSimpleCalculation) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

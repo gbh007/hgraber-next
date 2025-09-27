@@ -25,6 +25,20 @@ func ConvertAPIBookFilter(req serverapi.BookFilter) core.BookFilter {
 			filter.OrderBy = core.BookFilterOrderByName
 		case serverapi.BookFilterSortFieldPageCount:
 			filter.OrderBy = core.BookFilterOrderByPageCount
+		case serverapi.BookFilterSortFieldCalcPageCount:
+			filter.OrderBy = core.BookFilterOrderByCalcPageCount
+		case serverapi.BookFilterSortFieldCalcFileCount:
+			filter.OrderBy = core.BookFilterOrderByCalcFileCount
+		case serverapi.BookFilterSortFieldCalcDeadHashCount:
+			filter.OrderBy = core.BookFilterOrderByCalcDeadHashCount
+		case serverapi.BookFilterSortFieldCalcPageSize:
+			filter.OrderBy = core.BookFilterOrderByCalcPageSize
+		case serverapi.BookFilterSortFieldCalcFileSize:
+			filter.OrderBy = core.BookFilterOrderByCalcFileSize
+		case serverapi.BookFilterSortFieldCalcDeadHashSize:
+			filter.OrderBy = core.BookFilterOrderByCalcDeadHashSize
+		case serverapi.BookFilterSortFieldCalculatedAt:
+			filter.OrderBy = core.BookFilterOrderByCalculatedAt
 		default:
 			filter.OrderBy = core.BookFilterOrderByCreated
 		}

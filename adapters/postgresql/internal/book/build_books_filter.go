@@ -72,6 +72,48 @@ func (repo *BookRepo) buildBooksFilter(
 				"page_count" + orderBySuffix,
 				"id" + orderBySuffix,
 			}
+
+		case core.BookFilterOrderByCalcPageCount:
+			orderBy = []string{
+				"calc_page_count" + orderBySuffix + " NULLS LAST",
+				"id" + orderBySuffix,
+			}
+
+		case core.BookFilterOrderByCalcFileCount:
+			orderBy = []string{
+				"calc_file_count" + orderBySuffix + " NULLS LAST",
+				"id" + orderBySuffix,
+			}
+
+		case core.BookFilterOrderByCalcDeadHashCount:
+			orderBy = []string{
+				"calc_dead_hash_count" + orderBySuffix + " NULLS LAST",
+				"id" + orderBySuffix,
+			}
+
+		case core.BookFilterOrderByCalcPageSize:
+			orderBy = []string{
+				"calc_page_size" + orderBySuffix + " NULLS LAST",
+				"id" + orderBySuffix,
+			}
+
+		case core.BookFilterOrderByCalcFileSize:
+			orderBy = []string{
+				"calc_file_size" + orderBySuffix + " NULLS LAST",
+				"id" + orderBySuffix,
+			}
+
+		case core.BookFilterOrderByCalcDeadHashSize:
+			orderBy = []string{
+				"calc_dead_hash_size" + orderBySuffix + " NULLS LAST",
+				"id" + orderBySuffix,
+			}
+
+		case core.BookFilterOrderByCalculatedAt:
+			orderBy = []string{
+				"calculated_at" + orderBySuffix + " NULLS LAST",
+				"id" + orderBySuffix,
+			}
 		}
 
 		builder = builder.OrderBy(orderBy...)
