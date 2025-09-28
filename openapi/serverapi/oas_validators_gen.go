@@ -2075,6 +2075,8 @@ func (s BookFilterSortField) Validate() error {
 		return nil
 	case "calculated_at":
 		return nil
+	case "calc_avg_page_size":
+		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}

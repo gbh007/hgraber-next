@@ -22,6 +22,7 @@ func (repo *BookRepo) UpdateBookCalculation(ctx context.Context, id uuid.UUID, c
 			"calc_file_size":       model.NilInt64ToDB(calc.CalcFileSize),
 			"calc_dead_hash_size":  model.NilInt64ToDB(calc.CalcDeadHashSize),
 			"calculated_at":        model.TimeToDB(calc.CalculatedAt),
+			"calc_avg_page_size":   model.NilInt64ToDB(calc.CalcAvgPageSize),
 		}).
 		Where(squirrel.Eq{
 			"id": id,

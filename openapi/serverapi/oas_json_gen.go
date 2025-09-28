@@ -33630,6 +33630,8 @@ func (s *BookFilterSortField) Decode(d *jx.Decoder) error {
 		*s = BookFilterSortFieldCalcDeadHashSize
 	case BookFilterSortFieldCalculatedAt:
 		*s = BookFilterSortFieldCalculatedAt
+	case BookFilterSortFieldCalcAvgPageSize:
+		*s = BookFilterSortFieldCalcAvgPageSize
 	default:
 		*s = BookFilterSortField(v)
 	}
@@ -34779,9 +34781,15 @@ func (s *BookSimpleCalculation) encodeFields(e *jx.Encoder) {
 			s.CalculatedAt.Encode(e, json.EncodeDateTime)
 		}
 	}
+	{
+		if s.CalcAvgPageSize.Set {
+			e.FieldStart("calc_avg_page_size")
+			s.CalcAvgPageSize.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfBookSimpleCalculation = [7]string{
+var jsonFieldsNameOfBookSimpleCalculation = [8]string{
 	0: "calc_page_count",
 	1: "calc_file_count",
 	2: "calc_dead_hash_count",
@@ -34789,6 +34797,7 @@ var jsonFieldsNameOfBookSimpleCalculation = [7]string{
 	4: "calc_file_size",
 	5: "calc_dead_hash_size",
 	6: "calculated_at",
+	7: "calc_avg_page_size",
 }
 
 // Decode decodes BookSimpleCalculation from json.
@@ -34868,6 +34877,16 @@ func (s *BookSimpleCalculation) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"calculated_at\"")
+			}
+		case "calc_avg_page_size":
+			if err := func() error {
+				s.CalcAvgPageSize.Reset()
+				if err := s.CalcAvgPageSize.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"calc_avg_page_size\"")
 			}
 		default:
 			return d.Skip()

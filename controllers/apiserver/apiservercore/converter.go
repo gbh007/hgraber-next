@@ -54,6 +54,7 @@ func (c *Controller) ConvertSimpleBook(
 				CalcFileSize:      OptInt64Pointer(book.Calc.CalcFileSize),
 				CalcDeadHashSize:  OptInt64Pointer(book.Calc.CalcDeadHashSize),
 				CalculatedAt:      OptTime(book.Calc.CalculatedAt),
+				CalcAvgPageSize:   OptInt64Pointer(book.Calc.CalcAvgPageSize),
 			},
 			Set: !book.Calc.IsZero(),
 		},

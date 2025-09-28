@@ -114,6 +114,12 @@ func (repo *BookRepo) buildBooksFilter(
 				"calculated_at" + orderBySuffix + " NULLS LAST",
 				"id" + orderBySuffix,
 			}
+
+		case core.BookFilterOrderByCalcAvgPageSize:
+			orderBy = []string{
+				"calc_avg_page_size" + orderBySuffix + " NULLS LAST",
+				"id" + orderBySuffix,
+			}
 		}
 
 		builder = builder.OrderBy(orderBy...)

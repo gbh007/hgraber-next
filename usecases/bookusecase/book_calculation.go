@@ -52,6 +52,7 @@ func (uc *UseCase) CalculateBook(ctx context.Context, bookID uuid.UUID) error {
 		calcPageSize      int64
 		calcFileSize      int64
 		calcDeadHashSize  int64
+		calcAvgPageSize   int64
 	)
 
 	for _, page := range bookPages {
@@ -68,6 +69,8 @@ func (uc *UseCase) CalculateBook(ctx context.Context, bookID uuid.UUID) error {
 			calcDeadHashSize += file.Size
 		}
 	}
+
+	calcAvgPageSize = calcPageSize / calcPageCount
 
 	needUpdate := false
 	book.Calc.CalculatedAt = time.Now().UTC()
@@ -99,6 +102,11 @@ func (uc *UseCase) CalculateBook(ctx context.Context, bookID uuid.UUID) error {
 
 	if book.Calc.CalcDeadHashSize == nil || *book.Calc.CalcDeadHashSize != calcDeadHashSize {
 		book.Calc.CalcDeadHashSize = &calcDeadHashSize
+		needUpdate = true
+	}
+
+	if book.Calc.CalcAvgPageSize == nil || *book.Calc.CalcAvgPageSize != calcAvgPageSize {
+		book.Calc.CalcAvgPageSize = &calcAvgPageSize
 		needUpdate = true
 	}
 

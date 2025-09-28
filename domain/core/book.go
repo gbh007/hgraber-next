@@ -15,6 +15,7 @@ type BookCalc struct {
 	CalcPageSize      *int64
 	CalcFileSize      *int64
 	CalcDeadHashSize  *int64
+	CalcAvgPageSize   *int64
 	CalculatedAt      time.Time
 }
 

@@ -5931,6 +5931,10 @@ components:
               type: string
               format: date-time
               description: Время изменения данных
+            calc_avg_page_size:
+              type: integer
+              format: int64
+              description: Текущий средний размер страниц
         flags:
           $ref: "#/components/schemas/BookFlags"
       required:
@@ -6172,6 +6176,7 @@ components:
                 - calc_file_size
                 - calc_dead_hash_size
                 - calculated_at
+                - calc_avg_page_size
         pagination:
           type: object
           description: Параметры пагинации

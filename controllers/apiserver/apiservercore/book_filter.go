@@ -39,6 +39,8 @@ func ConvertAPIBookFilter(req serverapi.BookFilter) core.BookFilter {
 			filter.OrderBy = core.BookFilterOrderByCalcDeadHashSize
 		case serverapi.BookFilterSortFieldCalculatedAt:
 			filter.OrderBy = core.BookFilterOrderByCalculatedAt
+		case serverapi.BookFilterSortFieldCalcAvgPageSize:
+			filter.OrderBy = core.BookFilterOrderByCalcAvgPageSize
 		default:
 			filter.OrderBy = core.BookFilterOrderByCreated
 		}

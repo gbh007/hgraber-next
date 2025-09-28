@@ -31,6 +31,7 @@ func BookColumns() []string {
 		"calc_file_size",
 		"calc_dead_hash_size",
 		"calculated_at",
+		"calc_avg_page_size",
 	}
 }
 
@@ -50,6 +51,7 @@ func BookScanner(book *core.Book) RowScanner {
 			calcFileSize      sql.NullInt64
 			calcDeadHashSize  sql.NullInt64
 			calculatedAt      sql.NullTime
+			calcAvgPageSize   sql.NullInt64
 		)
 
 		err := rows.Scan(
@@ -72,6 +74,7 @@ func BookScanner(book *core.Book) RowScanner {
 			&calcFileSize,
 			&calcDeadHashSize,
 			&calculatedAt,
+			&calcAvgPageSize,
 		)
 		if err != nil {
 			return fmt.Errorf("scan to model: %w", err)
@@ -97,6 +100,7 @@ func BookScanner(book *core.Book) RowScanner {
 			CalcFileSize:      NilInt64FromDB(calcFileSize),
 			CalcDeadHashSize:  NilInt64FromDB(calcDeadHashSize),
 			CalculatedAt:      calculatedAt.Time,
+			CalcAvgPageSize:   NilInt64FromDB(calcAvgPageSize),
 		}
 
 		return nil

@@ -25,6 +25,7 @@ const (
 	BookFilterOrderByCalcFileSize
 	BookFilterOrderByCalcDeadHashSize
 	BookFilterOrderByCalculatedAt
+	BookFilterOrderByCalcAvgPageSize
 )
 
 type BookFilterAttributeType byte

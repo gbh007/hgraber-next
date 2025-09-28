@@ -8992,6 +8992,7 @@ const (
 	BookFilterSortFieldCalcFileSize      BookFilterSortField = "calc_file_size"
 	BookFilterSortFieldCalcDeadHashSize  BookFilterSortField = "calc_dead_hash_size"
 	BookFilterSortFieldCalculatedAt      BookFilterSortField = "calculated_at"
+	BookFilterSortFieldCalcAvgPageSize   BookFilterSortField = "calc_avg_page_size"
 )
 
 // AllValues returns all BookFilterSortField values.
@@ -9008,6 +9009,7 @@ func (BookFilterSortField) AllValues() []BookFilterSortField {
 		BookFilterSortFieldCalcFileSize,
 		BookFilterSortFieldCalcDeadHashSize,
 		BookFilterSortFieldCalculatedAt,
+		BookFilterSortFieldCalcAvgPageSize,
 	}
 }
 
@@ -9035,6 +9037,8 @@ func (s BookFilterSortField) MarshalText() ([]byte, error) {
 	case BookFilterSortFieldCalcDeadHashSize:
 		return []byte(s), nil
 	case BookFilterSortFieldCalculatedAt:
+		return []byte(s), nil
+	case BookFilterSortFieldCalcAvgPageSize:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -9076,6 +9080,9 @@ func (s *BookFilterSortField) UnmarshalText(data []byte) error {
 		return nil
 	case BookFilterSortFieldCalculatedAt:
 		*s = BookFilterSortFieldCalculatedAt
+		return nil
+	case BookFilterSortFieldCalcAvgPageSize:
+		*s = BookFilterSortFieldCalcAvgPageSize
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -9519,6 +9526,8 @@ type BookSimpleCalculation struct {
 	CalcDeadHashSize OptInt64 `json:"calc_dead_hash_size"`
 	// Время изменения данных.
 	CalculatedAt OptDateTime `json:"calculated_at"`
+	// Текущий средний размер страниц.
+	CalcAvgPageSize OptInt64 `json:"calc_avg_page_size"`
 }
 
 // GetCalcPageCount returns the value of CalcPageCount.
@@ -9556,6 +9565,11 @@ func (s *BookSimpleCalculation) GetCalculatedAt() OptDateTime {
 	return s.CalculatedAt
 }
 
+// GetCalcAvgPageSize returns the value of CalcAvgPageSize.
+func (s *BookSimpleCalculation) GetCalcAvgPageSize() OptInt64 {
+	return s.CalcAvgPageSize
+}
+
 // SetCalcPageCount sets the value of CalcPageCount.
 func (s *BookSimpleCalculation) SetCalcPageCount(val OptInt64) {
 	s.CalcPageCount = val
@@ -9589,6 +9603,11 @@ func (s *BookSimpleCalculation) SetCalcDeadHashSize(val OptInt64) {
 // SetCalculatedAt sets the value of CalculatedAt.
 func (s *BookSimpleCalculation) SetCalculatedAt(val OptDateTime) {
 	s.CalculatedAt = val
+}
+
+// SetCalcAvgPageSize sets the value of CalcAvgPageSize.
+func (s *BookSimpleCalculation) SetCalcAvgPageSize(val OptInt64) {
+	s.CalcAvgPageSize = val
 }
 
 type Cookies struct {
