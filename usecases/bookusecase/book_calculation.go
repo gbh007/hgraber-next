@@ -70,7 +70,9 @@ func (uc *UseCase) CalculateBook(ctx context.Context, bookID uuid.UUID) error {
 		}
 	}
 
-	calcAvgPageSize = calcPageSize / calcPageCount
+	if calcPageCount > 0 {
+		calcAvgPageSize = calcPageSize / calcPageCount
+	}
 
 	needUpdate := false
 	book.Calc.CalculatedAt = time.Now().UTC()
