@@ -8,7 +8,7 @@ import (
 )
 
 func (uc *UseCase) UnHashedFiles(ctx context.Context) ([]core.File, error) {
-	return uc.storage.GetUnHashedFiles(ctx)
+	return uc.storage.GetUnHashedFiles(ctx) //nolint:wrapcheck // обвязка не требуется
 }
 
 func (uc *UseCase) HandleFileHash(ctx context.Context, f core.File) error {

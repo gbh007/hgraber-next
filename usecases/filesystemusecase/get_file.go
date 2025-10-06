@@ -8,5 +8,5 @@ import (
 )
 
 func (uc *UseCase) File(ctx context.Context, fileID uuid.UUID, fsID *uuid.UUID) (io.Reader, error) {
-	return uc.fileStorage.Get(ctx, fileID, fsID)
+	return uc.fileStorage.Get(ctx, fileID, fsID) //nolint:wrapcheck // обвязка не требуется
 }

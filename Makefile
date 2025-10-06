@@ -15,7 +15,7 @@ $(GOLANGCI_LINT):
 
 .PHONY: lint
 lint: $(GOLANGCI_LINT)
-	$(GOLANGCI_LINT) run
+	$(GOLANGCI_LINT) run  --max-issues-per-linter 0 --max-same-issues 0
 	go tool goarchlint run
 
 .PHONY: install-tools

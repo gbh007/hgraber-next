@@ -15,7 +15,7 @@ import (
 func (uc *UseCase) ValidateFS(ctx context.Context, fsID uuid.UUID) error {
 	ids, err := uc.storage.FileIDsByFilter(ctx, fsmodel.FileFilter{FSID: &fsID})
 	if err != nil {
-		return err
+		return fmt.Errorf("storage: file ids by filter: %w", err)
 	}
 
 	uc.tmpStorage.AddToValidate(ids)

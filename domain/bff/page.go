@@ -6,6 +6,15 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
+type PreviewPage struct {
+	PageNumber  int
+	Ext         string
+	Downloaded  bool
+	FileID      uuid.UUID
+	FSID        uuid.UUID
+	HasDeadHash StatusFlag
+}
+
 func PageWithHashToPreview(p core.PageWithHash) PreviewPage {
 	return PreviewPage{
 		PageNumber: p.PageNumber,
@@ -14,13 +23,4 @@ func PageWithHashToPreview(p core.PageWithHash) PreviewPage {
 		FileID:     p.FileID,
 		FSID:       p.FSID,
 	}
-}
-
-type PreviewPage struct {
-	PageNumber  int
-	Ext         string
-	Downloaded  bool
-	FileID      uuid.UUID
-	FSID        uuid.UUID
-	HasDeadHash StatusFlag
 }

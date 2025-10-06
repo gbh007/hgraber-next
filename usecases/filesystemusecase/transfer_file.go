@@ -23,7 +23,7 @@ func (uc *UseCase) TransferFSFiles(ctx context.Context, from, to uuid.UUID, only
 
 	ids, err := uc.storage.FileIDsByFilter(ctx, filter)
 	if err != nil {
-		return err
+		return fmt.Errorf("storage: file ids by filter: %w", err)
 	}
 
 	uc.tmpStorage.AddToFileTransfer(pkg.Map(ids, func(fileID uuid.UUID) fsmodel.FileTransfer {
@@ -44,7 +44,7 @@ func (uc *UseCase) TransferFSFilesByBook(ctx context.Context, bookID, to uuid.UU
 
 	ids, err := uc.storage.FileIDsByFilter(ctx, filter)
 	if err != nil {
-		return err
+		return fmt.Errorf("storage: file ids by filter: %w", err)
 	}
 
 	uc.tmpStorage.AddToFileTransfer(pkg.Map(ids, func(fileID uuid.UUID) fsmodel.FileTransfer {

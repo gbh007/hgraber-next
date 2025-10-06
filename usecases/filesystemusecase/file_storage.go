@@ -64,7 +64,7 @@ func (uc *UseCase) FileStoragesWithStatus(
 }
 
 func (uc *UseCase) FileStorage(ctx context.Context, id uuid.UUID) (fsmodel.FileStorageSystem, error) {
-	return uc.storage.FileStorage(ctx, id)
+	return uc.storage.FileStorage(ctx, id) //nolint:wrapcheck // обвязка не требуется
 }
 
 func (uc *UseCase) NewFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) (uuid.UUID, error) {

@@ -1,3 +1,4 @@
+//nolint:decorder // будет исправлено позднее
 package bff
 
 import (
@@ -46,6 +47,7 @@ func (book BookDetails) PageDownloadPercent() float64 {
 		return v
 	})
 
+	//nolint:mnd // будет исправлено позднее
 	return math.Round(float64(downloadedPageCount)*10000/float64(len(book.Pages))) / 100
 }
 
@@ -58,9 +60,10 @@ func (book BookDetails) AvgPageSize() int64 {
 }
 
 type BookDetailsFSDisposition struct {
+	core.SizeWithCount
+
 	ID   uuid.UUID
 	Name string
-	core.SizeWithCount
 }
 
 type BookShort struct {

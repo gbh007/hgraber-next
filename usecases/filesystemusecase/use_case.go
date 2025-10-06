@@ -75,5 +75,5 @@ func (uc *UseCase) HighwayFileURL(
 	ext string,
 	fsID uuid.UUID,
 ) (url.URL, bool, error) {
-	return uc.fileStorage.HighwayFileURL(ctx, fileID, ext, fsID)
+	return uc.fileStorage.HighwayFileURL(ctx, fileID, ext, fsID) //nolint:wrapcheck // обвязка не требуется
 }

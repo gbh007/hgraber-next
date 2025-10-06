@@ -11,6 +11,8 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
+var errChainAttributeRemap = errors.New("chain attribute remap not supported")
+
 func (uc *UseCase) CreateAttributeRemap(ctx context.Context, ar core.AttributeRemap) error {
 	if !ar.IsDelete() && !ar.IsNoRemap() {
 		targetAR, err := uc.AttributeRemap(ctx, ar.ToCode, ar.ToValue)
@@ -19,13 +21,18 @@ func (uc *UseCase) CreateAttributeRemap(ctx context.Context, ar core.AttributeRe
 		}
 
 		if err == nil && !targetAR.IsNoRemap() {
-			return fmt.Errorf("chain attribute remap not supported")
+			return errChainAttributeRemap
 		}
 	}
 
 	ar.CreatedAt = time.Now().UTC()
 
-	return uc.storage.InsertAttributeRemap(ctx, ar)
+	err := uc.storage.InsertAttributeRemap(ctx, ar)
+	if err != nil {
+		return fmt.Errorf("storage: insert attribute remap: %w", err)
+	}
+
+	return nil
 }
 
 func (uc *UseCase) UpdateAttributeRemap(ctx context.Context, ar core.AttributeRemap) error {
@@ -36,23 +43,28 @@ func (uc *UseCase) UpdateAttributeRemap(ctx context.Context, ar core.AttributeRe
 		}
 
 		if err == nil && !targetAR.IsNoRemap() {
-			return fmt.Errorf("chain attribute remap not supported")
+			return errChainAttributeRemap
 		}
 	}
 
 	ar.UpdateAt = time.Now().UTC()
 
-	return uc.storage.UpdateAttributeRemap(ctx, ar)
+	err := uc.storage.UpdateAttributeRemap(ctx, ar)
+	if err != nil {
+		return fmt.Errorf("storage: update attribute remap: %w", err)
+	}
+
+	return nil
 }
 
 func (uc *UseCase) DeleteAttributeRemap(ctx context.Context, code, value string) error {
-	return uc.storage.DeleteAttributeRemap(ctx, code, value)
+	return uc.storage.DeleteAttributeRemap(ctx, code, value) //nolint:wrapcheck // обвязка не требуется
 }
 
 func (uc *UseCase) AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, error) {
 	remaps, err := uc.storage.AttributeRemaps(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("storage: get attribute remaps: %w", err)
 	}
 
 	slices.SortStableFunc(remaps, func(a, b core.AttributeRemap) int {
@@ -71,5 +83,5 @@ func (uc *UseCase) AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, 
 }
 
 func (uc *UseCase) AttributeRemap(ctx context.Context, code, value string) (core.AttributeRemap, error) {
-	return uc.storage.AttributeRemap(ctx, code, value)
+	return uc.storage.AttributeRemap(ctx, code, value) //nolint:wrapcheck // обвязка не требуется
 }
