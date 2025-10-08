@@ -26,7 +26,7 @@ func (uc *UseCase) Book(ctx context.Context, u url.URL, pageLimit *int) (hproxym
 	for _, agent := range agents {
 		info, err := uc.agentSystem.BooksCheck(ctx, agent.ID, []url.URL{u})
 
-		if errors.Is(err, agentmodel.AgentAPIOffline) {
+		if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),

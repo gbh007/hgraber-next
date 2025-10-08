@@ -62,7 +62,6 @@ func (mp MetricProvider) NewSystemInfoCollector(
 	err := metricserver.RegisterWorkerInfoCollector(
 		mp.registerer,
 		infoProvider,
-		time.Millisecond*100, // TODO: настраивать таймаут через конфиг
 	)
 	if err != nil {
 		return nil, fmt.Errorf("register worker collector: %w", err)

@@ -112,7 +112,7 @@ linters:
           arguments:
             - 8
         - name: atomic
-        - name: bare-return
+        # - name: bare-return
         - name: blank-imports
         - name: bool-literal-in-expr
         - name: comment-spacings

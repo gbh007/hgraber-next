@@ -5,20 +5,21 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestErrorWithArgWrap(t *testing.T) {
 	err1 := WrapError(sql.ErrNoRows, "hello", ErrorArgument("world", "!"))
 
-	assert.ErrorIs(t, err1, sql.ErrNoRows, "not equal origin error")
-	assert.NotErrorIs(t, err1, sql.ErrTxDone, "equal not origin error")
+	require.ErrorIs(t, err1, sql.ErrNoRows, "not equal origin error")
+	require.NotErrorIs(t, err1, sql.ErrTxDone, "equal not origin error")
 	assert.Equal(t, "hello (world=!): "+sql.ErrNoRows.Error(), err1.Error(), "not correct message")
 
 	err2 := WrapError(err1, "double trouble", ErrorArgument("first", 1), ErrorArgument("second", [2]int{}))
 
-	assert.ErrorIs(t, err2, err1, "not equal origin error")
-	assert.ErrorIs(t, err2, sql.ErrNoRows, "not equal deep origin error")
-	assert.NotErrorIs(t, err2, sql.ErrTxDone, "equal not origin error")
+	require.ErrorIs(t, err2, err1, "not equal origin error")
+	require.ErrorIs(t, err2, sql.ErrNoRows, "not equal deep origin error")
+	require.NotErrorIs(t, err2, sql.ErrTxDone, "equal not origin error")
 	assert.Equal(t, "double trouble (first=1, second=[0 0]): "+err1.Error(), err2.Error(), "not correct message")
 
 	err3 := WrapError(sql.ErrNoRows, "")
@@ -28,15 +29,15 @@ func TestErrorWithArgWrap(t *testing.T) {
 func TestErrorWithArgNew(t *testing.T) {
 	err1 := ErrorWithArgs("hello", ErrorArgument("world", "!"))
 
-	assert.NotErrorIs(t, err1, sql.ErrNoRows, "equal not origin error")
-	assert.NotErrorIs(t, err1, sql.ErrTxDone, "equal not origin error")
+	require.NotErrorIs(t, err1, sql.ErrNoRows, "equal not origin error")
+	require.NotErrorIs(t, err1, sql.ErrTxDone, "equal not origin error")
 	assert.Equal(t, "hello (world=!)", err1.Error(), "not correct message")
 
 	err2 := WrapError(err1, "double trouble", ErrorArgument("first", 1), ErrorArgument("second", [2]int{}))
 
-	assert.ErrorIs(t, err2, err1, "not equal origin error")
-	assert.NotErrorIs(t, err2, sql.ErrNoRows, "equal not origin error")
-	assert.NotErrorIs(t, err2, sql.ErrTxDone, "equal not origin error")
+	require.ErrorIs(t, err2, err1, "not equal origin error")
+	require.NotErrorIs(t, err2, sql.ErrNoRows, "equal not origin error")
+	require.NotErrorIs(t, err2, sql.ErrTxDone, "equal not origin error")
 	assert.Equal(t, "double trouble (first=1, second=[0 0]): "+err1.Error(), err2.Error(), "not correct message")
 
 	err3 := ErrorWithArgs("", ErrorArgument("hello", "world!"))
@@ -46,16 +47,16 @@ func TestErrorWithArgNew(t *testing.T) {
 func TestErrorWithArgEqualNil(t *testing.T) {
 	err1 := WrapError(nil, "hello", ErrorArgument("world", "!"))
 
-	assert.NoError(t, err1, "empty is not nil")
+	require.NoError(t, err1, "empty is not nil")
 
-	assert.NotErrorIs(t, err1, sql.ErrNoRows, "equal not origin error")
-	assert.NotErrorIs(t, err1, sql.ErrTxDone, "equal not origin error")
+	require.NotErrorIs(t, err1, sql.ErrNoRows, "equal not origin error")
+	require.NotErrorIs(t, err1, sql.ErrTxDone, "equal not origin error")
 
 	err2 := WrapError(err1, "double trouble", ErrorArgument("first", 1), ErrorArgument("second", [2]int{}))
 
-	assert.NoError(t, err2, "empty is not nil")
-	assert.NotErrorIs(t, err2, sql.ErrNoRows, "equal not origin error")
-	assert.NotErrorIs(t, err2, sql.ErrTxDone, "equal not origin error")
+	require.NoError(t, err2, "empty is not nil")
+	require.NotErrorIs(t, err2, sql.ErrNoRows, "equal not origin error")
+	require.NotErrorIs(t, err2, sql.ErrTxDone, "equal not origin error")
 
 	err3 := ErrorWithArgs("")
 	assert.NoError(t, err3, "empty is not nil")

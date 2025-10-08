@@ -12,7 +12,7 @@ import (
 
 //nolint:gocognit,cyclop,funlen // будет исправлено позднее
 func (repo *BookRepo) buildBooksFilter(
-	ctx context.Context,
+	_ context.Context,
 	filter core.BookFilter,
 	isCount bool,
 ) (string, []any, error) {

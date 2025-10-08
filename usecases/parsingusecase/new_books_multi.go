@@ -47,7 +47,7 @@ urlLoop:
 		for _, agent := range agents {
 			booksInfo, err := uc.agentSystem.BooksCheckMultiple(ctx, agent.ID, multiURL)
 
-			if errors.Is(err, agentmodel.AgentAPIOffline) {
+			if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
 				uc.logger.DebugContext(
 					ctx, "agent api offline",
 					slog.String("agent_id", agent.ID.String()),

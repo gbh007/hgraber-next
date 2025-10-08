@@ -31,7 +31,7 @@ func (uc *UseCase) Image(ctx context.Context, bookURL, imageURL url.URL) (io.Rea
 			},
 		)
 
-		if errors.Is(err, agentmodel.AgentAPIOffline) {
+		if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),

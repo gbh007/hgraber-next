@@ -47,32 +47,32 @@ func (a *Adapter) BookParse(ctx context.Context, u url.URL) (agentmodel.AgentBoo
 	case *agentapi.APIParsingBookPostBadRequest:
 		return agentmodel.AgentBookDetails{}, fmt.Errorf(
 			"%w: %s",
-			agentmodel.AgentAPIBadRequest,
+			agentmodel.ErrAgentAPIBadRequest,
 			typedRes.Details.Value,
 		)
 
 	case *agentapi.APIParsingBookPostUnauthorized:
 		return agentmodel.AgentBookDetails{}, fmt.Errorf(
 			"%w: %s",
-			agentmodel.AgentAPIUnauthorized,
+			agentmodel.ErrAgentAPIUnauthorized,
 			typedRes.Details.Value,
 		)
 
 	case *agentapi.APIParsingBookPostForbidden:
 		return agentmodel.AgentBookDetails{}, fmt.Errorf(
 			"%w: %s",
-			agentmodel.AgentAPIForbidden,
+			agentmodel.ErrAgentAPIForbidden,
 			typedRes.Details.Value,
 		)
 
 	case *agentapi.APIParsingBookPostInternalServerError:
 		return agentmodel.AgentBookDetails{}, fmt.Errorf(
 			"%w: %s",
-			agentmodel.AgentAPIInternalError,
+			agentmodel.ErrAgentAPIInternalError,
 			typedRes.Details.Value,
 		)
 
 	default:
-		return agentmodel.AgentBookDetails{}, agentmodel.AgentAPIUnknownResponse
+		return agentmodel.AgentBookDetails{}, agentmodel.ErrAgentAPIUnknownResponse
 	}
 }

@@ -36,18 +36,26 @@ func (a *Adapter) Status(ctx context.Context) (agentmodel.AgentStatus, error) {
 		}, nil
 
 	case *agentapi.APICoreStatusGetBadRequest:
-		return agentmodel.AgentStatus{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return agentmodel.AgentStatus{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APICoreStatusGetUnauthorized:
-		return agentmodel.AgentStatus{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return agentmodel.AgentStatus{}, fmt.Errorf(
+			"%w: %s",
+			agentmodel.ErrAgentAPIUnauthorized,
+			typedRes.Details.Value,
+		)
 
 	case *agentapi.APICoreStatusGetForbidden:
-		return agentmodel.AgentStatus{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return agentmodel.AgentStatus{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APICoreStatusGetInternalServerError:
-		return agentmodel.AgentStatus{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return agentmodel.AgentStatus{}, fmt.Errorf(
+			"%w: %s",
+			agentmodel.ErrAgentAPIInternalError,
+			typedRes.Details.Value,
+		)
 
 	default:
-		return agentmodel.AgentStatus{}, agentmodel.AgentAPIUnknownResponse
+		return agentmodel.AgentStatus{}, agentmodel.ErrAgentAPIUnknownResponse
 	}
 }

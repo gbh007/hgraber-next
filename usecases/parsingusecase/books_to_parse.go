@@ -60,7 +60,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]agentmodel.BookWithAgent
 			}),
 		)
 
-		if errors.Is(err, agentmodel.AgentAPIOffline) {
+		if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),

@@ -30,22 +30,22 @@ func (a *FSAdapter) Create(ctx context.Context, fileID uuid.UUID, body io.Reader
 		return nil
 
 	case *agentapi.APIFsCreatePostConflict:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIConflict, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIConflict, typedRes.Details.Value)
 
 	case *agentapi.APIFsCreatePostBadRequest:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIFsCreatePostUnauthorized:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIFsCreatePostForbidden:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIFsCreatePostInternalServerError:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return agentmodel.AgentAPIUnknownResponse
+		return agentmodel.ErrAgentAPIUnknownResponse
 	}
 }
 
@@ -63,19 +63,19 @@ func (a *FSAdapter) Delete(ctx context.Context, fileID uuid.UUID) error {
 		return fmt.Errorf("%w: %s", core.ErrFileNotFound, typedRes.Details.Value)
 
 	case *agentapi.APIFsDeletePostBadRequest:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIFsDeletePostUnauthorized:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIFsDeletePostForbidden:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIFsDeletePostInternalServerError:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return agentmodel.AgentAPIUnknownResponse
+		return agentmodel.ErrAgentAPIUnknownResponse
 	}
 }
 
@@ -93,19 +93,19 @@ func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error
 		return nil, fmt.Errorf("%w: %s", core.ErrFileNotFound, typedRes.Details.Value)
 
 	case *agentapi.APIFsGetGetBadRequest:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIFsGetGetUnauthorized:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIFsGetGetForbidden:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIFsGetGetInternalServerError:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return nil, agentmodel.AgentAPIUnknownResponse
+		return nil, agentmodel.ErrAgentAPIUnknownResponse
 	}
 }
 
@@ -135,19 +135,19 @@ func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes 
 		}, nil
 
 	case *agentapi.APIFsInfoPostBadRequest:
-		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIFsInfoPostUnauthorized:
-		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIFsInfoPostForbidden:
-		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIFsInfoPostInternalServerError:
-		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return fsmodel.FSState{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return fsmodel.FSState{}, agentmodel.AgentAPIUnknownResponse
+		return fsmodel.FSState{}, agentmodel.ErrAgentAPIUnknownResponse
 	}
 }
 
@@ -162,18 +162,18 @@ func (a *FSAdapter) CreateHighwayToken(ctx context.Context) (string, time.Time, 
 		return typedRes.Token, typedRes.ValidUntil, nil
 
 	case *agentapi.APIHighwayTokenCreatePostBadRequest:
-		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIHighwayTokenCreatePostUnauthorized:
-		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIHighwayTokenCreatePostForbidden:
-		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIHighwayTokenCreatePostInternalServerError:
-		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return "", time.Time{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return "", time.Time{}, agentmodel.AgentAPIUnknownResponse
+		return "", time.Time{}, agentmodel.ErrAgentAPIUnknownResponse
 	}
 }

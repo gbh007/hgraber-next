@@ -23,18 +23,18 @@ func (a *Adapter) PageLoad(ctx context.Context, url agentmodel.AgentPageURL) (io
 		return typedRes.Data, nil
 
 	case *agentapi.APIParsingPagePostBadRequest:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIParsingPagePostUnauthorized:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIParsingPagePostForbidden:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIParsingPagePostInternalServerError:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return nil, agentmodel.AgentAPIUnknownResponse
+		return nil, agentmodel.ErrAgentAPIUnknownResponse
 	}
 }

@@ -32,7 +32,7 @@ func (uc *UseCase) Agents(
 
 	for i, a := range res {
 		status, err := uc.agentSystemAdapter.Status(ctx, a.Agent.ID)
-		if errors.Is(err, agentmodel.AgentAPIOffline) {
+		if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
 			res[i].IsOffline = true
 
 			continue

@@ -5,25 +5,25 @@ import (
 	"fmt"
 )
 
-func ErrorArgument(
-	key string,
-	value any,
-) errorArgument {
-	return errorArgument{
-		Key:   key,
-		Value: value,
-	}
-}
-
 type errorArgument struct {
 	Key   string
 	Value any
 }
 
-type errorWithArgs struct {
+type errorWithArgs struct { //nolint:errname // ложно-положительное
 	origin error
 	msg    string
 	args   []errorArgument
+}
+
+func ErrorArgument(
+	key string,
+	value any,
+) errorArgument { //nolint:revive // будет исправлено позднее
+	return errorArgument{
+		Key:   key,
+		Value: value,
+	}
 }
 
 func WrapError(

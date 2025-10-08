@@ -12,7 +12,7 @@ func (c *AttributeHandlersController) APIAttributeRemapCreatePost(
 	ctx context.Context,
 	req *serverapi.APIAttributeRemapCreatePostReq,
 ) (serverapi.APIAttributeRemapCreatePostRes, error) {
-	if !(req.IsDelete.Value || (req.ToCode.IsSet() && req.ToValue.IsSet())) {
+	if !(req.IsDelete.Value || (req.ToCode.IsSet() && req.ToValue.IsSet())) { //nolint:staticcheck,lll // будет исправлено позднее
 		return &serverapi.APIAttributeRemapCreatePostBadRequest{
 			InnerCode: apiservercore.AttributeUseCaseCode,
 			Details:   serverapi.NewOptString("invalid remap"),

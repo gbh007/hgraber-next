@@ -21,7 +21,7 @@ func (c *AttributeHandlersController) APIAttributeRemapListGet(
 	}
 
 	return &serverapi.APIAttributeRemapListGetOK{
-		Remaps: pkg.Map(colors, func(raw core.AttributeRemap) serverapi.AttributeRemap {
+		Remaps: pkg.Map(colors, func(raw core.AttributeRemap) serverapi.AttributeRemap { //nolint:gocritic,golines,lll // не понятно в чем проблема
 			return apiservercore.ConvertAttributeRemapToAPI(raw)
 		}),
 	}, nil

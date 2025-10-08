@@ -34,6 +34,7 @@ func (uc *UseCase) DeduplicateFiles(_ context.Context) (systemmodel.RunnableTask
 	}), nil
 }
 
+//nolint:funlen // будет исправлено позднее
 func (uc *UseCase) deduplicateFiles(
 	ctx context.Context,
 	taskResult systemmodel.TaskResultWriter,
@@ -101,7 +102,7 @@ func (uc *UseCase) deduplicateFiles(
 			continue
 		}
 
-		if len(files) < 2 {
+		if len(files) < 2 { //nolint:mnd // не критично
 			uc.logger.WarnContext(
 				ctx, "invalid deduplicate ids len",
 				slog.Any("ids", files),

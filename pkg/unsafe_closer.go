@@ -33,5 +33,5 @@ func (c *unsafeCloser) Read(p []byte) (n int, err error) {
 		c.isClosed = true
 	}
 
-	return
+	return n, err //nolint:wrapcheck // оставляем оригинальную ошибку
 }

@@ -23,19 +23,19 @@ func (a *Adapter) BooksCheck(ctx context.Context, urls []url.URL) ([]agentmodel.
 		return convertBooksCheckResult(typedRes), nil
 
 	case *agentapi.APIParsingBookCheckPostBadRequest:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIParsingBookCheckPostUnauthorized:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIParsingBookCheckPostForbidden:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIParsingBookCheckPostInternalServerError:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return nil, agentmodel.AgentAPIUnknownResponse
+		return nil, agentmodel.ErrAgentAPIUnknownResponse
 	}
 }
 

@@ -1,3 +1,4 @@
+//revive:disable:file-length-limit
 package exportusecase
 
 import (
@@ -17,6 +18,7 @@ import (
 	"github.com/gbh007/hgraber-next/external"
 )
 
+//nolint:gocognit,cyclop,funlen // будет исправлено позднее
 func (uc *UseCase) ImportArchive(
 	ctx context.Context,
 	body io.Reader,
@@ -38,7 +40,7 @@ func (uc *UseCase) ImportArchive(
 		return uuid.Nil, fmt.Errorf("create zip reader: %w", err)
 	}
 
-	pageData := make(map[int]uuid.UUID, 50)
+	pageData := make(map[int]uuid.UUID, core.AvgPageCountInBook)
 
 	info, err := external.ReadArchive(
 		ctx,

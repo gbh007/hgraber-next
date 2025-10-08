@@ -45,7 +45,7 @@ agentSearch:
 		// это плохо, но в текущих реализациях парсеров будет работать
 		info, err := uc.agentSystem.BooksCheck(ctx, agent.ID, []url.URL{u})
 
-		if errors.Is(err, agentmodel.AgentAPIOffline) {
+		if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),

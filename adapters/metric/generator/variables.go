@@ -9,7 +9,6 @@ import (
 	"github.com/gbh007/hgraber-next/adapters/metric/metriccore"
 )
 
-//nolint:lll // будет исправлено позднее
 func (g Generator) WithVariables(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
 	builder.WithVariable(
 		dashboard.

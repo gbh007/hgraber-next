@@ -44,19 +44,19 @@ func (a *Adapter) PagesCheck(
 		)
 
 	case *agentapi.APIParsingPageCheckPostBadRequest:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIParsingPageCheckPostUnauthorized:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIParsingPageCheckPostForbidden:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIParsingPageCheckPostInternalServerError:
-		return nil, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return nil, agentmodel.AgentAPIUnknownResponse
+		return nil, agentmodel.ErrAgentAPIUnknownResponse
 	}
 
 	return result, nil

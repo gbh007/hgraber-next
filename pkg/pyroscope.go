@@ -21,18 +21,18 @@ func NewPyroscopeLogger(logger *slog.Logger, debug bool) *PyroscopeLogger {
 	}
 }
 
-func (l PyroscopeLogger) Infof(msg string, args ...interface{}) {
-	l.logger.Info(fmt.Sprintf(msg, args...))
+func (l PyroscopeLogger) Infof(msg string, args ...any) {
+	l.logger.Info(fmt.Sprintf(msg, args...)) //nolint:sloglint // особенность реализации
 }
 
-func (l PyroscopeLogger) Debugf(msg string, args ...interface{}) {
+func (l PyroscopeLogger) Debugf(msg string, args ...any) {
 	if !l.debug {
 		return
 	}
 
-	l.logger.Debug(fmt.Sprintf(msg, args...))
+	l.logger.Debug(fmt.Sprintf(msg, args...)) //nolint:sloglint // особенность реализации
 }
 
-func (l PyroscopeLogger) Errorf(msg string, args ...interface{}) {
-	l.logger.Error(fmt.Sprintf(msg, args...))
+func (l PyroscopeLogger) Errorf(msg string, args ...any) {
+	l.logger.Error(fmt.Sprintf(msg, args...)) //nolint:sloglint // особенность реализации
 }

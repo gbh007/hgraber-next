@@ -30,19 +30,19 @@ func (a *Adapter) ExportArchive(ctx context.Context, data agentmodel.AgentExport
 		return nil
 
 	case *agentapi.APIImportArchivePostBadRequest:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIImportArchivePostUnauthorized:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIImportArchivePostForbidden:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIImportArchivePostInternalServerError:
-		return fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return agentmodel.AgentAPIUnknownResponse
+		return agentmodel.ErrAgentAPIUnknownResponse
 	}
 }
 

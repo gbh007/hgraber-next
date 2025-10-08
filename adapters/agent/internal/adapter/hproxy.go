@@ -53,19 +53,19 @@ func (a *Adapter) HProxyList(ctx context.Context, u url.URL) (hproxymodel.List, 
 		return data, nil
 
 	case *agentapi.APIHproxyParseListPostBadRequest:
-		return hproxymodel.List{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return hproxymodel.List{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIHproxyParseListPostUnauthorized:
-		return hproxymodel.List{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return hproxymodel.List{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIHproxyParseListPostForbidden:
-		return hproxymodel.List{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return hproxymodel.List{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIHproxyParseListPostInternalServerError:
-		return hproxymodel.List{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return hproxymodel.List{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return hproxymodel.List{}, agentmodel.AgentAPIUnknownResponse
+		return hproxymodel.List{}, agentmodel.ErrAgentAPIUnknownResponse
 	}
 }
 
@@ -130,18 +130,18 @@ func (a *Adapter) HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (hp
 		}, nil
 
 	case *agentapi.APIHproxyParseBookPostBadRequest:
-		return hproxymodel.Book{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIBadRequest, typedRes.Details.Value)
+		return hproxymodel.Book{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
 
 	case *agentapi.APIHproxyParseBookPostUnauthorized:
-		return hproxymodel.Book{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIUnauthorized, typedRes.Details.Value)
+		return hproxymodel.Book{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
 
 	case *agentapi.APIHproxyParseBookPostForbidden:
-		return hproxymodel.Book{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIForbidden, typedRes.Details.Value)
+		return hproxymodel.Book{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
 
 	case *agentapi.APIHproxyParseBookPostInternalServerError:
-		return hproxymodel.Book{}, fmt.Errorf("%w: %s", agentmodel.AgentAPIInternalError, typedRes.Details.Value)
+		return hproxymodel.Book{}, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
 
 	default:
-		return hproxymodel.Book{}, agentmodel.AgentAPIUnknownResponse
+		return hproxymodel.Book{}, agentmodel.ErrAgentAPIUnknownResponse
 	}
 }

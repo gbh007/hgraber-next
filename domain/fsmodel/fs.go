@@ -11,23 +11,6 @@ import (
 
 const ApproximateFSCount = 10
 
-type FileStorageSystem struct {
-	ID                  uuid.UUID
-	Name                string
-	Description         string
-	AgentID             uuid.UUID
-	Path                string
-	DownloadPriority    int
-	DeduplicatePriority int
-	HighwayEnabled      bool
-	HighwayAddr         *url.URL
-	CreatedAt           time.Time
-}
-
-func (fs FileStorageSystem) NotAvailable() bool {
-	return fs.AgentID == uuid.Nil && fs.Path == ""
-}
-
 type FSWithStatus struct {
 	Info FileStorageSystem
 
@@ -65,4 +48,21 @@ type FileFilter struct {
 	FSID       *uuid.UUID
 	BookID     *uuid.UUID
 	PageNumber *int
+}
+
+type FileStorageSystem struct {
+	ID                  uuid.UUID
+	Name                string
+	Description         string
+	AgentID             uuid.UUID
+	Path                string
+	DownloadPriority    int
+	DeduplicatePriority int
+	HighwayEnabled      bool
+	HighwayAddr         *url.URL
+	CreatedAt           time.Time
+}
+
+func (fs FileStorageSystem) NotAvailable() bool {
+	return fs.AgentID == uuid.Nil && fs.Path == ""
 }

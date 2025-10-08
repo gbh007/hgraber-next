@@ -19,7 +19,7 @@ func (rt agentOfflineRoundTripper) RoundTrip(req *http.Request) (*http.Response,
 	if errors.Is(err, syscall.ECONNREFUSED) ||
 		errors.Is(err, syscall.EHOSTDOWN) ||
 		errors.Is(err, syscall.EHOSTUNREACH) {
-		err = fmt.Errorf("%w: %w", agentmodel.AgentAPIOffline, err)
+		err = fmt.Errorf("%w: %w", agentmodel.ErrAgentAPIOffline, err)
 	}
 
 	return res, err

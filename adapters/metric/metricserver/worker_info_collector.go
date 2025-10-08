@@ -2,7 +2,6 @@ package metricserver
 
 import (
 	"context"
-	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 
@@ -17,18 +16,14 @@ type workerInfoProvider interface {
 
 type WorkerInfoCollector struct {
 	workerInfoProvider workerInfoProvider
-
-	timeout time.Duration
 }
 
 func RegisterWorkerInfoCollector(
 	registerer prometheus.Registerer,
 	workerInfoProvider workerInfoProvider,
-	timeout time.Duration,
 ) error {
 	return registerer.Register(&WorkerInfoCollector{ //nolint:wrapcheck // не имеет смысла
 		workerInfoProvider: workerInfoProvider,
-		timeout:            timeout,
 	})
 }
 
@@ -37,8 +32,7 @@ func (c *WorkerInfoCollector) Describe(desc chan<- *prometheus.Desc) {
 }
 
 func (c *WorkerInfoCollector) Collect(metr chan<- prometheus.Metric) {
-	ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
-	defer cancel()
+	ctx := context.Background()
 
 	workers := c.workerInfoProvider.WorkersInfo(ctx)
 
