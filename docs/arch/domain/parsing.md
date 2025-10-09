@@ -4,8 +4,9 @@
 
 |  Name   |          Path           | Inner | Count |
 |:-------:|:-----------------------:|:-----:|:-----:|
-|  uuid   | github.com/google/uuid  |  ❌   |   3   |
-|   url   |         net/url         |  ❌   |   2   |
+|  uuid   | github.com/google/uuid  |  ❌   |   4   |
+|   url   |         net/url         |  ❌   |   3   |
+|   fmt   |           fmt           |  ❌   |   1   |
 |  core   | [/domain/core](core.md) |  ✅   |   1   |
 | strings |         strings         |  ❌   |   1   |
 

@@ -24,7 +24,7 @@
 
 ```mermaid
 erDiagram
-    "/application/server" ||--|{ "/usecases/agentusecase" : x1
+    "/application/server" ||--|{ "/usecases/agentusecase" : x2
     "/usecases/agentusecase" ||--|{ "/domain/agentmodel" : x2
     "/usecases/agentusecase" ||--|{ "/domain/core" : x6
     "/usecases/agentusecase" ||--|{ "/pkg" : x1

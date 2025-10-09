@@ -27,7 +27,7 @@ install-tools:
 	go get -u -tool mvdan.cc/gofumpt@v0.8.0
 	go get -u -tool golang.org/x/tools/cmd/goimports@v0.36.0
 	go get -u -tool github.com/daixiang0/gci@v0.13.7
-	go get -u -tool github.com/gbh007/goarchlint/cmd/goarchlint@v0.0.1
+	go get -u -tool github.com/gbh007/goarchlint/cmd/goarchlint@v0.0.3
 
 # .PHONY: lint
 # lint:

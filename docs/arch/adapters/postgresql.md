@@ -41,7 +41,7 @@ erDiagram
     "/adapters/postgresql" ||--|{ "/adapters/postgresql/internal/page" : x1
     "/adapters/postgresql" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql" ||--|{ "/adapters/postgresql/internal/urlmirror" : x1
-    "/application/server" ||--|{ "/adapters/postgresql" : x1
+    "/application/server" ||--|{ "/adapters/postgresql" : x2
 ```
 
 ---

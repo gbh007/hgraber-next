@@ -6,8 +6,8 @@
 |:-----------:|:-----------------------------------------------:|:-----:|:-----:|
 |   context   |                     context                     |  ❌   |   4   |
 | systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |  ✅   |   3   |
+|     fmt     |                       fmt                       |  ❌   |   2   |
 |    uuid     |             github.com/google/uuid              |  ❌   |   2   |
-|     fmt     |                       fmt                       |  ❌   |   1   |
 |    slog     |                    log/slog                     |  ❌   |   1   |
 
 ## Used by
@@ -20,7 +20,7 @@
 
 ```mermaid
 erDiagram
-    "/application/server" ||--|{ "/usecases/systemusecase" : x1
+    "/application/server" ||--|{ "/usecases/systemusecase" : x2
     "/usecases/systemusecase" ||--|{ "/domain/systemmodel" : x3
 ```
 

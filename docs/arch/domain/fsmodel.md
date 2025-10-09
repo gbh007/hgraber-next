@@ -15,7 +15,7 @@
 |:-----------------:|:---------------------------------------------------------------------------------:|
 |       agent       |                      [/adapters/agent](../adapters/agent.md)                      |
 |      adapter      |     [/adapters/agent/internal/adapter](../adapters/agent/internal/adapter.md)     |
-|      agentFS      |                    [/adapters/agentFS](../adapters/agentFS.md)                    |
+|      agentfs      |                    [/adapters/agentfs](../adapters/agentfs.md)                    |
 |    filestorage    |                [/adapters/filestorage](../adapters/filestorage.md)                |
 |    localfiles     |                 [/adapters/localfiles](../adapters/localfiles.md)                 |
 |       file        |   [/adapters/postgresql/internal/file](../adapters/postgresql/internal/file.md)   |
@@ -35,7 +35,7 @@
 erDiagram
     "/adapters/agent" ||--|{ "/domain/fsmodel" : x1
     "/adapters/agent/internal/adapter" ||--|{ "/domain/fsmodel" : x1
-    "/adapters/agentFS" ||--|{ "/domain/fsmodel" : x1
+    "/adapters/agentfs" ||--|{ "/domain/fsmodel" : x1
     "/adapters/filestorage" ||--|{ "/domain/fsmodel" : x4
     "/adapters/localfiles" ||--|{ "/domain/fsmodel" : x1
     "/adapters/postgresql/internal/file" ||--|{ "/domain/fsmodel" : x5

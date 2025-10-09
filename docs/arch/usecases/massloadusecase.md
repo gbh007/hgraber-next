@@ -29,7 +29,7 @@
 
 ```mermaid
 erDiagram
-    "/application/server" ||--|{ "/usecases/massloadusecase" : x1
+    "/application/server" ||--|{ "/usecases/massloadusecase" : x2
     "/usecases/massloadusecase" ||--|{ "/domain/agentmodel" : x2
     "/usecases/massloadusecase" ||--|{ "/domain/core" : x3
     "/usecases/massloadusecase" ||--|{ "/domain/hproxymodel" : x1

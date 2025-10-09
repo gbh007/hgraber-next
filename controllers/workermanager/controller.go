@@ -43,6 +43,10 @@ func New(logger *slog.Logger, workerUnits ...WorkerUnit) *Controller {
 	}
 }
 
+func (c *Controller) AddUnits(workerUnits ...WorkerUnit) {
+	c.workerUnits = append(c.workerUnits, workerUnits...)
+}
+
 func (c *Controller) Name() string {
 	return "worker manager"
 }

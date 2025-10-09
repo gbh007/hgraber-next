@@ -41,7 +41,7 @@ erDiagram
     "/adapters/metric" ||--|{ "/adapters/metric/metricstatistic" : x1
     "/adapters/metric" ||--|{ "/domain/core" : x1
     "/adapters/metric" ||--|{ "/domain/systemmodel" : x1
-    "/application/server" ||--|{ "/adapters/metric" : x1
+    "/application/server" ||--|{ "/adapters/metric" : x2
 ```
 
 ---

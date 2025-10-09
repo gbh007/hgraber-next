@@ -75,7 +75,7 @@ erDiagram
     "/adapters/metric" ||--|{ "/domain/core" : x1
     "/adapters/postgresql/internal/agent" ||--|{ "/domain/core" : x5
     "/adapters/postgresql/internal/attribute" ||--|{ "/domain/core" : x15
-    "/adapters/postgresql/internal/book" ||--|{ "/domain/core" : x14
+    "/adapters/postgresql/internal/book" ||--|{ "/domain/core" : x15
     "/adapters/postgresql/internal/deadhash" ||--|{ "/domain/core" : x5
     "/adapters/postgresql/internal/file" ||--|{ "/domain/core" : x11
     "/adapters/postgresql/internal/label" ||--|{ "/domain/core" : x9
@@ -102,7 +102,7 @@ erDiagram
     "/usecases/agentusecase" ||--|{ "/domain/core" : x6
     "/usecases/attributeusecase" ||--|{ "/domain/core" : x5
     "/usecases/bffusecase" ||--|{ "/domain/core" : x3
-    "/usecases/bookusecase" ||--|{ "/domain/core" : x2
+    "/usecases/bookusecase" ||--|{ "/domain/core" : x3
     "/usecases/cleanupusecase" ||--|{ "/domain/core" : x5
     "/usecases/deduplicatorusecase" ||--|{ "/domain/core" : x12
     "/usecases/exportusecase" ||--|{ "/domain/core" : x3

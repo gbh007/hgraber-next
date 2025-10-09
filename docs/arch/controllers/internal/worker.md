@@ -27,7 +27,7 @@
 ```mermaid
 erDiagram
     "/controllers/internal/worker" ||--|{ "/pkg" : x1
-    "/controllers/workermanager" ||--|{ "/controllers/internal/worker" : x9
+    "/controllers/workermanager" ||--|{ "/controllers/internal/worker" : x10
 ```
 
 ---

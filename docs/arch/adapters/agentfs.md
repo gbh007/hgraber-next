@@ -1,4 +1,4 @@
-# agentFS
+# agentfs
 
 ## Imports
 
@@ -21,8 +21,8 @@
 
 ```mermaid
 erDiagram
-    "/adapters/agentFS" ||--|{ "/domain/fsmodel" : x1
-    "/adapters/filestorage" ||--|{ "/adapters/agentFS" : x1
+    "/adapters/agentfs" ||--|{ "/domain/fsmodel" : x1
+    "/adapters/filestorage" ||--|{ "/adapters/agentfs" : x1
 ```
 
 ---

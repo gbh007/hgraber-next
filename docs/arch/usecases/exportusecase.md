@@ -30,7 +30,7 @@
 
 ```mermaid
 erDiagram
-    "/application/server" ||--|{ "/usecases/exportusecase" : x1
+    "/application/server" ||--|{ "/usecases/exportusecase" : x2
     "/usecases/exportusecase" ||--|{ "/domain/agentmodel" : x2
     "/usecases/exportusecase" ||--|{ "/domain/core" : x3
     "/usecases/exportusecase" ||--|{ "/domain/parsing" : x2

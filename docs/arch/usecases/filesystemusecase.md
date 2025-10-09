@@ -27,7 +27,7 @@
 
 ```mermaid
 erDiagram
-    "/application/server" ||--|{ "/usecases/filesystemusecase" : x1
+    "/application/server" ||--|{ "/usecases/filesystemusecase" : x2
     "/usecases/filesystemusecase" ||--|{ "/domain/core" : x5
     "/usecases/filesystemusecase" ||--|{ "/domain/fsmodel" : x4
     "/usecases/filesystemusecase" ||--|{ "/pkg" : x1

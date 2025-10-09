@@ -4,13 +4,13 @@
 
 |     Name      |                        Path                         | Inner | Count |
 |:-------------:|:---------------------------------------------------:|:-----:|:-----:|
-|    context    |                       context                       |  ❌   |  10   |
-|     slog      |                      log/slog                       |  ❌   |  10   |
-|    worker     | [/controllers/internal/worker](internal/worker.md)  |  ✅   |   9   |
-|     trace     |           go.opentelemetry.io/otel/trace            |  ❌   |   9   |
-|      pkg      |                  [/pkg](../pkg.md)                  |  ✅   |   8   |
+|    context    |                       context                       |  ❌   |  11   |
+|     slog      |                      log/slog                       |  ❌   |  11   |
+|    worker     | [/controllers/internal/worker](internal/worker.md)  |  ✅   |  10   |
+|     trace     |           go.opentelemetry.io/otel/trace            |  ❌   |  10   |
+|      pkg      |                  [/pkg](../pkg.md)                  |  ✅   |   9   |
+|     uuid      |               github.com/google/uuid                |  ❌   |   4   |
 |     core      |          [/domain/core](../domain/core.md)          |  ✅   |   3   |
-|     uuid      |               github.com/google/uuid                |  ❌   |   3   |
 |  agentmodel   |    [/domain/agentmodel](../domain/agentmodel.md)    |  ✅   |   2   |
 | massloadmodel | [/domain/massloadmodel](../domain/massloadmodel.md) |  ✅   |   2   |
 |  systemmodel  |   [/domain/systemmodel](../domain/systemmodel.md)   |  ✅   |   2   |
@@ -29,15 +29,15 @@
 
 ```mermaid
 erDiagram
-    "/application/server" ||--|{ "/controllers/workermanager" : x1
-    "/controllers/workermanager" ||--|{ "/controllers/internal/worker" : x9
+    "/application/server" ||--|{ "/controllers/workermanager" : x3
+    "/controllers/workermanager" ||--|{ "/controllers/internal/worker" : x10
     "/controllers/workermanager" ||--|{ "/domain/agentmodel" : x2
     "/controllers/workermanager" ||--|{ "/domain/core" : x3
     "/controllers/workermanager" ||--|{ "/domain/fsmodel" : x1
     "/controllers/workermanager" ||--|{ "/domain/massloadmodel" : x2
     "/controllers/workermanager" ||--|{ "/domain/parsing" : x1
     "/controllers/workermanager" ||--|{ "/domain/systemmodel" : x2
-    "/controllers/workermanager" ||--|{ "/pkg" : x8
+    "/controllers/workermanager" ||--|{ "/pkg" : x9
 ```
 
 ---

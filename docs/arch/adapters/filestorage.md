@@ -12,7 +12,7 @@
 |    core    |    [/domain/core](../domain/core.md)    |  ✅   |   3   |
 |   errors   |                 errors                  |  ❌   |   2   |
 |     io     |                   io                    |  ❌   |   2   |
-|  agentFS   |     [/adapters/agentFS](agentFS.md)     |  ✅   |   1   |
+|  agentfs   |     [/adapters/agentfs](agentfs.md)     |  ✅   |   1   |
 | localfiles |  [/adapters/localfiles](localfiles.md)  |  ✅   |   1   |
 |    slog    |                log/slog                 |  ❌   |   1   |
 |    url     |                 net/url                 |  ❌   |   1   |
@@ -29,11 +29,11 @@
 
 ```mermaid
 erDiagram
-    "/adapters/filestorage" ||--|{ "/adapters/agentFS" : x1
+    "/adapters/filestorage" ||--|{ "/adapters/agentfs" : x1
     "/adapters/filestorage" ||--|{ "/adapters/localfiles" : x1
     "/adapters/filestorage" ||--|{ "/domain/core" : x3
     "/adapters/filestorage" ||--|{ "/domain/fsmodel" : x4
-    "/application/server" ||--|{ "/adapters/filestorage" : x1
+    "/application/server" ||--|{ "/adapters/filestorage" : x2
 ```
 
 ---

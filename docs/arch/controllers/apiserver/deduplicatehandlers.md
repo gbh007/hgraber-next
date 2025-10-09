@@ -7,9 +7,9 @@
 |    context    |                         context                          |  ❌   |   7   |
 | apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |  ✅   |   7   |
 |   serverapi   |     [/openapi/serverapi](../../openapi/serverapi.md)     |  ✅   |   6   |
+|      bff      |            [/domain/bff](../../domain/bff.md)            |  ✅   |   5   |
 |      pkg      |                   [/pkg](../../pkg.md)                   |  ✅   |   5   |
 |     core      |           [/domain/core](../../domain/core.md)           |  ✅   |   4   |
-|      bff      |            [/domain/bff](../../domain/bff.md)            |  ✅   |   3   |
 |     uuid      |                  github.com/google/uuid                  |  ❌   |   1   |
 |     trace     |              go.opentelemetry.io/otel/trace              |  ❌   |   1   |
 |      io       |                            io                            |  ❌   |   1   |
@@ -27,7 +27,7 @@
 erDiagram
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/deduplicatehandlers" : x1
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/controllers/apiserver/apiservercore" : x7
-    "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/bff" : x3
+    "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/bff" : x5
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/core" : x4
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/openapi/serverapi" : x6
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/pkg" : x5

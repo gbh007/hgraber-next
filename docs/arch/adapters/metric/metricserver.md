@@ -8,7 +8,6 @@
 | metriccore  |    [/adapters/metric/metriccore](metriccore.md)    |  ✅   |   2   |
 |   context   |                      context                       |  ❌   |   1   |
 | systemmodel | [/domain/systemmodel](../../domain/systemmodel.md) |  ✅   |   1   |
-|    time     |                        time                        |  ❌   |   1   |
 
 ## Used by
 

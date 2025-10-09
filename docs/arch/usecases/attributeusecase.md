@@ -6,7 +6,7 @@
 |:-----------:|:-----------------------------------------------:|:-----:|:-----:|
 |   context   |                     context                     |  ❌   |   5   |
 |    core     |        [/domain/core](../domain/core.md)        |  ✅   |   5   |
-|     fmt     |                       fmt                       |  ❌   |   3   |
+|     fmt     |                       fmt                       |  ❌   |   4   |
 |   slices    |                     slices                      |  ❌   |   3   |
 |   strings   |                     strings                     |  ❌   |   2   |
 |    time     |                      time                       |  ❌   |   2   |
@@ -25,7 +25,7 @@
 
 ```mermaid
 erDiagram
-    "/application/server" ||--|{ "/usecases/attributeusecase" : x1
+    "/application/server" ||--|{ "/usecases/attributeusecase" : x2
     "/usecases/attributeusecase" ||--|{ "/domain/core" : x5
     "/usecases/attributeusecase" ||--|{ "/domain/systemmodel" : x1
 ```

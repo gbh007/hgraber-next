@@ -4,10 +4,10 @@
 
 |   Name    |                       Path                       | Inner | Count |
 |:---------:|:------------------------------------------------:|:-----:|:-----:|
+|  context  |                     context                      |  ❌   |   3   |
 | serverapi | [/openapi/serverapi](../../openapi/serverapi.md) |  ✅   |   3   |
 |   uuid    |              github.com/google/uuid              |  ❌   |   3   |
 |    url    |                     net/url                      |  ❌   |   3   |
-|  context  |                     context                      |  ❌   |   2   |
 |   core    |       [/domain/core](../../domain/core.md)       |  ✅   |   2   |
 |   slog    |                     log/slog                     |  ❌   |   2   |
 |   time    |                       time                       |  ❌   |   2   |

@@ -2,18 +2,19 @@
 
 ## Imports
 
-|     Name     |                Path                | Inner | Count |
-|:------------:|:----------------------------------:|:-----:|:-----:|
-|     fmt      |                fmt                 |  ❌   |   3   |
-|    assert    | github.com/stretchr/testify/assert |  ❌   |   2   |
-|   testing    |              testing               |  ❌   |   2   |
-|    bytes     |               bytes                |  ❌   |   1   |
-|     sql      |            database/sql            |  ❌   |   1   |
-|    errors    |               errors               |  ❌   |   1   |
-| pyroscope-go |  github.com/grafana/pyroscope-go   |  ❌   |   1   |
-|      io      |                 io                 |  ❌   |   1   |
-|     slog     |              log/slog              |  ❌   |   1   |
-|     sync     |                sync                |  ❌   |   1   |
+|     Name     |                Path                 | Inner | Count |
+|:------------:|:-----------------------------------:|:-----:|:-----:|
+|     fmt      |                 fmt                 |  ❌   |   3   |
+|    assert    | github.com/stretchr/testify/assert  |  ❌   |   2   |
+|   testing    |               testing               |  ❌   |   2   |
+|    bytes     |                bytes                |  ❌   |   1   |
+|     sql      |            database/sql             |  ❌   |   1   |
+|    errors    |               errors                |  ❌   |   1   |
+| pyroscope-go |   github.com/grafana/pyroscope-go   |  ❌   |   1   |
+|   require    | github.com/stretchr/testify/require |  ❌   |   1   |
+|      io      |                 io                  |  ❌   |   1   |
+|     slog     |              log/slog               |  ❌   |   1   |
+|     sync     |                sync                 |  ❌   |   1   |
 
 ## Used by
 
@@ -76,7 +77,7 @@ erDiagram
     "/controllers/apiserver/massloadhandlers" ||--|{ "/pkg" : x3
     "/controllers/apiserver/systemhandlers" ||--|{ "/pkg" : x4
     "/controllers/internal/worker" ||--|{ "/pkg" : x1
-    "/controllers/workermanager" ||--|{ "/pkg" : x8
+    "/controllers/workermanager" ||--|{ "/pkg" : x9
     "/domain/bff" ||--|{ "/pkg" : x1
     "/domain/core" ||--|{ "/pkg" : x1
     "/external" ||--|{ "/pkg" : x2

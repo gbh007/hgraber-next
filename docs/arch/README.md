@@ -14,7 +14,7 @@
 |:-------------------:|:--------------------------------------------------------------------------------------------:|
 |        agent        |                             [/adapters/agent](adapters/agent.md)                             |
 |       adapter       |            [/adapters/agent/internal/adapter](adapters/agent/internal/adapter.md)            |
-|       agentFS       |                           [/adapters/agentFS](adapters/agentFS.md)                           |
+|       agentfs       |                           [/adapters/agentfs](adapters/agentfs.md)                           |
 |     filestorage     |                       [/adapters/filestorage](adapters/filestorage.md)                       |
 |     localfiles      |                        [/adapters/localfiles](adapters/localfiles.md)                        |
 |       metric        |                            [/adapters/metric](adapters/metric.md)                            |
@@ -67,6 +67,7 @@
 |    labelhandlers    |        [/controllers/apiserver/labelhandlers](controllers/apiserver/labelhandlers.md)        |
 |  massloadhandlers   |     [/controllers/apiserver/massloadhandlers](controllers/apiserver/massloadhandlers.md)     |
 |   systemhandlers    |       [/controllers/apiserver/systemhandlers](controllers/apiserver/systemhandlers.md)       |
+|        async        |                          [/controllers/async](controllers/async.md)                          |
 |       worker        |                [/controllers/internal/worker](controllers/internal/worker.md)                |
 |    workermanager    |                  [/controllers/workermanager](controllers/workermanager.md)                  |
 |     agentmodel      |                          [/domain/agentmodel](domain/agentmodel.md)                          |
@@ -101,18 +102,18 @@
 
 |     Name      |                              Path                               | Count |
 |:-------------:|:---------------------------------------------------------------:|:-----:|
-|    context    |                             context                             |  387  |
-|      fmt      |                               fmt                               |  296  |
-|     uuid      |                     github.com/google/uuid                      |  160  |
-|   squirrel    |                 github.com/Masterminds/squirrel                 |  110  |
+|    context    |                             context                             |  395  |
+|      fmt      |                               fmt                               |  307  |
+|     uuid      |                     github.com/google/uuid                      |  164  |
+|   squirrel    |                 github.com/Masterminds/squirrel                 |  111  |
 |     time      |                              time                               |  93   |
-|     slog      |                            log/slog                             |  87   |
-|      url      |                             net/url                             |  68   |
+|     slog      |                            log/slog                             |  90   |
+|      url      |                             net/url                             |  69   |
 |    errors     |                             errors                              |  64   |
 |      io       |                               io                                |  45   |
-|     trace     |                 go.opentelemetry.io/otel/trace                  |  41   |
+|     trace     |                 go.opentelemetry.io/otel/trace                  |  43   |
 |      sql      |                          database/sql                           |  36   |
-|     http      |                            net/http                             |  28   |
+|     http      |                            net/http                             |  30   |
 |  timeseries   |     github.com/grafana/grafana-foundation-sdk/go/timeseries     |  26   |
 |      v5       |                     github.com/jackc/pgx/v5                     |  24   |
 |    strings    |                             strings                             |  22   |
@@ -124,11 +125,11 @@
 |    slices     |                             slices                              |  16   |
 |      cog      |        github.com/grafana/grafana-foundation-sdk/go/cog         |  15   |
 |   variants    |    github.com/grafana/grafana-foundation-sdk/go/cog/variants    |  15   |
+|     bytes     |                              bytes                              |  14   |
 |  prometheus   |     github.com/grafana/grafana-foundation-sdk/go/prometheus     |  14   |
-|     bytes     |                              bytes                              |  12   |
 |     http      |                  github.com/ogen-go/ogen/http                   |  12   |
 |   validate    |                github.com/ogen-go/ogen/validate                 |  12   |
-|      os       |                               os                                |  11   |
+|      os       |                               os                                |  12   |
 |      jx       |                     github.com/go-faster/jx                     |  10   |
 |  middleware   |               github.com/ogen-go/ogen/middleware                |  10   |
 |      uri      |                   github.com/ogen-go/ogen/uri                   |  10   |
@@ -151,10 +152,10 @@
 |    v1.26.0    |            go.opentelemetry.io/otel/semconv/v1.26.0             |   4   |
 |     flag      |                              flag                               |   3   |
 |     table     |       github.com/grafana/grafana-foundation-sdk/go/table        |   3   |
+| pyroscope-go  |                 github.com/grafana/pyroscope-go                 |   3   |
 |     toml      |                   github.com/BurntSushi/toml                    |   2   |
 |    heatmap    |      github.com/grafana/grafana-foundation-sdk/go/heatmap       |   2   |
 |   piechart    |      github.com/grafana/grafana-foundation-sdk/go/piechart      |   2   |
-| pyroscope-go  |                 github.com/grafana/pyroscope-go                 |   2   |
 |   envconfig   |              github.com/kelseyhightower/envconfig               |   2   |
 |     json      |                  github.com/ogen-go/ogen/json                   |   2   |
 |   otelogen    |                github.com/ogen-go/ogen/otelogen                 |   2   |
@@ -181,10 +182,12 @@
 |      v3       |                   github.com/pressly/goose/v3                   |   1   |
 |  collectors   |    github.com/prometheus/client_golang/prometheus/collectors    |   1   |
 |   promhttp    |     github.com/prometheus/client_golang/prometheus/promhttp     |   1   |
+|    require    |               github.com/stretchr/testify/require               |   1   |
 | otlptracehttp | go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp |   1   |
 |   resource    |              go.opentelemetry.io/otel/sdk/resource              |   1   |
 |     trace     |               go.opentelemetry.io/otel/sdk/trace                |   1   |
 |    v1.20.0    |            go.opentelemetry.io/otel/semconv/v1.20.0             |   1   |
+|     noop      |               go.opentelemetry.io/otel/trace/noop               |   1   |
 |     unix      |                      golang.org/x/sys/unix                      |   1   |
 |     maps      |                              maps                               |   1   |
 |     math      |                              math                               |   1   |
@@ -207,8 +210,8 @@ erDiagram
     "/adapters/agent/internal/adapter" ||--|{ "/domain/hproxymodel" : x1
     "/adapters/agent/internal/adapter" ||--|{ "/openapi/agentapi" : x11
     "/adapters/agent/internal/adapter" ||--|{ "/pkg" : x6
-    "/adapters/agentFS" ||--|{ "/domain/fsmodel" : x1
-    "/adapters/filestorage" ||--|{ "/adapters/agentFS" : x1
+    "/adapters/agentfs" ||--|{ "/domain/fsmodel" : x1
+    "/adapters/filestorage" ||--|{ "/adapters/agentfs" : x1
     "/adapters/filestorage" ||--|{ "/adapters/localfiles" : x1
     "/adapters/filestorage" ||--|{ "/domain/core" : x3
     "/adapters/filestorage" ||--|{ "/domain/fsmodel" : x4
@@ -285,9 +288,9 @@ erDiagram
     "/adapters/postgresql/internal/attribute" ||--|{ "/adapters/postgresql/internal/model" : x5
     "/adapters/postgresql/internal/attribute" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/attribute" ||--|{ "/domain/core" : x15
-    "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/model" : x6
+    "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/model" : x7
     "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/repository" : x1
-    "/adapters/postgresql/internal/book" ||--|{ "/domain/core" : x14
+    "/adapters/postgresql/internal/book" ||--|{ "/domain/core" : x15
     "/adapters/postgresql/internal/deadhash" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/deadhash" ||--|{ "/domain/core" : x5
     "/adapters/postgresql/internal/deadhash" ||--|{ "/pkg" : x1
@@ -321,32 +324,33 @@ erDiagram
     "/adapters/tmpdata" ||--|{ "/domain/systemmodel" : x2
     "/adapters/tmpdata" ||--|{ "/pkg" : x1
     "/application/configremaper" ||--|{ "/config" : x1
-    "/application/server" ||--|{ "/adapters/agent" : x1
-    "/application/server" ||--|{ "/adapters/filestorage" : x1
-    "/application/server" ||--|{ "/adapters/metric" : x1
-    "/application/server" ||--|{ "/adapters/postgresql" : x1
-    "/application/server" ||--|{ "/adapters/tmpdata" : x1
-    "/application/server" ||--|{ "/config" : x3
+    "/application/server" ||--|{ "/adapters/agent" : x2
+    "/application/server" ||--|{ "/adapters/filestorage" : x2
+    "/application/server" ||--|{ "/adapters/metric" : x2
+    "/application/server" ||--|{ "/adapters/postgresql" : x2
+    "/application/server" ||--|{ "/adapters/tmpdata" : x2
+    "/application/server" ||--|{ "/config" : x4
     "/application/server" ||--|{ "/controllers/apiagent" : x1
     "/application/server" ||--|{ "/controllers/apiserver" : x1
-    "/application/server" ||--|{ "/controllers/workermanager" : x1
+    "/application/server" ||--|{ "/controllers/async" : x2
+    "/application/server" ||--|{ "/controllers/workermanager" : x3
     "/application/server" ||--|{ "/domain/core" : x1
     "/application/server" ||--|{ "/domain/systemmodel" : x1
     "/application/server" ||--|{ "/pkg" : x1
-    "/application/server" ||--|{ "/usecases/agentusecase" : x1
-    "/application/server" ||--|{ "/usecases/attributeusecase" : x1
-    "/application/server" ||--|{ "/usecases/bffusecase" : x1
-    "/application/server" ||--|{ "/usecases/bookusecase" : x1
-    "/application/server" ||--|{ "/usecases/cleanupusecase" : x1
-    "/application/server" ||--|{ "/usecases/deduplicatorusecase" : x1
-    "/application/server" ||--|{ "/usecases/exportusecase" : x1
-    "/application/server" ||--|{ "/usecases/filesystemusecase" : x1
-    "/application/server" ||--|{ "/usecases/hproxyusecase" : x1
-    "/application/server" ||--|{ "/usecases/labelusecase" : x1
-    "/application/server" ||--|{ "/usecases/massloadusecase" : x1
-    "/application/server" ||--|{ "/usecases/parsingusecase" : x1
-    "/application/server" ||--|{ "/usecases/rebuilderusecase" : x1
-    "/application/server" ||--|{ "/usecases/systemusecase" : x1
+    "/application/server" ||--|{ "/usecases/agentusecase" : x2
+    "/application/server" ||--|{ "/usecases/attributeusecase" : x2
+    "/application/server" ||--|{ "/usecases/bffusecase" : x2
+    "/application/server" ||--|{ "/usecases/bookusecase" : x2
+    "/application/server" ||--|{ "/usecases/cleanupusecase" : x2
+    "/application/server" ||--|{ "/usecases/deduplicatorusecase" : x2
+    "/application/server" ||--|{ "/usecases/exportusecase" : x2
+    "/application/server" ||--|{ "/usecases/filesystemusecase" : x2
+    "/application/server" ||--|{ "/usecases/hproxyusecase" : x2
+    "/application/server" ||--|{ "/usecases/labelusecase" : x2
+    "/application/server" ||--|{ "/usecases/massloadusecase" : x2
+    "/application/server" ||--|{ "/usecases/parsingusecase" : x2
+    "/application/server" ||--|{ "/usecases/rebuilderusecase" : x2
+    "/application/server" ||--|{ "/usecases/systemusecase" : x2
     "/cmd/configremaper" ||--|{ "/application/configremaper" : x1
     "/cmd/configremaper" ||--|{ "/config" : x1
     "/cmd/grafanagenerator" ||--|{ "/adapters/metric/generator" : x1
@@ -387,7 +391,7 @@ erDiagram
     "/controllers/apiserver/bookhandlers" ||--|{ "/openapi/serverapi" : x10
     "/controllers/apiserver/bookhandlers" ||--|{ "/pkg" : x2
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/controllers/apiserver/apiservercore" : x7
-    "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/bff" : x3
+    "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/bff" : x5
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/core" : x4
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/openapi/serverapi" : x6
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/pkg" : x5
@@ -416,14 +420,14 @@ erDiagram
     "/controllers/apiserver/systemhandlers" ||--|{ "/openapi/serverapi" : x12
     "/controllers/apiserver/systemhandlers" ||--|{ "/pkg" : x4
     "/controllers/internal/worker" ||--|{ "/pkg" : x1
-    "/controllers/workermanager" ||--|{ "/controllers/internal/worker" : x9
+    "/controllers/workermanager" ||--|{ "/controllers/internal/worker" : x10
     "/controllers/workermanager" ||--|{ "/domain/agentmodel" : x2
     "/controllers/workermanager" ||--|{ "/domain/core" : x3
     "/controllers/workermanager" ||--|{ "/domain/fsmodel" : x1
     "/controllers/workermanager" ||--|{ "/domain/massloadmodel" : x2
     "/controllers/workermanager" ||--|{ "/domain/parsing" : x1
     "/controllers/workermanager" ||--|{ "/domain/systemmodel" : x2
-    "/controllers/workermanager" ||--|{ "/pkg" : x8
+    "/controllers/workermanager" ||--|{ "/pkg" : x9
     "/domain/agentmodel" ||--|{ "/domain/core" : x2
     "/domain/bff" ||--|{ "/domain/core" : x3
     "/domain/bff" ||--|{ "/pkg" : x1
@@ -441,7 +445,7 @@ erDiagram
     "/usecases/bffusecase" ||--|{ "/domain/core" : x3
     "/usecases/bffusecase" ||--|{ "/domain/fsmodel" : x1
     "/usecases/bffusecase" ||--|{ "/pkg" : x1
-    "/usecases/bookusecase" ||--|{ "/domain/core" : x2
+    "/usecases/bookusecase" ||--|{ "/domain/core" : x3
     "/usecases/cleanupusecase" ||--|{ "/domain/core" : x5
     "/usecases/cleanupusecase" ||--|{ "/domain/fsmodel" : x3
     "/usecases/cleanupusecase" ||--|{ "/domain/systemmodel" : x7

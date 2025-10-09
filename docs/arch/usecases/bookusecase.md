@@ -4,11 +4,11 @@
 
 |  Name   |               Path                | Inner | Count |
 |:-------:|:---------------------------------:|:-----:|:-----:|
-| context |              context              |  ❌   |   4   |
-|  uuid   |      github.com/google/uuid       |  ❌   |   4   |
-|  core   | [/domain/core](../domain/core.md) |  ✅   |   2   |
-|  time   |               time                |  ❌   |   2   |
-|   fmt   |                fmt                |  ❌   |   1   |
+| context |              context              |  ❌   |   5   |
+|  uuid   |      github.com/google/uuid       |  ❌   |   5   |
+|  core   | [/domain/core](../domain/core.md) |  ✅   |   3   |
+|  time   |               time                |  ❌   |   3   |
+|   fmt   |                fmt                |  ❌   |   2   |
 |  slog   |             log/slog              |  ❌   |   1   |
 
 ## Used by
@@ -21,8 +21,8 @@
 
 ```mermaid
 erDiagram
-    "/application/server" ||--|{ "/usecases/bookusecase" : x1
-    "/usecases/bookusecase" ||--|{ "/domain/core" : x2
+    "/application/server" ||--|{ "/usecases/bookusecase" : x2
+    "/usecases/bookusecase" ||--|{ "/domain/core" : x3
 ```
 
 ---

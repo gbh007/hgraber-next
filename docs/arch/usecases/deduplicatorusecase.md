@@ -32,7 +32,7 @@
 
 ```mermaid
 erDiagram
-    "/application/server" ||--|{ "/usecases/deduplicatorusecase" : x1
+    "/application/server" ||--|{ "/usecases/deduplicatorusecase" : x2
     "/usecases/deduplicatorusecase" ||--|{ "/domain/bff" : x5
     "/usecases/deduplicatorusecase" ||--|{ "/domain/core" : x12
     "/usecases/deduplicatorusecase" ||--|{ "/domain/systemmodel" : x1

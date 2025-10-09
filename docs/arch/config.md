@@ -32,7 +32,7 @@
 ```mermaid
 erDiagram
     "/application/configremaper" ||--|{ "/config" : x1
-    "/application/server" ||--|{ "/config" : x3
+    "/application/server" ||--|{ "/config" : x4
     "/cmd/configremaper" ||--|{ "/config" : x1
     "/cmd/grafanagenerator" ||--|{ "/config" : x1
 ```

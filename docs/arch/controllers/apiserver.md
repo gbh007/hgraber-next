@@ -4,14 +4,14 @@
 
 |        Name         |                                      Path                                      | Inner | Count |
 |:-------------------:|:------------------------------------------------------------------------------:|:-----:|:-----:|
+|        http         |                                    net/http                                    |  ❌   |   5   |
 |        slog         |                                    log/slog                                    |  ❌   |   4   |
-|        http         |                                    net/http                                    |  ❌   |   4   |
 |       context       |                                    context                                     |  ❌   |   3   |
 |       errors        |                                     errors                                     |  ❌   |   3   |
 |      serverapi      |                 [/openapi/serverapi](../openapi/serverapi.md)                  |  ✅   |   3   |
 |        time         |                                      time                                      |  ❌   |   3   |
+|        bytes        |                                     bytes                                      |  ❌   |   2   |
 |         fmt         |                                      fmt                                       |  ❌   |   2   |
-|        bytes        |                                     bytes                                      |  ❌   |   1   |
 |        json         |                                 encoding/json                                  |  ❌   |   1   |
 |    agenthandlers    |       [/controllers/apiserver/agenthandlers](apiserver/agenthandlers.md)       |  ✅   |   1   |
 |    apiservercore    |       [/controllers/apiserver/apiservercore](apiserver/apiservercore.md)       |  ✅   |   1   |

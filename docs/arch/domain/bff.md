@@ -25,7 +25,7 @@
 erDiagram
     "/controllers/apiserver/apiservercore" ||--|{ "/domain/bff" : x1
     "/controllers/apiserver/bookhandlers" ||--|{ "/domain/bff" : x3
-    "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/bff" : x3
+    "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/bff" : x5
     "/domain/bff" ||--|{ "/domain/core" : x3
     "/domain/bff" ||--|{ "/pkg" : x1
     "/usecases/bffusecase" ||--|{ "/domain/bff" : x4

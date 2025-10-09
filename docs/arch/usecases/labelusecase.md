@@ -21,7 +21,7 @@
 
 ```mermaid
 erDiagram
-    "/application/server" ||--|{ "/usecases/labelusecase" : x1
+    "/application/server" ||--|{ "/usecases/labelusecase" : x2
     "/usecases/labelusecase" ||--|{ "/domain/core" : x2
     "/usecases/labelusecase" ||--|{ "/domain/systemmodel" : x1
 ```

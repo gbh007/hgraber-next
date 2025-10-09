@@ -4,11 +4,11 @@
 
 |  Name   |              Path              | Inner | Count |
 |:-------:|:------------------------------:|:-----:|:-----:|
+|   fmt   |              fmt               |  ❌   |   4   |
 |   io    |               io               |  ❌   |   4   |
 |   zip   |          archive/zip           |  ❌   |   3   |
 | context |            context             |  ❌   |   3   |
 |  json   |         encoding/json          |  ❌   |   3   |
-|   fmt   |              fmt               |  ❌   |   3   |
 |  core   | [/domain/core](domain/core.md) |  ✅   |   3   |
 | strings |            strings             |  ❌   |   3   |
 |  time   |              time              |  ❌   |   3   |

@@ -25,7 +25,7 @@ erDiagram
     "/adapters/tmpdata" ||--|{ "/domain/fsmodel" : x2
     "/adapters/tmpdata" ||--|{ "/domain/systemmodel" : x2
     "/adapters/tmpdata" ||--|{ "/pkg" : x1
-    "/application/server" ||--|{ "/adapters/tmpdata" : x1
+    "/application/server" ||--|{ "/adapters/tmpdata" : x2
 ```
 
 ---

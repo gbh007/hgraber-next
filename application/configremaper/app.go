@@ -18,18 +18,18 @@ func Run[T any](newConfig func() T) {
 
 	if len(*outPath) == 0 {
 		logger.Error("empty out path")
-		os.Exit(1)
+		os.Exit(1) //nolint:revive // в данном случае так проще
 	}
 
 	cfg, err := config.ImportConfig(*inPath, *useEnv, newConfig)
 	if err != nil {
 		logger.Error("import config", slog.String("error", err.Error()))
-		os.Exit(1)
+		os.Exit(1) //nolint:revive // в данном случае так проще
 	}
 
 	err = config.ExportToFile(&cfg, *outPath)
 	if err != nil {
 		logger.Error("export config", slog.String("error", err.Error()))
-		os.Exit(1)
+		os.Exit(1) //nolint:revive // в данном случае так проще
 	}
 }

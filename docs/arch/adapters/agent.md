@@ -32,7 +32,7 @@ erDiagram
     "/adapters/agent" ||--|{ "/domain/core" : x1
     "/adapters/agent" ||--|{ "/domain/fsmodel" : x1
     "/adapters/agent" ||--|{ "/domain/hproxymodel" : x1
-    "/application/server" ||--|{ "/adapters/agent" : x1
+    "/application/server" ||--|{ "/adapters/agent" : x2
 ```
 
 ---

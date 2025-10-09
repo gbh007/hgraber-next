@@ -4,12 +4,12 @@
 
 |    Name    |                           Path                            | Inner | Count |
 |:----------:|:---------------------------------------------------------:|:-----:|:-----:|
-|  context   |                          context                          |  ❌   |  18   |
-|    fmt     |                            fmt                            |  ❌   |  18   |
-|    core    |          [/domain/core](../../../domain/core.md)          |  ✅   |  14   |
-|  squirrel  |              github.com/Masterminds/squirrel              |  ❌   |  13   |
-|    uuid    |                  github.com/google/uuid                   |  ❌   |  11   |
-|   model    |      [/adapters/postgresql/internal/model](model.md)      |  ✅   |   6   |
+|  context   |                          context                          |  ❌   |  19   |
+|    fmt     |                            fmt                            |  ❌   |  19   |
+|    core    |          [/domain/core](../../../domain/core.md)          |  ✅   |  15   |
+|  squirrel  |              github.com/Masterminds/squirrel              |  ❌   |  14   |
+|    uuid    |                  github.com/google/uuid                   |  ❌   |  12   |
+|   model    |      [/adapters/postgresql/internal/model](model.md)      |  ✅   |   7   |
 |    sql     |                       database/sql                        |  ❌   |   4   |
 |   errors   |                          errors                           |  ❌   |   2   |
 |    time    |                           time                            |  ❌   |   2   |
@@ -29,9 +29,9 @@
 ```mermaid
 erDiagram
     "/adapters/postgresql" ||--|{ "/adapters/postgresql/internal/book" : x1
-    "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/model" : x6
+    "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/model" : x7
     "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/repository" : x1
-    "/adapters/postgresql/internal/book" ||--|{ "/domain/core" : x14
+    "/adapters/postgresql/internal/book" ||--|{ "/domain/core" : x15
 ```
 
 ---

@@ -35,7 +35,7 @@
 erDiagram
     "/adapters/postgresql/internal/agent" ||--|{ "/adapters/postgresql/internal/model" : x2
     "/adapters/postgresql/internal/attribute" ||--|{ "/adapters/postgresql/internal/model" : x5
-    "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/model" : x6
+    "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/model" : x7
     "/adapters/postgresql/internal/file" ||--|{ "/adapters/postgresql/internal/model" : x10
     "/adapters/postgresql/internal/label" ||--|{ "/adapters/postgresql/internal/model" : x3
     "/adapters/postgresql/internal/massload" ||--|{ "/adapters/postgresql/internal/model" : x16
