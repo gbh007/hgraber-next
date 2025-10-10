@@ -6,17 +6,20 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 )
 
 func (repo *MassloadRepo) CreateMassloadAttribute(ctx context.Context, id int, attr massloadmodel.Attribute) error {
-	builder := squirrel.Insert("massload_attributes").
+	table := model.MassloadAttributeTable
+
+	builder := squirrel.Insert(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"massload_id": id,
-			"attr_code":   attr.Code,
-			"attr_value":  attr.Value,
-			"created_at":  attr.CreatedAt,
+			table.ColumnMassloadID(): id,
+			table.ColumnAttrCode():   attr.Code,
+			table.ColumnAttrValue():  attr.Value,
+			table.ColumnCreatedAt():  attr.CreatedAt,
 		})
 
 	query, args := builder.MustSql()

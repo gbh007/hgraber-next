@@ -130,57 +130,6 @@ func MassloadExternalLinkScanner(link *massloadmodel.ExternalLink) RowScanner {
 	}
 }
 
-func MassloadAttributeColumns() []string {
-	return []string{
-		"attr_code",
-		"attr_value",
-		"page_size",
-		"file_size",
-		"page_count",
-		"file_count",
-		"books_in_system",
-		"created_at",
-		"updated_at",
-	}
-}
-
-func MassloadAttributeScanner(attr *massloadmodel.Attribute) RowScanner {
-	return func(rows pgx.Rows) error {
-		var (
-			pageSize     sql.NullInt64
-			fileSize     sql.NullInt64
-			pageCount    sql.NullInt64
-			fileCount    sql.NullInt64
-			bookInSystem sql.NullInt64
-			updatedAt    sql.NullTime
-		)
-
-		err := rows.Scan(
-			&attr.Code,
-			&attr.Value,
-			&pageSize,
-			&fileSize,
-			&pageCount,
-			&fileCount,
-			&bookInSystem,
-			&attr.CreatedAt,
-			&updatedAt,
-		)
-		if err != nil {
-			return fmt.Errorf("scan to model: %w", err)
-		}
-
-		attr.UpdatedAt = updatedAt.Time
-		attr.PageSize = NilInt64FromDB(pageSize)
-		attr.FileSize = NilInt64FromDB(fileSize)
-		attr.PageCount = NilInt64FromDB(pageCount)
-		attr.FileCount = NilInt64FromDB(fileCount)
-		attr.BookInSystem = NilInt64FromDB(bookInSystem)
-
-		return nil
-	}
-}
-
 func MassloadFlagColumns() []string {
 	return []string{
 		"code",

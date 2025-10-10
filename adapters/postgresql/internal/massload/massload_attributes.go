@@ -11,13 +11,15 @@ import (
 )
 
 func (repo *MassloadRepo) MassloadAttributes(ctx context.Context, id int) ([]massloadmodel.Attribute, error) {
-	builder := squirrel.Select(model.MassloadAttributeColumns()...).
+	table := model.MassloadAttributeTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("massload_attributes").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"massload_id": id,
+			table.ColumnMassloadID(): id,
 		}).
-		OrderBy("created_at")
+		OrderBy(table.ColumnCreatedAt())
 
 	query, args := builder.MustSql()
 
@@ -33,7 +35,7 @@ func (repo *MassloadRepo) MassloadAttributes(ctx context.Context, id int) ([]mas
 	for rows.Next() {
 		attr := massloadmodel.Attribute{}
 
-		err := rows.Scan(model.MassloadAttributeScanner(&attr))
+		err := rows.Scan(table.Scanner(&attr))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

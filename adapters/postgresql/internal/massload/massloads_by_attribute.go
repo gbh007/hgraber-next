@@ -14,16 +14,23 @@ func (repo *MassloadRepo) MassloadsByAttribute(
 	ctx context.Context,
 	code, value string,
 ) ([]massloadmodel.Massload, error) {
+	attrTable := model.MassloadAttributeTable
+
+	subQuery, subArgs := squirrel.Select("1").
+		From(attrTable.Name()).
+		Where(squirrel.Expr(attrTable.ColumnMassloadID() + " = id")).
+		Where(squirrel.Eq{
+			attrTable.ColumnAttrCode():  code,
+			attrTable.ColumnAttrValue(): value,
+		}).
+		Prefix("EXISTS (").
+		Suffix(")").
+		MustSql()
+
 	builder := squirrel.Select(model.MassloadColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("massloads").
-		Where(
-			squirrel.Expr(
-				"EXISTS (SELECT FROM massload_attributes WHERE massload_id = id AND attr_code = ? AND attr_value = ?)",
-				code,
-				value,
-			),
-		)
+		Where(subQuery, subArgs...)
 
 	query, args := builder.MustSql()
 

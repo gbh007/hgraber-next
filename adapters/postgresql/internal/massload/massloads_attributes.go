@@ -6,20 +6,23 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 )
 
 func (repo *MassloadRepo) MassloadsAttributes(ctx context.Context) ([]massloadmodel.Attribute, error) {
+	table := model.MassloadAttributeTable
+
 	builder := squirrel.
 		Select(
-			"attr_code",
-			"attr_value",
+			table.ColumnAttrCode(),
+			table.ColumnAttrValue(),
 		).
 		PlaceholderFormat(squirrel.Dollar).
-		From("massload_attributes").
+		From(table.Name()).
 		GroupBy(
-			"attr_code",
-			"attr_value",
+			table.ColumnAttrCode(),
+			table.ColumnAttrValue(),
 		)
 
 	query, args := builder.MustSql()

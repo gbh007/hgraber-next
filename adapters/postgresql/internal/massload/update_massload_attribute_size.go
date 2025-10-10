@@ -11,19 +11,21 @@ import (
 )
 
 func (repo *MassloadRepo) UpdateMassloadAttributeSize(ctx context.Context, attr massloadmodel.Attribute) error {
-	builder := squirrel.Update("massload_attributes").
+	table := model.MassloadAttributeTable
+
+	builder := squirrel.Update(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"page_size":       model.NilInt64ToDB(attr.PageSize),
-			"file_size":       model.NilInt64ToDB(attr.FileSize),
-			"page_count":      model.NilInt64ToDB(attr.PageCount),
-			"file_count":      model.NilInt64ToDB(attr.FileCount),
-			"books_in_system": model.NilInt64ToDB(attr.BookInSystem),
-			"updated_at":      model.TimeToDB(attr.UpdatedAt),
+			table.ColumnPageSize():      model.NilInt64ToDB(attr.PageSize),
+			table.ColumnFileSize():      model.NilInt64ToDB(attr.FileSize),
+			table.ColumnPageCount():     model.NilInt64ToDB(attr.PageCount),
+			table.ColumnFileCount():     model.NilInt64ToDB(attr.FileCount),
+			table.ColumnBooksInSystem(): model.NilInt64ToDB(attr.BookInSystem),
+			table.ColumnUpdatedAt():     model.TimeToDB(attr.UpdatedAt),
 		}).
 		Where(squirrel.Eq{
-			"attr_code":  attr.Code,
-			"attr_value": attr.Value,
+			table.ColumnAttrCode():  attr.Code,
+			table.ColumnAttrValue(): attr.Value,
 		})
 
 	query, args := builder.MustSql()

@@ -49,6 +49,8 @@ func (repo *MassloadRepo) Massloads(
 func (repo *MassloadRepo) massloadsBuilder(
 	filter massloadmodel.Filter,
 ) (squirrel.SelectBuilder, error) {
+	attrTable := model.MassloadAttributeTable
+
 	builder := squirrel.Select(model.MassloadColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("massloads")
@@ -157,11 +159,13 @@ func (repo *MassloadRepo) massloadsBuilder(
 		subBuilder := squirrel.Select("1").
 			// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
 			PlaceholderFormat(squirrel.Question).
-			From("massload_attributes").
+			From(attrTable.Name()).
 			Where(squirrel.Eq{
-				"attr_code": attrFilter.Code,
+				attrTable.ColumnAttrCode(): attrFilter.Code,
 			}).
-			Where(squirrel.Expr(`massload_id = id`))
+			Where(squirrel.Expr(attrTable.ColumnMassloadID() + " = id")).
+			Prefix("EXISTS (").
+			Suffix(")")
 
 		switch attrFilter.Type {
 		case massloadmodel.FilterAttributeTypeLike:
@@ -170,7 +174,7 @@ func (repo *MassloadRepo) massloadsBuilder(
 			}
 
 			subBuilder = subBuilder.Where(squirrel.ILike{
-				"attr_value": "%" + attrFilter.Values[0] + "%",
+				attrTable.ColumnAttrValue(): "%" + attrFilter.Values[0] + "%",
 			})
 
 		case massloadmodel.FilterAttributeTypeIn:
@@ -179,7 +183,7 @@ func (repo *MassloadRepo) massloadsBuilder(
 			}
 
 			subBuilder = subBuilder.Where(squirrel.Eq{
-				"attr_value": attrFilter.Values,
+				attrTable.ColumnAttrValue(): attrFilter.Values,
 			})
 
 		case massloadmodel.FilterAttributeTypeNone:
@@ -193,7 +197,7 @@ func (repo *MassloadRepo) massloadsBuilder(
 			return squirrel.Select(), fmt.Errorf("build attribute sub query: %w", err)
 		}
 
-		builder = builder.Where(squirrel.Expr(`EXISTS (`+subQuery+`)`, subArgs...))
+		builder = builder.Where(subQuery, subArgs...)
 	}
 
 	return builder, nil
