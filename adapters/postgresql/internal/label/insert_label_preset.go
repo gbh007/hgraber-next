@@ -11,13 +11,15 @@ import (
 )
 
 func (repo *LabelRepo) InsertLabelPreset(ctx context.Context, preset core.BookLabelPreset) error {
-	builder := squirrel.Insert("label_presets").
+	table := model.BookLabelPresetTable
+
+	builder := squirrel.Insert(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"name":        preset.Name,
-			"description": model.StringToDB(preset.Description),
-			"values":      preset.Values,
-			"created_at":  preset.CreatedAt,
+			table.ColumnName():        preset.Name,
+			table.ColumnDescription(): model.StringToDB(preset.Description),
+			table.ColumnValues():      preset.Values,
+			table.ColumnCreatedAt():   preset.CreatedAt,
 		})
 
 	query, args := builder.MustSql()

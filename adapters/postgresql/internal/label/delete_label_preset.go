@@ -5,13 +5,17 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *LabelRepo) DeleteLabelPreset(ctx context.Context, name string) error {
-	builder := squirrel.Delete("label_presets").
+	table := model.BookLabelPresetTable
+
+	builder := squirrel.Delete(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"name": name,
+			table.ColumnName(): name,
 		})
 
 	query, args := builder.MustSql()

@@ -2,23 +2,19 @@ package label
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *LabelRepo) LabelPresets(ctx context.Context) ([]core.BookLabelPreset, error) {
-	builder := squirrel.Select(
-		"name",
-		"description",
-		"values",
-		"created_at",
-		"updated_at",
-	).
-		From("label_presets").
+	table := model.BookLabelPresetTable
+
+	builder := squirrel.Select(table.Columns()...).
+		From(table.Name()).
 		PlaceholderFormat(squirrel.Dollar)
 
 	query, args := builder.MustSql()
@@ -33,25 +29,12 @@ func (repo *LabelRepo) LabelPresets(ctx context.Context) ([]core.BookLabelPreset
 	result := make([]core.BookLabelPreset, 0, 10) //nolint:mnd // оптимизация
 
 	for rows.Next() {
-		var (
-			preset      core.BookLabelPreset
-			updatedAt   sql.NullTime
-			description sql.NullString
-		)
+		var preset core.BookLabelPreset
 
-		err = rows.Scan(
-			&preset.Name,
-			&description,
-			&preset.Values,
-			&preset.CreatedAt,
-			&updatedAt,
-		)
+		err = rows.Scan(table.Scanner(&preset))
 		if err != nil {
 			return nil, fmt.Errorf("scan row: %w", err)
 		}
-
-		preset.Description = description.String
-		preset.UpdatedAt = updatedAt.Time
 
 		result = append(result, preset)
 	}

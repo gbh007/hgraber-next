@@ -2,26 +2,22 @@ package label
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *LabelRepo) LabelPreset(ctx context.Context, name string) (core.BookLabelPreset, error) {
-	builder := squirrel.Select(
-		"name",
-		"description",
-		"values",
-		"created_at",
-		"updated_at",
-	).
+	table := model.BookLabelPresetTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("label_presets").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"name": name,
+			table.ColumnName(): name,
 		}).
 		Limit(1)
 
@@ -29,25 +25,12 @@ func (repo *LabelRepo) LabelPreset(ctx context.Context, name string) (core.BookL
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	var (
-		preset      core.BookLabelPreset
-		updatedAt   sql.NullTime
-		description sql.NullString
-	)
+	var preset core.BookLabelPreset
 
-	err := row.Scan(
-		&preset.Name,
-		&description,
-		&preset.Values,
-		&preset.CreatedAt,
-		&updatedAt,
-	)
+	err := row.Scan(table.Scanner(&preset))
 	if err != nil { // TODO: err no rows
 		return core.BookLabelPreset{}, fmt.Errorf("scan row: %w", err)
 	}
-
-	preset.Description = description.String
-	preset.UpdatedAt = updatedAt.Time
 
 	return preset, nil
 }
