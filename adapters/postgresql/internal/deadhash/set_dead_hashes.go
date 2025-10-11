@@ -6,21 +6,24 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
 func (repo *DeadHashRepo) SetDeadHashes(ctx context.Context, hashes []core.DeadHash) error {
+	table := model.DeadHashTable
+
 	batches := pkg.Batching(hashes, 5000) //nolint:mnd // отдельная константа не нужна
 
 	for _, batch := range batches {
-		builder := squirrel.Insert("dead_hashes").
+		builder := squirrel.Insert(table.Name()).
 			PlaceholderFormat(squirrel.Dollar).
 			Columns(
-				"md5_sum",
-				"sha256_sum",
-				"size",
-				"created_at",
+				table.ColumnMd5Sum(),
+				table.ColumnSha256Sum(),
+				table.ColumnSize(),
+				table.ColumnCreatedAt(),
 			).
 			Suffix(`ON CONFLICT DO NOTHING`)
 

@@ -6,20 +6,18 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *DeadHashRepo) DeadHashesByMD5Sums(ctx context.Context, md5Sums []string) ([]core.DeadHash, error) {
-	builder := squirrel.Select(
-		"md5_sum",
-		"sha256_sum",
-		"size",
-		"created_at",
-	).
+	table := model.DeadHashTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("dead_hashes").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"md5_sum": md5Sums,
+			table.ColumnMd5Sum(): md5Sums,
 		})
 
 	query, args := builder.MustSql()
@@ -36,12 +34,7 @@ func (repo *DeadHashRepo) DeadHashesByMD5Sums(ctx context.Context, md5Sums []str
 	for rows.Next() {
 		hash := core.DeadHash{}
 
-		err = rows.Scan(
-			&hash.Md5Sum,
-			&hash.Sha256Sum,
-			&hash.Size,
-			&hash.CreatedAt,
-		)
+		err = rows.Scan(table.Scanner(&hash))
 		if err != nil {
 			return nil, fmt.Errorf("scan row: %w", err)
 		}

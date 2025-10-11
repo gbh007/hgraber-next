@@ -8,20 +8,23 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *DeadHashRepo) DeleteDeadHashes(ctx context.Context, hashes []core.DeadHash) error {
+	table := model.DeadHashTable
+
 	batch := &pgx.Batch{}
 	resultCount := 0
 
 	for _, hash := range hashes {
-		builder := squirrel.Delete("dead_hashes").
+		builder := squirrel.Delete(table.Name()).
 			PlaceholderFormat(squirrel.Dollar).
 			Where(squirrel.Eq{
-				"md5_sum":    hash.Md5Sum,
-				"sha256_sum": hash.Sha256Sum,
-				"size":       hash.Size,
+				table.ColumnMd5Sum():    hash.Md5Sum,
+				table.ColumnSha256Sum(): hash.Sha256Sum,
+				table.ColumnSize():      hash.Size,
 			})
 
 		query, args := builder.MustSql()
