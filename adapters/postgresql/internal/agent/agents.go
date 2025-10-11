@@ -11,38 +11,40 @@ import (
 )
 
 func (repo *AgentRepo) Agents(ctx context.Context, filter core.AgentFilter) ([]core.Agent, error) {
-	builder := squirrel.Select(model.AgentColumns()...).
+	table := model.AgentTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("agents").
-		OrderBy("priority DESC")
+		From(table.Name()).
+		OrderBy(table.ColumnPriority() + " DESC")
 
 	if filter.CanParse {
 		builder = builder.Where(squirrel.Eq{
-			"can_parse": true,
+			table.ColumnCanParse(): true,
 		})
 	}
 
 	if filter.CanParseMulti {
 		builder = builder.Where(squirrel.Eq{
-			"can_parse_multi": true,
+			table.ColumnCanParseMulti(): true,
 		})
 	}
 
 	if filter.CanExport {
 		builder = builder.Where(squirrel.Eq{
-			"can_export": true,
+			table.ColumnCanExport(): true,
 		})
 	}
 
 	if filter.HasFS {
 		builder = builder.Where(squirrel.Eq{
-			"has_fs": true,
+			table.ColumnHasFS(): true,
 		})
 	}
 
 	if filter.HasHProxy {
 		builder = builder.Where(squirrel.Eq{
-			"has_hproxy": true,
+			table.ColumnHasHProxy(): true,
 		})
 	}
 
@@ -60,7 +62,7 @@ func (repo *AgentRepo) Agents(ctx context.Context, filter core.AgentFilter) ([]c
 	for rows.Next() {
 		agent := core.Agent{}
 
-		err := rows.Scan(model.AgentScanner(&agent))
+		err := rows.Scan(table.Scanner(&agent))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

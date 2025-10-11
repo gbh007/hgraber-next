@@ -6,25 +6,28 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *AgentRepo) UpdateAgent(ctx context.Context, agent core.Agent) error {
-	builder := squirrel.Update("agents").
+	table := model.AgentTable
+
+	builder := squirrel.Update(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"name":            agent.Name,
-			"addr":            agent.Addr.String(),
-			"token":           agent.Token,
-			"can_parse":       agent.CanParse,
-			"can_parse_multi": agent.CanParseMulti,
-			"can_export":      agent.CanExport,
-			"has_fs":          agent.HasFS,
-			"has_hproxy":      agent.HasHProxy,
-			"priority":        agent.Priority,
+			table.ColumnName():          agent.Name,
+			table.ColumnAddr():          agent.Addr.String(),
+			table.ColumnToken():         agent.Token,
+			table.ColumnCanParse():      agent.CanParse,
+			table.ColumnCanParseMulti(): agent.CanParseMulti,
+			table.ColumnCanExport():     agent.CanExport,
+			table.ColumnHasFS():         agent.HasFS,
+			table.ColumnHasHProxy():     agent.HasHProxy,
+			table.ColumnPriority():      agent.Priority,
 		}).
 		Where(squirrel.Eq{
-			"id": agent.ID,
+			table.ColumnID(): agent.ID,
 		})
 
 	query, args := builder.MustSql()

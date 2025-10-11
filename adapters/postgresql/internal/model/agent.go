@@ -9,23 +9,43 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func AgentColumns() []string {
+var AgentTable Agent
+
+type Agent struct{}
+
+func (Agent) Name() string {
+	return "agents"
+}
+
+func (Agent) ColumnID() string            { return "id" }
+func (Agent) ColumnName() string          { return "name" }
+func (Agent) ColumnAddr() string          { return "addr" }
+func (Agent) ColumnToken() string         { return "token" }
+func (Agent) ColumnCanParse() string      { return "can_parse" }
+func (Agent) ColumnCanParseMulti() string { return "can_parse_multi" }
+func (Agent) ColumnCanExport() string     { return "can_export" }
+func (Agent) ColumnHasFS() string         { return "has_fs" }
+func (Agent) ColumnHasHProxy() string     { return "has_hproxy" }
+func (Agent) ColumnPriority() string      { return "priority" }
+func (Agent) ColumnCreateAt() string      { return "create_at" }
+
+func (a Agent) Columns() []string {
 	return []string{
-		"id",
-		"name",
-		"addr",
-		"token",
-		"can_parse",
-		"can_parse_multi",
-		"can_export",
-		"has_fs",
-		"has_hproxy",
-		"priority",
-		"create_at",
+		a.ColumnID(),
+		a.ColumnName(),
+		a.ColumnAddr(),
+		a.ColumnToken(),
+		a.ColumnCanParse(),
+		a.ColumnCanParseMulti(),
+		a.ColumnCanExport(),
+		a.ColumnHasFS(),
+		a.ColumnHasHProxy(),
+		a.ColumnPriority(),
+		a.ColumnCreateAt(),
 	}
 }
 
-func AgentScanner(agent *core.Agent) RowScanner {
+func (Agent) Scanner(agent *core.Agent) RowScanner {
 	return func(rows pgx.Rows) error {
 		var u string
 

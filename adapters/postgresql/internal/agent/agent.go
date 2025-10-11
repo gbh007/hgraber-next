@@ -14,11 +14,13 @@ import (
 )
 
 func (repo *AgentRepo) Agent(ctx context.Context, id uuid.UUID) (core.Agent, error) {
-	builder := squirrel.Select(model.AgentColumns()...).
+	table := model.AgentTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("agents").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"id": id,
+			table.ColumnID(): id,
 		}).
 		Limit(1)
 
@@ -27,7 +29,7 @@ func (repo *AgentRepo) Agent(ctx context.Context, id uuid.UUID) (core.Agent, err
 	result := core.Agent{}
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err := row.Scan(model.AgentScanner(&result))
+	err := row.Scan(table.Scanner(&result))
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return core.Agent{}, core.ErrAgentNotFound
