@@ -50,6 +50,7 @@ func (repo *MassloadRepo) massloadsBuilder(
 	filter massloadmodel.Filter,
 ) (squirrel.SelectBuilder, error) {
 	attrTable := model.MassloadAttributeTable
+	linkTable := model.MassloadExternalLinkTable
 
 	builder := squirrel.Select(model.MassloadColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
@@ -147,12 +148,23 @@ func (repo *MassloadRepo) massloadsBuilder(
 	}
 
 	if filter.Fields.ExternalLink != "" {
-		builder = builder.Where(
-			squirrel.Expr(
-				"EXISTS (SELECT FROM massload_external_links WHERE massload_id = id AND url ILIKE ?)",
-				"%"+filter.Fields.ExternalLink+"%",
-			),
-		) // особенность библиотеки, необходимо использовать `?`
+		subBuilder := squirrel.Select("1").
+			// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
+			PlaceholderFormat(squirrel.Question).
+			From(linkTable.Name()).
+			Where(squirrel.Expr(linkTable.ColumnMassloadID() + " = id")).
+			Where(squirrel.ILike{
+				linkTable.ColumnURL(): "%" + filter.Fields.ExternalLink + "%",
+			}).
+			Prefix("EXISTS (").
+			Suffix(")")
+
+		subQuery, subArgs, err := subBuilder.ToSql()
+		if err != nil {
+			return squirrel.Select(), fmt.Errorf("build external link sub query: %w", err)
+		}
+
+		builder = builder.Where(subQuery, subArgs...)
 	}
 
 	for _, attrFilter := range filter.Fields.Attributes {

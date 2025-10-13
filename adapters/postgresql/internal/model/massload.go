@@ -4,7 +4,6 @@ package model
 import (
 	"database/sql"
 	"fmt"
-	"net/url"
 
 	"github.com/jackc/pgx/v5"
 
@@ -75,56 +74,6 @@ func MassloadScanner(ml *massloadmodel.Massload) RowScanner {
 		ml.NewBooks = NilInt64FromDB(newBooks)
 		ml.ExistingBooks = NilInt64FromDB(existingBooks)
 		ml.BookInSystem = NilInt64FromDB(bookInSystem)
-
-		return nil
-	}
-}
-
-func MassloadExternalLinkColumns() []string {
-	return []string{
-		"url",
-		"books_ahead",
-		"new_books",
-		"existing_books",
-		"auto_check",
-		"created_at",
-		"updated_at",
-	}
-}
-
-func MassloadExternalLinkScanner(link *massloadmodel.ExternalLink) RowScanner {
-	return func(rows pgx.Rows) error {
-		var (
-			rawURL        string
-			booksAhead    sql.NullInt64
-			newBooks      sql.NullInt64
-			existingBooks sql.NullInt64
-			updatedAt     sql.NullTime
-		)
-
-		err := rows.Scan(
-			&rawURL,
-			&booksAhead,
-			&newBooks,
-			&existingBooks,
-			&link.AutoCheck,
-			&link.CreatedAt,
-			&updatedAt,
-		)
-		if err != nil {
-			return fmt.Errorf("scan to model: %w", err)
-		}
-
-		u, err := url.Parse(rawURL)
-		if err != nil {
-			return fmt.Errorf("parse url: %w", err)
-		}
-
-		link.URL = *u
-		link.UpdatedAt = updatedAt.Time
-		link.BooksAhead = NilInt64FromDB(booksAhead)
-		link.NewBooks = NilInt64FromDB(newBooks)
-		link.ExistingBooks = NilInt64FromDB(existingBooks)
 
 		return nil
 	}

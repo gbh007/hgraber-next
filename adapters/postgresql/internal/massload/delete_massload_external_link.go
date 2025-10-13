@@ -6,14 +6,18 @@ import (
 	"net/url"
 
 	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *MassloadRepo) DeleteMassloadExternalLink(ctx context.Context, id int, u url.URL) error {
-	builder := squirrel.Delete("massload_external_links").
+	table := model.MassloadExternalLinkTable
+
+	builder := squirrel.Delete(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"massload_id": id,
-			"url":         u.String(),
+			table.ColumnMassloadID(): id,
+			table.ColumnURL():        u.String(),
 		})
 
 	query, args := builder.MustSql()

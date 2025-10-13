@@ -11,13 +11,15 @@ import (
 )
 
 func (repo *MassloadRepo) MassloadExternalLinks(ctx context.Context, id int) ([]massloadmodel.ExternalLink, error) {
-	builder := squirrel.Select(model.MassloadExternalLinkColumns()...).
+	table := model.MassloadExternalLinkTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("massload_external_links").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"massload_id": id,
+			table.ColumnMassloadID(): id,
 		}).
-		OrderBy("created_at")
+		OrderBy(table.ColumnCreatedAt())
 
 	query, args := builder.MustSql()
 
@@ -33,7 +35,7 @@ func (repo *MassloadRepo) MassloadExternalLinks(ctx context.Context, id int) ([]
 	for rows.Next() {
 		link := massloadmodel.ExternalLink{}
 
-		err := rows.Scan(model.MassloadExternalLinkScanner(&link))
+		err := rows.Scan(table.Scanner(&link))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

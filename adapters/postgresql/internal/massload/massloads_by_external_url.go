@@ -15,15 +15,22 @@ func (repo *MassloadRepo) MassloadsByExternalLink(
 	ctx context.Context,
 	u url.URL,
 ) ([]massloadmodel.Massload, error) {
+	linkTable := model.MassloadExternalLinkTable
+
+	subQuery, subArgs := squirrel.Select("1").
+		From(linkTable.Name()).
+		Where(squirrel.Expr(linkTable.ColumnMassloadID() + " = id")).
+		Where(squirrel.Eq{
+			linkTable.ColumnURL(): u.String(),
+		}).
+		Prefix("EXISTS (").
+		Suffix(")").
+		MustSql()
+
 	builder := squirrel.Select(model.MassloadColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
 		From("massloads").
-		Where(
-			squirrel.Expr(
-				"EXISTS (SELECT FROM massload_external_links WHERE massload_id = id AND url = ?)",
-				u.String(),
-			),
-		)
+		Where(subQuery, subArgs...)
 
 	query, args := builder.MustSql()
 

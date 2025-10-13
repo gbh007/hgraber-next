@@ -6,6 +6,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 )
 
@@ -14,15 +15,17 @@ func (repo *MassloadRepo) UpdateMassloadExternalLink(
 	id int,
 	link massloadmodel.ExternalLink,
 ) error {
-	builder := squirrel.Update("massload_external_links").
+	table := model.MassloadExternalLinkTable
+
+	builder := squirrel.Update(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"auto_check": link.AutoCheck,
-			"updated_at": link.UpdatedAt,
+			table.ColumnAutoCheck(): link.AutoCheck,
+			table.ColumnUpdatedAt(): link.UpdatedAt,
 		}).
 		Where(squirrel.Eq{
-			"massload_id": id,
-			"url":         link.URL.String(),
+			table.ColumnMassloadID(): id,
+			table.ColumnURL():        link.URL.String(),
 		})
 
 	query, args := builder.MustSql()

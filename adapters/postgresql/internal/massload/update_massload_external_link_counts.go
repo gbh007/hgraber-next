@@ -15,17 +15,19 @@ func (repo *MassloadRepo) UpdateMassloadExternalLinkCounts(
 	id int,
 	link massloadmodel.ExternalLink,
 ) error {
-	builder := squirrel.Update("massload_external_links").
+	table := model.MassloadExternalLinkTable
+
+	builder := squirrel.Update(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"books_ahead":    model.NilInt64ToDB(link.BooksAhead),
-			"new_books":      model.NilInt64ToDB(link.NewBooks),
-			"existing_books": model.NilInt64ToDB(link.ExistingBooks),
-			"updated_at":     link.UpdatedAt,
+			table.ColumnBooksAhead():    model.NilInt64ToDB(link.BooksAhead),
+			table.ColumnNewBooks():      model.NilInt64ToDB(link.NewBooks),
+			table.ColumnExistingBooks(): model.NilInt64ToDB(link.ExistingBooks),
+			table.ColumnUpdatedAt():     link.UpdatedAt,
 		}).
 		Where(squirrel.Eq{
-			"massload_id": id,
-			"url":         link.URL.String(),
+			table.ColumnMassloadID(): id,
+			table.ColumnURL():        link.URL.String(),
 		})
 
 	query, args := builder.MustSql()
