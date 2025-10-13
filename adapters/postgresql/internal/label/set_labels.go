@@ -10,20 +10,30 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *LabelRepo) SetLabels(ctx context.Context, labels []core.BookLabel) error {
-	builder := squirrel.Insert("book_labels").
+	table := model.BookLabelTable
+
+	builder := squirrel.Insert(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Columns(
-			"book_id",
-			"page_number",
-			"name",
-			"value",
-			"create_at",
+			table.ColumnBookID(),
+			table.ColumnPageNumber(),
+			table.ColumnName(),
+			table.ColumnValue(),
+			table.ColumnCreateAt(),
 		).
-		Suffix(`ON CONFLICT (book_id, page_number, name) DO UPDATE SET value = EXCLUDED.value`)
+		Suffix(fmt.Sprintf(
+			`ON CONFLICT (%s, %s, %s) DO UPDATE SET %s = EXCLUDED.%s`,
+			table.ColumnBookID(),
+			table.ColumnPageNumber(),
+			table.ColumnName(),
+			table.ColumnValue(),
+			table.ColumnValue(),
+		))
 
 	for _, label := range labels {
 		builder = builder.Values(

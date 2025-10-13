@@ -8,17 +8,31 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func BookLabelColumns() []string {
+var BookLabelTable BookLabel
+
+type BookLabel struct{}
+
+func (BookLabel) Name() string {
+	return "book_labels"
+}
+
+func (BookLabel) ColumnBookID() string     { return "book_id" }
+func (BookLabel) ColumnPageNumber() string { return "page_number" }
+func (BookLabel) ColumnName() string       { return "name" }
+func (BookLabel) ColumnValue() string      { return "value" }
+func (BookLabel) ColumnCreateAt() string   { return "create_at" }
+
+func (bl BookLabel) Columns() []string {
 	return []string{
-		"book_id",
-		"page_number",
-		"name",
-		"value",
-		"create_at",
+		bl.ColumnBookID(),
+		bl.ColumnPageNumber(),
+		bl.ColumnName(),
+		bl.ColumnValue(),
+		bl.ColumnCreateAt(),
 	}
 }
 
-func BookLabelScanner(label *core.BookLabel) RowScanner {
+func (BookLabel) Scanner(label *core.BookLabel) RowScanner {
 	return func(rows pgx.Rows) error {
 		err := rows.Scan(
 			&label.BookID,

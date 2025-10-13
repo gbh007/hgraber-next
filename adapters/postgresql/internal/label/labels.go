@@ -12,11 +12,13 @@ import (
 )
 
 func (repo *LabelRepo) Labels(ctx context.Context, bookID uuid.UUID) ([]core.BookLabel, error) {
-	builder := squirrel.Select(model.BookLabelColumns()...).
+	table := model.BookLabelTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("book_labels").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"book_id": bookID,
+			table.ColumnBookID(): bookID,
 		})
 
 	query, args := builder.MustSql()
@@ -33,7 +35,7 @@ func (repo *LabelRepo) Labels(ctx context.Context, bookID uuid.UUID) ([]core.Boo
 	for rows.Next() {
 		label := core.BookLabel{}
 
-		err := rows.Scan(model.BookLabelScanner(&label))
+		err := rows.Scan(table.Scanner(&label))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

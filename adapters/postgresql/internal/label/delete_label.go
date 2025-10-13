@@ -6,16 +6,19 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *LabelRepo) DeleteLabel(ctx context.Context, label core.BookLabel) error {
-	builder := squirrel.Delete("book_labels").
+	table := model.BookLabelTable
+
+	builder := squirrel.Delete(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"book_id":     label.BookID,
-			"page_number": label.PageNumber,
-			"name":        label.Name,
+			table.ColumnBookID():     label.BookID,
+			table.ColumnPageNumber(): label.PageNumber,
+			table.ColumnName():       label.Name,
 		})
 
 	query, args := builder.MustSql()

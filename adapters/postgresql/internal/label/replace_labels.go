@@ -11,20 +11,30 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *LabelRepo) ReplaceLabels(ctx context.Context, bookID uuid.UUID, labels []core.BookLabel) error {
-	builder := squirrel.Insert("book_labels").
+	table := model.BookLabelTable
+
+	builder := squirrel.Insert(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Columns(
-			"book_id",
-			"page_number",
-			"name",
-			"value",
-			"create_at",
+			table.ColumnBookID(),
+			table.ColumnPageNumber(),
+			table.ColumnName(),
+			table.ColumnValue(),
+			table.ColumnCreateAt(),
 		).
-		Suffix(`ON CONFLICT (book_id, page_number, name) DO UPDATE SET value = EXCLUDED.value`)
+		Suffix(fmt.Sprintf(
+			`ON CONFLICT (%s, %s, %s) DO UPDATE SET %s = EXCLUDED.%s`,
+			table.ColumnBookID(),
+			table.ColumnPageNumber(),
+			table.ColumnName(),
+			table.ColumnValue(),
+			table.ColumnValue(),
+		))
 
 	for _, label := range labels {
 		builder = builder.Values(
@@ -53,7 +63,15 @@ func (repo *LabelRepo) ReplaceLabels(ctx context.Context, bookID uuid.UUID, labe
 		}
 	}()
 
-	_, err = tx.Exec(ctx, `DELETE FROM book_labels WHERE book_id = $1;`, bookID)
+	deleteBuilder := squirrel.Delete(table.Name()).
+		PlaceholderFormat(squirrel.Dollar).
+		Where(squirrel.Eq{
+			table.ColumnBookID(): bookID,
+		})
+
+	deleteQuery, deleteArgs := deleteBuilder.MustSql()
+
+	_, err = tx.Exec(ctx, deleteQuery, deleteArgs...)
 	if err != nil {
 		return fmt.Errorf("delete old labels: %w", err)
 	}
