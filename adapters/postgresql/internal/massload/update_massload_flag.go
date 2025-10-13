@@ -11,17 +11,19 @@ import (
 )
 
 func (repo *MassloadRepo) UpdateMassloadFlag(ctx context.Context, flag massloadmodel.Flag) error {
-	builder := squirrel.Update("massload_flags").
+	table := model.MassloadFlagTable
+
+	builder := squirrel.Update(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"name":             flag.Name,
-			"description":      model.StringToDB(flag.Description),
-			"order_weight":     flag.OrderWeight,
-			"text_color":       model.StringToDB(flag.TextColor),
-			"background_color": model.StringToDB(flag.BackgroundColor),
+			table.ColumnName():            flag.Name,
+			table.ColumnDescription():     model.StringToDB(flag.Description),
+			table.ColumnOrderWeight():     flag.OrderWeight,
+			table.ColumnTextColor():       model.StringToDB(flag.TextColor),
+			table.ColumnBackgroundColor(): model.StringToDB(flag.BackgroundColor),
 		}).
 		Where(squirrel.Eq{
-			"code": flag.Code,
+			table.ColumnCode(): flag.Code,
 		})
 
 	query, args := builder.MustSql()

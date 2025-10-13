@@ -11,10 +11,16 @@ import (
 )
 
 func (repo *MassloadRepo) MassloadFlags(ctx context.Context) ([]massloadmodel.Flag, error) {
-	builder := squirrel.Select(model.MassloadFlagColumns()...).
+	table := model.MassloadFlagTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("massload_flags").
-		OrderBy("order_weight DESC", "created_at", "code")
+		From(table.Name()).
+		OrderBy(
+			table.ColumnOrderWeight()+" DESC",
+			table.ColumnCreatedAt(),
+			table.ColumnCode(),
+		)
 
 	query, args := builder.MustSql()
 
@@ -30,7 +36,7 @@ func (repo *MassloadRepo) MassloadFlags(ctx context.Context) ([]massloadmodel.Fl
 	for rows.Next() {
 		flag := massloadmodel.Flag{}
 
-		err := rows.Scan(model.MassloadFlagScanner(&flag))
+		err := rows.Scan(table.Scanner(&flag))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

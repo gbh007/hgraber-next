@@ -11,11 +11,13 @@ import (
 )
 
 func (repo *MassloadRepo) MassloadFlag(ctx context.Context, code string) (massloadmodel.Flag, error) {
-	builder := squirrel.Select(model.MassloadFlagColumns()...).
+	table := model.MassloadFlagTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("massload_flags").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"code": code,
+			table.ColumnCode(): code,
 		}).
 		Limit(1)
 
@@ -25,7 +27,7 @@ func (repo *MassloadRepo) MassloadFlag(ctx context.Context, code string) (masslo
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err := row.Scan(model.MassloadFlagScanner(&flag))
+	err := row.Scan(table.Scanner(&flag))
 	if err != nil {
 		return massloadmodel.Flag{}, fmt.Errorf("exec: %w", err)
 	}
