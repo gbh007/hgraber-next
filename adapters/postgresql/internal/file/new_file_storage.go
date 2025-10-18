@@ -11,19 +11,21 @@ import (
 )
 
 func (repo *FileRepo) NewFileStorage(ctx context.Context, fs fsmodel.FileStorageSystem) error {
-	builder := squirrel.Insert("file_storages").
+	table := model.FileStorageTable
+
+	builder := squirrel.Insert(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"id":                   fs.ID,
-			"name":                 fs.Name,
-			"description":          model.StringToDB(fs.Description),
-			"agent_id":             model.UUIDToDB(fs.AgentID),
-			"path":                 model.StringToDB(fs.Path),
-			"download_priority":    fs.DownloadPriority,
-			"deduplicate_priority": fs.DeduplicatePriority,
-			"highway_enabled":      fs.HighwayEnabled,
-			"highway_addr":         model.URLToDB(fs.HighwayAddr),
-			"created_at":           fs.CreatedAt,
+			table.ColumnID():                  fs.ID,
+			table.ColumnName():                fs.Name,
+			table.ColumnDescription():         model.StringToDB(fs.Description),
+			table.ColumnAgentID():             model.UUIDToDB(fs.AgentID),
+			table.ColumnPath():                model.StringToDB(fs.Path),
+			table.ColumnDownloadPriority():    fs.DownloadPriority,
+			table.ColumnDeduplicatePriority(): fs.DeduplicatePriority,
+			table.ColumnHighwayEnabled():      fs.HighwayEnabled,
+			table.ColumnHighwayAddr():         model.URLToDB(fs.HighwayAddr),
+			table.ColumnCreatedAt():           fs.CreatedAt,
 		})
 
 	query, args := builder.MustSql()

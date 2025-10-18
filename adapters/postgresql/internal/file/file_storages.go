@@ -11,9 +11,11 @@ import (
 )
 
 func (repo *FileRepo) FileStorages(ctx context.Context) ([]fsmodel.FileStorageSystem, error) {
-	builder := squirrel.Select(model.FileStorageColumns()...).
+	table := model.FileStorageTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("file_storages")
+		From(table.Name())
 
 	query, args := builder.MustSql()
 
@@ -29,7 +31,7 @@ func (repo *FileRepo) FileStorages(ctx context.Context) ([]fsmodel.FileStorageSy
 	for rows.Next() {
 		fs := fsmodel.FileStorageSystem{}
 
-		err := rows.Scan(model.FileStorageScanner(&fs))
+		err := rows.Scan(table.Scanner(&fs))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

@@ -12,11 +12,13 @@ import (
 )
 
 func (repo *FileRepo) FileStorage(ctx context.Context, id uuid.UUID) (fsmodel.FileStorageSystem, error) {
-	builder := squirrel.Select(model.FileStorageColumns()...).
+	table := model.FileStorageTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("file_storages").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"id": id,
+			table.ColumnID(): id,
 		}).
 		Limit(1)
 
@@ -26,7 +28,7 @@ func (repo *FileRepo) FileStorage(ctx context.Context, id uuid.UUID) (fsmodel.Fi
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err := row.Scan(model.FileStorageScanner(&fs))
+	err := row.Scan(table.Scanner(&fs))
 	if err != nil {
 		return fsmodel.FileStorageSystem{}, fmt.Errorf("scan: %w", err)
 	}

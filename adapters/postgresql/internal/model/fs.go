@@ -11,22 +11,41 @@ import (
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
-func FileStorageColumns() []string {
+var FileStorageTable FileStorage
+
+type FileStorage struct{}
+
+func (FileStorage) Name() string {
+	return "file_storages"
+}
+
+func (FileStorage) ColumnID() string                  { return "id" }
+func (FileStorage) ColumnName() string                { return "name" }
+func (FileStorage) ColumnDescription() string         { return "description" }
+func (FileStorage) ColumnAgentID() string             { return "agent_id" }
+func (FileStorage) ColumnPath() string                { return "path" }
+func (FileStorage) ColumnDownloadPriority() string    { return "download_priority" }
+func (FileStorage) ColumnDeduplicatePriority() string { return "deduplicate_priority" }
+func (FileStorage) ColumnHighwayEnabled() string      { return "highway_enabled" }
+func (FileStorage) ColumnHighwayAddr() string         { return "highway_addr" }
+func (FileStorage) ColumnCreatedAt() string           { return "created_at" }
+
+func (fs FileStorage) Columns() []string {
 	return []string{
-		"id",
-		"name",
-		"description",
-		"agent_id",
-		"path",
-		"download_priority",
-		"deduplicate_priority",
-		"highway_enabled",
-		"highway_addr",
-		"created_at",
+		fs.ColumnID(),
+		fs.ColumnName(),
+		fs.ColumnDescription(),
+		fs.ColumnAgentID(),
+		fs.ColumnPath(),
+		fs.ColumnDownloadPriority(),
+		fs.ColumnDeduplicatePriority(),
+		fs.ColumnHighwayEnabled(),
+		fs.ColumnHighwayAddr(),
+		fs.ColumnCreatedAt(),
 	}
 }
 
-func FileStorageScanner(fs *fsmodel.FileStorageSystem) RowScanner {
+func (FileStorage) Scanner(fs *fsmodel.FileStorageSystem) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			description sql.NullString
