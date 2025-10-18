@@ -11,16 +11,18 @@ import (
 )
 
 func (repo *MassloadRepo) UpdateMassload(ctx context.Context, ml massloadmodel.Massload) error {
-	builder := squirrel.Update("massloads").
+	table := model.MassloadTable
+
+	builder := squirrel.Update(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"name":        ml.Name,
-			"description": model.StringToDB(ml.Description),
-			"flags":       ml.Flags,
-			"updated_at":  model.TimeToDB(ml.UpdatedAt),
+			table.ColumnName():        ml.Name,
+			table.ColumnDescription(): model.StringToDB(ml.Description),
+			table.ColumnFlags():       ml.Flags,
+			table.ColumnUpdatedAt():   model.TimeToDB(ml.UpdatedAt),
 		}).
 		Where(squirrel.Eq{
-			"id": ml.ID,
+			table.ColumnID(): ml.ID,
 		})
 
 	query, args := builder.MustSql()

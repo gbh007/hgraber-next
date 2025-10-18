@@ -11,15 +11,17 @@ import (
 )
 
 func (repo *MassloadRepo) CreateMassload(ctx context.Context, ml massloadmodel.Massload) (int, error) {
-	builder := squirrel.Insert("massloads").
+	table := model.MassloadTable
+
+	builder := squirrel.Insert(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"name":        ml.Name,
-			"description": model.StringToDB(ml.Description),
-			"flags":       ml.Flags,
-			"created_at":  ml.CreatedAt,
+			table.ColumnName():        ml.Name,
+			table.ColumnDescription(): model.StringToDB(ml.Description),
+			table.ColumnFlags():       ml.Flags,
+			table.ColumnCreatedAt():   ml.CreatedAt,
 		}).
-		Suffix("RETURNING id")
+		Suffix("RETURNING " + table.ColumnID())
 
 	query, args := builder.MustSql()
 

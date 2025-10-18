@@ -10,26 +10,49 @@ import (
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 )
 
-func MassloadColumns() []string {
+var MassloadTable Massload
+
+type Massload struct{}
+
+func (Massload) Name() string {
+	return "massloads"
+}
+
+func (Massload) ColumnID() string            { return "id" }
+func (Massload) ColumnName() string          { return "name" }
+func (Massload) ColumnDescription() string   { return "description" }
+func (Massload) ColumnFlags() string         { return "flags" }
+func (Massload) ColumnPageSize() string      { return "page_size" }
+func (Massload) ColumnFileSize() string      { return "file_size" }
+func (Massload) ColumnPageCount() string     { return "page_count" }
+func (Massload) ColumnFileCount() string     { return "file_count" }
+func (Massload) ColumnBooksAhead() string    { return "books_ahead" }
+func (Massload) ColumnNewBooks() string      { return "new_books" }
+func (Massload) ColumnExistingBooks() string { return "existing_books" }
+func (Massload) ColumnBooksInSystem() string { return "books_in_system" }
+func (Massload) ColumnCreatedAt() string     { return "created_at" }
+func (Massload) ColumnUpdatedAt() string     { return "updated_at" }
+
+func (m Massload) Columns() []string {
 	return []string{
-		"id",
-		"name",
-		"description",
-		"flags",
-		"page_size",
-		"file_size",
-		"page_count",
-		"file_count",
-		"books_ahead",
-		"new_books",
-		"existing_books",
-		"books_in_system",
-		"created_at",
-		"updated_at",
+		m.ColumnID(),
+		m.ColumnName(),
+		m.ColumnDescription(),
+		m.ColumnFlags(),
+		m.ColumnPageSize(),
+		m.ColumnFileSize(),
+		m.ColumnPageCount(),
+		m.ColumnFileCount(),
+		m.ColumnBooksAhead(),
+		m.ColumnNewBooks(),
+		m.ColumnExistingBooks(),
+		m.ColumnBooksInSystem(),
+		m.ColumnCreatedAt(),
+		m.ColumnUpdatedAt(),
 	}
 }
 
-func MassloadScanner(ml *massloadmodel.Massload) RowScanner {
+func (Massload) Scanner(ml *massloadmodel.Massload) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			description   sql.NullString

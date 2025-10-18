@@ -15,6 +15,8 @@ func (repo *MassloadRepo) Massloads(
 	ctx context.Context,
 	filter massloadmodel.Filter,
 ) ([]massloadmodel.Massload, error) {
+	table := model.MassloadTable
+
 	builder, err := repo.massloadsBuilder(filter)
 	if err != nil {
 		return nil, fmt.Errorf("build query: %w", err)
@@ -34,7 +36,7 @@ func (repo *MassloadRepo) Massloads(
 	for rows.Next() {
 		ml := massloadmodel.Massload{}
 
-		err := rows.Scan(model.MassloadScanner(&ml))
+		err := rows.Scan(table.Scanner(&ml))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}
@@ -51,10 +53,11 @@ func (repo *MassloadRepo) massloadsBuilder(
 ) (squirrel.SelectBuilder, error) {
 	attrTable := model.MassloadAttributeTable
 	linkTable := model.MassloadExternalLinkTable
+	table := model.MassloadTable
 
-	builder := squirrel.Select(model.MassloadColumns()...).
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("massloads")
+		From(table.Name())
 
 	var orderBySuffix string
 
@@ -65,85 +68,85 @@ func (repo *MassloadRepo) massloadsBuilder(
 	}
 
 	orderBy := []string{
-		"id" + orderBySuffix,
+		table.ColumnID() + orderBySuffix,
 	}
 
 	switch filter.OrderBy {
 	case massloadmodel.FilterOrderByID:
 		orderBy = []string{
-			"id" + orderBySuffix,
+			table.ColumnID() + orderBySuffix,
 		}
 
 	case massloadmodel.FilterOrderByName:
 		orderBy = []string{
-			"name" + orderBySuffix,
-			"id" + orderBySuffix,
+			table.ColumnName() + orderBySuffix,
+			table.ColumnID() + orderBySuffix,
 		}
 
 	case massloadmodel.FilterOrderByPageSize:
 		orderBy = []string{
-			"page_size" + orderBySuffix + " NULLS LAST",
-			"id" + orderBySuffix,
+			table.ColumnPageSize() + orderBySuffix + " NULLS LAST",
+			table.ColumnID() + orderBySuffix,
 		}
 
 	case massloadmodel.FilterOrderByFileSize:
 		orderBy = []string{
-			"file_size" + orderBySuffix + " NULLS LAST",
-			"id" + orderBySuffix,
+			table.ColumnFileSize() + orderBySuffix + " NULLS LAST",
+			table.ColumnID() + orderBySuffix,
 		}
 
 	case massloadmodel.FilterOrderByPageCount:
 		orderBy = []string{
-			"page_count" + orderBySuffix + " NULLS LAST",
-			"id" + orderBySuffix,
+			table.ColumnPageCount() + orderBySuffix + " NULLS LAST",
+			table.ColumnID() + orderBySuffix,
 		}
 
 	case massloadmodel.FilterOrderByFileCount:
 		orderBy = []string{
-			"file_count" + orderBySuffix + " NULLS LAST",
-			"id" + orderBySuffix,
+			table.ColumnFileCount() + orderBySuffix + " NULLS LAST",
+			table.ColumnID() + orderBySuffix,
 		}
 
 	case massloadmodel.FilterOrderByBooksAhead:
 		orderBy = []string{
-			"books_ahead" + orderBySuffix + " NULLS LAST",
-			"id" + orderBySuffix,
+			table.ColumnBooksAhead() + orderBySuffix + " NULLS LAST",
+			table.ColumnID() + orderBySuffix,
 		}
 
 	case massloadmodel.FilterOrderByNewBooks:
 		orderBy = []string{
-			"new_books" + orderBySuffix + " NULLS LAST",
-			"id" + orderBySuffix,
+			table.ColumnNewBooks() + orderBySuffix + " NULLS LAST",
+			table.ColumnID() + orderBySuffix,
 		}
 
 	case massloadmodel.FilterOrderByExistingBooks:
 		orderBy = []string{
-			"existing_books" + orderBySuffix + " NULLS LAST",
-			"id" + orderBySuffix,
+			table.ColumnExistingBooks() + orderBySuffix + " NULLS LAST",
+			table.ColumnID() + orderBySuffix,
 		}
 
 	case massloadmodel.FilterOrderByBooksInSystem:
 		orderBy = []string{
-			"books_in_system" + orderBySuffix + " NULLS LAST",
-			"id" + orderBySuffix,
+			table.ColumnBooksInSystem() + orderBySuffix + " NULLS LAST",
+			table.ColumnID() + orderBySuffix,
 		}
 	}
 
 	builder = builder.OrderBy(orderBy...)
 
 	if filter.Fields.Name != "" {
-		builder = builder.Where(squirrel.ILike{"name": "%" + filter.Fields.Name + "%"})
+		builder = builder.Where(squirrel.ILike{table.ColumnName(): "%" + filter.Fields.Name + "%"})
 	}
 
 	if len(filter.Fields.Flags) > 0 {
 		builder = builder.Where(
-			squirrel.Expr("flags @> ?", filter.Fields.Flags),
+			squirrel.Expr(table.ColumnFlags()+" @> ?", filter.Fields.Flags),
 		) // особенность библиотеки, необходимо использовать `?`
 	}
 
 	if len(filter.Fields.ExcludedFlags) > 0 {
 		builder = builder.Where(
-			squirrel.Expr("NOT flags && ?", filter.Fields.ExcludedFlags),
+			squirrel.Expr("NOT "+table.ColumnFlags()+" && ?", filter.Fields.ExcludedFlags),
 		) // особенность библиотеки, необходимо использовать `?`
 	}
 
@@ -152,7 +155,7 @@ func (repo *MassloadRepo) massloadsBuilder(
 			// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
 			PlaceholderFormat(squirrel.Question).
 			From(linkTable.Name()).
-			Where(squirrel.Expr(linkTable.ColumnMassloadID() + " = id")).
+			Where(squirrel.Expr(linkTable.ColumnMassloadID() + " = " + table.ColumnID())).
 			Where(squirrel.ILike{
 				linkTable.ColumnURL(): "%" + filter.Fields.ExternalLink + "%",
 			}).
@@ -175,7 +178,7 @@ func (repo *MassloadRepo) massloadsBuilder(
 			Where(squirrel.Eq{
 				attrTable.ColumnAttrCode(): attrFilter.Code,
 			}).
-			Where(squirrel.Expr(attrTable.ColumnMassloadID() + " = id")).
+			Where(squirrel.Expr(attrTable.ColumnMassloadID() + " = " + table.ColumnID())).
 			Prefix("EXISTS (").
 			Suffix(")")
 

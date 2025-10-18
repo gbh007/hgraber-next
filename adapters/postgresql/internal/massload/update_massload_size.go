@@ -11,18 +11,20 @@ import (
 )
 
 func (repo *MassloadRepo) UpdateMassloadSize(ctx context.Context, ml massloadmodel.Massload) error {
-	builder := squirrel.Update("massloads").
+	table := model.MassloadTable
+
+	builder := squirrel.Update(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"page_size":       model.NilInt64ToDB(ml.PageSize),
-			"file_size":       model.NilInt64ToDB(ml.FileSize),
-			"page_count":      model.NilInt64ToDB(ml.PageCount),
-			"file_count":      model.NilInt64ToDB(ml.FileCount),
-			"books_in_system": model.NilInt64ToDB(ml.BookInSystem),
-			"updated_at":      model.TimeToDB(ml.UpdatedAt),
+			table.ColumnPageSize():      model.NilInt64ToDB(ml.PageSize),
+			table.ColumnFileSize():      model.NilInt64ToDB(ml.FileSize),
+			table.ColumnPageCount():     model.NilInt64ToDB(ml.PageCount),
+			table.ColumnFileCount():     model.NilInt64ToDB(ml.FileCount),
+			table.ColumnBooksInSystem(): model.NilInt64ToDB(ml.BookInSystem),
+			table.ColumnUpdatedAt():     model.TimeToDB(ml.UpdatedAt),
 		}).
 		Where(squirrel.Eq{
-			"id": ml.ID,
+			table.ColumnID(): ml.ID,
 		})
 
 	query, args := builder.MustSql()

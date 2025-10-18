@@ -5,13 +5,17 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *MassloadRepo) DeleteMassload(ctx context.Context, id int) error {
-	builder := squirrel.Delete("massloads").
+	table := model.MassloadTable
+
+	builder := squirrel.Delete(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"id": id,
+			table.ColumnID(): id,
 		})
 
 	query, args := builder.MustSql()

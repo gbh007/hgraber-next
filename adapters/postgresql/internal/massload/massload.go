@@ -11,11 +11,13 @@ import (
 )
 
 func (repo *MassloadRepo) Massload(ctx context.Context, id int) (massloadmodel.Massload, error) {
-	builder := squirrel.Select(model.MassloadColumns()...).
+	table := model.MassloadTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("massloads").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"id": id,
+			table.ColumnID(): id,
 		}).
 		Limit(1)
 
@@ -25,7 +27,7 @@ func (repo *MassloadRepo) Massload(ctx context.Context, id int) (massloadmodel.M
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err := row.Scan(model.MassloadScanner(&ml))
+	err := row.Scan(table.Scanner(&ml))
 	if err != nil {
 		return massloadmodel.Massload{}, fmt.Errorf("exec: %w", err)
 	}

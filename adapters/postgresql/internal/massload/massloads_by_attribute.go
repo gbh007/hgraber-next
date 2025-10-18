@@ -15,10 +15,11 @@ func (repo *MassloadRepo) MassloadsByAttribute(
 	code, value string,
 ) ([]massloadmodel.Massload, error) {
 	attrTable := model.MassloadAttributeTable
+	table := model.MassloadTable
 
 	subQuery, subArgs := squirrel.Select("1").
 		From(attrTable.Name()).
-		Where(squirrel.Expr(attrTable.ColumnMassloadID() + " = id")).
+		Where(squirrel.Expr(attrTable.ColumnMassloadID() + " = " + table.ColumnID())).
 		Where(squirrel.Eq{
 			attrTable.ColumnAttrCode():  code,
 			attrTable.ColumnAttrValue(): value,
@@ -27,9 +28,9 @@ func (repo *MassloadRepo) MassloadsByAttribute(
 		Suffix(")").
 		MustSql()
 
-	builder := squirrel.Select(model.MassloadColumns()...).
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("massloads").
+		From(table.Name()).
 		Where(subQuery, subArgs...)
 
 	query, args := builder.MustSql()
@@ -46,7 +47,7 @@ func (repo *MassloadRepo) MassloadsByAttribute(
 	for rows.Next() {
 		ml := massloadmodel.Massload{}
 
-		err := rows.Scan(model.MassloadScanner(&ml))
+		err := rows.Scan(table.Scanner(&ml))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

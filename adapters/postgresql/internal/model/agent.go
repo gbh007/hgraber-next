@@ -18,7 +18,7 @@ func (Agent) Name() string {
 }
 
 func (Agent) ColumnID() string            { return "id" }
-func (Agent) ColumnName() string          { return "name" }
+func (Agent) ColumnName() string          { return "name" } //nolint:goconst // будет исправлено позднее
 func (Agent) ColumnAddr() string          { return "addr" }
 func (Agent) ColumnToken() string         { return "token" }
 func (Agent) ColumnCanParse() string      { return "can_parse" }
