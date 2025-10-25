@@ -1,4 +1,3 @@
-//nolint:goconst // будет исправлено позднее
 package model
 
 import (

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
@@ -13,16 +14,27 @@ import (
 
 func (repo *PageRepo) UpdatePageDownloaded(
 	ctx context.Context,
-	id uuid.UUID,
+	bookID uuid.UUID,
 	pageNumber int,
 	downloaded bool,
 	fileID uuid.UUID,
 ) error {
-	res, err := repo.Pool.Exec(
-		ctx,
-		`UPDATE pages SET downloaded = $1, load_at = $2, file_id = $5 WHERE book_id = $3 AND page_number = $4;`,
-		downloaded, time.Now().UTC(), id, pageNumber, model.UUIDToDB(fileID),
-	)
+	table := model.PageTable
+
+	query, args := squirrel.Update(table.Name()).
+		PlaceholderFormat(squirrel.Dollar).
+		SetMap(map[string]any{
+			table.ColumnDownloaded(): downloaded,
+			table.ColumnLoadAt():     time.Now().UTC(),
+			table.ColumnFileID():     model.UUIDToDB(fileID),
+		}).
+		Where(squirrel.Eq{
+			table.ColumnBookID():     bookID,
+			table.ColumnPageNumber(): pageNumber,
+		}).
+		MustSql()
+
+	res, err := repo.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("exec: %w", err)
 	}

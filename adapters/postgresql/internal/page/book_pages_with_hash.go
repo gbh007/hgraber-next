@@ -12,18 +12,20 @@ import (
 )
 
 func (repo *PageRepo) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]core.PageWithHash, error) {
+	pageTable := model.PageTable
+
 	builder := squirrel.Select(model.PageWithHashColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("pages p").
-		LeftJoin("files f ON p.file_id = f.id").
+		From(pageTable.Name() + " p").
+		LeftJoin("files f ON p." + pageTable.ColumnFileID() + " = f.id").
 		Where(squirrel.Eq{
-			"p.book_id": bookID,
+			"p." + pageTable.ColumnBookID(): bookID,
 		}).
-		OrderBy("p.page_number")
+		OrderBy("p." + pageTable.ColumnPageNumber())
 
 	query, args := builder.MustSql()
 
-	out := make([]core.PageWithHash, 0, 10) //nolint:mnd // оптимизация
+	out := make([]core.PageWithHash, 0, core.AvgPageCountInBook)
 
 	rows, err := repo.Pool.Query(ctx, query, args...)
 	if err != nil {

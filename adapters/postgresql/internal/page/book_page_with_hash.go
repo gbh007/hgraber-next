@@ -18,13 +18,15 @@ func (repo *PageRepo) BookPageWithHash(
 	bookID uuid.UUID,
 	pageNumber int,
 ) (core.PageWithHash, error) {
+	pageTable := model.PageTable
+
 	builder := squirrel.Select(model.PageWithHashColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("pages p").
-		LeftJoin("files f ON p.file_id = f.id").
+		From(pageTable.Name() + " p").
+		LeftJoin("files f ON p." + pageTable.ColumnFileID() + " = f.id").
 		Where(squirrel.Eq{
-			"p.book_id":     bookID,
-			"p.page_number": pageNumber,
+			"p." + pageTable.ColumnBookID():     bookID,
+			"p." + pageTable.ColumnPageNumber(): pageNumber,
 		}).
 		Limit(1)
 

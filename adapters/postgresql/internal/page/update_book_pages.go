@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log/slog"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
@@ -14,8 +15,9 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-// TODO: отрефакторить на squirel
 func (repo *PageRepo) UpdateBookPages(ctx context.Context, id uuid.UUID, pages []core.Page) error {
+	table := model.PageTable
+
 	tx, err := repo.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
@@ -31,25 +33,21 @@ func (repo *PageRepo) UpdateBookPages(ctx context.Context, id uuid.UUID, pages [
 		}
 	}()
 
-	_, err = tx.Exec(ctx, `DELETE FROM pages WHERE book_id = $1;`, id)
+	deleteQuery, deleteArgs := squirrel.
+		Delete(table.Name()).
+		PlaceholderFormat(squirrel.Dollar).
+		Where(squirrel.Eq{
+			table.ColumnBookID(): id,
+		}).
+		MustSql()
+
+	_, err = tx.Exec(ctx, deleteQuery, deleteArgs...)
 	if err != nil {
 		return fmt.Errorf("delete old pages: %w", err)
 	}
 
-	// TODO: слить с аналогичным дейтвием, реализовать как приватную функцию которая принимает транзакцию.
 	for _, v := range pages {
-		_, err = tx.Exec(
-			ctx,
-			`INSERT INTO pages (book_id, page_number, ext, origin_url, create_at, downloaded, load_at, file_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8);`, //nolint:lll // будет исправлено позднее
-			id,
-			v.PageNumber,
-			v.Ext,
-			model.URLToDB(v.OriginURL),
-			v.CreateAt.UTC(),
-			v.Downloaded,
-			model.TimeToDB(v.LoadAt),
-			model.UUIDToDB(v.FileID),
-		)
+		err = repo.insertPage(ctx, tx, v)
 		if err != nil {
 			return fmt.Errorf("insert page %d: %w", v.PageNumber, err)
 		}

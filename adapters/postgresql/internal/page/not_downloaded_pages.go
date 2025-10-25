@@ -8,23 +8,27 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 // TODO: добавить лимиты
 func (repo *PageRepo) NotDownloadedPages(ctx context.Context) ([]core.PageForDownload, error) {
+	pageTable := model.PageTable
+
+	//nolint:lll // будет исправлено позднее
 	builder := squirrel.Select(
-		"p.book_id",
-		"b.origin_url AS book_url",  // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
-		"p.origin_url AS image_url", // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
-		"p.page_number",
-		"p.ext",
+		"p."+pageTable.ColumnBookID(),
+		"b.origin_url AS book_url",                       // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
+		"p."+pageTable.ColumnOriginURL()+" AS image_url", // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
+		"p."+pageTable.ColumnPageNumber(),
+		"p."+pageTable.ColumnExt(),
 	).
 		PlaceholderFormat(squirrel.Dollar).
 		From("books AS b").
-		InnerJoin("pages AS p ON b.id = p.book_id").
+		InnerJoin(pageTable.Name() + " AS p ON b.id = p." + pageTable.ColumnBookID()).
 		Where(squirrel.Eq{
-			"p.downloaded": false,
+			"p." + pageTable.ColumnDownloaded(): false,
 		})
 
 	query, args := builder.MustSql()

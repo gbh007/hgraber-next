@@ -7,14 +7,18 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *PageRepo) BookPagesCount(ctx context.Context, bookID uuid.UUID) (int, error) {
+	table := model.PageTable
+
 	builder := squirrel.Select("COUNT(*)").
 		PlaceholderFormat(squirrel.Dollar).
-		From("pages").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"book_id": bookID,
+			table.ColumnBookID(): bookID,
 		})
 
 	query, args := builder.MustSql()

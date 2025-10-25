@@ -7,15 +7,18 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *PageRepo) PageSizeByAuthor(ctx context.Context) (map[string]core.SizeWithCount, error) {
+	pageTable := model.PageTable
+
 	builder := squirrel.Select("COUNT(*)", "ba.value", "SUM(f.size)").
 		PlaceholderFormat(squirrel.Dollar).
 		From("book_attributes ba").
-		InnerJoin("pages p ON ba.book_id = p.book_id").
-		InnerJoin("files f ON f.id = p.file_id").
+		InnerJoin(pageTable.Name() + " p ON ba.book_id = p." + pageTable.ColumnBookID()).
+		InnerJoin("files f ON f.id = p." + pageTable.ColumnFileID()).
 		Where(squirrel.Eq{
 			"ba.attr": "author",
 		}).

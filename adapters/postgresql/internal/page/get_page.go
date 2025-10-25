@@ -12,12 +12,14 @@ import (
 )
 
 func (repo *PageRepo) GetPage(ctx context.Context, id uuid.UUID, pageNumber int) (core.Page, error) {
-	builder := squirrel.Select(model.PageColumns()...).
+	table := model.PageTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("pages").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"book_id":     id,
-			"page_number": pageNumber,
+			table.ColumnBookID():     id,
+			table.ColumnPageNumber(): pageNumber,
 		}).
 		Limit(1)
 
@@ -27,7 +29,7 @@ func (repo *PageRepo) GetPage(ctx context.Context, id uuid.UUID, pageNumber int)
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err := row.Scan(model.PageScanner(&page))
+	err := row.Scan(table.Scanner(&page))
 	if err != nil {
 		return core.Page{}, fmt.Errorf("exec query: %w", err)
 	}

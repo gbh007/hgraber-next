@@ -12,13 +12,15 @@ import (
 )
 
 func (repo *PageRepo) BookPages(ctx context.Context, bookID uuid.UUID) ([]core.Page, error) {
-	builder := squirrel.Select(model.PageColumns()...).
+	table := model.PageTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("pages").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"book_id": bookID,
+			table.ColumnBookID(): bookID,
 		}).
-		OrderBy("page_number")
+		OrderBy(table.ColumnPageNumber())
 
 	query, args := builder.MustSql()
 
@@ -34,7 +36,7 @@ func (repo *PageRepo) BookPages(ctx context.Context, bookID uuid.UUID) ([]core.P
 	for rows.Next() {
 		page := core.Page{}
 
-		err := rows.Scan(model.PageScanner(&page))
+		err := rows.Scan(table.Scanner(&page))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

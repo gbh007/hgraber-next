@@ -11,10 +11,12 @@ import (
 )
 
 func (repo *PageRepo) BookPagesWithHashByMD5Sums(ctx context.Context, md5Sums []string) ([]core.PageWithHash, error) {
+	pageTable := model.PageTable
+
 	builder := squirrel.Select(model.PageWithHashColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("pages p").
-		LeftJoin("files f ON p.file_id = f.id").
+		From(pageTable.Name() + " p").
+		LeftJoin("files f ON p." + pageTable.ColumnFileID() + " = f.id").
 		Where(squirrel.Eq{
 			"f.md5_sum": md5Sums,
 		})

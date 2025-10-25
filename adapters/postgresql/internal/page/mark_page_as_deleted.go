@@ -7,11 +7,16 @@ import (
 	"fmt"
 	"log/slog"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *PageRepo) MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, pageNumber int) error {
+	pageTable := model.PageTable
+
 	tx, err := repo.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
@@ -27,28 +32,45 @@ func (repo *PageRepo) MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, p
 		}
 	}()
 
-	_, err = tx.Exec(ctx, `INSERT INTO
-    deleted_pages
-SELECT
-    p.book_id,
-    p.page_number,
-    p.ext,
-    p.origin_url,
-    f.md5_sum,
-    f.sha256_sum,
-    f.size,
-    p.downloaded,
-    p.create_at AS created_at,
-    p.load_at AS loaded_at
-FROM pages p
-    LEFT JOIN files f ON p.file_id = f.id
-WHERE
-    p.book_id = $1 AND p.page_number = $2;`, bookID, pageNumber)
+	insertQuery, insertArgs := squirrel.Insert("deleted_pages").
+		PlaceholderFormat(squirrel.Dollar).
+		Select(
+			squirrel.Select(
+				"p."+pageTable.ColumnBookID(),
+				"p."+pageTable.ColumnPageNumber(),
+				"p."+pageTable.ColumnExt(),
+				"p."+pageTable.ColumnOriginURL(),
+				"f.md5_sum",
+				"f.sha256_sum",
+				"f.size",
+				"p."+pageTable.ColumnDownloaded(),
+				"p."+pageTable.ColumnCreateAt()+" AS created_at",
+				"p."+pageTable.ColumnLoadAt()+" AS loaded_at",
+			).
+				From(pageTable.Name() + " p").
+				LeftJoin("files f ON p." + pageTable.ColumnFileID() + " = f.id").
+				Where(squirrel.Eq{
+					"p." + pageTable.ColumnBookID():     bookID,
+					"p." + pageTable.ColumnPageNumber(): pageNumber,
+				}),
+		).
+		MustSql()
+
+	_, err = tx.Exec(ctx, insertQuery, insertArgs...)
 	if err != nil {
 		return fmt.Errorf("copy page: %w", err)
 	}
 
-	_, err = tx.Exec(ctx, `DELETE FROM pages WHERE book_id = $1 AND page_number = $2;`, bookID, pageNumber)
+	deleteQuery, deleteArgs := squirrel.
+		Delete(pageTable.Name()).
+		PlaceholderFormat(squirrel.Dollar).
+		Where(squirrel.Eq{
+			pageTable.ColumnBookID():     bookID,
+			pageTable.ColumnPageNumber(): pageNumber,
+		}).
+		MustSql()
+
+	_, err = tx.Exec(ctx, deleteQuery, deleteArgs...)
 	if err != nil {
 		return fmt.Errorf("delete page: %w", err)
 	}

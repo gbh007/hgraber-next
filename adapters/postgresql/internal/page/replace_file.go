@@ -6,16 +6,20 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *PageRepo) ReplaceFile(ctx context.Context, oldFileID, newFileID uuid.UUID) error {
-	builder := squirrel.Update("pages").
+	table := model.PageTable
+
+	builder := squirrel.Update(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"file_id": newFileID,
+			table.ColumnFileID(): newFileID,
 		}).
 		Where(squirrel.Eq{
-			"file_id": oldFileID,
+			table.ColumnFileID(): oldFileID,
 		})
 
 	query, args := builder.MustSql()

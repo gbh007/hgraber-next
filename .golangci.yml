@@ -40,6 +40,9 @@ linters:
       - linters:
           - err113
         text: do not define dynamic errors
+      - linters:
+          - goconst
+        path: adapters/postgresql/internal/model/*
 
   settings:
     cyclop:

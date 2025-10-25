@@ -11,20 +11,37 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func PageColumns() []string {
+var PageTable Page
+
+type Page struct{}
+
+func (Page) Name() string {
+	return "pages"
+}
+
+func (Page) ColumnBookID() string     { return "book_id" }
+func (Page) ColumnPageNumber() string { return "page_number" }
+func (Page) ColumnExt() string        { return "ext" }
+func (Page) ColumnOriginURL() string  { return "origin_url" }
+func (Page) ColumnCreateAt() string   { return "create_at" }
+func (Page) ColumnDownloaded() string { return "downloaded" }
+func (Page) ColumnLoadAt() string     { return "load_at" }
+func (Page) ColumnFileID() string     { return "file_id" }
+
+func (p Page) Columns() []string {
 	return []string{
-		"book_id",
-		"page_number",
-		"ext",
-		"origin_url",
-		"create_at",
-		"downloaded",
-		"load_at",
-		"file_id",
+		p.ColumnBookID(),
+		p.ColumnPageNumber(),
+		p.ColumnExt(),
+		p.ColumnOriginURL(),
+		p.ColumnCreateAt(),
+		p.ColumnDownloaded(),
+		p.ColumnLoadAt(),
+		p.ColumnFileID(),
 	}
 }
 
-func PageScanner(page *core.Page) RowScanner {
+func (Page) Scanner(page *core.Page) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			originURL sql.NullString

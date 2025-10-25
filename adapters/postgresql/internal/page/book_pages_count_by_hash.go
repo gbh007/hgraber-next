@@ -7,14 +7,17 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *PageRepo) BookPagesCountByHash(ctx context.Context, hash core.FileHash) (int64, error) {
+	pageTable := model.PageTable
+
 	builder := squirrel.Select("COUNT(*)").
 		PlaceholderFormat(squirrel.Dollar).
-		From("pages p").
-		LeftJoin("files f ON p.file_id = f.id").
+		From(pageTable.Name() + " p").
+		LeftJoin("files f ON p." + pageTable.ColumnFileID() + " = f.id").
 		Where(squirrel.Eq{
 			"f.md5_sum":    hash.Md5Sum,
 			"f.sha256_sum": hash.Sha256Sum,
