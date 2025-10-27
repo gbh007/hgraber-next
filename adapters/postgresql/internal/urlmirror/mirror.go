@@ -12,11 +12,13 @@ import (
 )
 
 func (repo *URLMirrorRepo) Mirror(ctx context.Context, id uuid.UUID) (parsing.URLMirror, error) {
-	builder := squirrel.Select(model.URLMirrorColumns()...).
+	table := model.URLMirrorTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("url_mirrors").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"id": id,
+			table.ColumnID(): id,
 		}).
 		Limit(1)
 
@@ -26,7 +28,7 @@ func (repo *URLMirrorRepo) Mirror(ctx context.Context, id uuid.UUID) (parsing.UR
 
 	mirror := parsing.URLMirror{}
 
-	err := row.Scan(model.URLMirrorScanner(&mirror))
+	err := row.Scan(table.Scanner(&mirror))
 	if err != nil {
 		return parsing.URLMirror{}, fmt.Errorf("scan: %w", err)
 	}

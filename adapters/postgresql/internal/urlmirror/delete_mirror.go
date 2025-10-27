@@ -6,13 +6,17 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *URLMirrorRepo) DeleteMirror(ctx context.Context, id uuid.UUID) error {
-	builder := squirrel.Delete("url_mirrors").
+	table := model.URLMirrorTable
+
+	builder := squirrel.Delete(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"id": id,
+			table.ColumnID(): id,
 		})
 
 	query, args := builder.MustSql()

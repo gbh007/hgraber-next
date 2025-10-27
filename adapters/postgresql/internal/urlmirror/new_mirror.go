@@ -11,13 +11,15 @@ import (
 )
 
 func (repo *URLMirrorRepo) NewMirror(ctx context.Context, mirror parsing.URLMirror) error {
-	builder := squirrel.Insert("url_mirrors").
+	table := model.URLMirrorTable
+
+	builder := squirrel.Insert(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"id":          mirror.ID,
-			"name":        mirror.Name,
-			"prefixes":    mirror.Prefixes,
-			"description": model.StringToDB(mirror.Description),
+			table.ColumnID():          mirror.ID,
+			table.ColumnName():        mirror.Name,
+			table.ColumnPrefixes():    mirror.Prefixes,
+			table.ColumnDescription(): model.StringToDB(mirror.Description),
 		})
 
 	query, args := builder.MustSql()

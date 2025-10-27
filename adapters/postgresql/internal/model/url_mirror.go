@@ -9,16 +9,28 @@ import (
 	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
-func URLMirrorColumns() []string {
+var URLMirrorTable URLMirror
+
+type URLMirror struct{}
+
+func (URLMirror) Name() string {
+	return "url_mirrors"
+}
+func (URLMirror) ColumnID() string          { return "id" }
+func (URLMirror) ColumnName() string        { return "name" }
+func (URLMirror) ColumnPrefixes() string    { return "prefixes" }
+func (URLMirror) ColumnDescription() string { return "description" }
+
+func (um URLMirror) Columns() []string {
 	return []string{
-		"id",
-		"name",
-		"prefixes",
-		"description",
+		um.ColumnID(),
+		um.ColumnName(),
+		um.ColumnPrefixes(),
+		um.ColumnDescription(),
 	}
 }
 
-func URLMirrorScanner(mirror *parsing.URLMirror) RowScanner {
+func (URLMirror) Scanner(mirror *parsing.URLMirror) RowScanner {
 	return func(rows pgx.Rows) error {
 		var description sql.NullString
 

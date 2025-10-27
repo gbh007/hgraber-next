@@ -11,10 +11,12 @@ import (
 )
 
 func (repo *URLMirrorRepo) Mirrors(ctx context.Context) ([]parsing.URLMirror, error) {
-	builder := squirrel.Select(model.URLMirrorColumns()...).
+	table := model.URLMirrorTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("url_mirrors").
-		OrderBy("id")
+		From(table.Name()).
+		OrderBy(table.ColumnID())
 
 	query, args := builder.MustSql()
 
@@ -30,7 +32,7 @@ func (repo *URLMirrorRepo) Mirrors(ctx context.Context) ([]parsing.URLMirror, er
 	for rows.Next() {
 		mirror := parsing.URLMirror{}
 
-		err := rows.Scan(model.URLMirrorScanner(&mirror))
+		err := rows.Scan(table.Scanner(&mirror))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}
