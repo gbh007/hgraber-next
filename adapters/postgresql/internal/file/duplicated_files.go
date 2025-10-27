@@ -10,8 +10,10 @@ import (
 )
 
 func (repo *FileRepo) DuplicatedFiles(ctx context.Context) ([]core.File, error) {
+	table := model.FileTable
+
 	// TODO: переделать на squirrel
-	query := `SELECT ` + strings.Join(model.StringsPrefix(model.FileColumns(), "f."), ", ") + `
+	query := `SELECT ` + strings.Join(model.StringsPrefix(table.Columns(), "f."), ", ") + `
 FROM (
         SELECT COUNT(*) AS c, md5_sum, sha256_sum
         FROM files
@@ -35,7 +37,7 @@ FROM (
 	for rows.Next() {
 		file := core.File{}
 
-		err := rows.Scan(model.FileScanner(&file))
+		err := rows.Scan(table.Scanner(&file))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

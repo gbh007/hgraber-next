@@ -12,13 +12,15 @@ import (
 
 // TODO: добавить лимиты
 func (repo *FileRepo) GetUnHashedFiles(ctx context.Context) ([]core.File, error) {
-	builder := squirrel.Select(model.FileColumns()...).
+	table := model.FileTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("files").
+		From(table.Name()).
 		Where(squirrel.Or{
-			squirrel.Expr(`md5_sum IS NULL`),
-			squirrel.Expr(`sha256_sum IS NULL`),
-			squirrel.Expr(`"size" IS NULL`),
+			squirrel.Expr(table.ColumnMd5Sum() + " IS NULL"),
+			squirrel.Expr(table.ColumnSha256Sum() + " IS NULL"),
+			squirrel.Expr(table.ColumnSize() + " IS NULL"),
 		})
 
 	query, args := builder.MustSql()
@@ -35,7 +37,7 @@ func (repo *FileRepo) GetUnHashedFiles(ctx context.Context) ([]core.File, error)
 	for rows.Next() {
 		file := core.File{}
 
-		err := rows.Scan(model.FileScanner(&file))
+		err := rows.Scan(table.Scanner(&file))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

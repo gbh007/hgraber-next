@@ -11,11 +11,13 @@ import (
 )
 
 func (repo *FileRepo) FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]core.File, error) {
-	builder := squirrel.Select(model.FileColumns()...).
+	table := model.FileTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("files").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"md5_sum": md5Sums,
+			table.ColumnMd5Sum(): md5Sums,
 		})
 
 	query, args := builder.MustSql()
@@ -32,7 +34,7 @@ func (repo *FileRepo) FilesByMD5Sums(ctx context.Context, md5Sums []string) ([]c
 	for rows.Next() {
 		file := core.File{}
 
-		err := rows.Scan(model.FileScanner(&file))
+		err := rows.Scan(table.Scanner(&file))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

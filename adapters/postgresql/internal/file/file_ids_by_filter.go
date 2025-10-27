@@ -7,17 +7,21 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
 )
 
 func (repo *FileRepo) FileIDsByFilter(ctx context.Context, filter fsmodel.FileFilter) ([]uuid.UUID, error) {
-	builder := squirrel.Select("id").
+	fileTable := model.FileTable
+	pageTable := model.PageTable
+
+	builder := squirrel.Select(fileTable.ColumnID()).
 		PlaceholderFormat(squirrel.Dollar).
-		From("files")
+		From(fileTable.Name())
 
 	if filter.FSID != nil {
 		builder = builder.Where(squirrel.Eq{
-			"fs_id": *filter.FSID,
+			fileTable.ColumnFSID(): *filter.FSID,
 		})
 	}
 
@@ -25,18 +29,18 @@ func (repo *FileRepo) FileIDsByFilter(ctx context.Context, filter fsmodel.FileFi
 		subBuilder := squirrel.Select("1").
 			// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
 			PlaceholderFormat(squirrel.Question).
-			From("pages").
-			Where(squirrel.Expr(`file_id = files.id`))
+			From(pageTable.Name()).
+			Where(squirrel.Expr(pageTable.ColumnFileID() + " = " + fileTable.Name() + "." + fileTable.ColumnID()))
 
 		if filter.BookID != nil {
 			subBuilder = subBuilder.Where(squirrel.Eq{
-				"book_id": *filter.BookID,
+				pageTable.ColumnBookID(): *filter.BookID,
 			})
 		}
 
 		if filter.PageNumber != nil {
 			subBuilder = subBuilder.Where(squirrel.Eq{
-				"page_number": *filter.PageNumber,
+				pageTable.ColumnPageNumber(): *filter.PageNumber,
 			})
 		}
 

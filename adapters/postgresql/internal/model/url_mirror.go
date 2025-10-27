@@ -16,6 +16,7 @@ type URLMirror struct{}
 func (URLMirror) Name() string {
 	return "url_mirrors"
 }
+
 func (URLMirror) ColumnID() string          { return "id" }
 func (URLMirror) ColumnName() string        { return "name" }
 func (URLMirror) ColumnPrefixes() string    { return "prefixes" }

@@ -12,11 +12,13 @@ import (
 )
 
 func (repo *FileRepo) File(ctx context.Context, id uuid.UUID) (core.File, error) {
-	builder := squirrel.Select(model.FileColumns()...).
+	table := model.FileTable
+
+	builder := squirrel.Select(table.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("files").
+		From(table.Name()).
 		Where(squirrel.Eq{
-			"id": id,
+			table.ColumnID(): id,
 		}).
 		Limit(1)
 
@@ -26,7 +28,7 @@ func (repo *FileRepo) File(ctx context.Context, id uuid.UUID) (core.File, error)
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err := row.Scan(model.FileScanner(&file))
+	err := row.Scan(table.Scanner(&file))
 	if err != nil {
 		return core.File{}, fmt.Errorf("exec: %w", err)
 	}

@@ -11,10 +11,20 @@ import (
 )
 
 func (repo *FileRepo) DetachedFiles(ctx context.Context) ([]core.File, error) {
-	builder := squirrel.Select(model.FileColumns()...).
+	fileTable := model.FileTable
+	pageTable := model.PageTable
+
+	builder := squirrel.Select(fileTable.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("files").
-		Where(squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE pages.file_id = files.id)`))
+		From(fileTable.Name()).
+		Where(squirrel.Expr(
+			`NOT EXISTS (SELECT 1 FROM ` +
+				pageTable.Name() +
+				" WHERE " +
+				pageTable.Name() + "." + pageTable.ColumnFileID() +
+				" = " +
+				fileTable.Name() + "." + fileTable.ColumnID() + ")",
+		))
 
 	query, args := builder.MustSql()
 
@@ -30,7 +40,7 @@ func (repo *FileRepo) DetachedFiles(ctx context.Context) ([]core.File, error) {
 	for rows.Next() {
 		file := core.File{}
 
-		err := rows.Scan(model.FileScanner(&file))
+		err := rows.Scan(fileTable.Scanner(&file))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

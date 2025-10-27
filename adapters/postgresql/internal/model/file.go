@@ -9,21 +9,39 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func FileColumns() []string {
+var FileTable File
+
+type File struct{}
+
+func (File) Name() string {
+	return "files"
+}
+
+func (File) ColumnID() string          { return "id" }
+func (File) ColumnFilename() string    { return "filename" }
+func (File) ColumnExt() string         { return "ext" }
+func (File) ColumnMd5Sum() string      { return "md5_sum" }
+func (File) ColumnSha256Sum() string   { return "sha256_sum" }
+func (File) ColumnSize() string        { return "\"size\"" }
+func (File) ColumnFSID() string        { return "fs_id" }
+func (File) ColumnInvalidData() string { return "invalid_data" }
+func (File) ColumnCreateAt() string    { return "create_at" }
+
+func (f File) Columns() []string {
 	return []string{
-		"id",
-		"filename",
-		"ext",
-		"md5_sum",
-		"sha256_sum",
-		"\"size\"",
-		"fs_id",
-		"invalid_data",
-		"create_at",
+		f.ColumnID(),
+		f.ColumnFilename(),
+		f.ColumnExt(),
+		f.ColumnMd5Sum(),
+		f.ColumnSha256Sum(),
+		f.ColumnSize(),
+		f.ColumnFSID(),
+		f.ColumnInvalidData(),
+		f.ColumnCreateAt(),
 	}
 }
 
-func FileScanner(file *core.File) RowScanner {
+func (File) Scanner(file *core.File) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			md5Sum    sql.NullString

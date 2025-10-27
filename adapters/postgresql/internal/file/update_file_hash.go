@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
@@ -11,13 +12,24 @@ import (
 )
 
 func (repo *FileRepo) UpdateFileHash(ctx context.Context, id uuid.UUID, md5Sum, sha256Sum string, size int64) error {
-	res, err := repo.Pool.Exec(
-		ctx,
-		`UPDATE files SET md5_sum = $2, sha256_sum = $3, "size" = $4 WHERE id = $1`,
-		id, model.StringToDB(md5Sum), model.StringToDB(sha256Sum), model.Int64ToDB(size),
-	)
+	table := model.FileTable
+
+	builder := squirrel.Update(table.Name()).
+		PlaceholderFormat(squirrel.Dollar).
+		SetMap(map[string]any{
+			table.ColumnMd5Sum():    model.StringToDB(md5Sum),
+			table.ColumnSha256Sum(): model.StringToDB(sha256Sum),
+			table.ColumnSize():      model.Int64ToDB(size),
+		}).
+		Where(squirrel.Eq{
+			table.ColumnID(): id,
+		})
+
+	query, args := builder.MustSql()
+
+	res, err := repo.Pool.Exec(ctx, query, args...)
 	if err != nil {
-		return fmt.Errorf("exec: %w", err)
+		return fmt.Errorf("exec query: %w", err)
 	}
 
 	if res.RowsAffected() < 1 {

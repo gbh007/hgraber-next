@@ -7,17 +7,20 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *FileRepo) UpdateFileFS(ctx context.Context, fileID, fsID uuid.UUID) error {
-	builder := squirrel.Update("files").
+	table := model.FileTable
+
+	builder := squirrel.Update(table.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"fs_id": fsID,
+			table.ColumnFSID(): fsID,
 		}).
 		Where(squirrel.Eq{
-			"id": fileID,
+			table.ColumnID(): fileID,
 		})
 
 	query, args := builder.MustSql()
