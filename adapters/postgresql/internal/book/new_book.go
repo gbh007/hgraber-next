@@ -11,18 +11,20 @@ import (
 )
 
 func (repo *BookRepo) NewBook(ctx context.Context, book core.Book) error {
-	builder := squirrel.Insert("books").
+	bookTable := model.BookTable
+
+	builder := squirrel.Insert(bookTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).SetMap(
 		map[string]any{
-			"id":                book.ID,
-			"name":              model.StringToDB(book.Name),
-			"origin_url":        model.URLToDB(book.OriginURL),
-			"page_count":        model.Int32ToDB(book.PageCount),
-			"attributes_parsed": book.AttributesParsed,
-			"verified":          book.Verified,
-			"verified_at":       model.TimeToDB(book.VerifiedAt),
-			"is_rebuild":        book.IsRebuild,
-			"create_at":         book.CreateAt,
+			bookTable.ColumnID():               book.ID,
+			bookTable.ColumnName():             model.StringToDB(book.Name),
+			bookTable.ColumnOriginURL():        model.URLToDB(book.OriginURL),
+			bookTable.ColumnPageCount():        model.Int32ToDB(book.PageCount),
+			bookTable.ColumnAttributesParsed(): book.AttributesParsed,
+			bookTable.ColumnVerified():         book.Verified,
+			bookTable.ColumnVerifiedAt():       model.TimeToDB(book.VerifiedAt),
+			bookTable.ColumnIsRebuild():        book.IsRebuild,
+			bookTable.ColumnCreateAt():         book.CreateAt,
 		},
 	)
 

@@ -11,21 +11,21 @@ import (
 )
 
 func (repo *BookRepo) UpdateBook(ctx context.Context, book core.Book) error {
-	builder := squirrel.Update("books").
+	bookTable := model.BookTable
+
+	builder := squirrel.Update(bookTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
-		SetMap(
-			map[string]any{
-				"name":              model.StringToDB(book.Name),
-				"origin_url":        model.URLToDB(book.OriginURL),
-				"page_count":        model.Int32ToDB(book.PageCount),
-				"attributes_parsed": book.AttributesParsed,
-				"verified":          book.Verified,
-				"verified_at":       model.TimeToDB(book.VerifiedAt),
-				"is_rebuild":        book.IsRebuild,
-			},
-		).
+		SetMap(map[string]any{
+			bookTable.ColumnName():             model.StringToDB(book.Name),
+			bookTable.ColumnOriginURL():        model.URLToDB(book.OriginURL),
+			bookTable.ColumnPageCount():        model.Int32ToDB(book.PageCount),
+			bookTable.ColumnAttributesParsed(): book.AttributesParsed,
+			bookTable.ColumnVerified():         book.Verified,
+			bookTable.ColumnVerifiedAt():       model.TimeToDB(book.VerifiedAt),
+			bookTable.ColumnIsRebuild():        book.IsRebuild,
+		}).
 		Where(squirrel.Eq{
-			"id": book.ID,
+			bookTable.ColumnID(): book.ID,
 		})
 
 	query, args := builder.MustSql()

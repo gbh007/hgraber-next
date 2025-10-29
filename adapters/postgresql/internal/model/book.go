@@ -10,32 +10,59 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func BookColumns() []string {
-	return []string{
-		"id",
-		"name",
-		"origin_url",
-		"page_count",
-		"attributes_parsed",
-		"create_at",
-		"deleted",
-		"deleted_at",
-		"verified",
-		"verified_at",
-		"is_rebuild",
+var BookTable Book
 
-		"calc_page_count",
-		"calc_file_count",
-		"calc_dead_hash_count",
-		"calc_page_size",
-		"calc_file_size",
-		"calc_dead_hash_size",
-		"calculated_at",
-		"calc_avg_page_size",
+type Book struct{}
+
+func (Book) Name() string {
+	return "books"
+}
+
+func (Book) ColumnID() string                { return "id" }
+func (Book) ColumnName() string              { return "name" }
+func (Book) ColumnOriginURL() string         { return "origin_url" }
+func (Book) ColumnPageCount() string         { return "page_count" }
+func (Book) ColumnAttributesParsed() string  { return "attributes_parsed" }
+func (Book) ColumnCreateAt() string          { return "create_at" }
+func (Book) ColumnDeleted() string           { return "deleted" }
+func (Book) ColumnDeletedAt() string         { return "deleted_at" }
+func (Book) ColumnVerified() string          { return "verified" }
+func (Book) ColumnVerifiedAt() string        { return "verified_at" }
+func (Book) ColumnIsRebuild() string         { return "is_rebuild" }
+func (Book) ColumnCalcPageCount() string     { return "calc_page_count" }
+func (Book) ColumnCalcFileCount() string     { return "calc_file_count" }
+func (Book) ColumnCalcDeadHashCount() string { return "calc_dead_hash_count" }
+func (Book) ColumnCalcPageSize() string      { return "calc_page_size" }
+func (Book) ColumnCalcFileSize() string      { return "calc_file_size" }
+func (Book) ColumnCalcDeadHashSize() string  { return "calc_dead_hash_size" }
+func (Book) ColumnCalculatedAt() string      { return "calculated_at" }
+func (Book) ColumnCalcAvgPageSize() string   { return "calc_avg_page_size" }
+
+func (b Book) Columns() []string {
+	return []string{
+		b.ColumnID(),
+		b.ColumnName(),
+		b.ColumnOriginURL(),
+		b.ColumnPageCount(),
+		b.ColumnAttributesParsed(),
+		b.ColumnCreateAt(),
+		b.ColumnDeleted(),
+		b.ColumnDeletedAt(),
+		b.ColumnVerified(),
+		b.ColumnVerifiedAt(),
+		b.ColumnIsRebuild(),
+		b.ColumnCalcPageCount(),
+		b.ColumnCalcFileCount(),
+		b.ColumnCalcDeadHashCount(),
+		b.ColumnCalcPageSize(),
+		b.ColumnCalcFileSize(),
+		b.ColumnCalcDeadHashSize(),
+		b.ColumnCalculatedAt(),
+		b.ColumnCalcAvgPageSize(),
 	}
 }
 
-func BookScanner(book *core.Book) RowScanner {
+func (Book) Scanner(book *core.Book) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			name       sql.NullString

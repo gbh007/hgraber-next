@@ -6,18 +6,24 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *BookRepo) BookIDsByMD5(ctx context.Context, md5Sums []string) ([]uuid.UUID, error) {
-	builder := squirrel.Select("b.id").
+	bookTable := model.BookTable
+	fileTable := model.FileTable
+	pageTable := model.PageTable
+
+	builder := squirrel.Select("b." + bookTable.ColumnID()).
 		PlaceholderFormat(squirrel.Dollar).
-		From("books b").
-		InnerJoin("pages p ON p.book_id = b.id").
-		InnerJoin("files f ON f.id = p.file_id").
+		From(bookTable.Name() + " b").
+		InnerJoin(pageTable.Name() + " p ON p." + pageTable.ColumnBookID() + " = b." + bookTable.ColumnID()).
+		InnerJoin(fileTable.Name() + " f ON f." + fileTable.ColumnID() + " = p." + pageTable.ColumnFileID()).
 		Where(squirrel.Eq{
-			"f.md5_sum": md5Sums,
+			"f." + fileTable.ColumnMd5Sum(): md5Sums,
 		}).
-		GroupBy("b.id")
+		GroupBy("b." + bookTable.ColumnID())
 
 	query, args := builder.MustSql()
 

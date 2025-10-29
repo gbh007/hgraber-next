@@ -6,15 +6,19 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *BookRepo) BookIDsWithDeletedRebuilds(ctx context.Context) ([]uuid.UUID, error) {
-	builder := squirrel.Select("id").
+	bookTable := model.BookTable
+
+	builder := squirrel.Select(bookTable.ColumnID()).
 		PlaceholderFormat(squirrel.Dollar).
-		From("books").
+		From(bookTable.Name()).
 		Where(squirrel.Eq{
-			"deleted":    true,
-			"is_rebuild": true,
+			bookTable.ColumnDeleted():   true,
+			bookTable.ColumnIsRebuild(): true,
 		})
 
 	query, args := builder.MustSql()

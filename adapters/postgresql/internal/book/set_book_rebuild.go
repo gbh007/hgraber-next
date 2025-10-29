@@ -4,17 +4,28 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *BookRepo) SetBookRebuild(ctx context.Context, bookID uuid.UUID, reBuilded bool) error {
-	res, err := repo.Pool.Exec(
-		ctx,
-		`UPDATE books SET is_rebuild = $2 WHERE id = $1;`,
-		bookID, reBuilded,
-	)
+	bookTable := model.BookTable
+
+	builder := squirrel.Update(bookTable.Name()).
+		PlaceholderFormat(squirrel.Dollar).
+		SetMap(map[string]any{
+			bookTable.ColumnIsRebuild(): reBuilded,
+		}).
+		Where(squirrel.Eq{
+			bookTable.ColumnID(): bookID,
+		})
+
+	query, args := builder.MustSql()
+
+	res, err := repo.Pool.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("update book: %w", err)
 	}

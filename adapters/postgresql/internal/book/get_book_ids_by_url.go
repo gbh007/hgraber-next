@@ -7,14 +7,18 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *BookRepo) GetBookIDsByURL(ctx context.Context, u url.URL) ([]uuid.UUID, error) {
-	builder := squirrel.Select("id").
+	bookTable := model.BookTable
+
+	builder := squirrel.Select(bookTable.ColumnID()).
 		PlaceholderFormat(squirrel.Dollar).
-		From("books").
+		From(bookTable.Name()).
 		Where(squirrel.Eq{
-			"origin_url": u.String(),
+			bookTable.ColumnOriginURL(): u.String(),
 		})
 
 	query, args := builder.MustSql()

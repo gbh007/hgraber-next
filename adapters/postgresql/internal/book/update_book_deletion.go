@@ -11,16 +11,16 @@ import (
 )
 
 func (repo *BookRepo) UpdateBookDeletion(ctx context.Context, book core.Book) error {
-	builder := squirrel.Update("books").
+	bookTable := model.BookTable
+
+	builder := squirrel.Update(bookTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
-		SetMap(
-			map[string]any{
-				"deleted":    book.Deleted,
-				"deleted_at": model.TimeToDB(book.DeletedAt),
-			},
-		).
+		SetMap(map[string]any{
+			bookTable.ColumnDeleted():   book.Deleted,
+			bookTable.ColumnDeletedAt(): model.TimeToDB(book.DeletedAt),
+		}).
 		Where(squirrel.Eq{
-			"id": book.ID,
+			bookTable.ColumnID(): book.ID,
 		})
 
 	query, args := builder.MustSql()

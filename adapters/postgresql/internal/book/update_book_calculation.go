@@ -12,20 +12,22 @@ import (
 )
 
 func (repo *BookRepo) UpdateBookCalculation(ctx context.Context, id uuid.UUID, calc core.BookCalc) error {
-	builder := squirrel.Update("books").
+	bookTable := model.BookTable
+
+	builder := squirrel.Update(bookTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"calc_page_count":      model.NilInt64ToDB(calc.CalcPageCount),
-			"calc_file_count":      model.NilInt64ToDB(calc.CalcFileCount),
-			"calc_dead_hash_count": model.NilInt64ToDB(calc.CalcDeadHashCount),
-			"calc_page_size":       model.NilInt64ToDB(calc.CalcPageSize),
-			"calc_file_size":       model.NilInt64ToDB(calc.CalcFileSize),
-			"calc_dead_hash_size":  model.NilInt64ToDB(calc.CalcDeadHashSize),
-			"calculated_at":        model.TimeToDB(calc.CalculatedAt),
-			"calc_avg_page_size":   model.NilInt64ToDB(calc.CalcAvgPageSize),
+			bookTable.ColumnCalcPageCount():     model.NilInt64ToDB(calc.CalcPageCount),
+			bookTable.ColumnCalcFileCount():     model.NilInt64ToDB(calc.CalcFileCount),
+			bookTable.ColumnCalcDeadHashCount(): model.NilInt64ToDB(calc.CalcDeadHashCount),
+			bookTable.ColumnCalcPageSize():      model.NilInt64ToDB(calc.CalcPageSize),
+			bookTable.ColumnCalcFileSize():      model.NilInt64ToDB(calc.CalcFileSize),
+			bookTable.ColumnCalcDeadHashSize():  model.NilInt64ToDB(calc.CalcDeadHashSize),
+			bookTable.ColumnCalculatedAt():      model.TimeToDB(calc.CalculatedAt),
+			bookTable.ColumnCalcAvgPageSize():   model.NilInt64ToDB(calc.CalcAvgPageSize),
 		}).
 		Where(squirrel.Eq{
-			"id": id,
+			bookTable.ColumnID(): id,
 		})
 
 	query, args := builder.MustSql()

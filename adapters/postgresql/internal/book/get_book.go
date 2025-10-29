@@ -14,11 +14,13 @@ import (
 )
 
 func (repo *BookRepo) GetBook(ctx context.Context, bookID uuid.UUID) (core.Book, error) {
-	builder := squirrel.Select(model.BookColumns()...).
+	bookTable := model.BookTable
+
+	builder := squirrel.Select(bookTable.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("books").
+		From(bookTable.Name()).
 		Where(squirrel.Eq{
-			"id": bookID,
+			bookTable.ColumnID(): bookID,
 		}).
 		Limit(1)
 
@@ -28,7 +30,7 @@ func (repo *BookRepo) GetBook(ctx context.Context, bookID uuid.UUID) (core.Book,
 
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err := row.Scan(model.BookScanner(&book))
+	err := row.Scan(bookTable.Scanner(&book))
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return core.Book{}, core.ErrBookNotFound

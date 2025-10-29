@@ -12,21 +12,23 @@ import (
 
 // TODO: добавить лимиты
 func (repo *BookRepo) UnprocessedBooks(ctx context.Context) ([]core.Book, error) {
-	builder := squirrel.Select(model.BookColumns()...).
+	bookTable := model.BookTable
+
+	builder := squirrel.Select(bookTable.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("books").
+		From(bookTable.Name()).
 		Where(squirrel.And{
 			squirrel.Or{
-				squirrel.Expr(`name IS NULL`),
-				squirrel.Expr(`page_count IS NULL`),
+				squirrel.Expr(bookTable.ColumnName() + " IS NULL"),
+				squirrel.Expr(bookTable.ColumnPageCount() + " IS NULL"),
 				squirrel.Eq{
-					"attributes_parsed": false,
+					bookTable.ColumnAttributesParsed(): false,
 				},
 			},
-			squirrel.Expr(`origin_url IS NOT NULL`),
+			squirrel.Expr(bookTable.ColumnOriginURL() + " IS NOT NULL"),
 			squirrel.Eq{
-				"deleted":    false,
-				"is_rebuild": false,
+				bookTable.ColumnDeleted():   false,
+				bookTable.ColumnIsRebuild(): false,
 			},
 		})
 
@@ -44,7 +46,7 @@ func (repo *BookRepo) UnprocessedBooks(ctx context.Context) ([]core.Book, error)
 	for rows.Next() {
 		book := core.Book{}
 
-		err := rows.Scan(model.BookScanner(&book))
+		err := rows.Scan(bookTable.Scanner(&book))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

@@ -7,14 +7,17 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *BookRepo) DeleteBook(ctx context.Context, id uuid.UUID) error {
-	builder := squirrel.Delete("books").
+	bookTable := model.BookTable
+
+	builder := squirrel.Delete(bookTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"id": id,
+			bookTable.ColumnID(): id,
 		})
 
 	query, args := builder.MustSql()
