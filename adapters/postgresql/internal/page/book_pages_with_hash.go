@@ -12,16 +12,18 @@ import (
 )
 
 func (repo *PageRepo) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) ([]core.PageWithHash, error) {
-	pageTable := model.PageTable
+	pageTable := model.PageTable.WithPrefix("p")
+	fileTable := model.FileTable.WithPrefix("f")
+	pageWithHashTable := model.NewPageWithHash(pageTable, fileTable)
 
-	builder := squirrel.Select(model.PageWithHashColumns()...).
+	builder := squirrel.Select(pageWithHashTable.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From(pageTable.Name() + " p").
-		LeftJoin("files f ON p." + pageTable.ColumnFileID() + " = f.id").
+		From(pageTable.NameAlter()).
+		LeftJoin(pageWithHashTable.JoinString()).
 		Where(squirrel.Eq{
-			"p." + pageTable.ColumnBookID(): bookID,
+			pageTable.ColumnBookID(): bookID,
 		}).
-		OrderBy("p." + pageTable.ColumnPageNumber())
+		OrderBy(pageTable.ColumnPageNumber())
 
 	query, args := builder.MustSql()
 
@@ -37,7 +39,7 @@ func (repo *PageRepo) BookPagesWithHash(ctx context.Context, bookID uuid.UUID) (
 	for rows.Next() {
 		page := core.PageWithHash{}
 
-		err := rows.Scan(model.PageWithHashScanner(&page))
+		err := rows.Scan(pageWithHashTable.Scanner(&page))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

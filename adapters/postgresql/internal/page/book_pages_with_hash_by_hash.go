@@ -11,16 +11,18 @@ import (
 )
 
 func (repo *PageRepo) BookPagesWithHashByHash(ctx context.Context, hash core.FileHash) ([]core.PageWithHash, error) {
-	pageTable := model.PageTable
+	pageTable := model.PageTable.WithPrefix("p")
+	fileTable := model.FileTable.WithPrefix("f")
+	pageWithHashTable := model.NewPageWithHash(pageTable, fileTable)
 
-	builder := squirrel.Select(model.PageWithHashColumns()...).
+	builder := squirrel.Select(pageWithHashTable.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From(pageTable.Name() + " p").
-		LeftJoin("files f ON p." + pageTable.ColumnFileID() + " = f.id").
+		From(pageTable.NameAlter()).
+		LeftJoin(pageWithHashTable.JoinString()).
 		Where(squirrel.Eq{
-			"f.md5_sum":    hash.Md5Sum,
-			"f.sha256_sum": hash.Sha256Sum,
-			"f.size":       hash.Size,
+			fileTable.ColumnMd5Sum():    hash.Md5Sum,
+			fileTable.ColumnSha256Sum(): hash.Sha256Sum,
+			fileTable.ColumnSize():      hash.Size,
 		})
 
 	query, args := builder.MustSql()
@@ -37,7 +39,7 @@ func (repo *PageRepo) BookPagesWithHashByHash(ctx context.Context, hash core.Fil
 	for rows.Next() {
 		page := core.PageWithHash{}
 
-		err := rows.Scan(model.PageWithHashScanner(&page))
+		err := rows.Scan(pageWithHashTable.Scanner(&page))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

@@ -18,15 +18,17 @@ func (repo *PageRepo) BookPageWithHash(
 	bookID uuid.UUID,
 	pageNumber int,
 ) (core.PageWithHash, error) {
-	pageTable := model.PageTable
+	pageTable := model.PageTable.WithPrefix("p")
+	fileTable := model.FileTable.WithPrefix("f")
+	pageWithHashTable := model.NewPageWithHash(pageTable, fileTable)
 
-	builder := squirrel.Select(model.PageWithHashColumns()...).
+	builder := squirrel.Select(pageWithHashTable.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From(pageTable.Name() + " p").
-		LeftJoin("files f ON p." + pageTable.ColumnFileID() + " = f.id").
+		From(pageTable.NameAlter()).
+		LeftJoin(pageWithHashTable.JoinString()).
 		Where(squirrel.Eq{
-			"p." + pageTable.ColumnBookID():     bookID,
-			"p." + pageTable.ColumnPageNumber(): pageNumber,
+			pageTable.ColumnBookID():     bookID,
+			pageTable.ColumnPageNumber(): pageNumber,
 		}).
 		Limit(1)
 
@@ -35,7 +37,7 @@ func (repo *PageRepo) BookPageWithHash(
 	page := core.PageWithHash{}
 	row := repo.Pool.QueryRow(ctx, query, args...)
 
-	err := row.Scan(model.PageWithHashScanner(&page))
+	err := row.Scan(pageWithHashTable.Scanner(&page))
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return core.PageWithHash{}, core.ErrPageNotFound

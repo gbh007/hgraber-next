@@ -11,21 +11,45 @@ import (
 
 var FileTable File
 
-type File struct{}
+type File struct {
+	rawPrefix string
+	prefix    string
+}
+
+func (File) WithPrefix(p string) File {
+	if p == "" {
+		return File{}
+	}
+
+	return File{
+		rawPrefix: p,
+		prefix:    p + ".",
+	}
+}
+
+func (f File) Prefix() string { return f.rawPrefix }
 
 func (File) Name() string {
 	return "files"
 }
 
-func (File) ColumnID() string          { return "id" }
-func (File) ColumnFilename() string    { return "filename" }
-func (File) ColumnExt() string         { return "ext" }
-func (File) ColumnMd5Sum() string      { return "md5_sum" }
-func (File) ColumnSha256Sum() string   { return "sha256_sum" }
-func (File) ColumnSize() string        { return "\"size\"" }
-func (File) ColumnFSID() string        { return "fs_id" }
-func (File) ColumnInvalidData() string { return "invalid_data" }
-func (File) ColumnCreateAt() string    { return "create_at" }
+func (f File) NameAlter() string {
+	if f.rawPrefix == "" || f.rawPrefix == f.Name() {
+		return f.Name()
+	}
+
+	return f.Name() + " " + f.rawPrefix
+}
+
+func (f File) ColumnID() string          { return f.prefix + "id" }
+func (f File) ColumnFilename() string    { return f.prefix + "filename" }
+func (f File) ColumnExt() string         { return f.prefix + "ext" }
+func (f File) ColumnMd5Sum() string      { return f.prefix + "md5_sum" }
+func (f File) ColumnSha256Sum() string   { return f.prefix + "sha256_sum" }
+func (f File) ColumnSize() string        { return f.prefix + "\"size\"" }
+func (f File) ColumnFSID() string        { return f.prefix + "fs_id" }
+func (f File) ColumnInvalidData() string { return f.prefix + "invalid_data" }
+func (f File) ColumnCreateAt() string    { return f.prefix + "create_at" }
 
 func (f File) Columns() []string {
 	return []string{

@@ -11,24 +11,40 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func PageWithHashColumns() []string {
-	return []string{
-		"p.book_id",
-		"p.page_number",
-		"p.ext",
-		"p.origin_url",
-		"p.downloaded",
-		"p.file_id",
-		"p.create_at",
-		"p.load_at",
-		"f.md5_sum",
-		"f.sha256_sum",
-		"f.size",
-		"f.fs_id",
+type PageWithHash struct {
+	pages Page
+	files File
+}
+
+func NewPageWithHash(pages Page, files File) PageWithHash {
+	return PageWithHash{
+		pages: pages,
+		files: files,
 	}
 }
 
-func PageWithHashScanner(p *core.PageWithHash) RowScanner {
+func (p PageWithHash) JoinString() string {
+	return JoinPageAndFile(p.pages, p.files)
+}
+
+func (p PageWithHash) Columns() []string {
+	return []string{
+		p.pages.ColumnBookID(),
+		p.pages.ColumnPageNumber(),
+		p.pages.ColumnExt(),
+		p.pages.ColumnOriginURL(),
+		p.pages.ColumnDownloaded(),
+		p.pages.ColumnFileID(),
+		p.pages.ColumnCreateAt(),
+		p.pages.ColumnLoadAt(),
+		p.files.ColumnMd5Sum(),
+		p.files.ColumnSha256Sum(),
+		p.files.ColumnSize(),
+		p.files.ColumnFSID(),
+	}
+}
+
+func (PageWithHash) Scanner(p *core.PageWithHash) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			originURL sql.NullString

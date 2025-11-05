@@ -13,20 +13,43 @@ import (
 
 var PageTable Page
 
-type Page struct{}
+type Page struct {
+	rawPrefix string
+	prefix    string
+}
+
+func (Page) WithPrefix(p string) Page {
+	if p == "" {
+		return Page{}
+	}
+
+	return Page{
+		rawPrefix: p,
+		prefix:    p + ".",
+	}
+}
+func (p Page) Prefix() string { return p.rawPrefix }
 
 func (Page) Name() string {
 	return "pages"
 }
 
-func (Page) ColumnBookID() string     { return "book_id" }
-func (Page) ColumnPageNumber() string { return "page_number" }
-func (Page) ColumnExt() string        { return "ext" }
-func (Page) ColumnOriginURL() string  { return "origin_url" }
-func (Page) ColumnCreateAt() string   { return "create_at" }
-func (Page) ColumnDownloaded() string { return "downloaded" }
-func (Page) ColumnLoadAt() string     { return "load_at" }
-func (Page) ColumnFileID() string     { return "file_id" }
+func (p Page) NameAlter() string {
+	if p.rawPrefix == "" || p.rawPrefix == p.Name() {
+		return p.Name()
+	}
+
+	return p.Name() + " " + p.rawPrefix
+}
+
+func (p Page) ColumnBookID() string     { return p.prefix + "book_id" }
+func (p Page) ColumnPageNumber() string { return p.prefix + "page_number" }
+func (p Page) ColumnExt() string        { return p.prefix + "ext" }
+func (p Page) ColumnOriginURL() string  { return p.prefix + "origin_url" }
+func (p Page) ColumnCreateAt() string   { return p.prefix + "create_at" }
+func (p Page) ColumnDownloaded() string { return p.prefix + "downloaded" }
+func (p Page) ColumnLoadAt() string     { return p.prefix + "load_at" }
+func (p Page) ColumnFileID() string     { return p.prefix + "file_id" }
 
 func (p Page) Columns() []string {
 	return []string{

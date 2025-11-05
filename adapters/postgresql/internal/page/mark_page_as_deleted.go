@@ -15,7 +15,8 @@ import (
 )
 
 func (repo *PageRepo) MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, pageNumber int) error {
-	pageTable := model.PageTable
+	pageTable := model.PageTable.WithPrefix("p")
+	fileTable := model.FileTable.WithPrefix("f")
 
 	tx, err := repo.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
@@ -36,22 +37,22 @@ func (repo *PageRepo) MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, p
 		PlaceholderFormat(squirrel.Dollar).
 		Select(
 			squirrel.Select(
-				"p."+pageTable.ColumnBookID(),
-				"p."+pageTable.ColumnPageNumber(),
-				"p."+pageTable.ColumnExt(),
-				"p."+pageTable.ColumnOriginURL(),
-				"f.md5_sum",
-				"f.sha256_sum",
-				"f.size",
-				"p."+pageTable.ColumnDownloaded(),
-				"p."+pageTable.ColumnCreateAt()+" AS created_at",
-				"p."+pageTable.ColumnLoadAt()+" AS loaded_at",
+				pageTable.ColumnBookID(),
+				pageTable.ColumnPageNumber(),
+				pageTable.ColumnExt(),
+				pageTable.ColumnOriginURL(),
+				fileTable.ColumnMd5Sum(),
+				fileTable.ColumnSha256Sum(),
+				fileTable.ColumnSize(),
+				pageTable.ColumnDownloaded(),
+				pageTable.ColumnCreateAt()+" AS created_at",
+				pageTable.ColumnLoadAt()+" AS loaded_at",
 			).
-				From(pageTable.Name() + " p").
-				LeftJoin("files f ON p." + pageTable.ColumnFileID() + " = f.id").
+				From(pageTable.NameAlter()).
+				LeftJoin(model.JoinPageAndFile(pageTable, fileTable)).
 				Where(squirrel.Eq{
-					"p." + pageTable.ColumnBookID():     bookID,
-					"p." + pageTable.ColumnPageNumber(): pageNumber,
+					pageTable.ColumnBookID():     bookID,
+					pageTable.ColumnPageNumber(): pageNumber,
 				}),
 		).
 		MustSql()

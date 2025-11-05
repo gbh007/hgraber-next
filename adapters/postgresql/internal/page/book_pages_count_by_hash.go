@@ -12,16 +12,17 @@ import (
 )
 
 func (repo *PageRepo) BookPagesCountByHash(ctx context.Context, hash core.FileHash) (int64, error) {
-	pageTable := model.PageTable
+	pageTable := model.PageTable.WithPrefix("p")
+	fileTable := model.FileTable.WithPrefix("f")
 
 	builder := squirrel.Select("COUNT(*)").
 		PlaceholderFormat(squirrel.Dollar).
-		From(pageTable.Name() + " p").
-		LeftJoin("files f ON p." + pageTable.ColumnFileID() + " = f.id").
+		From(pageTable.NameAlter()).
+		LeftJoin(model.JoinPageAndFile(pageTable, fileTable)).
 		Where(squirrel.Eq{
-			"f.md5_sum":    hash.Md5Sum,
-			"f.sha256_sum": hash.Sha256Sum,
-			"f.size":       hash.Size,
+			fileTable.ColumnMd5Sum():    hash.Md5Sum,
+			fileTable.ColumnSha256Sum(): hash.Sha256Sum,
+			fileTable.ColumnSize():      hash.Size,
 		})
 
 	query, args := builder.MustSql()
