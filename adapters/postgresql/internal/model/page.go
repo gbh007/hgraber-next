@@ -11,35 +11,16 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-var PageTable Page
+var PageTable = Page{baseTable: baseTable{name: "pages"}}
 
 type Page struct {
-	rawPrefix string
-	prefix    string
+	baseTable
 }
 
-func (Page) WithPrefix(p string) Page {
-	if p == "" {
-		return Page{}
-	}
-
+func (p Page) WithPrefix(pf string) Page {
 	return Page{
-		rawPrefix: p,
-		prefix:    p + ".",
+		baseTable: p.withPrefix(pf),
 	}
-}
-func (p Page) Prefix() string { return p.rawPrefix }
-
-func (Page) Name() string {
-	return "pages"
-}
-
-func (p Page) NameAlter() string {
-	if p.rawPrefix == "" || p.rawPrefix == p.Name() {
-		return p.Name()
-	}
-
-	return p.Name() + " " + p.rawPrefix
 }
 
 func (p Page) ColumnBookID() string     { return p.prefix + "book_id" }

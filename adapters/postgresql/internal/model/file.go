@@ -9,36 +9,16 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-var FileTable File
+var FileTable = File{baseTable: baseTable{name: "files"}}
 
 type File struct {
-	rawPrefix string
-	prefix    string
+	baseTable
 }
 
-func (File) WithPrefix(p string) File {
-	if p == "" {
-		return File{}
-	}
-
+func (f File) WithPrefix(p string) File {
 	return File{
-		rawPrefix: p,
-		prefix:    p + ".",
+		baseTable: f.withPrefix(p),
 	}
-}
-
-func (f File) Prefix() string { return f.rawPrefix }
-
-func (File) Name() string {
-	return "files"
-}
-
-func (f File) NameAlter() string {
-	if f.rawPrefix == "" || f.rawPrefix == f.Name() {
-		return f.Name()
-	}
-
-	return f.Name() + " " + f.rawPrefix
 }
 
 func (f File) ColumnID() string          { return f.prefix + "id" }
