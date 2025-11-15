@@ -17,6 +17,7 @@ import (
 func (repo *PageRepo) MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, pageNumber int) error {
 	pageTable := model.PageTable.WithPrefix("p")
 	fileTable := model.FileTable.WithPrefix("f")
+	deletedPageTable := model.DeletedPageTable
 
 	tx, err := repo.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
@@ -33,20 +34,20 @@ func (repo *PageRepo) MarkPageAsDeleted(ctx context.Context, bookID uuid.UUID, p
 		}
 	}()
 
-	insertQuery, insertArgs := squirrel.Insert("deleted_pages").
+	insertQuery, insertArgs := squirrel.Insert(deletedPageTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Select(
 			squirrel.Select(
-				pageTable.ColumnBookID(),
-				pageTable.ColumnPageNumber(),
-				pageTable.ColumnExt(),
-				pageTable.ColumnOriginURL(),
-				fileTable.ColumnMd5Sum(),
-				fileTable.ColumnSha256Sum(),
-				fileTable.ColumnSize(),
-				pageTable.ColumnDownloaded(),
-				pageTable.ColumnCreateAt()+" AS created_at",
-				pageTable.ColumnLoadAt()+" AS loaded_at",
+				pageTable.ColumnBookID()+" AS "+deletedPageTable.ColumnBookID(),
+				pageTable.ColumnPageNumber()+" AS "+deletedPageTable.ColumnPageNumber(),
+				pageTable.ColumnExt()+" AS "+deletedPageTable.ColumnExt(),
+				pageTable.ColumnOriginURL()+" AS "+deletedPageTable.ColumnOriginURL(),
+				fileTable.ColumnMd5Sum()+" AS "+deletedPageTable.ColumnMd5Sum(),
+				fileTable.ColumnSha256Sum()+" AS "+deletedPageTable.ColumnSha256Sum(),
+				fileTable.ColumnSize()+" AS "+deletedPageTable.ColumnSize(),
+				pageTable.ColumnDownloaded()+" AS "+deletedPageTable.ColumnDownloaded(),
+				pageTable.ColumnCreateAt()+" AS "+deletedPageTable.ColumnCreatedAt(),
+				pageTable.ColumnLoadAt()+" AS "+deletedPageTable.ColumnLoadedAt(),
 			).
 				From(pageTable.NameAlter()).
 				LeftJoin(model.JoinPageAndFile(pageTable, fileTable)).

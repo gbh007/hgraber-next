@@ -10,22 +10,45 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-func DeletedPageToPageWithHashColumns() []string {
-	return []string{
-		"book_id",
-		"page_number",
-		"ext",
-		"origin_url",
-		"downloaded",
-		"created_at",
-		"loaded_at",
-		"md5_sum",
-		"sha256_sum",
-		"\"size\"",
+var DeletedPageTable = DeletedPage{baseTable: baseTable{name: "deleted_pages"}}
+
+type DeletedPage struct {
+	baseTable
+}
+
+func (p DeletedPage) WithPrefix(pf string) DeletedPage {
+	return DeletedPage{
+		baseTable: p.withPrefix(pf),
 	}
 }
 
-func DeletedPageToPageWithHashScanner(p *core.PageWithHash) RowScanner {
+func (p DeletedPage) ColumnBookID() string     { return "book_id" }
+func (p DeletedPage) ColumnPageNumber() string { return "page_number" }
+func (p DeletedPage) ColumnExt() string        { return "ext" }
+func (p DeletedPage) ColumnOriginURL() string  { return "origin_url" }
+func (p DeletedPage) ColumnDownloaded() string { return "downloaded" }
+func (p DeletedPage) ColumnCreatedAt() string  { return "created_at" }
+func (p DeletedPage) ColumnLoadedAt() string   { return "loaded_at" }
+func (p DeletedPage) ColumnMd5Sum() string     { return "md5_sum" }
+func (p DeletedPage) ColumnSha256Sum() string  { return "sha256_sum" }
+func (p DeletedPage) ColumnSize() string       { return "\"size\"" }
+
+func (p DeletedPage) ToPageWithHashColumns() []string {
+	return []string{
+		p.ColumnBookID(),
+		p.ColumnPageNumber(),
+		p.ColumnExt(),
+		p.ColumnOriginURL(),
+		p.ColumnDownloaded(),
+		p.ColumnCreatedAt(),
+		p.ColumnLoadedAt(),
+		p.ColumnMd5Sum(),
+		p.ColumnSha256Sum(),
+		p.ColumnSize(),
+	}
+}
+
+func (DeletedPage) ToPageWithHashScanner(p *core.PageWithHash) RowScanner {
 	return func(rows pgx.Rows) error {
 		var (
 			originURL sql.NullString

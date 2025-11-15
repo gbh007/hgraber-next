@@ -12,13 +12,15 @@ import (
 )
 
 func (repo *PageRepo) DeletedPages(ctx context.Context, bookID uuid.UUID) ([]core.PageWithHash, error) {
-	builder := squirrel.Select(model.DeletedPageToPageWithHashColumns()...).
+	deletedPageTable := model.DeletedPageTable
+
+	builder := squirrel.Select(deletedPageTable.ToPageWithHashColumns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("deleted_pages").
+		From(deletedPageTable.Name()).
 		Where(squirrel.Eq{
-			"book_id": bookID,
+			deletedPageTable.ColumnBookID(): bookID,
 		}).
-		OrderBy("page_number")
+		OrderBy(deletedPageTable.ColumnPageNumber())
 
 	query, args := builder.MustSql()
 
@@ -34,7 +36,7 @@ func (repo *PageRepo) DeletedPages(ctx context.Context, bookID uuid.UUID) ([]cor
 	for rows.Next() {
 		page := core.PageWithHash{}
 
-		err := rows.Scan(model.DeletedPageToPageWithHashScanner(&page))
+		err := rows.Scan(deletedPageTable.ToPageWithHashScanner(&page))
 		if err != nil {
 			return nil, fmt.Errorf("scan: %w", err)
 		}

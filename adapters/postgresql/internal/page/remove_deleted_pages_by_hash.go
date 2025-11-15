@@ -6,16 +6,19 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *PageRepo) RemoveDeletedPagesByHash(ctx context.Context, hash core.FileHash) error {
-	builder := squirrel.Delete("deleted_pages").
+	deletedPageTable := model.DeletedPageTable
+
+	builder := squirrel.Delete(deletedPageTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"md5_sum":    hash.Md5Sum,
-			"sha256_sum": hash.Sha256Sum,
-			"\"size\"":   hash.Size,
+			deletedPageTable.ColumnMd5Sum():    hash.Md5Sum,
+			deletedPageTable.ColumnSha256Sum(): hash.Sha256Sum,
+			deletedPageTable.ColumnSize():      hash.Size,
 		})
 
 	query, args := builder.MustSql()

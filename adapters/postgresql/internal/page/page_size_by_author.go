@@ -12,13 +12,14 @@ import (
 )
 
 func (repo *PageRepo) PageSizeByAuthor(ctx context.Context) (map[string]core.SizeWithCount, error) {
-	pageTable := model.PageTable
+	pageTable := model.PageTable.WithPrefix("p")
+	fileTable := model.FileTable.WithPrefix("f")
 
-	builder := squirrel.Select("COUNT(*)", "ba.value", "SUM(f.size)").
+	builder := squirrel.Select("COUNT(*)", "ba.value", "SUM("+fileTable.ColumnSize()+")").
 		PlaceholderFormat(squirrel.Dollar).
 		From("book_attributes ba").
-		InnerJoin(pageTable.Name() + " p ON ba.book_id = p." + pageTable.ColumnBookID()).
-		InnerJoin("files f ON f.id = p." + pageTable.ColumnFileID()).
+		InnerJoin(pageTable.NameAlter() + " ON ba.book_id = " + pageTable.ColumnBookID()).
+		InnerJoin(model.JoinPageAndFile(pageTable, fileTable)).
 		Where(squirrel.Eq{
 			"ba.attr": "author",
 		}).

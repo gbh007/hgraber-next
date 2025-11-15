@@ -14,21 +14,21 @@ import (
 
 // TODO: добавить лимиты
 func (repo *PageRepo) NotDownloadedPages(ctx context.Context) ([]core.PageForDownload, error) {
-	pageTable := model.PageTable
+	pageTable := model.PageTable.WithPrefix("p")
 
 	//nolint:lll // будет исправлено позднее
 	builder := squirrel.Select(
-		"p."+pageTable.ColumnBookID(),
-		"b.origin_url AS book_url",                       // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
-		"p."+pageTable.ColumnOriginURL()+" AS image_url", // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
-		"p."+pageTable.ColumnPageNumber(),
-		"p."+pageTable.ColumnExt(),
+		pageTable.ColumnBookID(),
+		"b.origin_url AS book_url",                  // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
+		pageTable.ColumnOriginURL()+" AS image_url", // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
+		pageTable.ColumnPageNumber(),
+		pageTable.ColumnExt(),
 	).
 		PlaceholderFormat(squirrel.Dollar).
 		From("books AS b").
-		InnerJoin(pageTable.Name() + " AS p ON b.id = p." + pageTable.ColumnBookID()).
+		InnerJoin(pageTable.NameAlter() + " ON b.id = " + pageTable.ColumnBookID()).
 		Where(squirrel.Eq{
-			"p." + pageTable.ColumnDownloaded(): false,
+			pageTable.ColumnDownloaded(): false,
 		})
 
 	query, args := builder.MustSql()

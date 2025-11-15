@@ -6,26 +6,29 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *PageRepo) DeletedPagesHashes(ctx context.Context) ([]core.FileHash, error) {
+	deletedPageTable := model.DeletedPageTable
+
 	builder := squirrel.Select(
-		"md5_sum",
-		"sha256_sum",
-		"size",
+		deletedPageTable.ColumnMd5Sum(),
+		deletedPageTable.ColumnSha256Sum(),
+		deletedPageTable.ColumnSize(),
 	).
 		PlaceholderFormat(squirrel.Dollar).
-		From("deleted_pages").
+		From(deletedPageTable.Name()).
 		Where(squirrel.And{
-			squirrel.Expr(`md5_sum IS NOT NULL`),
-			squirrel.Expr(`sha256_sum IS NOT NULL`),
-			squirrel.Expr(`size IS NOT NULL`),
+			squirrel.Expr(deletedPageTable.ColumnMd5Sum() + " IS NOT NULL"),
+			squirrel.Expr(deletedPageTable.ColumnSha256Sum() + " IS NOT NULL"),
+			squirrel.Expr(deletedPageTable.ColumnSize() + " IS NOT NULL"),
 		}).
 		GroupBy(
-			"md5_sum",
-			"sha256_sum",
-			"size",
+			deletedPageTable.ColumnMd5Sum(),
+			deletedPageTable.ColumnSha256Sum(),
+			deletedPageTable.ColumnSize(),
 		)
 
 	query, args := builder.MustSql()

@@ -6,14 +6,18 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *PageRepo) RemoveDeletedPages(ctx context.Context, bookID uuid.UUID, pageNumbers []int) error {
-	builder := squirrel.Delete("deleted_pages").
+	deletedPageTable := model.DeletedPageTable
+
+	builder := squirrel.Delete(deletedPageTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"book_id":     bookID,
-			"page_number": pageNumbers,
+			deletedPageTable.ColumnBookID():     bookID,
+			deletedPageTable.ColumnPageNumber(): pageNumbers,
 		})
 
 	query, args := builder.MustSql()

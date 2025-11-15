@@ -3,10 +3,14 @@ package page
 import (
 	"context"
 	"fmt"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *PageRepo) TruncateDeletedPages(ctx context.Context) error {
-	_, err := repo.Pool.Exec(ctx, `TRUNCATE deleted_pages;`)
+	deletedPageTable := model.DeletedPageTable
+
+	_, err := repo.Pool.Exec(ctx, "TRUNCATE "+deletedPageTable.Name())
 	if err != nil {
 		return fmt.Errorf("exec query: %w", err)
 	}
