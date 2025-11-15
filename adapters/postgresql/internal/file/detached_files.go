@@ -11,19 +11,20 @@ import (
 )
 
 func (repo *FileRepo) DetachedFiles(ctx context.Context) ([]core.File, error) {
-	fileTable := model.FileTable
-	pageTable := model.PageTable
+	fileTable := model.FileTable.WithPrefix(model.FileTable.Name())
+	pageTable := model.PageTable.WithPrefix(model.PageTable.Name())
 
 	builder := squirrel.Select(fileTable.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From(fileTable.Name()).
+		From(fileTable.NameAlter()).
 		Where(squirrel.Expr(
 			`NOT EXISTS (SELECT 1 FROM ` +
-				pageTable.Name() +
+				pageTable.NameAlter() +
 				" WHERE " +
-				pageTable.Name() + "." + pageTable.ColumnFileID() +
+				pageTable.ColumnFileID() +
 				" = " +
-				fileTable.Name() + "." + fileTable.ColumnID() + ")",
+				fileTable.ColumnID() +
+				")",
 		))
 
 	query, args := builder.MustSql()

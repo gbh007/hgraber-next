@@ -17,15 +17,15 @@ func (repo *FileRepo) FSFilesInfo(
 	fsID uuid.UUID,
 	onlyInvalidData, onlyDetached bool,
 ) (core.SizeWithCount, error) {
-	fileTable := model.FileTable
-	pageTable := model.PageTable
+	fileTable := model.FileTable.WithPrefix(model.FileTable.Name())
+	pageTable := model.PageTable.WithPrefix(model.PageTable.Name())
 
 	builder := squirrel.Select(
 		"COUNT(*)",
 		"SUM("+fileTable.ColumnSize()+")",
 	).
 		PlaceholderFormat(squirrel.Dollar).
-		From(fileTable.Name()).
+		From(fileTable.NameAlter()).
 		Where(squirrel.Eq{
 			fileTable.ColumnFSID(): fsID,
 		})
@@ -40,11 +40,12 @@ func (repo *FileRepo) FSFilesInfo(
 		builder = builder.Where(
 			squirrel.Expr(
 				`NOT EXISTS (SELECT 1 FROM ` +
-					pageTable.Name() +
+					pageTable.NameAlter() +
 					" WHERE " +
-					pageTable.Name() + "." + pageTable.ColumnFileID() +
+					pageTable.ColumnFileID() +
 					" = " +
-					fileTable.Name() + "." + fileTable.ColumnID() + ")",
+					fileTable.ColumnID() +
+					")",
 			),
 		)
 	}
