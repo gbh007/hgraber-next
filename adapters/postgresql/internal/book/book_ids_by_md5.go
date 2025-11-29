@@ -11,19 +11,19 @@ import (
 )
 
 func (repo *BookRepo) BookIDsByMD5(ctx context.Context, md5Sums []string) ([]uuid.UUID, error) {
-	bookTable := model.BookTable
-	fileTable := model.FileTable
-	pageTable := model.PageTable
+	bookTable := model.BookTable.WithPrefix("b")
+	fileTable := model.FileTable.WithPrefix("f")
+	pageTable := model.PageTable.WithPrefix("p")
 
-	builder := squirrel.Select("b." + bookTable.ColumnID()).
+	builder := squirrel.Select(bookTable.ColumnID()).
 		PlaceholderFormat(squirrel.Dollar).
-		From(bookTable.Name() + " b").
-		InnerJoin(pageTable.Name() + " p ON p." + pageTable.ColumnBookID() + " = b." + bookTable.ColumnID()).
-		InnerJoin(fileTable.Name() + " f ON f." + fileTable.ColumnID() + " = p." + pageTable.ColumnFileID()).
+		From(bookTable.NameAlter()).
+		InnerJoin(model.JoinBookAndPage(bookTable, pageTable)).
+		InnerJoin(model.JoinPageAndFile(pageTable, fileTable)).
 		Where(squirrel.Eq{
-			"f." + fileTable.ColumnMd5Sum(): md5Sums,
+			fileTable.ColumnMd5Sum(): md5Sums,
 		}).
-		GroupBy("b." + bookTable.ColumnID())
+		GroupBy(bookTable.ColumnID())
 
 	query, args := builder.MustSql()
 

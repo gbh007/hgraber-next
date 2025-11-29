@@ -8,19 +8,23 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-var BookLabelTable BookLabel
+var BookLabelTable = BookLabel{baseTable: baseTable{name: "book_labels"}}
 
-type BookLabel struct{}
-
-func (BookLabel) Name() string {
-	return "book_labels"
+type BookLabel struct {
+	baseTable
 }
 
-func (BookLabel) ColumnBookID() string     { return "book_id" }
-func (BookLabel) ColumnPageNumber() string { return "page_number" }
-func (BookLabel) ColumnName() string       { return "name" }
-func (BookLabel) ColumnValue() string      { return "value" }
-func (BookLabel) ColumnCreateAt() string   { return "create_at" }
+func (bl BookLabel) WithPrefix(pf string) BookLabel {
+	return BookLabel{
+		baseTable: bl.withPrefix(pf),
+	}
+}
+
+func (bl BookLabel) ColumnBookID() string     { return bl.prefix + "book_id" }
+func (bl BookLabel) ColumnPageNumber() string { return bl.prefix + "page_number" }
+func (bl BookLabel) ColumnName() string       { return bl.prefix + "name" }
+func (bl BookLabel) ColumnValue() string      { return bl.prefix + "value" }
+func (bl BookLabel) ColumnCreateAt() string   { return bl.prefix + "create_at" }
 
 func (bl BookLabel) Columns() []string {
 	return []string{

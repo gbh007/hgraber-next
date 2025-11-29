@@ -7,6 +7,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
@@ -18,14 +19,19 @@ func (repo *BookRepo) buildBooksFilter(
 ) (string, []any, error) {
 	var builder squirrel.SelectBuilder
 
+	bookTable := model.BookTable.WithPrefix("b")
+	pageTable := model.PageTable.WithPrefix("p")
+	bookLabelTable := model.BookLabelTable.WithPrefix("l")
+	bookAttributeTable := model.BookAttributeTable.WithPrefix("a")
+
 	if isCount {
-		builder = squirrel.Select("COUNT(id)")
+		builder = squirrel.Select("COUNT(" + bookTable.ColumnID() + ")")
 	} else {
-		builder = squirrel.Select("id")
+		builder = squirrel.Select(bookTable.ColumnID())
 	}
 
 	builder = builder.PlaceholderFormat(squirrel.Dollar).
-		From("books")
+		From(bookTable.NameAlter())
 
 	if !isCount {
 		if filter.Limit > 0 {
@@ -45,80 +51,80 @@ func (repo *BookRepo) buildBooksFilter(
 		}
 
 		orderBy := []string{
-			"create_at" + orderBySuffix,
-			"id" + orderBySuffix,
+			bookTable.ColumnCreateAt() + orderBySuffix,
+			bookTable.ColumnID() + orderBySuffix,
 		}
 
 		switch filter.OrderBy {
 		case core.BookFilterOrderByCreated:
 			orderBy = []string{
-				"create_at" + orderBySuffix,
-				"id" + orderBySuffix,
+				bookTable.ColumnCreateAt() + orderBySuffix,
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByName:
 			orderBy = []string{
-				"name" + orderBySuffix,
-				"id" + orderBySuffix,
+				bookTable.ColumnName() + orderBySuffix,
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByID:
 			orderBy = []string{
-				"id" + orderBySuffix,
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByPageCount:
 			orderBy = []string{
-				"page_count" + orderBySuffix,
-				"id" + orderBySuffix,
+				bookTable.ColumnPageCount() + orderBySuffix,
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByCalcPageCount:
 			orderBy = []string{
-				"calc_page_count" + orderBySuffix + " NULLS LAST",
-				"id" + orderBySuffix,
+				bookTable.ColumnCalcPageCount() + orderBySuffix + " NULLS LAST",
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByCalcFileCount:
 			orderBy = []string{
-				"calc_file_count" + orderBySuffix + " NULLS LAST",
-				"id" + orderBySuffix,
+				bookTable.ColumnCalcFileCount() + orderBySuffix + " NULLS LAST",
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByCalcDeadHashCount:
 			orderBy = []string{
-				"calc_dead_hash_count" + orderBySuffix + " NULLS LAST",
-				"id" + orderBySuffix,
+				bookTable.ColumnCalcDeadHashCount() + orderBySuffix + " NULLS LAST",
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByCalcPageSize:
 			orderBy = []string{
-				"calc_page_size" + orderBySuffix + " NULLS LAST",
-				"id" + orderBySuffix,
+				bookTable.ColumnCalcPageSize() + orderBySuffix + " NULLS LAST",
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByCalcFileSize:
 			orderBy = []string{
-				"calc_file_size" + orderBySuffix + " NULLS LAST",
-				"id" + orderBySuffix,
+				bookTable.ColumnCalcFileSize() + orderBySuffix + " NULLS LAST",
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByCalcDeadHashSize:
 			orderBy = []string{
-				"calc_dead_hash_size" + orderBySuffix + " NULLS LAST",
-				"id" + orderBySuffix,
+				bookTable.ColumnCalcDeadHashSize() + orderBySuffix + " NULLS LAST",
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByCalculatedAt:
 			orderBy = []string{
-				"calculated_at" + orderBySuffix + " NULLS LAST",
-				"id" + orderBySuffix,
+				bookTable.ColumnCalculatedAt() + orderBySuffix + " NULLS LAST",
+				bookTable.ColumnID() + orderBySuffix,
 			}
 
 		case core.BookFilterOrderByCalcAvgPageSize:
 			orderBy = []string{
-				"calc_avg_page_size" + orderBySuffix + " NULLS LAST",
-				"id" + orderBySuffix,
+				bookTable.ColumnCalcAvgPageSize() + orderBySuffix + " NULLS LAST",
+				bookTable.ColumnID() + orderBySuffix,
 			}
 		}
 
@@ -127,39 +133,39 @@ func (repo *BookRepo) buildBooksFilter(
 
 	if !filter.From.IsZero() {
 		builder = builder.Where(squirrel.GtOrEq{
-			"create_at": filter.From,
+			bookTable.ColumnCreateAt(): filter.From,
 		})
 	}
 
 	if !filter.To.IsZero() {
 		builder = builder.Where(squirrel.Lt{
-			"create_at": filter.To,
+			bookTable.ColumnCreateAt(): filter.To,
 		})
 	}
 
 	switch filter.ShowDeleted {
 	case core.BookFilterShowTypeOnly:
-		builder = builder.Where(squirrel.Eq{"deleted": true})
+		builder = builder.Where(squirrel.Eq{bookTable.ColumnDeleted(): true})
 	case core.BookFilterShowTypeExcept:
-		builder = builder.Where(squirrel.Eq{"deleted": false})
+		builder = builder.Where(squirrel.Eq{bookTable.ColumnDeleted(): false})
 	case core.BookFilterShowTypeAll:
 		// Ничего не делаем
 	}
 
 	switch filter.ShowVerified {
 	case core.BookFilterShowTypeOnly:
-		builder = builder.Where(squirrel.Eq{"verified": true})
+		builder = builder.Where(squirrel.Eq{bookTable.ColumnVerified(): true})
 	case core.BookFilterShowTypeExcept:
-		builder = builder.Where(squirrel.Eq{"verified": false})
+		builder = builder.Where(squirrel.Eq{bookTable.ColumnVerified(): false})
 	case core.BookFilterShowTypeAll:
 		// Ничего не делаем
 	}
 
 	switch filter.ShowRebuilded {
 	case core.BookFilterShowTypeOnly:
-		builder = builder.Where(squirrel.Eq{"is_rebuild": true})
+		builder = builder.Where(squirrel.Eq{bookTable.ColumnIsRebuild(): true})
 	case core.BookFilterShowTypeExcept:
-		builder = builder.Where(squirrel.Eq{"is_rebuild": false})
+		builder = builder.Where(squirrel.Eq{bookTable.ColumnIsRebuild(): false})
 	case core.BookFilterShowTypeAll:
 		// Ничего не делаем
 	}
@@ -167,17 +173,17 @@ func (repo *BookRepo) buildBooksFilter(
 	switch filter.ShowDownloaded {
 	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(squirrel.And{
-			squirrel.Eq{"attributes_parsed": true},
-			squirrel.NotEq{"name": nil},
-			squirrel.NotEq{"page_count": nil},
-			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE downloaded = FALSE AND books.id = pages.book_id)`),
+			squirrel.Eq{bookTable.ColumnAttributesParsed(): true},
+			squirrel.NotEq{bookTable.ColumnName(): nil},
+			squirrel.NotEq{bookTable.ColumnPageCount(): nil},
+			squirrel.Expr("NOT EXISTS (SELECT 1 FROM " + pageTable.NameAlter() + " WHERE " + pageTable.ColumnDownloaded() + " = FALSE AND " + bookTable.ColumnID() + " = " + pageTable.ColumnBookID() + ")"), //nolint:golines,lll // будет исправлено позднее
 		})
 	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(squirrel.Or{
-			squirrel.Eq{"attributes_parsed": false},
-			squirrel.Eq{"name": nil},
-			squirrel.Eq{"page_count": nil},
-			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE downloaded = FALSE AND books.id = pages.book_id)`),
+			squirrel.Eq{bookTable.ColumnAttributesParsed(): false},
+			squirrel.Eq{bookTable.ColumnName(): nil},
+			squirrel.Eq{bookTable.ColumnPageCount(): nil},
+			squirrel.Expr("EXISTS (SELECT 1 FROM " + pageTable.NameAlter() + " WHERE " + pageTable.ColumnDownloaded() + " = FALSE AND " + bookTable.ColumnID() + " = " + pageTable.ColumnBookID() + ")"), //nolint:golines,lll // будет исправлено позднее
 		})
 	case core.BookFilterShowTypeAll:
 		// Ничего не делаем
@@ -186,11 +192,11 @@ func (repo *BookRepo) buildBooksFilter(
 	switch filter.ShowWithoutPages {
 	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(
-			squirrel.Expr(`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id)`),
+			squirrel.Expr("NOT EXISTS (SELECT 1 FROM " + pageTable.NameAlter() + " WHERE " + bookTable.ColumnID() + " = " + pageTable.ColumnBookID() + ")"), //nolint:golines,lll // будет исправлено позднее
 		)
 	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(
-			squirrel.Expr(`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id)`),
+			squirrel.Expr("EXISTS (SELECT 1 FROM " + pageTable.NameAlter() + " WHERE " + bookTable.ColumnID() + " = " + pageTable.ColumnBookID() + ")"), //nolint:lll // будет исправлено позднее
 		)
 	case core.BookFilterShowTypeAll:
 		// Ничего не делаем
@@ -200,14 +206,14 @@ func (repo *BookRepo) buildBooksFilter(
 	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(
 			squirrel.Expr(
-				`NOT EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`,
+				"NOT EXISTS (SELECT 1 FROM "+pageTable.NameAlter()+" WHERE "+bookTable.ColumnID()+" = "+pageTable.ColumnBookID()+" AND "+pageTable.ColumnPageNumber()+" = ?)", //nolint:lll // будет исправлено позднее
 				core.PageNumberForPreview,
 			), // особенность библиотеки, необходимо использовать `?`
 		)
 	case core.BookFilterShowTypeExcept:
 		builder = builder.Where(
 			squirrel.Expr(
-				`EXISTS (SELECT 1 FROM pages WHERE books.id = pages.book_id AND pages.page_number = ?)`,
+				"EXISTS (SELECT 1 FROM "+pageTable.NameAlter()+" WHERE "+bookTable.ColumnID()+" = "+pageTable.ColumnBookID()+" AND "+pageTable.ColumnPageNumber()+" = ?)", //nolint:lll // будет исправлено позднее
 				core.PageNumberForPreview,
 			), // особенность библиотеки, необходимо использовать `?`
 		)
@@ -216,18 +222,18 @@ func (repo *BookRepo) buildBooksFilter(
 	}
 
 	if filter.Fields.Name != "" {
-		builder = builder.Where(squirrel.ILike{"name": "%" + filter.Fields.Name + "%"})
+		builder = builder.Where(squirrel.ILike{bookTable.ColumnName(): "%" + filter.Fields.Name + "%"})
 	}
 
 	for _, attrFilter := range filter.Fields.Attributes {
 		subBuilder := squirrel.Select("1").
 			// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
 			PlaceholderFormat(squirrel.Question).
-			From("book_attributes").
+			From(bookAttributeTable.NameAlter()).
 			Where(squirrel.Eq{
-				"attr": attrFilter.Code,
+				bookAttributeTable.ColumnAttr(): attrFilter.Code,
 			}).
-			Where(squirrel.Expr(`book_id = books.id`))
+			Where(squirrel.Expr(bookAttributeTable.ColumnBookID() + " = " + bookTable.ColumnID()))
 
 		switch attrFilter.Type {
 		case core.BookFilterAttributeTypeLike:
@@ -236,7 +242,7 @@ func (repo *BookRepo) buildBooksFilter(
 			}
 
 			subBuilder = subBuilder.Where(squirrel.ILike{
-				"value": "%" + attrFilter.Values[0] + "%",
+				bookAttributeTable.ColumnValue(): "%" + attrFilter.Values[0] + "%",
 			})
 
 		case core.BookFilterAttributeTypeIn:
@@ -245,29 +251,29 @@ func (repo *BookRepo) buildBooksFilter(
 			}
 
 			subBuilder = subBuilder.Where(squirrel.Eq{
-				"value": attrFilter.Values,
+				bookAttributeTable.ColumnValue(): attrFilter.Values,
 			})
 
 		case core.BookFilterAttributeTypeCountEq:
 			if attrFilter.Count != 0 { // Случай когда нужно чтобы не было данных
 				subBuilder = subBuilder.Having(squirrel.Eq{
-					"COUNT(value)": attrFilter.Count,
+					"COUNT(" + bookAttributeTable.ColumnValue() + ")": attrFilter.Count,
 				}).
-					GroupBy("attr")
+					GroupBy(bookAttributeTable.ColumnAttr())
 			}
 
 		case core.BookFilterAttributeTypeCountGt:
 			subBuilder = subBuilder.Having(squirrel.Gt{
-				"COUNT(value)": attrFilter.Count,
+				"COUNT(" + bookAttributeTable.ColumnValue() + ")": attrFilter.Count,
 			}).
-				GroupBy("attr")
+				GroupBy(bookAttributeTable.ColumnAttr())
 
 		case core.BookFilterAttributeTypeCountLt:
 			if attrFilter.Count != 1 { // Случай когда нужно чтобы не было данных
 				subBuilder = subBuilder.Having(squirrel.Lt{
-					"COUNT(value)": attrFilter.Count,
+					"COUNT(" + bookAttributeTable.ColumnValue() + ")": attrFilter.Count,
 				}).
-					GroupBy("attr")
+					GroupBy(bookAttributeTable.ColumnAttr())
 			}
 		case core.BookFilterAttributeTypeNone:
 			continue
@@ -294,11 +300,11 @@ func (repo *BookRepo) buildBooksFilter(
 		subBuilder := squirrel.Select("1").
 			// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
 			PlaceholderFormat(squirrel.Question).
-			From("book_labels").
+			From(bookLabelTable.NameAlter()).
 			Where(squirrel.Eq{
-				"name": labelFilter.Name,
+				bookLabelTable.Name(): labelFilter.Name,
 			}).
-			Where(squirrel.Expr(`book_id = books.id`))
+			Where(squirrel.Expr(bookLabelTable.ColumnBookID() + " = " + bookTable.ColumnID()))
 
 		switch labelFilter.Type {
 		case core.BookFilterLabelTypeLike:
@@ -307,7 +313,7 @@ func (repo *BookRepo) buildBooksFilter(
 			}
 
 			subBuilder = subBuilder.Where(squirrel.ILike{
-				"value": "%" + labelFilter.Values[0] + "%",
+				bookLabelTable.ColumnValue(): "%" + labelFilter.Values[0] + "%",
 			})
 
 		case core.BookFilterLabelTypeIn:
@@ -316,29 +322,29 @@ func (repo *BookRepo) buildBooksFilter(
 			}
 
 			subBuilder = subBuilder.Where(squirrel.Eq{
-				"value": labelFilter.Values,
+				bookLabelTable.ColumnValue(): labelFilter.Values,
 			})
 
 		case core.BookFilterLabelTypeCountEq:
 			if labelFilter.Count != 0 { // Случай когда нужно чтобы не было данных
 				subBuilder = subBuilder.Having(squirrel.Eq{
-					"COUNT(value)": labelFilter.Count,
+					"COUNT(" + bookLabelTable.ColumnValue() + ")": labelFilter.Count,
 				}).
-					GroupBy("name")
+					GroupBy(bookLabelTable.Name())
 			}
 
 		case core.BookFilterLabelTypeCountGt:
 			subBuilder = subBuilder.Having(squirrel.Gt{
-				"COUNT(value)": labelFilter.Count,
+				"COUNT(" + bookLabelTable.ColumnValue() + ")": labelFilter.Count,
 			}).
-				GroupBy("name")
+				GroupBy(bookLabelTable.Name())
 
 		case core.BookFilterLabelTypeCountLt:
 			if labelFilter.Count != 1 { // Случай когда нужно чтобы не было данных
 				subBuilder = subBuilder.Having(squirrel.Lt{
-					"COUNT(value)": labelFilter.Count,
+					"COUNT(" + bookLabelTable.ColumnValue() + ")": labelFilter.Count,
 				}).
-					GroupBy("name")
+					GroupBy(bookLabelTable.Name())
 			}
 		case core.BookFilterLabelTypeNone:
 			continue

@@ -10,33 +10,37 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-var BookTable Book
+var BookTable = Book{baseTable: baseTable{name: "books"}}
 
-type Book struct{}
-
-func (Book) Name() string {
-	return "books"
+type Book struct {
+	baseTable
 }
 
-func (Book) ColumnID() string                { return "id" }
-func (Book) ColumnName() string              { return "name" }
-func (Book) ColumnOriginURL() string         { return "origin_url" }
-func (Book) ColumnPageCount() string         { return "page_count" }
-func (Book) ColumnAttributesParsed() string  { return "attributes_parsed" }
-func (Book) ColumnCreateAt() string          { return "create_at" }
-func (Book) ColumnDeleted() string           { return "deleted" }
-func (Book) ColumnDeletedAt() string         { return "deleted_at" }
-func (Book) ColumnVerified() string          { return "verified" }
-func (Book) ColumnVerifiedAt() string        { return "verified_at" }
-func (Book) ColumnIsRebuild() string         { return "is_rebuild" }
-func (Book) ColumnCalcPageCount() string     { return "calc_page_count" }
-func (Book) ColumnCalcFileCount() string     { return "calc_file_count" }
-func (Book) ColumnCalcDeadHashCount() string { return "calc_dead_hash_count" }
-func (Book) ColumnCalcPageSize() string      { return "calc_page_size" }
-func (Book) ColumnCalcFileSize() string      { return "calc_file_size" }
-func (Book) ColumnCalcDeadHashSize() string  { return "calc_dead_hash_size" }
-func (Book) ColumnCalculatedAt() string      { return "calculated_at" }
-func (Book) ColumnCalcAvgPageSize() string   { return "calc_avg_page_size" }
+func (b Book) WithPrefix(pf string) Book {
+	return Book{
+		baseTable: b.withPrefix(pf),
+	}
+}
+
+func (b Book) ColumnID() string                { return b.prefix + "id" }
+func (b Book) ColumnName() string              { return b.prefix + "name" }
+func (b Book) ColumnOriginURL() string         { return b.prefix + "origin_url" }
+func (b Book) ColumnPageCount() string         { return b.prefix + "page_count" }
+func (b Book) ColumnAttributesParsed() string  { return b.prefix + "attributes_parsed" }
+func (b Book) ColumnCreateAt() string          { return b.prefix + "create_at" }
+func (b Book) ColumnDeleted() string           { return b.prefix + "deleted" }
+func (b Book) ColumnDeletedAt() string         { return b.prefix + "deleted_at" }
+func (b Book) ColumnVerified() string          { return b.prefix + "verified" }
+func (b Book) ColumnVerifiedAt() string        { return b.prefix + "verified_at" }
+func (b Book) ColumnIsRebuild() string         { return b.prefix + "is_rebuild" }
+func (b Book) ColumnCalcPageCount() string     { return b.prefix + "calc_page_count" }
+func (b Book) ColumnCalcFileCount() string     { return b.prefix + "calc_file_count" }
+func (b Book) ColumnCalcDeadHashCount() string { return b.prefix + "calc_dead_hash_count" }
+func (b Book) ColumnCalcPageSize() string      { return b.prefix + "calc_page_size" }
+func (b Book) ColumnCalcFileSize() string      { return b.prefix + "calc_file_size" }
+func (b Book) ColumnCalcDeadHashSize() string  { return b.prefix + "calc_dead_hash_size" }
+func (b Book) ColumnCalculatedAt() string      { return b.prefix + "calculated_at" }
+func (b Book) ColumnCalcAvgPageSize() string   { return b.prefix + "calc_avg_page_size" }
 
 func (b Book) Columns() []string {
 	return []string{

@@ -8,15 +8,19 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *BookRepo) BookSizes(ctx context.Context) (map[uuid.UUID]core.SizeWithCount, error) {
-	builder := squirrel.Select("COUNT(*)", "p.book_id", "SUM(f.size)").
+	fileTable := model.FileTable.WithPrefix("f")
+	pageTable := model.PageTable.WithPrefix("p")
+
+	builder := squirrel.Select("COUNT(*)", pageTable.ColumnBookID(), "SUM("+fileTable.ColumnSize()+")").
 		PlaceholderFormat(squirrel.Dollar).
-		From("pages p").
-		InnerJoin("files f ON f.id = p.file_id").
-		GroupBy("p.book_id")
+		From(pageTable.NameAlter()).
+		InnerJoin(model.JoinPageAndFile(pageTable, fileTable)).
+		GroupBy(pageTable.ColumnBookID())
 
 	query, args := builder.MustSql()
 
