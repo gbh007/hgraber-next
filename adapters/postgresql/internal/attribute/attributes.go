@@ -11,10 +11,12 @@ import (
 )
 
 func (repo *AttributeRepo) Attributes(ctx context.Context) ([]core.Attribute, error) {
-	builder := squirrel.Select(model.AttributeColumns()...).
-		From("attributes").
+	attrTable := model.AttributeTable
+
+	builder := squirrel.Select(attrTable.Columns()...).
+		From(attrTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
-		OrderBy("\"order\"")
+		OrderBy(attrTable.ColumnOrder())
 
 	query, args := builder.MustSql()
 
@@ -30,7 +32,7 @@ func (repo *AttributeRepo) Attributes(ctx context.Context) ([]core.Attribute, er
 	for rows.Next() {
 		attribute := core.Attribute{}
 
-		err = rows.Scan(model.AttributeScanner(&attribute))
+		err = rows.Scan(attrTable.Scanner(&attribute))
 		if err != nil {
 			return nil, fmt.Errorf("scan row: %w", err)
 		}
