@@ -9,7 +9,7 @@ const (
 )
 
 const (
-	ServiceTypeLabelValueServer  = "server" //nolint:goconst // ложно-положительное
+	ServiceTypeLabelValueServer  = "server"
 	ServiceTypeLabelValueAgent   = "agent"
 	ServiceTypeLabelValueUnknown = "unknown"
 )

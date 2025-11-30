@@ -2,7 +2,7 @@ package metriccore
 
 const (
 	SystemName    = "hgraber_next"
-	SubSystemName = "server"
+	SubSystemName = "server" //nolint:goconst // ложно-положительное
 
 	OkLabelValue    = "ok"
 	ErrorLabelValue = "error"
