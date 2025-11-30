@@ -8,6 +8,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
@@ -15,6 +16,10 @@ func (repo *AttributeRepo) AttributesPageSize(
 	ctx context.Context,
 	attrs map[string][]string,
 ) (core.SizeWithCount, error) {
+	fileTable := model.FileTable.WithPrefix("f")
+	pageTable := model.PageTable.WithPrefix("p")
+	bookAttributeTable := model.BookAttributeTable.WithPrefix("a")
+
 	whereCond := squirrel.Or{}
 
 	for code, values := range attrs {
@@ -23,8 +28,8 @@ func (repo *AttributeRepo) AttributesPageSize(
 		}
 
 		whereCond = append(whereCond, squirrel.Eq{
-			"ba.attr":  code,
-			"ba.value": values,
+			bookAttributeTable.ColumnAttr():  code,
+			bookAttributeTable.ColumnValue(): values,
 		})
 	}
 
@@ -32,15 +37,15 @@ func (repo *AttributeRepo) AttributesPageSize(
 		return core.SizeWithCount{}, errors.New("incorrect condition: empty attributes")
 	}
 
-	subBuilder := squirrel.Select(`MAX(f."size") AS "size"`).
+	subBuilder := squirrel.Select("MAX("+fileTable.ColumnSize()+") AS \"size\"").
 		PlaceholderFormat(squirrel.Dollar).
-		From(`files f`).
-		InnerJoin(`pages p ON f.id = p.file_id`).
-		InnerJoin(`book_attributes ba ON ba.book_id = p.book_id`).
+		From(fileTable.NameAlter()).
+		InnerJoin(model.JoinFileAndPage(fileTable, pageTable)).
+		InnerJoin(model.JoinPageAndBookAttribute(pageTable, bookAttributeTable)).
 		Where(whereCond).
 		GroupBy(
-			`p.book_id`,
-			`p.page_number`,
+			pageTable.ColumnBookID(),
+			pageTable.ColumnPageNumber(),
 		)
 
 	builder := squirrel.Select(`SUM(uf."size")`, `COUNT(*)`).

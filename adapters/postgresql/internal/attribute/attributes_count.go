@@ -4,11 +4,29 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *AttributeRepo) AttributesCount(ctx context.Context) ([]core.AttributeVariant, error) {
-	rows, err := repo.Pool.Query(ctx, `SELECT COUNT(*), attr, value FROM book_attributes GROUP BY attr, value;`)
+	bookAttributeTable := model.BookAttributeTable
+
+	query, args := squirrel.Select(
+		"COUNT(*)",
+		bookAttributeTable.ColumnAttr(),
+		bookAttributeTable.ColumnValue(),
+	).
+		PlaceholderFormat(squirrel.Dollar).
+		From(bookAttributeTable.Name()).
+		GroupBy(
+			bookAttributeTable.ColumnAttr(),
+			bookAttributeTable.ColumnValue(),
+		).
+		MustSql()
+
+	rows, err := repo.Pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("get attributes count: %w", err)
 	}

@@ -16,13 +16,16 @@ func (repo *BookRepo) BookSizes(ctx context.Context) (map[uuid.UUID]core.SizeWit
 	fileTable := model.FileTable.WithPrefix("f")
 	pageTable := model.PageTable.WithPrefix("p")
 
-	builder := squirrel.Select("COUNT(*)", pageTable.ColumnBookID(), "SUM("+fileTable.ColumnSize()+")").
+	query, args := squirrel.Select(
+		"COUNT(*)",
+		pageTable.ColumnBookID(),
+		"SUM("+fileTable.ColumnSize()+")",
+	).
 		PlaceholderFormat(squirrel.Dollar).
 		From(pageTable.NameAlter()).
 		InnerJoin(model.JoinPageAndFile(pageTable, fileTable)).
-		GroupBy(pageTable.ColumnBookID())
-
-	query, args := builder.MustSql()
+		GroupBy(pageTable.ColumnBookID()).
+		MustSql()
 
 	out := make(map[uuid.UUID]core.SizeWithCount, 100) //nolint:mnd // оптимизация
 

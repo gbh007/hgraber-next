@@ -10,6 +10,8 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *AttributeRepo) UpdateAttributes(
@@ -17,6 +19,8 @@ func (repo *AttributeRepo) UpdateAttributes(
 	bookID uuid.UUID,
 	attributes map[string][]string,
 ) error {
+	bookAttributeTable := model.BookAttributeTable
+
 	tx, err := repo.Pool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
@@ -32,17 +36,25 @@ func (repo *AttributeRepo) UpdateAttributes(
 		}
 	}()
 
-	_, err = tx.Exec(ctx, `DELETE FROM book_attributes WHERE book_id = $1;`, bookID)
+	deleteAttrsQuery, deleteAttrsArgs := squirrel.
+		Delete(bookAttributeTable.Name()).
+		PlaceholderFormat(squirrel.Dollar).
+		Where(squirrel.Eq{
+			bookAttributeTable.ColumnBookID(): bookID,
+		}).
+		MustSql()
+
+	_, err = tx.Exec(ctx, deleteAttrsQuery, deleteAttrsArgs...)
 	if err != nil {
 		return fmt.Errorf("delete old attributes: %w", err)
 	}
 
-	builder := squirrel.Insert("book_attributes").
+	builder := squirrel.Insert(bookAttributeTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Columns(
-			"book_id",
-			"attr",
-			"value",
+			bookAttributeTable.ColumnBookID(),
+			bookAttributeTable.ColumnAttr(),
+			bookAttributeTable.ColumnValue(),
 		)
 
 	for code, values := range attributes {

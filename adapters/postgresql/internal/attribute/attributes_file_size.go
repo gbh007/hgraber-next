@@ -8,6 +8,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
@@ -15,6 +16,10 @@ func (repo *AttributeRepo) AttributesFileSize(
 	ctx context.Context,
 	attrs map[string][]string,
 ) (core.SizeWithCount, error) {
+	fileTable := model.FileTable.WithPrefix("f")
+	pageTable := model.PageTable.WithPrefix("p")
+	bookAttributeTable := model.BookAttributeTable.WithPrefix("a")
+
 	whereCond := squirrel.Or{}
 
 	for code, values := range attrs {
@@ -23,8 +28,8 @@ func (repo *AttributeRepo) AttributesFileSize(
 		}
 
 		whereCond = append(whereCond, squirrel.Eq{
-			"ba.attr":  code,
-			"ba.value": values,
+			bookAttributeTable.ColumnAttr():  code,
+			bookAttributeTable.ColumnValue(): values,
 		})
 	}
 
@@ -33,20 +38,20 @@ func (repo *AttributeRepo) AttributesFileSize(
 	}
 
 	subBuilder := squirrel.Select(
-		`f."size"`,
-		`f.md5_sum`,
-		`f.sha256_sum`,
+		fileTable.ColumnSize()+" AS \"size\"",
+		fileTable.ColumnMd5Sum(),
+		fileTable.ColumnSha256Sum(),
 	).
 		// Важно: либа не может переконвертить другой тип форматирования для подзапроса!
 		PlaceholderFormat(squirrel.Question).
-		From(`files f`).
-		InnerJoin(`pages p ON f.id = p.file_id`).
-		InnerJoin(`book_attributes ba ON ba.book_id = p.book_id`).
+		From(fileTable.NameAlter()).
+		InnerJoin(model.JoinFileAndPage(fileTable, pageTable)).
+		InnerJoin(model.JoinPageAndBookAttribute(pageTable, bookAttributeTable)).
 		Where(whereCond).
 		GroupBy(
-			`f."size"`,
-			`f.md5_sum`,
-			`f.sha256_sum`,
+			fileTable.ColumnSize(),
+			fileTable.ColumnMd5Sum(),
+			fileTable.ColumnSha256Sum(),
 		)
 
 	builder := squirrel.Select(`SUM(uf."size")`, `COUNT(*)`).
