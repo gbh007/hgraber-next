@@ -6,22 +6,19 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *AttributeRepo) AttributeColor(ctx context.Context, code, value string) (core.AttributeColor, error) {
-	builder := squirrel.Select(
-		"attr",
-		"value",
-		"text_color",
-		"background_color",
-		"created_at",
-	).
+	attrColorTable := model.AttributeColorTable
+
+	builder := squirrel.Select(attrColorTable.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("attribute_colors").
+		From(attrColorTable.Name()).
 		Where(squirrel.Eq{
-			"attr":  code,
-			"value": value,
+			attrColorTable.ColumnAttr():  code,
+			attrColorTable.ColumnValue(): value,
 		}).
 		Limit(1)
 
@@ -31,13 +28,7 @@ func (repo *AttributeRepo) AttributeColor(ctx context.Context, code, value strin
 
 	color := core.AttributeColor{}
 
-	err := row.Scan(
-		&color.Code,
-		&color.Value,
-		&color.TextColor,
-		&color.BackgroundColor,
-		&color.CreatedAt,
-	)
+	err := row.Scan(attrColorTable.Scanner(&color))
 	if err != nil { // TODO: err no rows
 		return core.AttributeColor{}, fmt.Errorf("scan row: %w", err)
 	}

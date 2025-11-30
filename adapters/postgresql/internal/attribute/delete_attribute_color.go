@@ -5,14 +5,18 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *AttributeRepo) DeleteAttributeColor(ctx context.Context, code, value string) error {
-	builder := squirrel.Delete("attribute_colors").
+	attrColorTable := model.AttributeColorTable
+
+	builder := squirrel.Delete(attrColorTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"attr":  code,
-			"value": value,
+			attrColorTable.ColumnAttr():  code,
+			attrColorTable.ColumnValue(): value,
 		})
 
 	query, args := builder.MustSql()

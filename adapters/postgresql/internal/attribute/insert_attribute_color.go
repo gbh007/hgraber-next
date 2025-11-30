@@ -6,18 +6,21 @@ import (
 
 	"github.com/Masterminds/squirrel"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *AttributeRepo) InsertAttributeColor(ctx context.Context, color core.AttributeColor) error {
-	builder := squirrel.Insert("attribute_colors").
+	attrColorTable := model.AttributeColorTable
+
+	builder := squirrel.Insert(attrColorTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"attr":             color.Code,
-			"value":            color.Value,
-			"text_color":       color.TextColor,
-			"background_color": color.BackgroundColor,
-			"created_at":       color.CreatedAt,
+			attrColorTable.ColumnAttr():            color.Code,
+			attrColorTable.ColumnValue():           color.Value,
+			attrColorTable.ColumnTextColor():       color.TextColor,
+			attrColorTable.ColumnBackgroundColor(): color.BackgroundColor,
+			attrColorTable.ColumnCreatedAt():       color.CreatedAt,
 		})
 
 	query, args := builder.MustSql()
