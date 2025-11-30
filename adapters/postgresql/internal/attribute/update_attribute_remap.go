@@ -11,16 +11,18 @@ import (
 )
 
 func (repo *AttributeRepo) UpdateAttributeRemap(ctx context.Context, ar core.AttributeRemap) error {
-	builder := squirrel.Update("attribute_remaps").
+	attrRemapTable := model.AttributeRemapTable
+
+	builder := squirrel.Update(attrRemapTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		SetMap(map[string]any{
-			"to_attr":    model.StringToDB(ar.ToCode),
-			"to_value":   model.StringToDB(ar.ToValue),
-			"updated_at": model.TimeToDB(ar.UpdateAt),
+			attrRemapTable.ColumnToAttr():    model.StringToDB(ar.ToCode),
+			attrRemapTable.ColumnToValue():   model.StringToDB(ar.ToValue),
+			attrRemapTable.ColumnUpdatedAt(): model.TimeToDB(ar.UpdateAt),
 		}).
 		Where(squirrel.Eq{
-			"attr":  ar.Code,
-			"value": ar.Value,
+			attrRemapTable.ColumnAttr():  ar.Code,
+			attrRemapTable.ColumnValue(): ar.Value,
 		})
 
 	query, args := builder.MustSql()

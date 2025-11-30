@@ -11,8 +11,10 @@ import (
 )
 
 func (repo *AttributeRepo) AttributeRemaps(ctx context.Context) ([]core.AttributeRemap, error) {
-	builder := squirrel.Select(model.AttributeRemapColumns()...).
-		From("attribute_remaps").
+	attrRemapTable := model.AttributeRemapTable
+
+	builder := squirrel.Select(attrRemapTable.Columns()...).
+		From(attrRemapTable.Name()).
 		PlaceholderFormat(squirrel.Dollar)
 
 	query, args := builder.MustSql()
@@ -29,7 +31,7 @@ func (repo *AttributeRepo) AttributeRemaps(ctx context.Context) ([]core.Attribut
 	for rows.Next() {
 		ar := core.AttributeRemap{}
 
-		err = rows.Scan(model.AttributeRemapScanner(&ar))
+		err = rows.Scan(attrRemapTable.Scanner(&ar))
 		if err != nil {
 			return nil, fmt.Errorf("scan row: %w", err)
 		}

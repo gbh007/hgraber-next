@@ -13,12 +13,14 @@ import (
 )
 
 func (repo *AttributeRepo) AttributeRemap(ctx context.Context, code, value string) (core.AttributeRemap, error) {
-	builder := squirrel.Select(model.AttributeRemapColumns()...).
+	attrRemapTable := model.AttributeRemapTable
+
+	builder := squirrel.Select(attrRemapTable.Columns()...).
 		PlaceholderFormat(squirrel.Dollar).
-		From("attribute_remaps").
+		From(attrRemapTable.Name()).
 		Where(squirrel.Eq{
-			"attr":  code,
-			"value": value,
+			attrRemapTable.ColumnAttr():  code,
+			attrRemapTable.ColumnValue(): value,
 		}).
 		Limit(1)
 
@@ -28,7 +30,7 @@ func (repo *AttributeRepo) AttributeRemap(ctx context.Context, code, value strin
 
 	ar := core.AttributeRemap{}
 
-	err := row.Scan(model.AttributeRemapScanner(&ar))
+	err := row.Scan(attrRemapTable.Scanner(&ar))
 	if errors.Is(err, sql.ErrNoRows) {
 		return core.AttributeRemap{}, core.ErrAttributeRemapNotFound
 	}

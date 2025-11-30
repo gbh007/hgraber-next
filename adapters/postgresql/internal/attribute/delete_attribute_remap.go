@@ -5,14 +5,18 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *AttributeRepo) DeleteAttributeRemap(ctx context.Context, code, value string) error {
-	builder := squirrel.Delete("attribute_remaps").
+	attrRemapTable := model.AttributeRemapTable
+
+	builder := squirrel.Delete(attrRemapTable.Name()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
-			"attr":  code,
-			"value": value,
+			attrRemapTable.ColumnAttr():  code,
+			attrRemapTable.ColumnValue(): value,
 		})
 
 	query, args := builder.MustSql()
