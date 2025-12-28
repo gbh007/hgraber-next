@@ -3,34 +3,49 @@ package file
 import (
 	"context"
 	"fmt"
-	"strings"
+
+	"github.com/Masterminds/squirrel"
 
 	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (repo *FileRepo) DuplicatedFiles(ctx context.Context) ([]core.File, error) {
-	table := model.FileTable
+	table := model.FileTable.WithPrefix("f")
+	subTable := model.FileTable
 
-	// TODO: переделать на squirrel
-	query := `SELECT ` + strings.Join(model.StringsPrefix(table.Columns(), "f."), ", ") + `
-FROM (
-        SELECT COUNT(*) AS c, md5_sum, sha256_sum
-        FROM files
-        GROUP BY
-            md5_sum, sha256_sum
-        HAVING
-            COUNT(*) > 1
-    ) AS t
-    INNER join files AS f ON f.md5_sum = t.md5_sum
-    AND f.sha256_sum = t.sha256_sum ORDER BY f.id;`
+	query, args := squirrel.Select(table.Columns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		FromSelect(
+			squirrel.
+				Select(
+					"COUNT(*) AS c",
+					subTable.ColumnMd5Sum(),
+					subTable.ColumnSha256Sum(),
+				).
+				From(subTable.Name()).
+				GroupBy(
+					subTable.ColumnMd5Sum(),
+					subTable.ColumnSha256Sum(),
+				).Having(squirrel.Gt{
+				"COUNT(*)": 1,
+			}),
+			"t",
+		).
+		InnerJoin(
+			table.NameAlter() +
+				" ON " + table.ColumnMd5Sum() + " = t." + subTable.ColumnMd5Sum() +
+				" AND " + table.ColumnSha256Sum() + " = t." + subTable.ColumnSha256Sum(),
+		).
+		OrderBy(table.ColumnID()).
+		MustSql()
+
+	rows, err := repo.Pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec: %w", err)
+	}
 
 	result := make([]core.File, 0)
-
-	rows, err := repo.Pool.Query(ctx, query)
-	if err != nil {
-		return nil, fmt.Errorf("exec query: %w", err)
-	}
 
 	defer rows.Close()
 

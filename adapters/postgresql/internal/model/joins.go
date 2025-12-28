@@ -13,5 +13,9 @@ func JoinBookAndPage(books Book, pages Page) string {
 }
 
 func JoinPageAndBookAttribute(pages Page, ba BookAttribute) string {
-	return ba.NameAlter() + " ON " + pages.ColumnFileID() + " = " + ba.ColumnBookID()
+	return ba.NameAlter() + " ON " + pages.ColumnBookID() + " = " + ba.ColumnBookID()
+}
+
+func JoinBookAttributePage(ba BookAttribute, pages Page) string {
+	return pages.NameAlter() + " ON " + ba.ColumnBookID() + " = " + pages.ColumnBookID()
 }

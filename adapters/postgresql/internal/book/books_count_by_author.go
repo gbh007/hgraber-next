@@ -6,16 +6,20 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 )
 
 func (repo *BookRepo) BooksCountByAuthor(ctx context.Context) (map[string]int64, error) {
-	builder := squirrel.Select("COUNT(*)", "value").
+	bookAttributeTable := model.BookAttributeTable
+
+	builder := squirrel.Select("COUNT(*)", bookAttributeTable.ColumnValue()).
 		PlaceholderFormat(squirrel.Dollar).
-		From("book_attributes").
+		From(bookAttributeTable.Name()).
 		Where(squirrel.Eq{
-			"attr": "author",
+			bookAttributeTable.ColumnAttr(): "author",
 		}).
-		GroupBy("value")
+		GroupBy(bookAttributeTable.ColumnValue())
 
 	query, args := builder.MustSql()
 

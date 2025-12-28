@@ -15,18 +15,18 @@ import (
 // TODO: добавить лимиты
 func (repo *PageRepo) NotDownloadedPages(ctx context.Context) ([]core.PageForDownload, error) {
 	pageTable := model.PageTable.WithPrefix("p")
+	bookTable := model.BookTable.WithPrefix("b")
 
-	//nolint:lll // будет исправлено позднее
 	builder := squirrel.Select(
 		pageTable.ColumnBookID(),
-		"b.origin_url AS book_url",                  // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
-		pageTable.ColumnOriginURL()+" AS image_url", // Примечание: ренейминг не нужен для pgx, но оставлен для наглядности.
+		bookTable.ColumnOriginURL(),
+		pageTable.ColumnOriginURL(),
 		pageTable.ColumnPageNumber(),
 		pageTable.ColumnExt(),
 	).
 		PlaceholderFormat(squirrel.Dollar).
-		From("books AS b").
-		InnerJoin(pageTable.NameAlter() + " ON b.id = " + pageTable.ColumnBookID()).
+		From(bookTable.NameAlter()).
+		InnerJoin(model.JoinBookAndPage(bookTable, pageTable)).
 		Where(squirrel.Eq{
 			pageTable.ColumnDownloaded(): false,
 		})
