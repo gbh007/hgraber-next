@@ -8,25 +8,29 @@ import (
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
-var DeadHashTable DeadHash
+var DeadHashTable = DeadHash{baseTable: baseTable{name: "dead_hashes"}}
 
-type DeadHash struct{}
-
-func (DeadHash) Name() string {
-	return "dead_hashes"
+type DeadHash struct {
+	baseTable
 }
 
-func (DeadHash) ColumnMd5Sum() string    { return "md5_sum" }
-func (DeadHash) ColumnSha256Sum() string { return "sha256_sum" }
-func (DeadHash) ColumnSize() string      { return "size" }
-func (DeadHash) ColumnCreatedAt() string { return "created_at" }
+func (dh DeadHash) WithPrefix(pf string) DeadHash {
+	return DeadHash{
+		baseTable: dh.withPrefix(pf),
+	}
+}
 
-func (a DeadHash) Columns() []string {
+func (dh DeadHash) ColumnMd5Sum() string    { return dh.prefix + "md5_sum" }
+func (dh DeadHash) ColumnSha256Sum() string { return dh.prefix + "sha256_sum" }
+func (dh DeadHash) ColumnSize() string      { return dh.prefix + "size" }
+func (dh DeadHash) ColumnCreatedAt() string { return dh.prefix + "created_at" }
+
+func (dh DeadHash) Columns() []string {
 	return []string{
-		a.ColumnMd5Sum(),
-		a.ColumnSha256Sum(),
-		a.ColumnSize(),
-		a.ColumnCreatedAt(),
+		dh.ColumnMd5Sum(),
+		dh.ColumnSha256Sum(),
+		dh.ColumnSize(),
+		dh.ColumnCreatedAt(),
 	}
 }
 

@@ -6,14 +6,16 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
+	"github.com/gbh007/hgraber-next/adapters/postgresql/internal/model"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
 )
 
-//nolint:lll,gocognit,cyclop,funlen // будет исправлено позднее
+//nolint:gocognit,cyclop,funlen // будет исправлено позднее
 func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeInfo, error) {
 	systemSize := systemmodel.SystemSizeInfo{
 		FileCountByFS:         make(map[uuid.UUID]int64, fsmodel.ApproximateFSCount),
@@ -25,18 +27,56 @@ func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeIn
 	}
 	batch := &pgx.Batch{}
 
+	bookTable := model.BookTable.WithPrefix("b")
+	pageTable := model.PageTable.WithPrefix("p")
+	deletedPageTable := model.DeletedPageTable.WithPrefix("dp")
+	deadHashTable := model.DeadHashTable.WithPrefix("dh")
+	fileTable := model.FileTable.WithPrefix("f")
+
+	apply := func(f func() (string, []any)) *pgx.QueuedQuery {
+		q, args := f()
+
+		return batch.Queue(q, args...)
+	}
+	// Queue(query string, arguments ...any)
+
 	// Книги
 
-	batch.Queue(`SELECT COUNT(*) FROM books;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.BookCount)
-		if err != nil {
-			return fmt.Errorf("get book count : %w", err)
-		}
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(bookTable.NameAlter()).
+			MustSql()
+	}).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.BookCount)
+			if err != nil {
+				return fmt.Errorf("get book count : %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
-	batch.Queue(`SELECT COUNT(*) FROM books WHERE deleted = FALSE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`).
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(bookTable.NameAlter()).
+			Where(squirrel.Eq{
+				bookTable.ColumnDeleted(): false,
+			}).
+			Where(squirrel.NotEq{
+				bookTable.ColumnPageCount(): nil,
+			}).
+			Where(
+				squirrel.Select("1").
+					From(pageTable.NameAlter()).
+					Where(pageTable.ColumnBookID() + " = " + bookTable.ColumnID()).
+					Where(squirrel.Eq{pageTable.ColumnDownloaded(): false}).
+					Prefix(" NOT EXISTS ( ").
+					Suffix(" ) "),
+			).
+			MustSql()
+	}).
 		QueryRow(func(row pgx.Row) error {
 			err := row.Scan(&systemSize.DownloadedBookCount)
 			if err != nil {
@@ -46,7 +86,27 @@ func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeIn
 			return nil
 		})
 
-	batch.Queue(`SELECT COUNT(*) FROM books WHERE deleted = FALSE AND verified = TRUE AND page_count IS NOT NULL AND NOT EXISTS (SELECT 1 FROM pages WHERE book_id = books.id AND pages.downloaded = FALSE);`).
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(bookTable.NameAlter()).
+			Where(squirrel.Eq{
+				bookTable.ColumnDeleted():  false,
+				bookTable.ColumnVerified(): true,
+			}).
+			Where(squirrel.NotEq{
+				bookTable.ColumnPageCount(): nil,
+			}).
+			Where(
+				squirrel.Select("1").
+					From(pageTable.NameAlter()).
+					Where(pageTable.ColumnBookID() + " = " + bookTable.ColumnID()).
+					Where(squirrel.Eq{pageTable.ColumnDownloaded(): false}).
+					Prefix(" NOT EXISTS ( ").
+					Suffix(" ) "),
+			).
+			MustSql()
+	}).
 		QueryRow(func(row pgx.Row) error {
 			err := row.Scan(&systemSize.VerifiedBookCount)
 			if err != nil {
@@ -56,16 +116,42 @@ func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeIn
 			return nil
 		})
 
-	batch.Queue(`SELECT COUNT(*) FROM books WHERE is_rebuild = TRUE;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.RebuildedBookCount)
-		if err != nil {
-			return fmt.Errorf("get book rebuilded count: %w", err)
-		}
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(bookTable.NameAlter()).
+			Where(squirrel.Eq{
+				bookTable.ColumnIsRebuild(): true,
+			}).
+			MustSql()
+	}).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.RebuildedBookCount)
+			if err != nil {
+				return fmt.Errorf("get book rebuilded count: %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
-	batch.Queue(`SELECT COUNT(*) FROM books WHERE (name IS NULL OR page_count IS NULL OR attributes_parsed = FALSE) AND origin_url IS NOT NULL AND deleted = FALSE AND is_rebuild = FALSE;`).
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(bookTable.NameAlter()).
+			Where(squirrel.Or{
+				squirrel.Eq{bookTable.ColumnName(): nil},
+				squirrel.Eq{bookTable.ColumnPageCount(): nil},
+				squirrel.Eq{bookTable.ColumnAttributesParsed(): false},
+			}).
+			Where(squirrel.NotEq{
+				bookTable.ColumnOriginURL(): nil,
+			}).
+			Where(squirrel.Eq{
+				bookTable.ColumnDeleted():   false,
+				bookTable.ColumnIsRebuild(): false,
+			}).
+			MustSql()
+	}).
 		QueryRow(func(row pgx.Row) error {
 			err := row.Scan(&systemSize.BookUnparsedCount)
 			if err != nil {
@@ -75,85 +161,148 @@ func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeIn
 			return nil
 		})
 
-	batch.Queue(`SELECT COUNT(*) FROM books WHERE deleted = TRUE;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.DeletedBookCount)
-		if err != nil {
-			return fmt.Errorf("get book deleted count: %w", err)
-		}
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(bookTable.NameAlter()).
+			Where(squirrel.Eq{
+				bookTable.ColumnDeleted(): true,
+			}).
+			MustSql()
+	}).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.DeletedBookCount)
+			if err != nil {
+				return fmt.Errorf("get book deleted count: %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
 	// Страницы
 
-	batch.Queue(`SELECT COUNT(*) FROM pages;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.PageCount)
-		if err != nil {
-			return fmt.Errorf("get page count: %w", err)
-		}
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(pageTable.NameAlter()).
+			MustSql()
+	}).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.PageCount)
+			if err != nil {
+				return fmt.Errorf("get page count: %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
-	batch.Queue(`SELECT COUNT(*) FROM pages WHERE downloaded = FALSE;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.PageUnloadedCount)
-		if err != nil {
-			return fmt.Errorf("get unloaded page count: %w", err)
-		}
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(pageTable.NameAlter()).
+			Where(squirrel.Eq{
+				pageTable.ColumnDownloaded(): false,
+			}).
+			MustSql()
+	}).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.PageUnloadedCount)
+			if err != nil {
+				return fmt.Errorf("get unloaded page count: %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
-	batch.Queue(`SELECT COUNT(*) FROM pages WHERE file_id IS NULL;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.PageWithoutBodyCount)
-		if err != nil {
-			return fmt.Errorf("get page without body count: %w", err)
-		}
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(pageTable.NameAlter()).
+			Where(squirrel.Eq{
+				pageTable.ColumnFileID(): nil,
+			}).
+			MustSql()
+	}).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.PageWithoutBodyCount)
+			if err != nil {
+				return fmt.Errorf("get page without body count: %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
-	batch.Queue(`SELECT COUNT(*) FROM deleted_pages;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.DeletedPageCount)
-		if err != nil {
-			return fmt.Errorf("get deleted page count: %w", err)
-		}
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(deletedPageTable.NameAlter()).
+			MustSql()
+	}).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.DeletedPageCount)
+			if err != nil {
+				return fmt.Errorf("get deleted page count: %w", err)
+			}
 
-		return nil
-	})
+			return nil
+		})
 
 	// Файлы
 
-	batch.Queue(`SELECT COUNT(*) FROM dead_hashes;`).QueryRow(func(row pgx.Row) error {
-		err := row.Scan(&systemSize.DeadHashCount)
-		if err != nil {
-			return fmt.Errorf("get dead hash count: %w", err)
-		}
-
-		return nil
-	})
-
-	batch.Queue(`SELECT COUNT(*), fs_id FROM files GROUP BY fs_id;`).Query(func(rows pgx.Rows) error {
-		defer rows.Close()
-
-		for rows.Next() {
-			var (
-				count sql.NullInt64
-				fsID  uuid.NullUUID
-			)
-
-			err := rows.Scan(&count, &fsID)
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)").
+			PlaceholderFormat(squirrel.Dollar).
+			From(deadHashTable.NameAlter()).
+			MustSql()
+	}).
+		QueryRow(func(row pgx.Row) error {
+			err := row.Scan(&systemSize.DeadHashCount)
 			if err != nil {
-				return fmt.Errorf("get file count: %w", err)
+				return fmt.Errorf("get dead hash count: %w", err)
 			}
 
-			systemSize.FileCountByFS[fsID.UUID] = count.Int64
-		}
+			return nil
+		})
 
-		return nil
-	})
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)", fileTable.ColumnFSID()).
+			PlaceholderFormat(squirrel.Dollar).
+			From(fileTable.NameAlter()).
+			GroupBy(fileTable.ColumnFSID()).
+			MustSql()
+	}).
+		Query(func(rows pgx.Rows) error {
+			defer rows.Close()
 
-	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE md5_sum IS NULL OR sha256_sum IS NULL OR "size" IS NULL GROUP BY fs_id;`).
+			for rows.Next() {
+				var (
+					count sql.NullInt64
+					fsID  uuid.NullUUID
+				)
+
+				err := rows.Scan(&count, &fsID)
+				if err != nil {
+					return fmt.Errorf("get file count: %w", err)
+				}
+
+				systemSize.FileCountByFS[fsID.UUID] = count.Int64
+			}
+
+			return nil
+		})
+
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)", fileTable.ColumnFSID()).
+			PlaceholderFormat(squirrel.Dollar).
+			From(fileTable.NameAlter()).
+			Where(squirrel.Or{
+				squirrel.Eq{fileTable.ColumnMd5Sum(): nil},
+				squirrel.Eq{fileTable.ColumnSha256Sum(): nil},
+				squirrel.Eq{fileTable.ColumnSize(): nil},
+			}).
+			GroupBy(fileTable.ColumnFSID()).
+			MustSql()
+	}).
 		Query(func(rows pgx.Rows) error {
 			defer rows.Close()
 
@@ -174,7 +323,14 @@ func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeIn
 			return nil
 		})
 
-	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE invalid_data = TRUE GROUP BY fs_id;`).
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)", fileTable.ColumnFSID()).
+			PlaceholderFormat(squirrel.Dollar).
+			From(fileTable.NameAlter()).
+			Where(squirrel.Eq{fileTable.ColumnInvalidData(): true}).
+			GroupBy(fileTable.ColumnFSID()).
+			MustSql()
+	}).
 		Query(func(rows pgx.Rows) error {
 			defer rows.Close()
 
@@ -195,7 +351,20 @@ func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeIn
 			return nil
 		})
 
-	batch.Queue(`SELECT COUNT(*), fs_id FROM files WHERE NOT EXISTS (SELECT 1 FROM pages WHERE pages.file_id = files.id) GROUP BY fs_id;`).
+	apply(func() (string, []any) {
+		return squirrel.Select("COUNT(*)", fileTable.ColumnFSID()).
+			PlaceholderFormat(squirrel.Dollar).
+			From(fileTable.NameAlter()).
+			Where(
+				squirrel.Select("1").
+					From(pageTable.NameAlter()).
+					Where(pageTable.ColumnFileID() + " = " + fileTable.ColumnID()).
+					Prefix(" NOT EXISTS ( ").
+					Suffix(" ) "),
+			).
+			GroupBy(fileTable.ColumnFSID()).
+			MustSql()
+	}).
 		Query(func(rows pgx.Rows) error {
 			defer rows.Close()
 
@@ -216,7 +385,15 @@ func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeIn
 			return nil
 		})
 
-	batch.Queue(`SELECT SUM(f."size"), fs_id FROM pages AS p LEFT JOIN files AS f ON p.file_id = f.id WHERE f."size" IS NOT NULL GROUP BY f.fs_id;`).
+	apply(func() (string, []any) {
+		return squirrel.Select("SUM("+fileTable.ColumnSize()+")", fileTable.ColumnFSID()).
+			PlaceholderFormat(squirrel.Dollar).
+			From(pageTable.NameAlter()).
+			LeftJoin(model.JoinPageAndFile(pageTable, fileTable)).
+			Where(squirrel.NotEq{fileTable.ColumnSize(): nil}).
+			GroupBy(fileTable.ColumnFSID()).
+			MustSql()
+	}).
 		Query(func(rows pgx.Rows) error {
 			defer rows.Close()
 
@@ -237,7 +414,14 @@ func (repo *OtherRepo) SystemSize(ctx context.Context) (systemmodel.SystemSizeIn
 			return nil
 		})
 
-	batch.Queue(`SELECT SUM("size"), fs_id FROM files WHERE "size" IS NOT NULL GROUP BY fs_id;`).
+	apply(func() (string, []any) {
+		return squirrel.Select("SUM("+fileTable.ColumnSize()+")", fileTable.ColumnFSID()).
+			PlaceholderFormat(squirrel.Dollar).
+			From(fileTable.NameAlter()).
+			Where(squirrel.NotEq{fileTable.ColumnSize(): nil}).
+			GroupBy(fileTable.ColumnFSID()).
+			MustSql()
+	}).
 		Query(func(rows pgx.Rows) error {
 			defer rows.Close()
 
