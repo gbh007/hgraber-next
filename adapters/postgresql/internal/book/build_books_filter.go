@@ -302,7 +302,7 @@ func (repo *BookRepo) buildBooksFilter(
 			PlaceholderFormat(squirrel.Question).
 			From(bookLabelTable.NameAlter()).
 			Where(squirrel.Eq{
-				bookLabelTable.Name(): labelFilter.Name,
+				bookLabelTable.ColumnName(): labelFilter.Name,
 			}).
 			Where(squirrel.Expr(bookLabelTable.ColumnBookID() + " = " + bookTable.ColumnID()))
 
@@ -330,21 +330,21 @@ func (repo *BookRepo) buildBooksFilter(
 				subBuilder = subBuilder.Having(squirrel.Eq{
 					"COUNT(" + bookLabelTable.ColumnValue() + ")": labelFilter.Count,
 				}).
-					GroupBy(bookLabelTable.Name())
+					GroupBy(bookLabelTable.ColumnName())
 			}
 
 		case core.BookFilterLabelTypeCountGt:
 			subBuilder = subBuilder.Having(squirrel.Gt{
 				"COUNT(" + bookLabelTable.ColumnValue() + ")": labelFilter.Count,
 			}).
-				GroupBy(bookLabelTable.Name())
+				GroupBy(bookLabelTable.ColumnName())
 
 		case core.BookFilterLabelTypeCountLt:
 			if labelFilter.Count != 1 { // Случай когда нужно чтобы не было данных
 				subBuilder = subBuilder.Having(squirrel.Lt{
 					"COUNT(" + bookLabelTable.ColumnValue() + ")": labelFilter.Count,
 				}).
-					GroupBy(bookLabelTable.Name())
+					GroupBy(bookLabelTable.ColumnName())
 			}
 		case core.BookFilterLabelTypeNone:
 			continue

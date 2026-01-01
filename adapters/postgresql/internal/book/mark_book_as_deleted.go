@@ -67,7 +67,7 @@ func (repo *BookRepo) MarkBookAsDeleted(ctx context.Context, bookID uuid.UUID) e
 	}
 
 	deletePagesQuery, deletePagesArgs := squirrel.
-		Delete(pageTable.Name()).
+		Delete(pageTable.NameAlter()).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{
 			pageTable.ColumnBookID(): bookID,
