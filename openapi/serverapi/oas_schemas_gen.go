@@ -8398,8 +8398,10 @@ type BookAttribute struct {
 	Code string `json:"code"`
 	// Название атрибута.
 	Name string `json:"name"`
-	// Значения атрибута.
+	// Строковые значения атрибута.
 	Values []string `json:"values"`
+	// Значения атрибута.
+	ValuesV2 []BookAttributeValuesV2Item `json:"values_v2"`
 }
 
 // GetCode returns the value of Code.
@@ -8417,6 +8419,11 @@ func (s *BookAttribute) GetValues() []string {
 	return s.Values
 }
 
+// GetValuesV2 returns the value of ValuesV2.
+func (s *BookAttribute) GetValuesV2() []BookAttributeValuesV2Item {
+	return s.ValuesV2
+}
+
 // SetCode sets the value of Code.
 func (s *BookAttribute) SetCode(val string) {
 	s.Code = val
@@ -8430,6 +8437,65 @@ func (s *BookAttribute) SetName(val string) {
 // SetValues sets the value of Values.
 func (s *BookAttribute) SetValues(val []string) {
 	s.Values = val
+}
+
+// SetValuesV2 sets the value of ValuesV2.
+func (s *BookAttribute) SetValuesV2(val []BookAttributeValuesV2Item) {
+	s.ValuesV2 = val
+}
+
+type BookAttributeValuesV2Item struct {
+	// Название во внутренней системе.
+	Name string `json:"name"`
+	// Массовые загрузки содержащие атрибут.
+	MassloadsByName []BookAttributeValuesV2ItemMassloadsByNameItem `json:"massloads_by_name"`
+}
+
+// GetName returns the value of Name.
+func (s *BookAttributeValuesV2Item) GetName() string {
+	return s.Name
+}
+
+// GetMassloadsByName returns the value of MassloadsByName.
+func (s *BookAttributeValuesV2Item) GetMassloadsByName() []BookAttributeValuesV2ItemMassloadsByNameItem {
+	return s.MassloadsByName
+}
+
+// SetName sets the value of Name.
+func (s *BookAttributeValuesV2Item) SetName(val string) {
+	s.Name = val
+}
+
+// SetMassloadsByName sets the value of MassloadsByName.
+func (s *BookAttributeValuesV2Item) SetMassloadsByName(val []BookAttributeValuesV2ItemMassloadsByNameItem) {
+	s.MassloadsByName = val
+}
+
+type BookAttributeValuesV2ItemMassloadsByNameItem struct {
+	// ID массовой загрузки.
+	ID int `json:"id"`
+	// Название массовой загрузки.
+	Name string `json:"name"`
+}
+
+// GetID returns the value of ID.
+func (s *BookAttributeValuesV2ItemMassloadsByNameItem) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *BookAttributeValuesV2ItemMassloadsByNameItem) GetName() string {
+	return s.Name
+}
+
+// SetID sets the value of ID.
+func (s *BookAttributeValuesV2ItemMassloadsByNameItem) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *BookAttributeValuesV2ItemMassloadsByNameItem) SetName(val string) {
+	s.Name = val
 }
 
 // Ref: #/components/schemas/BookFilter

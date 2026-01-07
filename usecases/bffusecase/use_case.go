@@ -9,6 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
+	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 )
 
 type storage interface {
@@ -33,6 +34,8 @@ type storage interface {
 	FileStorages(ctx context.Context) ([]fsmodel.FileStorageSystem, error)
 
 	AttributeColors(ctx context.Context) ([]core.AttributeColor, error)
+
+	MassloadsByAttribute(ctx context.Context, code, value string) ([]massloadmodel.Massload, error)
 }
 
 type deduplicator interface {

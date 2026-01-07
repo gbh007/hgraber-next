@@ -7,6 +7,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/pkg"
 )
 
 //nolint:cyclop // будет исправлено позднее
@@ -76,16 +77,20 @@ func (uc *UseCase) BookList(ctx context.Context, filter core.BookFilter) (bff.Bo
 			PreviewPage: bff.PageWithHashToPreview(page),
 		}
 
-		for _, attr := range convertBookAttributes(
+		for _, attr := range uc.convertBookAttributes(
+			ctx,
 			convertAttributes(attributesInfo),
 			attributes,
+			false,
 		) {
 			if attr.Code == "tag" {
-				bffBook.Tags = attr.Values
+				bffBook.Tags = pkg.Map(attr.Values, func(v bff.AttributeToWebValue) string {
+					return v.Name
+				})
 			}
 
 			for _, value := range attr.Values {
-				if color, ok := colorMap[attr.Code][value]; ok {
+				if color, ok := colorMap[attr.Code][value.Name]; ok {
 					bffBook.ColorAttributes = append(bffBook.ColorAttributes, color)
 				}
 			}

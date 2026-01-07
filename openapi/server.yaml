@@ -5973,9 +5973,35 @@ components:
           description: Название атрибута
         values:
           type: array
-          description: Значения атрибута
+          description: Строковые значения атрибута
           items:
             type: string
+        values_v2:
+          type: array
+          description: Значения атрибута
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Название во внутренней системе
+              massloads_by_name:
+                type: array
+                description: Массовые загрузки содержащие атрибут
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID массовой загрузки
+                    name:
+                      type: string
+                      description: Название массовой загрузки
+                  required:
+                    - id
+                    - name
+            required:
+              - name
       required:
         - code
         - name

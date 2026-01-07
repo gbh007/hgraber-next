@@ -3,12 +3,14 @@ package bffusecase
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"slices"
 
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
@@ -144,9 +146,11 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (bff.BookD
 		return bff.BookDetails{}, fmt.Errorf("storage: get attributes info: %w", err)
 	}
 
-	result.Attributes = convertBookAttributes(
+	result.Attributes = uc.convertBookAttributes(
+		ctx,
 		convertAttributes(attributesInfo),
 		attributes,
+		true,
 	)
 
 	return result, nil
@@ -158,15 +162,43 @@ func convertAttributes(attributes []core.Attribute) map[string]core.Attribute {
 	})
 }
 
-func convertBookAttributes(
+func (uc *UseCase) convertBookAttributes(
+	ctx context.Context,
 	attributes map[string]core.Attribute,
 	bookAttributes map[string][]string,
+	withMassload bool,
 ) []bff.AttributeToWeb {
 	result := pkg.MapToSlice(bookAttributes, func(code string, values []string) bff.AttributeToWeb {
 		return bff.AttributeToWeb{
-			Code:   code,
-			Name:   attributes[code].PluralName,
-			Values: values,
+			Code: code,
+			Name: attributes[code].PluralName,
+			Values: pkg.Map(values, func(v string) bff.AttributeToWebValue {
+				var (
+					mlByAttr []massloadmodel.Massload
+					err      error
+				)
+
+				if withMassload {
+					mlByAttr, err = uc.storage.MassloadsByAttribute(ctx, code, v)
+					if err != nil {
+						uc.logger.ErrorContext(
+							ctx,
+							"storage: get massloads by attribute on bff",
+							slog.String("error", err.Error()),
+						)
+					}
+				}
+
+				return bff.AttributeToWebValue{
+					Name: v,
+					MassloadsByName: pkg.Map(mlByAttr, func(ml massloadmodel.Massload) bff.MassloadInfo {
+						return bff.MassloadInfo{
+							ID:   ml.ID,
+							Name: ml.Name,
+						}
+					}),
+				}
+			}),
 		}
 	})
 

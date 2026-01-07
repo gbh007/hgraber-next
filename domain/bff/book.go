@@ -83,7 +83,7 @@ type BookList struct {
 type AttributeToWeb struct {
 	Code   string
 	Name   string
-	Values []string
+	Values []AttributeToWebValue
 }
 
 // TODO: подумать что делать с такими моделями
@@ -91,4 +91,14 @@ type BookWithPreviewPage struct {
 	core.Book
 
 	PreviewPage PreviewPage
+}
+
+type AttributeToWebValue struct {
+	Name            string
+	MassloadsByName []MassloadInfo
+}
+
+type MassloadInfo struct {
+	ID   int
+	Name string
 }

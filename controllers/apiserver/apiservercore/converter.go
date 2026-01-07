@@ -71,9 +71,22 @@ func (c *Controller) ConvertPreviewPage(ctx context.Context, page bff.PreviewPag
 
 func ConvertBookAttribute(a bff.AttributeToWeb) serverapi.BookAttribute {
 	return serverapi.BookAttribute{
-		Code:   a.Code,
-		Name:   a.Name,
-		Values: a.Values,
+		Code: a.Code,
+		Name: a.Name,
+		Values: pkg.Map(a.Values, func(v bff.AttributeToWebValue) string {
+			return v.Name
+		}),
+		ValuesV2: pkg.Map(a.Values, func(v bff.AttributeToWebValue) serverapi.BookAttributeValuesV2Item {
+			return serverapi.BookAttributeValuesV2Item{
+				Name: v.Name,
+				MassloadsByName: pkg.Map(v.MassloadsByName, func(m bff.MassloadInfo) serverapi.BookAttributeValuesV2ItemMassloadsByNameItem {
+					return serverapi.BookAttributeValuesV2ItemMassloadsByNameItem{
+						ID:   m.ID,
+						Name: m.Name,
+					}
+				}),
+			}
+		}),
 	}
 }
 

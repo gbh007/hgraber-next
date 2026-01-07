@@ -34,9 +34,9 @@ func (uc *UseCase) BookCompare(ctx context.Context, originID, targetID uuid.UUID
 
 	result := bff.BookCompareResult{
 		BookPagesCompareResult: pageCompare,
-		OriginAttributes:       convertBookAttributes(attributesInfoMap, attributeCompare.OriginAttributes),
-		BothAttributes:         convertBookAttributes(attributesInfoMap, attributeCompare.BothAttributes),
-		TargetAttributes:       convertBookAttributes(attributesInfoMap, attributeCompare.TargetAttributes),
+		OriginAttributes:       uc.convertBookAttributes(ctx, attributesInfoMap, attributeCompare.OriginAttributes, false),
+		BothAttributes:         uc.convertBookAttributes(ctx, attributesInfoMap, attributeCompare.BothAttributes, false),
+		TargetAttributes:       uc.convertBookAttributes(ctx, attributesInfoMap, attributeCompare.TargetAttributes, false),
 	}
 
 	return result, nil
