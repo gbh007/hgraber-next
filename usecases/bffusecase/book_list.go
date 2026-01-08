@@ -83,7 +83,7 @@ func (uc *UseCase) BookList(ctx context.Context, filter core.BookFilter) (bff.Bo
 			attributes,
 			false,
 		) {
-			if attr.Code == "tag" {
+			if attr.Code == core.AttributeCodeTag {
 				bffBook.Tags = pkg.Map(attr.Values, func(v bff.AttributeToWebValue) string {
 					return v.Name
 				})

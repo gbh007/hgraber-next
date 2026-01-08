@@ -2,17 +2,17 @@ package mcp
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"log/slog"
+	"net/http"
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/pkg"
 )
 
 type bffUseCases interface {
@@ -22,23 +22,32 @@ type bffUseCases interface {
 
 type Controller struct {
 	logger      *slog.Logger
-	bffUseCases bffUseCases
+	tracer      trace.Tracer
 	addr        string
+	token       string
+	debug       bool
+	bffUseCases bffUseCases
 }
 
 func New(
 	logger *slog.Logger,
-	bffUseCases bffUseCases,
+	tracer trace.Tracer,
 	addr string,
+	token string,
+	bffUseCases bffUseCases,
+	debug bool,
 ) *Controller {
 	return &Controller{
-		bffUseCases: bffUseCases,
 		logger:      logger,
+		tracer:      tracer,
 		addr:        addr,
+		token:       token,
+		bffUseCases: bffUseCases,
+		debug:       debug,
 	}
 }
 
-func (c *Controller) Start(ctx context.Context) (chan struct{}, error) {
+func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	done := make(chan struct{})
 
 	s := server.NewMCPServer(
@@ -46,115 +55,41 @@ func (c *Controller) Start(ctx context.Context) (chan struct{}, error) {
 		"0.0.1",
 	)
 
-	s.AddTool(
-		mcp.NewTool(
-			"book list",
-			mcp.WithDescription("get book list by filter"),
-			mcp.WithString(
-				"author",
-				mcp.Required(),
-				mcp.Description("book`s author"),
-			),
-		),
-		func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			list, err := c.bffUseCases.BookList(ctx, core.BookFilter{
-				ShowDeleted:      core.BookFilterShowTypeExcept,
-				ShowWithoutPages: core.BookFilterShowTypeExcept,
-				Fields: core.BookFilterFields{
-					Attributes: []core.BookFilterAttribute{
-						{
-							Code:   "author",
-							Type:   core.BookFilterAttributeTypeLike,
-							Values: []string{request.GetString("author", "")},
-						},
-					},
-				},
-			})
-			if err != nil {
-				return nil, fmt.Errorf("get book list: %w", err)
-			}
-
-			return mcp.NewToolResultStructuredOnly(map[string]any{
-				"books": pkg.Map(list.Books, func(b bff.BookShort) bookData {
-					return bookData{
-						ID:        b.Book.ID,
-						Name:      b.Book.Name,
-						PageCount: b.Book.PageCount,
-					}
-				}),
-			}), nil
-		},
+	s.AddTools(
+		c.bookDetailsTool(),
+		c.bookListTool(),
 	)
 
-	s.AddTool(
-		mcp.NewTool(
-			"book details",
-			mcp.WithDescription("get book details by id"),
-			mcp.WithString(
-				"id",
-				mcp.Required(),
-				mcp.Description("book`s id"),
-			),
-		),
-		func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			id, err := uuid.Parse(request.GetString("id", ""))
-			if err != nil {
-				return nil, fmt.Errorf("parse book id: %w", err)
-			}
+	httpMux := server.NewStreamableHTTPServer(s)
 
-			book, err := c.bffUseCases.BookDetails(ctx, id)
-			if err != nil {
-				return nil, fmt.Errorf("get book: %w", err)
-			}
-
-			result := bookData{
-				ID:        book.Book.ID,
-				Name:      book.Book.Name,
-				PageCount: book.Book.PageCount,
-			}
-
-			for _, attr := range book.Attributes {
-				if attr.Code != "tag" {
-					continue
-				}
-
-				for _, v := range attr.Values {
-					result.Tags = append(result.Tags, v.Name)
-				}
-			}
-
-			return mcp.NewToolResultStructuredOnly(result), nil
-		},
-	)
-
-	httpServer := server.NewStreamableHTTPServer(s)
+	server := &http.Server{ //nolint:gosec // будет исправлено позднее
+		Handler:  c.logIO(c.authMiddleware(httpMux)),
+		Addr:     c.addr,
+		ErrorLog: slog.NewLogLogger(c.logger.Handler(), slog.LevelError),
+	}
 
 	go func() {
 		defer close(done)
 
-		err := httpServer.Start(c.addr)
-		if err != nil {
-			c.logger.ErrorContext(
-				ctx,
-				"failed serve mcp",
-				slog.String("error", err.Error()),
-			)
+		c.logger.InfoContext(parentCtx, "mcp server start")
+		defer c.logger.InfoContext(parentCtx, "mcp server stop")
+
+		err := server.ListenAndServe()
+		if err != nil && !errors.Is(err, http.ErrServerClosed) {
+			c.logger.ErrorContext(parentCtx, err.Error())
 		}
 	}()
 
 	go func() {
-		<-ctx.Done()
+		<-parentCtx.Done()
+		c.logger.InfoContext(parentCtx, "stopping mcp server")
 
-		sCtx, cancel := context.WithTimeout(context.Background(), time.Minute)
+		shutdownCtx, cancel := context.WithTimeout(context.WithoutCancel(parentCtx), time.Second*10) //nolint:mnd,lll,golines // будет исправлено позднее
 		defer cancel()
 
-		err := httpServer.Shutdown(sCtx)
+		err := server.Shutdown(shutdownCtx)
 		if err != nil {
-			c.logger.ErrorContext(
-				ctx,
-				"failed shutdown mcp",
-				slog.String("error", err.Error()),
-			)
+			c.logger.ErrorContext(parentCtx, err.Error())
 		}
 	}()
 

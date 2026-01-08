@@ -10,6 +10,16 @@ import (
 
 const PossibleAttributeCount = 7
 
+const (
+	AttributeCodeAuthor    = "author"
+	AttributeCodeCategory  = "category"
+	AttributeCodeCharacter = "character"
+	AttributeCodeGroup     = "group"
+	AttributeCodeLanguage  = "language"
+	AttributeCodeParody    = "parody"
+	AttributeCodeTag       = "tag"
+)
+
 type AttributeVariant struct {
 	Code  string
 	Value string

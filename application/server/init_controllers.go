@@ -127,8 +127,11 @@ func (a *App) initControllers(_ context.Context) error {
 	if a.Config.MCPServer.Addr != "" {
 		mcpController := mcp.New(
 			a.Logger,
-			a.bffUseCases,
+			a.Tracer,
 			a.Config.MCPServer.Addr,
+			a.Config.MCPServer.Token,
+			a.bffUseCases,
+			a.Config.MCPServer.Debug,
 		)
 
 		a.asyncController.RegisterRunner(mcpController)
