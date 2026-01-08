@@ -14,6 +14,7 @@ type Config struct {
 	API            API            `toml:"api" yaml:"api" envconfig:"API"`
 	AgentServer    AgentServer    `toml:"agent_server" yaml:"agent_server" envconfig:"AGENT_SERVER"`
 	AttributeRemap AttributeRemap `toml:"attribute_remap" yaml:"attribute_remap" envconfig:"ATTRIBUTE_REMAP"`
+	MCPServer      MCPServer      `toml:"mcp_server" yaml:"mcp_server" envconfig:"MCP_SERVER"`
 }
 
 type Parsing struct {

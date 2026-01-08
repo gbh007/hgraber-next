@@ -2,6 +2,14 @@ package bffusecase
 
 // totalToPages - конвертирует количество данных в количество страниц
 func totalToPages(total, onPageCount int) (pageCount int) {
+	if total < 1 {
+		return 0
+	}
+
+	if onPageCount < 1 {
+		return 1
+	}
+
 	pageCount = total / onPageCount
 
 	if total%onPageCount > 0 {

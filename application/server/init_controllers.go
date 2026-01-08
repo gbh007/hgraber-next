@@ -9,6 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/controllers/apiserver"
 	"github.com/gbh007/hgraber-next/controllers/workermanager"
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
+	"github.com/gbh007/hgraber-next/experimental/mcp"
 )
 
 //nolint:cyclop,funlen // будет исправлено позднее
@@ -121,6 +122,16 @@ func (a *App) initControllers(_ context.Context) error {
 		}
 
 		a.asyncController.RegisterRunner(infoCollector)
+	}
+
+	if a.Config.MCPServer.Addr != "" {
+		mcpController := mcp.New(
+			a.Logger,
+			a.bffUseCases,
+			a.Config.MCPServer.Addr,
+		)
+
+		a.asyncController.RegisterRunner(mcpController)
 	}
 
 	return nil
