@@ -1,6 +1,9 @@
 package mcp
 
-import "net/http"
+import (
+	"net/http"
+	"strings"
+)
 
 func (c *Controller) authMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -13,6 +16,10 @@ func (c *Controller) authMiddleware(next http.Handler) http.Handler {
 		}
 
 		v := r.Header.Get("X-Hg-Token")
+		if v == "" {
+			v = strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
+		}
+
 		if v == "" {
 			w.WriteHeader(http.StatusUnauthorized)
 
