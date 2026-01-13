@@ -39,12 +39,41 @@ func (c *Controller) bookDetailsTool() server.ServerTool {
 			}
 
 			for _, attr := range book.Attributes {
-				if attr.Code != core.AttributeCodeTag {
-					continue
-				}
+				switch attr.Code {
+				case core.AttributeCodeTag:
+					for _, v := range attr.Values {
+						result.Tags = append(result.Tags, v.Name)
+					}
 
-				for _, v := range attr.Values {
-					result.Tags = append(result.Tags, v.Name)
+				case core.AttributeCodeAuthor:
+					for _, v := range attr.Values {
+						result.Authors = append(result.Authors, v.Name)
+					}
+
+				case core.AttributeCodeCategory:
+					for _, v := range attr.Values {
+						result.Categories = append(result.Categories, v.Name)
+					}
+
+				case core.AttributeCodeCharacter:
+					for _, v := range attr.Values {
+						result.Characters = append(result.Characters, v.Name)
+					}
+
+				case core.AttributeCodeGroup:
+					for _, v := range attr.Values {
+						result.Groups = append(result.Groups, v.Name)
+					}
+
+				case core.AttributeCodeLanguage:
+					for _, v := range attr.Values {
+						result.Languages = append(result.Languages, v.Name)
+					}
+
+				case core.AttributeCodeParody:
+					for _, v := range attr.Values {
+						result.Parodies = append(result.Parodies, v.Name)
+					}
 				}
 			}
 

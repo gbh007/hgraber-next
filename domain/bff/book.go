@@ -71,6 +71,8 @@ type BookShort struct {
 	PreviewPage     PreviewPage
 	Tags            []string
 	ColorAttributes []core.AttributeColor
+
+	AttributesRaw map[string][]string
 }
 
 type BookList struct {

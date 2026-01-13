@@ -73,8 +73,9 @@ func (uc *UseCase) BookList(ctx context.Context, filter core.BookFilter) (bff.Bo
 		}
 
 		bffBook := bff.BookShort{
-			Book:        book,
-			PreviewPage: bff.PageWithHashToPreview(page),
+			Book:          book,
+			PreviewPage:   bff.PageWithHashToPreview(page),
+			AttributesRaw: attributes,
 		}
 
 		for _, attr := range uc.convertBookAttributes(

@@ -43,11 +43,41 @@ func (c *Controller) bookListTool() server.ServerTool {
 
 			return mcp.NewToolResultStructuredOnly(map[string]any{
 				"books": pkg.Map(list.Books, func(b bff.BookShort) bookData {
-					return bookData{
+					data := bookData{
 						ID:        b.Book.ID,
 						Name:      b.Book.Name,
 						PageCount: b.Book.PageCount,
 					}
+
+					if values, ok := b.AttributesRaw[core.AttributeCodeTag]; ok {
+						data.Tags = values
+					}
+
+					if values, ok := b.AttributesRaw[core.AttributeCodeAuthor]; ok {
+						data.Authors = values
+					}
+
+					if values, ok := b.AttributesRaw[core.AttributeCodeCategory]; ok {
+						data.Categories = values
+					}
+
+					if values, ok := b.AttributesRaw[core.AttributeCodeCharacter]; ok {
+						data.Characters = values
+					}
+
+					if values, ok := b.AttributesRaw[core.AttributeCodeGroup]; ok {
+						data.Groups = values
+					}
+
+					if values, ok := b.AttributesRaw[core.AttributeCodeLanguage]; ok {
+						data.Languages = values
+					}
+
+					if values, ok := b.AttributesRaw[core.AttributeCodeParody]; ok {
+						data.Parodies = values
+					}
+
+					return data
 				}),
 			}), nil
 		},
