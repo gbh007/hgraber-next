@@ -18,25 +18,134 @@ func (c *Controller) bookListTool() server.ServerTool {
 			"book list",
 			mcp.WithDescription("get book list by filter"),
 			mcp.WithString(
-				"author",
-				mcp.Required(),
-				mcp.Description("book`s author"),
+				"filter.name",
+				mcp.Description("name for filtering by ILIKE"),
 			),
+			mcp.WithArray(
+				"filter.authors",
+				mcp.WithStringItems(),
+			),
+			mcp.WithArray(
+				"filter.categories",
+				mcp.WithStringItems(),
+			),
+			mcp.WithArray(
+				"filter.characters",
+				mcp.WithStringItems(),
+			),
+			mcp.WithArray(
+				"filter.groups",
+				mcp.WithStringItems(),
+			),
+			mcp.WithArray(
+				"filter.languages",
+				mcp.WithStringItems(),
+			),
+			mcp.WithArray(
+				"filter.parodies",
+				mcp.WithStringItems(),
+			),
+			mcp.WithArray(
+				"filter.tags",
+				mcp.WithStringItems(),
+			),
+			mcp.WithString(
+				"sort.by",
+				mcp.Enum(
+					"page count",
+					"name",
+					"creation date",
+				),
+			),
+			mcp.WithString(
+				"sort.order",
+				mcp.Enum(
+					"asc",
+					"desc",
+				),
+				mcp.DefaultString("asc"),
+			),
+			mcp.WithNumber("limit"),
+			mcp.WithNumber("offset"),
 		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			list, err := c.bffUseCases.BookList(ctx, core.BookFilter{
+			filter := core.BookFilter{
 				ShowDeleted:      core.BookFilterShowTypeExcept,
 				ShowWithoutPages: core.BookFilterShowTypeExcept,
 				Fields: core.BookFilterFields{
-					Attributes: []core.BookFilterAttribute{
-						{
-							Code:   core.AttributeCodeAuthor,
-							Type:   core.BookFilterAttributeTypeLike,
-							Values: []string{request.GetString("author", "")},
-						},
-					},
+					Name: request.GetString("filter.name", ""),
 				},
-			})
+				Desc:   request.GetString("sort order", "") == "desc",
+				Limit:  request.GetInt("limit", 0),
+				Offset: request.GetInt("offset", 0),
+			}
+
+			if v := request.GetStringSlice("filter.authors", nil); len(v) > 0 {
+				filter.Fields.Attributes = append(filter.Fields.Attributes, core.BookFilterAttribute{
+					Code:   core.AttributeCodeAuthor,
+					Type:   core.BookFilterAttributeTypeLike,
+					Values: v,
+				})
+			}
+
+			if v := request.GetStringSlice("filter.categories", nil); len(v) > 0 {
+				filter.Fields.Attributes = append(filter.Fields.Attributes, core.BookFilterAttribute{
+					Code:   core.AttributeCodeCategory,
+					Type:   core.BookFilterAttributeTypeLike,
+					Values: v,
+				})
+			}
+
+			if v := request.GetStringSlice("filter.characters", nil); len(v) > 0 {
+				filter.Fields.Attributes = append(filter.Fields.Attributes, core.BookFilterAttribute{
+					Code:   core.AttributeCodeCharacter,
+					Type:   core.BookFilterAttributeTypeLike,
+					Values: v,
+				})
+			}
+
+			if v := request.GetStringSlice("filter.groups", nil); len(v) > 0 {
+				filter.Fields.Attributes = append(filter.Fields.Attributes, core.BookFilterAttribute{
+					Code:   core.AttributeCodeGroup,
+					Type:   core.BookFilterAttributeTypeLike,
+					Values: v,
+				})
+			}
+
+			if v := request.GetStringSlice("filter.languages", nil); len(v) > 0 {
+				filter.Fields.Attributes = append(filter.Fields.Attributes, core.BookFilterAttribute{
+					Code:   core.AttributeCodeLanguage,
+					Type:   core.BookFilterAttributeTypeLike,
+					Values: v,
+				})
+			}
+
+			if v := request.GetStringSlice("filter.parodies", nil); len(v) > 0 {
+				filter.Fields.Attributes = append(filter.Fields.Attributes, core.BookFilterAttribute{
+					Code:   core.AttributeCodeParody,
+					Type:   core.BookFilterAttributeTypeLike,
+					Values: v,
+				})
+			}
+
+			if v := request.GetStringSlice("filter.tags", nil); len(v) > 0 {
+				filter.Fields.Attributes = append(filter.Fields.Attributes, core.BookFilterAttribute{
+					Code:   core.AttributeCodeTag,
+					Type:   core.BookFilterAttributeTypeLike,
+					Values: v,
+				})
+			}
+
+			switch request.GetString("sort by", "") {
+			case "page count":
+				filter.OrderBy = core.BookFilterOrderByPageCount
+			case "name":
+				filter.OrderBy = core.BookFilterOrderByName
+			case "creation date":
+				filter.OrderBy = core.BookFilterOrderByCreated
+			}
+
+			list, err := c.bffUseCases.BookList(ctx, filter)
 			if err != nil {
 				return nil, fmt.Errorf("get book list: %w", err)
 			}
