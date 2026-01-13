@@ -14,3 +14,9 @@ type bookData struct {
 	Languages  []string  `json:"languages,omitempty"`
 	Parodies   []string  `json:"parodies,omitempty"`
 }
+
+type attributeData struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
+	Count int    `json:"count"`
+}

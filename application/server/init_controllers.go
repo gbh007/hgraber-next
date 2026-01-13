@@ -131,6 +131,7 @@ func (a *App) initControllers(_ context.Context) error {
 			a.Config.MCPServer.Addr,
 			a.Config.MCPServer.Token,
 			a.bffUseCases,
+			a.attributeUseCases,
 			a.Config.MCPServer.Debug,
 		)
 

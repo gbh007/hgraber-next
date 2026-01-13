@@ -20,13 +20,18 @@ type bffUseCases interface {
 	BookList(ctx context.Context, filter core.BookFilter) (bff.BookList, error)
 }
 
+type attrUseCases interface {
+	AttributesCount(ctx context.Context) ([]core.AttributeVariant, error)
+}
+
 type Controller struct {
-	logger      *slog.Logger
-	tracer      trace.Tracer
-	addr        string
-	token       string
-	debug       bool
-	bffUseCases bffUseCases
+	logger       *slog.Logger
+	tracer       trace.Tracer
+	addr         string
+	token        string
+	debug        bool
+	bffUseCases  bffUseCases
+	attrUseCases attrUseCases
 }
 
 func New(
@@ -35,15 +40,17 @@ func New(
 	addr string,
 	token string,
 	bffUseCases bffUseCases,
+	attrUseCases attrUseCases,
 	debug bool,
 ) *Controller {
 	return &Controller{
-		logger:      logger,
-		tracer:      tracer,
-		addr:        addr,
-		token:       token,
-		bffUseCases: bffUseCases,
-		debug:       debug,
+		logger:       logger,
+		tracer:       tracer,
+		addr:         addr,
+		token:        token,
+		bffUseCases:  bffUseCases,
+		attrUseCases: attrUseCases,
+		debug:        debug,
 	}
 }
 
@@ -58,6 +65,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	s.AddTools(
 		c.bookDetailsTool(),
 		c.bookListTool(),
+		c.attributesCountTool(),
 	)
 
 	httpMux := server.NewStreamableHTTPServer(s)
