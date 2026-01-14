@@ -50,7 +50,7 @@ func (c *Controller) hProxyBookTool() server.ServerTool {
 							u = v.ExtURL.String()
 						}
 
-						result.Tags = append(result.Tags, hProxyAttributeValue{
+						result.Tags = append(result.Tags, hProxyValue{
 							Value:     v.Name,
 							OriginURL: u,
 						})
@@ -64,7 +64,7 @@ func (c *Controller) hProxyBookTool() server.ServerTool {
 							u = v.ExtURL.String()
 						}
 
-						result.Authors = append(result.Authors, hProxyAttributeValue{
+						result.Authors = append(result.Authors, hProxyValue{
 							Value:     v.Name,
 							OriginURL: u,
 						})
@@ -78,7 +78,7 @@ func (c *Controller) hProxyBookTool() server.ServerTool {
 							u = v.ExtURL.String()
 						}
 
-						result.Categories = append(result.Categories, hProxyAttributeValue{
+						result.Categories = append(result.Categories, hProxyValue{
 							Value:     v.Name,
 							OriginURL: u,
 						})
@@ -92,7 +92,7 @@ func (c *Controller) hProxyBookTool() server.ServerTool {
 							u = v.ExtURL.String()
 						}
 
-						result.Characters = append(result.Characters, hProxyAttributeValue{
+						result.Characters = append(result.Characters, hProxyValue{
 							Value:     v.Name,
 							OriginURL: u,
 						})
@@ -106,7 +106,7 @@ func (c *Controller) hProxyBookTool() server.ServerTool {
 							u = v.ExtURL.String()
 						}
 
-						result.Groups = append(result.Groups, hProxyAttributeValue{
+						result.Groups = append(result.Groups, hProxyValue{
 							Value:     v.Name,
 							OriginURL: u,
 						})
@@ -120,7 +120,7 @@ func (c *Controller) hProxyBookTool() server.ServerTool {
 							u = v.ExtURL.String()
 						}
 
-						result.Languages = append(result.Languages, hProxyAttributeValue{
+						result.Languages = append(result.Languages, hProxyValue{
 							Value:     v.Name,
 							OriginURL: u,
 						})
@@ -134,7 +134,7 @@ func (c *Controller) hProxyBookTool() server.ServerTool {
 							u = v.ExtURL.String()
 						}
 
-						result.Parodies = append(result.Parodies, hProxyAttributeValue{
+						result.Parodies = append(result.Parodies, hProxyValue{
 							Value:     v.Name,
 							OriginURL: u,
 						})

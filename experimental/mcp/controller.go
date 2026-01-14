@@ -77,6 +77,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 		c.bookListTool(),
 		c.attributesCountTool(),
 		c.hProxyBookTool(),
+		c.hProxyListTool(),
 	)
 
 	httpMux := server.NewStreamableHTTPServer(s)

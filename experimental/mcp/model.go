@@ -22,21 +22,27 @@ type attributeData struct {
 	Count int    `json:"count"`
 }
 
-type hProxyAttributeValue struct {
+type hProxyValue struct {
 	Value     string `json:"value"`
 	OriginURL string `json:"origin_url,omitempty"`
 }
 
 type hProxyBookData struct {
-	Name       string                 `json:"name"`
-	PageCount  int                    `json:"page_count"`
-	SystemIDs  []uuid.UUID            `json:"system_ids,omitempty"`
-	OriginURL  string                 `json:"origin_url,omitempty"`
-	Tags       []hProxyAttributeValue `json:"tags,omitempty"`
-	Authors    []hProxyAttributeValue `json:"authors,omitempty"`
-	Categories []hProxyAttributeValue `json:"categories,omitempty"`
-	Characters []hProxyAttributeValue `json:"characters,omitempty"`
-	Groups     []hProxyAttributeValue `json:"groups,omitempty"`
-	Languages  []hProxyAttributeValue `json:"languages,omitempty"`
-	Parodies   []hProxyAttributeValue `json:"parodies,omitempty"`
+	Name       string        `json:"name"`
+	PageCount  int           `json:"page_count,omitempty"`
+	SystemIDs  []uuid.UUID   `json:"system_ids,omitempty"`
+	OriginURL  string        `json:"origin_url,omitempty"`
+	Tags       []hProxyValue `json:"tags,omitempty"`
+	Authors    []hProxyValue `json:"authors,omitempty"`
+	Categories []hProxyValue `json:"categories,omitempty"`
+	Characters []hProxyValue `json:"characters,omitempty"`
+	Groups     []hProxyValue `json:"groups,omitempty"`
+	Languages  []hProxyValue `json:"languages,omitempty"`
+	Parodies   []hProxyValue `json:"parodies,omitempty"`
+}
+
+type hProxyListBookData struct {
+	Books    []hProxyBookData `json:"books,omitempty"`
+	Pages    []hProxyValue    `json:"pages,omitempty"`
+	NextPage string           `json:"next_page,omitempty"`
 }
