@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,6 +14,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/hproxymodel"
 )
 
 type bffUseCases interface {
@@ -24,14 +26,20 @@ type attrUseCases interface {
 	AttributesCount(ctx context.Context) ([]core.AttributeVariant, error)
 }
 
+type hProxyUseCases interface {
+	List(ctx context.Context, u url.URL) (hproxymodel.List, error)
+	Book(ctx context.Context, u url.URL, pageLimit *int) (hproxymodel.Book, error)
+}
+
 type Controller struct {
-	logger       *slog.Logger
-	tracer       trace.Tracer
-	addr         string
-	token        string
-	debug        bool
-	bffUseCases  bffUseCases
-	attrUseCases attrUseCases
+	logger         *slog.Logger
+	tracer         trace.Tracer
+	addr           string
+	token          string
+	debug          bool
+	bffUseCases    bffUseCases
+	attrUseCases   attrUseCases
+	hProxyUseCases hProxyUseCases
 }
 
 func New(
@@ -41,16 +49,18 @@ func New(
 	token string,
 	bffUseCases bffUseCases,
 	attrUseCases attrUseCases,
+	hProxyUseCases hProxyUseCases,
 	debug bool,
 ) *Controller {
 	return &Controller{
-		logger:       logger,
-		tracer:       tracer,
-		addr:         addr,
-		token:        token,
-		bffUseCases:  bffUseCases,
-		attrUseCases: attrUseCases,
-		debug:        debug,
+		logger:         logger,
+		tracer:         tracer,
+		addr:           addr,
+		token:          token,
+		bffUseCases:    bffUseCases,
+		attrUseCases:   attrUseCases,
+		hProxyUseCases: hProxyUseCases,
+		debug:          debug,
 	}
 }
 
@@ -66,6 +76,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 		c.bookDetailsTool(),
 		c.bookListTool(),
 		c.attributesCountTool(),
+		c.hProxyBookTool(),
 	)
 
 	httpMux := server.NewStreamableHTTPServer(s)

@@ -38,6 +38,10 @@ func (c *Controller) bookDetailsTool() server.ServerTool {
 				PageCount: book.Book.PageCount,
 			}
 
+			if book.Book.OriginURL != nil {
+				result.OriginURL = book.Book.OriginURL.String()
+			}
+
 			for _, attr := range book.Attributes {
 				switch attr.Code {
 				case core.AttributeCodeTag:

@@ -158,6 +158,10 @@ func (c *Controller) bookListTool() server.ServerTool {
 						PageCount: b.Book.PageCount,
 					}
 
+					if b.Book.OriginURL != nil {
+						data.OriginURL = b.Book.OriginURL.String()
+					}
+
 					if values, ok := b.AttributesRaw[core.AttributeCodeTag]; ok {
 						data.Tags = values
 					}
