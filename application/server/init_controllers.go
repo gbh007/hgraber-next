@@ -133,7 +133,9 @@ func (a *App) initControllers(_ context.Context) error {
 			a.bffUseCases,
 			a.attributeUseCases,
 			a.hProxyUseCases,
+			a.parsingUseCases,
 			a.Config.MCPServer.Debug,
+			a.Config.MCPServer.Mutate,
 		)
 
 		a.asyncController.RegisterRunner(mcpController)

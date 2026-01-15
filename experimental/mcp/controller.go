@@ -15,6 +15,7 @@ import (
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
+	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
 type bffUseCases interface {
@@ -30,16 +31,26 @@ type hProxyUseCases interface {
 	List(ctx context.Context, u url.URL) (hproxymodel.List, error)
 	Book(ctx context.Context, u url.URL, pageLimit *int) (hproxymodel.Book, error)
 }
+type bookParserUseCases interface {
+	NewBooks(ctx context.Context, urls []url.URL, flags parsing.ParseFlags) (parsing.FirstHandleMultipleResult, error)
+	NewBooksMulti(
+		ctx context.Context,
+		urls []url.URL,
+		flags parsing.ParseFlags,
+	) (parsing.MultiHandleMultipleResult, error)
+}
 
 type Controller struct {
-	logger         *slog.Logger
-	tracer         trace.Tracer
-	addr           string
-	token          string
-	debug          bool
-	bffUseCases    bffUseCases
-	attrUseCases   attrUseCases
-	hProxyUseCases hProxyUseCases
+	logger             *slog.Logger
+	tracer             trace.Tracer
+	addr               string
+	token              string
+	debug              bool
+	mutate             bool
+	bffUseCases        bffUseCases
+	attrUseCases       attrUseCases
+	hProxyUseCases     hProxyUseCases
+	bookParserUseCases bookParserUseCases
 }
 
 func New(
@@ -50,17 +61,21 @@ func New(
 	bffUseCases bffUseCases,
 	attrUseCases attrUseCases,
 	hProxyUseCases hProxyUseCases,
+	bookParserUseCases bookParserUseCases,
 	debug bool,
+	mutate bool,
 ) *Controller {
 	return &Controller{
-		logger:         logger,
-		tracer:         tracer,
-		addr:           addr,
-		token:          token,
-		bffUseCases:    bffUseCases,
-		attrUseCases:   attrUseCases,
-		hProxyUseCases: hProxyUseCases,
-		debug:          debug,
+		logger:             logger,
+		tracer:             tracer,
+		addr:               addr,
+		token:              token,
+		bffUseCases:        bffUseCases,
+		attrUseCases:       attrUseCases,
+		hProxyUseCases:     hProxyUseCases,
+		bookParserUseCases: bookParserUseCases,
+		debug:              debug,
+		mutate:             mutate,
 	}
 }
 
@@ -70,6 +85,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	s := server.NewMCPServer(
 		"hgraber-next",
 		"0.0.1",
+		server.WithInstructions(instructions),
 	)
 
 	s.AddTools(
@@ -79,6 +95,12 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 		c.hProxyBookTool(),
 		c.hProxyListTool(),
 	)
+
+	if c.mutate {
+		s.AddTools(
+			c.downloadBooksTool(),
+		)
+	}
 
 	httpMux := server.NewStreamableHTTPServer(s)
 

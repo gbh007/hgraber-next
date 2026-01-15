@@ -7,6 +7,7 @@
 addr = ":8888"
 token = "mcp-hg"
 debug = true
+mutate = false
 ```
 
 Пример конфигурации LM-studio

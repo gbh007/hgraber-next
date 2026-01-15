@@ -31,6 +31,7 @@ type hProxyBookData struct {
 	Name       string        `json:"name"`
 	PageCount  int           `json:"page_count,omitempty"`
 	SystemIDs  []uuid.UUID   `json:"system_ids,omitempty"`
+	Downloaded bool          `json:"downloaded"`
 	OriginURL  string        `json:"origin_url,omitempty"`
 	Tags       []hProxyValue `json:"tags,omitempty"`
 	Authors    []hProxyValue `json:"authors,omitempty"`

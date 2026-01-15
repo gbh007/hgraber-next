@@ -13,7 +13,7 @@ import (
 func (c *Controller) hProxyBookTool() server.ServerTool {
 	return server.ServerTool{
 		Tool: mcp.NewTool(
-			"origin book details",
+			"hproxy book details",
 			mcp.WithDescription("get origin book details by url, including attributes (tags etc)"),
 			mcp.WithString(
 				"url",
@@ -34,10 +34,11 @@ func (c *Controller) hProxyBookTool() server.ServerTool {
 			}
 
 			result := hProxyBookData{
-				Name:      book.Name,
-				PageCount: book.PageCount,
-				SystemIDs: book.ExistsIDs,
-				OriginURL: book.ExURL.String(),
+				Name:       book.Name,
+				PageCount:  book.PageCount,
+				SystemIDs:  book.ExistsIDs,
+				Downloaded: len(book.ExistsIDs) > 0,
+				OriginURL:  book.ExURL.String(),
 			}
 
 			for _, attr := range book.Attributes {
