@@ -15,7 +15,7 @@ import (
 
 func (g Generator) WithPanels(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
 	simpleinfo.WithRow(builder)
-	logspannel.WithRow(builder)
+	logspannel.WithRow(builder, g.useVictoriaLogs)
 	bookandpages.WithRow(builder)
 	statistic.WithRow(builder)
 	workersandagents.WithRow(builder)

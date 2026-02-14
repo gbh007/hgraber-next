@@ -13,8 +13,9 @@ const (
 	MetricVariableName = "metrics"
 	MetricVariableType = "prometheus"
 
-	LogsVariableName = "logs"
-	LogsVariableType = "loki"
+	LogsVariableName             = "logs"
+	LogsVariableTypeLoki         = "loki"
+	LogsVariableTypeVictoriaLogs = "victoriametrics-logs-datasource"
 
 	ServiceVariableName = "service_name"
 
@@ -49,8 +50,12 @@ var (
 		Type: StrToPtr(MetricVariableType),
 		Uid:  StrToPtr(NameToVarDS(MetricVariableName)),
 	}
-	LogsDatasource = dashboard.DataSourceRef{
-		Type: StrToPtr(LogsVariableType),
+	LogsLokiDatasource = dashboard.DataSourceRef{
+		Type: StrToPtr(LogsVariableTypeLoki),
+		Uid:  StrToPtr(NameToVarDS(LogsVariableName)),
+	}
+	LogsVictoriaLogsDatasource = dashboard.DataSourceRef{
+		Type: StrToPtr(LogsVariableTypeVictoriaLogs),
 		Uid:  StrToPtr(NameToVarDS(LogsVariableName)),
 	}
 	DeltaVariableValues = []string{"1m", "5m", "10m", "30m", "1h", "4h", "8h", "1d", "7d"}

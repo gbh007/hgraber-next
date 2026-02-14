@@ -26,7 +26,8 @@ type Config struct {
 		To string `toml:"to"`
 	} `toml:"file"`
 	HGraber struct {
-		Services []string `toml:"services"`
+		Services        []string `toml:"services"`
+		UseVictoriaLogs bool     `toml:"use_victoria_logs"`
 	} `toml:"hgraber"`
 }
 
@@ -43,7 +44,7 @@ func main() {
 		panic("empty uid")
 	}
 
-	g := generator.New(cfg.Grafana.UID, cfg.HGraber.Services)
+	g := generator.New(cfg.Grafana.UID, cfg.HGraber.Services, cfg.HGraber.UseVictoriaLogs)
 
 	dashboardModel, err := g.Build()
 	if err != nil {

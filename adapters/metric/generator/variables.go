@@ -10,11 +10,19 @@ import (
 )
 
 func (g Generator) WithVariables(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
-	builder.WithVariable(
-		dashboard.
-			NewDatasourceVariableBuilder(generatorcore.LogsVariableName).
-			Type(generatorcore.LogsVariableType),
-	)
+	if g.useVictoriaLogs {
+		builder.WithVariable(
+			dashboard.
+				NewDatasourceVariableBuilder(generatorcore.LogsVariableName).
+				Type(generatorcore.LogsVariableTypeVictoriaLogs),
+		)
+	} else {
+		builder.WithVariable(
+			dashboard.
+				NewDatasourceVariableBuilder(generatorcore.LogsVariableName).
+				Type(generatorcore.LogsVariableTypeLoki),
+		)
+	}
 	builder.WithVariable(
 		dashboard.
 			NewDatasourceVariableBuilder(generatorcore.MetricVariableName).

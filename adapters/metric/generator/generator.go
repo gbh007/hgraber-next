@@ -5,15 +5,17 @@ import (
 )
 
 type Generator struct {
-	uid      string
-	services []string
+	uid             string
+	services        []string
+	useVictoriaLogs bool
 }
 
-func New(uid string, services []string) *Generator {
+func New(uid string, services []string, useVictoriaLogs bool) *Generator {
 	plugins.RegisterDefaultPlugins()
 
 	return &Generator{
-		uid:      uid,
-		services: services,
+		uid:             uid,
+		services:        services,
+		useVictoriaLogs: useVictoriaLogs,
 	}
 }

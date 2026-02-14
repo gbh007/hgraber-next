@@ -6,6 +6,7 @@ uid = "bexc49h794pogd"
 
 [hgraber]
 services = ["hgraber-next-agent", "hgraber-next-server"]
+use_victoria_logs = false
 
 [file]
 to = "grafana-dasboard.json"

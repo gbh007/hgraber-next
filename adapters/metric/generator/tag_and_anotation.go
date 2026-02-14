@@ -31,15 +31,17 @@ func (g Generator) WithTagAndAnnotation(builder *dashboard.DashboardBuilder) *da
 			TargetBlank(true),
 	)
 
-	builder.Annotation(
-		dashboard.
-			NewAnnotationQueryBuilder().
-			Enable(true).
-			Expr("{service_name=~\"$service_name\"} |= `application start`"). // TODO: привести в более аккуратный вид
-			IconColor("super-light-purple").
-			Name("app started (logs)").
-			Datasource(generatorcore.LogsDatasource),
-	)
+	if !g.useVictoriaLogs {
+		builder.Annotation(
+			dashboard.
+				NewAnnotationQueryBuilder().
+				Enable(true).
+				Expr("{service_name=~\"$service_name\"} |= `application start`"). // TODO: привести в более аккуратный вид
+				IconColor("super-light-purple").
+				Name("app started (logs)").
+				Datasource(generatorcore.LogsLokiDatasource),
+		)
+	}
 
 	builder.Annotation( // TODO: перенастроить как будут изменения в либе графаны
 		dashboard.
