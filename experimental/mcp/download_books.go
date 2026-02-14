@@ -25,7 +25,7 @@ func (c *Controller) downloadBooksTool() server.ServerTool {
 				"links type",
 				mcp.Required(),
 				mcp.Enum(
-					"direct",
+					"book",
 					"attribute",
 				),
 			),
@@ -44,7 +44,7 @@ func (c *Controller) downloadBooksTool() server.ServerTool {
 			}
 
 			switch request.GetString("links type", "") {
-			case "direct":
+			case "book":
 				result, err := c.bookParserUseCases.NewBooks(ctx, urls, parsing.ParseFlags{})
 				if err != nil {
 					return nil, fmt.Errorf("download books: %w", err)
