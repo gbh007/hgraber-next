@@ -6,6 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/ogen-go/ogen/ogenerrors"
+	"github.com/ogen-go/ogen/validate"
+
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
@@ -45,11 +48,34 @@ func (c *Controller) NewError(ctx context.Context, err error) *agentapi.ErrorRes
 		}
 	}
 
+	var (
+		httpCode         = http.StatusInternalServerError
+		errorCode        = "internal error"
+		errorDescription = err.Error()
+	)
+
+	validateError := new(validate.Error)
+
+	switch {
+	case errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied):
+		httpCode = http.StatusUnauthorized
+		errorCode = "unauthorized"
+	case errors.Is(err, errAccessForbidden):
+		httpCode = http.StatusForbidden
+		errorCode = "forbidden"
+	case errors.Is(err, errPanicDetected):
+		httpCode = http.StatusInternalServerError
+		errorCode = "panic"
+	case errors.As(err, &validateError):
+		httpCode = http.StatusBadRequest
+		errorCode = "validate"
+	}
+
 	return &agentapi.ErrorResponseStatusCode{
-		StatusCode: http.StatusInternalServerError,
+		StatusCode: httpCode,
 		Response: agentapi.ErrorResponse{
-			InnerCode: "unexpected",
-			Details:   agentapi.NewOptString(err.Error()),
+			InnerCode: errorCode,
+			Details:   agentapi.NewOptString(errorDescription),
 		},
 	}
 }
