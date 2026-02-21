@@ -36,6 +36,8 @@ linters:
   exclusions:
     warn-unused: true
     generated: strict
+    paths:
+      - .hidden
     rules:
       - linters:
           - err113

@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"log/slog"
-	"regexp"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -16,12 +15,6 @@ import (
 var (
 	_ pgx.QueryTracer = (*pgxTracer)(nil)
 	_ pgx.BatchTracer = (*pgxTracer)(nil)
-)
-
-var (
-	stmtSpaceRegexp  = regexp.MustCompile(`\s+`)
-	stmtValuesRegexp = regexp.MustCompile(`(\(\s?(?:\$\d+,?\s?)+\),)+`)
-	stmtOnRegexp     = regexp.MustCompile(`((?:\$\d+,?\s?)+)`)
 )
 
 type (
@@ -54,7 +47,7 @@ func (t pgxTracer) TraceQueryStart(ctx context.Context, conn *pgx.Conn, data pgx
 	t.metricProvider.IncDBActiveRequest(dbName)
 
 	ctx = context.WithValue(ctx, requestCtxKey{}, requestInfo{
-		stmt:    filterStmt(data.SQL),
+		stmt:    data.SQL,
 		startAt: time.Now(),
 	})
 
@@ -74,8 +67,8 @@ func (t pgxTracer) TraceQueryEnd(ctx context.Context, conn *pgx.Conn, data pgx.T
 	span.End()
 
 	v, ok := ctx.Value(requestCtxKey{}).(requestInfo)
-	if ok {
-		t.metricProvider.RegisterDBRequestDuration(dbName, v.stmt, time.Since(v.startAt))
+	if stmt, keep := filterStmt(v.stmt); ok && keep {
+		t.metricProvider.RegisterDBRequestDuration(dbName, stmt, time.Since(v.startAt))
 	}
 
 	t.metricProvider.DecDBActiveRequest(dbName)
@@ -128,8 +121,8 @@ func (t pgxTracer) TraceBatchQuery(ctx context.Context, conn *pgx.Conn, data pgx
 	}
 
 	v, ok := ctx.Value(batchRequestCtxKey{}).(batchRequestInfo)
-	if ok {
-		t.metricProvider.RegisterDBRequestDuration(dbName, filterStmt(data.SQL), time.Since(v.startAt))
+	if stmt, keep := filterStmt(data.SQL); ok && keep {
+		t.metricProvider.RegisterDBRequestDuration(dbName, stmt, time.Since(v.startAt))
 	}
 
 	t.metricProvider.DecDBActiveRequest(dbName)
@@ -138,12 +131,4 @@ func (t pgxTracer) TraceBatchQuery(ctx context.Context, conn *pgx.Conn, data pgx
 func (t pgxTracer) TraceBatchEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchEndData) {
 	span := trace.SpanFromContext(ctx)
 	span.End()
-}
-
-func filterStmt(s string) string {
-	s = stmtSpaceRegexp.ReplaceAllString(s, " ")
-	s = stmtValuesRegexp.ReplaceAllString(s, "")
-	s = stmtOnRegexp.ReplaceAllString(s, "")
-
-	return s
 }
