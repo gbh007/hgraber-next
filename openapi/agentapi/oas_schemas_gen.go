@@ -3,6 +3,7 @@
 package agentapi
 
 import (
+	"fmt"
 	"io"
 	"net/url"
 	"time"
@@ -11,17 +12,9 @@ import (
 	"github.com/google/uuid"
 )
 
-type APICoreStatusGetBadRequest ErrorResponse
-
-func (*APICoreStatusGetBadRequest) aPICoreStatusGetRes() {}
-
-type APICoreStatusGetForbidden ErrorResponse
-
-func (*APICoreStatusGetForbidden) aPICoreStatusGetRes() {}
-
-type APICoreStatusGetInternalServerError ErrorResponse
-
-func (*APICoreStatusGetInternalServerError) aPICoreStatusGetRes() {}
+func (s *ErrorResponseStatusCode) Error() string {
+	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
+}
 
 type APICoreStatusGetOK struct {
 	// Время запуска агента.
@@ -61,8 +54,6 @@ func (s *APICoreStatusGetOK) SetStatus(val APICoreStatusGetOKStatus) {
 func (s *APICoreStatusGetOK) SetProblems(val []APICoreStatusGetOKProblemsItem) {
 	s.Problems = val
 }
-
-func (*APICoreStatusGetOK) aPICoreStatusGetRes() {}
 
 type APICoreStatusGetOKProblemsItem struct {
 	// Тип проблемы.
@@ -189,30 +180,8 @@ func (s *APICoreStatusGetOKStatus) UnmarshalText(data []byte) error {
 	}
 }
 
-type APICoreStatusGetUnauthorized ErrorResponse
-
-func (*APICoreStatusGetUnauthorized) aPICoreStatusGetRes() {}
-
-type APIFsCreatePostBadRequest ErrorResponse
-
-func (*APIFsCreatePostBadRequest) aPIFsCreatePostRes() {}
-
-type APIFsCreatePostConflict ErrorResponse
-
-func (*APIFsCreatePostConflict) aPIFsCreatePostRes() {}
-
-type APIFsCreatePostForbidden ErrorResponse
-
-func (*APIFsCreatePostForbidden) aPIFsCreatePostRes() {}
-
-type APIFsCreatePostInternalServerError ErrorResponse
-
-func (*APIFsCreatePostInternalServerError) aPIFsCreatePostRes() {}
-
 // APIFsCreatePostNoContent is response for APIFsCreatePost operation.
 type APIFsCreatePostNoContent struct{}
-
-func (*APIFsCreatePostNoContent) aPIFsCreatePostRes() {}
 
 type APIFsCreatePostReq struct {
 	Data io.Reader
@@ -228,30 +197,8 @@ func (s APIFsCreatePostReq) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-type APIFsCreatePostUnauthorized ErrorResponse
-
-func (*APIFsCreatePostUnauthorized) aPIFsCreatePostRes() {}
-
-type APIFsDeletePostBadRequest ErrorResponse
-
-func (*APIFsDeletePostBadRequest) aPIFsDeletePostRes() {}
-
-type APIFsDeletePostForbidden ErrorResponse
-
-func (*APIFsDeletePostForbidden) aPIFsDeletePostRes() {}
-
-type APIFsDeletePostInternalServerError ErrorResponse
-
-func (*APIFsDeletePostInternalServerError) aPIFsDeletePostRes() {}
-
 // APIFsDeletePostNoContent is response for APIFsDeletePost operation.
 type APIFsDeletePostNoContent struct{}
-
-func (*APIFsDeletePostNoContent) aPIFsDeletePostRes() {}
-
-type APIFsDeletePostNotFound ErrorResponse
-
-func (*APIFsDeletePostNotFound) aPIFsDeletePostRes() {}
 
 type APIFsDeletePostReq struct {
 	// ID файла для удаления.
@@ -268,26 +215,6 @@ func (s *APIFsDeletePostReq) SetFileID(val uuid.UUID) {
 	s.FileID = val
 }
 
-type APIFsDeletePostUnauthorized ErrorResponse
-
-func (*APIFsDeletePostUnauthorized) aPIFsDeletePostRes() {}
-
-type APIFsGetGetBadRequest ErrorResponse
-
-func (*APIFsGetGetBadRequest) aPIFsGetGetRes() {}
-
-type APIFsGetGetForbidden ErrorResponse
-
-func (*APIFsGetGetForbidden) aPIFsGetGetRes() {}
-
-type APIFsGetGetInternalServerError ErrorResponse
-
-func (*APIFsGetGetInternalServerError) aPIFsGetGetRes() {}
-
-type APIFsGetGetNotFound ErrorResponse
-
-func (*APIFsGetGetNotFound) aPIFsGetGetRes() {}
-
 type APIFsGetGetOK struct {
 	Data io.Reader
 }
@@ -301,24 +228,6 @@ func (s APIFsGetGetOK) Read(p []byte) (n int, err error) {
 	}
 	return s.Data.Read(p)
 }
-
-func (*APIFsGetGetOK) aPIFsGetGetRes() {}
-
-type APIFsGetGetUnauthorized ErrorResponse
-
-func (*APIFsGetGetUnauthorized) aPIFsGetGetRes() {}
-
-type APIFsInfoPostBadRequest ErrorResponse
-
-func (*APIFsInfoPostBadRequest) aPIFsInfoPostRes() {}
-
-type APIFsInfoPostForbidden ErrorResponse
-
-func (*APIFsInfoPostForbidden) aPIFsInfoPostRes() {}
-
-type APIFsInfoPostInternalServerError ErrorResponse
-
-func (*APIFsInfoPostInternalServerError) aPIFsInfoPostRes() {}
 
 type APIFsInfoPostOK struct {
 	// ID файлов что есть в файловой системе.
@@ -381,8 +290,6 @@ func (s *APIFsInfoPostOK) SetTotalFileCount(val OptInt64) {
 func (s *APIFsInfoPostOK) SetAvailableSize(val OptInt64) {
 	s.AvailableSize = val
 }
-
-func (*APIFsInfoPostOK) aPIFsInfoPostRes() {}
 
 type APIFsInfoPostOKFilesItem struct {
 	// ID файла.
@@ -450,26 +357,6 @@ func (s *APIFsInfoPostReq) SetIncludeFileSizes(val OptBool) {
 	s.IncludeFileSizes = val
 }
 
-type APIFsInfoPostUnauthorized ErrorResponse
-
-func (*APIFsInfoPostUnauthorized) aPIFsInfoPostRes() {}
-
-type APIHighwayFileIDExtGetBadRequest ErrorResponse
-
-func (*APIHighwayFileIDExtGetBadRequest) aPIHighwayFileIDExtGetRes() {}
-
-type APIHighwayFileIDExtGetForbidden ErrorResponse
-
-func (*APIHighwayFileIDExtGetForbidden) aPIHighwayFileIDExtGetRes() {}
-
-type APIHighwayFileIDExtGetInternalServerError ErrorResponse
-
-func (*APIHighwayFileIDExtGetInternalServerError) aPIHighwayFileIDExtGetRes() {}
-
-type APIHighwayFileIDExtGetNotFound ErrorResponse
-
-func (*APIHighwayFileIDExtGetNotFound) aPIHighwayFileIDExtGetRes() {}
-
 type APIHighwayFileIDExtGetOK struct {
 	Data io.Reader
 }
@@ -510,24 +397,6 @@ func (s *APIHighwayFileIDExtGetOKHeaders) SetResponse(val APIHighwayFileIDExtGet
 	s.Response = val
 }
 
-func (*APIHighwayFileIDExtGetOKHeaders) aPIHighwayFileIDExtGetRes() {}
-
-type APIHighwayFileIDExtGetUnauthorized ErrorResponse
-
-func (*APIHighwayFileIDExtGetUnauthorized) aPIHighwayFileIDExtGetRes() {}
-
-type APIHighwayTokenCreatePostBadRequest ErrorResponse
-
-func (*APIHighwayTokenCreatePostBadRequest) aPIHighwayTokenCreatePostRes() {}
-
-type APIHighwayTokenCreatePostForbidden ErrorResponse
-
-func (*APIHighwayTokenCreatePostForbidden) aPIHighwayTokenCreatePostRes() {}
-
-type APIHighwayTokenCreatePostInternalServerError ErrorResponse
-
-func (*APIHighwayTokenCreatePostInternalServerError) aPIHighwayTokenCreatePostRes() {}
-
 type APIHighwayTokenCreatePostOK struct {
 	// Время до которого будет активен токен.
 	ValidUntil time.Time `json:"valid_until"`
@@ -554,24 +423,6 @@ func (s *APIHighwayTokenCreatePostOK) SetValidUntil(val time.Time) {
 func (s *APIHighwayTokenCreatePostOK) SetToken(val string) {
 	s.Token = val
 }
-
-func (*APIHighwayTokenCreatePostOK) aPIHighwayTokenCreatePostRes() {}
-
-type APIHighwayTokenCreatePostUnauthorized ErrorResponse
-
-func (*APIHighwayTokenCreatePostUnauthorized) aPIHighwayTokenCreatePostRes() {}
-
-type APIHproxyParseBookPostBadRequest ErrorResponse
-
-func (*APIHproxyParseBookPostBadRequest) aPIHproxyParseBookPostRes() {}
-
-type APIHproxyParseBookPostForbidden ErrorResponse
-
-func (*APIHproxyParseBookPostForbidden) aPIHproxyParseBookPostRes() {}
-
-type APIHproxyParseBookPostInternalServerError ErrorResponse
-
-func (*APIHproxyParseBookPostInternalServerError) aPIHproxyParseBookPostRes() {}
 
 type APIHproxyParseBookPostOK struct {
 	// Название книги.
@@ -647,8 +498,6 @@ func (s *APIHproxyParseBookPostOK) SetPages(val []APIHproxyParseBookPostOKPagesI
 func (s *APIHproxyParseBookPostOK) SetAttributes(val []APIHproxyParseBookPostOKAttributesItem) {
 	s.Attributes = val
 }
-
-func (*APIHproxyParseBookPostOK) aPIHproxyParseBookPostRes() {}
 
 type APIHproxyParseBookPostOKAttributesItem struct {
 	// Код атрибута.
@@ -770,22 +619,6 @@ func (s *APIHproxyParseBookPostReq) SetPageLimit(val OptInt) {
 	s.PageLimit = val
 }
 
-type APIHproxyParseBookPostUnauthorized ErrorResponse
-
-func (*APIHproxyParseBookPostUnauthorized) aPIHproxyParseBookPostRes() {}
-
-type APIHproxyParseListPostBadRequest ErrorResponse
-
-func (*APIHproxyParseListPostBadRequest) aPIHproxyParseListPostRes() {}
-
-type APIHproxyParseListPostForbidden ErrorResponse
-
-func (*APIHproxyParseListPostForbidden) aPIHproxyParseListPostRes() {}
-
-type APIHproxyParseListPostInternalServerError ErrorResponse
-
-func (*APIHproxyParseListPostInternalServerError) aPIHproxyParseListPostRes() {}
-
 type APIHproxyParseListPostOK struct {
 	// Результаты обработки.
 	Results []APIHproxyParseListPostOKResultsItem `json:"results"`
@@ -812,8 +645,6 @@ func (s *APIHproxyParseListPostOK) SetResults(val []APIHproxyParseListPostOKResu
 func (s *APIHproxyParseListPostOK) SetNextURL(val OptURI) {
 	s.NextURL = val
 }
-
-func (*APIHproxyParseListPostOK) aPIHproxyParseListPostRes() {}
 
 // Экземпляр.
 type APIHproxyParseListPostOKResultsItem struct {
@@ -924,26 +755,8 @@ func (s *APIHproxyParseListPostReq) SetURL(val url.URL) {
 	s.URL = val
 }
 
-type APIHproxyParseListPostUnauthorized ErrorResponse
-
-func (*APIHproxyParseListPostUnauthorized) aPIHproxyParseListPostRes() {}
-
-type APIImportArchivePostBadRequest ErrorResponse
-
-func (*APIImportArchivePostBadRequest) aPIImportArchivePostRes() {}
-
-type APIImportArchivePostForbidden ErrorResponse
-
-func (*APIImportArchivePostForbidden) aPIImportArchivePostRes() {}
-
-type APIImportArchivePostInternalServerError ErrorResponse
-
-func (*APIImportArchivePostInternalServerError) aPIImportArchivePostRes() {}
-
 // APIImportArchivePostNoContent is response for APIImportArchivePost operation.
 type APIImportArchivePostNoContent struct{}
-
-func (*APIImportArchivePostNoContent) aPIImportArchivePostRes() {}
 
 type APIImportArchivePostReq struct {
 	Data io.Reader
@@ -958,22 +771,6 @@ func (s APIImportArchivePostReq) Read(p []byte) (n int, err error) {
 	}
 	return s.Data.Read(p)
 }
-
-type APIImportArchivePostUnauthorized ErrorResponse
-
-func (*APIImportArchivePostUnauthorized) aPIImportArchivePostRes() {}
-
-type APIParsingBookCheckPostBadRequest ErrorResponse
-
-func (*APIParsingBookCheckPostBadRequest) aPIParsingBookCheckPostRes() {}
-
-type APIParsingBookCheckPostForbidden ErrorResponse
-
-func (*APIParsingBookCheckPostForbidden) aPIParsingBookCheckPostRes() {}
-
-type APIParsingBookCheckPostInternalServerError ErrorResponse
-
-func (*APIParsingBookCheckPostInternalServerError) aPIParsingBookCheckPostRes() {}
 
 type APIParsingBookCheckPostReq struct {
 	// Ссылки на внешние системы.
@@ -990,22 +787,6 @@ func (s *APIParsingBookCheckPostReq) SetUrls(val []url.URL) {
 	s.Urls = val
 }
 
-type APIParsingBookCheckPostUnauthorized ErrorResponse
-
-func (*APIParsingBookCheckPostUnauthorized) aPIParsingBookCheckPostRes() {}
-
-type APIParsingBookMultiPostBadRequest ErrorResponse
-
-func (*APIParsingBookMultiPostBadRequest) aPIParsingBookMultiPostRes() {}
-
-type APIParsingBookMultiPostForbidden ErrorResponse
-
-func (*APIParsingBookMultiPostForbidden) aPIParsingBookMultiPostRes() {}
-
-type APIParsingBookMultiPostInternalServerError ErrorResponse
-
-func (*APIParsingBookMultiPostInternalServerError) aPIParsingBookMultiPostRes() {}
-
 type APIParsingBookMultiPostReq struct {
 	// Ссылка на внешние систему.
 	URL url.URL `json:"url"`
@@ -1020,22 +801,6 @@ func (s *APIParsingBookMultiPostReq) GetURL() url.URL {
 func (s *APIParsingBookMultiPostReq) SetURL(val url.URL) {
 	s.URL = val
 }
-
-type APIParsingBookMultiPostUnauthorized ErrorResponse
-
-func (*APIParsingBookMultiPostUnauthorized) aPIParsingBookMultiPostRes() {}
-
-type APIParsingBookPostBadRequest ErrorResponse
-
-func (*APIParsingBookPostBadRequest) aPIParsingBookPostRes() {}
-
-type APIParsingBookPostForbidden ErrorResponse
-
-func (*APIParsingBookPostForbidden) aPIParsingBookPostRes() {}
-
-type APIParsingBookPostInternalServerError ErrorResponse
-
-func (*APIParsingBookPostInternalServerError) aPIParsingBookPostRes() {}
 
 type APIParsingBookPostReq struct {
 	// Ссылка на внешнюю систему.
@@ -1052,22 +817,6 @@ func (s *APIParsingBookPostReq) SetURL(val url.URL) {
 	s.URL = val
 }
 
-type APIParsingBookPostUnauthorized ErrorResponse
-
-func (*APIParsingBookPostUnauthorized) aPIParsingBookPostRes() {}
-
-type APIParsingPageCheckPostBadRequest ErrorResponse
-
-func (*APIParsingPageCheckPostBadRequest) aPIParsingPageCheckPostRes() {}
-
-type APIParsingPageCheckPostForbidden ErrorResponse
-
-func (*APIParsingPageCheckPostForbidden) aPIParsingPageCheckPostRes() {}
-
-type APIParsingPageCheckPostInternalServerError ErrorResponse
-
-func (*APIParsingPageCheckPostInternalServerError) aPIParsingPageCheckPostRes() {}
-
 type APIParsingPageCheckPostOK struct {
 	// Результат обработки.
 	Result []APIParsingPageCheckPostOKResultItem `json:"result"`
@@ -1082,8 +831,6 @@ func (s *APIParsingPageCheckPostOK) GetResult() []APIParsingPageCheckPostOKResul
 func (s *APIParsingPageCheckPostOK) SetResult(val []APIParsingPageCheckPostOKResultItem) {
 	s.Result = val
 }
-
-func (*APIParsingPageCheckPostOK) aPIParsingPageCheckPostRes() {}
 
 type APIParsingPageCheckPostOKResultItem struct {
 	// Ссылка на книгу во внешней системе.
@@ -1227,22 +974,6 @@ func (s *APIParsingPageCheckPostReqUrlsItem) SetImageURL(val url.URL) {
 	s.ImageURL = val
 }
 
-type APIParsingPageCheckPostUnauthorized ErrorResponse
-
-func (*APIParsingPageCheckPostUnauthorized) aPIParsingPageCheckPostRes() {}
-
-type APIParsingPagePostBadRequest ErrorResponse
-
-func (*APIParsingPagePostBadRequest) aPIParsingPagePostRes() {}
-
-type APIParsingPagePostForbidden ErrorResponse
-
-func (*APIParsingPagePostForbidden) aPIParsingPagePostRes() {}
-
-type APIParsingPagePostInternalServerError ErrorResponse
-
-func (*APIParsingPagePostInternalServerError) aPIParsingPagePostRes() {}
-
 type APIParsingPagePostOK struct {
 	Data io.Reader
 }
@@ -1256,8 +987,6 @@ func (s APIParsingPagePostOK) Read(p []byte) (n int, err error) {
 	}
 	return s.Data.Read(p)
 }
-
-func (*APIParsingPagePostOK) aPIParsingPagePostRes() {}
 
 type APIParsingPagePostReq struct {
 	// Ссылка на книгу во внешней системе.
@@ -1285,10 +1014,6 @@ func (s *APIParsingPagePostReq) SetBookURL(val url.URL) {
 func (s *APIParsingPagePostReq) SetImageURL(val url.URL) {
 	s.ImageURL = val
 }
-
-type APIParsingPagePostUnauthorized ErrorResponse
-
-func (*APIParsingPagePostUnauthorized) aPIParsingPagePostRes() {}
 
 // Данные книги.
 // Ref: #/components/schemas/BookDetails
@@ -1354,8 +1079,6 @@ func (s *BookDetails) SetAttributes(val []BookDetailsAttributesItem) {
 func (s *BookDetails) SetPages(val []BookDetailsPagesItem) {
 	s.Pages = val
 }
-
-func (*BookDetails) aPIParsingBookPostRes() {}
 
 type BookDetailsAttributesItem struct {
 	// Код атрибута.
@@ -1516,9 +1239,6 @@ func (s *BooksCheckResult) SetResult(val []BooksCheckResultResultItem) {
 	s.Result = val
 }
 
-func (*BooksCheckResult) aPIParsingBookCheckPostRes() {}
-func (*BooksCheckResult) aPIParsingBookMultiPostRes() {}
-
 type BooksCheckResultResultItem struct {
 	// Ссылка на внешнюю систему.
 	URL url.URL `json:"url"`
@@ -1634,6 +1354,32 @@ func (s *ErrorResponse) SetInnerCode(val string) {
 // SetDetails sets the value of Details.
 func (s *ErrorResponse) SetDetails(val OptString) {
 	s.Details = val
+}
+
+// ErrorResponseStatusCode wraps ErrorResponse with StatusCode.
+type ErrorResponseStatusCode struct {
+	StatusCode int
+	Response   ErrorResponse
+}
+
+// GetStatusCode returns the value of StatusCode.
+func (s *ErrorResponseStatusCode) GetStatusCode() int {
+	return s.StatusCode
+}
+
+// GetResponse returns the value of Response.
+func (s *ErrorResponseStatusCode) GetResponse() ErrorResponse {
+	return s.Response
+}
+
+// SetStatusCode sets the value of StatusCode.
+func (s *ErrorResponseStatusCode) SetStatusCode(val int) {
+	s.StatusCode = val
+}
+
+// SetResponse sets the value of Response.
+func (s *ErrorResponseStatusCode) SetResponse(val ErrorResponse) {
+	s.Response = val
 }
 
 type HeaderAuth struct {

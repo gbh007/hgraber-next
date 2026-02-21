@@ -2,7 +2,6 @@ package adapter
 
 import (
 	"context"
-	"fmt"
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
@@ -15,28 +14,10 @@ func (a *Adapter) BooksCheck(ctx context.Context, urls []url.URL) ([]agentmodel.
 		Urls: urls,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("request: %w", err)
+		return nil, enrichError(err)
 	}
 
-	switch typedRes := res.(type) {
-	case *agentapi.BooksCheckResult:
-		return convertBooksCheckResult(typedRes), nil
-
-	case *agentapi.APIParsingBookCheckPostBadRequest:
-		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
-
-	case *agentapi.APIParsingBookCheckPostUnauthorized:
-		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
-
-	case *agentapi.APIParsingBookCheckPostForbidden:
-		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
-
-	case *agentapi.APIParsingBookCheckPostInternalServerError:
-		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
-
-	default:
-		return nil, agentmodel.ErrAgentAPIUnknownResponse
-	}
+	return convertBooksCheckResult(res), nil
 }
 
 func convertBooksCheckResult(checkResult *agentapi.BooksCheckResult) []agentmodel.AgentBookCheckResult {

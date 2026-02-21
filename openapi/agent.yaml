@@ -71,26 +71,8 @@ paths:
                 required:
                   - start_at
                   - status
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -124,26 +106,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BooksCheckResult"
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -175,26 +139,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BooksCheckResult"
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -226,26 +172,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BookDetails"
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -321,26 +249,8 @@ paths:
                         - result
                 required:
                   - result
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -378,26 +288,8 @@ paths:
               schema:
                 type: string
                 format: binary
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -440,26 +332,8 @@ paths:
       responses:
         204:
           description: Успешная загрузка
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -489,32 +363,8 @@ paths:
       responses:
         204:
           description: Успешная загрузка
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        409:
-          description: Файл уже существует
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -542,32 +392,8 @@ paths:
               schema:
                 type: string
                 format: binary
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -639,26 +465,8 @@ paths:
                     type: integer
                     format: int64
                     description: Доступный (свободный) размер для загрузки файлов
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -686,32 +494,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -741,26 +525,8 @@ paths:
                   token:
                     type: string
                     description: Токен highway
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -802,32 +568,8 @@ paths:
               schema:
                 type: string
                 format: binary
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -893,26 +635,8 @@ paths:
                     type: string
                     format: uri
                     description: Ссылка на следующую страницу
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1017,26 +741,8 @@ paths:
                       required:
                         - code
                         - values
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:

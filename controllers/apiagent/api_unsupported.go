@@ -2,6 +2,7 @@ package apiagent
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
@@ -10,86 +11,95 @@ func (c *Controller) APIFsCreatePost(
 	ctx context.Context,
 	req agentapi.APIFsCreatePostReq,
 	params agentapi.APIFsCreatePostParams,
-) (agentapi.APIFsCreatePostRes, error) {
-	return &agentapi.APIFsCreatePostBadRequest{
+) error {
+	return apiError{
+		Code:      http.StatusBadRequest,
 		InnerCode: ValidationCode,
-		Details:   agentapi.NewOptString("unsupported api"),
-	}, nil
+		Details:   "unsupported api",
+	}
 }
 
 func (c *Controller) APIFsDeletePost(
 	ctx context.Context,
 	req *agentapi.APIFsDeletePostReq,
-) (agentapi.APIFsDeletePostRes, error) {
-	return &agentapi.APIFsDeletePostBadRequest{
+) error {
+	return apiError{
+		Code:      http.StatusBadRequest,
 		InnerCode: ValidationCode,
-		Details:   agentapi.NewOptString("unsupported api"),
-	}, nil
+		Details:   "unsupported api",
+	}
 }
 
 func (c *Controller) APIFsGetGet(
 	ctx context.Context,
 	params agentapi.APIFsGetGetParams,
-) (agentapi.APIFsGetGetRes, error) {
-	return &agentapi.APIFsGetGetBadRequest{
+) (agentapi.APIFsGetGetOK, error) {
+	return agentapi.APIFsGetGetOK{}, apiError{
+		Code:      http.StatusBadRequest,
 		InnerCode: ValidationCode,
-		Details:   agentapi.NewOptString("unsupported api"),
-	}, nil
+		Details:   "unsupported api",
+	}
 }
 
 func (c *Controller) APIParsingBookMultiPost(
 	ctx context.Context,
 	req *agentapi.APIParsingBookMultiPostReq,
-) (agentapi.APIParsingBookMultiPostRes, error) {
-	return &agentapi.APIParsingBookMultiPostBadRequest{
+) (*agentapi.BooksCheckResult, error) {
+	return nil, apiError{
+		Code:      http.StatusBadRequest,
 		InnerCode: ValidationCode,
-		Details:   agentapi.NewOptString("unsupported api"),
-	}, nil
+		Details:   "unsupported api",
+	}
 }
 
 func (c *Controller) APIFsInfoPost(
 	ctx context.Context,
 	req *agentapi.APIFsInfoPostReq,
-) (agentapi.APIFsInfoPostRes, error) {
-	return &agentapi.APIFsInfoPostBadRequest{
+) (*agentapi.APIFsInfoPostOK, error) {
+	return nil, apiError{
+		Code:      http.StatusBadRequest,
 		InnerCode: ValidationCode,
-		Details:   agentapi.NewOptString("unsupported api"),
-	}, nil
+		Details:   "unsupported api",
+	}
 }
 
 func (c *Controller) APIHighwayFileIDExtGet(
 	ctx context.Context,
 	params agentapi.APIHighwayFileIDExtGetParams,
-) (agentapi.APIHighwayFileIDExtGetRes, error) {
-	return &agentapi.APIHighwayFileIDExtGetBadRequest{
+) (*agentapi.APIHighwayFileIDExtGetOKHeaders, error) {
+	return nil, apiError{
+		Code:      http.StatusBadRequest,
 		InnerCode: ValidationCode,
-		Details:   agentapi.NewOptString("unsupported api"),
-	}, nil
+		Details:   "unsupported api",
+	}
 }
 
-func (c *Controller) APIHighwayTokenCreatePost(ctx context.Context) (agentapi.APIHighwayTokenCreatePostRes, error) {
-	return &agentapi.APIHighwayTokenCreatePostBadRequest{
+func (c *Controller) APIHighwayTokenCreatePost(ctx context.Context) (*agentapi.APIHighwayTokenCreatePostOK, error) {
+	return nil, apiError{
+		Code:      http.StatusBadRequest,
 		InnerCode: ValidationCode,
-		Details:   agentapi.NewOptString("unsupported api"),
-	}, nil
+		Details:   "unsupported api",
+	}
 }
 
 func (c *Controller) APIHproxyParseBookPost(
 	ctx context.Context,
 	req *agentapi.APIHproxyParseBookPostReq,
-) (agentapi.APIHproxyParseBookPostRes, error) {
-	return &agentapi.APIHproxyParseBookPostBadRequest{
+) (*agentapi.APIHproxyParseBookPostOK, error) {
+	return nil, apiError{
+		Code:      http.StatusBadRequest,
 		InnerCode: ValidationCode,
-		Details:   agentapi.NewOptString("unsupported api"),
-	}, nil
+		Details:   "unsupported api",
+	}
 }
 
 func (c *Controller) APIHproxyParseListPost(
 	ctx context.Context,
 	req *agentapi.APIHproxyParseListPostReq,
-) (agentapi.APIHproxyParseListPostRes, error) {
-	return &agentapi.APIHproxyParseListPostBadRequest{
+) (*agentapi.APIHproxyParseListPostOK, error) {
+	return nil, apiError{
+		Code:      http.StatusBadRequest,
 		InnerCode: ValidationCode,
-		Details:   agentapi.NewOptString("unsupported api"),
-	}, nil
+		Details:   "unsupported api",
+	}
 }

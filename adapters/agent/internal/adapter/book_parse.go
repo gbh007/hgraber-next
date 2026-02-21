@@ -2,7 +2,6 @@ package adapter
 
 import (
 	"context"
-	"fmt"
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
@@ -15,64 +14,30 @@ func (a *Adapter) BookParse(ctx context.Context, u url.URL) (agentmodel.AgentBoo
 		URL: u,
 	})
 	if err != nil {
-		return agentmodel.AgentBookDetails{}, fmt.Errorf("request: %w", err)
+		return agentmodel.AgentBookDetails{}, enrichError(err)
 	}
 
-	switch typedRes := res.(type) {
-	case *agentapi.BookDetails:
-		result := agentmodel.AgentBookDetails{
-			URL:       typedRes.URL,
-			Name:      typedRes.Name,
-			PageCount: typedRes.PageCount,
-			Attributes: pkg.Map(
-				typedRes.Attributes,
-				func(a agentapi.BookDetailsAttributesItem) agentmodel.AgentBookDetailsAttributesItem {
-					return agentmodel.AgentBookDetailsAttributesItem{
-						Code:   string(a.Code),
-						Values: a.Values,
-					}
-				},
-			),
-			Pages: pkg.Map(typedRes.Pages, func(p agentapi.BookDetailsPagesItem) agentmodel.AgentBookDetailsPagesItem {
-				return agentmodel.AgentBookDetailsPagesItem{
-					PageNumber: p.PageNumber,
-					URL:        p.URL,
-					Filename:   p.Filename,
+	result := agentmodel.AgentBookDetails{
+		URL:       res.URL,
+		Name:      res.Name,
+		PageCount: res.PageCount,
+		Attributes: pkg.Map(
+			res.Attributes,
+			func(a agentapi.BookDetailsAttributesItem) agentmodel.AgentBookDetailsAttributesItem {
+				return agentmodel.AgentBookDetailsAttributesItem{
+					Code:   string(a.Code),
+					Values: a.Values,
 				}
-			}),
-		}
-
-		return result, nil
-
-	case *agentapi.APIParsingBookPostBadRequest:
-		return agentmodel.AgentBookDetails{}, fmt.Errorf(
-			"%w: %s",
-			agentmodel.ErrAgentAPIBadRequest,
-			typedRes.Details.Value,
-		)
-
-	case *agentapi.APIParsingBookPostUnauthorized:
-		return agentmodel.AgentBookDetails{}, fmt.Errorf(
-			"%w: %s",
-			agentmodel.ErrAgentAPIUnauthorized,
-			typedRes.Details.Value,
-		)
-
-	case *agentapi.APIParsingBookPostForbidden:
-		return agentmodel.AgentBookDetails{}, fmt.Errorf(
-			"%w: %s",
-			agentmodel.ErrAgentAPIForbidden,
-			typedRes.Details.Value,
-		)
-
-	case *agentapi.APIParsingBookPostInternalServerError:
-		return agentmodel.AgentBookDetails{}, fmt.Errorf(
-			"%w: %s",
-			agentmodel.ErrAgentAPIInternalError,
-			typedRes.Details.Value,
-		)
-
-	default:
-		return agentmodel.AgentBookDetails{}, agentmodel.ErrAgentAPIUnknownResponse
+			},
+		),
+		Pages: pkg.Map(res.Pages, func(p agentapi.BookDetailsPagesItem) agentmodel.AgentBookDetailsPagesItem {
+			return agentmodel.AgentBookDetailsPagesItem{
+				PageNumber: p.PageNumber,
+				URL:        p.URL,
+				Filename:   p.Filename,
+			}
+		}),
 	}
+
+	return result, nil
 }

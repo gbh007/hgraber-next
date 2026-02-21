@@ -13,92 +13,96 @@ type Handler interface {
 	// Получение данных о состоянии агента.
 	//
 	// GET /api/core/status
-	APICoreStatusGet(ctx context.Context) (APICoreStatusGetRes, error)
+	APICoreStatusGet(ctx context.Context) (*APICoreStatusGetOK, error)
 	// APIFsCreatePost implements POST /api/fs/create operation.
 	//
 	// Создание нового файла.
 	//
 	// POST /api/fs/create
-	APIFsCreatePost(ctx context.Context, req APIFsCreatePostReq, params APIFsCreatePostParams) (APIFsCreatePostRes, error)
+	APIFsCreatePost(ctx context.Context, req APIFsCreatePostReq, params APIFsCreatePostParams) error
 	// APIFsDeletePost implements POST /api/fs/delete operation.
 	//
 	// Удаление файла.
 	//
 	// POST /api/fs/delete
-	APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) (APIFsDeletePostRes, error)
+	APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) error
 	// APIFsGetGet implements GET /api/fs/get operation.
 	//
 	// Получение файла.
 	//
 	// GET /api/fs/get
-	APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (APIFsGetGetRes, error)
+	APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (APIFsGetGetOK, error)
 	// APIFsInfoPost implements POST /api/fs/info operation.
 	//
 	// Получение информации о состоянии файловой системы.
 	//
 	// POST /api/fs/info
-	APIFsInfoPost(ctx context.Context, req *APIFsInfoPostReq) (APIFsInfoPostRes, error)
+	APIFsInfoPost(ctx context.Context, req *APIFsInfoPostReq) (*APIFsInfoPostOK, error)
 	// APIHighwayFileIDExtGet implements GET /api/highway/file/{id}.{ext} operation.
 	//
 	// Получение файла через highway.
 	//
 	// GET /api/highway/file/{id}.{ext}
-	APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (APIHighwayFileIDExtGetRes, error)
+	APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (*APIHighwayFileIDExtGetOKHeaders, error)
 	// APIHighwayTokenCreatePost implements POST /api/highway/token/create operation.
 	//
 	// Создание нового токена для highway.
 	//
 	// POST /api/highway/token/create
-	APIHighwayTokenCreatePost(ctx context.Context) (APIHighwayTokenCreatePostRes, error)
+	APIHighwayTokenCreatePost(ctx context.Context) (*APIHighwayTokenCreatePostOK, error)
 	// APIHproxyParseBookPost implements POST /api/hproxy/parse/book operation.
 	//
 	// Парсинг данных книги по ссылке.
 	//
 	// POST /api/hproxy/parse/book
-	APIHproxyParseBookPost(ctx context.Context, req *APIHproxyParseBookPostReq) (APIHproxyParseBookPostRes, error)
+	APIHproxyParseBookPost(ctx context.Context, req *APIHproxyParseBookPostReq) (*APIHproxyParseBookPostOK, error)
 	// APIHproxyParseListPost implements POST /api/hproxy/parse/list operation.
 	//
 	// Парсинг списка данных по ссылке.
 	//
 	// POST /api/hproxy/parse/list
-	APIHproxyParseListPost(ctx context.Context, req *APIHproxyParseListPostReq) (APIHproxyParseListPostRes, error)
+	APIHproxyParseListPost(ctx context.Context, req *APIHproxyParseListPostReq) (*APIHproxyParseListPostOK, error)
 	// APIImportArchivePost implements POST /api/import/archive operation.
 	//
 	// Загрузка архива.
 	//
 	// POST /api/import/archive
-	APIImportArchivePost(ctx context.Context, req APIImportArchivePostReq, params APIImportArchivePostParams) (APIImportArchivePostRes, error)
+	APIImportArchivePost(ctx context.Context, req APIImportArchivePostReq, params APIImportArchivePostParams) error
 	// APIParsingBookCheckPost implements POST /api/parsing/book/check operation.
 	//
 	// Предварительная проверка ссылок на новые книги.
 	//
 	// POST /api/parsing/book/check
-	APIParsingBookCheckPost(ctx context.Context, req *APIParsingBookCheckPostReq) (APIParsingBookCheckPostRes, error)
+	APIParsingBookCheckPost(ctx context.Context, req *APIParsingBookCheckPostReq) (*BooksCheckResult, error)
 	// APIParsingBookMultiPost implements POST /api/parsing/book/multi operation.
 	//
 	// Обработка ссылки с набором книг (например всех глав
 	// манги).
 	//
 	// POST /api/parsing/book/multi
-	APIParsingBookMultiPost(ctx context.Context, req *APIParsingBookMultiPostReq) (APIParsingBookMultiPostRes, error)
+	APIParsingBookMultiPost(ctx context.Context, req *APIParsingBookMultiPostReq) (*BooksCheckResult, error)
 	// APIParsingBookPost implements POST /api/parsing/book operation.
 	//
 	// Обработка новой книги.
 	//
 	// POST /api/parsing/book
-	APIParsingBookPost(ctx context.Context, req *APIParsingBookPostReq) (APIParsingBookPostRes, error)
+	APIParsingBookPost(ctx context.Context, req *APIParsingBookPostReq) (*BookDetails, error)
 	// APIParsingPageCheckPost implements POST /api/parsing/page/check operation.
 	//
 	// Предварительная проверка ссылок для загрузки страниц.
 	//
 	// POST /api/parsing/page/check
-	APIParsingPageCheckPost(ctx context.Context, req *APIParsingPageCheckPostReq) (APIParsingPageCheckPostRes, error)
+	APIParsingPageCheckPost(ctx context.Context, req *APIParsingPageCheckPostReq) (*APIParsingPageCheckPostOK, error)
 	// APIParsingPagePost implements POST /api/parsing/page operation.
 	//
 	// Загрузка изображения страницы.
 	//
 	// POST /api/parsing/page
-	APIParsingPagePost(ctx context.Context, req *APIParsingPagePostReq) (APIParsingPagePostRes, error)
+	APIParsingPagePost(ctx context.Context, req *APIParsingPagePostReq) (APIParsingPagePostOK, error)
+	// NewError creates *ErrorResponseStatusCode from error returned by handler.
+	//
+	// Used for common default response.
+	NewError(ctx context.Context, err error) *ErrorResponseStatusCode
 }
 
 // Server implements http server based on OpenAPI v3 specification and

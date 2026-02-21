@@ -33,92 +33,92 @@ type Invoker interface {
 	// Получение данных о состоянии агента.
 	//
 	// GET /api/core/status
-	APICoreStatusGet(ctx context.Context) (APICoreStatusGetRes, error)
+	APICoreStatusGet(ctx context.Context) (*APICoreStatusGetOK, error)
 	// APIFsCreatePost invokes POST /api/fs/create operation.
 	//
 	// Создание нового файла.
 	//
 	// POST /api/fs/create
-	APIFsCreatePost(ctx context.Context, request APIFsCreatePostReq, params APIFsCreatePostParams) (APIFsCreatePostRes, error)
+	APIFsCreatePost(ctx context.Context, request APIFsCreatePostReq, params APIFsCreatePostParams) error
 	// APIFsDeletePost invokes POST /api/fs/delete operation.
 	//
 	// Удаление файла.
 	//
 	// POST /api/fs/delete
-	APIFsDeletePost(ctx context.Context, request *APIFsDeletePostReq) (APIFsDeletePostRes, error)
+	APIFsDeletePost(ctx context.Context, request *APIFsDeletePostReq) error
 	// APIFsGetGet invokes GET /api/fs/get operation.
 	//
 	// Получение файла.
 	//
 	// GET /api/fs/get
-	APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (APIFsGetGetRes, error)
+	APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (APIFsGetGetOK, error)
 	// APIFsInfoPost invokes POST /api/fs/info operation.
 	//
 	// Получение информации о состоянии файловой системы.
 	//
 	// POST /api/fs/info
-	APIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (APIFsInfoPostRes, error)
+	APIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (*APIFsInfoPostOK, error)
 	// APIHighwayFileIDExtGet invokes GET /api/highway/file/{id}.{ext} operation.
 	//
 	// Получение файла через highway.
 	//
 	// GET /api/highway/file/{id}.{ext}
-	APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (APIHighwayFileIDExtGetRes, error)
+	APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (*APIHighwayFileIDExtGetOKHeaders, error)
 	// APIHighwayTokenCreatePost invokes POST /api/highway/token/create operation.
 	//
 	// Создание нового токена для highway.
 	//
 	// POST /api/highway/token/create
-	APIHighwayTokenCreatePost(ctx context.Context) (APIHighwayTokenCreatePostRes, error)
+	APIHighwayTokenCreatePost(ctx context.Context) (*APIHighwayTokenCreatePostOK, error)
 	// APIHproxyParseBookPost invokes POST /api/hproxy/parse/book operation.
 	//
 	// Парсинг данных книги по ссылке.
 	//
 	// POST /api/hproxy/parse/book
-	APIHproxyParseBookPost(ctx context.Context, request *APIHproxyParseBookPostReq) (APIHproxyParseBookPostRes, error)
+	APIHproxyParseBookPost(ctx context.Context, request *APIHproxyParseBookPostReq) (*APIHproxyParseBookPostOK, error)
 	// APIHproxyParseListPost invokes POST /api/hproxy/parse/list operation.
 	//
 	// Парсинг списка данных по ссылке.
 	//
 	// POST /api/hproxy/parse/list
-	APIHproxyParseListPost(ctx context.Context, request *APIHproxyParseListPostReq) (APIHproxyParseListPostRes, error)
+	APIHproxyParseListPost(ctx context.Context, request *APIHproxyParseListPostReq) (*APIHproxyParseListPostOK, error)
 	// APIImportArchivePost invokes POST /api/import/archive operation.
 	//
 	// Загрузка архива.
 	//
 	// POST /api/import/archive
-	APIImportArchivePost(ctx context.Context, request APIImportArchivePostReq, params APIImportArchivePostParams) (APIImportArchivePostRes, error)
+	APIImportArchivePost(ctx context.Context, request APIImportArchivePostReq, params APIImportArchivePostParams) error
 	// APIParsingBookCheckPost invokes POST /api/parsing/book/check operation.
 	//
 	// Предварительная проверка ссылок на новые книги.
 	//
 	// POST /api/parsing/book/check
-	APIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (APIParsingBookCheckPostRes, error)
+	APIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (*BooksCheckResult, error)
 	// APIParsingBookMultiPost invokes POST /api/parsing/book/multi operation.
 	//
 	// Обработка ссылки с набором книг (например всех глав
 	// манги).
 	//
 	// POST /api/parsing/book/multi
-	APIParsingBookMultiPost(ctx context.Context, request *APIParsingBookMultiPostReq) (APIParsingBookMultiPostRes, error)
+	APIParsingBookMultiPost(ctx context.Context, request *APIParsingBookMultiPostReq) (*BooksCheckResult, error)
 	// APIParsingBookPost invokes POST /api/parsing/book operation.
 	//
 	// Обработка новой книги.
 	//
 	// POST /api/parsing/book
-	APIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (APIParsingBookPostRes, error)
+	APIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (*BookDetails, error)
 	// APIParsingPageCheckPost invokes POST /api/parsing/page/check operation.
 	//
 	// Предварительная проверка ссылок для загрузки страниц.
 	//
 	// POST /api/parsing/page/check
-	APIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (APIParsingPageCheckPostRes, error)
+	APIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (*APIParsingPageCheckPostOK, error)
 	// APIParsingPagePost invokes POST /api/parsing/page operation.
 	//
 	// Загрузка изображения страницы.
 	//
 	// POST /api/parsing/page
-	APIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (APIParsingPagePostRes, error)
+	APIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (APIParsingPagePostOK, error)
 }
 
 // Client implements OAS client.
@@ -127,8 +127,12 @@ type Client struct {
 	sec       SecuritySource
 	baseClient
 }
+type errorHandler interface {
+	NewError(ctx context.Context, err error) *ErrorResponseStatusCode
+}
 
 var _ Handler = struct {
+	errorHandler
 	*Client
 }{}
 
@@ -171,12 +175,12 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Получение данных о состоянии агента.
 //
 // GET /api/core/status
-func (c *Client) APICoreStatusGet(ctx context.Context) (APICoreStatusGetRes, error) {
+func (c *Client) APICoreStatusGet(ctx context.Context) (*APICoreStatusGetOK, error) {
 	res, err := c.sendAPICoreStatusGet(ctx)
 	return res, err
 }
 
-func (c *Client) sendAPICoreStatusGet(ctx context.Context) (res APICoreStatusGetRes, err error) {
+func (c *Client) sendAPICoreStatusGet(ctx context.Context) (res *APICoreStatusGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/core/status"),
@@ -275,12 +279,12 @@ func (c *Client) sendAPICoreStatusGet(ctx context.Context) (res APICoreStatusGet
 // Создание нового файла.
 //
 // POST /api/fs/create
-func (c *Client) APIFsCreatePost(ctx context.Context, request APIFsCreatePostReq, params APIFsCreatePostParams) (APIFsCreatePostRes, error) {
-	res, err := c.sendAPIFsCreatePost(ctx, request, params)
-	return res, err
+func (c *Client) APIFsCreatePost(ctx context.Context, request APIFsCreatePostReq, params APIFsCreatePostParams) error {
+	_, err := c.sendAPIFsCreatePost(ctx, request, params)
+	return err
 }
 
-func (c *Client) sendAPIFsCreatePost(ctx context.Context, request APIFsCreatePostReq, params APIFsCreatePostParams) (res APIFsCreatePostRes, err error) {
+func (c *Client) sendAPIFsCreatePost(ctx context.Context, request APIFsCreatePostReq, params APIFsCreatePostParams) (res *APIFsCreatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/fs/create"),
@@ -396,12 +400,12 @@ func (c *Client) sendAPIFsCreatePost(ctx context.Context, request APIFsCreatePos
 // Удаление файла.
 //
 // POST /api/fs/delete
-func (c *Client) APIFsDeletePost(ctx context.Context, request *APIFsDeletePostReq) (APIFsDeletePostRes, error) {
-	res, err := c.sendAPIFsDeletePost(ctx, request)
-	return res, err
+func (c *Client) APIFsDeletePost(ctx context.Context, request *APIFsDeletePostReq) error {
+	_, err := c.sendAPIFsDeletePost(ctx, request)
+	return err
 }
 
-func (c *Client) sendAPIFsDeletePost(ctx context.Context, request *APIFsDeletePostReq) (res APIFsDeletePostRes, err error) {
+func (c *Client) sendAPIFsDeletePost(ctx context.Context, request *APIFsDeletePostReq) (res *APIFsDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/fs/delete"),
@@ -503,12 +507,12 @@ func (c *Client) sendAPIFsDeletePost(ctx context.Context, request *APIFsDeletePo
 // Получение файла.
 //
 // GET /api/fs/get
-func (c *Client) APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (APIFsGetGetRes, error) {
+func (c *Client) APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (APIFsGetGetOK, error) {
 	res, err := c.sendAPIFsGetGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendAPIFsGetGet(ctx context.Context, params APIFsGetGetParams) (res APIFsGetGetRes, err error) {
+func (c *Client) sendAPIFsGetGet(ctx context.Context, params APIFsGetGetParams) (res APIFsGetGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/fs/get"),
@@ -625,12 +629,12 @@ func (c *Client) sendAPIFsGetGet(ctx context.Context, params APIFsGetGetParams) 
 // Получение информации о состоянии файловой системы.
 //
 // POST /api/fs/info
-func (c *Client) APIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (APIFsInfoPostRes, error) {
+func (c *Client) APIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (*APIFsInfoPostOK, error) {
 	res, err := c.sendAPIFsInfoPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (res APIFsInfoPostRes, err error) {
+func (c *Client) sendAPIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (res *APIFsInfoPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/fs/info"),
@@ -732,12 +736,12 @@ func (c *Client) sendAPIFsInfoPost(ctx context.Context, request *APIFsInfoPostRe
 // Получение файла через highway.
 //
 // GET /api/highway/file/{id}.{ext}
-func (c *Client) APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (APIHighwayFileIDExtGetRes, error) {
+func (c *Client) APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (*APIHighwayFileIDExtGetOKHeaders, error) {
 	res, err := c.sendAPIHighwayFileIDExtGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendAPIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (res APIHighwayFileIDExtGetRes, err error) {
+func (c *Client) sendAPIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (res *APIHighwayFileIDExtGetOKHeaders, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/highway/file/{id}.{ext}"),
@@ -858,12 +862,12 @@ func (c *Client) sendAPIHighwayFileIDExtGet(ctx context.Context, params APIHighw
 // Создание нового токена для highway.
 //
 // POST /api/highway/token/create
-func (c *Client) APIHighwayTokenCreatePost(ctx context.Context) (APIHighwayTokenCreatePostRes, error) {
+func (c *Client) APIHighwayTokenCreatePost(ctx context.Context) (*APIHighwayTokenCreatePostOK, error) {
 	res, err := c.sendAPIHighwayTokenCreatePost(ctx)
 	return res, err
 }
 
-func (c *Client) sendAPIHighwayTokenCreatePost(ctx context.Context) (res APIHighwayTokenCreatePostRes, err error) {
+func (c *Client) sendAPIHighwayTokenCreatePost(ctx context.Context) (res *APIHighwayTokenCreatePostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/highway/token/create"),
@@ -962,12 +966,12 @@ func (c *Client) sendAPIHighwayTokenCreatePost(ctx context.Context) (res APIHigh
 // Парсинг данных книги по ссылке.
 //
 // POST /api/hproxy/parse/book
-func (c *Client) APIHproxyParseBookPost(ctx context.Context, request *APIHproxyParseBookPostReq) (APIHproxyParseBookPostRes, error) {
+func (c *Client) APIHproxyParseBookPost(ctx context.Context, request *APIHproxyParseBookPostReq) (*APIHproxyParseBookPostOK, error) {
 	res, err := c.sendAPIHproxyParseBookPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIHproxyParseBookPost(ctx context.Context, request *APIHproxyParseBookPostReq) (res APIHproxyParseBookPostRes, err error) {
+func (c *Client) sendAPIHproxyParseBookPost(ctx context.Context, request *APIHproxyParseBookPostReq) (res *APIHproxyParseBookPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/hproxy/parse/book"),
@@ -1069,12 +1073,12 @@ func (c *Client) sendAPIHproxyParseBookPost(ctx context.Context, request *APIHpr
 // Парсинг списка данных по ссылке.
 //
 // POST /api/hproxy/parse/list
-func (c *Client) APIHproxyParseListPost(ctx context.Context, request *APIHproxyParseListPostReq) (APIHproxyParseListPostRes, error) {
+func (c *Client) APIHproxyParseListPost(ctx context.Context, request *APIHproxyParseListPostReq) (*APIHproxyParseListPostOK, error) {
 	res, err := c.sendAPIHproxyParseListPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIHproxyParseListPost(ctx context.Context, request *APIHproxyParseListPostReq) (res APIHproxyParseListPostRes, err error) {
+func (c *Client) sendAPIHproxyParseListPost(ctx context.Context, request *APIHproxyParseListPostReq) (res *APIHproxyParseListPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/hproxy/parse/list"),
@@ -1176,12 +1180,12 @@ func (c *Client) sendAPIHproxyParseListPost(ctx context.Context, request *APIHpr
 // Загрузка архива.
 //
 // POST /api/import/archive
-func (c *Client) APIImportArchivePost(ctx context.Context, request APIImportArchivePostReq, params APIImportArchivePostParams) (APIImportArchivePostRes, error) {
-	res, err := c.sendAPIImportArchivePost(ctx, request, params)
-	return res, err
+func (c *Client) APIImportArchivePost(ctx context.Context, request APIImportArchivePostReq, params APIImportArchivePostParams) error {
+	_, err := c.sendAPIImportArchivePost(ctx, request, params)
+	return err
 }
 
-func (c *Client) sendAPIImportArchivePost(ctx context.Context, request APIImportArchivePostReq, params APIImportArchivePostParams) (res APIImportArchivePostRes, err error) {
+func (c *Client) sendAPIImportArchivePost(ctx context.Context, request APIImportArchivePostReq, params APIImportArchivePostParams) (res *APIImportArchivePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/import/archive"),
@@ -1322,12 +1326,12 @@ func (c *Client) sendAPIImportArchivePost(ctx context.Context, request APIImport
 // Предварительная проверка ссылок на новые книги.
 //
 // POST /api/parsing/book/check
-func (c *Client) APIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (APIParsingBookCheckPostRes, error) {
+func (c *Client) APIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (*BooksCheckResult, error) {
 	res, err := c.sendAPIParsingBookCheckPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (res APIParsingBookCheckPostRes, err error) {
+func (c *Client) sendAPIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (res *BooksCheckResult, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book/check"),
@@ -1430,12 +1434,12 @@ func (c *Client) sendAPIParsingBookCheckPost(ctx context.Context, request *APIPa
 // манги).
 //
 // POST /api/parsing/book/multi
-func (c *Client) APIParsingBookMultiPost(ctx context.Context, request *APIParsingBookMultiPostReq) (APIParsingBookMultiPostRes, error) {
+func (c *Client) APIParsingBookMultiPost(ctx context.Context, request *APIParsingBookMultiPostReq) (*BooksCheckResult, error) {
 	res, err := c.sendAPIParsingBookMultiPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIParsingBookMultiPost(ctx context.Context, request *APIParsingBookMultiPostReq) (res APIParsingBookMultiPostRes, err error) {
+func (c *Client) sendAPIParsingBookMultiPost(ctx context.Context, request *APIParsingBookMultiPostReq) (res *BooksCheckResult, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book/multi"),
@@ -1537,12 +1541,12 @@ func (c *Client) sendAPIParsingBookMultiPost(ctx context.Context, request *APIPa
 // Обработка новой книги.
 //
 // POST /api/parsing/book
-func (c *Client) APIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (APIParsingBookPostRes, error) {
+func (c *Client) APIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (*BookDetails, error) {
 	res, err := c.sendAPIParsingBookPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (res APIParsingBookPostRes, err error) {
+func (c *Client) sendAPIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (res *BookDetails, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book"),
@@ -1644,12 +1648,12 @@ func (c *Client) sendAPIParsingBookPost(ctx context.Context, request *APIParsing
 // Предварительная проверка ссылок для загрузки страниц.
 //
 // POST /api/parsing/page/check
-func (c *Client) APIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (APIParsingPageCheckPostRes, error) {
+func (c *Client) APIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (*APIParsingPageCheckPostOK, error) {
 	res, err := c.sendAPIParsingPageCheckPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (res APIParsingPageCheckPostRes, err error) {
+func (c *Client) sendAPIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (res *APIParsingPageCheckPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/page/check"),
@@ -1751,12 +1755,12 @@ func (c *Client) sendAPIParsingPageCheckPost(ctx context.Context, request *APIPa
 // Загрузка изображения страницы.
 //
 // POST /api/parsing/page
-func (c *Client) APIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (APIParsingPagePostRes, error) {
+func (c *Client) APIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (APIParsingPagePostOK, error) {
 	res, err := c.sendAPIParsingPagePost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendAPIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (res APIParsingPagePostRes, err error) {
+func (c *Client) sendAPIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (res APIParsingPagePostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/page"),

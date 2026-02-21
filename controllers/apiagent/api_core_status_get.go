@@ -6,7 +6,7 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APICoreStatusGet(ctx context.Context) (agentapi.APICoreStatusGetRes, error) {
+func (c *Controller) APICoreStatusGet(ctx context.Context) (*agentapi.APICoreStatusGetOK, error) {
 	return &agentapi.APICoreStatusGetOK{
 		StartAt: c.startAt,
 		Status:  agentapi.APICoreStatusGetOKStatusOk,

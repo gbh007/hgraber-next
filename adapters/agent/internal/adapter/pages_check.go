@@ -2,7 +2,6 @@ package adapter
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
@@ -22,42 +21,20 @@ func (a *Adapter) PagesCheck(
 		}),
 	})
 	if err != nil {
-		return nil, fmt.Errorf("request: %w", err)
+		return nil, enrichError(err)
 	}
 
-	var result []agentmodel.AgentPageCheckResult
-
-	switch typedRes := res.(type) {
-	case *agentapi.APIParsingPageCheckPostOK:
-		result = pkg.Map(
-			typedRes.Result,
-			func(v agentapi.APIParsingPageCheckPostOKResultItem) agentmodel.AgentPageCheckResult {
-				return agentmodel.AgentPageCheckResult{
-					BookURL:       v.BookURL,
-					ImageURL:      v.ImageURL,
-					IsUnsupported: v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultUnsupported,
-					IsPossible:    v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultOk,
-					HasError:      v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultError,
-					ErrorReason:   v.ErrorDetails.Value,
-				}
-			},
-		)
-
-	case *agentapi.APIParsingPageCheckPostBadRequest:
-		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIBadRequest, typedRes.Details.Value)
-
-	case *agentapi.APIParsingPageCheckPostUnauthorized:
-		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIUnauthorized, typedRes.Details.Value)
-
-	case *agentapi.APIParsingPageCheckPostForbidden:
-		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIForbidden, typedRes.Details.Value)
-
-	case *agentapi.APIParsingPageCheckPostInternalServerError:
-		return nil, fmt.Errorf("%w: %s", agentmodel.ErrAgentAPIInternalError, typedRes.Details.Value)
-
-	default:
-		return nil, agentmodel.ErrAgentAPIUnknownResponse
-	}
-
-	return result, nil
+	return pkg.Map(
+		res.Result,
+		func(v agentapi.APIParsingPageCheckPostOKResultItem) agentmodel.AgentPageCheckResult {
+			return agentmodel.AgentPageCheckResult{
+				BookURL:       v.BookURL,
+				ImageURL:      v.ImageURL,
+				IsUnsupported: v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultUnsupported,
+				IsPossible:    v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultOk,
+				HasError:      v.Result == agentapi.APIParsingPageCheckPostOKResultItemResultError,
+				ErrorReason:   v.ErrorDetails.Value,
+			}
+		},
+	), nil
 }

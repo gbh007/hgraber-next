@@ -2,6 +2,7 @@ package apiagent
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
@@ -11,13 +12,14 @@ import (
 func (c *Controller) APIParsingBookCheckPost(
 	ctx context.Context,
 	req *agentapi.APIParsingBookCheckPostReq,
-) (agentapi.APIParsingBookCheckPostRes, error) {
+) (*agentapi.BooksCheckResult, error) {
 	result, err := c.parsingUseCases.BooksExists(ctx, req.Urls)
 	if err != nil {
-		return &agentapi.APIParsingBookCheckPostInternalServerError{
+		return nil, apiError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: ParseUseCaseCode,
-			Details:   agentapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &agentapi.BooksCheckResult{

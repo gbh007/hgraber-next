@@ -18,7 +18,7 @@ var _ Handler = UnimplementedHandler{}
 // Получение данных о состоянии агента.
 //
 // GET /api/core/status
-func (UnimplementedHandler) APICoreStatusGet(ctx context.Context) (r APICoreStatusGetRes, _ error) {
+func (UnimplementedHandler) APICoreStatusGet(ctx context.Context) (r *APICoreStatusGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -27,8 +27,8 @@ func (UnimplementedHandler) APICoreStatusGet(ctx context.Context) (r APICoreStat
 // Создание нового файла.
 //
 // POST /api/fs/create
-func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req APIFsCreatePostReq, params APIFsCreatePostParams) (r APIFsCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req APIFsCreatePostReq, params APIFsCreatePostParams) error {
+	return ht.ErrNotImplemented
 }
 
 // APIFsDeletePost implements POST /api/fs/delete operation.
@@ -36,8 +36,8 @@ func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req APIFsCreate
 // Удаление файла.
 //
 // POST /api/fs/delete
-func (UnimplementedHandler) APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) (r APIFsDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIFsGetGet implements GET /api/fs/get operation.
@@ -45,7 +45,7 @@ func (UnimplementedHandler) APIFsDeletePost(ctx context.Context, req *APIFsDelet
 // Получение файла.
 //
 // GET /api/fs/get
-func (UnimplementedHandler) APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (r APIFsGetGetRes, _ error) {
+func (UnimplementedHandler) APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (r APIFsGetGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -54,7 +54,7 @@ func (UnimplementedHandler) APIFsGetGet(ctx context.Context, params APIFsGetGetP
 // Получение информации о состоянии файловой системы.
 //
 // POST /api/fs/info
-func (UnimplementedHandler) APIFsInfoPost(ctx context.Context, req *APIFsInfoPostReq) (r APIFsInfoPostRes, _ error) {
+func (UnimplementedHandler) APIFsInfoPost(ctx context.Context, req *APIFsInfoPostReq) (r *APIFsInfoPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -63,7 +63,7 @@ func (UnimplementedHandler) APIFsInfoPost(ctx context.Context, req *APIFsInfoPos
 // Получение файла через highway.
 //
 // GET /api/highway/file/{id}.{ext}
-func (UnimplementedHandler) APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (r APIHighwayFileIDExtGetRes, _ error) {
+func (UnimplementedHandler) APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (r *APIHighwayFileIDExtGetOKHeaders, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -72,7 +72,7 @@ func (UnimplementedHandler) APIHighwayFileIDExtGet(ctx context.Context, params A
 // Создание нового токена для highway.
 //
 // POST /api/highway/token/create
-func (UnimplementedHandler) APIHighwayTokenCreatePost(ctx context.Context) (r APIHighwayTokenCreatePostRes, _ error) {
+func (UnimplementedHandler) APIHighwayTokenCreatePost(ctx context.Context) (r *APIHighwayTokenCreatePostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -81,7 +81,7 @@ func (UnimplementedHandler) APIHighwayTokenCreatePost(ctx context.Context) (r AP
 // Парсинг данных книги по ссылке.
 //
 // POST /api/hproxy/parse/book
-func (UnimplementedHandler) APIHproxyParseBookPost(ctx context.Context, req *APIHproxyParseBookPostReq) (r APIHproxyParseBookPostRes, _ error) {
+func (UnimplementedHandler) APIHproxyParseBookPost(ctx context.Context, req *APIHproxyParseBookPostReq) (r *APIHproxyParseBookPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -90,7 +90,7 @@ func (UnimplementedHandler) APIHproxyParseBookPost(ctx context.Context, req *API
 // Парсинг списка данных по ссылке.
 //
 // POST /api/hproxy/parse/list
-func (UnimplementedHandler) APIHproxyParseListPost(ctx context.Context, req *APIHproxyParseListPostReq) (r APIHproxyParseListPostRes, _ error) {
+func (UnimplementedHandler) APIHproxyParseListPost(ctx context.Context, req *APIHproxyParseListPostReq) (r *APIHproxyParseListPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -99,8 +99,8 @@ func (UnimplementedHandler) APIHproxyParseListPost(ctx context.Context, req *API
 // Загрузка архива.
 //
 // POST /api/import/archive
-func (UnimplementedHandler) APIImportArchivePost(ctx context.Context, req APIImportArchivePostReq, params APIImportArchivePostParams) (r APIImportArchivePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIImportArchivePost(ctx context.Context, req APIImportArchivePostReq, params APIImportArchivePostParams) error {
+	return ht.ErrNotImplemented
 }
 
 // APIParsingBookCheckPost implements POST /api/parsing/book/check operation.
@@ -108,7 +108,7 @@ func (UnimplementedHandler) APIImportArchivePost(ctx context.Context, req APIImp
 // Предварительная проверка ссылок на новые книги.
 //
 // POST /api/parsing/book/check
-func (UnimplementedHandler) APIParsingBookCheckPost(ctx context.Context, req *APIParsingBookCheckPostReq) (r APIParsingBookCheckPostRes, _ error) {
+func (UnimplementedHandler) APIParsingBookCheckPost(ctx context.Context, req *APIParsingBookCheckPostReq) (r *BooksCheckResult, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -118,7 +118,7 @@ func (UnimplementedHandler) APIParsingBookCheckPost(ctx context.Context, req *AP
 // манги).
 //
 // POST /api/parsing/book/multi
-func (UnimplementedHandler) APIParsingBookMultiPost(ctx context.Context, req *APIParsingBookMultiPostReq) (r APIParsingBookMultiPostRes, _ error) {
+func (UnimplementedHandler) APIParsingBookMultiPost(ctx context.Context, req *APIParsingBookMultiPostReq) (r *BooksCheckResult, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -127,7 +127,7 @@ func (UnimplementedHandler) APIParsingBookMultiPost(ctx context.Context, req *AP
 // Обработка новой книги.
 //
 // POST /api/parsing/book
-func (UnimplementedHandler) APIParsingBookPost(ctx context.Context, req *APIParsingBookPostReq) (r APIParsingBookPostRes, _ error) {
+func (UnimplementedHandler) APIParsingBookPost(ctx context.Context, req *APIParsingBookPostReq) (r *BookDetails, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -136,7 +136,7 @@ func (UnimplementedHandler) APIParsingBookPost(ctx context.Context, req *APIPars
 // Предварительная проверка ссылок для загрузки страниц.
 //
 // POST /api/parsing/page/check
-func (UnimplementedHandler) APIParsingPageCheckPost(ctx context.Context, req *APIParsingPageCheckPostReq) (r APIParsingPageCheckPostRes, _ error) {
+func (UnimplementedHandler) APIParsingPageCheckPost(ctx context.Context, req *APIParsingPageCheckPostReq) (r *APIParsingPageCheckPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -145,6 +145,14 @@ func (UnimplementedHandler) APIParsingPageCheckPost(ctx context.Context, req *AP
 // Загрузка изображения страницы.
 //
 // POST /api/parsing/page
-func (UnimplementedHandler) APIParsingPagePost(ctx context.Context, req *APIParsingPagePostReq) (r APIParsingPagePostRes, _ error) {
+func (UnimplementedHandler) APIParsingPagePost(ctx context.Context, req *APIParsingPagePostReq) (r APIParsingPagePostOK, _ error) {
 	return r, ht.ErrNotImplemented
+}
+
+// NewError creates *ErrorResponseStatusCode from error returned by handler.
+//
+// Used for common default response.
+func (UnimplementedHandler) NewError(ctx context.Context, err error) (r *ErrorResponseStatusCode) {
+	r = new(ErrorResponseStatusCode)
+	return r
 }

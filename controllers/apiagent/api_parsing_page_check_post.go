@@ -2,6 +2,7 @@ package apiagent
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
@@ -11,7 +12,7 @@ import (
 func (c *Controller) APIParsingPageCheckPost(
 	ctx context.Context,
 	req *agentapi.APIParsingPageCheckPostReq,
-) (agentapi.APIParsingPageCheckPostRes, error) {
+) (*agentapi.APIParsingPageCheckPostOK, error) {
 	result, err := c.parsingUseCases.PagesExists(
 		ctx,
 		pkg.Map(req.Urls, func(u agentapi.APIParsingPageCheckPostReqUrlsItem) agentmodel.AgentPageURL {
@@ -22,10 +23,11 @@ func (c *Controller) APIParsingPageCheckPost(
 		}),
 	)
 	if err != nil {
-		return &agentapi.APIParsingPageCheckPostInternalServerError{
+		return nil, apiError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: ParseUseCaseCode,
-			Details:   agentapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &agentapi.APIParsingPageCheckPostOK{
