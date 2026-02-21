@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -13,7 +14,7 @@ import (
 func (c *BookHandlersController) APIBookDeletePost(
 	ctx context.Context,
 	req *serverapi.APIBookDeletePostReq,
-) (serverapi.APIBookDeletePostRes, error) {
+) error {
 	var (
 		err error
 		uc  string
@@ -38,18 +39,20 @@ func (c *BookHandlersController) APIBookDeletePost(
 	}
 
 	if errors.Is(err, core.ErrBookNotFound) {
-		return &serverapi.APIBookDeletePostNotFound{
+		return apiservercore.APIError{
+			Code:      http.StatusNotFound,
 			InnerCode: uc,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	if err != nil {
-		return &serverapi.APIBookDeletePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: uc,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIBookDeletePostNoContent{}, nil
+	return nil
 }

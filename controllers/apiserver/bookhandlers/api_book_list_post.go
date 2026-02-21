@@ -2,6 +2,7 @@ package bookhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
@@ -13,15 +14,16 @@ import (
 func (c *BookHandlersController) APIBookListPost(
 	ctx context.Context,
 	req *serverapi.BookFilter,
-) (serverapi.APIBookListPostRes, error) {
+) (*serverapi.APIBookListPostOK, error) {
 	filter := apiservercore.ConvertAPIBookFilter(*req)
 
 	bookList, err := c.bffUseCases.BookList(ctx, filter)
 	if err != nil {
-		return &serverapi.APIBookListPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.BFFUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIBookListPostOK{

@@ -2,6 +2,7 @@ package labelhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -12,13 +13,14 @@ import (
 func (c *LabelHandlersController) APILabelGetPost(
 	ctx context.Context,
 	req *serverapi.APILabelGetPostReq,
-) (serverapi.APILabelGetPostRes, error) {
+) (*serverapi.APILabelGetPostOK, error) {
 	labels, err := c.labelUseCases.Labels(ctx, req.BookID)
 	if err != nil {
-		return &serverapi.APILabelGetPostInternalServerError{
-			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
+			InnerCode: apiservercore.LabelUseCaseCode,
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APILabelGetPostOK{

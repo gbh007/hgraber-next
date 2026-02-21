@@ -2,6 +2,7 @@ package fshandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -11,7 +12,7 @@ import (
 func (c *FSHandlersController) APIFsTransferBookPost(
 	ctx context.Context,
 	req *serverapi.APIFsTransferBookPostReq,
-) (serverapi.APIFsTransferBookPostRes, error) {
+) error {
 	var pageNumber *int
 
 	if req.OnlyPreviewPages.Value {
@@ -25,11 +26,12 @@ func (c *FSHandlersController) APIFsTransferBookPost(
 
 	err := c.fsUseCases.TransferFSFilesByBook(ctx, req.BookID, req.To, pageNumber)
 	if err != nil {
-		return &serverapi.APIFsTransferBookPostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.FSUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIFsTransferBookPostNoContent{}, nil
+	return nil
 }

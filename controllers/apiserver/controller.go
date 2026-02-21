@@ -2,10 +2,15 @@
 package apiserver
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"log/slog"
+	"net/http"
 	"time"
 
+	"github.com/ogen-go/ogen/ogenerrors"
+	"github.com/ogen-go/ogen/validate"
 	"github.com/prometheus/client_golang/prometheus"
 	"go.opentelemetry.io/otel/trace"
 
@@ -255,4 +260,62 @@ func New( //revive:disable:argument-limit // будет исправлено п�
 	c.ogenServer = ogenServer
 
 	return c, nil
+}
+
+func (c *Controller) NewError(ctx context.Context, err error) *serverapi.ErrorResponseStatusCode {
+	if err == nil {
+		return &serverapi.ErrorResponseStatusCode{
+			StatusCode: http.StatusInternalServerError,
+			Response: serverapi.ErrorResponse{
+				InnerCode: "unexpected",
+				Details:   serverapi.NewOptString("missing error"),
+			},
+		}
+	}
+
+	var ae apiservercore.APIError
+
+	if errors.As(err, &ae) {
+		return &serverapi.ErrorResponseStatusCode{
+			StatusCode: ae.Code,
+			Response: serverapi.ErrorResponse{
+				InnerCode: ae.InnerCode,
+				Details: serverapi.OptString{
+					Value: ae.Details,
+					Set:   len(ae.Details) > 0,
+				},
+			},
+		}
+	}
+
+	var (
+		httpCode         = http.StatusInternalServerError
+		errorCode        = "internal error"
+		errorDescription = err.Error()
+	)
+
+	validateError := new(validate.Error)
+
+	switch {
+	case errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied):
+		httpCode = http.StatusUnauthorized
+		errorCode = "unauthorized"
+	case errors.Is(err, errAccessForbidden):
+		httpCode = http.StatusForbidden
+		errorCode = "forbidden"
+	case errors.Is(err, errPanicDetected):
+		httpCode = http.StatusInternalServerError
+		errorCode = "panic"
+	case errors.As(err, &validateError):
+		httpCode = http.StatusBadRequest
+		errorCode = "validate"
+	}
+
+	return &serverapi.ErrorResponseStatusCode{
+		StatusCode: httpCode,
+		Response: serverapi.ErrorResponse{
+			InnerCode: errorCode,
+			Details:   serverapi.NewOptString(errorDescription),
+		},
+	}
 }

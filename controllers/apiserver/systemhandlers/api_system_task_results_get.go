@@ -2,6 +2,7 @@ package systemhandlers
 
 import (
 	"context"
+	"net/http"
 	"slices"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
@@ -12,13 +13,14 @@ import (
 
 func (c *SystemHandlersController) APISystemTaskResultsGet(
 	ctx context.Context,
-) (serverapi.APISystemTaskResultsGetRes, error) {
+) (*serverapi.APISystemTaskResultsGetOK, error) {
 	result, err := c.systemUseCases.TaskResults(ctx)
 	if err != nil {
-		return &serverapi.APISystemTaskResultsGetInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.TaskerUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	responseResults := pkg.Map(

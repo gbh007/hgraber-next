@@ -2,6 +2,7 @@ package massloadhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
@@ -13,7 +14,7 @@ import (
 func (c *MassloadController) APIMassloadInfoListPost(
 	ctx context.Context,
 	req *serverapi.APIMassloadInfoListPostReq,
-) (serverapi.APIMassloadInfoListPostRes, error) {
+) (*serverapi.APIMassloadInfoListPostOK, error) {
 	filter := massloadmodel.Filter{}
 
 	filter.Desc = req.Sort.Value.Desc.Value
@@ -74,10 +75,11 @@ func (c *MassloadController) APIMassloadInfoListPost(
 
 	mls, err := c.massloadUseCases.Massloads(ctx, filter)
 	if err != nil {
-		return &serverapi.APIMassloadInfoListPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIMassloadInfoListPostOK{

@@ -2,6 +2,7 @@ package massloadhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,14 +11,15 @@ import (
 func (c *MassloadController) APIMassloadInfoDeletePost(
 	ctx context.Context,
 	req *serverapi.APIMassloadInfoDeletePostReq,
-) (serverapi.APIMassloadInfoDeletePostRes, error) {
+) error {
 	err := c.massloadUseCases.DeleteMassload(ctx, req.ID)
 	if err != nil {
-		return &serverapi.APIMassloadInfoDeletePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIMassloadInfoDeletePostNoContent{}, nil
+	return nil
 }

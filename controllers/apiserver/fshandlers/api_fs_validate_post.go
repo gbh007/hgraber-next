@@ -2,6 +2,7 @@ package fshandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,14 +11,15 @@ import (
 func (c *FSHandlersController) APIFsValidatePost(
 	ctx context.Context,
 	req *serverapi.APIFsValidatePostReq,
-) (serverapi.APIFsValidatePostRes, error) {
+) error {
 	err := c.fsUseCases.ValidateFS(ctx, req.ID)
 	if err != nil {
-		return &serverapi.APIFsValidatePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.FSUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIFsValidatePostNoContent{}, nil
+	return nil
 }

@@ -2,6 +2,7 @@ package agenthandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -11,7 +12,7 @@ import (
 func (c *AgentHandlersController) APIAgentNewPost(
 	ctx context.Context,
 	req *serverapi.APIAgentNewPostReq,
-) (serverapi.APIAgentNewPostRes, error) {
+) error {
 	err := c.agentUseCases.NewAgent(ctx, core.Agent{
 		Name:          req.Name,
 		Addr:          req.Addr,
@@ -24,11 +25,12 @@ func (c *AgentHandlersController) APIAgentNewPost(
 		Priority:      req.Priority.Value,
 	})
 	if err != nil {
-		return &serverapi.APIAgentNewPostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIAgentNewPostNoContent{}, nil
+	return nil
 }

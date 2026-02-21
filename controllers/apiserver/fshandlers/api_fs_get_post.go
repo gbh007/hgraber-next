@@ -2,6 +2,7 @@ package fshandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,13 +11,14 @@ import (
 func (c *FSHandlersController) APIFsGetPost(
 	ctx context.Context,
 	req *serverapi.APIFsGetPostReq,
-) (serverapi.APIFsGetPostRes, error) {
+) (*serverapi.FileSystemInfo, error) {
 	fs, err := c.fsUseCases.FileStorage(ctx, req.ID)
 	if err != nil {
-		return &serverapi.APIFsGetPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.FSUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	result := apiservercore.ConvertFileSystemInfoToAPI(fs)

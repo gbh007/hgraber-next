@@ -2,6 +2,7 @@ package massloadhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
@@ -11,7 +12,7 @@ import (
 func (c *MassloadController) APIMassloadInfoUpdatePost(
 	ctx context.Context,
 	req *serverapi.APIMassloadInfoUpdatePostReq,
-) (serverapi.APIMassloadInfoUpdatePostRes, error) {
+) error {
 	err := c.massloadUseCases.UpdateMassload(ctx, massloadmodel.Massload{
 		ID:          req.ID,
 		Name:        req.Name,
@@ -19,11 +20,12 @@ func (c *MassloadController) APIMassloadInfoUpdatePost(
 		Flags:       req.Flags,
 	})
 	if err != nil {
-		return &serverapi.APIMassloadInfoUpdatePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIMassloadInfoUpdatePostNoContent{}, nil
+	return nil
 }

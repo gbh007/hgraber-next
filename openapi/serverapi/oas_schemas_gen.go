@@ -3,6 +3,7 @@
 package serverapi
 
 import (
+	"fmt"
 	"io"
 	"net/url"
 	"time"
@@ -11,26 +12,12 @@ import (
 	"github.com/google/uuid"
 )
 
-type APIAgentDeletePostBadRequest ErrorResponse
-
-func (*APIAgentDeletePostBadRequest) aPIAgentDeletePostRes() {}
-
-type APIAgentDeletePostForbidden ErrorResponse
-
-func (*APIAgentDeletePostForbidden) aPIAgentDeletePostRes() {}
-
-type APIAgentDeletePostInternalServerError ErrorResponse
-
-func (*APIAgentDeletePostInternalServerError) aPIAgentDeletePostRes() {}
+func (s *ErrorResponseStatusCode) Error() string {
+	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
+}
 
 // APIAgentDeletePostNoContent is response for APIAgentDeletePost operation.
 type APIAgentDeletePostNoContent struct{}
-
-func (*APIAgentDeletePostNoContent) aPIAgentDeletePostRes() {}
-
-type APIAgentDeletePostNotFound ErrorResponse
-
-func (*APIAgentDeletePostNotFound) aPIAgentDeletePostRes() {}
 
 type APIAgentDeletePostReq struct {
 	// ID агента.
@@ -47,26 +34,6 @@ func (s *APIAgentDeletePostReq) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
-type APIAgentDeletePostUnauthorized ErrorResponse
-
-func (*APIAgentDeletePostUnauthorized) aPIAgentDeletePostRes() {}
-
-type APIAgentGetPostBadRequest ErrorResponse
-
-func (*APIAgentGetPostBadRequest) aPIAgentGetPostRes() {}
-
-type APIAgentGetPostForbidden ErrorResponse
-
-func (*APIAgentGetPostForbidden) aPIAgentGetPostRes() {}
-
-type APIAgentGetPostInternalServerError ErrorResponse
-
-func (*APIAgentGetPostInternalServerError) aPIAgentGetPostRes() {}
-
-type APIAgentGetPostNotFound ErrorResponse
-
-func (*APIAgentGetPostNotFound) aPIAgentGetPostRes() {}
-
 type APIAgentGetPostReq struct {
 	// ID агента.
 	ID uuid.UUID `json:"id"`
@@ -81,26 +48,6 @@ func (s *APIAgentGetPostReq) GetID() uuid.UUID {
 func (s *APIAgentGetPostReq) SetID(val uuid.UUID) {
 	s.ID = val
 }
-
-type APIAgentGetPostUnauthorized ErrorResponse
-
-func (*APIAgentGetPostUnauthorized) aPIAgentGetPostRes() {}
-
-type APIAgentListPostBadRequest ErrorResponse
-
-func (*APIAgentListPostBadRequest) aPIAgentListPostRes() {}
-
-type APIAgentListPostForbidden ErrorResponse
-
-func (*APIAgentListPostForbidden) aPIAgentListPostRes() {}
-
-type APIAgentListPostInternalServerError ErrorResponse
-
-func (*APIAgentListPostInternalServerError) aPIAgentListPostRes() {}
-
-type APIAgentListPostOKApplicationJSON []APIAgentListPostOKItem
-
-func (*APIAgentListPostOKApplicationJSON) aPIAgentListPostRes() {}
 
 type APIAgentListPostOKItem struct {
 	// Статус агента.
@@ -396,26 +343,8 @@ func (s *APIAgentListPostReq) SetIncludeStatus(val OptBool) {
 	s.IncludeStatus = val
 }
 
-type APIAgentListPostUnauthorized ErrorResponse
-
-func (*APIAgentListPostUnauthorized) aPIAgentListPostRes() {}
-
-type APIAgentNewPostBadRequest ErrorResponse
-
-func (*APIAgentNewPostBadRequest) aPIAgentNewPostRes() {}
-
-type APIAgentNewPostForbidden ErrorResponse
-
-func (*APIAgentNewPostForbidden) aPIAgentNewPostRes() {}
-
-type APIAgentNewPostInternalServerError ErrorResponse
-
-func (*APIAgentNewPostInternalServerError) aPIAgentNewPostRes() {}
-
 // APIAgentNewPostNoContent is response for APIAgentNewPost operation.
 type APIAgentNewPostNoContent struct{}
-
-func (*APIAgentNewPostNoContent) aPIAgentNewPostRes() {}
 
 type APIAgentNewPostReq struct {
 	// Название агента.
@@ -529,26 +458,8 @@ func (s *APIAgentNewPostReq) SetPriority(val OptInt) {
 	s.Priority = val
 }
 
-type APIAgentNewPostUnauthorized ErrorResponse
-
-func (*APIAgentNewPostUnauthorized) aPIAgentNewPostRes() {}
-
-type APIAgentTaskExportPostBadRequest ErrorResponse
-
-func (*APIAgentTaskExportPostBadRequest) aPIAgentTaskExportPostRes() {}
-
-type APIAgentTaskExportPostForbidden ErrorResponse
-
-func (*APIAgentTaskExportPostForbidden) aPIAgentTaskExportPostRes() {}
-
-type APIAgentTaskExportPostInternalServerError ErrorResponse
-
-func (*APIAgentTaskExportPostInternalServerError) aPIAgentTaskExportPostRes() {}
-
 // APIAgentTaskExportPostNoContent is response for APIAgentTaskExportPost operation.
 type APIAgentTaskExportPostNoContent struct{}
-
-func (*APIAgentTaskExportPostNoContent) aPIAgentTaskExportPostRes() {}
 
 type APIAgentTaskExportPostReq struct {
 	BookFilter BookFilter `json:"book_filter"`
@@ -588,26 +499,8 @@ func (s *APIAgentTaskExportPostReq) SetDeleteAfter(val OptBool) {
 	s.DeleteAfter = val
 }
 
-type APIAgentTaskExportPostUnauthorized ErrorResponse
-
-func (*APIAgentTaskExportPostUnauthorized) aPIAgentTaskExportPostRes() {}
-
-type APIAgentUpdatePostBadRequest ErrorResponse
-
-func (*APIAgentUpdatePostBadRequest) aPIAgentUpdatePostRes() {}
-
-type APIAgentUpdatePostForbidden ErrorResponse
-
-func (*APIAgentUpdatePostForbidden) aPIAgentUpdatePostRes() {}
-
-type APIAgentUpdatePostInternalServerError ErrorResponse
-
-func (*APIAgentUpdatePostInternalServerError) aPIAgentUpdatePostRes() {}
-
 // APIAgentUpdatePostNoContent is response for APIAgentUpdatePost operation.
 type APIAgentUpdatePostNoContent struct{}
-
-func (*APIAgentUpdatePostNoContent) aPIAgentUpdatePostRes() {}
 
 type APIAgentUpdatePostReq struct {
 	// ID агента.
@@ -733,26 +626,8 @@ func (s *APIAgentUpdatePostReq) SetPriority(val int) {
 	s.Priority = val
 }
 
-type APIAgentUpdatePostUnauthorized ErrorResponse
-
-func (*APIAgentUpdatePostUnauthorized) aPIAgentUpdatePostRes() {}
-
-type APIAttributeColorCreatePostBadRequest ErrorResponse
-
-func (*APIAttributeColorCreatePostBadRequest) aPIAttributeColorCreatePostRes() {}
-
-type APIAttributeColorCreatePostForbidden ErrorResponse
-
-func (*APIAttributeColorCreatePostForbidden) aPIAttributeColorCreatePostRes() {}
-
-type APIAttributeColorCreatePostInternalServerError ErrorResponse
-
-func (*APIAttributeColorCreatePostInternalServerError) aPIAttributeColorCreatePostRes() {}
-
 // APIAttributeColorCreatePostNoContent is response for APIAttributeColorCreatePost operation.
 type APIAttributeColorCreatePostNoContent struct{}
-
-func (*APIAttributeColorCreatePostNoContent) aPIAttributeColorCreatePostRes() {}
 
 // Цвет аттрибута.
 type APIAttributeColorCreatePostReq struct {
@@ -806,30 +681,8 @@ func (s *APIAttributeColorCreatePostReq) SetBackgroundColor(val string) {
 	s.BackgroundColor = val
 }
 
-type APIAttributeColorCreatePostUnauthorized ErrorResponse
-
-func (*APIAttributeColorCreatePostUnauthorized) aPIAttributeColorCreatePostRes() {}
-
-type APIAttributeColorDeletePostBadRequest ErrorResponse
-
-func (*APIAttributeColorDeletePostBadRequest) aPIAttributeColorDeletePostRes() {}
-
-type APIAttributeColorDeletePostForbidden ErrorResponse
-
-func (*APIAttributeColorDeletePostForbidden) aPIAttributeColorDeletePostRes() {}
-
-type APIAttributeColorDeletePostInternalServerError ErrorResponse
-
-func (*APIAttributeColorDeletePostInternalServerError) aPIAttributeColorDeletePostRes() {}
-
 // APIAttributeColorDeletePostNoContent is response for APIAttributeColorDeletePost operation.
 type APIAttributeColorDeletePostNoContent struct{}
-
-func (*APIAttributeColorDeletePostNoContent) aPIAttributeColorDeletePostRes() {}
-
-type APIAttributeColorDeletePostNotFound ErrorResponse
-
-func (*APIAttributeColorDeletePostNotFound) aPIAttributeColorDeletePostRes() {}
 
 type APIAttributeColorDeletePostReq struct {
 	// Код атрибута.
@@ -858,22 +711,6 @@ func (s *APIAttributeColorDeletePostReq) SetValue(val string) {
 	s.Value = val
 }
 
-type APIAttributeColorDeletePostUnauthorized ErrorResponse
-
-func (*APIAttributeColorDeletePostUnauthorized) aPIAttributeColorDeletePostRes() {}
-
-type APIAttributeColorGetPostForbidden ErrorResponse
-
-func (*APIAttributeColorGetPostForbidden) aPIAttributeColorGetPostRes() {}
-
-type APIAttributeColorGetPostInternalServerError ErrorResponse
-
-func (*APIAttributeColorGetPostInternalServerError) aPIAttributeColorGetPostRes() {}
-
-type APIAttributeColorGetPostNotFound ErrorResponse
-
-func (*APIAttributeColorGetPostNotFound) aPIAttributeColorGetPostRes() {}
-
 type APIAttributeColorGetPostReq struct {
 	// Код атрибута.
 	Code string `json:"code"`
@@ -901,18 +738,6 @@ func (s *APIAttributeColorGetPostReq) SetValue(val string) {
 	s.Value = val
 }
 
-type APIAttributeColorGetPostUnauthorized ErrorResponse
-
-func (*APIAttributeColorGetPostUnauthorized) aPIAttributeColorGetPostRes() {}
-
-type APIAttributeColorListGetForbidden ErrorResponse
-
-func (*APIAttributeColorListGetForbidden) aPIAttributeColorListGetRes() {}
-
-type APIAttributeColorListGetInternalServerError ErrorResponse
-
-func (*APIAttributeColorListGetInternalServerError) aPIAttributeColorListGetRes() {}
-
 type APIAttributeColorListGetOK struct {
 	// Список цветов.
 	Colors []AttributeColor `json:"colors"`
@@ -928,32 +753,8 @@ func (s *APIAttributeColorListGetOK) SetColors(val []AttributeColor) {
 	s.Colors = val
 }
 
-func (*APIAttributeColorListGetOK) aPIAttributeColorListGetRes() {}
-
-type APIAttributeColorListGetUnauthorized ErrorResponse
-
-func (*APIAttributeColorListGetUnauthorized) aPIAttributeColorListGetRes() {}
-
-type APIAttributeColorUpdatePostBadRequest ErrorResponse
-
-func (*APIAttributeColorUpdatePostBadRequest) aPIAttributeColorUpdatePostRes() {}
-
-type APIAttributeColorUpdatePostForbidden ErrorResponse
-
-func (*APIAttributeColorUpdatePostForbidden) aPIAttributeColorUpdatePostRes() {}
-
-type APIAttributeColorUpdatePostInternalServerError ErrorResponse
-
-func (*APIAttributeColorUpdatePostInternalServerError) aPIAttributeColorUpdatePostRes() {}
-
 // APIAttributeColorUpdatePostNoContent is response for APIAttributeColorUpdatePost operation.
 type APIAttributeColorUpdatePostNoContent struct{}
-
-func (*APIAttributeColorUpdatePostNoContent) aPIAttributeColorUpdatePostRes() {}
-
-type APIAttributeColorUpdatePostNotFound ErrorResponse
-
-func (*APIAttributeColorUpdatePostNotFound) aPIAttributeColorUpdatePostRes() {}
 
 // Цвет аттрибута.
 type APIAttributeColorUpdatePostReq struct {
@@ -1007,18 +808,6 @@ func (s *APIAttributeColorUpdatePostReq) SetBackgroundColor(val string) {
 	s.BackgroundColor = val
 }
 
-type APIAttributeColorUpdatePostUnauthorized ErrorResponse
-
-func (*APIAttributeColorUpdatePostUnauthorized) aPIAttributeColorUpdatePostRes() {}
-
-type APIAttributeCountGetForbidden ErrorResponse
-
-func (*APIAttributeCountGetForbidden) aPIAttributeCountGetRes() {}
-
-type APIAttributeCountGetInternalServerError ErrorResponse
-
-func (*APIAttributeCountGetInternalServerError) aPIAttributeCountGetRes() {}
-
 type APIAttributeCountGetOK struct {
 	// Список аттрибутов.
 	Attributes []APIAttributeCountGetOKAttributesItem `json:"attributes"`
@@ -1033,8 +822,6 @@ func (s *APIAttributeCountGetOK) GetAttributes() []APIAttributeCountGetOKAttribu
 func (s *APIAttributeCountGetOK) SetAttributes(val []APIAttributeCountGetOKAttributesItem) {
 	s.Attributes = val
 }
-
-func (*APIAttributeCountGetOK) aPIAttributeCountGetRes() {}
 
 type APIAttributeCountGetOKAttributesItem struct {
 	// Код аттрибута.
@@ -1075,18 +862,6 @@ func (s *APIAttributeCountGetOKAttributesItem) SetCount(val int) {
 	s.Count = val
 }
 
-type APIAttributeCountGetUnauthorized ErrorResponse
-
-func (*APIAttributeCountGetUnauthorized) aPIAttributeCountGetRes() {}
-
-type APIAttributeOriginCountGetForbidden ErrorResponse
-
-func (*APIAttributeOriginCountGetForbidden) aPIAttributeOriginCountGetRes() {}
-
-type APIAttributeOriginCountGetInternalServerError ErrorResponse
-
-func (*APIAttributeOriginCountGetInternalServerError) aPIAttributeOriginCountGetRes() {}
-
 type APIAttributeOriginCountGetOK struct {
 	// Список аттрибутов.
 	Attributes []APIAttributeOriginCountGetOKAttributesItem `json:"attributes"`
@@ -1101,8 +876,6 @@ func (s *APIAttributeOriginCountGetOK) GetAttributes() []APIAttributeOriginCount
 func (s *APIAttributeOriginCountGetOK) SetAttributes(val []APIAttributeOriginCountGetOKAttributesItem) {
 	s.Attributes = val
 }
-
-func (*APIAttributeOriginCountGetOK) aPIAttributeOriginCountGetRes() {}
 
 type APIAttributeOriginCountGetOKAttributesItem struct {
 	// Код аттрибута.
@@ -1143,26 +916,8 @@ func (s *APIAttributeOriginCountGetOKAttributesItem) SetCount(val int) {
 	s.Count = val
 }
 
-type APIAttributeOriginCountGetUnauthorized ErrorResponse
-
-func (*APIAttributeOriginCountGetUnauthorized) aPIAttributeOriginCountGetRes() {}
-
-type APIAttributeRemapCreatePostBadRequest ErrorResponse
-
-func (*APIAttributeRemapCreatePostBadRequest) aPIAttributeRemapCreatePostRes() {}
-
-type APIAttributeRemapCreatePostForbidden ErrorResponse
-
-func (*APIAttributeRemapCreatePostForbidden) aPIAttributeRemapCreatePostRes() {}
-
-type APIAttributeRemapCreatePostInternalServerError ErrorResponse
-
-func (*APIAttributeRemapCreatePostInternalServerError) aPIAttributeRemapCreatePostRes() {}
-
 // APIAttributeRemapCreatePostNoContent is response for APIAttributeRemapCreatePost operation.
 type APIAttributeRemapCreatePostNoContent struct{}
-
-func (*APIAttributeRemapCreatePostNoContent) aPIAttributeRemapCreatePostRes() {}
 
 // Цвет аттрибута.
 type APIAttributeRemapCreatePostReq struct {
@@ -1228,30 +983,8 @@ func (s *APIAttributeRemapCreatePostReq) SetIsDelete(val OptBool) {
 	s.IsDelete = val
 }
 
-type APIAttributeRemapCreatePostUnauthorized ErrorResponse
-
-func (*APIAttributeRemapCreatePostUnauthorized) aPIAttributeRemapCreatePostRes() {}
-
-type APIAttributeRemapDeletePostBadRequest ErrorResponse
-
-func (*APIAttributeRemapDeletePostBadRequest) aPIAttributeRemapDeletePostRes() {}
-
-type APIAttributeRemapDeletePostForbidden ErrorResponse
-
-func (*APIAttributeRemapDeletePostForbidden) aPIAttributeRemapDeletePostRes() {}
-
-type APIAttributeRemapDeletePostInternalServerError ErrorResponse
-
-func (*APIAttributeRemapDeletePostInternalServerError) aPIAttributeRemapDeletePostRes() {}
-
 // APIAttributeRemapDeletePostNoContent is response for APIAttributeRemapDeletePost operation.
 type APIAttributeRemapDeletePostNoContent struct{}
-
-func (*APIAttributeRemapDeletePostNoContent) aPIAttributeRemapDeletePostRes() {}
-
-type APIAttributeRemapDeletePostNotFound ErrorResponse
-
-func (*APIAttributeRemapDeletePostNotFound) aPIAttributeRemapDeletePostRes() {}
 
 type APIAttributeRemapDeletePostReq struct {
 	// Код атрибута.
@@ -1280,22 +1013,6 @@ func (s *APIAttributeRemapDeletePostReq) SetValue(val string) {
 	s.Value = val
 }
 
-type APIAttributeRemapDeletePostUnauthorized ErrorResponse
-
-func (*APIAttributeRemapDeletePostUnauthorized) aPIAttributeRemapDeletePostRes() {}
-
-type APIAttributeRemapGetPostForbidden ErrorResponse
-
-func (*APIAttributeRemapGetPostForbidden) aPIAttributeRemapGetPostRes() {}
-
-type APIAttributeRemapGetPostInternalServerError ErrorResponse
-
-func (*APIAttributeRemapGetPostInternalServerError) aPIAttributeRemapGetPostRes() {}
-
-type APIAttributeRemapGetPostNotFound ErrorResponse
-
-func (*APIAttributeRemapGetPostNotFound) aPIAttributeRemapGetPostRes() {}
-
 type APIAttributeRemapGetPostReq struct {
 	// Код атрибута.
 	Code string `json:"code"`
@@ -1323,18 +1040,6 @@ func (s *APIAttributeRemapGetPostReq) SetValue(val string) {
 	s.Value = val
 }
 
-type APIAttributeRemapGetPostUnauthorized ErrorResponse
-
-func (*APIAttributeRemapGetPostUnauthorized) aPIAttributeRemapGetPostRes() {}
-
-type APIAttributeRemapListGetForbidden ErrorResponse
-
-func (*APIAttributeRemapListGetForbidden) aPIAttributeRemapListGetRes() {}
-
-type APIAttributeRemapListGetInternalServerError ErrorResponse
-
-func (*APIAttributeRemapListGetInternalServerError) aPIAttributeRemapListGetRes() {}
-
 type APIAttributeRemapListGetOK struct {
 	// Список ремапингов.
 	Remaps []AttributeRemap `json:"remaps"`
@@ -1350,32 +1055,8 @@ func (s *APIAttributeRemapListGetOK) SetRemaps(val []AttributeRemap) {
 	s.Remaps = val
 }
 
-func (*APIAttributeRemapListGetOK) aPIAttributeRemapListGetRes() {}
-
-type APIAttributeRemapListGetUnauthorized ErrorResponse
-
-func (*APIAttributeRemapListGetUnauthorized) aPIAttributeRemapListGetRes() {}
-
-type APIAttributeRemapUpdatePostBadRequest ErrorResponse
-
-func (*APIAttributeRemapUpdatePostBadRequest) aPIAttributeRemapUpdatePostRes() {}
-
-type APIAttributeRemapUpdatePostForbidden ErrorResponse
-
-func (*APIAttributeRemapUpdatePostForbidden) aPIAttributeRemapUpdatePostRes() {}
-
-type APIAttributeRemapUpdatePostInternalServerError ErrorResponse
-
-func (*APIAttributeRemapUpdatePostInternalServerError) aPIAttributeRemapUpdatePostRes() {}
-
 // APIAttributeRemapUpdatePostNoContent is response for APIAttributeRemapUpdatePost operation.
 type APIAttributeRemapUpdatePostNoContent struct{}
-
-func (*APIAttributeRemapUpdatePostNoContent) aPIAttributeRemapUpdatePostRes() {}
-
-type APIAttributeRemapUpdatePostNotFound ErrorResponse
-
-func (*APIAttributeRemapUpdatePostNotFound) aPIAttributeRemapUpdatePostRes() {}
 
 // Цвет аттрибута.
 type APIAttributeRemapUpdatePostReq struct {
@@ -1441,26 +1122,6 @@ func (s *APIAttributeRemapUpdatePostReq) SetIsDelete(val OptBool) {
 	s.IsDelete = val
 }
 
-type APIAttributeRemapUpdatePostUnauthorized ErrorResponse
-
-func (*APIAttributeRemapUpdatePostUnauthorized) aPIAttributeRemapUpdatePostRes() {}
-
-type APIBookArchiveIDGetBadRequest ErrorResponse
-
-func (*APIBookArchiveIDGetBadRequest) aPIBookArchiveIDGetRes() {}
-
-type APIBookArchiveIDGetForbidden ErrorResponse
-
-func (*APIBookArchiveIDGetForbidden) aPIBookArchiveIDGetRes() {}
-
-type APIBookArchiveIDGetInternalServerError ErrorResponse
-
-func (*APIBookArchiveIDGetInternalServerError) aPIBookArchiveIDGetRes() {}
-
-type APIBookArchiveIDGetNotFound ErrorResponse
-
-func (*APIBookArchiveIDGetNotFound) aPIBookArchiveIDGetRes() {}
-
 type APIBookArchiveIDGetOK struct {
 	Data io.Reader
 }
@@ -1512,32 +1173,8 @@ func (s *APIBookArchiveIDGetOKHeaders) SetResponse(val APIBookArchiveIDGetOK) {
 	s.Response = val
 }
 
-func (*APIBookArchiveIDGetOKHeaders) aPIBookArchiveIDGetRes() {}
-
-type APIBookArchiveIDGetUnauthorized ErrorResponse
-
-func (*APIBookArchiveIDGetUnauthorized) aPIBookArchiveIDGetRes() {}
-
-type APIBookDeletePostBadRequest ErrorResponse
-
-func (*APIBookDeletePostBadRequest) aPIBookDeletePostRes() {}
-
-type APIBookDeletePostForbidden ErrorResponse
-
-func (*APIBookDeletePostForbidden) aPIBookDeletePostRes() {}
-
-type APIBookDeletePostInternalServerError ErrorResponse
-
-func (*APIBookDeletePostInternalServerError) aPIBookDeletePostRes() {}
-
 // APIBookDeletePostNoContent is response for APIBookDeletePost operation.
 type APIBookDeletePostNoContent struct{}
-
-func (*APIBookDeletePostNoContent) aPIBookDeletePostRes() {}
-
-type APIBookDeletePostNotFound ErrorResponse
-
-func (*APIBookDeletePostNotFound) aPIBookDeletePostRes() {}
 
 type APIBookDeletePostReq struct {
 	// Формат удаления.
@@ -1628,26 +1265,6 @@ func (s *APIBookDeletePostReqType) UnmarshalText(data []byte) error {
 	}
 }
 
-type APIBookDeletePostUnauthorized ErrorResponse
-
-func (*APIBookDeletePostUnauthorized) aPIBookDeletePostRes() {}
-
-type APIBookDetailsPostBadRequest ErrorResponse
-
-func (*APIBookDetailsPostBadRequest) aPIBookDetailsPostRes() {}
-
-type APIBookDetailsPostForbidden ErrorResponse
-
-func (*APIBookDetailsPostForbidden) aPIBookDetailsPostRes() {}
-
-type APIBookDetailsPostInternalServerError ErrorResponse
-
-func (*APIBookDetailsPostInternalServerError) aPIBookDetailsPostRes() {}
-
-type APIBookDetailsPostNotFound ErrorResponse
-
-func (*APIBookDetailsPostNotFound) aPIBookDetailsPostRes() {}
-
 // Данные книги.
 type APIBookDetailsPostOK struct {
 	Info BookSimple `json:"info"`
@@ -1721,8 +1338,6 @@ func (s *APIBookDetailsPostOK) SetSize(val OptAPIBookDetailsPostOKSize) {
 func (s *APIBookDetailsPostOK) SetFsDisposition(val []APIBookDetailsPostOKFsDispositionItem) {
 	s.FsDisposition = val
 }
-
-func (*APIBookDetailsPostOK) aPIBookDetailsPostRes() {}
 
 type APIBookDetailsPostOKFsDispositionItem struct {
 	// ID ФС.
@@ -2002,22 +1617,6 @@ func (s *APIBookDetailsPostReq) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
-type APIBookDetailsPostUnauthorized ErrorResponse
-
-func (*APIBookDetailsPostUnauthorized) aPIBookDetailsPostRes() {}
-
-type APIBookListPostBadRequest ErrorResponse
-
-func (*APIBookListPostBadRequest) aPIBookListPostRes() {}
-
-type APIBookListPostForbidden ErrorResponse
-
-func (*APIBookListPostForbidden) aPIBookListPostRes() {}
-
-type APIBookListPostInternalServerError ErrorResponse
-
-func (*APIBookListPostInternalServerError) aPIBookListPostRes() {}
-
 type APIBookListPostOK struct {
 	// Список книг.
 	Books []APIBookListPostOKBooksItem `json:"books"`
@@ -2056,8 +1655,6 @@ func (s *APIBookListPostOK) SetCount(val int) {
 func (s *APIBookListPostOK) SetPages(val []APIBookListPostOKPagesItem) {
 	s.Pages = val
 }
-
-func (*APIBookListPostOK) aPIBookListPostRes() {}
 
 // Данные книги в упрощенном формате.
 type APIBookListPostOKBooksItem struct {
@@ -2190,26 +1787,6 @@ func (s *APIBookListPostOKPagesItem) SetIsSeparator(val bool) {
 	s.IsSeparator = val
 }
 
-type APIBookListPostUnauthorized ErrorResponse
-
-func (*APIBookListPostUnauthorized) aPIBookListPostRes() {}
-
-type APIBookPageBodyPostBadRequest ErrorResponse
-
-func (*APIBookPageBodyPostBadRequest) aPIBookPageBodyPostRes() {}
-
-type APIBookPageBodyPostForbidden ErrorResponse
-
-func (*APIBookPageBodyPostForbidden) aPIBookPageBodyPostRes() {}
-
-type APIBookPageBodyPostInternalServerError ErrorResponse
-
-func (*APIBookPageBodyPostInternalServerError) aPIBookPageBodyPostRes() {}
-
-type APIBookPageBodyPostNotFound ErrorResponse
-
-func (*APIBookPageBodyPostNotFound) aPIBookPageBodyPostRes() {}
-
 type APIBookPageBodyPostOK struct {
 	Data io.Reader
 }
@@ -2223,8 +1800,6 @@ func (s APIBookPageBodyPostOK) Read(p []byte) (n int, err error) {
 	}
 	return s.Data.Read(p)
 }
-
-func (*APIBookPageBodyPostOK) aPIBookPageBodyPostRes() {}
 
 type APIBookPageBodyPostReq struct {
 	// ID книги.
@@ -2265,30 +1840,8 @@ func (s *APIBookPageBodyPostReq) SetURL(val OptURI) {
 	s.URL = val
 }
 
-type APIBookPageBodyPostUnauthorized ErrorResponse
-
-func (*APIBookPageBodyPostUnauthorized) aPIBookPageBodyPostRes() {}
-
-type APIBookPageDeletePostBadRequest ErrorResponse
-
-func (*APIBookPageDeletePostBadRequest) aPIBookPageDeletePostRes() {}
-
-type APIBookPageDeletePostForbidden ErrorResponse
-
-func (*APIBookPageDeletePostForbidden) aPIBookPageDeletePostRes() {}
-
-type APIBookPageDeletePostInternalServerError ErrorResponse
-
-func (*APIBookPageDeletePostInternalServerError) aPIBookPageDeletePostRes() {}
-
 // APIBookPageDeletePostNoContent is response for APIBookPageDeletePost operation.
 type APIBookPageDeletePostNoContent struct{}
-
-func (*APIBookPageDeletePostNoContent) aPIBookPageDeletePostRes() {}
-
-type APIBookPageDeletePostNotFound ErrorResponse
-
-func (*APIBookPageDeletePostNotFound) aPIBookPageDeletePostRes() {}
 
 type APIBookPageDeletePostReq struct {
 	// Тип удаления.
@@ -2383,26 +1936,6 @@ func (s *APIBookPageDeletePostReqType) UnmarshalText(data []byte) error {
 	}
 }
 
-type APIBookPageDeletePostUnauthorized ErrorResponse
-
-func (*APIBookPageDeletePostUnauthorized) aPIBookPageDeletePostRes() {}
-
-type APIBookRawPostBadRequest ErrorResponse
-
-func (*APIBookRawPostBadRequest) aPIBookRawPostRes() {}
-
-type APIBookRawPostForbidden ErrorResponse
-
-func (*APIBookRawPostForbidden) aPIBookRawPostRes() {}
-
-type APIBookRawPostInternalServerError ErrorResponse
-
-func (*APIBookRawPostInternalServerError) aPIBookRawPostRes() {}
-
-type APIBookRawPostNotFound ErrorResponse
-
-func (*APIBookRawPostNotFound) aPIBookRawPostRes() {}
-
 type APIBookRawPostReq struct {
 	// ID книги.
 	ID OptUUID `json:"id"`
@@ -2430,26 +1963,6 @@ func (s *APIBookRawPostReq) SetURL(val OptURI) {
 	s.URL = val
 }
 
-type APIBookRawPostUnauthorized ErrorResponse
-
-func (*APIBookRawPostUnauthorized) aPIBookRawPostRes() {}
-
-type APIBookRebuildPostBadRequest ErrorResponse
-
-func (*APIBookRebuildPostBadRequest) aPIBookRebuildPostRes() {}
-
-type APIBookRebuildPostForbidden ErrorResponse
-
-func (*APIBookRebuildPostForbidden) aPIBookRebuildPostRes() {}
-
-type APIBookRebuildPostInternalServerError ErrorResponse
-
-func (*APIBookRebuildPostInternalServerError) aPIBookRebuildPostRes() {}
-
-type APIBookRebuildPostNotFound ErrorResponse
-
-func (*APIBookRebuildPostNotFound) aPIBookRebuildPostRes() {}
-
 type APIBookRebuildPostOK struct {
 	// ID книги в которую были добавлены страницы.
 	ID uuid.UUID `json:"id"`
@@ -2464,8 +1977,6 @@ func (s *APIBookRebuildPostOK) GetID() uuid.UUID {
 func (s *APIBookRebuildPostOK) SetID(val uuid.UUID) {
 	s.ID = val
 }
-
-func (*APIBookRebuildPostOK) aPIBookRebuildPostRes() {}
 
 type APIBookRebuildPostReq struct {
 	OldBook BookRaw `json:"old_book"`
@@ -2658,26 +2169,8 @@ func (s *APIBookRebuildPostReqFlags) SetPageReOrder(val OptBool) {
 	s.PageReOrder = val
 }
 
-type APIBookRebuildPostUnauthorized ErrorResponse
-
-func (*APIBookRebuildPostUnauthorized) aPIBookRebuildPostRes() {}
-
-type APIBookRestorePostBadRequest ErrorResponse
-
-func (*APIBookRestorePostBadRequest) aPIBookRestorePostRes() {}
-
-type APIBookRestorePostForbidden ErrorResponse
-
-func (*APIBookRestorePostForbidden) aPIBookRestorePostRes() {}
-
-type APIBookRestorePostInternalServerError ErrorResponse
-
-func (*APIBookRestorePostInternalServerError) aPIBookRestorePostRes() {}
-
 // APIBookRestorePostNoContent is response for APIBookRestorePost operation.
 type APIBookRestorePostNoContent struct{}
-
-func (*APIBookRestorePostNoContent) aPIBookRestorePostRes() {}
 
 type APIBookRestorePostReq struct {
 	// ID книги.
@@ -2706,30 +2199,8 @@ func (s *APIBookRestorePostReq) SetOnlyPages(val OptBool) {
 	s.OnlyPages = val
 }
 
-type APIBookRestorePostUnauthorized ErrorResponse
-
-func (*APIBookRestorePostUnauthorized) aPIBookRestorePostRes() {}
-
-type APIBookStatusSetPostBadRequest ErrorResponse
-
-func (*APIBookStatusSetPostBadRequest) aPIBookStatusSetPostRes() {}
-
-type APIBookStatusSetPostForbidden ErrorResponse
-
-func (*APIBookStatusSetPostForbidden) aPIBookStatusSetPostRes() {}
-
-type APIBookStatusSetPostInternalServerError ErrorResponse
-
-func (*APIBookStatusSetPostInternalServerError) aPIBookStatusSetPostRes() {}
-
 // APIBookStatusSetPostNoContent is response for APIBookStatusSetPost operation.
 type APIBookStatusSetPostNoContent struct{}
-
-func (*APIBookStatusSetPostNoContent) aPIBookStatusSetPostRes() {}
-
-type APIBookStatusSetPostNotFound ErrorResponse
-
-func (*APIBookStatusSetPostNotFound) aPIBookStatusSetPostRes() {}
 
 type APIBookStatusSetPostReq struct {
 	// ID книги.
@@ -2812,50 +2283,8 @@ func (s *APIBookStatusSetPostReqStatus) UnmarshalText(data []byte) error {
 	}
 }
 
-type APIBookStatusSetPostUnauthorized ErrorResponse
-
-func (*APIBookStatusSetPostUnauthorized) aPIBookStatusSetPostRes() {}
-
-type APIBookUpdatePostBadRequest ErrorResponse
-
-func (*APIBookUpdatePostBadRequest) aPIBookUpdatePostRes() {}
-
-type APIBookUpdatePostForbidden ErrorResponse
-
-func (*APIBookUpdatePostForbidden) aPIBookUpdatePostRes() {}
-
-type APIBookUpdatePostInternalServerError ErrorResponse
-
-func (*APIBookUpdatePostInternalServerError) aPIBookUpdatePostRes() {}
-
 // APIBookUpdatePostNoContent is response for APIBookUpdatePost operation.
 type APIBookUpdatePostNoContent struct{}
-
-func (*APIBookUpdatePostNoContent) aPIBookUpdatePostRes() {}
-
-type APIBookUpdatePostNotFound ErrorResponse
-
-func (*APIBookUpdatePostNotFound) aPIBookUpdatePostRes() {}
-
-type APIBookUpdatePostUnauthorized ErrorResponse
-
-func (*APIBookUpdatePostUnauthorized) aPIBookUpdatePostRes() {}
-
-type APIDeduplicateArchivePostBadRequest ErrorResponse
-
-func (*APIDeduplicateArchivePostBadRequest) aPIDeduplicateArchivePostRes() {}
-
-type APIDeduplicateArchivePostForbidden ErrorResponse
-
-func (*APIDeduplicateArchivePostForbidden) aPIDeduplicateArchivePostRes() {}
-
-type APIDeduplicateArchivePostInternalServerError ErrorResponse
-
-func (*APIDeduplicateArchivePostInternalServerError) aPIDeduplicateArchivePostRes() {}
-
-type APIDeduplicateArchivePostOKApplicationJSON []APIDeduplicateArchivePostOKItem
-
-func (*APIDeduplicateArchivePostOKApplicationJSON) aPIDeduplicateArchivePostRes() {}
 
 type APIDeduplicateArchivePostOKItem struct {
 	// ID книги.
@@ -2922,22 +2351,6 @@ func (s APIDeduplicateArchivePostReq) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-type APIDeduplicateArchivePostUnauthorized ErrorResponse
-
-func (*APIDeduplicateArchivePostUnauthorized) aPIDeduplicateArchivePostRes() {}
-
-type APIDeduplicateBookByPageBodyPostBadRequest ErrorResponse
-
-func (*APIDeduplicateBookByPageBodyPostBadRequest) aPIDeduplicateBookByPageBodyPostRes() {}
-
-type APIDeduplicateBookByPageBodyPostForbidden ErrorResponse
-
-func (*APIDeduplicateBookByPageBodyPostForbidden) aPIDeduplicateBookByPageBodyPostRes() {}
-
-type APIDeduplicateBookByPageBodyPostInternalServerError ErrorResponse
-
-func (*APIDeduplicateBookByPageBodyPostInternalServerError) aPIDeduplicateBookByPageBodyPostRes() {}
-
 type APIDeduplicateBookByPageBodyPostOK struct {
 	Result []APIDeduplicateBookByPageBodyPostOKResultItem `json:"result"`
 }
@@ -2951,8 +2364,6 @@ func (s *APIDeduplicateBookByPageBodyPostOK) GetResult() []APIDeduplicateBookByP
 func (s *APIDeduplicateBookByPageBodyPostOK) SetResult(val []APIDeduplicateBookByPageBodyPostOKResultItem) {
 	s.Result = val
 }
-
-func (*APIDeduplicateBookByPageBodyPostOK) aPIDeduplicateBookByPageBodyPostRes() {}
 
 type APIDeduplicateBookByPageBodyPostOKResultItem struct {
 	Book BookSimple `json:"book"`
@@ -3177,22 +2588,6 @@ func (s *APIDeduplicateBookByPageBodyPostReq) SetBookID(val uuid.UUID) {
 	s.BookID = val
 }
 
-type APIDeduplicateBookByPageBodyPostUnauthorized ErrorResponse
-
-func (*APIDeduplicateBookByPageBodyPostUnauthorized) aPIDeduplicateBookByPageBodyPostRes() {}
-
-type APIDeduplicateBooksByPagePostBadRequest ErrorResponse
-
-func (*APIDeduplicateBooksByPagePostBadRequest) aPIDeduplicateBooksByPagePostRes() {}
-
-type APIDeduplicateBooksByPagePostForbidden ErrorResponse
-
-func (*APIDeduplicateBooksByPagePostForbidden) aPIDeduplicateBooksByPagePostRes() {}
-
-type APIDeduplicateBooksByPagePostInternalServerError ErrorResponse
-
-func (*APIDeduplicateBooksByPagePostInternalServerError) aPIDeduplicateBooksByPagePostRes() {}
-
 type APIDeduplicateBooksByPagePostOK struct {
 	Books []BookSimple `json:"books"`
 }
@@ -3206,8 +2601,6 @@ func (s *APIDeduplicateBooksByPagePostOK) GetBooks() []BookSimple {
 func (s *APIDeduplicateBooksByPagePostOK) SetBooks(val []BookSimple) {
 	s.Books = val
 }
-
-func (*APIDeduplicateBooksByPagePostOK) aPIDeduplicateBooksByPagePostRes() {}
 
 type APIDeduplicateBooksByPagePostReq struct {
 	// ID исходной книги.
@@ -3235,22 +2628,6 @@ func (s *APIDeduplicateBooksByPagePostReq) SetBookID(val uuid.UUID) {
 func (s *APIDeduplicateBooksByPagePostReq) SetPageNumber(val int) {
 	s.PageNumber = val
 }
-
-type APIDeduplicateBooksByPagePostUnauthorized ErrorResponse
-
-func (*APIDeduplicateBooksByPagePostUnauthorized) aPIDeduplicateBooksByPagePostRes() {}
-
-type APIDeduplicateComparePostBadRequest ErrorResponse
-
-func (*APIDeduplicateComparePostBadRequest) aPIDeduplicateComparePostRes() {}
-
-type APIDeduplicateComparePostForbidden ErrorResponse
-
-func (*APIDeduplicateComparePostForbidden) aPIDeduplicateComparePostRes() {}
-
-type APIDeduplicateComparePostInternalServerError ErrorResponse
-
-func (*APIDeduplicateComparePostInternalServerError) aPIDeduplicateComparePostRes() {}
 
 type APIDeduplicateComparePostOK struct {
 	// ID исходной книги.
@@ -3509,8 +2886,6 @@ func (s *APIDeduplicateComparePostOK) SetTargetPageAvgSizeFormatted(val OptStrin
 	s.TargetPageAvgSizeFormatted = val
 }
 
-func (*APIDeduplicateComparePostOK) aPIDeduplicateComparePostRes() {}
-
 type APIDeduplicateComparePostReq struct {
 	// ID исходной книги.
 	OriginBookID uuid.UUID `json:"origin_book_id"`
@@ -3538,30 +2913,8 @@ func (s *APIDeduplicateComparePostReq) SetTargetBookID(val uuid.UUID) {
 	s.TargetBookID = val
 }
 
-type APIDeduplicateComparePostUnauthorized ErrorResponse
-
-func (*APIDeduplicateComparePostUnauthorized) aPIDeduplicateComparePostRes() {}
-
-type APIDeduplicateDeadHashSetPostBadRequest ErrorResponse
-
-func (*APIDeduplicateDeadHashSetPostBadRequest) aPIDeduplicateDeadHashSetPostRes() {}
-
-type APIDeduplicateDeadHashSetPostForbidden ErrorResponse
-
-func (*APIDeduplicateDeadHashSetPostForbidden) aPIDeduplicateDeadHashSetPostRes() {}
-
-type APIDeduplicateDeadHashSetPostInternalServerError ErrorResponse
-
-func (*APIDeduplicateDeadHashSetPostInternalServerError) aPIDeduplicateDeadHashSetPostRes() {}
-
 // APIDeduplicateDeadHashSetPostNoContent is response for APIDeduplicateDeadHashSetPost operation.
 type APIDeduplicateDeadHashSetPostNoContent struct{}
-
-func (*APIDeduplicateDeadHashSetPostNoContent) aPIDeduplicateDeadHashSetPostRes() {}
-
-type APIDeduplicateDeadHashSetPostNotFound ErrorResponse
-
-func (*APIDeduplicateDeadHashSetPostNotFound) aPIDeduplicateDeadHashSetPostRes() {}
 
 type APIDeduplicateDeadHashSetPostReq struct {
 	// ID книги.
@@ -3602,22 +2955,6 @@ func (s *APIDeduplicateDeadHashSetPostReq) SetValue(val bool) {
 	s.Value = val
 }
 
-type APIDeduplicateDeadHashSetPostUnauthorized ErrorResponse
-
-func (*APIDeduplicateDeadHashSetPostUnauthorized) aPIDeduplicateDeadHashSetPostRes() {}
-
-type APIDeduplicateUniquePagesPostBadRequest ErrorResponse
-
-func (*APIDeduplicateUniquePagesPostBadRequest) aPIDeduplicateUniquePagesPostRes() {}
-
-type APIDeduplicateUniquePagesPostForbidden ErrorResponse
-
-func (*APIDeduplicateUniquePagesPostForbidden) aPIDeduplicateUniquePagesPostRes() {}
-
-type APIDeduplicateUniquePagesPostInternalServerError ErrorResponse
-
-func (*APIDeduplicateUniquePagesPostInternalServerError) aPIDeduplicateUniquePagesPostRes() {}
-
 type APIDeduplicateUniquePagesPostOK struct {
 	// Уникальные страницы в книге.
 	Pages []PageSimple `json:"pages"`
@@ -3633,8 +2970,6 @@ func (s *APIDeduplicateUniquePagesPostOK) SetPages(val []PageSimple) {
 	s.Pages = val
 }
 
-func (*APIDeduplicateUniquePagesPostOK) aPIDeduplicateUniquePagesPostRes() {}
-
 type APIDeduplicateUniquePagesPostReq struct {
 	// ID исходной книги.
 	BookID uuid.UUID `json:"book_id"`
@@ -3649,26 +2984,6 @@ func (s *APIDeduplicateUniquePagesPostReq) GetBookID() uuid.UUID {
 func (s *APIDeduplicateUniquePagesPostReq) SetBookID(val uuid.UUID) {
 	s.BookID = val
 }
-
-type APIDeduplicateUniquePagesPostUnauthorized ErrorResponse
-
-func (*APIDeduplicateUniquePagesPostUnauthorized) aPIDeduplicateUniquePagesPostRes() {}
-
-type APIFileIDGetBadRequest ErrorResponse
-
-func (*APIFileIDGetBadRequest) aPIFileIDGetRes() {}
-
-type APIFileIDGetForbidden ErrorResponse
-
-func (*APIFileIDGetForbidden) aPIFileIDGetRes() {}
-
-type APIFileIDGetInternalServerError ErrorResponse
-
-func (*APIFileIDGetInternalServerError) aPIFileIDGetRes() {}
-
-type APIFileIDGetNotFound ErrorResponse
-
-func (*APIFileIDGetNotFound) aPIFileIDGetRes() {}
 
 type APIFileIDGetOK struct {
 	Data io.Reader
@@ -3710,24 +3025,6 @@ func (s *APIFileIDGetOKHeaders) SetResponse(val APIFileIDGetOK) {
 	s.Response = val
 }
 
-func (*APIFileIDGetOKHeaders) aPIFileIDGetRes() {}
-
-type APIFileIDGetUnauthorized ErrorResponse
-
-func (*APIFileIDGetUnauthorized) aPIFileIDGetRes() {}
-
-type APIFsCreatePostBadRequest ErrorResponse
-
-func (*APIFsCreatePostBadRequest) aPIFsCreatePostRes() {}
-
-type APIFsCreatePostForbidden ErrorResponse
-
-func (*APIFsCreatePostForbidden) aPIFsCreatePostRes() {}
-
-type APIFsCreatePostInternalServerError ErrorResponse
-
-func (*APIFsCreatePostInternalServerError) aPIFsCreatePostRes() {}
-
 type APIFsCreatePostOK struct {
 	// ID ФС.
 	ID uuid.UUID `json:"id"`
@@ -3742,8 +3039,6 @@ func (s *APIFsCreatePostOK) GetID() uuid.UUID {
 func (s *APIFsCreatePostOK) SetID(val uuid.UUID) {
 	s.ID = val
 }
-
-func (*APIFsCreatePostOK) aPIFsCreatePostRes() {}
 
 // Данные о файловой системе.
 type APIFsCreatePostReq struct {
@@ -3846,30 +3141,8 @@ func (s *APIFsCreatePostReq) SetHighwayAddr(val OptURI) {
 	s.HighwayAddr = val
 }
 
-type APIFsCreatePostUnauthorized ErrorResponse
-
-func (*APIFsCreatePostUnauthorized) aPIFsCreatePostRes() {}
-
-type APIFsDeletePostBadRequest ErrorResponse
-
-func (*APIFsDeletePostBadRequest) aPIFsDeletePostRes() {}
-
-type APIFsDeletePostForbidden ErrorResponse
-
-func (*APIFsDeletePostForbidden) aPIFsDeletePostRes() {}
-
-type APIFsDeletePostInternalServerError ErrorResponse
-
-func (*APIFsDeletePostInternalServerError) aPIFsDeletePostRes() {}
-
 // APIFsDeletePostNoContent is response for APIFsDeletePost operation.
 type APIFsDeletePostNoContent struct{}
-
-func (*APIFsDeletePostNoContent) aPIFsDeletePostRes() {}
-
-type APIFsDeletePostNotFound ErrorResponse
-
-func (*APIFsDeletePostNotFound) aPIFsDeletePostRes() {}
 
 type APIFsDeletePostReq struct {
 	// ID ФС.
@@ -3886,26 +3159,6 @@ func (s *APIFsDeletePostReq) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
-type APIFsDeletePostUnauthorized ErrorResponse
-
-func (*APIFsDeletePostUnauthorized) aPIFsDeletePostRes() {}
-
-type APIFsGetPostBadRequest ErrorResponse
-
-func (*APIFsGetPostBadRequest) aPIFsGetPostRes() {}
-
-type APIFsGetPostForbidden ErrorResponse
-
-func (*APIFsGetPostForbidden) aPIFsGetPostRes() {}
-
-type APIFsGetPostInternalServerError ErrorResponse
-
-func (*APIFsGetPostInternalServerError) aPIFsGetPostRes() {}
-
-type APIFsGetPostNotFound ErrorResponse
-
-func (*APIFsGetPostNotFound) aPIFsGetPostRes() {}
-
 type APIFsGetPostReq struct {
 	// ID ФС.
 	ID uuid.UUID `json:"id"`
@@ -3921,22 +3174,6 @@ func (s *APIFsGetPostReq) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
-type APIFsGetPostUnauthorized ErrorResponse
-
-func (*APIFsGetPostUnauthorized) aPIFsGetPostRes() {}
-
-type APIFsListPostBadRequest ErrorResponse
-
-func (*APIFsListPostBadRequest) aPIFsListPostRes() {}
-
-type APIFsListPostForbidden ErrorResponse
-
-func (*APIFsListPostForbidden) aPIFsListPostRes() {}
-
-type APIFsListPostInternalServerError ErrorResponse
-
-func (*APIFsListPostInternalServerError) aPIFsListPostRes() {}
-
 type APIFsListPostOK struct {
 	// Список ФС.
 	FileSystems []APIFsListPostOKFileSystemsItem `json:"file_systems"`
@@ -3951,8 +3188,6 @@ func (s *APIFsListPostOK) GetFileSystems() []APIFsListPostOKFileSystemsItem {
 func (s *APIFsListPostOK) SetFileSystems(val []APIFsListPostOKFileSystemsItem) {
 	s.FileSystems = val
 }
-
-func (*APIFsListPostOK) aPIFsListPostRes() {}
 
 type APIFsListPostOKFileSystemsItem struct {
 	Info FileSystemInfo `json:"info"`
@@ -4066,26 +3301,8 @@ func (s *APIFsListPostReq) SetIncludeAvailableSize(val OptBool) {
 	s.IncludeAvailableSize = val
 }
 
-type APIFsListPostUnauthorized ErrorResponse
-
-func (*APIFsListPostUnauthorized) aPIFsListPostRes() {}
-
-type APIFsRemoveMismatchPostBadRequest ErrorResponse
-
-func (*APIFsRemoveMismatchPostBadRequest) aPIFsRemoveMismatchPostRes() {}
-
-type APIFsRemoveMismatchPostForbidden ErrorResponse
-
-func (*APIFsRemoveMismatchPostForbidden) aPIFsRemoveMismatchPostRes() {}
-
-type APIFsRemoveMismatchPostInternalServerError ErrorResponse
-
-func (*APIFsRemoveMismatchPostInternalServerError) aPIFsRemoveMismatchPostRes() {}
-
 // APIFsRemoveMismatchPostNoContent is response for APIFsRemoveMismatchPost operation.
 type APIFsRemoveMismatchPostNoContent struct{}
-
-func (*APIFsRemoveMismatchPostNoContent) aPIFsRemoveMismatchPostRes() {}
 
 type APIFsRemoveMismatchPostReq struct {
 	// ID ФС.
@@ -4102,26 +3319,8 @@ func (s *APIFsRemoveMismatchPostReq) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
-type APIFsRemoveMismatchPostUnauthorized ErrorResponse
-
-func (*APIFsRemoveMismatchPostUnauthorized) aPIFsRemoveMismatchPostRes() {}
-
-type APIFsTransferBookPostBadRequest ErrorResponse
-
-func (*APIFsTransferBookPostBadRequest) aPIFsTransferBookPostRes() {}
-
-type APIFsTransferBookPostForbidden ErrorResponse
-
-func (*APIFsTransferBookPostForbidden) aPIFsTransferBookPostRes() {}
-
-type APIFsTransferBookPostInternalServerError ErrorResponse
-
-func (*APIFsTransferBookPostInternalServerError) aPIFsTransferBookPostRes() {}
-
 // APIFsTransferBookPostNoContent is response for APIFsTransferBookPost operation.
 type APIFsTransferBookPostNoContent struct{}
-
-func (*APIFsTransferBookPostNoContent) aPIFsTransferBookPostRes() {}
 
 type APIFsTransferBookPostReq struct {
 	// ID книги которую переносить.
@@ -4174,26 +3373,8 @@ func (s *APIFsTransferBookPostReq) SetOnlyPreviewPages(val OptBool) {
 	s.OnlyPreviewPages = val
 }
 
-type APIFsTransferBookPostUnauthorized ErrorResponse
-
-func (*APIFsTransferBookPostUnauthorized) aPIFsTransferBookPostRes() {}
-
-type APIFsTransferPostBadRequest ErrorResponse
-
-func (*APIFsTransferPostBadRequest) aPIFsTransferPostRes() {}
-
-type APIFsTransferPostForbidden ErrorResponse
-
-func (*APIFsTransferPostForbidden) aPIFsTransferPostRes() {}
-
-type APIFsTransferPostInternalServerError ErrorResponse
-
-func (*APIFsTransferPostInternalServerError) aPIFsTransferPostRes() {}
-
 // APIFsTransferPostNoContent is response for APIFsTransferPost operation.
 type APIFsTransferPostNoContent struct{}
-
-func (*APIFsTransferPostNoContent) aPIFsTransferPostRes() {}
 
 type APIFsTransferPostReq struct {
 	// ID файловой системы с которой переносить.
@@ -4234,30 +3415,8 @@ func (s *APIFsTransferPostReq) SetOnlyPreviewPages(val OptBool) {
 	s.OnlyPreviewPages = val
 }
 
-type APIFsTransferPostUnauthorized ErrorResponse
-
-func (*APIFsTransferPostUnauthorized) aPIFsTransferPostRes() {}
-
-type APIFsUpdatePostBadRequest ErrorResponse
-
-func (*APIFsUpdatePostBadRequest) aPIFsUpdatePostRes() {}
-
-type APIFsUpdatePostForbidden ErrorResponse
-
-func (*APIFsUpdatePostForbidden) aPIFsUpdatePostRes() {}
-
-type APIFsUpdatePostInternalServerError ErrorResponse
-
-func (*APIFsUpdatePostInternalServerError) aPIFsUpdatePostRes() {}
-
 // APIFsUpdatePostNoContent is response for APIFsUpdatePost operation.
 type APIFsUpdatePostNoContent struct{}
-
-func (*APIFsUpdatePostNoContent) aPIFsUpdatePostRes() {}
-
-type APIFsUpdatePostNotFound ErrorResponse
-
-func (*APIFsUpdatePostNotFound) aPIFsUpdatePostRes() {}
 
 // Данные о файловой системе.
 type APIFsUpdatePostReq struct {
@@ -4372,26 +3531,8 @@ func (s *APIFsUpdatePostReq) SetHighwayAddr(val OptURI) {
 	s.HighwayAddr = val
 }
 
-type APIFsUpdatePostUnauthorized ErrorResponse
-
-func (*APIFsUpdatePostUnauthorized) aPIFsUpdatePostRes() {}
-
-type APIFsValidatePostBadRequest ErrorResponse
-
-func (*APIFsValidatePostBadRequest) aPIFsValidatePostRes() {}
-
-type APIFsValidatePostForbidden ErrorResponse
-
-func (*APIFsValidatePostForbidden) aPIFsValidatePostRes() {}
-
-type APIFsValidatePostInternalServerError ErrorResponse
-
-func (*APIFsValidatePostInternalServerError) aPIFsValidatePostRes() {}
-
 // APIFsValidatePostNoContent is response for APIFsValidatePost operation.
 type APIFsValidatePostNoContent struct{}
-
-func (*APIFsValidatePostNoContent) aPIFsValidatePostRes() {}
 
 type APIFsValidatePostReq struct {
 	// ID ФС.
@@ -4407,22 +3548,6 @@ func (s *APIFsValidatePostReq) GetID() uuid.UUID {
 func (s *APIFsValidatePostReq) SetID(val uuid.UUID) {
 	s.ID = val
 }
-
-type APIFsValidatePostUnauthorized ErrorResponse
-
-func (*APIFsValidatePostUnauthorized) aPIFsValidatePostRes() {}
-
-type APIHproxyBookPostBadRequest ErrorResponse
-
-func (*APIHproxyBookPostBadRequest) aPIHproxyBookPostRes() {}
-
-type APIHproxyBookPostForbidden ErrorResponse
-
-func (*APIHproxyBookPostForbidden) aPIHproxyBookPostRes() {}
-
-type APIHproxyBookPostInternalServerError ErrorResponse
-
-func (*APIHproxyBookPostInternalServerError) aPIHproxyBookPostRes() {}
 
 type APIHproxyBookPostOK struct {
 	// Название книги.
@@ -4510,8 +3635,6 @@ func (s *APIHproxyBookPostOK) SetPages(val []APIHproxyBookPostOKPagesItem) {
 func (s *APIHproxyBookPostOK) SetAttributes(val []APIHproxyBookPostOKAttributesItem) {
 	s.Attributes = val
 }
-
-func (*APIHproxyBookPostOK) aPIHproxyBookPostRes() {}
 
 type APIHproxyBookPostOKAttributesItem struct {
 	// Код атрибута.
@@ -4723,26 +3846,6 @@ func (s *APIHproxyBookPostReq) SetPageLimit(val OptInt) {
 	s.PageLimit = val
 }
 
-type APIHproxyBookPostUnauthorized ErrorResponse
-
-func (*APIHproxyBookPostUnauthorized) aPIHproxyBookPostRes() {}
-
-type APIHproxyFileGetBadRequest ErrorResponse
-
-func (*APIHproxyFileGetBadRequest) aPIHproxyFileGetRes() {}
-
-type APIHproxyFileGetForbidden ErrorResponse
-
-func (*APIHproxyFileGetForbidden) aPIHproxyFileGetRes() {}
-
-type APIHproxyFileGetInternalServerError ErrorResponse
-
-func (*APIHproxyFileGetInternalServerError) aPIHproxyFileGetRes() {}
-
-type APIHproxyFileGetNotFound ErrorResponse
-
-func (*APIHproxyFileGetNotFound) aPIHproxyFileGetRes() {}
-
 type APIHproxyFileGetOK struct {
 	Data io.Reader
 }
@@ -4783,24 +3886,6 @@ func (s *APIHproxyFileGetOKHeaders) SetResponse(val APIHproxyFileGetOK) {
 	s.Response = val
 }
 
-func (*APIHproxyFileGetOKHeaders) aPIHproxyFileGetRes() {}
-
-type APIHproxyFileGetUnauthorized ErrorResponse
-
-func (*APIHproxyFileGetUnauthorized) aPIHproxyFileGetRes() {}
-
-type APIHproxyListPostBadRequest ErrorResponse
-
-func (*APIHproxyListPostBadRequest) aPIHproxyListPostRes() {}
-
-type APIHproxyListPostForbidden ErrorResponse
-
-func (*APIHproxyListPostForbidden) aPIHproxyListPostRes() {}
-
-type APIHproxyListPostInternalServerError ErrorResponse
-
-func (*APIHproxyListPostInternalServerError) aPIHproxyListPostRes() {}
-
 type APIHproxyListPostOK struct {
 	// Список книг.
 	Books []APIHproxyListPostOKBooksItem `json:"books"`
@@ -4827,8 +3912,6 @@ func (s *APIHproxyListPostOK) SetBooks(val []APIHproxyListPostOKBooksItem) {
 func (s *APIHproxyListPostOK) SetPagination(val []APIHproxyListPostOKPaginationItem) {
 	s.Pagination = val
 }
-
-func (*APIHproxyListPostOK) aPIHproxyListPostRes() {}
 
 type APIHproxyListPostOKBooksItem struct {
 	// Ссылка на книгу во внешней системе.
@@ -4923,26 +4006,8 @@ func (s *APIHproxyListPostReq) SetURL(val url.URL) {
 	s.URL = val
 }
 
-type APIHproxyListPostUnauthorized ErrorResponse
-
-func (*APIHproxyListPostUnauthorized) aPIHproxyListPostRes() {}
-
-type APILabelDeletePostBadRequest ErrorResponse
-
-func (*APILabelDeletePostBadRequest) aPILabelDeletePostRes() {}
-
-type APILabelDeletePostForbidden ErrorResponse
-
-func (*APILabelDeletePostForbidden) aPILabelDeletePostRes() {}
-
-type APILabelDeletePostInternalServerError ErrorResponse
-
-func (*APILabelDeletePostInternalServerError) aPILabelDeletePostRes() {}
-
 // APILabelDeletePostNoContent is response for APILabelDeletePost operation.
 type APILabelDeletePostNoContent struct{}
-
-func (*APILabelDeletePostNoContent) aPILabelDeletePostRes() {}
 
 type APILabelDeletePostReq struct {
 	// ID книги.
@@ -4983,22 +4048,6 @@ func (s *APILabelDeletePostReq) SetName(val string) {
 	s.Name = val
 }
 
-type APILabelDeletePostUnauthorized ErrorResponse
-
-func (*APILabelDeletePostUnauthorized) aPILabelDeletePostRes() {}
-
-type APILabelGetPostBadRequest ErrorResponse
-
-func (*APILabelGetPostBadRequest) aPILabelGetPostRes() {}
-
-type APILabelGetPostForbidden ErrorResponse
-
-func (*APILabelGetPostForbidden) aPILabelGetPostRes() {}
-
-type APILabelGetPostInternalServerError ErrorResponse
-
-func (*APILabelGetPostInternalServerError) aPILabelGetPostRes() {}
-
 type APILabelGetPostOK struct {
 	// Метки книги.
 	Labels []APILabelGetPostOKLabelsItem `json:"labels"`
@@ -5013,8 +4062,6 @@ func (s *APILabelGetPostOK) GetLabels() []APILabelGetPostOKLabelsItem {
 func (s *APILabelGetPostOK) SetLabels(val []APILabelGetPostOKLabelsItem) {
 	s.Labels = val
 }
-
-func (*APILabelGetPostOK) aPILabelGetPostRes() {}
 
 type APILabelGetPostOKLabelsItem struct {
 	// ID книги.
@@ -5094,26 +4141,8 @@ func (s *APILabelGetPostReq) SetBookID(val uuid.UUID) {
 	s.BookID = val
 }
 
-type APILabelGetPostUnauthorized ErrorResponse
-
-func (*APILabelGetPostUnauthorized) aPILabelGetPostRes() {}
-
-type APILabelPresetCreatePostBadRequest ErrorResponse
-
-func (*APILabelPresetCreatePostBadRequest) aPILabelPresetCreatePostRes() {}
-
-type APILabelPresetCreatePostForbidden ErrorResponse
-
-func (*APILabelPresetCreatePostForbidden) aPILabelPresetCreatePostRes() {}
-
-type APILabelPresetCreatePostInternalServerError ErrorResponse
-
-func (*APILabelPresetCreatePostInternalServerError) aPILabelPresetCreatePostRes() {}
-
 // APILabelPresetCreatePostNoContent is response for APILabelPresetCreatePost operation.
 type APILabelPresetCreatePostNoContent struct{}
-
-func (*APILabelPresetCreatePostNoContent) aPILabelPresetCreatePostRes() {}
 
 type APILabelPresetCreatePostReq struct {
 	// Название метки (ее код).
@@ -5154,30 +4183,8 @@ func (s *APILabelPresetCreatePostReq) SetValues(val []string) {
 	s.Values = val
 }
 
-type APILabelPresetCreatePostUnauthorized ErrorResponse
-
-func (*APILabelPresetCreatePostUnauthorized) aPILabelPresetCreatePostRes() {}
-
-type APILabelPresetDeletePostBadRequest ErrorResponse
-
-func (*APILabelPresetDeletePostBadRequest) aPILabelPresetDeletePostRes() {}
-
-type APILabelPresetDeletePostForbidden ErrorResponse
-
-func (*APILabelPresetDeletePostForbidden) aPILabelPresetDeletePostRes() {}
-
-type APILabelPresetDeletePostInternalServerError ErrorResponse
-
-func (*APILabelPresetDeletePostInternalServerError) aPILabelPresetDeletePostRes() {}
-
 // APILabelPresetDeletePostNoContent is response for APILabelPresetDeletePost operation.
 type APILabelPresetDeletePostNoContent struct{}
-
-func (*APILabelPresetDeletePostNoContent) aPILabelPresetDeletePostRes() {}
-
-type APILabelPresetDeletePostNotFound ErrorResponse
-
-func (*APILabelPresetDeletePostNotFound) aPILabelPresetDeletePostRes() {}
 
 type APILabelPresetDeletePostReq struct {
 	// Название метки (ее код).
@@ -5193,22 +4200,6 @@ func (s *APILabelPresetDeletePostReq) GetName() string {
 func (s *APILabelPresetDeletePostReq) SetName(val string) {
 	s.Name = val
 }
-
-type APILabelPresetDeletePostUnauthorized ErrorResponse
-
-func (*APILabelPresetDeletePostUnauthorized) aPILabelPresetDeletePostRes() {}
-
-type APILabelPresetGetPostForbidden ErrorResponse
-
-func (*APILabelPresetGetPostForbidden) aPILabelPresetGetPostRes() {}
-
-type APILabelPresetGetPostInternalServerError ErrorResponse
-
-func (*APILabelPresetGetPostInternalServerError) aPILabelPresetGetPostRes() {}
-
-type APILabelPresetGetPostNotFound ErrorResponse
-
-func (*APILabelPresetGetPostNotFound) aPILabelPresetGetPostRes() {}
 
 type APILabelPresetGetPostOK struct {
 	// Название метки (ее код).
@@ -5273,8 +4264,6 @@ func (s *APILabelPresetGetPostOK) SetUpdatedAt(val OptDateTime) {
 	s.UpdatedAt = val
 }
 
-func (*APILabelPresetGetPostOK) aPILabelPresetGetPostRes() {}
-
 type APILabelPresetGetPostReq struct {
 	// Название метки (ее код).
 	Name string `json:"name"`
@@ -5290,18 +4279,6 @@ func (s *APILabelPresetGetPostReq) SetName(val string) {
 	s.Name = val
 }
 
-type APILabelPresetGetPostUnauthorized ErrorResponse
-
-func (*APILabelPresetGetPostUnauthorized) aPILabelPresetGetPostRes() {}
-
-type APILabelPresetListGetForbidden ErrorResponse
-
-func (*APILabelPresetListGetForbidden) aPILabelPresetListGetRes() {}
-
-type APILabelPresetListGetInternalServerError ErrorResponse
-
-func (*APILabelPresetListGetInternalServerError) aPILabelPresetListGetRes() {}
-
 type APILabelPresetListGetOK struct {
 	// Список пресетов.
 	Presets []APILabelPresetListGetOKPresetsItem `json:"presets"`
@@ -5316,8 +4293,6 @@ func (s *APILabelPresetListGetOK) GetPresets() []APILabelPresetListGetOKPresetsI
 func (s *APILabelPresetListGetOK) SetPresets(val []APILabelPresetListGetOKPresetsItem) {
 	s.Presets = val
 }
-
-func (*APILabelPresetListGetOK) aPILabelPresetListGetRes() {}
 
 type APILabelPresetListGetOKPresetsItem struct {
 	// Название метки (ее код).
@@ -5382,30 +4357,8 @@ func (s *APILabelPresetListGetOKPresetsItem) SetUpdatedAt(val OptDateTime) {
 	s.UpdatedAt = val
 }
 
-type APILabelPresetListGetUnauthorized ErrorResponse
-
-func (*APILabelPresetListGetUnauthorized) aPILabelPresetListGetRes() {}
-
-type APILabelPresetUpdatePostBadRequest ErrorResponse
-
-func (*APILabelPresetUpdatePostBadRequest) aPILabelPresetUpdatePostRes() {}
-
-type APILabelPresetUpdatePostForbidden ErrorResponse
-
-func (*APILabelPresetUpdatePostForbidden) aPILabelPresetUpdatePostRes() {}
-
-type APILabelPresetUpdatePostInternalServerError ErrorResponse
-
-func (*APILabelPresetUpdatePostInternalServerError) aPILabelPresetUpdatePostRes() {}
-
 // APILabelPresetUpdatePostNoContent is response for APILabelPresetUpdatePost operation.
 type APILabelPresetUpdatePostNoContent struct{}
-
-func (*APILabelPresetUpdatePostNoContent) aPILabelPresetUpdatePostRes() {}
-
-type APILabelPresetUpdatePostNotFound ErrorResponse
-
-func (*APILabelPresetUpdatePostNotFound) aPILabelPresetUpdatePostRes() {}
 
 type APILabelPresetUpdatePostReq struct {
 	// Название метки (ее код).
@@ -5446,26 +4399,8 @@ func (s *APILabelPresetUpdatePostReq) SetValues(val []string) {
 	s.Values = val
 }
 
-type APILabelPresetUpdatePostUnauthorized ErrorResponse
-
-func (*APILabelPresetUpdatePostUnauthorized) aPILabelPresetUpdatePostRes() {}
-
-type APILabelSetPostBadRequest ErrorResponse
-
-func (*APILabelSetPostBadRequest) aPILabelSetPostRes() {}
-
-type APILabelSetPostForbidden ErrorResponse
-
-func (*APILabelSetPostForbidden) aPILabelSetPostRes() {}
-
-type APILabelSetPostInternalServerError ErrorResponse
-
-func (*APILabelSetPostInternalServerError) aPILabelSetPostRes() {}
-
 // APILabelSetPostNoContent is response for APILabelSetPost operation.
 type APILabelSetPostNoContent struct{}
-
-func (*APILabelSetPostNoContent) aPILabelSetPostRes() {}
 
 type APILabelSetPostReq struct {
 	// ID книги.
@@ -5518,30 +4453,8 @@ func (s *APILabelSetPostReq) SetValue(val string) {
 	s.Value = val
 }
 
-type APILabelSetPostUnauthorized ErrorResponse
-
-func (*APILabelSetPostUnauthorized) aPILabelSetPostRes() {}
-
-type APIMassloadCalculatePostBadRequest ErrorResponse
-
-func (*APIMassloadCalculatePostBadRequest) aPIMassloadCalculatePostRes() {}
-
-type APIMassloadCalculatePostForbidden ErrorResponse
-
-func (*APIMassloadCalculatePostForbidden) aPIMassloadCalculatePostRes() {}
-
-type APIMassloadCalculatePostInternalServerError ErrorResponse
-
-func (*APIMassloadCalculatePostInternalServerError) aPIMassloadCalculatePostRes() {}
-
 // APIMassloadCalculatePostNoContent is response for APIMassloadCalculatePost operation.
 type APIMassloadCalculatePostNoContent struct{}
-
-func (*APIMassloadCalculatePostNoContent) aPIMassloadCalculatePostRes() {}
-
-type APIMassloadCalculatePostNotFound ErrorResponse
-
-func (*APIMassloadCalculatePostNotFound) aPIMassloadCalculatePostRes() {}
 
 type APIMassloadCalculatePostReq struct {
 	// ИД массовой загрузки.
@@ -5582,26 +4495,8 @@ func (s *APIMassloadCalculatePostReq) SetForce(val OptBool) {
 	s.Force = val
 }
 
-type APIMassloadCalculatePostUnauthorized ErrorResponse
-
-func (*APIMassloadCalculatePostUnauthorized) aPIMassloadCalculatePostRes() {}
-
-type APIMassloadFlagCreatePostBadRequest ErrorResponse
-
-func (*APIMassloadFlagCreatePostBadRequest) aPIMassloadFlagCreatePostRes() {}
-
-type APIMassloadFlagCreatePostForbidden ErrorResponse
-
-func (*APIMassloadFlagCreatePostForbidden) aPIMassloadFlagCreatePostRes() {}
-
-type APIMassloadFlagCreatePostInternalServerError ErrorResponse
-
-func (*APIMassloadFlagCreatePostInternalServerError) aPIMassloadFlagCreatePostRes() {}
-
 // APIMassloadFlagCreatePostNoContent is response for APIMassloadFlagCreatePost operation.
 type APIMassloadFlagCreatePostNoContent struct{}
-
-func (*APIMassloadFlagCreatePostNoContent) aPIMassloadFlagCreatePostRes() {}
 
 // Флаг для массовой загрузки.
 type APIMassloadFlagCreatePostReq struct {
@@ -5679,30 +4574,8 @@ func (s *APIMassloadFlagCreatePostReq) SetBackgroundColor(val OptString) {
 	s.BackgroundColor = val
 }
 
-type APIMassloadFlagCreatePostUnauthorized ErrorResponse
-
-func (*APIMassloadFlagCreatePostUnauthorized) aPIMassloadFlagCreatePostRes() {}
-
-type APIMassloadFlagDeletePostBadRequest ErrorResponse
-
-func (*APIMassloadFlagDeletePostBadRequest) aPIMassloadFlagDeletePostRes() {}
-
-type APIMassloadFlagDeletePostForbidden ErrorResponse
-
-func (*APIMassloadFlagDeletePostForbidden) aPIMassloadFlagDeletePostRes() {}
-
-type APIMassloadFlagDeletePostInternalServerError ErrorResponse
-
-func (*APIMassloadFlagDeletePostInternalServerError) aPIMassloadFlagDeletePostRes() {}
-
 // APIMassloadFlagDeletePostNoContent is response for APIMassloadFlagDeletePost operation.
 type APIMassloadFlagDeletePostNoContent struct{}
-
-func (*APIMassloadFlagDeletePostNoContent) aPIMassloadFlagDeletePostRes() {}
-
-type APIMassloadFlagDeletePostNotFound ErrorResponse
-
-func (*APIMassloadFlagDeletePostNotFound) aPIMassloadFlagDeletePostRes() {}
 
 type APIMassloadFlagDeletePostReq struct {
 	// Код флага.
@@ -5719,22 +4592,6 @@ func (s *APIMassloadFlagDeletePostReq) SetCode(val string) {
 	s.Code = val
 }
 
-type APIMassloadFlagDeletePostUnauthorized ErrorResponse
-
-func (*APIMassloadFlagDeletePostUnauthorized) aPIMassloadFlagDeletePostRes() {}
-
-type APIMassloadFlagGetPostForbidden ErrorResponse
-
-func (*APIMassloadFlagGetPostForbidden) aPIMassloadFlagGetPostRes() {}
-
-type APIMassloadFlagGetPostInternalServerError ErrorResponse
-
-func (*APIMassloadFlagGetPostInternalServerError) aPIMassloadFlagGetPostRes() {}
-
-type APIMassloadFlagGetPostNotFound ErrorResponse
-
-func (*APIMassloadFlagGetPostNotFound) aPIMassloadFlagGetPostRes() {}
-
 type APIMassloadFlagGetPostReq struct {
 	// Код флага.
 	Code string `json:"code"`
@@ -5749,18 +4606,6 @@ func (s *APIMassloadFlagGetPostReq) GetCode() string {
 func (s *APIMassloadFlagGetPostReq) SetCode(val string) {
 	s.Code = val
 }
-
-type APIMassloadFlagGetPostUnauthorized ErrorResponse
-
-func (*APIMassloadFlagGetPostUnauthorized) aPIMassloadFlagGetPostRes() {}
-
-type APIMassloadFlagListGetForbidden ErrorResponse
-
-func (*APIMassloadFlagListGetForbidden) aPIMassloadFlagListGetRes() {}
-
-type APIMassloadFlagListGetInternalServerError ErrorResponse
-
-func (*APIMassloadFlagListGetInternalServerError) aPIMassloadFlagListGetRes() {}
 
 type APIMassloadFlagListGetOK struct {
 	// Список флагов.
@@ -5777,32 +4622,8 @@ func (s *APIMassloadFlagListGetOK) SetFlags(val []MassloadFlag) {
 	s.Flags = val
 }
 
-func (*APIMassloadFlagListGetOK) aPIMassloadFlagListGetRes() {}
-
-type APIMassloadFlagListGetUnauthorized ErrorResponse
-
-func (*APIMassloadFlagListGetUnauthorized) aPIMassloadFlagListGetRes() {}
-
-type APIMassloadFlagUpdatePostBadRequest ErrorResponse
-
-func (*APIMassloadFlagUpdatePostBadRequest) aPIMassloadFlagUpdatePostRes() {}
-
-type APIMassloadFlagUpdatePostForbidden ErrorResponse
-
-func (*APIMassloadFlagUpdatePostForbidden) aPIMassloadFlagUpdatePostRes() {}
-
-type APIMassloadFlagUpdatePostInternalServerError ErrorResponse
-
-func (*APIMassloadFlagUpdatePostInternalServerError) aPIMassloadFlagUpdatePostRes() {}
-
 // APIMassloadFlagUpdatePostNoContent is response for APIMassloadFlagUpdatePost operation.
 type APIMassloadFlagUpdatePostNoContent struct{}
-
-func (*APIMassloadFlagUpdatePostNoContent) aPIMassloadFlagUpdatePostRes() {}
-
-type APIMassloadFlagUpdatePostNotFound ErrorResponse
-
-func (*APIMassloadFlagUpdatePostNotFound) aPIMassloadFlagUpdatePostRes() {}
 
 // Флаг для массовой загрузки.
 type APIMassloadFlagUpdatePostReq struct {
@@ -5880,31 +4701,8 @@ func (s *APIMassloadFlagUpdatePostReq) SetBackgroundColor(val OptString) {
 	s.BackgroundColor = val
 }
 
-type APIMassloadFlagUpdatePostUnauthorized ErrorResponse
-
-func (*APIMassloadFlagUpdatePostUnauthorized) aPIMassloadFlagUpdatePostRes() {}
-
-type APIMassloadInfoAttributeCreatePostBadRequest ErrorResponse
-
-func (*APIMassloadInfoAttributeCreatePostBadRequest) aPIMassloadInfoAttributeCreatePostRes() {}
-
-type APIMassloadInfoAttributeCreatePostForbidden ErrorResponse
-
-func (*APIMassloadInfoAttributeCreatePostForbidden) aPIMassloadInfoAttributeCreatePostRes() {}
-
-type APIMassloadInfoAttributeCreatePostInternalServerError ErrorResponse
-
-func (*APIMassloadInfoAttributeCreatePostInternalServerError) aPIMassloadInfoAttributeCreatePostRes() {
-}
-
 // APIMassloadInfoAttributeCreatePostNoContent is response for APIMassloadInfoAttributeCreatePost operation.
 type APIMassloadInfoAttributeCreatePostNoContent struct{}
-
-func (*APIMassloadInfoAttributeCreatePostNoContent) aPIMassloadInfoAttributeCreatePostRes() {}
-
-type APIMassloadInfoAttributeCreatePostNotFound ErrorResponse
-
-func (*APIMassloadInfoAttributeCreatePostNotFound) aPIMassloadInfoAttributeCreatePostRes() {}
 
 type APIMassloadInfoAttributeCreatePostReq struct {
 	// ИД массовой загрузки.
@@ -5945,31 +4743,8 @@ func (s *APIMassloadInfoAttributeCreatePostReq) SetValue(val string) {
 	s.Value = val
 }
 
-type APIMassloadInfoAttributeCreatePostUnauthorized ErrorResponse
-
-func (*APIMassloadInfoAttributeCreatePostUnauthorized) aPIMassloadInfoAttributeCreatePostRes() {}
-
-type APIMassloadInfoAttributeDeletePostBadRequest ErrorResponse
-
-func (*APIMassloadInfoAttributeDeletePostBadRequest) aPIMassloadInfoAttributeDeletePostRes() {}
-
-type APIMassloadInfoAttributeDeletePostForbidden ErrorResponse
-
-func (*APIMassloadInfoAttributeDeletePostForbidden) aPIMassloadInfoAttributeDeletePostRes() {}
-
-type APIMassloadInfoAttributeDeletePostInternalServerError ErrorResponse
-
-func (*APIMassloadInfoAttributeDeletePostInternalServerError) aPIMassloadInfoAttributeDeletePostRes() {
-}
-
 // APIMassloadInfoAttributeDeletePostNoContent is response for APIMassloadInfoAttributeDeletePost operation.
 type APIMassloadInfoAttributeDeletePostNoContent struct{}
-
-func (*APIMassloadInfoAttributeDeletePostNoContent) aPIMassloadInfoAttributeDeletePostRes() {}
-
-type APIMassloadInfoAttributeDeletePostNotFound ErrorResponse
-
-func (*APIMassloadInfoAttributeDeletePostNotFound) aPIMassloadInfoAttributeDeletePostRes() {}
 
 type APIMassloadInfoAttributeDeletePostReq struct {
 	// ИД массовой загрузки.
@@ -6010,22 +4785,6 @@ func (s *APIMassloadInfoAttributeDeletePostReq) SetValue(val string) {
 	s.Value = val
 }
 
-type APIMassloadInfoAttributeDeletePostUnauthorized ErrorResponse
-
-func (*APIMassloadInfoAttributeDeletePostUnauthorized) aPIMassloadInfoAttributeDeletePostRes() {}
-
-type APIMassloadInfoCreatePostBadRequest ErrorResponse
-
-func (*APIMassloadInfoCreatePostBadRequest) aPIMassloadInfoCreatePostRes() {}
-
-type APIMassloadInfoCreatePostForbidden ErrorResponse
-
-func (*APIMassloadInfoCreatePostForbidden) aPIMassloadInfoCreatePostRes() {}
-
-type APIMassloadInfoCreatePostInternalServerError ErrorResponse
-
-func (*APIMassloadInfoCreatePostInternalServerError) aPIMassloadInfoCreatePostRes() {}
-
 type APIMassloadInfoCreatePostOK struct {
 	// ИД загрузки.
 	ID int `json:"id"`
@@ -6040,8 +4799,6 @@ func (s *APIMassloadInfoCreatePostOK) GetID() int {
 func (s *APIMassloadInfoCreatePostOK) SetID(val int) {
 	s.ID = val
 }
-
-func (*APIMassloadInfoCreatePostOK) aPIMassloadInfoCreatePostRes() {}
 
 // Массовая загрузка.
 type APIMassloadInfoCreatePostReq struct {
@@ -6083,30 +4840,8 @@ func (s *APIMassloadInfoCreatePostReq) SetFlags(val []string) {
 	s.Flags = val
 }
 
-type APIMassloadInfoCreatePostUnauthorized ErrorResponse
-
-func (*APIMassloadInfoCreatePostUnauthorized) aPIMassloadInfoCreatePostRes() {}
-
-type APIMassloadInfoDeletePostBadRequest ErrorResponse
-
-func (*APIMassloadInfoDeletePostBadRequest) aPIMassloadInfoDeletePostRes() {}
-
-type APIMassloadInfoDeletePostForbidden ErrorResponse
-
-func (*APIMassloadInfoDeletePostForbidden) aPIMassloadInfoDeletePostRes() {}
-
-type APIMassloadInfoDeletePostInternalServerError ErrorResponse
-
-func (*APIMassloadInfoDeletePostInternalServerError) aPIMassloadInfoDeletePostRes() {}
-
 // APIMassloadInfoDeletePostNoContent is response for APIMassloadInfoDeletePost operation.
 type APIMassloadInfoDeletePostNoContent struct{}
-
-func (*APIMassloadInfoDeletePostNoContent) aPIMassloadInfoDeletePostRes() {}
-
-type APIMassloadInfoDeletePostNotFound ErrorResponse
-
-func (*APIMassloadInfoDeletePostNotFound) aPIMassloadInfoDeletePostRes() {}
 
 type APIMassloadInfoDeletePostReq struct {
 	// ИД массовой загрузки.
@@ -6123,31 +4858,8 @@ func (s *APIMassloadInfoDeletePostReq) SetID(val int) {
 	s.ID = val
 }
 
-type APIMassloadInfoDeletePostUnauthorized ErrorResponse
-
-func (*APIMassloadInfoDeletePostUnauthorized) aPIMassloadInfoDeletePostRes() {}
-
-type APIMassloadInfoExternalLinkCreatePostBadRequest ErrorResponse
-
-func (*APIMassloadInfoExternalLinkCreatePostBadRequest) aPIMassloadInfoExternalLinkCreatePostRes() {}
-
-type APIMassloadInfoExternalLinkCreatePostForbidden ErrorResponse
-
-func (*APIMassloadInfoExternalLinkCreatePostForbidden) aPIMassloadInfoExternalLinkCreatePostRes() {}
-
-type APIMassloadInfoExternalLinkCreatePostInternalServerError ErrorResponse
-
-func (*APIMassloadInfoExternalLinkCreatePostInternalServerError) aPIMassloadInfoExternalLinkCreatePostRes() {
-}
-
 // APIMassloadInfoExternalLinkCreatePostNoContent is response for APIMassloadInfoExternalLinkCreatePost operation.
 type APIMassloadInfoExternalLinkCreatePostNoContent struct{}
-
-func (*APIMassloadInfoExternalLinkCreatePostNoContent) aPIMassloadInfoExternalLinkCreatePostRes() {}
-
-type APIMassloadInfoExternalLinkCreatePostNotFound ErrorResponse
-
-func (*APIMassloadInfoExternalLinkCreatePostNotFound) aPIMassloadInfoExternalLinkCreatePostRes() {}
 
 type APIMassloadInfoExternalLinkCreatePostReq struct {
 	// ИД массовой загрузки.
@@ -6188,32 +4900,8 @@ func (s *APIMassloadInfoExternalLinkCreatePostReq) SetAutoCheck(val OptBool) {
 	s.AutoCheck = val
 }
 
-type APIMassloadInfoExternalLinkCreatePostUnauthorized ErrorResponse
-
-func (*APIMassloadInfoExternalLinkCreatePostUnauthorized) aPIMassloadInfoExternalLinkCreatePostRes() {
-}
-
-type APIMassloadInfoExternalLinkDeletePostBadRequest ErrorResponse
-
-func (*APIMassloadInfoExternalLinkDeletePostBadRequest) aPIMassloadInfoExternalLinkDeletePostRes() {}
-
-type APIMassloadInfoExternalLinkDeletePostForbidden ErrorResponse
-
-func (*APIMassloadInfoExternalLinkDeletePostForbidden) aPIMassloadInfoExternalLinkDeletePostRes() {}
-
-type APIMassloadInfoExternalLinkDeletePostInternalServerError ErrorResponse
-
-func (*APIMassloadInfoExternalLinkDeletePostInternalServerError) aPIMassloadInfoExternalLinkDeletePostRes() {
-}
-
 // APIMassloadInfoExternalLinkDeletePostNoContent is response for APIMassloadInfoExternalLinkDeletePost operation.
 type APIMassloadInfoExternalLinkDeletePostNoContent struct{}
-
-func (*APIMassloadInfoExternalLinkDeletePostNoContent) aPIMassloadInfoExternalLinkDeletePostRes() {}
-
-type APIMassloadInfoExternalLinkDeletePostNotFound ErrorResponse
-
-func (*APIMassloadInfoExternalLinkDeletePostNotFound) aPIMassloadInfoExternalLinkDeletePostRes() {}
 
 type APIMassloadInfoExternalLinkDeletePostReq struct {
 	// ИД массовой загрузки.
@@ -6242,32 +4930,8 @@ func (s *APIMassloadInfoExternalLinkDeletePostReq) SetURL(val url.URL) {
 	s.URL = val
 }
 
-type APIMassloadInfoExternalLinkDeletePostUnauthorized ErrorResponse
-
-func (*APIMassloadInfoExternalLinkDeletePostUnauthorized) aPIMassloadInfoExternalLinkDeletePostRes() {
-}
-
-type APIMassloadInfoExternalLinkUpdatePostBadRequest ErrorResponse
-
-func (*APIMassloadInfoExternalLinkUpdatePostBadRequest) aPIMassloadInfoExternalLinkUpdatePostRes() {}
-
-type APIMassloadInfoExternalLinkUpdatePostForbidden ErrorResponse
-
-func (*APIMassloadInfoExternalLinkUpdatePostForbidden) aPIMassloadInfoExternalLinkUpdatePostRes() {}
-
-type APIMassloadInfoExternalLinkUpdatePostInternalServerError ErrorResponse
-
-func (*APIMassloadInfoExternalLinkUpdatePostInternalServerError) aPIMassloadInfoExternalLinkUpdatePostRes() {
-}
-
 // APIMassloadInfoExternalLinkUpdatePostNoContent is response for APIMassloadInfoExternalLinkUpdatePost operation.
 type APIMassloadInfoExternalLinkUpdatePostNoContent struct{}
-
-func (*APIMassloadInfoExternalLinkUpdatePostNoContent) aPIMassloadInfoExternalLinkUpdatePostRes() {}
-
-type APIMassloadInfoExternalLinkUpdatePostNotFound ErrorResponse
-
-func (*APIMassloadInfoExternalLinkUpdatePostNotFound) aPIMassloadInfoExternalLinkUpdatePostRes() {}
 
 type APIMassloadInfoExternalLinkUpdatePostReq struct {
 	// ИД массовой загрузки.
@@ -6308,23 +4972,6 @@ func (s *APIMassloadInfoExternalLinkUpdatePostReq) SetAutoCheck(val OptBool) {
 	s.AutoCheck = val
 }
 
-type APIMassloadInfoExternalLinkUpdatePostUnauthorized ErrorResponse
-
-func (*APIMassloadInfoExternalLinkUpdatePostUnauthorized) aPIMassloadInfoExternalLinkUpdatePostRes() {
-}
-
-type APIMassloadInfoGetPostForbidden ErrorResponse
-
-func (*APIMassloadInfoGetPostForbidden) aPIMassloadInfoGetPostRes() {}
-
-type APIMassloadInfoGetPostInternalServerError ErrorResponse
-
-func (*APIMassloadInfoGetPostInternalServerError) aPIMassloadInfoGetPostRes() {}
-
-type APIMassloadInfoGetPostNotFound ErrorResponse
-
-func (*APIMassloadInfoGetPostNotFound) aPIMassloadInfoGetPostRes() {}
-
 type APIMassloadInfoGetPostReq struct {
 	// ИД массовой загрузки.
 	ID int `json:"id"`
@@ -6340,18 +4987,6 @@ func (s *APIMassloadInfoGetPostReq) SetID(val int) {
 	s.ID = val
 }
 
-type APIMassloadInfoGetPostUnauthorized ErrorResponse
-
-func (*APIMassloadInfoGetPostUnauthorized) aPIMassloadInfoGetPostRes() {}
-
-type APIMassloadInfoListPostForbidden ErrorResponse
-
-func (*APIMassloadInfoListPostForbidden) aPIMassloadInfoListPostRes() {}
-
-type APIMassloadInfoListPostInternalServerError ErrorResponse
-
-func (*APIMassloadInfoListPostInternalServerError) aPIMassloadInfoListPostRes() {}
-
 type APIMassloadInfoListPostOK struct {
 	// Список загрузок.
 	Massloads []MassloadInfo `json:"massloads"`
@@ -6366,8 +5001,6 @@ func (s *APIMassloadInfoListPostOK) GetMassloads() []MassloadInfo {
 func (s *APIMassloadInfoListPostOK) SetMassloads(val []MassloadInfo) {
 	s.Massloads = val
 }
-
-func (*APIMassloadInfoListPostOK) aPIMassloadInfoListPostRes() {}
 
 type APIMassloadInfoListPostReq struct {
 	// Фильтры массовой загрузки.
@@ -6668,30 +5301,8 @@ func (s *APIMassloadInfoListPostReqSortField) UnmarshalText(data []byte) error {
 	}
 }
 
-type APIMassloadInfoListPostUnauthorized ErrorResponse
-
-func (*APIMassloadInfoListPostUnauthorized) aPIMassloadInfoListPostRes() {}
-
-type APIMassloadInfoUpdatePostBadRequest ErrorResponse
-
-func (*APIMassloadInfoUpdatePostBadRequest) aPIMassloadInfoUpdatePostRes() {}
-
-type APIMassloadInfoUpdatePostForbidden ErrorResponse
-
-func (*APIMassloadInfoUpdatePostForbidden) aPIMassloadInfoUpdatePostRes() {}
-
-type APIMassloadInfoUpdatePostInternalServerError ErrorResponse
-
-func (*APIMassloadInfoUpdatePostInternalServerError) aPIMassloadInfoUpdatePostRes() {}
-
 // APIMassloadInfoUpdatePostNoContent is response for APIMassloadInfoUpdatePost operation.
 type APIMassloadInfoUpdatePostNoContent struct{}
-
-func (*APIMassloadInfoUpdatePostNoContent) aPIMassloadInfoUpdatePostRes() {}
-
-type APIMassloadInfoUpdatePostNotFound ErrorResponse
-
-func (*APIMassloadInfoUpdatePostNotFound) aPIMassloadInfoUpdatePostRes() {}
 
 // Массовая загрузка.
 type APIMassloadInfoUpdatePostReq struct {
@@ -6744,22 +5355,6 @@ func (s *APIMassloadInfoUpdatePostReq) SetDescription(val OptString) {
 func (s *APIMassloadInfoUpdatePostReq) SetFlags(val []string) {
 	s.Flags = val
 }
-
-type APIMassloadInfoUpdatePostUnauthorized ErrorResponse
-
-func (*APIMassloadInfoUpdatePostUnauthorized) aPIMassloadInfoUpdatePostRes() {}
-
-type APIParsingHandlePostBadRequest ErrorResponse
-
-func (*APIParsingHandlePostBadRequest) aPIParsingHandlePostRes() {}
-
-type APIParsingHandlePostForbidden ErrorResponse
-
-func (*APIParsingHandlePostForbidden) aPIParsingHandlePostRes() {}
-
-type APIParsingHandlePostInternalServerError ErrorResponse
-
-func (*APIParsingHandlePostInternalServerError) aPIParsingHandlePostRes() {}
 
 type APIParsingHandlePostOK struct {
 	// Общее количество обработанных.
@@ -6835,8 +5430,6 @@ func (s *APIParsingHandlePostOK) SetNotHandled(val []url.URL) {
 func (s *APIParsingHandlePostOK) SetDetails(val []APIParsingHandlePostOKDetailsItem) {
 	s.Details = val
 }
-
-func (*APIParsingHandlePostOK) aPIParsingHandlePostRes() {}
 
 type APIParsingHandlePostOKDetailsItem struct {
 	// Изначальная ссылка.
@@ -6964,26 +5557,8 @@ func (s *APIParsingHandlePostReq) SetReadOnlyMode(val OptBool) {
 	s.ReadOnlyMode = val
 }
 
-type APIParsingHandlePostUnauthorized ErrorResponse
-
-func (*APIParsingHandlePostUnauthorized) aPIParsingHandlePostRes() {}
-
-type APIParsingMirrorCreatePostBadRequest ErrorResponse
-
-func (*APIParsingMirrorCreatePostBadRequest) aPIParsingMirrorCreatePostRes() {}
-
-type APIParsingMirrorCreatePostForbidden ErrorResponse
-
-func (*APIParsingMirrorCreatePostForbidden) aPIParsingMirrorCreatePostRes() {}
-
-type APIParsingMirrorCreatePostInternalServerError ErrorResponse
-
-func (*APIParsingMirrorCreatePostInternalServerError) aPIParsingMirrorCreatePostRes() {}
-
 // APIParsingMirrorCreatePostNoContent is response for APIParsingMirrorCreatePost operation.
 type APIParsingMirrorCreatePostNoContent struct{}
-
-func (*APIParsingMirrorCreatePostNoContent) aPIParsingMirrorCreatePostRes() {}
 
 type APIParsingMirrorCreatePostReq struct {
 	// Название зеркала.
@@ -7024,30 +5599,8 @@ func (s *APIParsingMirrorCreatePostReq) SetPrefixes(val []string) {
 	s.Prefixes = val
 }
 
-type APIParsingMirrorCreatePostUnauthorized ErrorResponse
-
-func (*APIParsingMirrorCreatePostUnauthorized) aPIParsingMirrorCreatePostRes() {}
-
-type APIParsingMirrorDeletePostBadRequest ErrorResponse
-
-func (*APIParsingMirrorDeletePostBadRequest) aPIParsingMirrorDeletePostRes() {}
-
-type APIParsingMirrorDeletePostForbidden ErrorResponse
-
-func (*APIParsingMirrorDeletePostForbidden) aPIParsingMirrorDeletePostRes() {}
-
-type APIParsingMirrorDeletePostInternalServerError ErrorResponse
-
-func (*APIParsingMirrorDeletePostInternalServerError) aPIParsingMirrorDeletePostRes() {}
-
 // APIParsingMirrorDeletePostNoContent is response for APIParsingMirrorDeletePost operation.
 type APIParsingMirrorDeletePostNoContent struct{}
-
-func (*APIParsingMirrorDeletePostNoContent) aPIParsingMirrorDeletePostRes() {}
-
-type APIParsingMirrorDeletePostNotFound ErrorResponse
-
-func (*APIParsingMirrorDeletePostNotFound) aPIParsingMirrorDeletePostRes() {}
 
 type APIParsingMirrorDeletePostReq struct {
 	// ID зеркала.
@@ -7063,22 +5616,6 @@ func (s *APIParsingMirrorDeletePostReq) GetID() uuid.UUID {
 func (s *APIParsingMirrorDeletePostReq) SetID(val uuid.UUID) {
 	s.ID = val
 }
-
-type APIParsingMirrorDeletePostUnauthorized ErrorResponse
-
-func (*APIParsingMirrorDeletePostUnauthorized) aPIParsingMirrorDeletePostRes() {}
-
-type APIParsingMirrorGetPostForbidden ErrorResponse
-
-func (*APIParsingMirrorGetPostForbidden) aPIParsingMirrorGetPostRes() {}
-
-type APIParsingMirrorGetPostInternalServerError ErrorResponse
-
-func (*APIParsingMirrorGetPostInternalServerError) aPIParsingMirrorGetPostRes() {}
-
-type APIParsingMirrorGetPostNotFound ErrorResponse
-
-func (*APIParsingMirrorGetPostNotFound) aPIParsingMirrorGetPostRes() {}
 
 type APIParsingMirrorGetPostOK struct {
 	// ID зеркала.
@@ -7131,8 +5668,6 @@ func (s *APIParsingMirrorGetPostOK) SetPrefixes(val []string) {
 	s.Prefixes = val
 }
 
-func (*APIParsingMirrorGetPostOK) aPIParsingMirrorGetPostRes() {}
-
 type APIParsingMirrorGetPostReq struct {
 	// ID зеркала.
 	ID uuid.UUID `json:"id"`
@@ -7148,18 +5683,6 @@ func (s *APIParsingMirrorGetPostReq) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
-type APIParsingMirrorGetPostUnauthorized ErrorResponse
-
-func (*APIParsingMirrorGetPostUnauthorized) aPIParsingMirrorGetPostRes() {}
-
-type APIParsingMirrorListGetForbidden ErrorResponse
-
-func (*APIParsingMirrorListGetForbidden) aPIParsingMirrorListGetRes() {}
-
-type APIParsingMirrorListGetInternalServerError ErrorResponse
-
-func (*APIParsingMirrorListGetInternalServerError) aPIParsingMirrorListGetRes() {}
-
 type APIParsingMirrorListGetOK struct {
 	// Список зеркал.
 	Mirrors []APIParsingMirrorListGetOKMirrorsItem `json:"mirrors"`
@@ -7174,8 +5697,6 @@ func (s *APIParsingMirrorListGetOK) GetMirrors() []APIParsingMirrorListGetOKMirr
 func (s *APIParsingMirrorListGetOK) SetMirrors(val []APIParsingMirrorListGetOKMirrorsItem) {
 	s.Mirrors = val
 }
-
-func (*APIParsingMirrorListGetOK) aPIParsingMirrorListGetRes() {}
 
 type APIParsingMirrorListGetOKMirrorsItem struct {
 	// ID зеркала.
@@ -7228,30 +5749,8 @@ func (s *APIParsingMirrorListGetOKMirrorsItem) SetPrefixes(val []string) {
 	s.Prefixes = val
 }
 
-type APIParsingMirrorListGetUnauthorized ErrorResponse
-
-func (*APIParsingMirrorListGetUnauthorized) aPIParsingMirrorListGetRes() {}
-
-type APIParsingMirrorUpdatePostBadRequest ErrorResponse
-
-func (*APIParsingMirrorUpdatePostBadRequest) aPIParsingMirrorUpdatePostRes() {}
-
-type APIParsingMirrorUpdatePostForbidden ErrorResponse
-
-func (*APIParsingMirrorUpdatePostForbidden) aPIParsingMirrorUpdatePostRes() {}
-
-type APIParsingMirrorUpdatePostInternalServerError ErrorResponse
-
-func (*APIParsingMirrorUpdatePostInternalServerError) aPIParsingMirrorUpdatePostRes() {}
-
 // APIParsingMirrorUpdatePostNoContent is response for APIParsingMirrorUpdatePost operation.
 type APIParsingMirrorUpdatePostNoContent struct{}
-
-func (*APIParsingMirrorUpdatePostNoContent) aPIParsingMirrorUpdatePostRes() {}
-
-type APIParsingMirrorUpdatePostNotFound ErrorResponse
-
-func (*APIParsingMirrorUpdatePostNotFound) aPIParsingMirrorUpdatePostRes() {}
 
 type APIParsingMirrorUpdatePostReq struct {
 	// ID зеркала.
@@ -7304,22 +5803,6 @@ func (s *APIParsingMirrorUpdatePostReq) SetPrefixes(val []string) {
 	s.Prefixes = val
 }
 
-type APIParsingMirrorUpdatePostUnauthorized ErrorResponse
-
-func (*APIParsingMirrorUpdatePostUnauthorized) aPIParsingMirrorUpdatePostRes() {}
-
-type APISystemImportArchivePostBadRequest ErrorResponse
-
-func (*APISystemImportArchivePostBadRequest) aPISystemImportArchivePostRes() {}
-
-type APISystemImportArchivePostForbidden ErrorResponse
-
-func (*APISystemImportArchivePostForbidden) aPISystemImportArchivePostRes() {}
-
-type APISystemImportArchivePostInternalServerError ErrorResponse
-
-func (*APISystemImportArchivePostInternalServerError) aPISystemImportArchivePostRes() {}
-
 type APISystemImportArchivePostOK struct {
 	// ID новой книги.
 	ID uuid.UUID `json:"id"`
@@ -7335,8 +5818,6 @@ func (s *APISystemImportArchivePostOK) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
-func (*APISystemImportArchivePostOK) aPISystemImportArchivePostRes() {}
-
 type APISystemImportArchivePostReq struct {
 	Data io.Reader
 }
@@ -7350,18 +5831,6 @@ func (s APISystemImportArchivePostReq) Read(p []byte) (n int, err error) {
 	}
 	return s.Data.Read(p)
 }
-
-type APISystemImportArchivePostUnauthorized ErrorResponse
-
-func (*APISystemImportArchivePostUnauthorized) aPISystemImportArchivePostRes() {}
-
-type APISystemInfoSizeGetForbidden ErrorResponse
-
-func (*APISystemInfoSizeGetForbidden) aPISystemInfoSizeGetRes() {}
-
-type APISystemInfoSizeGetInternalServerError ErrorResponse
-
-func (*APISystemInfoSizeGetInternalServerError) aPISystemInfoSizeGetRes() {}
 
 // Информация о системе.
 type APISystemInfoSizeGetOK struct {
@@ -7602,20 +6071,6 @@ func (s *APISystemInfoSizeGetOK) SetFilesSizeFormatted(val string) {
 	s.FilesSizeFormatted = val
 }
 
-func (*APISystemInfoSizeGetOK) aPISystemInfoSizeGetRes() {}
-
-type APISystemInfoSizeGetUnauthorized ErrorResponse
-
-func (*APISystemInfoSizeGetUnauthorized) aPISystemInfoSizeGetRes() {}
-
-type APISystemInfoWorkersGetForbidden ErrorResponse
-
-func (*APISystemInfoWorkersGetForbidden) aPISystemInfoWorkersGetRes() {}
-
-type APISystemInfoWorkersGetInternalServerError ErrorResponse
-
-func (*APISystemInfoWorkersGetInternalServerError) aPISystemInfoWorkersGetRes() {}
-
 // Информация о системе.
 type APISystemInfoWorkersGetOK struct {
 	// Данные об обработчиках.
@@ -7631,8 +6086,6 @@ func (s *APISystemInfoWorkersGetOK) GetWorkers() []APISystemInfoWorkersGetOKWork
 func (s *APISystemInfoWorkersGetOK) SetWorkers(val []APISystemInfoWorkersGetOKWorkersItem) {
 	s.Workers = val
 }
-
-func (*APISystemInfoWorkersGetOK) aPISystemInfoWorkersGetRes() {}
 
 type APISystemInfoWorkersGetOKWorkersItem struct {
 	// Название обработчика.
@@ -7685,26 +6138,8 @@ func (s *APISystemInfoWorkersGetOKWorkersItem) SetRunners(val int) {
 	s.Runners = val
 }
 
-type APISystemInfoWorkersGetUnauthorized ErrorResponse
-
-func (*APISystemInfoWorkersGetUnauthorized) aPISystemInfoWorkersGetRes() {}
-
-type APISystemTaskCreatePostBadRequest ErrorResponse
-
-func (*APISystemTaskCreatePostBadRequest) aPISystemTaskCreatePostRes() {}
-
-type APISystemTaskCreatePostForbidden ErrorResponse
-
-func (*APISystemTaskCreatePostForbidden) aPISystemTaskCreatePostRes() {}
-
-type APISystemTaskCreatePostInternalServerError ErrorResponse
-
-func (*APISystemTaskCreatePostInternalServerError) aPISystemTaskCreatePostRes() {}
-
 // APISystemTaskCreatePostNoContent is response for APISystemTaskCreatePost operation.
 type APISystemTaskCreatePostNoContent struct{}
-
-func (*APISystemTaskCreatePostNoContent) aPISystemTaskCreatePostRes() {}
 
 type APISystemTaskCreatePostReq struct {
 	// Код задачи.
@@ -7720,18 +6155,6 @@ func (s *APISystemTaskCreatePostReq) GetCode() string {
 func (s *APISystemTaskCreatePostReq) SetCode(val string) {
 	s.Code = val
 }
-
-type APISystemTaskCreatePostUnauthorized ErrorResponse
-
-func (*APISystemTaskCreatePostUnauthorized) aPISystemTaskCreatePostRes() {}
-
-type APISystemTaskResultsGetForbidden ErrorResponse
-
-func (*APISystemTaskResultsGetForbidden) aPISystemTaskResultsGetRes() {}
-
-type APISystemTaskResultsGetInternalServerError ErrorResponse
-
-func (*APISystemTaskResultsGetInternalServerError) aPISystemTaskResultsGetRes() {}
 
 type APISystemTaskResultsGetOK struct {
 	// Данные о доступных тасках.
@@ -7759,8 +6182,6 @@ func (s *APISystemTaskResultsGetOK) SetTasks(val []APISystemTaskResultsGetOKTask
 func (s *APISystemTaskResultsGetOK) SetResults(val []APISystemTaskResultsGetOKResultsItem) {
 	s.Results = val
 }
-
-func (*APISystemTaskResultsGetOK) aPISystemTaskResultsGetRes() {}
 
 type APISystemTaskResultsGetOKResultsItem struct {
 	// Название задачи.
@@ -7987,26 +6408,8 @@ func (s *APISystemTaskResultsGetOKTasksItem) SetDescription(val OptString) {
 	s.Description = val
 }
 
-type APISystemTaskResultsGetUnauthorized ErrorResponse
-
-func (*APISystemTaskResultsGetUnauthorized) aPISystemTaskResultsGetRes() {}
-
-type APISystemWorkerConfigPostBadRequest ErrorResponse
-
-func (*APISystemWorkerConfigPostBadRequest) aPISystemWorkerConfigPostRes() {}
-
-type APISystemWorkerConfigPostForbidden ErrorResponse
-
-func (*APISystemWorkerConfigPostForbidden) aPISystemWorkerConfigPostRes() {}
-
-type APISystemWorkerConfigPostInternalServerError ErrorResponse
-
-func (*APISystemWorkerConfigPostInternalServerError) aPISystemWorkerConfigPostRes() {}
-
 // APISystemWorkerConfigPostNoContent is response for APISystemWorkerConfigPost operation.
 type APISystemWorkerConfigPostNoContent struct{}
-
-func (*APISystemWorkerConfigPostNoContent) aPISystemWorkerConfigPostRes() {}
 
 type APISystemWorkerConfigPostReq struct {
 	// Количество раннеров.
@@ -8050,18 +6453,6 @@ func (s *APISystemWorkerConfigPostReqRunnersCountItem) SetCount(val int) {
 	s.Count = val
 }
 
-type APISystemWorkerConfigPostUnauthorized ErrorResponse
-
-func (*APISystemWorkerConfigPostUnauthorized) aPISystemWorkerConfigPostRes() {}
-
-type APIUserLoginPostBadRequest ErrorResponse
-
-func (*APIUserLoginPostBadRequest) aPIUserLoginPostRes() {}
-
-type APIUserLoginPostInternalServerError ErrorResponse
-
-func (*APIUserLoginPostInternalServerError) aPIUserLoginPostRes() {}
-
 // APIUserLoginPostNoContent is response for APIUserLoginPost operation.
 type APIUserLoginPostNoContent struct {
 	SetCookie OptString
@@ -8076,8 +6467,6 @@ func (s *APIUserLoginPostNoContent) GetSetCookie() OptString {
 func (s *APIUserLoginPostNoContent) SetSetCookie(val OptString) {
 	s.SetCookie = val
 }
-
-func (*APIUserLoginPostNoContent) aPIUserLoginPostRes() {}
 
 type APIUserLoginPostReq struct {
 	// Токен пользователя.
@@ -8231,8 +6620,6 @@ func (s *Agent) SetCreatedAt(val time.Time) {
 	s.CreatedAt = val
 }
 
-func (*Agent) aPIAgentGetPostRes() {}
-
 // Цвет аттрибута.
 // Ref: #/components/schemas/AttributeColor
 type AttributeColor struct {
@@ -8297,8 +6684,6 @@ func (s *AttributeColor) SetBackgroundColor(val string) {
 func (s *AttributeColor) SetCreatedAt(val time.Time) {
 	s.CreatedAt = val
 }
-
-func (*AttributeColor) aPIAttributeColorGetPostRes() {}
 
 // Ремапинг аттрибута.
 // Ref: #/components/schemas/AttributeRemap
@@ -8388,8 +6773,6 @@ func (s *AttributeRemap) SetCreatedAt(val time.Time) {
 func (s *AttributeRemap) SetUpdatedAt(val OptDateTime) {
 	s.UpdatedAt = val
 }
-
-func (*AttributeRemap) aPIAttributeRemapGetPostRes() {}
 
 // Аттрибут книги.
 // Ref: #/components/schemas/BookAttribute
@@ -9321,8 +7704,6 @@ func (s *BookRaw) SetLabels(val []BookRawLabelsItem) {
 	s.Labels = val
 }
 
-func (*BookRaw) aPIBookRawPostRes() {}
-
 type BookRawAttributesItem struct {
 	// Код атрибута.
 	Code string `json:"code"`
@@ -9730,6 +8111,32 @@ func (s *ErrorResponse) SetDetails(val OptString) {
 	s.Details = val
 }
 
+// ErrorResponseStatusCode wraps ErrorResponse with StatusCode.
+type ErrorResponseStatusCode struct {
+	StatusCode int
+	Response   ErrorResponse
+}
+
+// GetStatusCode returns the value of StatusCode.
+func (s *ErrorResponseStatusCode) GetStatusCode() int {
+	return s.StatusCode
+}
+
+// GetResponse returns the value of Response.
+func (s *ErrorResponseStatusCode) GetResponse() ErrorResponse {
+	return s.Response
+}
+
+// SetStatusCode sets the value of StatusCode.
+func (s *ErrorResponseStatusCode) SetStatusCode(val int) {
+	s.StatusCode = val
+}
+
+// SetResponse sets the value of Response.
+func (s *ErrorResponseStatusCode) SetResponse(val ErrorResponse) {
+	s.Response = val
+}
+
 // Информация о размерах файлов и их количестве.
 // Ref: #/components/schemas/FSDBFilesInfo
 type FSDBFilesInfo struct {
@@ -9899,8 +8306,6 @@ func (s *FileSystemInfo) SetCreatedAt(val time.Time) {
 	s.CreatedAt = val
 }
 
-func (*FileSystemInfo) aPIFsGetPostRes() {}
-
 type HeaderAuth struct {
 	APIKey string
 	Roles  []string
@@ -10014,8 +8419,6 @@ func (s *MassloadFlag) SetBackgroundColor(val OptString) {
 func (s *MassloadFlag) SetCreatedAt(val time.Time) {
 	s.CreatedAt = val
 }
-
-func (*MassloadFlag) aPIMassloadFlagGetPostRes() {}
 
 // Данные массовой загрузки.
 // Ref: #/components/schemas/MassloadInfo
@@ -10243,8 +8646,6 @@ func (s *MassloadInfo) SetExternalLinks(val []MassloadInfoExternalLinksItem) {
 func (s *MassloadInfo) SetAttributes(val []MassloadInfoAttributesItem) {
 	s.Attributes = val
 }
-
-func (*MassloadInfo) aPIMassloadInfoGetPostRes() {}
 
 type MassloadInfoAttributesItem struct {
 	// Код атрибута.

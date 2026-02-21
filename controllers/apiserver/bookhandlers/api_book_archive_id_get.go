@@ -3,6 +3,7 @@ package bookhandlers
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -12,20 +13,22 @@ import (
 func (c *BookHandlersController) APIBookArchiveIDGet(
 	ctx context.Context,
 	params serverapi.APIBookArchiveIDGetParams,
-) (serverapi.APIBookArchiveIDGetRes, error) {
+) (*serverapi.APIBookArchiveIDGetOKHeaders, error) {
 	body, book, err := c.exportUseCases.ExportBook(ctx, params.ID)
 	if errors.Is(err, core.ErrBookNotFound) {
-		return &serverapi.APIBookArchiveIDGetNotFound{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusNotFound,
 			InnerCode: apiservercore.ExportUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	if err != nil {
-		return &serverapi.APIBookArchiveIDGetInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.ExportUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIBookArchiveIDGetOKHeaders{

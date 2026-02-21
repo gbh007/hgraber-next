@@ -2,6 +2,7 @@ package attributehandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -11,13 +12,14 @@ import (
 
 func (c *AttributeHandlersController) APIAttributeOriginCountGet(
 	ctx context.Context,
-) (serverapi.APIAttributeOriginCountGetRes, error) {
+) (*serverapi.APIAttributeOriginCountGetOK, error) {
 	attributes, err := c.attributeUseCases.BookOriginAttributesCount(ctx)
 	if err != nil {
-		return &serverapi.APIAttributeOriginCountGetInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.AttributeUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIAttributeOriginCountGetOK{

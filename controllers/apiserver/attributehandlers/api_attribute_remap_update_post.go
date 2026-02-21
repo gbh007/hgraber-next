@@ -2,6 +2,7 @@ package attributehandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -11,12 +12,13 @@ import (
 func (c *AttributeHandlersController) APIAttributeRemapUpdatePost(
 	ctx context.Context,
 	req *serverapi.APIAttributeRemapUpdatePostReq,
-) (serverapi.APIAttributeRemapUpdatePostRes, error) {
+) error {
 	if !(req.IsDelete.Value || (req.ToCode.IsSet() && req.ToValue.IsSet())) { //nolint:staticcheck,lll // будет исправлено позднее
-		return &serverapi.APIAttributeRemapUpdatePostBadRequest{
+		return apiservercore.APIError{
+			Code:      http.StatusBadRequest,
 			InnerCode: apiservercore.AttributeUseCaseCode,
-			Details:   serverapi.NewOptString("invalid remap"),
-		}, nil
+			Details:   "invalid remap",
+		}
 	}
 
 	ar := core.AttributeRemap{
@@ -33,11 +35,12 @@ func (c *AttributeHandlersController) APIAttributeRemapUpdatePost(
 
 	err := c.attributeUseCases.UpdateAttributeRemap(ctx, ar)
 	if err != nil {
-		return &serverapi.APIAttributeRemapUpdatePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.AttributeUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIAttributeRemapUpdatePostNoContent{}, nil
+	return nil
 }

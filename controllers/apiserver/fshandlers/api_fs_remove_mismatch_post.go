@@ -2,6 +2,7 @@ package fshandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,14 +11,15 @@ import (
 func (c *FSHandlersController) APIFsRemoveMismatchPost(
 	ctx context.Context,
 	req *serverapi.APIFsRemoveMismatchPostReq,
-) (serverapi.APIFsRemoveMismatchPostRes, error) {
+) error {
 	err := c.systemUseCases.RemoveFilesInFSMismatch(ctx, req.ID)
 	if err != nil {
-		return &serverapi.APIFsRemoveMismatchPostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.TaskerUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIFsRemoveMismatchPostNoContent{}, nil
+	return nil
 }

@@ -9,7 +9,7 @@ import (
 func (c *SystemHandlersController) APISystemWorkerConfigPost(
 	ctx context.Context,
 	req *serverapi.APISystemWorkerConfigPostReq,
-) (serverapi.APISystemWorkerConfigPostRes, error) {
+) error {
 	counts := make(map[string]int, len(req.RunnersCount))
 
 	for _, runnerCount := range req.RunnersCount {
@@ -18,5 +18,5 @@ func (c *SystemHandlersController) APISystemWorkerConfigPost(
 
 	c.systemUseCases.SetWorkerConfig(ctx, counts)
 
-	return &serverapi.APISystemWorkerConfigPostNoContent{}, nil
+	return nil
 }

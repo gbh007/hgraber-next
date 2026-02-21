@@ -2,6 +2,7 @@ package labelhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -11,7 +12,7 @@ import (
 func (c *LabelHandlersController) APILabelSetPost(
 	ctx context.Context,
 	req *serverapi.APILabelSetPostReq,
-) (serverapi.APILabelSetPostRes, error) {
+) error {
 	err := c.labelUseCases.SetLabel(ctx, core.BookLabel{
 		BookID:     req.BookID,
 		PageNumber: req.PageNumber.Value,
@@ -19,11 +20,12 @@ func (c *LabelHandlersController) APILabelSetPost(
 		Value:      req.Value,
 	})
 	if err != nil {
-		return &serverapi.APILabelSetPostInternalServerError{
-			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
+			InnerCode: apiservercore.LabelUseCaseCode,
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APILabelSetPostNoContent{}, nil
+	return nil
 }

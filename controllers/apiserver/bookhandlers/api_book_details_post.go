@@ -3,6 +3,7 @@ package bookhandlers
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
@@ -14,20 +15,22 @@ import (
 func (c *BookHandlersController) APIBookDetailsPost(
 	ctx context.Context,
 	req *serverapi.APIBookDetailsPostReq,
-) (serverapi.APIBookDetailsPostRes, error) {
+) (*serverapi.APIBookDetailsPostOK, error) {
 	book, err := c.bffUseCases.BookDetails(ctx, req.ID)
 	if errors.Is(err, core.ErrBookNotFound) {
-		return &serverapi.APIBookDetailsPostNotFound{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusNotFound,
 			InnerCode: apiservercore.BFFUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	if err != nil {
-		return &serverapi.APIBookDetailsPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.BFFUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIBookDetailsPostOK{

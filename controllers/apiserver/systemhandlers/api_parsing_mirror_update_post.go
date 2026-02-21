@@ -2,6 +2,7 @@ package systemhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/parsing"
@@ -11,7 +12,7 @@ import (
 func (c *SystemHandlersController) APIParsingMirrorUpdatePost(
 	ctx context.Context,
 	req *serverapi.APIParsingMirrorUpdatePostReq,
-) (serverapi.APIParsingMirrorUpdatePostRes, error) {
+) error {
 	err := c.parseUseCases.UpdateMirror(ctx, parsing.URLMirror{
 		ID:          req.ID,
 		Name:        req.Name,
@@ -19,11 +20,12 @@ func (c *SystemHandlersController) APIParsingMirrorUpdatePost(
 		Description: req.Description.Value,
 	})
 	if err != nil {
-		return &serverapi.APIParsingMirrorUpdatePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.ParseUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIParsingMirrorUpdatePostNoContent{}, nil
+	return nil
 }

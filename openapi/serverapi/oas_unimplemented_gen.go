@@ -18,8 +18,8 @@ var _ Handler = UnimplementedHandler{}
 // Удаление агента.
 //
 // POST /api/agent/delete
-func (UnimplementedHandler) APIAgentDeletePost(ctx context.Context, req *APIAgentDeletePostReq) (r APIAgentDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIAgentDeletePost(ctx context.Context, req *APIAgentDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIAgentGetPost implements POST /api/agent/get operation.
@@ -27,7 +27,7 @@ func (UnimplementedHandler) APIAgentDeletePost(ctx context.Context, req *APIAgen
 // Получение данных агента.
 //
 // POST /api/agent/get
-func (UnimplementedHandler) APIAgentGetPost(ctx context.Context, req *APIAgentGetPostReq) (r APIAgentGetPostRes, _ error) {
+func (UnimplementedHandler) APIAgentGetPost(ctx context.Context, req *APIAgentGetPostReq) (r *Agent, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -36,7 +36,7 @@ func (UnimplementedHandler) APIAgentGetPost(ctx context.Context, req *APIAgentGe
 // Список агентов.
 //
 // POST /api/agent/list
-func (UnimplementedHandler) APIAgentListPost(ctx context.Context, req *APIAgentListPostReq) (r APIAgentListPostRes, _ error) {
+func (UnimplementedHandler) APIAgentListPost(ctx context.Context, req *APIAgentListPostReq) (r []APIAgentListPostOKItem, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -45,8 +45,8 @@ func (UnimplementedHandler) APIAgentListPost(ctx context.Context, req *APIAgentL
 // Создание нового агента.
 //
 // POST /api/agent/new
-func (UnimplementedHandler) APIAgentNewPost(ctx context.Context, req *APIAgentNewPostReq) (r APIAgentNewPostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIAgentNewPost(ctx context.Context, req *APIAgentNewPostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIAgentTaskExportPost implements POST /api/agent/task/export operation.
@@ -54,8 +54,8 @@ func (UnimplementedHandler) APIAgentNewPost(ctx context.Context, req *APIAgentNe
 // Экспорт книг в другую систему.
 //
 // POST /api/agent/task/export
-func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) (r APIAgentTaskExportPostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIAgentUpdatePost implements POST /api/agent/update operation.
@@ -63,8 +63,8 @@ func (UnimplementedHandler) APIAgentTaskExportPost(ctx context.Context, req *API
 // Обновление данных агента.
 //
 // POST /api/agent/update
-func (UnimplementedHandler) APIAgentUpdatePost(ctx context.Context, req *APIAgentUpdatePostReq) (r APIAgentUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIAgentUpdatePost(ctx context.Context, req *APIAgentUpdatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIAttributeColorCreatePost implements POST /api/attribute/color/create operation.
@@ -72,8 +72,8 @@ func (UnimplementedHandler) APIAgentUpdatePost(ctx context.Context, req *APIAgen
 // Создание покраски аттрибута.
 //
 // POST /api/attribute/color/create
-func (UnimplementedHandler) APIAttributeColorCreatePost(ctx context.Context, req *APIAttributeColorCreatePostReq) (r APIAttributeColorCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIAttributeColorCreatePost(ctx context.Context, req *APIAttributeColorCreatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIAttributeColorDeletePost implements POST /api/attribute/color/delete operation.
@@ -81,8 +81,8 @@ func (UnimplementedHandler) APIAttributeColorCreatePost(ctx context.Context, req
 // Удаление цвета атрибута.
 //
 // POST /api/attribute/color/delete
-func (UnimplementedHandler) APIAttributeColorDeletePost(ctx context.Context, req *APIAttributeColorDeletePostReq) (r APIAttributeColorDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIAttributeColorDeletePost(ctx context.Context, req *APIAttributeColorDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIAttributeColorGetPost implements POST /api/attribute/color/get operation.
@@ -90,7 +90,7 @@ func (UnimplementedHandler) APIAttributeColorDeletePost(ctx context.Context, req
 // Цвет конкретного атрибута.
 //
 // POST /api/attribute/color/get
-func (UnimplementedHandler) APIAttributeColorGetPost(ctx context.Context, req *APIAttributeColorGetPostReq) (r APIAttributeColorGetPostRes, _ error) {
+func (UnimplementedHandler) APIAttributeColorGetPost(ctx context.Context, req *APIAttributeColorGetPostReq) (r *AttributeColor, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -99,7 +99,7 @@ func (UnimplementedHandler) APIAttributeColorGetPost(ctx context.Context, req *A
 // Цвета атрибутов.
 //
 // GET /api/attribute/color/list
-func (UnimplementedHandler) APIAttributeColorListGet(ctx context.Context) (r APIAttributeColorListGetRes, _ error) {
+func (UnimplementedHandler) APIAttributeColorListGet(ctx context.Context) (r *APIAttributeColorListGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -108,8 +108,8 @@ func (UnimplementedHandler) APIAttributeColorListGet(ctx context.Context) (r API
 // Обновления покраски атрибута.
 //
 // POST /api/attribute/color/update
-func (UnimplementedHandler) APIAttributeColorUpdatePost(ctx context.Context, req *APIAttributeColorUpdatePostReq) (r APIAttributeColorUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIAttributeColorUpdatePost(ctx context.Context, req *APIAttributeColorUpdatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIAttributeCountGet implements GET /api/attribute/count operation.
@@ -118,7 +118,7 @@ func (UnimplementedHandler) APIAttributeColorUpdatePost(ctx context.Context, req
 // атрибутов.
 //
 // GET /api/attribute/count
-func (UnimplementedHandler) APIAttributeCountGet(ctx context.Context) (r APIAttributeCountGetRes, _ error) {
+func (UnimplementedHandler) APIAttributeCountGet(ctx context.Context) (r *APIAttributeCountGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -128,7 +128,7 @@ func (UnimplementedHandler) APIAttributeCountGet(ctx context.Context) (r APIAttr
 // оригинальных атрибутов.
 //
 // GET /api/attribute/origin/count
-func (UnimplementedHandler) APIAttributeOriginCountGet(ctx context.Context) (r APIAttributeOriginCountGetRes, _ error) {
+func (UnimplementedHandler) APIAttributeOriginCountGet(ctx context.Context) (r *APIAttributeOriginCountGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -137,8 +137,8 @@ func (UnimplementedHandler) APIAttributeOriginCountGet(ctx context.Context) (r A
 // Создание ремапинга аттрибута.
 //
 // POST /api/attribute/remap/create
-func (UnimplementedHandler) APIAttributeRemapCreatePost(ctx context.Context, req *APIAttributeRemapCreatePostReq) (r APIAttributeRemapCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIAttributeRemapCreatePost(ctx context.Context, req *APIAttributeRemapCreatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIAttributeRemapDeletePost implements POST /api/attribute/remap/delete operation.
@@ -146,8 +146,8 @@ func (UnimplementedHandler) APIAttributeRemapCreatePost(ctx context.Context, req
 // Удаление ремапинга атрибута.
 //
 // POST /api/attribute/remap/delete
-func (UnimplementedHandler) APIAttributeRemapDeletePost(ctx context.Context, req *APIAttributeRemapDeletePostReq) (r APIAttributeRemapDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIAttributeRemapDeletePost(ctx context.Context, req *APIAttributeRemapDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIAttributeRemapGetPost implements POST /api/attribute/remap/get operation.
@@ -155,7 +155,7 @@ func (UnimplementedHandler) APIAttributeRemapDeletePost(ctx context.Context, req
 // Ремапинг конкретного атрибута.
 //
 // POST /api/attribute/remap/get
-func (UnimplementedHandler) APIAttributeRemapGetPost(ctx context.Context, req *APIAttributeRemapGetPostReq) (r APIAttributeRemapGetPostRes, _ error) {
+func (UnimplementedHandler) APIAttributeRemapGetPost(ctx context.Context, req *APIAttributeRemapGetPostReq) (r *AttributeRemap, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -164,7 +164,7 @@ func (UnimplementedHandler) APIAttributeRemapGetPost(ctx context.Context, req *A
 // Ремапинги атрибутов.
 //
 // GET /api/attribute/remap/list
-func (UnimplementedHandler) APIAttributeRemapListGet(ctx context.Context) (r APIAttributeRemapListGetRes, _ error) {
+func (UnimplementedHandler) APIAttributeRemapListGet(ctx context.Context) (r *APIAttributeRemapListGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -173,8 +173,8 @@ func (UnimplementedHandler) APIAttributeRemapListGet(ctx context.Context) (r API
 // Обновления ремапинга атрибута.
 //
 // POST /api/attribute/remap/update
-func (UnimplementedHandler) APIAttributeRemapUpdatePost(ctx context.Context, req *APIAttributeRemapUpdatePostReq) (r APIAttributeRemapUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIAttributeRemapUpdatePost(ctx context.Context, req *APIAttributeRemapUpdatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIBookArchiveIDGet implements GET /api/book/archive/{id} operation.
@@ -182,7 +182,7 @@ func (UnimplementedHandler) APIAttributeRemapUpdatePost(ctx context.Context, req
 // Получение архива с книгой.
 //
 // GET /api/book/archive/{id}
-func (UnimplementedHandler) APIBookArchiveIDGet(ctx context.Context, params APIBookArchiveIDGetParams) (r APIBookArchiveIDGetRes, _ error) {
+func (UnimplementedHandler) APIBookArchiveIDGet(ctx context.Context, params APIBookArchiveIDGetParams) (r *APIBookArchiveIDGetOKHeaders, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -191,8 +191,8 @@ func (UnimplementedHandler) APIBookArchiveIDGet(ctx context.Context, params APIB
 // Удаляет книгу и/или ее страницы.
 //
 // POST /api/book/delete
-func (UnimplementedHandler) APIBookDeletePost(ctx context.Context, req *APIBookDeletePostReq) (r APIBookDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIBookDeletePost(ctx context.Context, req *APIBookDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIBookDetailsPost implements POST /api/book/details operation.
@@ -200,7 +200,7 @@ func (UnimplementedHandler) APIBookDeletePost(ctx context.Context, req *APIBookD
 // Информация о книге.
 //
 // POST /api/book/details
-func (UnimplementedHandler) APIBookDetailsPost(ctx context.Context, req *APIBookDetailsPostReq) (r APIBookDetailsPostRes, _ error) {
+func (UnimplementedHandler) APIBookDetailsPost(ctx context.Context, req *APIBookDetailsPostReq) (r *APIBookDetailsPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -209,7 +209,7 @@ func (UnimplementedHandler) APIBookDetailsPost(ctx context.Context, req *APIBook
 // Список книг.
 //
 // POST /api/book/list
-func (UnimplementedHandler) APIBookListPost(ctx context.Context, req *BookFilter) (r APIBookListPostRes, _ error) {
+func (UnimplementedHandler) APIBookListPost(ctx context.Context, req *BookFilter) (r *APIBookListPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -219,7 +219,7 @@ func (UnimplementedHandler) APIBookListPost(ctx context.Context, req *BookFilter
 // данным книги).
 //
 // POST /api/book/page/body
-func (UnimplementedHandler) APIBookPageBodyPost(ctx context.Context, req *APIBookPageBodyPostReq) (r APIBookPageBodyPostRes, _ error) {
+func (UnimplementedHandler) APIBookPageBodyPost(ctx context.Context, req *APIBookPageBodyPostReq) (r APIBookPageBodyPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -228,8 +228,8 @@ func (UnimplementedHandler) APIBookPageBodyPost(ctx context.Context, req *APIBoo
 // Удаляет страницы из книг.
 //
 // POST /api/book/page/delete
-func (UnimplementedHandler) APIBookPageDeletePost(ctx context.Context, req *APIBookPageDeletePostReq) (r APIBookPageDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIBookPageDeletePost(ctx context.Context, req *APIBookPageDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIBookRawPost implements POST /api/book/raw operation.
@@ -237,7 +237,7 @@ func (UnimplementedHandler) APIBookPageDeletePost(ctx context.Context, req *APIB
 // Информация о книге (или по ИД или по адресу).
 //
 // POST /api/book/raw
-func (UnimplementedHandler) APIBookRawPost(ctx context.Context, req *APIBookRawPostReq) (r APIBookRawPostRes, _ error) {
+func (UnimplementedHandler) APIBookRawPost(ctx context.Context, req *APIBookRawPostReq) (r *BookRaw, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -247,7 +247,7 @@ func (UnimplementedHandler) APIBookRawPost(ctx context.Context, req *APIBookRawP
 // другую пересобранную.
 //
 // POST /api/book/rebuild
-func (UnimplementedHandler) APIBookRebuildPost(ctx context.Context, req *APIBookRebuildPostReq) (r APIBookRebuildPostRes, _ error) {
+func (UnimplementedHandler) APIBookRebuildPost(ctx context.Context, req *APIBookRebuildPostReq) (r *APIBookRebuildPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -258,8 +258,8 @@ func (UnimplementedHandler) APIBookRebuildPost(ctx context.Context, req *APIBook
 // уже были очищены).
 //
 // POST /api/book/restore
-func (UnimplementedHandler) APIBookRestorePost(ctx context.Context, req *APIBookRestorePostReq) (r APIBookRestorePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIBookRestorePost(ctx context.Context, req *APIBookRestorePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIBookStatusSetPost implements POST /api/book/status/set operation.
@@ -267,8 +267,8 @@ func (UnimplementedHandler) APIBookRestorePost(ctx context.Context, req *APIBook
 // Изменение статуса книги.
 //
 // POST /api/book/status/set
-func (UnimplementedHandler) APIBookStatusSetPost(ctx context.Context, req *APIBookStatusSetPostReq) (r APIBookStatusSetPostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIBookStatusSetPost(ctx context.Context, req *APIBookStatusSetPostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIBookUpdatePost implements POST /api/book/update operation.
@@ -277,8 +277,8 @@ func (UnimplementedHandler) APIBookStatusSetPost(ctx context.Context, req *APIBo
 // (верификация, число страниц и т.д.).
 //
 // POST /api/book/update
-func (UnimplementedHandler) APIBookUpdatePost(ctx context.Context, req *BookRaw) (r APIBookUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIBookUpdatePost(ctx context.Context, req *BookRaw) error {
+	return ht.ErrNotImplemented
 }
 
 // APIDeduplicateArchivePost implements POST /api/deduplicate/archive operation.
@@ -286,7 +286,7 @@ func (UnimplementedHandler) APIBookUpdatePost(ctx context.Context, req *BookRaw)
 // Проверка наличия данных в системе из архива.
 //
 // POST /api/deduplicate/archive
-func (UnimplementedHandler) APIDeduplicateArchivePost(ctx context.Context, req APIDeduplicateArchivePostReq) (r APIDeduplicateArchivePostRes, _ error) {
+func (UnimplementedHandler) APIDeduplicateArchivePost(ctx context.Context, req APIDeduplicateArchivePostReq) (r []APIDeduplicateArchivePostOKItem, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -295,7 +295,7 @@ func (UnimplementedHandler) APIDeduplicateArchivePost(ctx context.Context, req A
 // Поиск дубликатов книги по телу страницы.
 //
 // POST /api/deduplicate/book-by-page-body
-func (UnimplementedHandler) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *APIDeduplicateBookByPageBodyPostReq) (r APIDeduplicateBookByPageBodyPostRes, _ error) {
+func (UnimplementedHandler) APIDeduplicateBookByPageBodyPost(ctx context.Context, req *APIDeduplicateBookByPageBodyPostReq) (r *APIDeduplicateBookByPageBodyPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -304,7 +304,7 @@ func (UnimplementedHandler) APIDeduplicateBookByPageBodyPost(ctx context.Context
 // Поиск книг содержащих такую же страницу (тело).
 //
 // POST /api/deduplicate/books-by-page
-func (UnimplementedHandler) APIDeduplicateBooksByPagePost(ctx context.Context, req *APIDeduplicateBooksByPagePostReq) (r APIDeduplicateBooksByPagePostRes, _ error) {
+func (UnimplementedHandler) APIDeduplicateBooksByPagePost(ctx context.Context, req *APIDeduplicateBooksByPagePostReq) (r *APIDeduplicateBooksByPagePostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -313,7 +313,7 @@ func (UnimplementedHandler) APIDeduplicateBooksByPagePost(ctx context.Context, r
 // Сравнение двух книг на дублируемые страницы.
 //
 // POST /api/deduplicate/compare
-func (UnimplementedHandler) APIDeduplicateComparePost(ctx context.Context, req *APIDeduplicateComparePostReq) (r APIDeduplicateComparePostRes, _ error) {
+func (UnimplementedHandler) APIDeduplicateComparePost(ctx context.Context, req *APIDeduplicateComparePostReq) (r *APIDeduplicateComparePostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -323,8 +323,8 @@ func (UnimplementedHandler) APIDeduplicateComparePost(ctx context.Context, req *
 // ее страницы.
 //
 // POST /api/deduplicate/dead-hash/set
-func (UnimplementedHandler) APIDeduplicateDeadHashSetPost(ctx context.Context, req *APIDeduplicateDeadHashSetPostReq) (r APIDeduplicateDeadHashSetPostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIDeduplicateDeadHashSetPost(ctx context.Context, req *APIDeduplicateDeadHashSetPostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIDeduplicateUniquePagesPost implements POST /api/deduplicate/unique-pages operation.
@@ -332,7 +332,7 @@ func (UnimplementedHandler) APIDeduplicateDeadHashSetPost(ctx context.Context, r
 // Поиск уникальных страниц в книге.
 //
 // POST /api/deduplicate/unique-pages
-func (UnimplementedHandler) APIDeduplicateUniquePagesPost(ctx context.Context, req *APIDeduplicateUniquePagesPostReq) (r APIDeduplicateUniquePagesPostRes, _ error) {
+func (UnimplementedHandler) APIDeduplicateUniquePagesPost(ctx context.Context, req *APIDeduplicateUniquePagesPostReq) (r *APIDeduplicateUniquePagesPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -341,7 +341,7 @@ func (UnimplementedHandler) APIDeduplicateUniquePagesPost(ctx context.Context, r
 // Получение тела файла (изображения страницы).
 //
 // GET /api/file/{id}
-func (UnimplementedHandler) APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (r APIFileIDGetRes, _ error) {
+func (UnimplementedHandler) APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (r *APIFileIDGetOKHeaders, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -350,7 +350,7 @@ func (UnimplementedHandler) APIFileIDGet(ctx context.Context, params APIFileIDGe
 // Создание файловой системы.
 //
 // POST /api/fs/create
-func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req *APIFsCreatePostReq) (r APIFsCreatePostRes, _ error) {
+func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req *APIFsCreatePostReq) (r *APIFsCreatePostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -359,8 +359,8 @@ func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req *APIFsCreat
 // Удаление файловой системы.
 //
 // POST /api/fs/delete
-func (UnimplementedHandler) APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) (r APIFsDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIFsGetPost implements POST /api/fs/get operation.
@@ -368,7 +368,7 @@ func (UnimplementedHandler) APIFsDeletePost(ctx context.Context, req *APIFsDelet
 // Данные настроек файловой системы.
 //
 // POST /api/fs/get
-func (UnimplementedHandler) APIFsGetPost(ctx context.Context, req *APIFsGetPostReq) (r APIFsGetPostRes, _ error) {
+func (UnimplementedHandler) APIFsGetPost(ctx context.Context, req *APIFsGetPostReq) (r *FileSystemInfo, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -377,7 +377,7 @@ func (UnimplementedHandler) APIFsGetPost(ctx context.Context, req *APIFsGetPostR
 // Список файловых систем.
 //
 // POST /api/fs/list
-func (UnimplementedHandler) APIFsListPost(ctx context.Context, req *APIFsListPostReq) (r APIFsListPostRes, _ error) {
+func (UnimplementedHandler) APIFsListPost(ctx context.Context, req *APIFsListPostReq) (r *APIFsListPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -387,8 +387,8 @@ func (UnimplementedHandler) APIFsListPost(ctx context.Context, req *APIFsListPos
 // базой данных и файловым хранилищем.
 //
 // POST /api/fs/remove-mismatch
-func (UnimplementedHandler) APIFsRemoveMismatchPost(ctx context.Context, req *APIFsRemoveMismatchPostReq) (r APIFsRemoveMismatchPostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIFsRemoveMismatchPost(ctx context.Context, req *APIFsRemoveMismatchPostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIFsTransferBookPost implements POST /api/fs/transfer/book operation.
@@ -396,8 +396,8 @@ func (UnimplementedHandler) APIFsRemoveMismatchPost(ctx context.Context, req *AP
 // Запускает перенос файлов между файловыми системами.
 //
 // POST /api/fs/transfer/book
-func (UnimplementedHandler) APIFsTransferBookPost(ctx context.Context, req *APIFsTransferBookPostReq) (r APIFsTransferBookPostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIFsTransferBookPost(ctx context.Context, req *APIFsTransferBookPostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIFsTransferPost implements POST /api/fs/transfer operation.
@@ -405,8 +405,8 @@ func (UnimplementedHandler) APIFsTransferBookPost(ctx context.Context, req *APIF
 // Запускает перенос файлов между файловыми системами.
 //
 // POST /api/fs/transfer
-func (UnimplementedHandler) APIFsTransferPost(ctx context.Context, req *APIFsTransferPostReq) (r APIFsTransferPostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIFsTransferPost(ctx context.Context, req *APIFsTransferPostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIFsUpdatePost implements POST /api/fs/update operation.
@@ -414,8 +414,8 @@ func (UnimplementedHandler) APIFsTransferPost(ctx context.Context, req *APIFsTra
 // Изменение настроек файловой системы.
 //
 // POST /api/fs/update
-func (UnimplementedHandler) APIFsUpdatePost(ctx context.Context, req *APIFsUpdatePostReq) (r APIFsUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIFsUpdatePost(ctx context.Context, req *APIFsUpdatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIFsValidatePost implements POST /api/fs/validate operation.
@@ -423,8 +423,8 @@ func (UnimplementedHandler) APIFsUpdatePost(ctx context.Context, req *APIFsUpdat
 // Запускает валидацию файлов на файловой системе.
 //
 // POST /api/fs/validate
-func (UnimplementedHandler) APIFsValidatePost(ctx context.Context, req *APIFsValidatePostReq) (r APIFsValidatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIFsValidatePost(ctx context.Context, req *APIFsValidatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIHproxyBookPost implements POST /api/hproxy/book operation.
@@ -432,7 +432,7 @@ func (UnimplementedHandler) APIFsValidatePost(ctx context.Context, req *APIFsVal
 // Парсинг данных книги по ссылке.
 //
 // POST /api/hproxy/book
-func (UnimplementedHandler) APIHproxyBookPost(ctx context.Context, req *APIHproxyBookPostReq) (r APIHproxyBookPostRes, _ error) {
+func (UnimplementedHandler) APIHproxyBookPost(ctx context.Context, req *APIHproxyBookPostReq) (r *APIHproxyBookPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -441,7 +441,7 @@ func (UnimplementedHandler) APIHproxyBookPost(ctx context.Context, req *APIHprox
 // Получение тела файла (изображения страницы).
 //
 // GET /api/hproxy/file
-func (UnimplementedHandler) APIHproxyFileGet(ctx context.Context, params APIHproxyFileGetParams) (r APIHproxyFileGetRes, _ error) {
+func (UnimplementedHandler) APIHproxyFileGet(ctx context.Context, params APIHproxyFileGetParams) (r *APIHproxyFileGetOKHeaders, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -450,7 +450,7 @@ func (UnimplementedHandler) APIHproxyFileGet(ctx context.Context, params APIHpro
 // Парсинг списка данных по ссылке.
 //
 // POST /api/hproxy/list
-func (UnimplementedHandler) APIHproxyListPost(ctx context.Context, req *APIHproxyListPostReq) (r APIHproxyListPostRes, _ error) {
+func (UnimplementedHandler) APIHproxyListPost(ctx context.Context, req *APIHproxyListPostReq) (r *APIHproxyListPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -459,8 +459,8 @@ func (UnimplementedHandler) APIHproxyListPost(ctx context.Context, req *APIHprox
 // Удаление метки на книгу или страницу.
 //
 // POST /api/label/delete
-func (UnimplementedHandler) APILabelDeletePost(ctx context.Context, req *APILabelDeletePostReq) (r APILabelDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APILabelDeletePost(ctx context.Context, req *APILabelDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APILabelGetPost implements POST /api/label/get operation.
@@ -468,7 +468,7 @@ func (UnimplementedHandler) APILabelDeletePost(ctx context.Context, req *APILabe
 // Получение меток книги.
 //
 // POST /api/label/get
-func (UnimplementedHandler) APILabelGetPost(ctx context.Context, req *APILabelGetPostReq) (r APILabelGetPostRes, _ error) {
+func (UnimplementedHandler) APILabelGetPost(ctx context.Context, req *APILabelGetPostReq) (r *APILabelGetPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -477,8 +477,8 @@ func (UnimplementedHandler) APILabelGetPost(ctx context.Context, req *APILabelGe
 // Создание пресета меток.
 //
 // POST /api/label/preset/create
-func (UnimplementedHandler) APILabelPresetCreatePost(ctx context.Context, req *APILabelPresetCreatePostReq) (r APILabelPresetCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APILabelPresetCreatePost(ctx context.Context, req *APILabelPresetCreatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APILabelPresetDeletePost implements POST /api/label/preset/delete operation.
@@ -486,8 +486,8 @@ func (UnimplementedHandler) APILabelPresetCreatePost(ctx context.Context, req *A
 // Удаление пресета меток.
 //
 // POST /api/label/preset/delete
-func (UnimplementedHandler) APILabelPresetDeletePost(ctx context.Context, req *APILabelPresetDeletePostReq) (r APILabelPresetDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APILabelPresetDeletePost(ctx context.Context, req *APILabelPresetDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APILabelPresetGetPost implements POST /api/label/preset/get operation.
@@ -495,7 +495,7 @@ func (UnimplementedHandler) APILabelPresetDeletePost(ctx context.Context, req *A
 // Пресеты меток.
 //
 // POST /api/label/preset/get
-func (UnimplementedHandler) APILabelPresetGetPost(ctx context.Context, req *APILabelPresetGetPostReq) (r APILabelPresetGetPostRes, _ error) {
+func (UnimplementedHandler) APILabelPresetGetPost(ctx context.Context, req *APILabelPresetGetPostReq) (r *APILabelPresetGetPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -504,7 +504,7 @@ func (UnimplementedHandler) APILabelPresetGetPost(ctx context.Context, req *APIL
 // Пресеты меток.
 //
 // GET /api/label/preset/list
-func (UnimplementedHandler) APILabelPresetListGet(ctx context.Context) (r APILabelPresetListGetRes, _ error) {
+func (UnimplementedHandler) APILabelPresetListGet(ctx context.Context) (r *APILabelPresetListGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -513,8 +513,8 @@ func (UnimplementedHandler) APILabelPresetListGet(ctx context.Context) (r APILab
 // Обновления пресета меток.
 //
 // POST /api/label/preset/update
-func (UnimplementedHandler) APILabelPresetUpdatePost(ctx context.Context, req *APILabelPresetUpdatePostReq) (r APILabelPresetUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APILabelPresetUpdatePost(ctx context.Context, req *APILabelPresetUpdatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APILabelSetPost implements POST /api/label/set operation.
@@ -522,8 +522,8 @@ func (UnimplementedHandler) APILabelPresetUpdatePost(ctx context.Context, req *A
 // Установка метки на книгу или страницу.
 //
 // POST /api/label/set
-func (UnimplementedHandler) APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) (r APILabelSetPostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadCalculatePost implements POST /api/massload/calculate operation.
@@ -531,8 +531,8 @@ func (UnimplementedHandler) APILabelSetPost(ctx context.Context, req *APILabelSe
 // Расчет массовых загрузок.
 //
 // POST /api/massload/calculate
-func (UnimplementedHandler) APIMassloadCalculatePost(ctx context.Context, req *APIMassloadCalculatePostReq) (r APIMassloadCalculatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadCalculatePost(ctx context.Context, req *APIMassloadCalculatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadFlagCreatePost implements POST /api/massload/flag/create operation.
@@ -540,8 +540,8 @@ func (UnimplementedHandler) APIMassloadCalculatePost(ctx context.Context, req *A
 // Создание информации о флаге массовой загрузке.
 //
 // POST /api/massload/flag/create
-func (UnimplementedHandler) APIMassloadFlagCreatePost(ctx context.Context, req *APIMassloadFlagCreatePostReq) (r APIMassloadFlagCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadFlagCreatePost(ctx context.Context, req *APIMassloadFlagCreatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadFlagDeletePost implements POST /api/massload/flag/delete operation.
@@ -549,8 +549,8 @@ func (UnimplementedHandler) APIMassloadFlagCreatePost(ctx context.Context, req *
 // Удаление флага массовой загрузки.
 //
 // POST /api/massload/flag/delete
-func (UnimplementedHandler) APIMassloadFlagDeletePost(ctx context.Context, req *APIMassloadFlagDeletePostReq) (r APIMassloadFlagDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadFlagDeletePost(ctx context.Context, req *APIMassloadFlagDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadFlagGetPost implements POST /api/massload/flag/get operation.
@@ -558,7 +558,7 @@ func (UnimplementedHandler) APIMassloadFlagDeletePost(ctx context.Context, req *
 // Получение флага массовой загрузки.
 //
 // POST /api/massload/flag/get
-func (UnimplementedHandler) APIMassloadFlagGetPost(ctx context.Context, req *APIMassloadFlagGetPostReq) (r APIMassloadFlagGetPostRes, _ error) {
+func (UnimplementedHandler) APIMassloadFlagGetPost(ctx context.Context, req *APIMassloadFlagGetPostReq) (r *MassloadFlag, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -567,7 +567,7 @@ func (UnimplementedHandler) APIMassloadFlagGetPost(ctx context.Context, req *API
 // Флаги для массовых загрузок.
 //
 // GET /api/massload/flag/list
-func (UnimplementedHandler) APIMassloadFlagListGet(ctx context.Context) (r APIMassloadFlagListGetRes, _ error) {
+func (UnimplementedHandler) APIMassloadFlagListGet(ctx context.Context) (r *APIMassloadFlagListGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -576,8 +576,8 @@ func (UnimplementedHandler) APIMassloadFlagListGet(ctx context.Context) (r APIMa
 // Обновление флага массовой загрузки.
 //
 // POST /api/massload/flag/update
-func (UnimplementedHandler) APIMassloadFlagUpdatePost(ctx context.Context, req *APIMassloadFlagUpdatePostReq) (r APIMassloadFlagUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadFlagUpdatePost(ctx context.Context, req *APIMassloadFlagUpdatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadInfoAttributeCreatePost implements POST /api/massload/info/attribute/create operation.
@@ -585,8 +585,8 @@ func (UnimplementedHandler) APIMassloadFlagUpdatePost(ctx context.Context, req *
 // Привязка аттрибута к массовой загрузке.
 //
 // POST /api/massload/info/attribute/create
-func (UnimplementedHandler) APIMassloadInfoAttributeCreatePost(ctx context.Context, req *APIMassloadInfoAttributeCreatePostReq) (r APIMassloadInfoAttributeCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadInfoAttributeCreatePost(ctx context.Context, req *APIMassloadInfoAttributeCreatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadInfoAttributeDeletePost implements POST /api/massload/info/attribute/delete operation.
@@ -594,8 +594,8 @@ func (UnimplementedHandler) APIMassloadInfoAttributeCreatePost(ctx context.Conte
 // Удаление аттрибута для массовой загрузки.
 //
 // POST /api/massload/info/attribute/delete
-func (UnimplementedHandler) APIMassloadInfoAttributeDeletePost(ctx context.Context, req *APIMassloadInfoAttributeDeletePostReq) (r APIMassloadInfoAttributeDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadInfoAttributeDeletePost(ctx context.Context, req *APIMassloadInfoAttributeDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadInfoCreatePost implements POST /api/massload/info/create operation.
@@ -603,7 +603,7 @@ func (UnimplementedHandler) APIMassloadInfoAttributeDeletePost(ctx context.Conte
 // Создание информации о массовой загрузке.
 //
 // POST /api/massload/info/create
-func (UnimplementedHandler) APIMassloadInfoCreatePost(ctx context.Context, req *APIMassloadInfoCreatePostReq) (r APIMassloadInfoCreatePostRes, _ error) {
+func (UnimplementedHandler) APIMassloadInfoCreatePost(ctx context.Context, req *APIMassloadInfoCreatePostReq) (r *APIMassloadInfoCreatePostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -612,8 +612,8 @@ func (UnimplementedHandler) APIMassloadInfoCreatePost(ctx context.Context, req *
 // Удаление массовой загрузки.
 //
 // POST /api/massload/info/delete
-func (UnimplementedHandler) APIMassloadInfoDeletePost(ctx context.Context, req *APIMassloadInfoDeletePostReq) (r APIMassloadInfoDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadInfoDeletePost(ctx context.Context, req *APIMassloadInfoDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadInfoExternalLinkCreatePost implements POST /api/massload/info/external_link/create operation.
@@ -621,8 +621,8 @@ func (UnimplementedHandler) APIMassloadInfoDeletePost(ctx context.Context, req *
 // Привязка внешней ссылки к массовой загрузке.
 //
 // POST /api/massload/info/external_link/create
-func (UnimplementedHandler) APIMassloadInfoExternalLinkCreatePost(ctx context.Context, req *APIMassloadInfoExternalLinkCreatePostReq) (r APIMassloadInfoExternalLinkCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadInfoExternalLinkCreatePost(ctx context.Context, req *APIMassloadInfoExternalLinkCreatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadInfoExternalLinkDeletePost implements POST /api/massload/info/external_link/delete operation.
@@ -630,8 +630,8 @@ func (UnimplementedHandler) APIMassloadInfoExternalLinkCreatePost(ctx context.Co
 // Удаление внешней ссылки для массовой загрузки.
 //
 // POST /api/massload/info/external_link/delete
-func (UnimplementedHandler) APIMassloadInfoExternalLinkDeletePost(ctx context.Context, req *APIMassloadInfoExternalLinkDeletePostReq) (r APIMassloadInfoExternalLinkDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadInfoExternalLinkDeletePost(ctx context.Context, req *APIMassloadInfoExternalLinkDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadInfoExternalLinkUpdatePost implements POST /api/massload/info/external_link/update operation.
@@ -639,8 +639,8 @@ func (UnimplementedHandler) APIMassloadInfoExternalLinkDeletePost(ctx context.Co
 // Обновление внешней ссылки массовой загрузки.
 //
 // POST /api/massload/info/external_link/update
-func (UnimplementedHandler) APIMassloadInfoExternalLinkUpdatePost(ctx context.Context, req *APIMassloadInfoExternalLinkUpdatePostReq) (r APIMassloadInfoExternalLinkUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadInfoExternalLinkUpdatePost(ctx context.Context, req *APIMassloadInfoExternalLinkUpdatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIMassloadInfoGetPost implements POST /api/massload/info/get operation.
@@ -648,7 +648,7 @@ func (UnimplementedHandler) APIMassloadInfoExternalLinkUpdatePost(ctx context.Co
 // Получение массовой загрузки.
 //
 // POST /api/massload/info/get
-func (UnimplementedHandler) APIMassloadInfoGetPost(ctx context.Context, req *APIMassloadInfoGetPostReq) (r APIMassloadInfoGetPostRes, _ error) {
+func (UnimplementedHandler) APIMassloadInfoGetPost(ctx context.Context, req *APIMassloadInfoGetPostReq) (r *MassloadInfo, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -657,7 +657,7 @@ func (UnimplementedHandler) APIMassloadInfoGetPost(ctx context.Context, req *API
 // Массовые загрузки.
 //
 // POST /api/massload/info/list
-func (UnimplementedHandler) APIMassloadInfoListPost(ctx context.Context, req *APIMassloadInfoListPostReq) (r APIMassloadInfoListPostRes, _ error) {
+func (UnimplementedHandler) APIMassloadInfoListPost(ctx context.Context, req *APIMassloadInfoListPostReq) (r *APIMassloadInfoListPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -666,8 +666,8 @@ func (UnimplementedHandler) APIMassloadInfoListPost(ctx context.Context, req *AP
 // Обновление массовой загрузки.
 //
 // POST /api/massload/info/update
-func (UnimplementedHandler) APIMassloadInfoUpdatePost(ctx context.Context, req *APIMassloadInfoUpdatePostReq) (r APIMassloadInfoUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIMassloadInfoUpdatePost(ctx context.Context, req *APIMassloadInfoUpdatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIParsingHandlePost implements POST /api/parsing/handle operation.
@@ -675,7 +675,7 @@ func (UnimplementedHandler) APIMassloadInfoUpdatePost(ctx context.Context, req *
 // Обработка ссылок на новые книги.
 //
 // POST /api/parsing/handle
-func (UnimplementedHandler) APIParsingHandlePost(ctx context.Context, req *APIParsingHandlePostReq) (r APIParsingHandlePostRes, _ error) {
+func (UnimplementedHandler) APIParsingHandlePost(ctx context.Context, req *APIParsingHandlePostReq) (r *APIParsingHandlePostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -684,8 +684,8 @@ func (UnimplementedHandler) APIParsingHandlePost(ctx context.Context, req *APIPa
 // Создание данных зеркала.
 //
 // POST /api/parsing/mirror/create
-func (UnimplementedHandler) APIParsingMirrorCreatePost(ctx context.Context, req *APIParsingMirrorCreatePostReq) (r APIParsingMirrorCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIParsingMirrorCreatePost(ctx context.Context, req *APIParsingMirrorCreatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIParsingMirrorDeletePost implements POST /api/parsing/mirror/delete operation.
@@ -693,8 +693,8 @@ func (UnimplementedHandler) APIParsingMirrorCreatePost(ctx context.Context, req 
 // Удаление зеркала.
 //
 // POST /api/parsing/mirror/delete
-func (UnimplementedHandler) APIParsingMirrorDeletePost(ctx context.Context, req *APIParsingMirrorDeletePostReq) (r APIParsingMirrorDeletePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIParsingMirrorDeletePost(ctx context.Context, req *APIParsingMirrorDeletePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIParsingMirrorGetPost implements POST /api/parsing/mirror/get operation.
@@ -702,7 +702,7 @@ func (UnimplementedHandler) APIParsingMirrorDeletePost(ctx context.Context, req 
 // Получение данных зеркала.
 //
 // POST /api/parsing/mirror/get
-func (UnimplementedHandler) APIParsingMirrorGetPost(ctx context.Context, req *APIParsingMirrorGetPostReq) (r APIParsingMirrorGetPostRes, _ error) {
+func (UnimplementedHandler) APIParsingMirrorGetPost(ctx context.Context, req *APIParsingMirrorGetPostReq) (r *APIParsingMirrorGetPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -711,7 +711,7 @@ func (UnimplementedHandler) APIParsingMirrorGetPost(ctx context.Context, req *AP
 // Зеркала.
 //
 // GET /api/parsing/mirror/list
-func (UnimplementedHandler) APIParsingMirrorListGet(ctx context.Context) (r APIParsingMirrorListGetRes, _ error) {
+func (UnimplementedHandler) APIParsingMirrorListGet(ctx context.Context) (r *APIParsingMirrorListGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -720,8 +720,8 @@ func (UnimplementedHandler) APIParsingMirrorListGet(ctx context.Context) (r APIP
 // Обновления зеркала.
 //
 // POST /api/parsing/mirror/update
-func (UnimplementedHandler) APIParsingMirrorUpdatePost(ctx context.Context, req *APIParsingMirrorUpdatePostReq) (r APIParsingMirrorUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APIParsingMirrorUpdatePost(ctx context.Context, req *APIParsingMirrorUpdatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APISystemImportArchivePost implements POST /api/system/import/archive operation.
@@ -729,7 +729,7 @@ func (UnimplementedHandler) APIParsingMirrorUpdatePost(ctx context.Context, req 
 // Импорт новой книги через архив.
 //
 // POST /api/system/import/archive
-func (UnimplementedHandler) APISystemImportArchivePost(ctx context.Context, req APISystemImportArchivePostReq) (r APISystemImportArchivePostRes, _ error) {
+func (UnimplementedHandler) APISystemImportArchivePost(ctx context.Context, req APISystemImportArchivePostReq) (r *APISystemImportArchivePostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -738,7 +738,7 @@ func (UnimplementedHandler) APISystemImportArchivePost(ctx context.Context, req 
 // Получение общей информации о системе.
 //
 // GET /api/system/info/size
-func (UnimplementedHandler) APISystemInfoSizeGet(ctx context.Context) (r APISystemInfoSizeGetRes, _ error) {
+func (UnimplementedHandler) APISystemInfoSizeGet(ctx context.Context) (r *APISystemInfoSizeGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -747,7 +747,7 @@ func (UnimplementedHandler) APISystemInfoSizeGet(ctx context.Context) (r APISyst
 // Получение информации о воркерах в системе.
 //
 // GET /api/system/info/workers
-func (UnimplementedHandler) APISystemInfoWorkersGet(ctx context.Context) (r APISystemInfoWorkersGetRes, _ error) {
+func (UnimplementedHandler) APISystemInfoWorkersGet(ctx context.Context) (r *APISystemInfoWorkersGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -756,8 +756,8 @@ func (UnimplementedHandler) APISystemInfoWorkersGet(ctx context.Context) (r APIS
 // Создание и фоновый запуск задачи.
 //
 // POST /api/system/task/create
-func (UnimplementedHandler) APISystemTaskCreatePost(ctx context.Context, req *APISystemTaskCreatePostReq) (r APISystemTaskCreatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APISystemTaskCreatePost(ctx context.Context, req *APISystemTaskCreatePostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APISystemTaskResultsGet implements GET /api/system/task/results operation.
@@ -765,7 +765,7 @@ func (UnimplementedHandler) APISystemTaskCreatePost(ctx context.Context, req *AP
 // Получение результатов задач.
 //
 // GET /api/system/task/results
-func (UnimplementedHandler) APISystemTaskResultsGet(ctx context.Context) (r APISystemTaskResultsGetRes, _ error) {
+func (UnimplementedHandler) APISystemTaskResultsGet(ctx context.Context) (r *APISystemTaskResultsGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -775,8 +775,8 @@ func (UnimplementedHandler) APISystemTaskResultsGet(ctx context.Context) (r APIS
 // сбрасывается при перезапуске системы.
 //
 // POST /api/system/worker/config
-func (UnimplementedHandler) APISystemWorkerConfigPost(ctx context.Context, req *APISystemWorkerConfigPostReq) (r APISystemWorkerConfigPostRes, _ error) {
-	return r, ht.ErrNotImplemented
+func (UnimplementedHandler) APISystemWorkerConfigPost(ctx context.Context, req *APISystemWorkerConfigPostReq) error {
+	return ht.ErrNotImplemented
 }
 
 // APIUserLoginPost implements POST /api/user/login operation.
@@ -784,6 +784,14 @@ func (UnimplementedHandler) APISystemWorkerConfigPost(ctx context.Context, req *
 // Проставление токена в куки.
 //
 // POST /api/user/login
-func (UnimplementedHandler) APIUserLoginPost(ctx context.Context, req *APIUserLoginPostReq) (r APIUserLoginPostRes, _ error) {
+func (UnimplementedHandler) APIUserLoginPost(ctx context.Context, req *APIUserLoginPostReq) (r *APIUserLoginPostNoContent, _ error) {
 	return r, ht.ErrNotImplemented
+}
+
+// NewError creates *ErrorResponseStatusCode from error returned by handler.
+//
+// Used for common default response.
+func (UnimplementedHandler) NewError(ctx context.Context, err error) (r *ErrorResponseStatusCode) {
+	r = new(ErrorResponseStatusCode)
+	return r
 }

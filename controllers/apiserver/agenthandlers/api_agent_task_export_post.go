@@ -2,6 +2,7 @@ package agenthandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,7 +11,7 @@ import (
 func (c *AgentHandlersController) APIAgentTaskExportPost(
 	ctx context.Context,
 	req *serverapi.APIAgentTaskExportPostReq,
-) (serverapi.APIAgentTaskExportPostRes, error) {
+) error {
 	err := c.exportUseCases.Export(
 		ctx,
 		req.Exporter,
@@ -18,11 +19,12 @@ func (c *AgentHandlersController) APIAgentTaskExportPost(
 		req.DeleteAfter.Value,
 	)
 	if err != nil {
-		return &serverapi.APIAgentTaskExportPostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.ExportUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIAgentTaskExportPostNoContent{}, nil
+	return nil
 }

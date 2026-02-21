@@ -3,6 +3,7 @@ package bookhandlers
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -12,7 +13,7 @@ import (
 func (c *BookHandlersController) APIBookRebuildPost(
 	ctx context.Context,
 	req *serverapi.APIBookRebuildPostReq,
-) (serverapi.APIBookRebuildPostRes, error) {
+) (*serverapi.APIBookRebuildPostOK, error) {
 	id, err := c.rebuilderUseCases.RebuildBook(ctx, core.RebuildBookRequest{
 		ModifiedOldBook: apiservercore.ConvertBookRawToBookFull(&req.OldBook),
 		SelectedPages:   req.SelectedPages,
@@ -37,17 +38,19 @@ func (c *BookHandlersController) APIBookRebuildPost(
 	})
 
 	if errors.Is(err, core.ErrBookNotFound) {
-		return &serverapi.APIBookRebuildPostNotFound{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusNotFound,
 			InnerCode: apiservercore.RebuilderUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	if err != nil {
-		return &serverapi.APIBookRebuildPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.RebuilderUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIBookRebuildPostOK{

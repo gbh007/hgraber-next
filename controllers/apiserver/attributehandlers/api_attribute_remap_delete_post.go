@@ -2,6 +2,7 @@ package attributehandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,14 +11,15 @@ import (
 func (c *AttributeHandlersController) APIAttributeRemapDeletePost(
 	ctx context.Context,
 	req *serverapi.APIAttributeRemapDeletePostReq,
-) (serverapi.APIAttributeRemapDeletePostRes, error) {
+) error {
 	err := c.attributeUseCases.DeleteAttributeRemap(ctx, req.Code, req.Value)
 	if err != nil {
-		return &serverapi.APIAttributeRemapDeletePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.AttributeUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIAttributeRemapDeletePostNoContent{}, nil
+	return nil
 }

@@ -3,6 +3,7 @@ package bookhandlers
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -12,7 +13,7 @@ import (
 func (c *BookHandlersController) APIBookStatusSetPost(
 	ctx context.Context,
 	req *serverapi.APIBookStatusSetPostReq,
-) (serverapi.APIBookStatusSetPostRes, error) {
+) error {
 	var err error
 
 	switch req.Status {
@@ -23,18 +24,20 @@ func (c *BookHandlersController) APIBookStatusSetPost(
 	}
 
 	if errors.Is(err, core.ErrBookNotFound) {
-		return &serverapi.APIBookStatusSetPostNotFound{
+		return apiservercore.APIError{
+			Code:      http.StatusNotFound,
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	if err != nil {
-		return &serverapi.APIBookStatusSetPostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIBookStatusSetPostNoContent{}, nil
+	return nil
 }

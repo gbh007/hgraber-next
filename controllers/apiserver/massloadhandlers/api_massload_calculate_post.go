@@ -2,6 +2,7 @@ package massloadhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,12 +11,13 @@ import (
 func (c *MassloadController) APIMassloadCalculatePost(
 	ctx context.Context,
 	req *serverapi.APIMassloadCalculatePostReq,
-) (serverapi.APIMassloadCalculatePostRes, error) {
+) error {
 	if !req.ID.Set && !req.All.Value {
-		return &serverapi.APIMassloadCalculatePostBadRequest{
+		return apiservercore.APIError{
+			Code:      http.StatusBadRequest,
 			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   serverapi.NewOptString("invalid target"),
-		}, nil
+			Details:   "invalid target",
+		}
 	}
 
 	var err error
@@ -27,11 +29,12 @@ func (c *MassloadController) APIMassloadCalculatePost(
 	}
 
 	if err != nil {
-		return &serverapi.APIMassloadCalculatePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIMassloadCalculatePostNoContent{}, nil
+	return nil
 }

@@ -2,6 +2,7 @@ package attributehandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -11,7 +12,7 @@ import (
 func (c *AttributeHandlersController) APIAttributeColorCreatePost(
 	ctx context.Context,
 	req *serverapi.APIAttributeColorCreatePostReq,
-) (serverapi.APIAttributeColorCreatePostRes, error) {
+) error {
 	err := c.attributeUseCases.CreateAttributeColor(ctx, core.AttributeColor{
 		Code:            req.Code,
 		Value:           req.Value,
@@ -19,11 +20,12 @@ func (c *AttributeHandlersController) APIAttributeColorCreatePost(
 		BackgroundColor: req.BackgroundColor,
 	})
 	if err != nil {
-		return &serverapi.APIAttributeColorCreatePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.AttributeUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIAttributeColorCreatePostNoContent{}, nil
+	return nil
 }

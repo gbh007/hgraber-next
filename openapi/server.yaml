@@ -63,14 +63,8 @@ paths:
               schema:
                 type: string
                 description: Токен доступа
-        400:
-          description: Пользовательская ошибка при авторизации
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -103,32 +97,8 @@ paths:
               schema:
                 type: string
                 format: binary
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -230,20 +200,8 @@ paths:
                   - page_without_body_count
                   - files_size
                   - files_size_formatted
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -287,20 +245,8 @@ paths:
                         - in_queue
                         - in_work
                         - runners
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -327,26 +273,8 @@ paths:
       responses:
         204:
           description: Успешное создание и запуск
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -458,20 +386,8 @@ paths:
                         - duration_formatted
                         - started_at
                         - ended_at
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -510,20 +426,8 @@ paths:
                         - code
                         - value
                         - count
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -562,20 +466,8 @@ paths:
                         - code
                         - value
                         - count
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -614,26 +506,8 @@ paths:
       responses:
         204:
           description: Успешное установка
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -668,26 +542,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -749,26 +605,8 @@ paths:
                         - name
                         - value
                         - created_at
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -804,26 +642,8 @@ paths:
       responses:
         204:
           description: Успешное создание
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -859,32 +679,8 @@ paths:
       responses:
         204:
           description: Успешное обновление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -911,32 +707,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -991,26 +763,8 @@ paths:
                   - name
                   - values
                   - created_at
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1059,20 +813,8 @@ paths:
                         - name
                         - values
                         - created_at
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1228,33 +970,8 @@ paths:
                 required:
                   - info
                   - page_loaded_percent
-
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1288,32 +1005,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BookRaw"
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1334,32 +1027,8 @@ paths:
       responses:
         204:
           description: Успешное изменение данных
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1446,32 +1115,8 @@ paths:
                     description: ID книги в которую были добавлены страницы
                 required:
                   - id
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1502,26 +1147,8 @@ paths:
       responses:
         204:
           description: Успешное выполнение запроса
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1612,26 +1239,8 @@ paths:
                         - is_separator
                 required:
                   - count
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1663,32 +1272,8 @@ paths:
               schema:
                 type: string
                 format: binary
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1726,32 +1311,8 @@ paths:
               schema:
                 type: string
                 format: binary
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1790,32 +1351,8 @@ paths:
       responses:
         204:
           description: Успешное изменение
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1916,26 +1453,8 @@ paths:
                   - duplicate_count
                   - error_count
                   - details
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -1971,26 +1490,8 @@ paths:
       responses:
         204:
           description: Успешное создание
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2031,32 +1532,8 @@ paths:
       responses:
         204:
           description: Успешное обновление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2084,32 +1561,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2161,26 +1614,8 @@ paths:
                   - id
                   - name
                   - prefixes
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2225,20 +1660,8 @@ paths:
                         - id
                         - name
                         - prefixes
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2271,26 +1694,8 @@ paths:
                     description: ID новой книги
                 required:
                   - id
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2339,26 +1744,8 @@ paths:
                     - book_id
                     - entry_percentage
                     - reverse_entry_percentage
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2472,26 +1859,8 @@ paths:
                         - target_avg_page_size
                         - target_avg_page_size_formatted
                         - target_page_count
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2529,26 +1898,8 @@ paths:
                     description: Уникальные страницы в книге
                     items:
                       $ref: "#/components/schemas/PageSimple"
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2590,26 +1941,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/BookSimple"
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2738,26 +2071,8 @@ paths:
                   - target_covered_origin
                   - origin_covered_target_without_dead_hashes
                   - target_covered_origin_without_dead_hashes
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2793,32 +2108,8 @@ paths:
       responses:
         204:
           description: Успешное выполнение
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2861,32 +2152,8 @@ paths:
       responses:
         204:
           description: Успешное выполнение
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2925,32 +2192,8 @@ paths:
       responses:
         204:
           description: Успешное выполнение
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -2984,26 +2227,8 @@ paths:
       responses:
         204:
           description: Успешное создание задачи экспорта
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3058,26 +2283,8 @@ paths:
       responses:
         204:
           description: Успешное создание агента
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3143,26 +2350,8 @@ paths:
       responses:
         204:
           description: Успешное обновление агента
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3194,32 +2383,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Agent"
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3311,26 +2476,8 @@ paths:
                       $ref: "#/components/schemas/Agent"
                   required:
                     - info
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3358,32 +2505,8 @@ paths:
       responses:
         204:
           description: Успешное удаление агента
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не существуют
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3420,26 +2543,8 @@ paths:
       responses:
         204:
           description: Успешное изменение конфигурации
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3479,26 +2584,8 @@ paths:
       responses:
         204:
           description: Успешное создание
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3538,32 +2625,8 @@ paths:
       responses:
         204:
           description: Успешное обновление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3594,32 +2657,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3654,26 +2693,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AttributeColor"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3698,20 +2719,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/AttributeColor"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3752,26 +2761,8 @@ paths:
       responses:
         204:
           description: Успешное создание
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3812,32 +2803,8 @@ paths:
       responses:
         204:
           description: Успешное обновление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3868,32 +2835,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3928,26 +2871,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AttributeRemap"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -3972,20 +2897,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/AttributeRemap"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4017,32 +2930,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FileSystemInfo"
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4108,26 +2997,8 @@ paths:
                     description: ID ФС
                 required:
                   - id
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4187,32 +3058,8 @@ paths:
       responses:
         204:
           description: Успешное обновление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4240,32 +3087,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4326,26 +3149,8 @@ paths:
                       required:
                         - info
                         - is_legacy
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4373,26 +3178,8 @@ paths:
       responses:
         204:
           description: Процесс запущен
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4420,26 +3207,8 @@ paths:
       responses:
         204:
           description: Задача запущена
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4475,26 +3244,8 @@ paths:
       responses:
         204:
           description: Процесс запущен
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4533,26 +3284,8 @@ paths:
       responses:
         204:
           description: Процесс запущен
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4626,26 +3359,8 @@ paths:
                       required:
                         - ext_url
                         - name
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4788,26 +3503,8 @@ paths:
                         - code
                         - name
                         - values
-        400:
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Токен доступа не предоставлен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4842,32 +3539,8 @@ paths:
               schema:
                 type: string
                 format: binary
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4913,26 +3586,8 @@ paths:
                     description: ИД загрузки
                 required:
                   - id
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -4972,32 +3627,8 @@ paths:
       responses:
         204:
           description: Успешное обновление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5024,32 +3655,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5080,26 +3687,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MassloadInfo"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5197,20 +3786,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/MassloadInfo"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5241,32 +3818,8 @@ paths:
       responses:
         204:
           description: Успешное создание задачи
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5311,26 +3864,8 @@ paths:
       responses:
         204:
           description: Успешное создание
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5375,32 +3910,8 @@ paths:
       responses:
         204:
           description: Успешное обновление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5427,32 +3938,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5483,26 +3970,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MassloadFlag"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5527,20 +3996,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/MassloadFlag"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5576,32 +4033,8 @@ paths:
       responses:
         204:
           description: Успешное создание
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5637,32 +4070,8 @@ paths:
       responses:
         204:
           description: Успешное обновление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5695,32 +4104,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5755,32 +4140,8 @@ paths:
       responses:
         204:
           description: Успешное создание
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:
@@ -5815,32 +4176,8 @@ paths:
       responses:
         204:
           description: Успешное удаление
-        400:
-          description: Некорректный запрос данных
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        401:
-          description: Пользователь не авторизован
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        403:
-          description: Доступ запрещен
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        404:
-          description: Данные не найдены
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        500:
-          description: Серверная ошибка
+        default:
+          description: Ошибка
           content:
             application/json:
               schema:

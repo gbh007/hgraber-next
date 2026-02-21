@@ -2,6 +2,7 @@ package massloadhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
@@ -11,7 +12,7 @@ import (
 func (c *MassloadController) APIMassloadFlagCreatePost(
 	ctx context.Context,
 	req *serverapi.APIMassloadFlagCreatePostReq,
-) (serverapi.APIMassloadFlagCreatePostRes, error) {
+) error {
 	err := c.massloadUseCases.CreateMassloadFlag(ctx, massloadmodel.Flag{
 		Code:            req.Code,
 		Name:            req.Name,
@@ -21,11 +22,12 @@ func (c *MassloadController) APIMassloadFlagCreatePost(
 		OrderWeight:     req.OrderWeight,
 	})
 	if err != nil {
-		return &serverapi.APIMassloadFlagCreatePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIMassloadFlagCreatePostNoContent{}, nil
+	return nil
 }

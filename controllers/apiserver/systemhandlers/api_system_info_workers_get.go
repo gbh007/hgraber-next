@@ -10,7 +10,7 @@ import (
 
 func (c *SystemHandlersController) APISystemInfoWorkersGet(
 	ctx context.Context,
-) (serverapi.APISystemInfoWorkersGetRes, error) {
+) (*serverapi.APISystemInfoWorkersGetOK, error) {
 	workers := c.systemUseCases.WorkersInfo(ctx)
 
 	return &serverapi.APISystemInfoWorkersGetOK{

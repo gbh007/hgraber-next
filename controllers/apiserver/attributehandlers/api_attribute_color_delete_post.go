@@ -2,6 +2,7 @@ package attributehandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,14 +11,15 @@ import (
 func (c *AttributeHandlersController) APIAttributeColorDeletePost(
 	ctx context.Context,
 	req *serverapi.APIAttributeColorDeletePostReq,
-) (serverapi.APIAttributeColorDeletePostRes, error) {
+) error {
 	err := c.attributeUseCases.DeleteAttributeColor(ctx, req.Code, req.Value)
 	if err != nil {
-		return &serverapi.APIAttributeColorDeletePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.AttributeUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIAttributeColorDeletePostNoContent{}, nil
+	return nil
 }

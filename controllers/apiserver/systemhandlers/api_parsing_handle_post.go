@@ -2,6 +2,7 @@ package systemhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/parsing"
@@ -12,17 +13,18 @@ import (
 func (c *SystemHandlersController) APIParsingHandlePost(
 	ctx context.Context,
 	req *serverapi.APIParsingHandlePostReq,
-) (serverapi.APIParsingHandlePostRes, error) {
+) (*serverapi.APIParsingHandlePostOK, error) {
 	if req.IsMulti.Value {
 		result, err := c.parseUseCases.NewBooksMulti(ctx, req.Urls, parsing.ParseFlags{
 			AutoVerify: req.AutoVerify.Value,
 			ReadOnly:   req.ReadOnlyMode.Value,
 		})
 		if err != nil {
-			return &serverapi.APIParsingHandlePostInternalServerError{
+			return nil, apiservercore.APIError{
+				Code:      http.StatusInternalServerError,
 				InnerCode: apiservercore.ParseUseCaseCode,
-				Details:   serverapi.NewOptString(err.Error()),
-			}, nil
+				Details:   err.Error(),
+			}
 		}
 
 		return &serverapi.APIParsingHandlePostOK{
@@ -41,10 +43,11 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 		ReadOnly:   req.ReadOnlyMode.Value,
 	})
 	if err != nil {
-		return &serverapi.APIParsingHandlePostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.ParseUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIParsingHandlePostOK{

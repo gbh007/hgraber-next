@@ -13,161 +13,161 @@ type Handler interface {
 	// Удаление агента.
 	//
 	// POST /api/agent/delete
-	APIAgentDeletePost(ctx context.Context, req *APIAgentDeletePostReq) (APIAgentDeletePostRes, error)
+	APIAgentDeletePost(ctx context.Context, req *APIAgentDeletePostReq) error
 	// APIAgentGetPost implements POST /api/agent/get operation.
 	//
 	// Получение данных агента.
 	//
 	// POST /api/agent/get
-	APIAgentGetPost(ctx context.Context, req *APIAgentGetPostReq) (APIAgentGetPostRes, error)
+	APIAgentGetPost(ctx context.Context, req *APIAgentGetPostReq) (*Agent, error)
 	// APIAgentListPost implements POST /api/agent/list operation.
 	//
 	// Список агентов.
 	//
 	// POST /api/agent/list
-	APIAgentListPost(ctx context.Context, req *APIAgentListPostReq) (APIAgentListPostRes, error)
+	APIAgentListPost(ctx context.Context, req *APIAgentListPostReq) ([]APIAgentListPostOKItem, error)
 	// APIAgentNewPost implements POST /api/agent/new operation.
 	//
 	// Создание нового агента.
 	//
 	// POST /api/agent/new
-	APIAgentNewPost(ctx context.Context, req *APIAgentNewPostReq) (APIAgentNewPostRes, error)
+	APIAgentNewPost(ctx context.Context, req *APIAgentNewPostReq) error
 	// APIAgentTaskExportPost implements POST /api/agent/task/export operation.
 	//
 	// Экспорт книг в другую систему.
 	//
 	// POST /api/agent/task/export
-	APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) (APIAgentTaskExportPostRes, error)
+	APIAgentTaskExportPost(ctx context.Context, req *APIAgentTaskExportPostReq) error
 	// APIAgentUpdatePost implements POST /api/agent/update operation.
 	//
 	// Обновление данных агента.
 	//
 	// POST /api/agent/update
-	APIAgentUpdatePost(ctx context.Context, req *APIAgentUpdatePostReq) (APIAgentUpdatePostRes, error)
+	APIAgentUpdatePost(ctx context.Context, req *APIAgentUpdatePostReq) error
 	// APIAttributeColorCreatePost implements POST /api/attribute/color/create operation.
 	//
 	// Создание покраски аттрибута.
 	//
 	// POST /api/attribute/color/create
-	APIAttributeColorCreatePost(ctx context.Context, req *APIAttributeColorCreatePostReq) (APIAttributeColorCreatePostRes, error)
+	APIAttributeColorCreatePost(ctx context.Context, req *APIAttributeColorCreatePostReq) error
 	// APIAttributeColorDeletePost implements POST /api/attribute/color/delete operation.
 	//
 	// Удаление цвета атрибута.
 	//
 	// POST /api/attribute/color/delete
-	APIAttributeColorDeletePost(ctx context.Context, req *APIAttributeColorDeletePostReq) (APIAttributeColorDeletePostRes, error)
+	APIAttributeColorDeletePost(ctx context.Context, req *APIAttributeColorDeletePostReq) error
 	// APIAttributeColorGetPost implements POST /api/attribute/color/get operation.
 	//
 	// Цвет конкретного атрибута.
 	//
 	// POST /api/attribute/color/get
-	APIAttributeColorGetPost(ctx context.Context, req *APIAttributeColorGetPostReq) (APIAttributeColorGetPostRes, error)
+	APIAttributeColorGetPost(ctx context.Context, req *APIAttributeColorGetPostReq) (*AttributeColor, error)
 	// APIAttributeColorListGet implements GET /api/attribute/color/list operation.
 	//
 	// Цвета атрибутов.
 	//
 	// GET /api/attribute/color/list
-	APIAttributeColorListGet(ctx context.Context) (APIAttributeColorListGetRes, error)
+	APIAttributeColorListGet(ctx context.Context) (*APIAttributeColorListGetOK, error)
 	// APIAttributeColorUpdatePost implements POST /api/attribute/color/update operation.
 	//
 	// Обновления покраски атрибута.
 	//
 	// POST /api/attribute/color/update
-	APIAttributeColorUpdatePost(ctx context.Context, req *APIAttributeColorUpdatePostReq) (APIAttributeColorUpdatePostRes, error)
+	APIAttributeColorUpdatePost(ctx context.Context, req *APIAttributeColorUpdatePostReq) error
 	// APIAttributeCountGet implements GET /api/attribute/count operation.
 	//
 	// Получение информации о количестве вариантов
 	// атрибутов.
 	//
 	// GET /api/attribute/count
-	APIAttributeCountGet(ctx context.Context) (APIAttributeCountGetRes, error)
+	APIAttributeCountGet(ctx context.Context) (*APIAttributeCountGetOK, error)
 	// APIAttributeOriginCountGet implements GET /api/attribute/origin/count operation.
 	//
 	// Получение информации о количестве вариантов
 	// оригинальных атрибутов.
 	//
 	// GET /api/attribute/origin/count
-	APIAttributeOriginCountGet(ctx context.Context) (APIAttributeOriginCountGetRes, error)
+	APIAttributeOriginCountGet(ctx context.Context) (*APIAttributeOriginCountGetOK, error)
 	// APIAttributeRemapCreatePost implements POST /api/attribute/remap/create operation.
 	//
 	// Создание ремапинга аттрибута.
 	//
 	// POST /api/attribute/remap/create
-	APIAttributeRemapCreatePost(ctx context.Context, req *APIAttributeRemapCreatePostReq) (APIAttributeRemapCreatePostRes, error)
+	APIAttributeRemapCreatePost(ctx context.Context, req *APIAttributeRemapCreatePostReq) error
 	// APIAttributeRemapDeletePost implements POST /api/attribute/remap/delete operation.
 	//
 	// Удаление ремапинга атрибута.
 	//
 	// POST /api/attribute/remap/delete
-	APIAttributeRemapDeletePost(ctx context.Context, req *APIAttributeRemapDeletePostReq) (APIAttributeRemapDeletePostRes, error)
+	APIAttributeRemapDeletePost(ctx context.Context, req *APIAttributeRemapDeletePostReq) error
 	// APIAttributeRemapGetPost implements POST /api/attribute/remap/get operation.
 	//
 	// Ремапинг конкретного атрибута.
 	//
 	// POST /api/attribute/remap/get
-	APIAttributeRemapGetPost(ctx context.Context, req *APIAttributeRemapGetPostReq) (APIAttributeRemapGetPostRes, error)
+	APIAttributeRemapGetPost(ctx context.Context, req *APIAttributeRemapGetPostReq) (*AttributeRemap, error)
 	// APIAttributeRemapListGet implements GET /api/attribute/remap/list operation.
 	//
 	// Ремапинги атрибутов.
 	//
 	// GET /api/attribute/remap/list
-	APIAttributeRemapListGet(ctx context.Context) (APIAttributeRemapListGetRes, error)
+	APIAttributeRemapListGet(ctx context.Context) (*APIAttributeRemapListGetOK, error)
 	// APIAttributeRemapUpdatePost implements POST /api/attribute/remap/update operation.
 	//
 	// Обновления ремапинга атрибута.
 	//
 	// POST /api/attribute/remap/update
-	APIAttributeRemapUpdatePost(ctx context.Context, req *APIAttributeRemapUpdatePostReq) (APIAttributeRemapUpdatePostRes, error)
+	APIAttributeRemapUpdatePost(ctx context.Context, req *APIAttributeRemapUpdatePostReq) error
 	// APIBookArchiveIDGet implements GET /api/book/archive/{id} operation.
 	//
 	// Получение архива с книгой.
 	//
 	// GET /api/book/archive/{id}
-	APIBookArchiveIDGet(ctx context.Context, params APIBookArchiveIDGetParams) (APIBookArchiveIDGetRes, error)
+	APIBookArchiveIDGet(ctx context.Context, params APIBookArchiveIDGetParams) (*APIBookArchiveIDGetOKHeaders, error)
 	// APIBookDeletePost implements POST /api/book/delete operation.
 	//
 	// Удаляет книгу и/или ее страницы.
 	//
 	// POST /api/book/delete
-	APIBookDeletePost(ctx context.Context, req *APIBookDeletePostReq) (APIBookDeletePostRes, error)
+	APIBookDeletePost(ctx context.Context, req *APIBookDeletePostReq) error
 	// APIBookDetailsPost implements POST /api/book/details operation.
 	//
 	// Информация о книге.
 	//
 	// POST /api/book/details
-	APIBookDetailsPost(ctx context.Context, req *APIBookDetailsPostReq) (APIBookDetailsPostRes, error)
+	APIBookDetailsPost(ctx context.Context, req *APIBookDetailsPostReq) (*APIBookDetailsPostOK, error)
 	// APIBookListPost implements POST /api/book/list operation.
 	//
 	// Список книг.
 	//
 	// POST /api/book/list
-	APIBookListPost(ctx context.Context, req *BookFilter) (APIBookListPostRes, error)
+	APIBookListPost(ctx context.Context, req *BookFilter) (*APIBookListPostOK, error)
 	// APIBookPageBodyPost implements POST /api/book/page/body operation.
 	//
 	// Получение тела страницы (по оригинальному адресу или
 	// данным книги).
 	//
 	// POST /api/book/page/body
-	APIBookPageBodyPost(ctx context.Context, req *APIBookPageBodyPostReq) (APIBookPageBodyPostRes, error)
+	APIBookPageBodyPost(ctx context.Context, req *APIBookPageBodyPostReq) (APIBookPageBodyPostOK, error)
 	// APIBookPageDeletePost implements POST /api/book/page/delete operation.
 	//
 	// Удаляет страницы из книг.
 	//
 	// POST /api/book/page/delete
-	APIBookPageDeletePost(ctx context.Context, req *APIBookPageDeletePostReq) (APIBookPageDeletePostRes, error)
+	APIBookPageDeletePost(ctx context.Context, req *APIBookPageDeletePostReq) error
 	// APIBookRawPost implements POST /api/book/raw operation.
 	//
 	// Информация о книге (или по ИД или по адресу).
 	//
 	// POST /api/book/raw
-	APIBookRawPost(ctx context.Context, req *APIBookRawPostReq) (APIBookRawPostRes, error)
+	APIBookRawPost(ctx context.Context, req *APIBookRawPostReq) (*BookRaw, error)
 	// APIBookRebuildPost implements POST /api/book/rebuild operation.
 	//
 	// Может как создать новую книгу, так и добавить данные в
 	// другую пересобранную.
 	//
 	// POST /api/book/rebuild
-	APIBookRebuildPost(ctx context.Context, req *APIBookRebuildPostReq) (APIBookRebuildPostRes, error)
+	APIBookRebuildPost(ctx context.Context, req *APIBookRebuildPostReq) (*APIBookRebuildPostOK, error)
 	// APIBookRestorePost implements POST /api/book/restore operation.
 	//
 	// Пытается восстановить книгу или ее страницы
@@ -175,359 +175,363 @@ type Handler interface {
 	// уже были очищены).
 	//
 	// POST /api/book/restore
-	APIBookRestorePost(ctx context.Context, req *APIBookRestorePostReq) (APIBookRestorePostRes, error)
+	APIBookRestorePost(ctx context.Context, req *APIBookRestorePostReq) error
 	// APIBookStatusSetPost implements POST /api/book/status/set operation.
 	//
 	// Изменение статуса книги.
 	//
 	// POST /api/book/status/set
-	APIBookStatusSetPost(ctx context.Context, req *APIBookStatusSetPostReq) (APIBookStatusSetPostRes, error)
+	APIBookStatusSetPost(ctx context.Context, req *APIBookStatusSetPostReq) error
 	// APIBookUpdatePost implements POST /api/book/update operation.
 	//
 	// Изменяет часть данных книги, ряд полей не изменяется
 	// (верификация, число страниц и т.д.).
 	//
 	// POST /api/book/update
-	APIBookUpdatePost(ctx context.Context, req *BookRaw) (APIBookUpdatePostRes, error)
+	APIBookUpdatePost(ctx context.Context, req *BookRaw) error
 	// APIDeduplicateArchivePost implements POST /api/deduplicate/archive operation.
 	//
 	// Проверка наличия данных в системе из архива.
 	//
 	// POST /api/deduplicate/archive
-	APIDeduplicateArchivePost(ctx context.Context, req APIDeduplicateArchivePostReq) (APIDeduplicateArchivePostRes, error)
+	APIDeduplicateArchivePost(ctx context.Context, req APIDeduplicateArchivePostReq) ([]APIDeduplicateArchivePostOKItem, error)
 	// APIDeduplicateBookByPageBodyPost implements POST /api/deduplicate/book-by-page-body operation.
 	//
 	// Поиск дубликатов книги по телу страницы.
 	//
 	// POST /api/deduplicate/book-by-page-body
-	APIDeduplicateBookByPageBodyPost(ctx context.Context, req *APIDeduplicateBookByPageBodyPostReq) (APIDeduplicateBookByPageBodyPostRes, error)
+	APIDeduplicateBookByPageBodyPost(ctx context.Context, req *APIDeduplicateBookByPageBodyPostReq) (*APIDeduplicateBookByPageBodyPostOK, error)
 	// APIDeduplicateBooksByPagePost implements POST /api/deduplicate/books-by-page operation.
 	//
 	// Поиск книг содержащих такую же страницу (тело).
 	//
 	// POST /api/deduplicate/books-by-page
-	APIDeduplicateBooksByPagePost(ctx context.Context, req *APIDeduplicateBooksByPagePostReq) (APIDeduplicateBooksByPagePostRes, error)
+	APIDeduplicateBooksByPagePost(ctx context.Context, req *APIDeduplicateBooksByPagePostReq) (*APIDeduplicateBooksByPagePostOK, error)
 	// APIDeduplicateComparePost implements POST /api/deduplicate/compare operation.
 	//
 	// Сравнение двух книг на дублируемые страницы.
 	//
 	// POST /api/deduplicate/compare
-	APIDeduplicateComparePost(ctx context.Context, req *APIDeduplicateComparePostReq) (APIDeduplicateComparePostRes, error)
+	APIDeduplicateComparePost(ctx context.Context, req *APIDeduplicateComparePostReq) (*APIDeduplicateComparePostOK, error)
 	// APIDeduplicateDeadHashSetPost implements POST /api/deduplicate/dead-hash/set operation.
 	//
 	// Устанавливает значение мертвых хешей для книги или
 	// ее страницы.
 	//
 	// POST /api/deduplicate/dead-hash/set
-	APIDeduplicateDeadHashSetPost(ctx context.Context, req *APIDeduplicateDeadHashSetPostReq) (APIDeduplicateDeadHashSetPostRes, error)
+	APIDeduplicateDeadHashSetPost(ctx context.Context, req *APIDeduplicateDeadHashSetPostReq) error
 	// APIDeduplicateUniquePagesPost implements POST /api/deduplicate/unique-pages operation.
 	//
 	// Поиск уникальных страниц в книге.
 	//
 	// POST /api/deduplicate/unique-pages
-	APIDeduplicateUniquePagesPost(ctx context.Context, req *APIDeduplicateUniquePagesPostReq) (APIDeduplicateUniquePagesPostRes, error)
+	APIDeduplicateUniquePagesPost(ctx context.Context, req *APIDeduplicateUniquePagesPostReq) (*APIDeduplicateUniquePagesPostOK, error)
 	// APIFileIDGet implements GET /api/file/{id} operation.
 	//
 	// Получение тела файла (изображения страницы).
 	//
 	// GET /api/file/{id}
-	APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (APIFileIDGetRes, error)
+	APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (*APIFileIDGetOKHeaders, error)
 	// APIFsCreatePost implements POST /api/fs/create operation.
 	//
 	// Создание файловой системы.
 	//
 	// POST /api/fs/create
-	APIFsCreatePost(ctx context.Context, req *APIFsCreatePostReq) (APIFsCreatePostRes, error)
+	APIFsCreatePost(ctx context.Context, req *APIFsCreatePostReq) (*APIFsCreatePostOK, error)
 	// APIFsDeletePost implements POST /api/fs/delete operation.
 	//
 	// Удаление файловой системы.
 	//
 	// POST /api/fs/delete
-	APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) (APIFsDeletePostRes, error)
+	APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) error
 	// APIFsGetPost implements POST /api/fs/get operation.
 	//
 	// Данные настроек файловой системы.
 	//
 	// POST /api/fs/get
-	APIFsGetPost(ctx context.Context, req *APIFsGetPostReq) (APIFsGetPostRes, error)
+	APIFsGetPost(ctx context.Context, req *APIFsGetPostReq) (*FileSystemInfo, error)
 	// APIFsListPost implements POST /api/fs/list operation.
 	//
 	// Список файловых систем.
 	//
 	// POST /api/fs/list
-	APIFsListPost(ctx context.Context, req *APIFsListPostReq) (APIFsListPostRes, error)
+	APIFsListPost(ctx context.Context, req *APIFsListPostReq) (*APIFsListPostOK, error)
 	// APIFsRemoveMismatchPost implements POST /api/fs/remove-mismatch operation.
 	//
 	// Запускает задачу удаления не совпавших файлов между
 	// базой данных и файловым хранилищем.
 	//
 	// POST /api/fs/remove-mismatch
-	APIFsRemoveMismatchPost(ctx context.Context, req *APIFsRemoveMismatchPostReq) (APIFsRemoveMismatchPostRes, error)
+	APIFsRemoveMismatchPost(ctx context.Context, req *APIFsRemoveMismatchPostReq) error
 	// APIFsTransferBookPost implements POST /api/fs/transfer/book operation.
 	//
 	// Запускает перенос файлов между файловыми системами.
 	//
 	// POST /api/fs/transfer/book
-	APIFsTransferBookPost(ctx context.Context, req *APIFsTransferBookPostReq) (APIFsTransferBookPostRes, error)
+	APIFsTransferBookPost(ctx context.Context, req *APIFsTransferBookPostReq) error
 	// APIFsTransferPost implements POST /api/fs/transfer operation.
 	//
 	// Запускает перенос файлов между файловыми системами.
 	//
 	// POST /api/fs/transfer
-	APIFsTransferPost(ctx context.Context, req *APIFsTransferPostReq) (APIFsTransferPostRes, error)
+	APIFsTransferPost(ctx context.Context, req *APIFsTransferPostReq) error
 	// APIFsUpdatePost implements POST /api/fs/update operation.
 	//
 	// Изменение настроек файловой системы.
 	//
 	// POST /api/fs/update
-	APIFsUpdatePost(ctx context.Context, req *APIFsUpdatePostReq) (APIFsUpdatePostRes, error)
+	APIFsUpdatePost(ctx context.Context, req *APIFsUpdatePostReq) error
 	// APIFsValidatePost implements POST /api/fs/validate operation.
 	//
 	// Запускает валидацию файлов на файловой системе.
 	//
 	// POST /api/fs/validate
-	APIFsValidatePost(ctx context.Context, req *APIFsValidatePostReq) (APIFsValidatePostRes, error)
+	APIFsValidatePost(ctx context.Context, req *APIFsValidatePostReq) error
 	// APIHproxyBookPost implements POST /api/hproxy/book operation.
 	//
 	// Парсинг данных книги по ссылке.
 	//
 	// POST /api/hproxy/book
-	APIHproxyBookPost(ctx context.Context, req *APIHproxyBookPostReq) (APIHproxyBookPostRes, error)
+	APIHproxyBookPost(ctx context.Context, req *APIHproxyBookPostReq) (*APIHproxyBookPostOK, error)
 	// APIHproxyFileGet implements GET /api/hproxy/file operation.
 	//
 	// Получение тела файла (изображения страницы).
 	//
 	// GET /api/hproxy/file
-	APIHproxyFileGet(ctx context.Context, params APIHproxyFileGetParams) (APIHproxyFileGetRes, error)
+	APIHproxyFileGet(ctx context.Context, params APIHproxyFileGetParams) (*APIHproxyFileGetOKHeaders, error)
 	// APIHproxyListPost implements POST /api/hproxy/list operation.
 	//
 	// Парсинг списка данных по ссылке.
 	//
 	// POST /api/hproxy/list
-	APIHproxyListPost(ctx context.Context, req *APIHproxyListPostReq) (APIHproxyListPostRes, error)
+	APIHproxyListPost(ctx context.Context, req *APIHproxyListPostReq) (*APIHproxyListPostOK, error)
 	// APILabelDeletePost implements POST /api/label/delete operation.
 	//
 	// Удаление метки на книгу или страницу.
 	//
 	// POST /api/label/delete
-	APILabelDeletePost(ctx context.Context, req *APILabelDeletePostReq) (APILabelDeletePostRes, error)
+	APILabelDeletePost(ctx context.Context, req *APILabelDeletePostReq) error
 	// APILabelGetPost implements POST /api/label/get operation.
 	//
 	// Получение меток книги.
 	//
 	// POST /api/label/get
-	APILabelGetPost(ctx context.Context, req *APILabelGetPostReq) (APILabelGetPostRes, error)
+	APILabelGetPost(ctx context.Context, req *APILabelGetPostReq) (*APILabelGetPostOK, error)
 	// APILabelPresetCreatePost implements POST /api/label/preset/create operation.
 	//
 	// Создание пресета меток.
 	//
 	// POST /api/label/preset/create
-	APILabelPresetCreatePost(ctx context.Context, req *APILabelPresetCreatePostReq) (APILabelPresetCreatePostRes, error)
+	APILabelPresetCreatePost(ctx context.Context, req *APILabelPresetCreatePostReq) error
 	// APILabelPresetDeletePost implements POST /api/label/preset/delete operation.
 	//
 	// Удаление пресета меток.
 	//
 	// POST /api/label/preset/delete
-	APILabelPresetDeletePost(ctx context.Context, req *APILabelPresetDeletePostReq) (APILabelPresetDeletePostRes, error)
+	APILabelPresetDeletePost(ctx context.Context, req *APILabelPresetDeletePostReq) error
 	// APILabelPresetGetPost implements POST /api/label/preset/get operation.
 	//
 	// Пресеты меток.
 	//
 	// POST /api/label/preset/get
-	APILabelPresetGetPost(ctx context.Context, req *APILabelPresetGetPostReq) (APILabelPresetGetPostRes, error)
+	APILabelPresetGetPost(ctx context.Context, req *APILabelPresetGetPostReq) (*APILabelPresetGetPostOK, error)
 	// APILabelPresetListGet implements GET /api/label/preset/list operation.
 	//
 	// Пресеты меток.
 	//
 	// GET /api/label/preset/list
-	APILabelPresetListGet(ctx context.Context) (APILabelPresetListGetRes, error)
+	APILabelPresetListGet(ctx context.Context) (*APILabelPresetListGetOK, error)
 	// APILabelPresetUpdatePost implements POST /api/label/preset/update operation.
 	//
 	// Обновления пресета меток.
 	//
 	// POST /api/label/preset/update
-	APILabelPresetUpdatePost(ctx context.Context, req *APILabelPresetUpdatePostReq) (APILabelPresetUpdatePostRes, error)
+	APILabelPresetUpdatePost(ctx context.Context, req *APILabelPresetUpdatePostReq) error
 	// APILabelSetPost implements POST /api/label/set operation.
 	//
 	// Установка метки на книгу или страницу.
 	//
 	// POST /api/label/set
-	APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) (APILabelSetPostRes, error)
+	APILabelSetPost(ctx context.Context, req *APILabelSetPostReq) error
 	// APIMassloadCalculatePost implements POST /api/massload/calculate operation.
 	//
 	// Расчет массовых загрузок.
 	//
 	// POST /api/massload/calculate
-	APIMassloadCalculatePost(ctx context.Context, req *APIMassloadCalculatePostReq) (APIMassloadCalculatePostRes, error)
+	APIMassloadCalculatePost(ctx context.Context, req *APIMassloadCalculatePostReq) error
 	// APIMassloadFlagCreatePost implements POST /api/massload/flag/create operation.
 	//
 	// Создание информации о флаге массовой загрузке.
 	//
 	// POST /api/massload/flag/create
-	APIMassloadFlagCreatePost(ctx context.Context, req *APIMassloadFlagCreatePostReq) (APIMassloadFlagCreatePostRes, error)
+	APIMassloadFlagCreatePost(ctx context.Context, req *APIMassloadFlagCreatePostReq) error
 	// APIMassloadFlagDeletePost implements POST /api/massload/flag/delete operation.
 	//
 	// Удаление флага массовой загрузки.
 	//
 	// POST /api/massload/flag/delete
-	APIMassloadFlagDeletePost(ctx context.Context, req *APIMassloadFlagDeletePostReq) (APIMassloadFlagDeletePostRes, error)
+	APIMassloadFlagDeletePost(ctx context.Context, req *APIMassloadFlagDeletePostReq) error
 	// APIMassloadFlagGetPost implements POST /api/massload/flag/get operation.
 	//
 	// Получение флага массовой загрузки.
 	//
 	// POST /api/massload/flag/get
-	APIMassloadFlagGetPost(ctx context.Context, req *APIMassloadFlagGetPostReq) (APIMassloadFlagGetPostRes, error)
+	APIMassloadFlagGetPost(ctx context.Context, req *APIMassloadFlagGetPostReq) (*MassloadFlag, error)
 	// APIMassloadFlagListGet implements GET /api/massload/flag/list operation.
 	//
 	// Флаги для массовых загрузок.
 	//
 	// GET /api/massload/flag/list
-	APIMassloadFlagListGet(ctx context.Context) (APIMassloadFlagListGetRes, error)
+	APIMassloadFlagListGet(ctx context.Context) (*APIMassloadFlagListGetOK, error)
 	// APIMassloadFlagUpdatePost implements POST /api/massload/flag/update operation.
 	//
 	// Обновление флага массовой загрузки.
 	//
 	// POST /api/massload/flag/update
-	APIMassloadFlagUpdatePost(ctx context.Context, req *APIMassloadFlagUpdatePostReq) (APIMassloadFlagUpdatePostRes, error)
+	APIMassloadFlagUpdatePost(ctx context.Context, req *APIMassloadFlagUpdatePostReq) error
 	// APIMassloadInfoAttributeCreatePost implements POST /api/massload/info/attribute/create operation.
 	//
 	// Привязка аттрибута к массовой загрузке.
 	//
 	// POST /api/massload/info/attribute/create
-	APIMassloadInfoAttributeCreatePost(ctx context.Context, req *APIMassloadInfoAttributeCreatePostReq) (APIMassloadInfoAttributeCreatePostRes, error)
+	APIMassloadInfoAttributeCreatePost(ctx context.Context, req *APIMassloadInfoAttributeCreatePostReq) error
 	// APIMassloadInfoAttributeDeletePost implements POST /api/massload/info/attribute/delete operation.
 	//
 	// Удаление аттрибута для массовой загрузки.
 	//
 	// POST /api/massload/info/attribute/delete
-	APIMassloadInfoAttributeDeletePost(ctx context.Context, req *APIMassloadInfoAttributeDeletePostReq) (APIMassloadInfoAttributeDeletePostRes, error)
+	APIMassloadInfoAttributeDeletePost(ctx context.Context, req *APIMassloadInfoAttributeDeletePostReq) error
 	// APIMassloadInfoCreatePost implements POST /api/massload/info/create operation.
 	//
 	// Создание информации о массовой загрузке.
 	//
 	// POST /api/massload/info/create
-	APIMassloadInfoCreatePost(ctx context.Context, req *APIMassloadInfoCreatePostReq) (APIMassloadInfoCreatePostRes, error)
+	APIMassloadInfoCreatePost(ctx context.Context, req *APIMassloadInfoCreatePostReq) (*APIMassloadInfoCreatePostOK, error)
 	// APIMassloadInfoDeletePost implements POST /api/massload/info/delete operation.
 	//
 	// Удаление массовой загрузки.
 	//
 	// POST /api/massload/info/delete
-	APIMassloadInfoDeletePost(ctx context.Context, req *APIMassloadInfoDeletePostReq) (APIMassloadInfoDeletePostRes, error)
+	APIMassloadInfoDeletePost(ctx context.Context, req *APIMassloadInfoDeletePostReq) error
 	// APIMassloadInfoExternalLinkCreatePost implements POST /api/massload/info/external_link/create operation.
 	//
 	// Привязка внешней ссылки к массовой загрузке.
 	//
 	// POST /api/massload/info/external_link/create
-	APIMassloadInfoExternalLinkCreatePost(ctx context.Context, req *APIMassloadInfoExternalLinkCreatePostReq) (APIMassloadInfoExternalLinkCreatePostRes, error)
+	APIMassloadInfoExternalLinkCreatePost(ctx context.Context, req *APIMassloadInfoExternalLinkCreatePostReq) error
 	// APIMassloadInfoExternalLinkDeletePost implements POST /api/massload/info/external_link/delete operation.
 	//
 	// Удаление внешней ссылки для массовой загрузки.
 	//
 	// POST /api/massload/info/external_link/delete
-	APIMassloadInfoExternalLinkDeletePost(ctx context.Context, req *APIMassloadInfoExternalLinkDeletePostReq) (APIMassloadInfoExternalLinkDeletePostRes, error)
+	APIMassloadInfoExternalLinkDeletePost(ctx context.Context, req *APIMassloadInfoExternalLinkDeletePostReq) error
 	// APIMassloadInfoExternalLinkUpdatePost implements POST /api/massload/info/external_link/update operation.
 	//
 	// Обновление внешней ссылки массовой загрузки.
 	//
 	// POST /api/massload/info/external_link/update
-	APIMassloadInfoExternalLinkUpdatePost(ctx context.Context, req *APIMassloadInfoExternalLinkUpdatePostReq) (APIMassloadInfoExternalLinkUpdatePostRes, error)
+	APIMassloadInfoExternalLinkUpdatePost(ctx context.Context, req *APIMassloadInfoExternalLinkUpdatePostReq) error
 	// APIMassloadInfoGetPost implements POST /api/massload/info/get operation.
 	//
 	// Получение массовой загрузки.
 	//
 	// POST /api/massload/info/get
-	APIMassloadInfoGetPost(ctx context.Context, req *APIMassloadInfoGetPostReq) (APIMassloadInfoGetPostRes, error)
+	APIMassloadInfoGetPost(ctx context.Context, req *APIMassloadInfoGetPostReq) (*MassloadInfo, error)
 	// APIMassloadInfoListPost implements POST /api/massload/info/list operation.
 	//
 	// Массовые загрузки.
 	//
 	// POST /api/massload/info/list
-	APIMassloadInfoListPost(ctx context.Context, req *APIMassloadInfoListPostReq) (APIMassloadInfoListPostRes, error)
+	APIMassloadInfoListPost(ctx context.Context, req *APIMassloadInfoListPostReq) (*APIMassloadInfoListPostOK, error)
 	// APIMassloadInfoUpdatePost implements POST /api/massload/info/update operation.
 	//
 	// Обновление массовой загрузки.
 	//
 	// POST /api/massload/info/update
-	APIMassloadInfoUpdatePost(ctx context.Context, req *APIMassloadInfoUpdatePostReq) (APIMassloadInfoUpdatePostRes, error)
+	APIMassloadInfoUpdatePost(ctx context.Context, req *APIMassloadInfoUpdatePostReq) error
 	// APIParsingHandlePost implements POST /api/parsing/handle operation.
 	//
 	// Обработка ссылок на новые книги.
 	//
 	// POST /api/parsing/handle
-	APIParsingHandlePost(ctx context.Context, req *APIParsingHandlePostReq) (APIParsingHandlePostRes, error)
+	APIParsingHandlePost(ctx context.Context, req *APIParsingHandlePostReq) (*APIParsingHandlePostOK, error)
 	// APIParsingMirrorCreatePost implements POST /api/parsing/mirror/create operation.
 	//
 	// Создание данных зеркала.
 	//
 	// POST /api/parsing/mirror/create
-	APIParsingMirrorCreatePost(ctx context.Context, req *APIParsingMirrorCreatePostReq) (APIParsingMirrorCreatePostRes, error)
+	APIParsingMirrorCreatePost(ctx context.Context, req *APIParsingMirrorCreatePostReq) error
 	// APIParsingMirrorDeletePost implements POST /api/parsing/mirror/delete operation.
 	//
 	// Удаление зеркала.
 	//
 	// POST /api/parsing/mirror/delete
-	APIParsingMirrorDeletePost(ctx context.Context, req *APIParsingMirrorDeletePostReq) (APIParsingMirrorDeletePostRes, error)
+	APIParsingMirrorDeletePost(ctx context.Context, req *APIParsingMirrorDeletePostReq) error
 	// APIParsingMirrorGetPost implements POST /api/parsing/mirror/get operation.
 	//
 	// Получение данных зеркала.
 	//
 	// POST /api/parsing/mirror/get
-	APIParsingMirrorGetPost(ctx context.Context, req *APIParsingMirrorGetPostReq) (APIParsingMirrorGetPostRes, error)
+	APIParsingMirrorGetPost(ctx context.Context, req *APIParsingMirrorGetPostReq) (*APIParsingMirrorGetPostOK, error)
 	// APIParsingMirrorListGet implements GET /api/parsing/mirror/list operation.
 	//
 	// Зеркала.
 	//
 	// GET /api/parsing/mirror/list
-	APIParsingMirrorListGet(ctx context.Context) (APIParsingMirrorListGetRes, error)
+	APIParsingMirrorListGet(ctx context.Context) (*APIParsingMirrorListGetOK, error)
 	// APIParsingMirrorUpdatePost implements POST /api/parsing/mirror/update operation.
 	//
 	// Обновления зеркала.
 	//
 	// POST /api/parsing/mirror/update
-	APIParsingMirrorUpdatePost(ctx context.Context, req *APIParsingMirrorUpdatePostReq) (APIParsingMirrorUpdatePostRes, error)
+	APIParsingMirrorUpdatePost(ctx context.Context, req *APIParsingMirrorUpdatePostReq) error
 	// APISystemImportArchivePost implements POST /api/system/import/archive operation.
 	//
 	// Импорт новой книги через архив.
 	//
 	// POST /api/system/import/archive
-	APISystemImportArchivePost(ctx context.Context, req APISystemImportArchivePostReq) (APISystemImportArchivePostRes, error)
+	APISystemImportArchivePost(ctx context.Context, req APISystemImportArchivePostReq) (*APISystemImportArchivePostOK, error)
 	// APISystemInfoSizeGet implements GET /api/system/info/size operation.
 	//
 	// Получение общей информации о системе.
 	//
 	// GET /api/system/info/size
-	APISystemInfoSizeGet(ctx context.Context) (APISystemInfoSizeGetRes, error)
+	APISystemInfoSizeGet(ctx context.Context) (*APISystemInfoSizeGetOK, error)
 	// APISystemInfoWorkersGet implements GET /api/system/info/workers operation.
 	//
 	// Получение информации о воркерах в системе.
 	//
 	// GET /api/system/info/workers
-	APISystemInfoWorkersGet(ctx context.Context) (APISystemInfoWorkersGetRes, error)
+	APISystemInfoWorkersGet(ctx context.Context) (*APISystemInfoWorkersGetOK, error)
 	// APISystemTaskCreatePost implements POST /api/system/task/create operation.
 	//
 	// Создание и фоновый запуск задачи.
 	//
 	// POST /api/system/task/create
-	APISystemTaskCreatePost(ctx context.Context, req *APISystemTaskCreatePostReq) (APISystemTaskCreatePostRes, error)
+	APISystemTaskCreatePost(ctx context.Context, req *APISystemTaskCreatePostReq) error
 	// APISystemTaskResultsGet implements GET /api/system/task/results operation.
 	//
 	// Получение результатов задач.
 	//
 	// GET /api/system/task/results
-	APISystemTaskResultsGet(ctx context.Context) (APISystemTaskResultsGetRes, error)
+	APISystemTaskResultsGet(ctx context.Context) (*APISystemTaskResultsGetOK, error)
 	// APISystemWorkerConfigPost implements POST /api/system/worker/config operation.
 	//
 	// Динамическая конфигурация раннеров (воркеров),
 	// сбрасывается при перезапуске системы.
 	//
 	// POST /api/system/worker/config
-	APISystemWorkerConfigPost(ctx context.Context, req *APISystemWorkerConfigPostReq) (APISystemWorkerConfigPostRes, error)
+	APISystemWorkerConfigPost(ctx context.Context, req *APISystemWorkerConfigPostReq) error
 	// APIUserLoginPost implements POST /api/user/login operation.
 	//
 	// Проставление токена в куки.
 	//
 	// POST /api/user/login
-	APIUserLoginPost(ctx context.Context, req *APIUserLoginPostReq) (APIUserLoginPostRes, error)
+	APIUserLoginPost(ctx context.Context, req *APIUserLoginPostReq) (*APIUserLoginPostNoContent, error)
+	// NewError creates *ErrorResponseStatusCode from error returned by handler.
+	//
+	// Used for common default response.
+	NewError(ctx context.Context, err error) *ErrorResponseStatusCode
 }
 
 // Server implements http server based on OpenAPI v3 specification and

@@ -3,6 +3,7 @@ package agenthandlers
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -12,21 +13,23 @@ import (
 func (c *AgentHandlersController) APIAgentGetPost(
 	ctx context.Context,
 	req *serverapi.APIAgentGetPostReq,
-) (serverapi.APIAgentGetPostRes, error) {
+) (*serverapi.Agent, error) {
 	agent, err := c.agentUseCases.Agent(ctx, req.ID)
 
 	if errors.Is(err, core.ErrAgentNotFound) {
-		return &serverapi.APIAgentGetPostNotFound{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusNotFound,
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	if err != nil {
-		return &serverapi.APIAgentGetPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	result := apiservercore.ConvertAgentToAPI(agent)

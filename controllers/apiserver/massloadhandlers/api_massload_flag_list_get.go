@@ -2,6 +2,7 @@ package massloadhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
@@ -9,13 +10,14 @@ import (
 	"github.com/gbh007/hgraber-next/pkg"
 )
 
-func (c *MassloadController) APIMassloadFlagListGet(ctx context.Context) (serverapi.APIMassloadFlagListGetRes, error) {
+func (c *MassloadController) APIMassloadFlagListGet(ctx context.Context) (*serverapi.APIMassloadFlagListGetOK, error) {
 	flags, err := c.massloadUseCases.MassloadFlags(ctx)
 	if err != nil {
-		return &serverapi.APIMassloadFlagListGetInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIMassloadFlagListGetOK{

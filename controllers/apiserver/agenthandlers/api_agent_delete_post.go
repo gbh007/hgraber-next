@@ -3,6 +3,7 @@ package agenthandlers
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -12,22 +13,24 @@ import (
 func (c *AgentHandlersController) APIAgentDeletePost(
 	ctx context.Context,
 	req *serverapi.APIAgentDeletePostReq,
-) (serverapi.APIAgentDeletePostRes, error) {
+) error {
 	err := c.agentUseCases.DeleteAgent(ctx, req.ID)
 
 	if errors.Is(err, core.ErrAgentNotFound) {
-		return &serverapi.APIAgentDeletePostNotFound{
+		return apiservercore.APIError{
+			Code:      http.StatusNotFound,
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	if err != nil {
-		return &serverapi.APIAgentDeletePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIAgentDeletePostNoContent{}, nil
+	return nil
 }

@@ -2,6 +2,7 @@ package systemhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,14 +11,15 @@ import (
 func (c *SystemHandlersController) APIParsingMirrorDeletePost(
 	ctx context.Context,
 	req *serverapi.APIParsingMirrorDeletePostReq,
-) (serverapi.APIParsingMirrorDeletePostRes, error) {
+) error {
 	err := c.parseUseCases.DeleteMirror(ctx, req.ID)
 	if err != nil {
-		return &serverapi.APIParsingMirrorDeletePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.ParseUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIParsingMirrorDeletePostNoContent{}, nil
+	return nil
 }

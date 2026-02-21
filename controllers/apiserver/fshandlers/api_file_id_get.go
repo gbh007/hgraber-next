@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"mime"
+	"net/http"
 	"path"
 	"strings"
 
@@ -17,13 +18,14 @@ import (
 func (c *FSHandlersController) APIFileIDGet(
 	ctx context.Context,
 	params serverapi.APIFileIDGetParams,
-) (serverapi.APIFileIDGetRes, error) {
+) (*serverapi.APIFileIDGetOKHeaders, error) {
 	fileID, err := uuid.Parse(strings.TrimSuffix(params.ID, path.Ext(params.ID)))
 	if err != nil {
-		return &serverapi.APIFileIDGetBadRequest{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusBadRequest,
 			InnerCode: apiservercore.ValidationCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	var fsID *uuid.UUID
@@ -34,17 +36,19 @@ func (c *FSHandlersController) APIFileIDGet(
 
 	body, err := c.fsUseCases.File(ctx, fileID, fsID)
 	if errors.Is(err, core.ErrFileNotFound) {
-		return &serverapi.APIFileIDGetNotFound{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusNotFound,
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	if err != nil {
-		return &serverapi.APIFileIDGetInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	// Это не самый правильный и ленивый костыль, но пока его будет достаточно

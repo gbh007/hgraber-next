@@ -2,6 +2,7 @@ package agenthandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
@@ -13,7 +14,7 @@ import (
 func (c *AgentHandlersController) APIAgentListPost(
 	ctx context.Context,
 	req *serverapi.APIAgentListPostReq,
-) (serverapi.APIAgentListPostRes, error) {
+) ([]serverapi.APIAgentListPostOKItem, error) {
 	agents, err := c.agentUseCases.Agents(ctx, core.AgentFilter{
 		CanParse:      req.CanParse.Value,
 		CanExport:     req.CanExport.Value,
@@ -22,10 +23,11 @@ func (c *AgentHandlersController) APIAgentListPost(
 		HasHProxy:     req.HasHproxy.Value,
 	}, req.IncludeStatus.Value)
 	if err != nil {
-		return &serverapi.APIAgentListPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	responseAgents := pkg.Map(agents, func(agent agentmodel.AgentWithStatus) serverapi.APIAgentListPostOKItem {
@@ -85,7 +87,5 @@ func (c *AgentHandlersController) APIAgentListPost(
 		}
 	})
 
-	res := serverapi.APIAgentListPostOKApplicationJSON(responseAgents)
-
-	return &res, nil
+	return responseAgents, nil
 }

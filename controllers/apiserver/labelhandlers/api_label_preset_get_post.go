@@ -2,6 +2,7 @@ package labelhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,13 +11,14 @@ import (
 func (c *LabelHandlersController) APILabelPresetGetPost(
 	ctx context.Context,
 	req *serverapi.APILabelPresetGetPostReq,
-) (serverapi.APILabelPresetGetPostRes, error) {
+) (*serverapi.APILabelPresetGetPostOK, error) {
 	raw, err := c.labelUseCases.LabelPreset(ctx, req.Name)
 	if err != nil {
-		return &serverapi.APILabelPresetGetPostInternalServerError{
-			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
+			InnerCode: apiservercore.LabelUseCaseCode,
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APILabelPresetGetPostOK{

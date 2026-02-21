@@ -2,6 +2,7 @@ package hproxyhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
@@ -12,7 +13,7 @@ import (
 func (c *HProxyHandlersController) APIHproxyBookPost(
 	ctx context.Context,
 	req *serverapi.APIHproxyBookPostReq,
-) (serverapi.APIHproxyBookPostRes, error) {
+) (*serverapi.APIHproxyBookPostOK, error) {
 	var pageLimit *int
 
 	if req.PageLimit.Set {
@@ -21,10 +22,11 @@ func (c *HProxyHandlersController) APIHproxyBookPost(
 
 	book, err := c.hProxyUseCases.Book(ctx, req.URL, pageLimit)
 	if err != nil {
-		return &serverapi.APIHproxyBookPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.HProxyUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIHproxyBookPostOK{

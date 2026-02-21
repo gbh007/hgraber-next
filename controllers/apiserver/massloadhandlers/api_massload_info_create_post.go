@@ -2,6 +2,7 @@ package massloadhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/massloadmodel"
@@ -11,17 +12,18 @@ import (
 func (c *MassloadController) APIMassloadInfoCreatePost(
 	ctx context.Context,
 	req *serverapi.APIMassloadInfoCreatePostReq,
-) (serverapi.APIMassloadInfoCreatePostRes, error) {
+) (*serverapi.APIMassloadInfoCreatePostOK, error) {
 	id, err := c.massloadUseCases.CreateMassload(ctx, massloadmodel.Massload{
 		Name:        req.Name,
 		Description: req.Description.Value,
 		Flags:       req.Flags,
 	})
 	if err != nil {
-		return &serverapi.APIMassloadInfoCreatePostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIMassloadInfoCreatePostOK{

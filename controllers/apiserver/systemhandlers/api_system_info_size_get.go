@@ -2,6 +2,7 @@ package systemhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -10,13 +11,14 @@ import (
 
 func (c *SystemHandlersController) APISystemInfoSizeGet(
 	ctx context.Context,
-) (serverapi.APISystemInfoSizeGetRes, error) {
+) (*serverapi.APISystemInfoSizeGetOK, error) {
 	info, err := c.systemUseCases.SystemSize(ctx)
 	if err != nil {
-		return &serverapi.APISystemInfoSizeGetInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APISystemInfoSizeGetOK{

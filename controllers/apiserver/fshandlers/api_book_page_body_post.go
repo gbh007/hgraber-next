@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -13,7 +14,7 @@ import (
 func (c *FSHandlersController) APIBookPageBodyPost(
 	ctx context.Context,
 	req *serverapi.APIBookPageBodyPostReq,
-) (serverapi.APIBookPageBodyPostRes, error) {
+) (serverapi.APIBookPageBodyPostOK, error) {
 	var (
 		body      io.Reader
 		err       error
@@ -30,27 +31,30 @@ func (c *FSHandlersController) APIBookPageBodyPost(
 		body, err = c.parseUseCases.PageBodyByURL(ctx, req.URL.Value)
 
 	default:
-		return &serverapi.APIBookPageBodyPostBadRequest{
+		return serverapi.APIBookPageBodyPostOK{}, apiservercore.APIError{
+			Code:      http.StatusBadRequest,
 			InnerCode: apiservercore.ValidationCode,
-			Details:   serverapi.NewOptString("id/page number and url is empty"),
-		}, nil
+			Details:   "id/page number and url is empty",
+		}
 	}
 
 	if errors.Is(err, core.ErrPageNotFound) || errors.Is(err, core.ErrFileNotFound) {
-		return &serverapi.APIBookPageBodyPostNotFound{
+		return serverapi.APIBookPageBodyPostOK{}, apiservercore.APIError{
+			Code:      http.StatusNotFound,
 			InnerCode: innerCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	if err != nil {
-		return &serverapi.APIBookPageBodyPostInternalServerError{
+		return serverapi.APIBookPageBodyPostOK{}, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: innerCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIBookPageBodyPostOK{
+	return serverapi.APIBookPageBodyPostOK{
 		Data: body,
 	}, nil
 }

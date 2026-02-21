@@ -3,6 +3,7 @@ package bookhandlers
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -12,7 +13,7 @@ import (
 func (c *BookHandlersController) APIBookRawPost(
 	ctx context.Context,
 	req *serverapi.APIBookRawPostReq,
-) (serverapi.APIBookRawPostRes, error) {
+) (*serverapi.BookRaw, error) {
 	var (
 		book      core.BookContainer
 		err       error
@@ -29,24 +30,27 @@ func (c *BookHandlersController) APIBookRawPost(
 		book, err = c.parseUseCases.BookByURL(ctx, req.URL.Value)
 
 	default:
-		return &serverapi.APIBookRawPostBadRequest{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusBadRequest,
 			InnerCode: apiservercore.ValidationCode,
-			Details:   serverapi.NewOptString("id and url is empty"),
-		}, nil
+			Details:   "id and url is empty",
+		}
 	}
 
 	if errors.Is(err, core.ErrBookNotFound) {
-		return &serverapi.APIBookRawPostNotFound{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusNotFound,
 			InnerCode: innerCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	if err != nil {
-		return &serverapi.APIBookRawPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: innerCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return apiservercore.ConvertBookFullToBookRaw(book), nil

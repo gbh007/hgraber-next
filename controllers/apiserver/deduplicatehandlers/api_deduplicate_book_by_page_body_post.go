@@ -2,6 +2,7 @@ package deduplicatehandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
@@ -13,13 +14,14 @@ import (
 func (c *DeduplicateHandlersController) APIDeduplicateBookByPageBodyPost(
 	ctx context.Context,
 	req *serverapi.APIDeduplicateBookByPageBodyPostReq,
-) (serverapi.APIDeduplicateBookByPageBodyPostRes, error) {
+) (*serverapi.APIDeduplicateBookByPageBodyPostOK, error) {
 	data, err := c.deduplicateUseCases.BookByPageEntryPercentage(ctx, req.BookID)
 	if err != nil {
-		return &serverapi.APIDeduplicateBookByPageBodyPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.DeduplicateUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIDeduplicateBookByPageBodyPostOK{

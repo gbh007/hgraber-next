@@ -2,6 +2,7 @@ package deduplicatehandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
@@ -13,13 +14,14 @@ import (
 func (c *DeduplicateHandlersController) APIDeduplicateComparePost(
 	ctx context.Context,
 	req *serverapi.APIDeduplicateComparePostReq,
-) (serverapi.APIDeduplicateComparePostRes, error) {
+) (*serverapi.APIDeduplicateComparePostOK, error) {
 	data, err := c.bffUseCases.BookCompare(ctx, req.OriginBookID, req.TargetBookID)
 	if err != nil {
-		return &serverapi.APIDeduplicateComparePostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIDeduplicateComparePostOK{

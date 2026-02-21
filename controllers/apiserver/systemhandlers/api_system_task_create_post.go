@@ -2,6 +2,7 @@ package systemhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
@@ -11,7 +12,7 @@ import (
 func (c *SystemHandlersController) APISystemTaskCreatePost(
 	ctx context.Context,
 	req *serverapi.APISystemTaskCreatePostReq,
-) (serverapi.APISystemTaskCreatePostRes, error) {
+) error {
 	var code systemmodel.TaskCode
 
 	switch req.Code {
@@ -37,11 +38,12 @@ func (c *SystemHandlersController) APISystemTaskCreatePost(
 
 	err := c.systemUseCases.RunTask(ctx, code)
 	if err != nil {
-		return &serverapi.APISystemTaskCreatePostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.TaskerUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APISystemTaskCreatePostNoContent{}, nil
+	return nil
 }

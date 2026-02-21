@@ -2,6 +2,7 @@ package hproxyhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
@@ -12,13 +13,14 @@ import (
 func (c *HProxyHandlersController) APIHproxyListPost(
 	ctx context.Context,
 	req *serverapi.APIHproxyListPostReq,
-) (serverapi.APIHproxyListPostRes, error) {
+) (*serverapi.APIHproxyListPostOK, error) {
 	data, err := c.hProxyUseCases.List(ctx, req.URL)
 	if err != nil {
-		return &serverapi.APIHproxyListPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.HProxyUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIHproxyListPostOK{

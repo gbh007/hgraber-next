@@ -2,6 +2,7 @@ package deduplicatehandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,7 +11,7 @@ import (
 func (c *DeduplicateHandlersController) APIDeduplicateDeadHashSetPost(
 	ctx context.Context,
 	req *serverapi.APIDeduplicateDeadHashSetPostReq,
-) (serverapi.APIDeduplicateDeadHashSetPostRes, error) {
+) error {
 	var err error
 
 	switch {
@@ -25,11 +26,12 @@ func (c *DeduplicateHandlersController) APIDeduplicateDeadHashSetPost(
 	}
 
 	if err != nil {
-		return &serverapi.APIDeduplicateDeadHashSetPostInternalServerError{
+		return apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.DeduplicateUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
-	return &serverapi.APIDeduplicateDeadHashSetPostNoContent{}, nil
+	return nil
 }

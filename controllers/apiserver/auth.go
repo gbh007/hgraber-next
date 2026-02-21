@@ -45,7 +45,7 @@ func (c *Controller) HandleCookies(
 func (c *Controller) APIUserLoginPost(
 	ctx context.Context,
 	req *serverapi.APIUserLoginPostReq,
-) (serverapi.APIUserLoginPostRes, error) {
+) (*serverapi.APIUserLoginPostNoContent, error) {
 	cookie := http.Cookie{
 		Name:     "X-HG-Token",
 		Value:    req.Token,

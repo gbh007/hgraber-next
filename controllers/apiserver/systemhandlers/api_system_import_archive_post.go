@@ -2,6 +2,7 @@ package systemhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,7 +11,7 @@ import (
 func (c *SystemHandlersController) APISystemImportArchivePost(
 	ctx context.Context,
 	req serverapi.APISystemImportArchivePostReq,
-) (serverapi.APISystemImportArchivePostRes, error) {
+) (*serverapi.APISystemImportArchivePostOK, error) {
 	// FIXME: возможно все таки стоит проверять на дубли.
 	id, err := c.exportUseCases.ImportArchive(
 		ctx,
@@ -19,10 +20,11 @@ func (c *SystemHandlersController) APISystemImportArchivePost(
 		true,
 	)
 	if err != nil {
-		return &serverapi.APISystemImportArchivePostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.ExportUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APISystemImportArchivePostOK{

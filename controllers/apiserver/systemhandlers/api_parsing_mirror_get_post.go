@@ -2,6 +2,7 @@ package systemhandlers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -10,13 +11,14 @@ import (
 func (c *SystemHandlersController) APIParsingMirrorGetPost(
 	ctx context.Context,
 	req *serverapi.APIParsingMirrorGetPostReq,
-) (serverapi.APIParsingMirrorGetPostRes, error) {
+) (*serverapi.APIParsingMirrorGetPostOK, error) {
 	mirror, err := c.parseUseCases.Mirror(ctx, req.ID)
 	if err != nil {
-		return &serverapi.APIParsingMirrorGetPostInternalServerError{
+		return nil, apiservercore.APIError{
+			Code:      http.StatusInternalServerError,
 			InnerCode: apiservercore.ParseUseCaseCode,
-			Details:   serverapi.NewOptString(err.Error()),
-		}, nil
+			Details:   err.Error(),
+		}
 	}
 
 	return &serverapi.APIParsingMirrorGetPostOK{
