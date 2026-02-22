@@ -104,7 +104,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 
 	httpMux := server.NewStreamableHTTPServer(s)
 
-	server := &http.Server{ //nolint:gosec // будет исправлено позднее
+	apiServer := &http.Server{ //nolint:gosec // будет исправлено позднее
 		Handler:  c.logIO(c.authMiddleware(httpMux)),
 		Addr:     c.addr,
 		ErrorLog: slog.NewLogLogger(c.logger.Handler(), slog.LevelError),
@@ -116,7 +116,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 		c.logger.InfoContext(parentCtx, "mcp server start")
 		defer c.logger.InfoContext(parentCtx, "mcp server stop")
 
-		err := server.ListenAndServe()
+		err := apiServer.ListenAndServe()
 		if err != nil && !errors.Is(err, http.ErrServerClosed) {
 			c.logger.ErrorContext(parentCtx, err.Error())
 		}
@@ -129,7 +129,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 		shutdownCtx, cancel := context.WithTimeout(context.WithoutCancel(parentCtx), time.Second*10) //nolint:mnd,lll,golines // будет исправлено позднее
 		defer cancel()
 
-		err := server.Shutdown(shutdownCtx)
+		err := apiServer.Shutdown(shutdownCtx)
 		if err != nil {
 			c.logger.ErrorContext(parentCtx, err.Error())
 		}

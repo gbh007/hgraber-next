@@ -62,22 +62,25 @@ func filterStmt(s string) (string, bool) {
 		updateKey,
 		deleteKey,
 	} {
-		if values := tmp[k]; len(values) > 0 {
-			if result.Len() > 0 {
-				_, _ = result.WriteString(" ")
-			}
-
-			_, _ = result.WriteString(k + ":")
-
-			for i, v := range values {
-				values[i] = strings.ToLower(v)
-			}
-
-			slices.Sort(values)
-			values = slices.Compact(values)
-
-			_, _ = result.WriteString(strings.Join(values, ","))
+		values := tmp[k]
+		if len(values) == 0 {
+			continue
 		}
+
+		if result.Len() > 0 {
+			_, _ = result.WriteString(" ")
+		}
+
+		_, _ = result.WriteString(k + ":")
+
+		for i, v := range values {
+			values[i] = strings.ToLower(v)
+		}
+
+		slices.Sort(values)
+		values = slices.Compact(values)
+
+		_, _ = result.WriteString(strings.Join(values, ","))
 	}
 
 	return result.String(), result.Len() > 0

@@ -8,7 +8,6 @@ import (
 
 	"github.com/go-faster/errors"
 	"github.com/google/uuid"
-
 	"github.com/ogen-go/ogen/conv"
 	"github.com/ogen-go/ogen/middleware"
 	"github.com/ogen-go/ogen/ogenerrors"
@@ -87,7 +86,7 @@ type APIFileIDGetParams struct {
 	// ID файла для получения.
 	ID string
 	// ID файловой системы, для ускорения получения файла.
-	Fsid OptUUID
+	Fsid OptUUID `json:",omitempty,omitzero"`
 }
 
 func unpackAPIFileIDGetParams(packed middleware.Parameters) (params APIFileIDGetParams) {

@@ -9,16 +9,15 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
-	"go.opentelemetry.io/otel/trace"
-
 	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/uri"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
+	semconv "go.opentelemetry.io/otel/semconv/v1.37.0"
+	"go.opentelemetry.io/otel/trace"
 )
 
 func trimTrailingSlashes(u *url.URL) {
@@ -127,14 +126,6 @@ type Client struct {
 	sec       SecuritySource
 	baseClient
 }
-type errorHandler interface {
-	NewError(ctx context.Context, err error) *ErrorResponseStatusCode
-}
-
-var _ Handler = struct {
-	errorHandler
-	*Client
-}{}
 
 // NewClient initializes new Client defined by OAS.
 func NewClient(serverURL string, sec SecuritySource, opts ...ClientOption) (*Client, error) {
@@ -183,8 +174,9 @@ func (c *Client) APICoreStatusGet(ctx context.Context) (*APICoreStatusGetOK, err
 func (c *Client) sendAPICoreStatusGet(ctx context.Context) (res *APICoreStatusGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/core/status"),
+		semconv.URLTemplateKey.String("/api/core/status"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -287,8 +279,9 @@ func (c *Client) APIFsCreatePost(ctx context.Context, request APIFsCreatePostReq
 func (c *Client) sendAPIFsCreatePost(ctx context.Context, request APIFsCreatePostReq, params APIFsCreatePostParams) (res *APIFsCreatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/create"),
+		semconv.URLTemplateKey.String("/api/fs/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -408,8 +401,9 @@ func (c *Client) APIFsDeletePost(ctx context.Context, request *APIFsDeletePostRe
 func (c *Client) sendAPIFsDeletePost(ctx context.Context, request *APIFsDeletePostReq) (res *APIFsDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/delete"),
+		semconv.URLTemplateKey.String("/api/fs/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -515,8 +509,9 @@ func (c *Client) APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (API
 func (c *Client) sendAPIFsGetGet(ctx context.Context, params APIFsGetGetParams) (res APIFsGetGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/fs/get"),
+		semconv.URLTemplateKey.String("/api/fs/get"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -637,8 +632,9 @@ func (c *Client) APIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (
 func (c *Client) sendAPIFsInfoPost(ctx context.Context, request *APIFsInfoPostReq) (res *APIFsInfoPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/info"),
+		semconv.URLTemplateKey.String("/api/fs/info"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -744,8 +740,9 @@ func (c *Client) APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFi
 func (c *Client) sendAPIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (res *APIHighwayFileIDExtGetOKHeaders, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/highway/file/{id}.{ext}"),
+		semconv.URLTemplateKey.String("/api/highway/file/{id}.{ext}"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -870,8 +867,9 @@ func (c *Client) APIHighwayTokenCreatePost(ctx context.Context) (*APIHighwayToke
 func (c *Client) sendAPIHighwayTokenCreatePost(ctx context.Context) (res *APIHighwayTokenCreatePostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/highway/token/create"),
+		semconv.URLTemplateKey.String("/api/highway/token/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -974,8 +972,9 @@ func (c *Client) APIHproxyParseBookPost(ctx context.Context, request *APIHproxyP
 func (c *Client) sendAPIHproxyParseBookPost(ctx context.Context, request *APIHproxyParseBookPostReq) (res *APIHproxyParseBookPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/hproxy/parse/book"),
+		semconv.URLTemplateKey.String("/api/hproxy/parse/book"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1081,8 +1080,9 @@ func (c *Client) APIHproxyParseListPost(ctx context.Context, request *APIHproxyP
 func (c *Client) sendAPIHproxyParseListPost(ctx context.Context, request *APIHproxyParseListPostReq) (res *APIHproxyParseListPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/hproxy/parse/list"),
+		semconv.URLTemplateKey.String("/api/hproxy/parse/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1188,8 +1188,9 @@ func (c *Client) APIImportArchivePost(ctx context.Context, request APIImportArch
 func (c *Client) sendAPIImportArchivePost(ctx context.Context, request APIImportArchivePostReq, params APIImportArchivePostParams) (res *APIImportArchivePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/import/archive"),
+		semconv.URLTemplateKey.String("/api/import/archive"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1334,8 +1335,9 @@ func (c *Client) APIParsingBookCheckPost(ctx context.Context, request *APIParsin
 func (c *Client) sendAPIParsingBookCheckPost(ctx context.Context, request *APIParsingBookCheckPostReq) (res *BooksCheckResult, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/parsing/book/check"),
+		semconv.URLTemplateKey.String("/api/parsing/book/check"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1442,8 +1444,9 @@ func (c *Client) APIParsingBookMultiPost(ctx context.Context, request *APIParsin
 func (c *Client) sendAPIParsingBookMultiPost(ctx context.Context, request *APIParsingBookMultiPostReq) (res *BooksCheckResult, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/parsing/book/multi"),
+		semconv.URLTemplateKey.String("/api/parsing/book/multi"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1549,8 +1552,9 @@ func (c *Client) APIParsingBookPost(ctx context.Context, request *APIParsingBook
 func (c *Client) sendAPIParsingBookPost(ctx context.Context, request *APIParsingBookPostReq) (res *BookDetails, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/parsing/book"),
+		semconv.URLTemplateKey.String("/api/parsing/book"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1656,8 +1660,9 @@ func (c *Client) APIParsingPageCheckPost(ctx context.Context, request *APIParsin
 func (c *Client) sendAPIParsingPageCheckPost(ctx context.Context, request *APIParsingPageCheckPostReq) (res *APIParsingPageCheckPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/parsing/page/check"),
+		semconv.URLTemplateKey.String("/api/parsing/page/check"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1763,8 +1768,9 @@ func (c *Client) APIParsingPagePost(ctx context.Context, request *APIParsingPage
 func (c *Client) sendAPIParsingPagePost(ctx context.Context, request *APIParsingPagePostReq) (res APIParsingPagePostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/parsing/page"),
+		semconv.URLTemplateKey.String("/api/parsing/page"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()

@@ -44,7 +44,7 @@ func (uc *UseCase) removeDetachedFiles(
 	if err != nil {
 		taskResult.SetError(err)
 
-		return
+		return count, size, err
 	}
 
 	taskResult.SetTotal(int64(len(files)))
@@ -71,14 +71,14 @@ func (uc *UseCase) removeDetachedFiles(
 		if err != nil {
 			taskResult.SetError(fmt.Errorf("delete file (%s) from storage: %w", file.ID.String(), err))
 
-			return
+			return count, size, err
 		}
 
 		err = uc.fileStorage.Delete(ctx, file.ID, &file.FSID)
 		if err != nil {
 			taskResult.SetError(fmt.Errorf("delete file (%s) from file-storage: %w", file.ID.String(), err))
 
-			return
+			return count, size, err
 		}
 
 		count++
@@ -88,5 +88,5 @@ func (uc *UseCase) removeDetachedFiles(
 
 	taskResult.EndStage()
 
-	return
+	return count, size, err
 }

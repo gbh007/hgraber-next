@@ -14,7 +14,6 @@ import (
 	"github.com/gbh007/hgraber-next/config"
 )
 
-//nolint:revive // будет исправлено позднее
 type Config struct {
 	Grafana struct {
 		Addr   string `toml:"addr"`
@@ -33,6 +32,7 @@ type Config struct {
 
 func main() {
 	configPath := flag.String("config", "config.toml", "path to config")
+
 	flag.Parse()
 
 	cfg, err := config.ImportConfig(*configPath, false, func() Config { return Config{} })

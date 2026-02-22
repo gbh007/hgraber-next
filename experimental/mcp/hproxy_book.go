@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (c *Controller) hProxyBookTool() server.ServerTool {
@@ -21,14 +22,14 @@ func (c *Controller) hProxyBookTool() server.ServerTool {
 			),
 		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			url, err := url.Parse(request.GetString("url", ""))
+			bookUrl, err := url.Parse(request.GetString("url", ""))
 			if err != nil {
 				return nil, fmt.Errorf("parse book id: %w", err)
 			}
 
 			pageLimit := 0
 
-			book, err := c.hProxyUseCases.Book(ctx, *url, &pageLimit)
+			book, err := c.hProxyUseCases.Book(ctx, *bookUrl, &pageLimit)
 			if err != nil {
 				return nil, fmt.Errorf("get book: %w", err)
 			}

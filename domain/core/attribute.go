@@ -2,6 +2,7 @@
 package core
 
 import (
+	"maps"
 	"strings"
 	"time"
 
@@ -45,9 +46,7 @@ type AttributeColor struct {
 func MergeAttributeMap(a, b map[string][]string) map[string][]string {
 	result := make(map[string][]string, max(len(a), len(b)))
 
-	for code, values := range a {
-		result[code] = values
-	}
+	maps.Copy(result, a)
 
 	for code, values := range b {
 		result[code] = pkg.Unique(result[code], values)

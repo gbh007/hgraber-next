@@ -8,15 +8,14 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
-	"go.opentelemetry.io/otel/trace"
-
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/middleware"
 	"github.com/ogen-go/ogen/ogenerrors"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
+	semconv "go.opentelemetry.io/otel/semconv/v1.37.0"
+	"go.opentelemetry.io/otel/trace"
 )
 
 type codeRecorder struct {
@@ -27,6 +26,10 @@ type codeRecorder struct {
 func (c *codeRecorder) WriteHeader(status int) {
 	c.status = status
 	c.ResponseWriter.WriteHeader(status)
+}
+
+func (c *codeRecorder) Unwrap() http.ResponseWriter {
+	return c.ResponseWriter
 }
 
 // handleAPICoreStatusGetRequest handles GET /api/core/status operation.
@@ -41,6 +44,8 @@ func (s *Server) handleAPICoreStatusGetRequest(args [0]string, argsEscaped bool,
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/core/status"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APICoreStatusGetOperation,
@@ -84,7 +89,7 @@ func (s *Server) handleAPICoreStatusGetRequest(args [0]string, argsEscaped bool,
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -149,6 +154,8 @@ func (s *Server) handleAPICoreStatusGetRequest(args [0]string, argsEscaped bool,
 		}
 	}
 
+	var rawBody []byte
+
 	var response *APICoreStatusGetOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -157,6 +164,7 @@ func (s *Server) handleAPICoreStatusGetRequest(args [0]string, argsEscaped bool,
 			OperationSummary: "Получение данных о состоянии агента",
 			OperationID:      "",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -220,6 +228,8 @@ func (s *Server) handleAPIFsCreatePostRequest(args [0]string, argsEscaped bool, 
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/fs/create"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIFsCreatePostOperation,
@@ -263,7 +273,7 @@ func (s *Server) handleAPIFsCreatePostRequest(args [0]string, argsEscaped bool, 
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -337,7 +347,9 @@ func (s *Server) handleAPIFsCreatePostRequest(args [0]string, argsEscaped bool, 
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	request, close, err := s.decodeAPIFsCreatePostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIFsCreatePostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -361,6 +373,7 @@ func (s *Server) handleAPIFsCreatePostRequest(args [0]string, argsEscaped bool, 
 			OperationSummary: "Создание нового файла",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
 					Name: "File-Id",
@@ -429,6 +442,8 @@ func (s *Server) handleAPIFsDeletePostRequest(args [0]string, argsEscaped bool, 
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/fs/delete"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIFsDeletePostOperation,
@@ -472,7 +487,7 @@ func (s *Server) handleAPIFsDeletePostRequest(args [0]string, argsEscaped bool, 
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -536,7 +551,9 @@ func (s *Server) handleAPIFsDeletePostRequest(args [0]string, argsEscaped bool, 
 			return
 		}
 	}
-	request, close, err := s.decodeAPIFsDeletePostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIFsDeletePostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -560,6 +577,7 @@ func (s *Server) handleAPIFsDeletePostRequest(args [0]string, argsEscaped bool, 
 			OperationSummary: "Удаление файла",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -623,6 +641,8 @@ func (s *Server) handleAPIFsGetGetRequest(args [0]string, argsEscaped bool, w ht
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/fs/get"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIFsGetGetOperation,
@@ -666,7 +686,7 @@ func (s *Server) handleAPIFsGetGetRequest(args [0]string, argsEscaped bool, w ht
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -741,6 +761,8 @@ func (s *Server) handleAPIFsGetGetRequest(args [0]string, argsEscaped bool, w ht
 		return
 	}
 
+	var rawBody []byte
+
 	var response APIFsGetGetOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -749,6 +771,7 @@ func (s *Server) handleAPIFsGetGetRequest(args [0]string, argsEscaped bool, w ht
 			OperationSummary: "Получение файла",
 			OperationID:      "",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
 					Name: "file-id",
@@ -817,6 +840,8 @@ func (s *Server) handleAPIFsInfoPostRequest(args [0]string, argsEscaped bool, w 
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/fs/info"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIFsInfoPostOperation,
@@ -860,7 +885,7 @@ func (s *Server) handleAPIFsInfoPostRequest(args [0]string, argsEscaped bool, w 
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -924,7 +949,9 @@ func (s *Server) handleAPIFsInfoPostRequest(args [0]string, argsEscaped bool, w 
 			return
 		}
 	}
-	request, close, err := s.decodeAPIFsInfoPostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIFsInfoPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -948,6 +975,7 @@ func (s *Server) handleAPIFsInfoPostRequest(args [0]string, argsEscaped bool, w 
 			OperationSummary: "Получение информации о состоянии файловой системы",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -1011,6 +1039,8 @@ func (s *Server) handleAPIHighwayFileIDExtGetRequest(args [2]string, argsEscaped
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/highway/file/{id}.{ext}"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIHighwayFileIDExtGetOperation,
@@ -1054,7 +1084,7 @@ func (s *Server) handleAPIHighwayFileIDExtGetRequest(args [2]string, argsEscaped
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1083,6 +1113,8 @@ func (s *Server) handleAPIHighwayFileIDExtGetRequest(args [2]string, argsEscaped
 		return
 	}
 
+	var rawBody []byte
+
 	var response *APIHighwayFileIDExtGetOKHeaders
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -1091,6 +1123,7 @@ func (s *Server) handleAPIHighwayFileIDExtGetRequest(args [2]string, argsEscaped
 			OperationSummary: "Получение файла через highway",
 			OperationID:      "",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
 					Name: "id",
@@ -1167,6 +1200,8 @@ func (s *Server) handleAPIHighwayTokenCreatePostRequest(args [0]string, argsEsca
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/highway/token/create"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIHighwayTokenCreatePostOperation,
@@ -1210,7 +1245,7 @@ func (s *Server) handleAPIHighwayTokenCreatePostRequest(args [0]string, argsEsca
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1275,6 +1310,8 @@ func (s *Server) handleAPIHighwayTokenCreatePostRequest(args [0]string, argsEsca
 		}
 	}
 
+	var rawBody []byte
+
 	var response *APIHighwayTokenCreatePostOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
@@ -1283,6 +1320,7 @@ func (s *Server) handleAPIHighwayTokenCreatePostRequest(args [0]string, argsEsca
 			OperationSummary: "Создание нового токена для highway",
 			OperationID:      "",
 			Body:             nil,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -1346,6 +1384,8 @@ func (s *Server) handleAPIHproxyParseBookPostRequest(args [0]string, argsEscaped
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/hproxy/parse/book"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIHproxyParseBookPostOperation,
@@ -1389,7 +1429,7 @@ func (s *Server) handleAPIHproxyParseBookPostRequest(args [0]string, argsEscaped
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1453,7 +1493,9 @@ func (s *Server) handleAPIHproxyParseBookPostRequest(args [0]string, argsEscaped
 			return
 		}
 	}
-	request, close, err := s.decodeAPIHproxyParseBookPostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIHproxyParseBookPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -1477,6 +1519,7 @@ func (s *Server) handleAPIHproxyParseBookPostRequest(args [0]string, argsEscaped
 			OperationSummary: "Парсинг данных книги по ссылке",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -1540,6 +1583,8 @@ func (s *Server) handleAPIHproxyParseListPostRequest(args [0]string, argsEscaped
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/hproxy/parse/list"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIHproxyParseListPostOperation,
@@ -1583,7 +1628,7 @@ func (s *Server) handleAPIHproxyParseListPostRequest(args [0]string, argsEscaped
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1647,7 +1692,9 @@ func (s *Server) handleAPIHproxyParseListPostRequest(args [0]string, argsEscaped
 			return
 		}
 	}
-	request, close, err := s.decodeAPIHproxyParseListPostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIHproxyParseListPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -1671,6 +1718,7 @@ func (s *Server) handleAPIHproxyParseListPostRequest(args [0]string, argsEscaped
 			OperationSummary: "Парсинг списка данных по ссылке",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -1734,6 +1782,8 @@ func (s *Server) handleAPIImportArchivePostRequest(args [0]string, argsEscaped b
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/import/archive"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIImportArchivePostOperation,
@@ -1777,7 +1827,7 @@ func (s *Server) handleAPIImportArchivePostRequest(args [0]string, argsEscaped b
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -1851,7 +1901,9 @@ func (s *Server) handleAPIImportArchivePostRequest(args [0]string, argsEscaped b
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	request, close, err := s.decodeAPIImportArchivePostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIImportArchivePostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -1875,6 +1927,7 @@ func (s *Server) handleAPIImportArchivePostRequest(args [0]string, argsEscaped b
 			OperationSummary: "Загрузка архива",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
 					Name: "Book-Id",
@@ -1951,6 +2004,8 @@ func (s *Server) handleAPIParsingBookCheckPostRequest(args [0]string, argsEscape
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book/check"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIParsingBookCheckPostOperation,
@@ -1994,7 +2049,7 @@ func (s *Server) handleAPIParsingBookCheckPostRequest(args [0]string, argsEscape
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -2058,7 +2113,9 @@ func (s *Server) handleAPIParsingBookCheckPostRequest(args [0]string, argsEscape
 			return
 		}
 	}
-	request, close, err := s.decodeAPIParsingBookCheckPostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIParsingBookCheckPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -2082,6 +2139,7 @@ func (s *Server) handleAPIParsingBookCheckPostRequest(args [0]string, argsEscape
 			OperationSummary: "Предварительная проверка ссылок на новые книги",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -2146,6 +2204,8 @@ func (s *Server) handleAPIParsingBookMultiPostRequest(args [0]string, argsEscape
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book/multi"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIParsingBookMultiPostOperation,
@@ -2189,7 +2249,7 @@ func (s *Server) handleAPIParsingBookMultiPostRequest(args [0]string, argsEscape
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -2253,7 +2313,9 @@ func (s *Server) handleAPIParsingBookMultiPostRequest(args [0]string, argsEscape
 			return
 		}
 	}
-	request, close, err := s.decodeAPIParsingBookMultiPostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIParsingBookMultiPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -2277,6 +2339,7 @@ func (s *Server) handleAPIParsingBookMultiPostRequest(args [0]string, argsEscape
 			OperationSummary: "Обработка ссылки с набором книг",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -2340,6 +2403,8 @@ func (s *Server) handleAPIParsingBookPostRequest(args [0]string, argsEscaped boo
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/book"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIParsingBookPostOperation,
@@ -2383,7 +2448,7 @@ func (s *Server) handleAPIParsingBookPostRequest(args [0]string, argsEscaped boo
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -2447,7 +2512,9 @@ func (s *Server) handleAPIParsingBookPostRequest(args [0]string, argsEscaped boo
 			return
 		}
 	}
-	request, close, err := s.decodeAPIParsingBookPostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIParsingBookPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -2471,6 +2538,7 @@ func (s *Server) handleAPIParsingBookPostRequest(args [0]string, argsEscaped boo
 			OperationSummary: "Обработка новой книги",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -2534,6 +2602,8 @@ func (s *Server) handleAPIParsingPageCheckPostRequest(args [0]string, argsEscape
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/page/check"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIParsingPageCheckPostOperation,
@@ -2577,7 +2647,7 @@ func (s *Server) handleAPIParsingPageCheckPostRequest(args [0]string, argsEscape
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -2641,7 +2711,9 @@ func (s *Server) handleAPIParsingPageCheckPostRequest(args [0]string, argsEscape
 			return
 		}
 	}
-	request, close, err := s.decodeAPIParsingPageCheckPostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIParsingPageCheckPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -2665,6 +2737,7 @@ func (s *Server) handleAPIParsingPageCheckPostRequest(args [0]string, argsEscape
 			OperationSummary: "Предварительная проверка ссылок для загрузки страниц",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
@@ -2728,6 +2801,8 @@ func (s *Server) handleAPIParsingPagePostRequest(args [0]string, argsEscaped boo
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/parsing/page"),
 	}
+	// Add attributes from config.
+	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
 	ctx, span := s.cfg.Tracer.Start(r.Context(), APIParsingPagePostOperation,
@@ -2771,7 +2846,7 @@ func (s *Server) handleAPIParsingPagePostRequest(args [0]string, argsEscaped boo
 			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
 			// max redirects exceeded), in which case status MUST be set to Error.
 			code := statusWriter.status
-			if code >= 100 && code < 500 {
+			if code < 100 || code >= 500 {
 				span.SetStatus(codes.Error, stage)
 			}
 
@@ -2835,7 +2910,9 @@ func (s *Server) handleAPIParsingPagePostRequest(args [0]string, argsEscaped boo
 			return
 		}
 	}
-	request, close, err := s.decodeAPIParsingPagePostRequest(r)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAPIParsingPagePostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -2859,6 +2936,7 @@ func (s *Server) handleAPIParsingPagePostRequest(args [0]string, argsEscaped boo
 			OperationSummary: "Загрузка изображения страницы",
 			OperationID:      "",
 			Body:             request,
+			RawBody:          rawBody,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}

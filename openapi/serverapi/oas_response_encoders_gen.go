@@ -8,12 +8,11 @@ import (
 
 	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/trace"
-
 	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/uri"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/trace"
 )
 
 func encodeAPIAgentDeletePostResponse(response *APIAgentDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
@@ -203,6 +202,7 @@ func encodeAPIAttributeRemapUpdatePostResponse(response *APIAttributeRemapUpdate
 }
 
 func encodeAPIBookArchiveIDGetResponse(response *APIBookArchiveIDGetOKHeaders, w http.ResponseWriter, span trace.Span) error {
+	w.Header().Set("Access-Control-Expose-Headers", "Content-Disposition")
 	// Encoding response headers.
 	{
 		h := uri.NewHeaderEncoder(w.Header())
@@ -968,6 +968,7 @@ func encodeAPISystemWorkerConfigPostResponse(response *APISystemWorkerConfigPost
 }
 
 func encodeAPIUserLoginPostResponse(response *APIUserLoginPostNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.Header().Set("Access-Control-Expose-Headers", "Set-Cookie")
 	// Encoding response headers.
 	{
 		h := uri.NewHeaderEncoder(w.Header())

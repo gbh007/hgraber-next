@@ -26,7 +26,7 @@ func PageCountDelta() *barchart.PanelBuilder {
 
 	return barchart.
 		NewPanelBuilder().
-		Title(fmt.Sprintf(`Page delta count at %s`, generatorcore.NameToVar(generatorcore.DeltaVariableName))).
+		Title("Page delta count at " + generatorcore.NameToVar(generatorcore.DeltaVariableName)).
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().

@@ -36,7 +36,8 @@ func (g Generator) WithTagAndAnnotation(builder *dashboard.DashboardBuilder) *da
 			dashboard.
 				NewAnnotationQueryBuilder().
 				Enable(true).
-				Expr("{service_name=~\"$service_name\"} |= `application start`"). // TODO: привести в более аккуратный вид
+				// TODO: привести в более аккуратный вид
+				Expr("{service_name=~\"$service_name\"} |= `application start`").
 				IconColor("super-light-purple").
 				Name("app started (logs)").
 				Datasource(generatorcore.LogsLokiDatasource),

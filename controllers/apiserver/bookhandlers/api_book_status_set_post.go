@@ -23,7 +23,7 @@ func (c *BookHandlersController) APIBookStatusSetPost(
 	case serverapi.APIBookStatusSetPostReqStatusVerify:
 		err = c.bookUseCases.VerifyBook(ctx, req.ID, req.Value)
 	default:
-		err = fmt.Errorf("unsupported status: %v", req.Status) //nolint:revive // правило не применимо
+		err = fmt.Errorf("unsupported status: %v", req.Status)
 
 		return apiservercore.APIError{
 			Code:    http.StatusBadRequest,

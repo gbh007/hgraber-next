@@ -49,7 +49,7 @@ func (uc *UseCase) deduplicateFiles(
 	if err != nil {
 		taskResult.SetError(err)
 
-		return
+		return count, size, err
 	}
 
 	storageMap := pkg.SliceToMap(storages, func(s fsmodel.FileStorageSystem) (uuid.UUID, fsmodel.FileStorageSystem) {
@@ -63,7 +63,7 @@ func (uc *UseCase) deduplicateFiles(
 	if err != nil {
 		taskResult.SetError(err)
 
-		return
+		return count, size, err
 	}
 
 	taskResult.SetTotal(int64(len(files)))
@@ -124,7 +124,7 @@ func (uc *UseCase) deduplicateFiles(
 			if err != nil {
 				taskResult.SetError(fmt.Errorf("replace id in storage: %w", err))
 
-				return
+				return count, size, err
 			}
 
 			uc.logger.InfoContext(
@@ -140,5 +140,5 @@ func (uc *UseCase) deduplicateFiles(
 
 	taskResult.EndStage()
 
-	return
+	return count, size, err
 }

@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/go-faster/errors"
-
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
@@ -34,6 +33,7 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 	return "", false
 }
 
+// operationRolesHeaderAuth is a private map storing roles per operation.
 var operationRolesHeaderAuth = map[string][]string{
 	APICoreStatusGetOperation:          []string{},
 	APIFsCreatePostOperation:           []string{},
@@ -49,6 +49,27 @@ var operationRolesHeaderAuth = map[string][]string{
 	APIParsingBookPostOperation:        []string{},
 	APIParsingPageCheckPostOperation:   []string{},
 	APIParsingPagePostOperation:        []string{},
+}
+
+// GetRolesForHeaderAuth returns the required roles for the given operation.
+//
+// This is useful for authorization scenarios where you need to know which roles
+// are required for an operation.
+//
+// Example:
+//
+//	requiredRoles := GetRolesForHeaderAuth(AddPetOperation)
+//
+// Returns nil if the operation has no role requirements or if the operation is unknown.
+func GetRolesForHeaderAuth(operation string) []string {
+	roles, ok := operationRolesHeaderAuth[operation]
+	if !ok {
+		return nil
+	}
+	// Return a copy to prevent external modification
+	result := make([]string, len(roles))
+	copy(result, roles)
+	return result
 }
 
 func (s *Server) securityHeaderAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {

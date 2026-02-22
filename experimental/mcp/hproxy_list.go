@@ -20,12 +20,12 @@ func (c *Controller) hProxyListTool() server.ServerTool {
 			),
 		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			url, err := url.Parse(request.GetString("url", ""))
+			listUrl, err := url.Parse(request.GetString("url", ""))
 			if err != nil {
 				return nil, fmt.Errorf("parse book id: %w", err)
 			}
 
-			list, err := c.hProxyUseCases.List(ctx, *url)
+			list, err := c.hProxyUseCases.List(ctx, *listUrl)
 			if err != nil {
 				return nil, fmt.Errorf("get book: %w", err)
 			}

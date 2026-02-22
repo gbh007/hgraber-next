@@ -8,6 +8,7 @@ import (
 
 func parseConfig() (config.Config, error) {
 	configPath := flag.String("config", "config.yaml", "path to config")
+
 	flag.Parse()
 
 	//nolint:wrapcheck // здесь обертка не нужна

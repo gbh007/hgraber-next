@@ -9,16 +9,15 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
-	"go.opentelemetry.io/otel/trace"
-
 	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/uri"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
+	semconv "go.opentelemetry.io/otel/semconv/v1.37.0"
+	"go.opentelemetry.io/otel/trace"
 )
 
 func trimTrailingSlashes(u *url.URL) {
@@ -556,14 +555,6 @@ type Client struct {
 	sec       SecuritySource
 	baseClient
 }
-type errorHandler interface {
-	NewError(ctx context.Context, err error) *ErrorResponseStatusCode
-}
-
-var _ Handler = struct {
-	errorHandler
-	*Client
-}{}
 
 // NewClient initializes new Client defined by OAS.
 func NewClient(serverURL string, sec SecuritySource, opts ...ClientOption) (*Client, error) {
@@ -612,8 +603,9 @@ func (c *Client) APIAgentDeletePost(ctx context.Context, request *APIAgentDelete
 func (c *Client) sendAPIAgentDeletePost(ctx context.Context, request *APIAgentDeletePostReq) (res *APIAgentDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/agent/delete"),
+		semconv.URLTemplateKey.String("/api/agent/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -731,8 +723,9 @@ func (c *Client) APIAgentGetPost(ctx context.Context, request *APIAgentGetPostRe
 func (c *Client) sendAPIAgentGetPost(ctx context.Context, request *APIAgentGetPostReq) (res *Agent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/agent/get"),
+		semconv.URLTemplateKey.String("/api/agent/get"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -850,8 +843,9 @@ func (c *Client) APIAgentListPost(ctx context.Context, request *APIAgentListPost
 func (c *Client) sendAPIAgentListPost(ctx context.Context, request *APIAgentListPostReq) (res []APIAgentListPostOKItem, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/agent/list"),
+		semconv.URLTemplateKey.String("/api/agent/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -969,8 +963,9 @@ func (c *Client) APIAgentNewPost(ctx context.Context, request *APIAgentNewPostRe
 func (c *Client) sendAPIAgentNewPost(ctx context.Context, request *APIAgentNewPostReq) (res *APIAgentNewPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/agent/new"),
+		semconv.URLTemplateKey.String("/api/agent/new"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1088,8 +1083,9 @@ func (c *Client) APIAgentTaskExportPost(ctx context.Context, request *APIAgentTa
 func (c *Client) sendAPIAgentTaskExportPost(ctx context.Context, request *APIAgentTaskExportPostReq) (res *APIAgentTaskExportPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/agent/task/export"),
+		semconv.URLTemplateKey.String("/api/agent/task/export"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1207,8 +1203,9 @@ func (c *Client) APIAgentUpdatePost(ctx context.Context, request *APIAgentUpdate
 func (c *Client) sendAPIAgentUpdatePost(ctx context.Context, request *APIAgentUpdatePostReq) (res *APIAgentUpdatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/agent/update"),
+		semconv.URLTemplateKey.String("/api/agent/update"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1326,8 +1323,9 @@ func (c *Client) APIAttributeColorCreatePost(ctx context.Context, request *APIAt
 func (c *Client) sendAPIAttributeColorCreatePost(ctx context.Context, request *APIAttributeColorCreatePostReq) (res *APIAttributeColorCreatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/attribute/color/create"),
+		semconv.URLTemplateKey.String("/api/attribute/color/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1445,8 +1443,9 @@ func (c *Client) APIAttributeColorDeletePost(ctx context.Context, request *APIAt
 func (c *Client) sendAPIAttributeColorDeletePost(ctx context.Context, request *APIAttributeColorDeletePostReq) (res *APIAttributeColorDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/attribute/color/delete"),
+		semconv.URLTemplateKey.String("/api/attribute/color/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1564,8 +1563,9 @@ func (c *Client) APIAttributeColorGetPost(ctx context.Context, request *APIAttri
 func (c *Client) sendAPIAttributeColorGetPost(ctx context.Context, request *APIAttributeColorGetPostReq) (res *AttributeColor, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/attribute/color/get"),
+		semconv.URLTemplateKey.String("/api/attribute/color/get"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1683,8 +1683,9 @@ func (c *Client) APIAttributeColorListGet(ctx context.Context) (*APIAttributeCol
 func (c *Client) sendAPIAttributeColorListGet(ctx context.Context) (res *APIAttributeColorListGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/attribute/color/list"),
+		semconv.URLTemplateKey.String("/api/attribute/color/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1799,8 +1800,9 @@ func (c *Client) APIAttributeColorUpdatePost(ctx context.Context, request *APIAt
 func (c *Client) sendAPIAttributeColorUpdatePost(ctx context.Context, request *APIAttributeColorUpdatePostReq) (res *APIAttributeColorUpdatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/attribute/color/update"),
+		semconv.URLTemplateKey.String("/api/attribute/color/update"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -1919,8 +1921,9 @@ func (c *Client) APIAttributeCountGet(ctx context.Context) (*APIAttributeCountGe
 func (c *Client) sendAPIAttributeCountGet(ctx context.Context) (res *APIAttributeCountGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/attribute/count"),
+		semconv.URLTemplateKey.String("/api/attribute/count"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2036,8 +2039,9 @@ func (c *Client) APIAttributeOriginCountGet(ctx context.Context) (*APIAttributeO
 func (c *Client) sendAPIAttributeOriginCountGet(ctx context.Context) (res *APIAttributeOriginCountGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/attribute/origin/count"),
+		semconv.URLTemplateKey.String("/api/attribute/origin/count"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2152,8 +2156,9 @@ func (c *Client) APIAttributeRemapCreatePost(ctx context.Context, request *APIAt
 func (c *Client) sendAPIAttributeRemapCreatePost(ctx context.Context, request *APIAttributeRemapCreatePostReq) (res *APIAttributeRemapCreatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/attribute/remap/create"),
+		semconv.URLTemplateKey.String("/api/attribute/remap/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2271,8 +2276,9 @@ func (c *Client) APIAttributeRemapDeletePost(ctx context.Context, request *APIAt
 func (c *Client) sendAPIAttributeRemapDeletePost(ctx context.Context, request *APIAttributeRemapDeletePostReq) (res *APIAttributeRemapDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/attribute/remap/delete"),
+		semconv.URLTemplateKey.String("/api/attribute/remap/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2390,8 +2396,9 @@ func (c *Client) APIAttributeRemapGetPost(ctx context.Context, request *APIAttri
 func (c *Client) sendAPIAttributeRemapGetPost(ctx context.Context, request *APIAttributeRemapGetPostReq) (res *AttributeRemap, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/attribute/remap/get"),
+		semconv.URLTemplateKey.String("/api/attribute/remap/get"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2509,8 +2516,9 @@ func (c *Client) APIAttributeRemapListGet(ctx context.Context) (*APIAttributeRem
 func (c *Client) sendAPIAttributeRemapListGet(ctx context.Context) (res *APIAttributeRemapListGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/attribute/remap/list"),
+		semconv.URLTemplateKey.String("/api/attribute/remap/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2625,8 +2633,9 @@ func (c *Client) APIAttributeRemapUpdatePost(ctx context.Context, request *APIAt
 func (c *Client) sendAPIAttributeRemapUpdatePost(ctx context.Context, request *APIAttributeRemapUpdatePostReq) (res *APIAttributeRemapUpdatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/attribute/remap/update"),
+		semconv.URLTemplateKey.String("/api/attribute/remap/update"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2744,8 +2753,9 @@ func (c *Client) APIBookArchiveIDGet(ctx context.Context, params APIBookArchiveI
 func (c *Client) sendAPIBookArchiveIDGet(ctx context.Context, params APIBookArchiveIDGetParams) (res *APIBookArchiveIDGetOKHeaders, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/book/archive/{id}"),
+		semconv.URLTemplateKey.String("/api/book/archive/{id}"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2878,8 +2888,9 @@ func (c *Client) APIBookDeletePost(ctx context.Context, request *APIBookDeletePo
 func (c *Client) sendAPIBookDeletePost(ctx context.Context, request *APIBookDeletePostReq) (res *APIBookDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/book/delete"),
+		semconv.URLTemplateKey.String("/api/book/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2997,8 +3008,9 @@ func (c *Client) APIBookDetailsPost(ctx context.Context, request *APIBookDetails
 func (c *Client) sendAPIBookDetailsPost(ctx context.Context, request *APIBookDetailsPostReq) (res *APIBookDetailsPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/book/details"),
+		semconv.URLTemplateKey.String("/api/book/details"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -3116,8 +3128,9 @@ func (c *Client) APIBookListPost(ctx context.Context, request *BookFilter) (*API
 func (c *Client) sendAPIBookListPost(ctx context.Context, request *BookFilter) (res *APIBookListPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/book/list"),
+		semconv.URLTemplateKey.String("/api/book/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -3236,8 +3249,9 @@ func (c *Client) APIBookPageBodyPost(ctx context.Context, request *APIBookPageBo
 func (c *Client) sendAPIBookPageBodyPost(ctx context.Context, request *APIBookPageBodyPostReq) (res APIBookPageBodyPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/book/page/body"),
+		semconv.URLTemplateKey.String("/api/book/page/body"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -3355,8 +3369,9 @@ func (c *Client) APIBookPageDeletePost(ctx context.Context, request *APIBookPage
 func (c *Client) sendAPIBookPageDeletePost(ctx context.Context, request *APIBookPageDeletePostReq) (res *APIBookPageDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/book/page/delete"),
+		semconv.URLTemplateKey.String("/api/book/page/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -3474,8 +3489,9 @@ func (c *Client) APIBookRawPost(ctx context.Context, request *APIBookRawPostReq)
 func (c *Client) sendAPIBookRawPost(ctx context.Context, request *APIBookRawPostReq) (res *BookRaw, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/book/raw"),
+		semconv.URLTemplateKey.String("/api/book/raw"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -3594,8 +3610,9 @@ func (c *Client) APIBookRebuildPost(ctx context.Context, request *APIBookRebuild
 func (c *Client) sendAPIBookRebuildPost(ctx context.Context, request *APIBookRebuildPostReq) (res *APIBookRebuildPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/book/rebuild"),
+		semconv.URLTemplateKey.String("/api/book/rebuild"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -3715,8 +3732,9 @@ func (c *Client) APIBookRestorePost(ctx context.Context, request *APIBookRestore
 func (c *Client) sendAPIBookRestorePost(ctx context.Context, request *APIBookRestorePostReq) (res *APIBookRestorePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/book/restore"),
+		semconv.URLTemplateKey.String("/api/book/restore"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -3834,8 +3852,9 @@ func (c *Client) APIBookStatusSetPost(ctx context.Context, request *APIBookStatu
 func (c *Client) sendAPIBookStatusSetPost(ctx context.Context, request *APIBookStatusSetPostReq) (res *APIBookStatusSetPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/book/status/set"),
+		semconv.URLTemplateKey.String("/api/book/status/set"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -3954,8 +3973,9 @@ func (c *Client) APIBookUpdatePost(ctx context.Context, request *BookRaw) error 
 func (c *Client) sendAPIBookUpdatePost(ctx context.Context, request *BookRaw) (res *APIBookUpdatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/book/update"),
+		semconv.URLTemplateKey.String("/api/book/update"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -4073,8 +4093,9 @@ func (c *Client) APIDeduplicateArchivePost(ctx context.Context, request APIDedup
 func (c *Client) sendAPIDeduplicateArchivePost(ctx context.Context, request APIDeduplicateArchivePostReq) (res []APIDeduplicateArchivePostOKItem, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/archive"),
+		semconv.URLTemplateKey.String("/api/deduplicate/archive"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -4192,8 +4213,9 @@ func (c *Client) APIDeduplicateBookByPageBodyPost(ctx context.Context, request *
 func (c *Client) sendAPIDeduplicateBookByPageBodyPost(ctx context.Context, request *APIDeduplicateBookByPageBodyPostReq) (res *APIDeduplicateBookByPageBodyPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/book-by-page-body"),
+		semconv.URLTemplateKey.String("/api/deduplicate/book-by-page-body"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -4311,8 +4333,9 @@ func (c *Client) APIDeduplicateBooksByPagePost(ctx context.Context, request *API
 func (c *Client) sendAPIDeduplicateBooksByPagePost(ctx context.Context, request *APIDeduplicateBooksByPagePostReq) (res *APIDeduplicateBooksByPagePostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/books-by-page"),
+		semconv.URLTemplateKey.String("/api/deduplicate/books-by-page"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -4430,8 +4453,9 @@ func (c *Client) APIDeduplicateComparePost(ctx context.Context, request *APIDedu
 func (c *Client) sendAPIDeduplicateComparePost(ctx context.Context, request *APIDeduplicateComparePostReq) (res *APIDeduplicateComparePostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/compare"),
+		semconv.URLTemplateKey.String("/api/deduplicate/compare"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -4550,8 +4574,9 @@ func (c *Client) APIDeduplicateDeadHashSetPost(ctx context.Context, request *API
 func (c *Client) sendAPIDeduplicateDeadHashSetPost(ctx context.Context, request *APIDeduplicateDeadHashSetPostReq) (res *APIDeduplicateDeadHashSetPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/dead-hash/set"),
+		semconv.URLTemplateKey.String("/api/deduplicate/dead-hash/set"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -4669,8 +4694,9 @@ func (c *Client) APIDeduplicateUniquePagesPost(ctx context.Context, request *API
 func (c *Client) sendAPIDeduplicateUniquePagesPost(ctx context.Context, request *APIDeduplicateUniquePagesPostReq) (res *APIDeduplicateUniquePagesPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/deduplicate/unique-pages"),
+		semconv.URLTemplateKey.String("/api/deduplicate/unique-pages"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -4788,8 +4814,9 @@ func (c *Client) APIFileIDGet(ctx context.Context, params APIFileIDGetParams) (*
 func (c *Client) sendAPIFileIDGet(ctx context.Context, params APIFileIDGetParams) (res *APIFileIDGetOKHeaders, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/file/{id}"),
+		semconv.URLTemplateKey.String("/api/file/{id}"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -4943,8 +4970,9 @@ func (c *Client) APIFsCreatePost(ctx context.Context, request *APIFsCreatePostRe
 func (c *Client) sendAPIFsCreatePost(ctx context.Context, request *APIFsCreatePostReq) (res *APIFsCreatePostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/create"),
+		semconv.URLTemplateKey.String("/api/fs/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -5062,8 +5090,9 @@ func (c *Client) APIFsDeletePost(ctx context.Context, request *APIFsDeletePostRe
 func (c *Client) sendAPIFsDeletePost(ctx context.Context, request *APIFsDeletePostReq) (res *APIFsDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/delete"),
+		semconv.URLTemplateKey.String("/api/fs/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -5181,8 +5210,9 @@ func (c *Client) APIFsGetPost(ctx context.Context, request *APIFsGetPostReq) (*F
 func (c *Client) sendAPIFsGetPost(ctx context.Context, request *APIFsGetPostReq) (res *FileSystemInfo, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/get"),
+		semconv.URLTemplateKey.String("/api/fs/get"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -5300,8 +5330,9 @@ func (c *Client) APIFsListPost(ctx context.Context, request *APIFsListPostReq) (
 func (c *Client) sendAPIFsListPost(ctx context.Context, request *APIFsListPostReq) (res *APIFsListPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/list"),
+		semconv.URLTemplateKey.String("/api/fs/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -5420,8 +5451,9 @@ func (c *Client) APIFsRemoveMismatchPost(ctx context.Context, request *APIFsRemo
 func (c *Client) sendAPIFsRemoveMismatchPost(ctx context.Context, request *APIFsRemoveMismatchPostReq) (res *APIFsRemoveMismatchPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/remove-mismatch"),
+		semconv.URLTemplateKey.String("/api/fs/remove-mismatch"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -5539,8 +5571,9 @@ func (c *Client) APIFsTransferBookPost(ctx context.Context, request *APIFsTransf
 func (c *Client) sendAPIFsTransferBookPost(ctx context.Context, request *APIFsTransferBookPostReq) (res *APIFsTransferBookPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/transfer/book"),
+		semconv.URLTemplateKey.String("/api/fs/transfer/book"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -5658,8 +5691,9 @@ func (c *Client) APIFsTransferPost(ctx context.Context, request *APIFsTransferPo
 func (c *Client) sendAPIFsTransferPost(ctx context.Context, request *APIFsTransferPostReq) (res *APIFsTransferPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/transfer"),
+		semconv.URLTemplateKey.String("/api/fs/transfer"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -5777,8 +5811,9 @@ func (c *Client) APIFsUpdatePost(ctx context.Context, request *APIFsUpdatePostRe
 func (c *Client) sendAPIFsUpdatePost(ctx context.Context, request *APIFsUpdatePostReq) (res *APIFsUpdatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/update"),
+		semconv.URLTemplateKey.String("/api/fs/update"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -5896,8 +5931,9 @@ func (c *Client) APIFsValidatePost(ctx context.Context, request *APIFsValidatePo
 func (c *Client) sendAPIFsValidatePost(ctx context.Context, request *APIFsValidatePostReq) (res *APIFsValidatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/fs/validate"),
+		semconv.URLTemplateKey.String("/api/fs/validate"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -6015,8 +6051,9 @@ func (c *Client) APIHproxyBookPost(ctx context.Context, request *APIHproxyBookPo
 func (c *Client) sendAPIHproxyBookPost(ctx context.Context, request *APIHproxyBookPostReq) (res *APIHproxyBookPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/hproxy/book"),
+		semconv.URLTemplateKey.String("/api/hproxy/book"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -6134,8 +6171,9 @@ func (c *Client) APIHproxyFileGet(ctx context.Context, params APIHproxyFileGetPa
 func (c *Client) sendAPIHproxyFileGet(ctx context.Context, params APIHproxyFileGetParams) (res *APIHproxyFileGetOKHeaders, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/hproxy/file"),
+		semconv.URLTemplateKey.String("/api/hproxy/file"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -6282,8 +6320,9 @@ func (c *Client) APIHproxyListPost(ctx context.Context, request *APIHproxyListPo
 func (c *Client) sendAPIHproxyListPost(ctx context.Context, request *APIHproxyListPostReq) (res *APIHproxyListPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/hproxy/list"),
+		semconv.URLTemplateKey.String("/api/hproxy/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -6401,8 +6440,9 @@ func (c *Client) APILabelDeletePost(ctx context.Context, request *APILabelDelete
 func (c *Client) sendAPILabelDeletePost(ctx context.Context, request *APILabelDeletePostReq) (res *APILabelDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/label/delete"),
+		semconv.URLTemplateKey.String("/api/label/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -6520,8 +6560,9 @@ func (c *Client) APILabelGetPost(ctx context.Context, request *APILabelGetPostRe
 func (c *Client) sendAPILabelGetPost(ctx context.Context, request *APILabelGetPostReq) (res *APILabelGetPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/label/get"),
+		semconv.URLTemplateKey.String("/api/label/get"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -6639,8 +6680,9 @@ func (c *Client) APILabelPresetCreatePost(ctx context.Context, request *APILabel
 func (c *Client) sendAPILabelPresetCreatePost(ctx context.Context, request *APILabelPresetCreatePostReq) (res *APILabelPresetCreatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/label/preset/create"),
+		semconv.URLTemplateKey.String("/api/label/preset/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -6758,8 +6800,9 @@ func (c *Client) APILabelPresetDeletePost(ctx context.Context, request *APILabel
 func (c *Client) sendAPILabelPresetDeletePost(ctx context.Context, request *APILabelPresetDeletePostReq) (res *APILabelPresetDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/label/preset/delete"),
+		semconv.URLTemplateKey.String("/api/label/preset/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -6877,8 +6920,9 @@ func (c *Client) APILabelPresetGetPost(ctx context.Context, request *APILabelPre
 func (c *Client) sendAPILabelPresetGetPost(ctx context.Context, request *APILabelPresetGetPostReq) (res *APILabelPresetGetPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/label/preset/get"),
+		semconv.URLTemplateKey.String("/api/label/preset/get"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -6996,8 +7040,9 @@ func (c *Client) APILabelPresetListGet(ctx context.Context) (*APILabelPresetList
 func (c *Client) sendAPILabelPresetListGet(ctx context.Context) (res *APILabelPresetListGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/label/preset/list"),
+		semconv.URLTemplateKey.String("/api/label/preset/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -7112,8 +7157,9 @@ func (c *Client) APILabelPresetUpdatePost(ctx context.Context, request *APILabel
 func (c *Client) sendAPILabelPresetUpdatePost(ctx context.Context, request *APILabelPresetUpdatePostReq) (res *APILabelPresetUpdatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/label/preset/update"),
+		semconv.URLTemplateKey.String("/api/label/preset/update"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -7231,8 +7277,9 @@ func (c *Client) APILabelSetPost(ctx context.Context, request *APILabelSetPostRe
 func (c *Client) sendAPILabelSetPost(ctx context.Context, request *APILabelSetPostReq) (res *APILabelSetPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/label/set"),
+		semconv.URLTemplateKey.String("/api/label/set"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -7350,8 +7397,9 @@ func (c *Client) APIMassloadCalculatePost(ctx context.Context, request *APIMassl
 func (c *Client) sendAPIMassloadCalculatePost(ctx context.Context, request *APIMassloadCalculatePostReq) (res *APIMassloadCalculatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/calculate"),
+		semconv.URLTemplateKey.String("/api/massload/calculate"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -7469,8 +7517,9 @@ func (c *Client) APIMassloadFlagCreatePost(ctx context.Context, request *APIMass
 func (c *Client) sendAPIMassloadFlagCreatePost(ctx context.Context, request *APIMassloadFlagCreatePostReq) (res *APIMassloadFlagCreatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/flag/create"),
+		semconv.URLTemplateKey.String("/api/massload/flag/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -7588,8 +7637,9 @@ func (c *Client) APIMassloadFlagDeletePost(ctx context.Context, request *APIMass
 func (c *Client) sendAPIMassloadFlagDeletePost(ctx context.Context, request *APIMassloadFlagDeletePostReq) (res *APIMassloadFlagDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/flag/delete"),
+		semconv.URLTemplateKey.String("/api/massload/flag/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -7707,8 +7757,9 @@ func (c *Client) APIMassloadFlagGetPost(ctx context.Context, request *APIMassloa
 func (c *Client) sendAPIMassloadFlagGetPost(ctx context.Context, request *APIMassloadFlagGetPostReq) (res *MassloadFlag, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/flag/get"),
+		semconv.URLTemplateKey.String("/api/massload/flag/get"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -7826,8 +7877,9 @@ func (c *Client) APIMassloadFlagListGet(ctx context.Context) (*APIMassloadFlagLi
 func (c *Client) sendAPIMassloadFlagListGet(ctx context.Context) (res *APIMassloadFlagListGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/massload/flag/list"),
+		semconv.URLTemplateKey.String("/api/massload/flag/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -7942,8 +7994,9 @@ func (c *Client) APIMassloadFlagUpdatePost(ctx context.Context, request *APIMass
 func (c *Client) sendAPIMassloadFlagUpdatePost(ctx context.Context, request *APIMassloadFlagUpdatePostReq) (res *APIMassloadFlagUpdatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/flag/update"),
+		semconv.URLTemplateKey.String("/api/massload/flag/update"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -8061,8 +8114,9 @@ func (c *Client) APIMassloadInfoAttributeCreatePost(ctx context.Context, request
 func (c *Client) sendAPIMassloadInfoAttributeCreatePost(ctx context.Context, request *APIMassloadInfoAttributeCreatePostReq) (res *APIMassloadInfoAttributeCreatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/info/attribute/create"),
+		semconv.URLTemplateKey.String("/api/massload/info/attribute/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -8180,8 +8234,9 @@ func (c *Client) APIMassloadInfoAttributeDeletePost(ctx context.Context, request
 func (c *Client) sendAPIMassloadInfoAttributeDeletePost(ctx context.Context, request *APIMassloadInfoAttributeDeletePostReq) (res *APIMassloadInfoAttributeDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/info/attribute/delete"),
+		semconv.URLTemplateKey.String("/api/massload/info/attribute/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -8299,8 +8354,9 @@ func (c *Client) APIMassloadInfoCreatePost(ctx context.Context, request *APIMass
 func (c *Client) sendAPIMassloadInfoCreatePost(ctx context.Context, request *APIMassloadInfoCreatePostReq) (res *APIMassloadInfoCreatePostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/info/create"),
+		semconv.URLTemplateKey.String("/api/massload/info/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -8418,8 +8474,9 @@ func (c *Client) APIMassloadInfoDeletePost(ctx context.Context, request *APIMass
 func (c *Client) sendAPIMassloadInfoDeletePost(ctx context.Context, request *APIMassloadInfoDeletePostReq) (res *APIMassloadInfoDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/info/delete"),
+		semconv.URLTemplateKey.String("/api/massload/info/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -8537,8 +8594,9 @@ func (c *Client) APIMassloadInfoExternalLinkCreatePost(ctx context.Context, requ
 func (c *Client) sendAPIMassloadInfoExternalLinkCreatePost(ctx context.Context, request *APIMassloadInfoExternalLinkCreatePostReq) (res *APIMassloadInfoExternalLinkCreatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/info/external_link/create"),
+		semconv.URLTemplateKey.String("/api/massload/info/external_link/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -8656,8 +8714,9 @@ func (c *Client) APIMassloadInfoExternalLinkDeletePost(ctx context.Context, requ
 func (c *Client) sendAPIMassloadInfoExternalLinkDeletePost(ctx context.Context, request *APIMassloadInfoExternalLinkDeletePostReq) (res *APIMassloadInfoExternalLinkDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/info/external_link/delete"),
+		semconv.URLTemplateKey.String("/api/massload/info/external_link/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -8775,8 +8834,9 @@ func (c *Client) APIMassloadInfoExternalLinkUpdatePost(ctx context.Context, requ
 func (c *Client) sendAPIMassloadInfoExternalLinkUpdatePost(ctx context.Context, request *APIMassloadInfoExternalLinkUpdatePostReq) (res *APIMassloadInfoExternalLinkUpdatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/info/external_link/update"),
+		semconv.URLTemplateKey.String("/api/massload/info/external_link/update"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -8894,8 +8954,9 @@ func (c *Client) APIMassloadInfoGetPost(ctx context.Context, request *APIMassloa
 func (c *Client) sendAPIMassloadInfoGetPost(ctx context.Context, request *APIMassloadInfoGetPostReq) (res *MassloadInfo, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/info/get"),
+		semconv.URLTemplateKey.String("/api/massload/info/get"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -9013,8 +9074,9 @@ func (c *Client) APIMassloadInfoListPost(ctx context.Context, request *APIMasslo
 func (c *Client) sendAPIMassloadInfoListPost(ctx context.Context, request *APIMassloadInfoListPostReq) (res *APIMassloadInfoListPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/info/list"),
+		semconv.URLTemplateKey.String("/api/massload/info/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -9132,8 +9194,9 @@ func (c *Client) APIMassloadInfoUpdatePost(ctx context.Context, request *APIMass
 func (c *Client) sendAPIMassloadInfoUpdatePost(ctx context.Context, request *APIMassloadInfoUpdatePostReq) (res *APIMassloadInfoUpdatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/massload/info/update"),
+		semconv.URLTemplateKey.String("/api/massload/info/update"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -9251,8 +9314,9 @@ func (c *Client) APIParsingHandlePost(ctx context.Context, request *APIParsingHa
 func (c *Client) sendAPIParsingHandlePost(ctx context.Context, request *APIParsingHandlePostReq) (res *APIParsingHandlePostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/parsing/handle"),
+		semconv.URLTemplateKey.String("/api/parsing/handle"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -9370,8 +9434,9 @@ func (c *Client) APIParsingMirrorCreatePost(ctx context.Context, request *APIPar
 func (c *Client) sendAPIParsingMirrorCreatePost(ctx context.Context, request *APIParsingMirrorCreatePostReq) (res *APIParsingMirrorCreatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/parsing/mirror/create"),
+		semconv.URLTemplateKey.String("/api/parsing/mirror/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -9489,8 +9554,9 @@ func (c *Client) APIParsingMirrorDeletePost(ctx context.Context, request *APIPar
 func (c *Client) sendAPIParsingMirrorDeletePost(ctx context.Context, request *APIParsingMirrorDeletePostReq) (res *APIParsingMirrorDeletePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/parsing/mirror/delete"),
+		semconv.URLTemplateKey.String("/api/parsing/mirror/delete"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -9608,8 +9674,9 @@ func (c *Client) APIParsingMirrorGetPost(ctx context.Context, request *APIParsin
 func (c *Client) sendAPIParsingMirrorGetPost(ctx context.Context, request *APIParsingMirrorGetPostReq) (res *APIParsingMirrorGetPostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/parsing/mirror/get"),
+		semconv.URLTemplateKey.String("/api/parsing/mirror/get"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -9727,8 +9794,9 @@ func (c *Client) APIParsingMirrorListGet(ctx context.Context) (*APIParsingMirror
 func (c *Client) sendAPIParsingMirrorListGet(ctx context.Context) (res *APIParsingMirrorListGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/parsing/mirror/list"),
+		semconv.URLTemplateKey.String("/api/parsing/mirror/list"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -9843,8 +9911,9 @@ func (c *Client) APIParsingMirrorUpdatePost(ctx context.Context, request *APIPar
 func (c *Client) sendAPIParsingMirrorUpdatePost(ctx context.Context, request *APIParsingMirrorUpdatePostReq) (res *APIParsingMirrorUpdatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/parsing/mirror/update"),
+		semconv.URLTemplateKey.String("/api/parsing/mirror/update"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -9962,8 +10031,9 @@ func (c *Client) APISystemImportArchivePost(ctx context.Context, request APISyst
 func (c *Client) sendAPISystemImportArchivePost(ctx context.Context, request APISystemImportArchivePostReq) (res *APISystemImportArchivePostOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/system/import/archive"),
+		semconv.URLTemplateKey.String("/api/system/import/archive"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -10081,8 +10151,9 @@ func (c *Client) APISystemInfoSizeGet(ctx context.Context) (*APISystemInfoSizeGe
 func (c *Client) sendAPISystemInfoSizeGet(ctx context.Context) (res *APISystemInfoSizeGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/system/info/size"),
+		semconv.URLTemplateKey.String("/api/system/info/size"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -10197,8 +10268,9 @@ func (c *Client) APISystemInfoWorkersGet(ctx context.Context) (*APISystemInfoWor
 func (c *Client) sendAPISystemInfoWorkersGet(ctx context.Context) (res *APISystemInfoWorkersGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/system/info/workers"),
+		semconv.URLTemplateKey.String("/api/system/info/workers"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -10313,8 +10385,9 @@ func (c *Client) APISystemTaskCreatePost(ctx context.Context, request *APISystem
 func (c *Client) sendAPISystemTaskCreatePost(ctx context.Context, request *APISystemTaskCreatePostReq) (res *APISystemTaskCreatePostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/system/task/create"),
+		semconv.URLTemplateKey.String("/api/system/task/create"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -10432,8 +10505,9 @@ func (c *Client) APISystemTaskResultsGet(ctx context.Context) (*APISystemTaskRes
 func (c *Client) sendAPISystemTaskResultsGet(ctx context.Context) (res *APISystemTaskResultsGetOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/system/task/results"),
+		semconv.URLTemplateKey.String("/api/system/task/results"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -10549,8 +10623,9 @@ func (c *Client) APISystemWorkerConfigPost(ctx context.Context, request *APISyst
 func (c *Client) sendAPISystemWorkerConfigPost(ctx context.Context, request *APISystemWorkerConfigPostReq) (res *APISystemWorkerConfigPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/system/worker/config"),
+		semconv.URLTemplateKey.String("/api/system/worker/config"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -10668,8 +10743,9 @@ func (c *Client) APIUserLoginPost(ctx context.Context, request *APIUserLoginPost
 func (c *Client) sendAPIUserLoginPost(ctx context.Context, request *APIUserLoginPostReq) (res *APIUserLoginPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/user/login"),
+		semconv.URLTemplateKey.String("/api/user/login"),
 	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
 	// Run stopwatch.
 	startTime := time.Now()

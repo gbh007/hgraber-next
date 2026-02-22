@@ -33,7 +33,7 @@ type Repo struct {
 	*other.OtherRepo
 
 	// Переопределение для того чтобы реальные не были доступны из вне.
-	Repository, Logger, Tracer, Pool struct{} //nolint:revive // это объект пустышка
+	Repository, Logger, Tracer, Pool struct{}
 }
 
 func New(

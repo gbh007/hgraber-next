@@ -62,7 +62,7 @@ type BookHandlersController struct {
 	deduplicateUseCases DeduplicateUseCases
 }
 
-func New( //nolint:revive // будет исправлено позднее
+func New(
 	logger *slog.Logger,
 	tracer trace.Tracer,
 	parseUseCases ParseUseCases,

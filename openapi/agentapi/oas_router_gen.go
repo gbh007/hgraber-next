@@ -10,6 +10,51 @@ import (
 	"github.com/ogen-go/ogen/uri"
 )
 
+var (
+	rn1AllowedHeaders = map[string]string{
+		"GET": "X-Hg-Agent-Token",
+	}
+	rn3AllowedHeaders = map[string]string{
+		"POST": "Content-Type,File-Id,X-Hg-Agent-Token",
+	}
+	rn5AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+	rn6AllowedHeaders = map[string]string{
+		"GET": "X-Hg-Agent-Token",
+	}
+	rn7AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+	rn13AllowedHeaders = map[string]string{
+		"POST": "X-Hg-Agent-Token",
+	}
+	rn15AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+	rn17AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+	rn18AllowedHeaders = map[string]string{
+		"POST": "Book-Id,Book-Name,Book-Url,Content-Type,X-Hg-Agent-Token",
+	}
+	rn22AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+	rn19AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+	rn21AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+	rn25AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+	rn24AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+)
+
 func (s *Server) cutPrefix(path string) (string, bool) {
 	prefix := s.cfg.Prefix
 	if prefix == "" {
@@ -75,7 +120,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					case "GET":
 						s.handleAPICoreStatusGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "GET")
+						s.notAllowed(w, r, notAllowedParams{
+							allowedMethods: "GET",
+							allowedHeaders: rn1AllowedHeaders,
+							acceptPost:     "",
+							acceptPatch:    "",
+						})
 					}
 
 					return
@@ -107,7 +157,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "POST":
 							s.handleAPIFsCreatePostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: rn3AllowedHeaders,
+								acceptPost:     "application/octet-stream",
+								acceptPatch:    "",
+							})
 						}
 
 						return
@@ -127,7 +182,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "POST":
 							s.handleAPIFsDeletePostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: rn5AllowedHeaders,
+								acceptPost:     "application/json",
+								acceptPatch:    "",
+							})
 						}
 
 						return
@@ -147,7 +207,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "GET":
 							s.handleAPIFsGetGetRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "GET")
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "GET",
+								allowedHeaders: rn6AllowedHeaders,
+								acceptPost:     "",
+								acceptPatch:    "",
+							})
 						}
 
 						return
@@ -167,7 +232,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "POST":
 							s.handleAPIFsInfoPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: rn7AllowedHeaders,
+								acceptPost:     "application/json",
+								acceptPatch:    "",
+							})
 						}
 
 						return
@@ -246,7 +316,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										args[1],
 									}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "GET")
+									s.notAllowed(w, r, notAllowedParams{
+										allowedMethods: "GET",
+										allowedHeaders: nil,
+										acceptPost:     "",
+										acceptPatch:    "",
+									})
 								}
 
 								return
@@ -268,7 +343,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							case "POST":
 								s.handleAPIHighwayTokenCreatePostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "POST")
+								s.notAllowed(w, r, notAllowedParams{
+									allowedMethods: "POST",
+									allowedHeaders: rn13AllowedHeaders,
+									acceptPost:     "",
+									acceptPatch:    "",
+								})
 							}
 
 							return
@@ -302,7 +382,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							case "POST":
 								s.handleAPIHproxyParseBookPostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "POST")
+								s.notAllowed(w, r, notAllowedParams{
+									allowedMethods: "POST",
+									allowedHeaders: rn15AllowedHeaders,
+									acceptPost:     "application/json",
+									acceptPatch:    "",
+								})
 							}
 
 							return
@@ -322,7 +407,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							case "POST":
 								s.handleAPIHproxyParseListPostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "POST")
+								s.notAllowed(w, r, notAllowedParams{
+									allowedMethods: "POST",
+									allowedHeaders: rn17AllowedHeaders,
+									acceptPost:     "application/json",
+									acceptPatch:    "",
+								})
 							}
 
 							return
@@ -346,7 +436,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					case "POST":
 						s.handleAPIImportArchivePostRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "POST")
+						s.notAllowed(w, r, notAllowedParams{
+							allowedMethods: "POST",
+							allowedHeaders: rn18AllowedHeaders,
+							acceptPost:     "application/octet-stream",
+							acceptPatch:    "",
+						})
 					}
 
 					return
@@ -377,7 +472,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "POST":
 							s.handleAPIParsingBookPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: rn22AllowedHeaders,
+								acceptPost:     "application/json",
+								acceptPatch:    "",
+							})
 						}
 
 						return
@@ -409,7 +509,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								case "POST":
 									s.handleAPIParsingBookCheckPostRequest([0]string{}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "POST")
+									s.notAllowed(w, r, notAllowedParams{
+										allowedMethods: "POST",
+										allowedHeaders: rn19AllowedHeaders,
+										acceptPost:     "application/json",
+										acceptPatch:    "",
+									})
 								}
 
 								return
@@ -429,7 +534,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								case "POST":
 									s.handleAPIParsingBookMultiPostRequest([0]string{}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "POST")
+									s.notAllowed(w, r, notAllowedParams{
+										allowedMethods: "POST",
+										allowedHeaders: rn21AllowedHeaders,
+										acceptPost:     "application/json",
+										acceptPatch:    "",
+									})
 								}
 
 								return
@@ -452,7 +562,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						case "POST":
 							s.handleAPIParsingPagePostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: rn25AllowedHeaders,
+								acceptPost:     "application/json",
+								acceptPatch:    "",
+							})
 						}
 
 						return
@@ -472,7 +587,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							case "POST":
 								s.handleAPIParsingPageCheckPostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "POST")
+								s.notAllowed(w, r, notAllowedParams{
+									allowedMethods: "POST",
+									allowedHeaders: rn24AllowedHeaders,
+									acceptPost:     "application/json",
+									acceptPatch:    "",
+								})
 							}
 
 							return
@@ -491,12 +611,13 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // Route is route object.
 type Route struct {
-	name        string
-	summary     string
-	operationID string
-	pathPattern string
-	count       int
-	args        [2]string
+	name           string
+	summary        string
+	operationID    string
+	operationGroup string
+	pathPattern    string
+	count          int
+	args           [2]string
 }
 
 // Name returns ogen operation name.
@@ -514,6 +635,11 @@ func (r Route) Summary() string {
 // OperationID returns OpenAPI operationId.
 func (r Route) OperationID() string {
 	return r.operationID
+}
+
+// OperationGroup returns the x-ogen-operation-group value.
+func (r Route) OperationGroup() string {
+	return r.operationGroup
 }
 
 // PathPattern returns OpenAPI path.
@@ -591,6 +717,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = APICoreStatusGetOperation
 						r.summary = "Получение данных о состоянии агента"
 						r.operationID = ""
+						r.operationGroup = ""
 						r.pathPattern = "/api/core/status"
 						r.args = args
 						r.count = 0
@@ -627,6 +754,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = APIFsCreatePostOperation
 							r.summary = "Создание нового файла"
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/api/fs/create"
 							r.args = args
 							r.count = 0
@@ -651,6 +779,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = APIFsDeletePostOperation
 							r.summary = "Удаление файла"
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/api/fs/delete"
 							r.args = args
 							r.count = 0
@@ -675,6 +804,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = APIFsGetGetOperation
 							r.summary = "Получение файла"
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/api/fs/get"
 							r.args = args
 							r.count = 0
@@ -699,6 +829,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = APIFsInfoPostOperation
 							r.summary = "Получение информации о состоянии файловой системы"
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/api/fs/info"
 							r.args = args
 							r.count = 0
@@ -779,6 +910,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = APIHighwayFileIDExtGetOperation
 									r.summary = "Получение файла через highway"
 									r.operationID = ""
+									r.operationGroup = ""
 									r.pathPattern = "/api/highway/file/{id}.{ext}"
 									r.args = args
 									r.count = 2
@@ -805,6 +937,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.name = APIHighwayTokenCreatePostOperation
 								r.summary = "Создание нового токена для highway"
 								r.operationID = ""
+								r.operationGroup = ""
 								r.pathPattern = "/api/highway/token/create"
 								r.args = args
 								r.count = 0
@@ -843,6 +976,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.name = APIHproxyParseBookPostOperation
 								r.summary = "Парсинг данных книги по ссылке"
 								r.operationID = ""
+								r.operationGroup = ""
 								r.pathPattern = "/api/hproxy/parse/book"
 								r.args = args
 								r.count = 0
@@ -867,6 +1001,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.name = APIHproxyParseListPostOperation
 								r.summary = "Парсинг списка данных по ссылке"
 								r.operationID = ""
+								r.operationGroup = ""
 								r.pathPattern = "/api/hproxy/parse/list"
 								r.args = args
 								r.count = 0
@@ -895,6 +1030,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = APIImportArchivePostOperation
 						r.summary = "Загрузка архива"
 						r.operationID = ""
+						r.operationGroup = ""
 						r.pathPattern = "/api/import/archive"
 						r.args = args
 						r.count = 0
@@ -930,6 +1066,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = APIParsingBookPostOperation
 							r.summary = "Обработка новой книги"
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/api/parsing/book"
 							r.args = args
 							r.count = 0
@@ -966,6 +1103,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = APIParsingBookCheckPostOperation
 									r.summary = "Предварительная проверка ссылок на новые книги"
 									r.operationID = ""
+									r.operationGroup = ""
 									r.pathPattern = "/api/parsing/book/check"
 									r.args = args
 									r.count = 0
@@ -990,6 +1128,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = APIParsingBookMultiPostOperation
 									r.summary = "Обработка ссылки с набором книг"
 									r.operationID = ""
+									r.operationGroup = ""
 									r.pathPattern = "/api/parsing/book/multi"
 									r.args = args
 									r.count = 0
@@ -1017,6 +1156,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = APIParsingPagePostOperation
 							r.summary = "Загрузка изображения страницы"
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/api/parsing/page"
 							r.args = args
 							r.count = 0
@@ -1041,6 +1181,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.name = APIParsingPageCheckPostOperation
 								r.summary = "Предварительная проверка ссылок для загрузки страниц"
 								r.operationID = ""
+								r.operationGroup = ""
 								r.pathPattern = "/api/parsing/page/check"
 								r.args = args
 								r.count = 0

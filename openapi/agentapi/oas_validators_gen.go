@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/go-faster/errors"
-
 	"github.com/ogen-go/ogen/validate"
 )
 
@@ -214,6 +213,7 @@ func (s *APIHproxyParseBookPostOKPagesItem) Validate() error {
 			MaxExclusive:  false,
 			MultipleOfSet: false,
 			MultipleOf:    0,
+			Pattern:       nil,
 		}).Validate(int64(s.PageNumber)); err != nil {
 			return errors.Wrap(err, "int")
 		}
@@ -565,6 +565,7 @@ func (s *BookDetailsPagesItem) Validate() error {
 			MaxExclusive:  false,
 			MultipleOfSet: false,
 			MultipleOf:    0,
+			Pattern:       nil,
 		}).Validate(int64(s.PageNumber)); err != nil {
 			return errors.Wrap(err, "int")
 		}

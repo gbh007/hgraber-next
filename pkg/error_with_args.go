@@ -76,7 +76,7 @@ func (err *errorWithArgs) Error() string {
 
 			buf.WriteString(arg.Key)
 			buf.WriteString("=")
-			buf.WriteString(fmt.Sprint(arg.Value))
+			fmt.Fprint(&buf, arg.Value)
 		}
 
 		buf.WriteString(")")

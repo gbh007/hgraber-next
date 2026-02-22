@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/go-faster/errors"
-
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
@@ -37,6 +36,7 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 	return "", false
 }
 
+// operationRolesCookies is a private map storing roles per operation.
 var operationRolesCookies = map[string][]string{
 	APIAgentDeletePostOperation:                    []string{},
 	APIAgentGetPostOperation:                       []string{},
@@ -124,29 +124,28 @@ var operationRolesCookies = map[string][]string{
 	APISystemWorkerConfigPostOperation:             []string{},
 }
 
-func (s *Server) securityCookies(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
-	var t Cookies
-	const parameterName = "X-HG-Token"
-	var value string
-	switch cookie, err := req.Cookie(parameterName); {
-	case err == nil: // if NO error
-		value = cookie.Value
-	case errors.Is(err, http.ErrNoCookie):
-		return ctx, false, nil
-	default:
-		return nil, false, errors.Wrap(err, "get cookie value")
+// GetRolesForCookies returns the required roles for the given operation.
+//
+// This is useful for authorization scenarios where you need to know which roles
+// are required for an operation.
+//
+// Example:
+//
+//	requiredRoles := GetRolesForCookies(AddPetOperation)
+//
+// Returns nil if the operation has no role requirements or if the operation is unknown.
+func GetRolesForCookies(operation string) []string {
+	roles, ok := operationRolesCookies[operation]
+	if !ok {
+		return nil
 	}
-	t.APIKey = value
-	t.Roles = operationRolesCookies[operationName]
-	rctx, err := s.sec.HandleCookies(ctx, operationName, t)
-	if errors.Is(err, ogenerrors.ErrSkipServerSecurity) {
-		return nil, false, nil
-	} else if err != nil {
-		return nil, false, err
-	}
-	return rctx, true, err
+	// Return a copy to prevent external modification
+	result := make([]string, len(roles))
+	copy(result, roles)
+	return result
 }
 
+// operationRolesHeaderAuth is a private map storing roles per operation.
 var operationRolesHeaderAuth = map[string][]string{
 	APIAgentDeletePostOperation:                    []string{},
 	APIAgentGetPostOperation:                       []string{},
@@ -232,6 +231,50 @@ var operationRolesHeaderAuth = map[string][]string{
 	APISystemTaskCreatePostOperation:               []string{},
 	APISystemTaskResultsGetOperation:               []string{},
 	APISystemWorkerConfigPostOperation:             []string{},
+}
+
+// GetRolesForHeaderAuth returns the required roles for the given operation.
+//
+// This is useful for authorization scenarios where you need to know which roles
+// are required for an operation.
+//
+// Example:
+//
+//	requiredRoles := GetRolesForHeaderAuth(AddPetOperation)
+//
+// Returns nil if the operation has no role requirements or if the operation is unknown.
+func GetRolesForHeaderAuth(operation string) []string {
+	roles, ok := operationRolesHeaderAuth[operation]
+	if !ok {
+		return nil
+	}
+	// Return a copy to prevent external modification
+	result := make([]string, len(roles))
+	copy(result, roles)
+	return result
+}
+
+func (s *Server) securityCookies(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
+	var t Cookies
+	const parameterName = "X-HG-Token"
+	var value string
+	switch cookie, err := req.Cookie(parameterName); {
+	case err == nil: // if NO error
+		value = cookie.Value
+	case errors.Is(err, http.ErrNoCookie):
+		return ctx, false, nil
+	default:
+		return nil, false, errors.Wrap(err, "get cookie value")
+	}
+	t.APIKey = value
+	t.Roles = operationRolesCookies[operationName]
+	rctx, err := s.sec.HandleCookies(ctx, operationName, t)
+	if errors.Is(err, ogenerrors.ErrSkipServerSecurity) {
+		return nil, false, nil
+	} else if err != nil {
+		return nil, false, err
+	}
+	return rctx, true, err
 }
 
 func (s *Server) securityHeaderAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {

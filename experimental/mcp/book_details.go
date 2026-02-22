@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/google/uuid"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+
+	"github.com/gbh007/hgraber-next/domain/core"
 )
 
 func (c *Controller) bookDetailsTool() server.ServerTool {

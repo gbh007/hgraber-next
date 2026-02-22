@@ -27,7 +27,7 @@ func BookCountDelta() *barchart.PanelBuilder {
 
 	return barchart.
 		NewPanelBuilder().
-		Title(fmt.Sprintf(`Book delta count at %s`, generatorcore.NameToVar(generatorcore.DeltaVariableName))).
+		Title("Book delta count at " + generatorcore.NameToVar(generatorcore.DeltaVariableName)).
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().

@@ -28,7 +28,7 @@ func (c *BookHandlersController) APIBookDeletePost(
 		err = c.deduplicateUseCases.DeleteBookDeadHashedPages(ctx, req.BookID)
 
 	default:
-		err = fmt.Errorf("unsupported type: %v", req.Type) //nolint:revive // правило не применимо
+		err = fmt.Errorf("unsupported type: %v", req.Type)
 
 		return apiservercore.APIError{
 			Code:    http.StatusBadRequest,

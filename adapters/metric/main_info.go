@@ -1,4 +1,3 @@
-//revive:disable:file-length-limit
 package metric
 
 import (
@@ -87,11 +86,7 @@ func (c *SystemInfoCollector) Start(ctx context.Context) (chan struct{}, error) 
 	wg := new(sync.WaitGroup)
 
 	if c.mainInfoInterval > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-
+		wg.Go(func() {
 			c.logger.InfoContext(ctx, "system info collector start")
 			defer c.logger.InfoContext(ctx, "system info collector stop")
 
@@ -107,15 +102,11 @@ func (c *SystemInfoCollector) Start(ctx context.Context) (chan struct{}, error) 
 					c.collectMainInfo(ctx)
 				}
 			}
-		}()
+		})
 	}
 
 	if c.statisticInterval > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-
+		wg.Go(func() {
 			c.logger.InfoContext(ctx, "book statistic collector start")
 			defer c.logger.InfoContext(ctx, "book statistic collector stop")
 
@@ -135,7 +126,7 @@ func (c *SystemInfoCollector) Start(ctx context.Context) (chan struct{}, error) 
 					c.collectPageSizeByAuthorStatistic(ctx)
 				}
 			}
-		}()
+		})
 	}
 
 	go func() {

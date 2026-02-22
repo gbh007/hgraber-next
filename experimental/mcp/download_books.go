@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/domain/parsing"
-	"github.com/gbh007/hgraber-next/pkg"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+
+	"github.com/gbh007/hgraber-next/domain/parsing"
+	"github.com/gbh007/hgraber-next/pkg"
 )
 
 func (c *Controller) downloadBooksTool() server.ServerTool {

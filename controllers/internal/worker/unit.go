@@ -89,7 +89,7 @@ func (w *Unit[T]) handleOne(ctx context.Context, value T) (err error) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			err = fmt.Errorf("panic detected: %v", p) //nolint:revive // правило не применимо
+			err = fmt.Errorf("panic detected: %v", p)
 		}
 	}()
 

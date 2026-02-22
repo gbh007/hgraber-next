@@ -45,7 +45,7 @@ type Page struct {
 	OriginURL  string    `json:"origin_url,omitempty"`
 	CreateAt   time.Time `json:"create_at"`
 	Downloaded bool      `json:"downloaded,omitempty"`
-	LoadAt     time.Time `json:"load_at,omitempty"`
+	LoadAt     time.Time `json:"load_at,omitzero"`
 	Labels     []Label   `json:"labels,omitempty"`
 }
 

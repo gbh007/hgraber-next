@@ -27,7 +27,7 @@ func FileCountDelta() *barchart.PanelBuilder {
 
 	return barchart.
 		NewPanelBuilder().
-		Title(fmt.Sprintf(`File delta count at %s`, generatorcore.NameToVar(generatorcore.DeltaVariableName))).
+		Title("File delta count at " + generatorcore.NameToVar(generatorcore.DeltaVariableName)).
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().

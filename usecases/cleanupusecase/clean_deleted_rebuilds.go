@@ -35,7 +35,7 @@ func (uc *UseCase) cleanDeletedRebuilds(
 	if err != nil {
 		taskResult.SetError(err)
 
-		return
+		return ids, err
 	}
 
 	buff := &bytes.Buffer{}
@@ -54,11 +54,11 @@ func (uc *UseCase) cleanDeletedRebuilds(
 		if err != nil {
 			taskResult.SetError(err)
 
-			return
+			return ids, err
 		}
 	}
 
 	taskResult.EndStage()
 
-	return
+	return ids, err
 }

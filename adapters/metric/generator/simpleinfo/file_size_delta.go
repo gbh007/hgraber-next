@@ -1,8 +1,6 @@
 package simpleinfo
 
 import (
-	"fmt"
-
 	"github.com/grafana/grafana-foundation-sdk/go/barchart"
 	"github.com/grafana/grafana-foundation-sdk/go/cog"
 	"github.com/grafana/grafana-foundation-sdk/go/cog/variants"
@@ -30,7 +28,7 @@ func FileSizeDelta() *barchart.PanelBuilder {
 
 	return barchart.
 		NewPanelBuilder().
-		Title(fmt.Sprintf(`File delta size at %s`, generatorcore.NameToVar(generatorcore.DeltaVariableName))).
+		Title("File delta size at " + generatorcore.NameToVar(generatorcore.DeltaVariableName)).
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().

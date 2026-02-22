@@ -2,7 +2,7 @@ package model
 
 import "github.com/jackc/pgx/v5"
 
-var _ pgx.RowScanner = (RowScanner)(nil)
+var _ pgx.RowScanner = RowScanner(nil)
 
 type RowScanner func(rows pgx.Rows) error
 

@@ -23,6 +23,7 @@ func (g Generator) WithVariables(builder *dashboard.DashboardBuilder) *dashboard
 				Type(generatorcore.LogsVariableTypeLoki),
 		)
 	}
+
 	builder.WithVariable(
 		dashboard.
 			NewDatasourceVariableBuilder(generatorcore.MetricVariableName).

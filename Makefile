@@ -11,21 +11,25 @@ GOBIN = $(PWD)/bin/utils
 GOLANGCI_LINT = $(GOBIN)/golangci-lint
 
 $(GOLANGCI_LINT):
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(GOBIN) v2.4.0
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(GOBIN) v2.10.1
 
 .PHONY: lint
 lint: $(GOLANGCI_LINT)
 	$(GOLANGCI_LINT) run  --max-issues-per-linter 0 --max-same-issues 0
 	go tool goarchlint run
 
+.PHONY: lint-fix
+lint-fix: $(GOLANGCI_LINT)
+	$(GOLANGCI_LINT) run --fix --max-issues-per-linter 0 --max-same-issues 0
+
 .PHONY: install-tools
 install-tools:
 # 	На данный момент не работает корректно
-# 	go get -u -tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.4.0
-	go get -u -tool github.com/ogen-go/ogen/cmd/ogen@v1.14.0
-	go get -u -tool golang.org/x/tools/cmd/deadcode@v0.36.0
-	go get -u -tool mvdan.cc/gofumpt@v0.8.0
-	go get -u -tool golang.org/x/tools/cmd/goimports@v0.36.0
+# 	go get -u -tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.10.1
+	go get -u -tool github.com/ogen-go/ogen/cmd/ogen@v1.19.0
+	go get -u -tool golang.org/x/tools/cmd/deadcode@v0.42.0
+	go get -u -tool mvdan.cc/gofumpt@v0.9.2
+	go get -u -tool golang.org/x/tools/cmd/goimports@v0.42.0
 	go get -u -tool github.com/daixiang0/gci@v0.13.7
 	go get -u -tool github.com/gbh007/goarchlint/cmd/goarchlint@v0.0.3
 
@@ -42,7 +46,7 @@ deadcode:
 format:
 	go tool gofumpt -l -w .
 	go tool goimports -l -w .
-	go tool gci write -s standard -s default -s "prefix(github.com/gbh007/hgraber-next)" --skip-generated .
+	go tool gci write -s standard -s default -s "localmodule" --skip-generated .
 
 .PHONY: generate
 generate:

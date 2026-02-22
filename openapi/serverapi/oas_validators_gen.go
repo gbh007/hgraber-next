@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/go-faster/errors"
-
 	"github.com/ogen-go/ogen/validate"
 )
 
@@ -216,6 +215,7 @@ func (s *APIBookDetailsPostOK) Validate() error {
 			MaxExclusive:  false,
 			MultipleOfSet: false,
 			MultipleOf:    nil,
+			Pattern:       nil,
 		}).Validate(float64(s.PageLoadedPercent)); err != nil {
 			return errors.Wrap(err, "float")
 		}
@@ -309,6 +309,7 @@ func (s *APIBookPageDeletePostReq) Validate() error {
 			MaxExclusive:  false,
 			MultipleOfSet: false,
 			MultipleOf:    0,
+			Pattern:       nil,
 		}).Validate(int64(s.PageNumber)); err != nil {
 			return errors.Wrap(err, "int")
 		}
@@ -369,6 +370,7 @@ func (s *APIBookRebuildPostReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
+					Pattern:       nil,
 				}).Validate(int64(elem)); err != nil {
 					return errors.Wrap(err, "int")
 				}
@@ -403,6 +405,7 @@ func (s *APIBookRebuildPostReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
+					Pattern:       nil,
 				}).Validate(int64(elem)); err != nil {
 					return errors.Wrap(err, "int")
 				}
@@ -607,6 +610,7 @@ func (s *APIDeduplicateBooksByPagePostReq) Validate() error {
 			MaxExclusive:  false,
 			MultipleOfSet: false,
 			MultipleOf:    0,
+			Pattern:       nil,
 		}).Validate(int64(s.PageNumber)); err != nil {
 			return errors.Wrap(err, "int")
 		}
@@ -847,6 +851,7 @@ func (s *APIDeduplicateDeadHashSetPostReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
+					Pattern:       nil,
 				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
@@ -1012,6 +1017,7 @@ func (s *APIHproxyBookPostOKPagesItem) Validate() error {
 			MaxExclusive:  false,
 			MultipleOfSet: false,
 			MultipleOf:    0,
+			Pattern:       nil,
 		}).Validate(int64(s.PageNumber)); err != nil {
 			return errors.Wrap(err, "int")
 		}
@@ -1950,6 +1956,7 @@ func (s *BookFilterPagination) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
+					Pattern:       nil,
 				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
@@ -2133,6 +2140,7 @@ func (s *BookRawPagesItem) Validate() error {
 			MaxExclusive:  false,
 			MultipleOfSet: false,
 			MultipleOf:    0,
+			Pattern:       nil,
 		}).Validate(int64(s.PageNumber)); err != nil {
 			return errors.Wrap(err, "int")
 		}
@@ -2165,6 +2173,7 @@ func (s *PageSimple) Validate() error {
 			MaxExclusive:  false,
 			MultipleOfSet: false,
 			MultipleOf:    0,
+			Pattern:       nil,
 		}).Validate(int64(s.PageNumber)); err != nil {
 			return errors.Wrap(err, "int")
 		}

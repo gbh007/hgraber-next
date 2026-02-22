@@ -2,13 +2,12 @@ version: "2"
 
 run:
   timeout: "5m"
-  go: "1.24"
+  go: "1.25"
 
 formatters:
   settings:
     gofumpt:
       extra-rules: true
-      module-path: github.com/gbh007/hgraber-next
     gci:
       no-inline-comments: false
       no-prefix-comments: false
@@ -17,17 +16,10 @@ formatters:
       sections:
         - standard
         - default
-        - prefix(github.com/gbh007/hgraber-next)
-    golines:
-      max-len: 120
-      tab-len: 4
-      shorten-comments: true
-      reformat-tags: false
-      chain-split-dots: true
+        - localmodule
   enable:
     - gofumpt
     - goimports
-    - golines
     - gci
 
 linters:
@@ -42,82 +34,172 @@ linters:
       - linters:
           - err113
         text: do not define dynamic errors
-      - linters:
-          - goconst
-        path: adapters/postgresql/internal/model/*
 
   settings:
-    cyclop:
-      max-complexity: 15
-      package-average: 0
-    decorder:
-      dec-order:
-        - const
-        - var
-        - type
-        - func
-      ignore-underscore-vars: false
-      disable-dec-order-check: false
-      disable-init-func-first-check: false
-      disable-dec-num-check: true
-      disable-type-dec-num-check: true
-      disable-const-dec-num-check: true
-      disable-var-dec-num-check: true
-    forbidigo:
-      exclude-godoc-examples: true
-      analyze-types: true
-      forbid:
-        - pattern: ^print(ln)?$
-          msg: Do not use print.
-        - pattern: ^fmt\.Print.*$
-          msg: Do not use print.
-    funlen:
-      lines: 150
-      statements: 40
-      ignore-comments: true
-    gocognit:
-      min-complexity: 40
-    goconst:
-      match-constant: true
-      min-len: 3
-      min-occurrences: 3
-      ignore-calls: true
-      numbers: false
-      find-duplicates: true
-      eval-const-expressions: false
-    godox:
-      keywords:
-        # - FIXME # Временно выключено
-        - BUG
-    lll:
-      tab-width: 4
-      line-length: 120
-    loggercheck:
-      kitlog: false
-      klog: false
-      logr: false
-      slog: true
-      zap: false
-      require-string-key: false
-      no-printf-like: false
-    mnd:
-      checks:
-        - argument
-        - case
-        - condition
-        - operation
-        - return
+    copyloopvar:
+      check-alias: true
+    errcheck:
+      check-type-assertions: true
+      check-blank: false
+      disable-default-exclusions: false
+      verbose: false
+    gocritic:
+      disable-all: true
+      enable-all: false
+      enabled-checks:
+        - appendAssign
+        - appendCombine
+        - argOrder
+        - assignOp
+        - badCall
+        - badCond
+        - badLock
+        - badRegexp
+        - badSorting
+        - badSyncOnceFunc
+        - boolExprSimplify
+        - builtinShadow
+        - builtinShadowDecl
+        - caseOrder
+        - commentedOutCode
+        - commentedOutImport
+        - defaultCaseOrder
+        - deferInLoop
+        - deferUnlambda
+        - deprecatedComment
+        - dupArg
+        - dupBranchBody
+        - dupCase
+        - dupImport
+        - dupOption
+        - dupSubExpr
+        - dynamicFmtString
+        - elseif
+        - emptyDecl
+        - emptyFallthrough
+        - equalFold
+        - evalOrder
+        - exitAfterDefer
+        - exposedSyncMutex
+        - externalErrorReassign
+        - filepathJoin
+        - flagDeref
+        - flagName
+        - httpNoBody
+        - ifElseChain
+        - importShadow
+        - indexAlloc
+        - initClause
+        - mapKey
+        - methodExprCall
+        - nestingReduce
+        - newDeref
+        - nilValReturn
+        - octalLiteral
+        - offBy1
+        - preferDecodeRune
+        - preferFilepathJoin
+        - preferFprint
+        - preferStringWriter
+        - preferWriteByte
+        - ptrToRefParam
+        - rangeAppendAll
+        - redundantSprint
+        - regexpMust
+        - regexpPattern
+        - regexpSimplify
+        - returnAfterHttpError
+        - singleCaseSwitch
+        - sliceClear
+        - sloppyLen
+        - sloppyReassign
+        - sloppyTypeAssert
+        - sortSlice
+        - sqlQuery
+        - stringConcatSimplify
+        - stringXbytes
+        - stringsCompare
+        - switchTrue
+        - syncMapLoadAndDelete
+        - timeExprSimplify
+        - todoCommentWithoutDetail
+        - tooManyResultsChecker
+        - truncateCmp
+        - typeAssertChain
+        - typeSwitchVar
+        - typeUnparen
+        - uncheckedInlineErr
+        - underef
+        - unlabelStmt
+        - unlambda
+        - unnecessaryBlock
+        - unnecessaryDefer
+        - unslice
+        - valSwap
+        - weakCond
+        - whyNoLint
+        - wrapperFunc
+        - yodaStyleExpr
+        - zeroByteRepeat
+      settings:
+        commentedOutCode:
+          minLength: 3
+        ifElseChain:
+          minThreshold: 3
+        nestingReduce:
+          bodyWidth: 5
+        tooManyResultsChecker:
+          maxResults: 4
+    govet:
+      disable-all: true
+      enable:
+        - appends
+        - asmdecl
         - assign
-      ignored-functions:
-        - '^strconv\.\w+$'
+        - atomic
+        - atomicalign
+        - bools
+        - buildtag
+        - cgocall
+        - composites
+        - copylocks
+        - deepequalerrors
+        - defers
+        - directive
+        - errorsas
+        - findcall
+        - framepointer
+        - hostport
+        - httpmux
+        - httpresponse
+        - ifaceassert
+        - loopclosure
+        - lostcancel
+        - nilfunc
+        - nilness
+        - printf
+        - reflectvaluecompare
+        - shift
+        - sigchanyzer
+        - slog
+        - sortslice
+        - stdmethods
+        - stdversion
+        - stringintconv
+        - structtag
+        - testinggoroutine
+        - tests
+        - timeformat
+        - unmarshal
+        - unreachable
+        - unsafeptr
+        - unusedresult
+        - unusedwrite
+        - waitgroup
     revive:
       enable-all-rules: false
       rules:
-        - name: argument-limit
-          arguments:
-            - 8
         - name: atomic
-        # - name: bare-return
         - name: blank-imports
         - name: bool-literal-in-expr
         - name: comment-spacings
@@ -131,7 +213,6 @@ linters:
             - allow-types-before: "*testing.T"
         - name: context-keys-type
         - name: datarace
-        - name: deep-exit
         - name: defer
         - name: dot-imports
         - name: duplicated-imports
@@ -139,23 +220,19 @@ linters:
         - name: empty-block
         - name: empty-lines
         - name: error-naming
+        - name: error-return
+          severity: warning
         - name: error-strings
         - name: errorf
-        - name: file-length-limit
-          arguments:
-            - max: 200
-              skip-comments: false
-              skip-blank-lines: false
         - name: filename-format
           arguments:
             - "^[a-z][_a-z0-9]*\\.go$"
+        - name: forbidden-call-in-wg-go
         - name: get-return
         - name: identical-branches
-        # TODO: эти правила есть в revive но их нет в golangci lint (включить как появятся)
-        # - name: identical-ifelseif-branches
-        # - name: identical-ifelseif-conditions
-        # - name: identical-switch-branches
-        # - name: identical-switch-conditions
+        - name: identical-ifelseif-branches
+        - name: identical-ifelseif-conditions
+        - name: identical-switch-conditions
         - name: if-return
         - name: import-alias-naming
           arguments:
@@ -163,9 +240,9 @@ linters:
         - name: import-shadowing
         - name: increment-decrement
         - name: indent-error-flow
+        - name: inefficient-map-lookup
         - name: modifies-parameter
         - name: modifies-value-receiver
-        - name: nested-structs
         - name: optimize-operands-order
         - name: range
         - name: redefines-builtin-id
@@ -175,8 +252,8 @@ linters:
         - name: string-format
           arguments:
             - - "fmt.Errorf[0]"
-              - "/^((.+: )+%w)|(%w(: .+)+)$/"
-              - 'need use format "some text: %w"'
+              - "/^((.+: )+%\\w)|(%\\w(: .+)+)$/"
+              - "need use format"
         - name: string-of-int
         - name: superfluous-else
         - name: time-date
@@ -187,22 +264,18 @@ linters:
         - name: unexported-naming
         - name: unexported-return
         - name: unhandled-error
+        - name: unnecessary-if
         - name: unnecessary-format
         - name: unnecessary-stmt
         - name: unreachable-code
         - name: use-any
+        - name: use-errors-new
+        # FIXME: включить правило как появится в golangcilint
+        # - name: use-slices-sort
+        - name: use-waitgroup-go
         - name: useless-break
-        # TODO: эти правила есть в revive но их нет в golangci lint (включить как появятся)
-        # - name: useless-fallthrough
+        - name: useless-fallthrough
         - name: var-declaration
-        - name: var-naming
-          arguments:
-            - []
-            - []
-            - - skip-initialism-name-checks: false
-                upper-case-const: false
-                skip-package-name-checks: false
-                extra-bad-package-names: []
         - name: waitgroup-by-value
     sloglint:
       kv-only: false
@@ -215,8 +288,19 @@ linters:
       no-raw-keys: false
       key-naming-case: snake
       args-on-sep-lines: false
+      forbidden-keys:
+        - err
     testifylint:
       enable-all: true
+    usetesting:
+      os-create-temp: true
+      os-mkdir-temp: true
+      os-setenv: true
+      os-temp-dir: true
+      os-chdir: true
+      context-background: true
+      context-todo: true
+
   enable:
     - asasalint
     - asciicheck
@@ -225,8 +309,6 @@ linters:
     - containedctx
     - contextcheck
     - copyloopvar
-    - cyclop
-    - decorder
     - embeddedstructfieldcheck
     - err113
     - errcheck
@@ -235,23 +317,16 @@ linters:
     - exhaustive
     - exptostd
     - fatcontext
-    - forbidigo
     - forcetypeassert
-    - funcorder
-    - funlen
     - gocheckcompilerdirectives
-    - gocognit
-    - goconst
     - gocritic
-    - godox
-    - gosec
     - govet
     - iface
     - ineffassign
     - intrange
-    - lll
+    - iotamixing
     - mirror
-    - mnd
+    - modernize
     - musttag
     - nilerr
     - nilnesserr
@@ -259,22 +334,22 @@ linters:
     - nlreturn
     - noctx
     - nolintlint
-    - prealloc
+    - perfsprint
     - predeclared
     - promlinter
-    - protogetter
     - reassign
     - revive
     - rowserrcheck
     - sloglint
     - spancheck
-    - staticcheck
     - sqlclosecheck
+    - staticcheck
     - testifylint
     - unconvert
     - unparam
     - unused
     - usestdlibvars
+    - usetesting
     - wastedassign
     - whitespace
     - wsl_v5

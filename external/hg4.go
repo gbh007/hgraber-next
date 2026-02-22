@@ -1,4 +1,3 @@
-//revive:disable:file-length-limit
 package external
 
 import (
@@ -25,7 +24,7 @@ type HG4Title struct {
 }
 
 type HG4TitleInfo struct {
-	Parsed     HG4TitleInfoParsed `json:"parsed,omitempty"`
+	Parsed     HG4TitleInfoParsed `json:"parsed,omitzero"`
 	Name       string             `json:"name,omitempty"`
 	Rate       int                `json:"rate,omitempty"` // 3.2.0+
 	Tags       []string           `json:"tags,omitempty"`
@@ -80,7 +79,7 @@ func HG4ParseInfoTXT(body io.Reader) (Info, bool, error) {
 
 	const v1_0_0 = "v1.0.0"
 
-	for _, row := range strings.Split(string(rawData), "\n") {
+	for row := range strings.SplitSeq(string(rawData), "\n") {
 		switch {
 		case strings.HasPrefix(row, "URL:"):
 			info.Data.OriginURL = cleanupPrefix(row, "URL:")
