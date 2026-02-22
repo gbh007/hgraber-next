@@ -3,6 +3,7 @@ package bookhandlers
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
@@ -21,22 +22,24 @@ func (c *BookHandlersController) APIBookStatusSetPost(
 		err = c.bookUseCases.SetBookRebuild(ctx, req.ID, req.Value)
 	case serverapi.APIBookStatusSetPostReqStatusVerify:
 		err = c.bookUseCases.VerifyBook(ctx, req.ID, req.Value)
+	default:
+		err = fmt.Errorf("unsupported status: %v", req.Status) //nolint:revive // правило не применимо
+
+		return apiservercore.APIError{
+			Code:    http.StatusBadRequest,
+			Details: err.Error(),
+		}
 	}
 
 	if errors.Is(err, core.ErrBookNotFound) {
 		return apiservercore.APIError{
-			Code:      http.StatusNotFound,
-			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   err.Error(),
+			Code:    http.StatusNotFound,
+			Details: err.Error(),
 		}
 	}
 
 	if err != nil {
-		return apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   err.Error(),
-		}
+		return err
 	}
 
 	return nil

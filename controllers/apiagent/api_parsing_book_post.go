@@ -2,7 +2,6 @@ package apiagent
 
 import (
 	"context"
-	"net/http"
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -16,11 +15,7 @@ func (c *Controller) APIParsingBookPost(
 ) (*agentapi.BookDetails, error) {
 	details, err := c.parsingUseCases.BookByURL(ctx, req.URL)
 	if err != nil {
-		return nil, apiError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: ParseUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	var u url.URL

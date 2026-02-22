@@ -2,9 +2,7 @@ package labelhandlers
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/gbh007/hgraber-next/pkg"
@@ -16,11 +14,7 @@ func (c *LabelHandlersController) APILabelGetPost(
 ) (*serverapi.APILabelGetPostOK, error) {
 	labels, err := c.labelUseCases.Labels(ctx, req.BookID)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.LabelUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &serverapi.APILabelGetPostOK{

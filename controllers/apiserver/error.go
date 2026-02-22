@@ -1,45 +1,36 @@
-package apiagent
+package apiserver
 
 import (
 	"context"
 	"errors"
 	"net/http"
-	"strconv"
 
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/validate"
 
-	"github.com/gbh007/hgraber-next/openapi/agentapi"
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
-type apiError struct {
-	Code    int
-	Details string
-}
-
-func (ae apiError) Error() string {
-	return strconv.Itoa(ae.Code) + ": " + ae.Details
-}
-
-func (c *Controller) NewError(ctx context.Context, err error) *agentapi.ErrorResponseStatusCode {
+func (c *Controller) NewError(ctx context.Context, err error) *serverapi.ErrorResponseStatusCode {
 	if err == nil {
-		return &agentapi.ErrorResponseStatusCode{
+		return &serverapi.ErrorResponseStatusCode{
 			StatusCode: http.StatusInternalServerError,
-			Response: agentapi.ErrorResponse{
+			Response: serverapi.ErrorResponse{
 				InnerCode: "unexpected",
-				Details:   agentapi.NewOptString("empty error"),
+				Details:   serverapi.NewOptString("missing error"),
 			},
 		}
 	}
 
-	var ae apiError
+	var ae apiservercore.APIError
 
 	if errors.As(err, &ae) {
-		return &agentapi.ErrorResponseStatusCode{
+		return &serverapi.ErrorResponseStatusCode{
 			StatusCode: ae.Code,
-			Response: agentapi.ErrorResponse{
+			Response: serverapi.ErrorResponse{
 				InnerCode: "api error",
-				Details: agentapi.OptString{
+				Details: serverapi.OptString{
 					Value: ae.Details,
 					Set:   len(ae.Details) > 0,
 				},
@@ -61,6 +52,7 @@ func (c *Controller) NewError(ctx context.Context, err error) *agentapi.ErrorRes
 		decodeRequestError *ogenerrors.DecodeRequestError
 	)
 
+	//nolint:goconst // будет исправлено позднее
 	switch {
 	case errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied):
 		httpCode = http.StatusUnauthorized
@@ -88,11 +80,11 @@ func (c *Controller) NewError(ctx context.Context, err error) *agentapi.ErrorRes
 		errorCode = "validate"
 	}
 
-	return &agentapi.ErrorResponseStatusCode{
+	return &serverapi.ErrorResponseStatusCode{
 		StatusCode: httpCode,
-		Response: agentapi.ErrorResponse{
+		Response: serverapi.ErrorResponse{
 			InnerCode: errorCode,
-			Details:   agentapi.NewOptString(errorDescription),
+			Details:   serverapi.NewOptString(errorDescription),
 		},
 	}
 }

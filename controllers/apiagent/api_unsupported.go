@@ -13,9 +13,8 @@ func (c *Controller) APIFsCreatePost(
 	params agentapi.APIFsCreatePostParams,
 ) error {
 	return apiError{
-		Code:      http.StatusBadRequest,
-		InnerCode: ValidationCode,
-		Details:   "unsupported api",
+		Code:    http.StatusBadRequest,
+		Details: "unsupported api",
 	}
 }
 
@@ -24,9 +23,8 @@ func (c *Controller) APIFsDeletePost(
 	req *agentapi.APIFsDeletePostReq,
 ) error {
 	return apiError{
-		Code:      http.StatusBadRequest,
-		InnerCode: ValidationCode,
-		Details:   "unsupported api",
+		Code:    http.StatusBadRequest,
+		Details: "unsupported api",
 	}
 }
 
@@ -35,9 +33,8 @@ func (c *Controller) APIFsGetGet(
 	params agentapi.APIFsGetGetParams,
 ) (agentapi.APIFsGetGetOK, error) {
 	return agentapi.APIFsGetGetOK{}, apiError{
-		Code:      http.StatusBadRequest,
-		InnerCode: ValidationCode,
-		Details:   "unsupported api",
+		Code:    http.StatusBadRequest,
+		Details: "unsupported api",
 	}
 }
 
@@ -46,9 +43,8 @@ func (c *Controller) APIParsingBookMultiPost(
 	req *agentapi.APIParsingBookMultiPostReq,
 ) (*agentapi.BooksCheckResult, error) {
 	return nil, apiError{
-		Code:      http.StatusBadRequest,
-		InnerCode: ValidationCode,
-		Details:   "unsupported api",
+		Code:    http.StatusBadRequest,
+		Details: "unsupported api",
 	}
 }
 
@@ -57,9 +53,8 @@ func (c *Controller) APIFsInfoPost(
 	req *agentapi.APIFsInfoPostReq,
 ) (*agentapi.APIFsInfoPostOK, error) {
 	return nil, apiError{
-		Code:      http.StatusBadRequest,
-		InnerCode: ValidationCode,
-		Details:   "unsupported api",
+		Code:    http.StatusBadRequest,
+		Details: "unsupported api",
 	}
 }
 
@@ -68,17 +63,15 @@ func (c *Controller) APIHighwayFileIDExtGet(
 	params agentapi.APIHighwayFileIDExtGetParams,
 ) (*agentapi.APIHighwayFileIDExtGetOKHeaders, error) {
 	return nil, apiError{
-		Code:      http.StatusBadRequest,
-		InnerCode: ValidationCode,
-		Details:   "unsupported api",
+		Code:    http.StatusBadRequest,
+		Details: "unsupported api",
 	}
 }
 
 func (c *Controller) APIHighwayTokenCreatePost(ctx context.Context) (*agentapi.APIHighwayTokenCreatePostOK, error) {
 	return nil, apiError{
-		Code:      http.StatusBadRequest,
-		InnerCode: ValidationCode,
-		Details:   "unsupported api",
+		Code:    http.StatusBadRequest,
+		Details: "unsupported api",
 	}
 }
 
@@ -87,9 +80,8 @@ func (c *Controller) APIHproxyParseBookPost(
 	req *agentapi.APIHproxyParseBookPostReq,
 ) (*agentapi.APIHproxyParseBookPostOK, error) {
 	return nil, apiError{
-		Code:      http.StatusBadRequest,
-		InnerCode: ValidationCode,
-		Details:   "unsupported api",
+		Code:    http.StatusBadRequest,
+		Details: "unsupported api",
 	}
 }
 
@@ -98,8 +90,7 @@ func (c *Controller) APIHproxyParseListPost(
 	req *agentapi.APIHproxyParseListPostReq,
 ) (*agentapi.APIHproxyParseListPostOK, error) {
 	return nil, apiError{
-		Code:      http.StatusBadRequest,
-		InnerCode: ValidationCode,
-		Details:   "unsupported api",
+		Code:    http.StatusBadRequest,
+		Details: "unsupported api",
 	}
 }

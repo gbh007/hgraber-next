@@ -79,12 +79,14 @@ func ConvertBookAttribute(a bff.AttributeToWeb) serverapi.BookAttribute {
 		ValuesV2: pkg.Map(a.Values, func(v bff.AttributeToWebValue) serverapi.BookAttributeValuesV2Item {
 			return serverapi.BookAttributeValuesV2Item{
 				Name: v.Name,
-				MassloadsByName: pkg.Map(v.MassloadsByName, func(m bff.MassloadInfo) serverapi.BookAttributeValuesV2ItemMassloadsByNameItem {
-					return serverapi.BookAttributeValuesV2ItemMassloadsByNameItem{
-						ID:   m.ID,
-						Name: m.Name,
-					}
-				}),
+				MassloadsByName: pkg.Map(v.MassloadsByName,
+					func(m bff.MassloadInfo) serverapi.BookAttributeValuesV2ItemMassloadsByNameItem {
+						return serverapi.BookAttributeValuesV2ItemMassloadsByNameItem{
+							ID:   m.ID,
+							Name: m.Name,
+						}
+					},
+				),
 			}
 		}),
 	}

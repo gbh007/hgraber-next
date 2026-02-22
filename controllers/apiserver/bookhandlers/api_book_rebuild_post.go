@@ -39,18 +39,13 @@ func (c *BookHandlersController) APIBookRebuildPost(
 
 	if errors.Is(err, core.ErrBookNotFound) {
 		return nil, apiservercore.APIError{
-			Code:      http.StatusNotFound,
-			InnerCode: apiservercore.RebuilderUseCaseCode,
-			Details:   err.Error(),
+			Code:    http.StatusNotFound,
+			Details: err.Error(),
 		}
 	}
 
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.RebuilderUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &serverapi.APIBookRebuildPostOK{

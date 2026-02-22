@@ -17,18 +17,13 @@ func (c *BookHandlersController) APIBookArchiveIDGet(
 	body, book, err := c.exportUseCases.ExportBook(ctx, params.ID)
 	if errors.Is(err, core.ErrBookNotFound) {
 		return nil, apiservercore.APIError{
-			Code:      http.StatusNotFound,
-			InnerCode: apiservercore.ExportUseCaseCode,
-			Details:   err.Error(),
+			Code:    http.StatusNotFound,
+			Details: err.Error(),
 		}
 	}
 
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.ExportUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &serverapi.APIBookArchiveIDGetOKHeaders{

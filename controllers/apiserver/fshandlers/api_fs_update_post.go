@@ -2,7 +2,6 @@ package fshandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
@@ -13,7 +12,7 @@ func (c *FSHandlersController) APIFsUpdatePost(
 	ctx context.Context,
 	req *serverapi.APIFsUpdatePostReq,
 ) error {
-	err := c.fsUseCases.UpdateFileStorage(ctx, fsmodel.FileStorageSystem{
+	return c.fsUseCases.UpdateFileStorage(ctx, fsmodel.FileStorageSystem{
 		ID:                  req.ID,
 		Name:                req.Name,
 		Description:         req.Description.Value,
@@ -24,13 +23,4 @@ func (c *FSHandlersController) APIFsUpdatePost(
 		HighwayEnabled:      req.HighwayEnabled,
 		HighwayAddr:         apiservercore.URLFromOpt(req.HighwayAddr),
 	})
-	if err != nil {
-		return apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.FSUseCaseCode,
-			Details:   err.Error(),
-		}
-	}
-
-	return nil
 }

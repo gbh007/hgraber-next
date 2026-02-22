@@ -18,18 +18,13 @@ func (c *AgentHandlersController) APIAgentDeletePost(
 
 	if errors.Is(err, core.ErrAgentNotFound) {
 		return apiservercore.APIError{
-			Code:      http.StatusNotFound,
-			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   err.Error(),
+			Code:    http.StatusNotFound,
+			Details: err.Error(),
 		}
 	}
 
 	if err != nil {
-		return apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.AgentUseCaseCode,
-			Details:   err.Error(),
-		}
+		return err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return nil

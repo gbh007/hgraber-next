@@ -2,9 +2,7 @@ package deduplicatehandlers
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
 	"github.com/gbh007/hgraber-next/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -17,11 +15,7 @@ func (c *DeduplicateHandlersController) APIDeduplicateBookByPageBodyPost(
 ) (*serverapi.APIDeduplicateBookByPageBodyPostOK, error) {
 	data, err := c.deduplicateUseCases.BookByPageEntryPercentage(ctx, req.BookID)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.DeduplicateUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &serverapi.APIDeduplicateBookByPageBodyPostOK{

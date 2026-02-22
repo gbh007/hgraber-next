@@ -2,7 +2,6 @@ package deduplicatehandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
@@ -17,11 +16,7 @@ func (c *DeduplicateHandlersController) APIDeduplicateComparePost(
 ) (*serverapi.APIDeduplicateComparePostOK, error) {
 	data, err := c.bffUseCases.BookCompare(ctx, req.OriginBookID, req.TargetBookID)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &serverapi.APIDeduplicateComparePostOK{

@@ -2,7 +2,6 @@ package bookhandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/bff"
@@ -19,11 +18,7 @@ func (c *BookHandlersController) APIBookListPost(
 
 	bookList, err := c.bffUseCases.BookList(ctx, filter)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.BFFUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &serverapi.APIBookListPostOK{

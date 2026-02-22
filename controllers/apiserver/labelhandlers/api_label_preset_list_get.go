@@ -2,7 +2,6 @@ package labelhandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -15,11 +14,7 @@ func (c *LabelHandlersController) APILabelPresetListGet(
 ) (*serverapi.APILabelPresetListGetOK, error) {
 	presets, err := c.labelUseCases.LabelPresets(ctx)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.LabelUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &serverapi.APILabelPresetListGetOK{

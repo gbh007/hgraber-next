@@ -3,10 +3,8 @@ package hproxyhandlers
 import (
 	"context"
 	"mime"
-	"net/http"
 	"path"
 
-	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
 
@@ -16,11 +14,7 @@ func (c *HProxyHandlersController) APIHproxyFileGet(
 ) (*serverapi.APIHproxyFileGetOKHeaders, error) {
 	r, err := c.hProxyUseCases.Image(ctx, params.BookURL, params.ImageURL)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.HProxyUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	// Это не самый правильный и ленивый костыль, но пока его будет достаточно

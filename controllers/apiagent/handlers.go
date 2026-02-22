@@ -95,7 +95,13 @@ func (c *Controller) methodErrorHandler(ctx context.Context, w http.ResponseWrit
 		)
 	}
 
-	validateError := new(validate.Error)
+	var (
+		validateError      *validate.Error
+		decodeBodyError    *ogenerrors.DecodeBodyError
+		decodeParamError   *ogenerrors.DecodeParamError
+		decodeParamsError  *ogenerrors.DecodeParamsError
+		decodeRequestError *ogenerrors.DecodeRequestError
+	)
 
 	switch {
 	case errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied):
@@ -108,6 +114,18 @@ func (c *Controller) methodErrorHandler(ctx context.Context, w http.ResponseWrit
 		httpCode = http.StatusInternalServerError
 		errorCode = "panic"
 	case errors.As(err, &validateError):
+		httpCode = http.StatusBadRequest
+		errorCode = "validate"
+	case errors.As(err, &decodeBodyError):
+		httpCode = http.StatusBadRequest
+		errorCode = "validate"
+	case errors.As(err, &decodeParamError):
+		httpCode = http.StatusBadRequest
+		errorCode = "validate"
+	case errors.As(err, &decodeParamsError):
+		httpCode = http.StatusBadRequest
+		errorCode = "validate"
+	case errors.As(err, &decodeRequestError):
 		httpCode = http.StatusBadRequest
 		errorCode = "validate"
 	}

@@ -2,7 +2,6 @@ package massloadhandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -17,11 +16,7 @@ func (c *MassloadController) APIMassloadInfoGetPost(
 ) (*serverapi.MassloadInfo, error) {
 	ml, err := c.massloadUseCases.Massload(ctx, req.ID)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err
 	}
 
 	resp := convertMassloadInfo(ml)

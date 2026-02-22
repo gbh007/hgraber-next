@@ -2,9 +2,7 @@ package systemhandlers
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/systemmodel"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 )
@@ -36,14 +34,5 @@ func (c *SystemHandlersController) APISystemTaskCreatePost(
 		code = systemmodel.CleanAfterParseTaskCode
 	}
 
-	err := c.systemUseCases.RunTask(ctx, code)
-	if err != nil {
-		return apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.TaskerUseCaseCode,
-			Details:   err.Error(),
-		}
-	}
-
-	return nil
+	return c.systemUseCases.RunTask(ctx, code)
 }

@@ -2,7 +2,6 @@ package systemhandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/parsing"
@@ -20,11 +19,7 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 			ReadOnly:   req.ReadOnlyMode.Value,
 		})
 		if err != nil {
-			return nil, apiservercore.APIError{
-				Code:      http.StatusInternalServerError,
-				InnerCode: apiservercore.ParseUseCaseCode,
-				Details:   err.Error(),
-			}
+			return nil, err
 		}
 
 		return &serverapi.APIParsingHandlePostOK{
@@ -43,11 +38,7 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 		ReadOnly:   req.ReadOnlyMode.Value,
 	})
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.ParseUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err
 	}
 
 	return &serverapi.APIParsingHandlePostOK{

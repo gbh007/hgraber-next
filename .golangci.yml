@@ -277,5 +277,4 @@ linters:
     - usestdlibvars
     - wastedassign
     - whitespace
-    - wrapcheck
     - wsl_v5

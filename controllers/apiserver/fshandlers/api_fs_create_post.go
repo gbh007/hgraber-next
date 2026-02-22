@@ -2,7 +2,6 @@ package fshandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/fsmodel"
@@ -24,11 +23,7 @@ func (c *FSHandlersController) APIFsCreatePost(
 		HighwayAddr:         apiservercore.URLFromOpt(req.HighwayAddr),
 	})
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.FSUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &serverapi.APIFsCreatePostOK{

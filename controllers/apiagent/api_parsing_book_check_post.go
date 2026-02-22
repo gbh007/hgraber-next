@@ -2,7 +2,6 @@ package apiagent
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
@@ -15,11 +14,7 @@ func (c *Controller) APIParsingBookCheckPost(
 ) (*agentapi.BooksCheckResult, error) {
 	result, err := c.parsingUseCases.BooksExists(ctx, req.Urls)
 	if err != nil {
-		return nil, apiError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: ParseUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &agentapi.BooksCheckResult{

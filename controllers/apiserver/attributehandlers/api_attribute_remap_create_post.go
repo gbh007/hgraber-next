@@ -15,9 +15,8 @@ func (c *AttributeHandlersController) APIAttributeRemapCreatePost(
 ) error {
 	if !(req.IsDelete.Value || (req.ToCode.IsSet() && req.ToValue.IsSet())) { //nolint:staticcheck,lll // будет исправлено позднее
 		return apiservercore.APIError{
-			Code:      http.StatusBadRequest,
-			InnerCode: apiservercore.AttributeUseCaseCode,
-			Details:   "invalid remap",
+			Code:    http.StatusBadRequest,
+			Details: "invalid remap",
 		}
 	}
 
@@ -33,14 +32,5 @@ func (c *AttributeHandlersController) APIAttributeRemapCreatePost(
 		ar.ToValue = ""
 	}
 
-	err := c.attributeUseCases.CreateAttributeRemap(ctx, ar)
-	if err != nil {
-		return apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.AttributeUseCaseCode,
-			Details:   err.Error(),
-		}
-	}
-
-	return nil
+	return c.attributeUseCases.CreateAttributeRemap(ctx, ar)
 }

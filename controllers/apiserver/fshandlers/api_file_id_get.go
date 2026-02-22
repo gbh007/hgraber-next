@@ -22,9 +22,8 @@ func (c *FSHandlersController) APIFileIDGet(
 	fileID, err := uuid.Parse(strings.TrimSuffix(params.ID, path.Ext(params.ID)))
 	if err != nil {
 		return nil, apiservercore.APIError{
-			Code:      http.StatusBadRequest,
-			InnerCode: apiservercore.ValidationCode,
-			Details:   err.Error(),
+			Code:    http.StatusBadRequest,
+			Details: err.Error(),
 		}
 	}
 
@@ -37,18 +36,13 @@ func (c *FSHandlersController) APIFileIDGet(
 	body, err := c.fsUseCases.File(ctx, fileID, fsID)
 	if errors.Is(err, core.ErrFileNotFound) {
 		return nil, apiservercore.APIError{
-			Code:      http.StatusNotFound,
-			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   err.Error(),
+			Code:    http.StatusNotFound,
+			Details: err.Error(),
 		}
 	}
 
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.WebAPIUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	// Это не самый правильный и ленивый костыль, но пока его будет достаточно

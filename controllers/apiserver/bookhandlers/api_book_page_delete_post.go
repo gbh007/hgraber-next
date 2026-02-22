@@ -15,40 +15,34 @@ func (c *BookHandlersController) APIBookPageDeletePost(
 	ctx context.Context,
 	req *serverapi.APIBookPageDeletePostReq,
 ) error {
-	var (
-		err error
-		uc  string
-	)
+	var err error
 
 	switch req.Type {
 	case serverapi.APIBookPageDeletePostReqTypeOne:
 		err = c.bookUseCases.DeletePage(ctx, req.BookID, req.PageNumber)
-		uc = apiservercore.BookUseCaseCode
 
 	case serverapi.APIBookPageDeletePostReqTypeAllCopy:
 		err = c.deduplicateUseCases.DeleteAllPageByHash(ctx, req.BookID, req.PageNumber, req.SetDeadHash.Value)
-		uc = apiservercore.DeduplicateUseCaseCode
 
 	default:
 		err = fmt.Errorf("unsupported type: %v", req.Type) //nolint:revive // правило не применимо
-		uc = apiservercore.ValidationCode
+
+		return apiservercore.APIError{
+			Code:    http.StatusBadRequest,
+			Details: err.Error(),
+		}
 	}
 
 	if errors.Is(err, core.ErrBookNotFound) ||
 		errors.Is(err, core.ErrPageNotFound) {
 		return apiservercore.APIError{
-			Code:      http.StatusNotFound,
-			InnerCode: uc,
-			Details:   err.Error(),
+			Code:    http.StatusNotFound,
+			Details: err.Error(),
 		}
 	}
 
 	if err != nil {
-		return apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: uc,
-			Details:   err.Error(),
-		}
+		return err
 	}
 
 	return nil

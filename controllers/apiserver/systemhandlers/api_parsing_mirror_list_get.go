@@ -2,7 +2,6 @@ package systemhandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/parsing"
@@ -15,11 +14,7 @@ func (c *SystemHandlersController) APIParsingMirrorListGet(
 ) (*serverapi.APIParsingMirrorListGetOK, error) {
 	mirrors, err := c.parseUseCases.Mirrors(ctx)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.ParseUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err
 	}
 
 	return &serverapi.APIParsingMirrorListGetOK{

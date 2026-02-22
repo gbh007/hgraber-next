@@ -5,11 +5,10 @@ import (
 )
 
 type APIError struct {
-	Code      int
-	InnerCode string
-	Details   string
+	Code    int
+	Details string
 }
 
 func (ae APIError) Error() string {
-	return strconv.Itoa(ae.Code) + ": " + ae.InnerCode
+	return strconv.Itoa(ae.Code) + ": " + ae.Details
 }

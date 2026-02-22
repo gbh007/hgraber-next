@@ -2,7 +2,6 @@ package attributehandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -15,11 +14,7 @@ func (c *AttributeHandlersController) APIAttributeRemapListGet(
 ) (*serverapi.APIAttributeRemapListGetOK, error) {
 	colors, err := c.attributeUseCases.AttributeRemaps(ctx)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.AttributeUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &serverapi.APIAttributeRemapListGetOK{

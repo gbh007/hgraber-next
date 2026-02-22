@@ -2,7 +2,6 @@ package deduplicatehandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/core"
@@ -16,11 +15,7 @@ func (c *DeduplicateHandlersController) APIDeduplicateArchivePost(
 ) ([]serverapi.APIDeduplicateArchivePostOKItem, error) {
 	data, err := c.deduplicateUseCases.ArchiveEntryPercentage(ctx, req.Data)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.DeduplicateUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return pkg.Map(data, func(raw core.DeduplicateArchiveResult) serverapi.APIDeduplicateArchivePostOKItem {

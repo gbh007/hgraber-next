@@ -16,42 +16,33 @@ func (c *FSHandlersController) APIBookPageBodyPost(
 	req *serverapi.APIBookPageBodyPostReq,
 ) (serverapi.APIBookPageBodyPostOK, error) {
 	var (
-		body      io.Reader
-		err       error
-		innerCode string
+		body io.Reader
+		err  error
 	)
 
 	switch {
 	case req.ID.IsSet() && req.PageNumber.IsSet():
-		innerCode = apiservercore.WebAPIUseCaseCode
 		body, err = c.fsUseCases.PageBody(ctx, req.ID.Value, req.PageNumber.Value)
 
 	case req.URL.IsSet():
-		innerCode = apiservercore.ParseUseCaseCode
 		body, err = c.parseUseCases.PageBodyByURL(ctx, req.URL.Value)
 
 	default:
 		return serverapi.APIBookPageBodyPostOK{}, apiservercore.APIError{
-			Code:      http.StatusBadRequest,
-			InnerCode: apiservercore.ValidationCode,
-			Details:   "id/page number and url is empty",
+			Code:    http.StatusBadRequest,
+			Details: "id/page number and url is empty",
 		}
 	}
 
 	if errors.Is(err, core.ErrPageNotFound) || errors.Is(err, core.ErrFileNotFound) {
 		return serverapi.APIBookPageBodyPostOK{}, apiservercore.APIError{
-			Code:      http.StatusNotFound,
-			InnerCode: innerCode,
-			Details:   err.Error(),
+			Code:    http.StatusNotFound,
+			Details: err.Error(),
 		}
 	}
 
 	if err != nil {
-		return serverapi.APIBookPageBodyPostOK{}, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: innerCode,
-			Details:   err.Error(),
-		}
+		return serverapi.APIBookPageBodyPostOK{}, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return serverapi.APIBookPageBodyPostOK{

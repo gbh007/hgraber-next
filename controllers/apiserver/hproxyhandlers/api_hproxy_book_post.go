@@ -2,7 +2,6 @@ package hproxyhandlers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 	"github.com/gbh007/hgraber-next/domain/hproxymodel"
@@ -22,11 +21,7 @@ func (c *HProxyHandlersController) APIHproxyBookPost(
 
 	book, err := c.hProxyUseCases.Book(ctx, req.URL, pageLimit)
 	if err != nil {
-		return nil, apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.HProxyUseCaseCode,
-			Details:   err.Error(),
-		}
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
 	return &serverapi.APIHproxyBookPostOK{

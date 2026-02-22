@@ -14,9 +14,8 @@ func (c *MassloadController) APIMassloadCalculatePost(
 ) error {
 	if !req.ID.Set && !req.All.Value {
 		return apiservercore.APIError{
-			Code:      http.StatusBadRequest,
-			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   "invalid target",
+			Code:    http.StatusBadRequest,
+			Details: "invalid target",
 		}
 	}
 
@@ -29,11 +28,7 @@ func (c *MassloadController) APIMassloadCalculatePost(
 	}
 
 	if err != nil {
-		return apiservercore.APIError{
-			Code:      http.StatusInternalServerError,
-			InnerCode: apiservercore.MassloadUseCaseCode,
-			Details:   err.Error(),
-		}
+		return err
 	}
 
 	return nil
