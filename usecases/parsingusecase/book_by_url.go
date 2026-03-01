@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/google/uuid"
+
 	"github.com/gbh007/hgraber-next/domain/core"
 )
 
@@ -20,21 +22,25 @@ func (uc *UseCase) BookByURL(ctx context.Context, u url.URL) (core.BookContainer
 
 	firstBook := core.BookContainer{}
 
-	for i, id := range ids {
+	for _, id := range ids {
 		book, err := uc.bookAdapter.BookRaw(ctx, id)
 		if err != nil {
 			return core.BookContainer{}, fmt.Errorf("get book by id (%s): %w", id.String(), err)
 		}
 
-		// Предпочитаем отдавать загруженную книгу
-		if book.IsLoaded() {
+		// Предпочитаем отдавать загруженную и не пересобранную книгу
+		if book.IsLoaded() && !book.Book.IsRebuild {
 			return book, nil
 		}
 
-		// Если нет загруженных книг, то вернем первую
-		if i == 0 {
+		// Если нет загруженных книг, то вернем первую оригинальную
+		if firstBook.Book.ID == uuid.Nil && !book.Book.IsRebuild {
 			firstBook = book
 		}
+	}
+
+	if firstBook.Book.ID == uuid.Nil {
+		return core.BookContainer{}, core.ErrBookNotFound
 	}
 
 	return firstBook, nil

@@ -25,8 +25,8 @@ urlLoop:
 				return nil, fmt.Errorf("get book (%s) details by url (%s): %w", id.String(), u.String(), err)
 			}
 
-			// Только загруженные книги считаем доступными.
-			if book.IsLoaded() {
+			// Только загруженные и не пересобранные книги считаем доступными.
+			if book.IsLoaded() && !book.Book.IsRebuild {
 				result = append(result, agentmodel.AgentBookCheckResult{
 					URL:        u,
 					IsPossible: true,
