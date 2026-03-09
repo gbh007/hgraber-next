@@ -2,27 +2,39 @@
 
 ## Imports
 
-|    Name    |                     Path                      | Inner | Count |
-|:----------:|:---------------------------------------------:|:-----:|:-----:|
-|  context   |                    context                    |  ❌   |  12   |
-|    fmt     |                      fmt                      |  ❌   |  10   |
-| agentmodel | [/domain/agentmodel](../domain/agentmodel.md) |  ✅   |   9   |
-|    core    |       [/domain/core](../domain/core.md)       |  ✅   |   9   |
-|    url     |                    net/url                    |  ❌   |   7   |
-|   errors   |                    errors                     |  ❌   |   6   |
-|    uuid    |            github.com/google/uuid             |  ❌   |   6   |
-|  parsing   |    [/domain/parsing](../domain/parsing.md)    |  ✅   |   5   |
-|    slog    |                   log/slog                    |  ❌   |   5   |
-|    time    |                     time                      |  ❌   |   5   |
-|    pkg     |               [/pkg](../pkg.md)               |  ✅   |   4   |
-|     io     |                      io                       |  ❌   |   2   |
-|    path    |                     path                      |  ❌   |   1   |
-|  strings   |                    strings                    |  ❌   |   1   |
+### Inner imports
+
+| Name       | Path                                          | Count |
+|:-----------|:----------------------------------------------|------:|
+| agentmodel | [/domain/agentmodel](../domain/agentmodel.md) |     9 |
+| core       | [/domain/core](../domain/core.md)             |     9 |
+| parsing    | [/domain/parsing](../domain/parsing.md)       |     5 |
+| pkg        | [/pkg](../pkg.md)                             |     4 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     7 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |    12 |
+| fmt     | fmt      |    10 |
+| url     | net/url  |     7 |
+| errors  | errors   |     6 |
+| slog    | log/slog |     5 |
+| time    | time     |     5 |
+| io      | io       |     2 |
+| path    | path     |     1 |
+| strings | strings  |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme

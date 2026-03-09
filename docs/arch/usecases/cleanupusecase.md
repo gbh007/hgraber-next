@@ -2,25 +2,37 @@
 
 ## Imports
 
-|    Name     |                      Path                       | Inner | Count |
-|:-----------:|:-----------------------------------------------:|:-----:|:-----:|
-|   context   |                     context                     |  ❌   |   8   |
-| systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |  ✅   |   7   |
-|     fmt     |                       fmt                       |  ❌   |   6   |
-|    core     |        [/domain/core](../domain/core.md)        |  ✅   |   5   |
-|    uuid     |             github.com/google/uuid              |  ❌   |   4   |
-|    trace    |         go.opentelemetry.io/otel/trace          |  ❌   |   4   |
-|    slog     |                    log/slog                     |  ❌   |   4   |
-|    time     |                      time                       |  ❌   |   4   |
-|   fsmodel   |     [/domain/fsmodel](../domain/fsmodel.md)     |  ✅   |   3   |
-|     pkg     |                [/pkg](../pkg.md)                |  ✅   |   2   |
-|    bytes    |                      bytes                      |  ❌   |   1   |
-|   slices    |                     slices                      |  ❌   |   1   |
+### Inner imports
+
+| Name        | Path                                            | Count |
+|:------------|:------------------------------------------------|------:|
+| systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |     7 |
+| core        | [/domain/core](../domain/core.md)               |     5 |
+| fsmodel     | [/domain/fsmodel](../domain/fsmodel.md)         |     3 |
+| pkg         | [/pkg](../pkg.md)                               |     2 |
+
+### External imports
+
+| Name  | Path                           | Count |
+|:------|:-------------------------------|------:|
+| uuid  | github.com/google/uuid         |     4 |
+| trace | go.opentelemetry.io/otel/trace |     4 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     8 |
+| fmt     | fmt      |     6 |
+| slog    | log/slog |     4 |
+| time    | time     |     4 |
+| bytes   | bytes    |     1 |
+| slices  | slices   |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme

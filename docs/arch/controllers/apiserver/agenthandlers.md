@@ -2,23 +2,36 @@
 
 ## Imports
 
-|     Name      |                           Path                           | Inner | Count |
-|:-------------:|:--------------------------------------------------------:|:-----:|:-----:|
-|    context    |                         context                          |  ❌   |   7   |
-| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |  ✅   |   7   |
-|     core      |           [/domain/core](../../domain/core.md)           |  ✅   |   6   |
-|   serverapi   |     [/openapi/serverapi](../../openapi/serverapi.md)     |  ✅   |   6   |
-|    errors     |                          errors                          |  ❌   |   2   |
-|  agentmodel   |     [/domain/agentmodel](../../domain/agentmodel.md)     |  ✅   |   2   |
-|      pkg      |                   [/pkg](../../pkg.md)                   |  ✅   |   1   |
-|     uuid      |                  github.com/google/uuid                  |  ❌   |   1   |
-|     trace     |              go.opentelemetry.io/otel/trace              |  ❌   |   1   |
-|     slog      |                         log/slog                         |  ❌   |   1   |
+### Inner imports
+
+| Name          | Path                                                     | Count |
+|:--------------|:---------------------------------------------------------|------:|
+| core          | [/domain/core](../../domain/core.md)                     |     6 |
+| serverapi     | [/openapi/serverapi](../../openapi/serverapi.md)         |     6 |
+| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |     5 |
+| agentmodel    | [/domain/agentmodel](../../domain/agentmodel.md)         |     2 |
+| pkg           | [/pkg](../../pkg.md)                                     |     1 |
+
+### External imports
+
+| Name  | Path                           | Count |
+|:------|:-------------------------------|------:|
+| uuid  | github.com/google/uuid         |     1 |
+| trace | go.opentelemetry.io/otel/trace |     1 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     7 |
+| errors  | errors   |     2 |
+| http    | net/http |     2 |
+| slog    | log/slog |     1 |
 
 ## Used by
 
-|   Name    |                   Path                    |
-|:---------:|:-----------------------------------------:|
+| Name      | Path                                      |
+|:----------|:------------------------------------------|
 | apiserver | [/controllers/apiserver](../apiserver.md) |
 
 ## Scheme
@@ -26,7 +39,7 @@
 ```mermaid
 erDiagram
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/agenthandlers" : x1
-    "/controllers/apiserver/agenthandlers" ||--|{ "/controllers/apiserver/apiservercore" : x7
+    "/controllers/apiserver/agenthandlers" ||--|{ "/controllers/apiserver/apiservercore" : x5
     "/controllers/apiserver/agenthandlers" ||--|{ "/domain/agentmodel" : x2
     "/controllers/apiserver/agenthandlers" ||--|{ "/domain/core" : x6
     "/controllers/apiserver/agenthandlers" ||--|{ "/openapi/serverapi" : x6

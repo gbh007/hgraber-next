@@ -2,19 +2,31 @@
 
 ## Imports
 
-|  Name   |                  Path                   | Inner | Count |
-|:-------:|:---------------------------------------:|:-----:|:-----:|
-| context |                 context                 |  ❌   |   1   |
-|   fmt   |                   fmt                   |  ❌   |   1   |
-| fsmodel | [/domain/fsmodel](../domain/fsmodel.md) |  ✅   |   1   |
-|  uuid   |         github.com/google/uuid          |  ❌   |   1   |
-|   io    |                   io                    |  ❌   |   1   |
-|  slog   |                log/slog                 |  ❌   |   1   |
+### Inner imports
+
+| Name    | Path                                    | Count |
+|:--------|:----------------------------------------|------:|
+| fsmodel | [/domain/fsmodel](../domain/fsmodel.md) |     1 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     1 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     1 |
+| fmt     | fmt      |     1 |
+| io      | io       |     1 |
+| slog    | log/slog |     1 |
 
 ## Used by
 
-|    Name     |                  Path                   |
-|:-----------:|:---------------------------------------:|
+| Name        | Path                                    |
+|:------------|:----------------------------------------|
 | filestorage | [/adapters/filestorage](filestorage.md) |
 
 ## Scheme

@@ -2,17 +2,29 @@
 
 ## Imports
 
-|    Name    |                      Path                      | Inner | Count |
-|:----------:|:----------------------------------------------:|:-----:|:-----:|
-| metriccore |  [/adapters/metric/metriccore](metriccore.md)  |  ✅   |   2   |
-| prometheus | github.com/prometheus/client_golang/prometheus |  ❌   |   2   |
-|   atomic   |                  sync/atomic                   |  ❌   |   1   |
+### Inner imports
+
+| Name       | Path                                         | Count |
+|:-----------|:---------------------------------------------|------:|
+| metriccore | [/adapters/metric/metriccore](metriccore.md) |     2 |
+
+### External imports
+
+| Name       | Path                                           | Count |
+|:-----------|:-----------------------------------------------|------:|
+| prometheus | github.com/prometheus/client_golang/prometheus |     2 |
+
+### Std imports
+
+| Name   | Path        | Count |
+|:-------|:------------|------:|
+| atomic | sync/atomic |     1 |
 
 ## Used by
 
-|   Name    |                              Path                              |
-|:---------:|:--------------------------------------------------------------:|
-|  metric   |                [/adapters/metric](../metric.md)                |
+| Name      | Path                                                           |
+|:----------|:---------------------------------------------------------------|
+| metric    | [/adapters/metric](../metric.md)                               |
 | statistic | [/adapters/metric/generator/statistic](generator/statistic.md) |
 
 ## Scheme

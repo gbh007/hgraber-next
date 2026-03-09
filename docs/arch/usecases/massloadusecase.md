@@ -2,27 +2,39 @@
 
 ## Imports
 
-|     Name      |                        Path                         | Inner | Count |
-|:-------------:|:---------------------------------------------------:|:-----:|:-----:|
-|    context    |                       context                       |  ❌   |   8   |
-|      fmt      |                         fmt                         |  ❌   |   7   |
-| massloadmodel | [/domain/massloadmodel](../domain/massloadmodel.md) |  ✅   |   7   |
-|     time      |                        time                         |  ❌   |   6   |
-|     core      |          [/domain/core](../domain/core.md)          |  ✅   |   3   |
-|      url      |                       net/url                       |  ❌   |   3   |
-|  agentmodel   |    [/domain/agentmodel](../domain/agentmodel.md)    |  ✅   |   2   |
-|    parsing    |       [/domain/parsing](../domain/parsing.md)       |  ✅   |   2   |
-|  systemmodel  |   [/domain/systemmodel](../domain/systemmodel.md)   |  ✅   |   2   |
-|      pkg      |                  [/pkg](../pkg.md)                  |  ✅   |   2   |
-|     uuid      |               github.com/google/uuid                |  ❌   |   2   |
-|     slog      |                      log/slog                       |  ❌   |   2   |
-|    errors     |                       errors                        |  ❌   |   1   |
-|  hproxymodel  |   [/domain/hproxymodel](../domain/hproxymodel.md)   |  ✅   |   1   |
+### Inner imports
+
+| Name          | Path                                                | Count |
+|:--------------|:----------------------------------------------------|------:|
+| massloadmodel | [/domain/massloadmodel](../domain/massloadmodel.md) |     7 |
+| core          | [/domain/core](../domain/core.md)                   |     3 |
+| agentmodel    | [/domain/agentmodel](../domain/agentmodel.md)       |     2 |
+| parsing       | [/domain/parsing](../domain/parsing.md)             |     2 |
+| systemmodel   | [/domain/systemmodel](../domain/systemmodel.md)     |     2 |
+| pkg           | [/pkg](../pkg.md)                                   |     2 |
+| hproxymodel   | [/domain/hproxymodel](../domain/hproxymodel.md)     |     1 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     2 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     8 |
+| fmt     | fmt      |     7 |
+| time    | time     |     6 |
+| url     | net/url  |     3 |
+| slog    | log/slog |     2 |
+| errors  | errors   |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme

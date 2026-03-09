@@ -2,74 +2,86 @@
 
 ## Imports
 
-|  Name   |          Path          | Inner | Count |
-|:-------:|:----------------------:|:-----:|:-----:|
-|  uuid   | github.com/google/uuid |  ❌   |   8   |
-|  time   |          time          |  ❌   |   8   |
-|   url   |        net/url         |  ❌   |   4   |
-| strings |        strings         |  ❌   |   3   |
-| errors  |         errors         |  ❌   |   2   |
-| strconv |        strconv         |  ❌   |   2   |
-|   md5   |       crypto/md5       |  ❌   |   1   |
-| sha256  |     crypto/sha256      |  ❌   |   1   |
-|   fmt   |          fmt           |  ❌   |   1   |
-|   pkg   |   [/pkg](../pkg.md)    |  ✅   |   1   |
-|   io    |           io           |  ❌   |   1   |
+### Inner imports
+
+| Name | Path              | Count |
+|:-----|:------------------|------:|
+| pkg  | [/pkg](../pkg.md) |     1 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     8 |
+
+### Std imports
+
+| Name    | Path          | Count |
+|:--------|:--------------|------:|
+| time    | time          |     8 |
+| url     | net/url       |     4 |
+| strings | strings       |     3 |
+| errors  | errors        |     2 |
+| strconv | strconv       |     2 |
+| md5     | crypto/md5    |     1 |
+| sha256  | crypto/sha256 |     1 |
+| fmt     | fmt           |     1 |
+| io      | io            |     1 |
+| maps    | maps          |     1 |
 
 ## Used by
 
-|        Name         |                                             Path                                              |
-|:-------------------:|:---------------------------------------------------------------------------------------------:|
-|        agent        |                            [/adapters/agent](../adapters/agent.md)                            |
-|       adapter       |           [/adapters/agent/internal/adapter](../adapters/agent/internal/adapter.md)           |
-|     filestorage     |                      [/adapters/filestorage](../adapters/filestorage.md)                      |
-|     localfiles      |                       [/adapters/localfiles](../adapters/localfiles.md)                       |
-|       metric        |                           [/adapters/metric](../adapters/metric.md)                           |
-|        agent        |        [/adapters/postgresql/internal/agent](../adapters/postgresql/internal/agent.md)        |
-|      attribute      |    [/adapters/postgresql/internal/attribute](../adapters/postgresql/internal/attribute.md)    |
-|        book         |         [/adapters/postgresql/internal/book](../adapters/postgresql/internal/book.md)         |
-|      deadhash       |     [/adapters/postgresql/internal/deadhash](../adapters/postgresql/internal/deadhash.md)     |
-|        file         |         [/adapters/postgresql/internal/file](../adapters/postgresql/internal/file.md)         |
-|        label        |        [/adapters/postgresql/internal/label](../adapters/postgresql/internal/label.md)        |
-|        model        |        [/adapters/postgresql/internal/model](../adapters/postgresql/internal/model.md)        |
-|        page         |         [/adapters/postgresql/internal/page](../adapters/postgresql/internal/page.md)         |
-|       server        |                        [/application/server](../application/server.md)                        |
-|      apiagent       |                      [/controllers/apiagent](../controllers/apiagent.md)                      |
-|    agenthandlers    |       [/controllers/apiserver/agenthandlers](../controllers/apiserver/agenthandlers.md)       |
-|    apiservercore    |       [/controllers/apiserver/apiservercore](../controllers/apiserver/apiservercore.md)       |
-|  attributehandlers  |   [/controllers/apiserver/attributehandlers](../controllers/apiserver/attributehandlers.md)   |
-|    bookhandlers     |        [/controllers/apiserver/bookhandlers](../controllers/apiserver/bookhandlers.md)        |
+| Name                | Path                                                                                          |
+|:--------------------|:----------------------------------------------------------------------------------------------|
+| agent               | [/adapters/agent](../adapters/agent.md)                                                       |
+| filestorage         | [/adapters/filestorage](../adapters/filestorage.md)                                           |
+| localfiles          | [/adapters/localfiles](../adapters/localfiles.md)                                             |
+| metric              | [/adapters/metric](../adapters/metric.md)                                                     |
+| agent               | [/adapters/postgresql/internal/agent](../adapters/postgresql/internal/agent.md)               |
+| attribute           | [/adapters/postgresql/internal/attribute](../adapters/postgresql/internal/attribute.md)       |
+| book                | [/adapters/postgresql/internal/book](../adapters/postgresql/internal/book.md)                 |
+| deadhash            | [/adapters/postgresql/internal/deadhash](../adapters/postgresql/internal/deadhash.md)         |
+| file                | [/adapters/postgresql/internal/file](../adapters/postgresql/internal/file.md)                 |
+| label               | [/adapters/postgresql/internal/label](../adapters/postgresql/internal/label.md)               |
+| model               | [/adapters/postgresql/internal/model](../adapters/postgresql/internal/model.md)               |
+| page                | [/adapters/postgresql/internal/page](../adapters/postgresql/internal/page.md)                 |
+| server              | [/application/server](../application/server.md)                                               |
+| apiagent            | [/controllers/apiagent](../controllers/apiagent.md)                                           |
+| agenthandlers       | [/controllers/apiserver/agenthandlers](../controllers/apiserver/agenthandlers.md)             |
+| apiservercore       | [/controllers/apiserver/apiservercore](../controllers/apiserver/apiservercore.md)             |
+| attributehandlers   | [/controllers/apiserver/attributehandlers](../controllers/apiserver/attributehandlers.md)     |
+| bookhandlers        | [/controllers/apiserver/bookhandlers](../controllers/apiserver/bookhandlers.md)               |
 | deduplicatehandlers | [/controllers/apiserver/deduplicatehandlers](../controllers/apiserver/deduplicatehandlers.md) |
-|     fshandlers      |          [/controllers/apiserver/fshandlers](../controllers/apiserver/fshandlers.md)          |
-|    labelhandlers    |       [/controllers/apiserver/labelhandlers](../controllers/apiserver/labelhandlers.md)       |
-|  massloadhandlers   |    [/controllers/apiserver/massloadhandlers](../controllers/apiserver/massloadhandlers.md)    |
-|   systemhandlers    |      [/controllers/apiserver/systemhandlers](../controllers/apiserver/systemhandlers.md)      |
-|    workermanager    |                 [/controllers/workermanager](../controllers/workermanager.md)                 |
-|     agentmodel      |                              [/domain/agentmodel](agentmodel.md)                              |
-|         bff         |                                     [/domain/bff](bff.md)                                     |
-|       fsmodel       |                                 [/domain/fsmodel](fsmodel.md)                                 |
-|       parsing       |                                 [/domain/parsing](parsing.md)                                 |
-|      external       |                                  [/external](../external.md)                                  |
-|    agentusecase     |                     [/usecases/agentusecase](../usecases/agentusecase.md)                     |
-|  attributeusecase   |                 [/usecases/attributeusecase](../usecases/attributeusecase.md)                 |
-|     bffusecase      |                       [/usecases/bffusecase](../usecases/bffusecase.md)                       |
-|     bookusecase     |                      [/usecases/bookusecase](../usecases/bookusecase.md)                      |
-|   cleanupusecase    |                   [/usecases/cleanupusecase](../usecases/cleanupusecase.md)                   |
-| deduplicatorusecase |              [/usecases/deduplicatorusecase](../usecases/deduplicatorusecase.md)              |
-|    exportusecase    |                    [/usecases/exportusecase](../usecases/exportusecase.md)                    |
-|  filesystemusecase  |                [/usecases/filesystemusecase](../usecases/filesystemusecase.md)                |
-|    hproxyusecase    |                    [/usecases/hproxyusecase](../usecases/hproxyusecase.md)                    |
-|    labelusecase     |                     [/usecases/labelusecase](../usecases/labelusecase.md)                     |
-|   massloadusecase   |                  [/usecases/massloadusecase](../usecases/massloadusecase.md)                  |
-|   parsingusecase    |                   [/usecases/parsingusecase](../usecases/parsingusecase.md)                   |
-|  rebuilderusecase   |                 [/usecases/rebuilderusecase](../usecases/rebuilderusecase.md)                 |
+| fshandlers          | [/controllers/apiserver/fshandlers](../controllers/apiserver/fshandlers.md)                   |
+| labelhandlers       | [/controllers/apiserver/labelhandlers](../controllers/apiserver/labelhandlers.md)             |
+| massloadhandlers    | [/controllers/apiserver/massloadhandlers](../controllers/apiserver/massloadhandlers.md)       |
+| systemhandlers      | [/controllers/apiserver/systemhandlers](../controllers/apiserver/systemhandlers.md)           |
+| workermanager       | [/controllers/workermanager](../controllers/workermanager.md)                                 |
+| agentmodel          | [/domain/agentmodel](agentmodel.md)                                                           |
+| bff                 | [/domain/bff](bff.md)                                                                         |
+| fsmodel             | [/domain/fsmodel](fsmodel.md)                                                                 |
+| parsing             | [/domain/parsing](parsing.md)                                                                 |
+| mcp                 | [/experimental/mcp](../experimental/mcp.md)                                                   |
+| external            | [/external](../external.md)                                                                   |
+| agentusecase        | [/usecases/agentusecase](../usecases/agentusecase.md)                                         |
+| attributeusecase    | [/usecases/attributeusecase](../usecases/attributeusecase.md)                                 |
+| bffusecase          | [/usecases/bffusecase](../usecases/bffusecase.md)                                             |
+| bookusecase         | [/usecases/bookusecase](../usecases/bookusecase.md)                                           |
+| cleanupusecase      | [/usecases/cleanupusecase](../usecases/cleanupusecase.md)                                     |
+| deduplicatorusecase | [/usecases/deduplicatorusecase](../usecases/deduplicatorusecase.md)                           |
+| exportusecase       | [/usecases/exportusecase](../usecases/exportusecase.md)                                       |
+| filesystemusecase   | [/usecases/filesystemusecase](../usecases/filesystemusecase.md)                               |
+| hproxyusecase       | [/usecases/hproxyusecase](../usecases/hproxyusecase.md)                                       |
+| labelusecase        | [/usecases/labelusecase](../usecases/labelusecase.md)                                         |
+| massloadusecase     | [/usecases/massloadusecase](../usecases/massloadusecase.md)                                   |
+| parsingusecase      | [/usecases/parsingusecase](../usecases/parsingusecase.md)                                     |
+| rebuilderusecase    | [/usecases/rebuilderusecase](../usecases/rebuilderusecase.md)                                 |
 
 ## Scheme
 
 ```mermaid
 erDiagram
     "/adapters/agent" ||--|{ "/domain/core" : x1
-    "/adapters/agent/internal/adapter" ||--|{ "/domain/core" : x1
     "/adapters/filestorage" ||--|{ "/domain/core" : x3
     "/adapters/localfiles" ||--|{ "/domain/core" : x2
     "/adapters/metric" ||--|{ "/domain/core" : x1
@@ -79,7 +91,7 @@ erDiagram
     "/adapters/postgresql/internal/deadhash" ||--|{ "/domain/core" : x5
     "/adapters/postgresql/internal/file" ||--|{ "/domain/core" : x11
     "/adapters/postgresql/internal/label" ||--|{ "/domain/core" : x9
-    "/adapters/postgresql/internal/model" ||--|{ "/domain/core" : x8
+    "/adapters/postgresql/internal/model" ||--|{ "/domain/core" : x12
     "/adapters/postgresql/internal/page" ||--|{ "/domain/core" : x17
     "/application/server" ||--|{ "/domain/core" : x1
     "/controllers/apiagent" ||--|{ "/domain/core" : x2
@@ -98,6 +110,7 @@ erDiagram
     "/domain/core" ||--|{ "/pkg" : x1
     "/domain/fsmodel" ||--|{ "/domain/core" : x1
     "/domain/parsing" ||--|{ "/domain/core" : x1
+    "/experimental/mcp" ||--|{ "/domain/core" : x5
     "/external" ||--|{ "/domain/core" : x3
     "/usecases/agentusecase" ||--|{ "/domain/core" : x6
     "/usecases/attributeusecase" ||--|{ "/domain/core" : x5

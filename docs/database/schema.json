@@ -113,6 +113,46 @@
           "type": "boolean",
           "nullable": false,
           "default": "false"
+        },
+        {
+          "name": "calc_page_count",
+          "type": "integer",
+          "nullable": true
+        },
+        {
+          "name": "calc_file_count",
+          "type": "integer",
+          "nullable": true
+        },
+        {
+          "name": "calc_dead_hash_count",
+          "type": "integer",
+          "nullable": true
+        },
+        {
+          "name": "calc_page_size",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "calc_file_size",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "calc_dead_hash_size",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "calculated_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "calc_avg_page_size",
+          "type": "bigint",
+          "nullable": true
         }
       ],
       "indexes": [
@@ -1869,7 +1909,7 @@
   ],
   "driver": {
     "name": "postgres",
-    "database_version": "PostgreSQL 16.3 (Debian 16.3-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit",
+    "database_version": "PostgreSQL 16.8 (Debian 16.8-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit",
     "meta": {
       "current_schema": "public",
       "search_paths": [

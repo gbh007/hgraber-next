@@ -2,17 +2,24 @@
 
 ## Imports
 
-|  Name  |          Path           | Inner | Count |
-|:------:|:-----------------------:|:-----:|:-----:|
-|  flag  |          flag           |  ❌   |   1   |
-| config | [/config](../config.md) |  ✅   |   1   |
-|  slog  |        log/slog         |  ❌   |   1   |
-|   os   |           os            |  ❌   |   1   |
+### Inner imports
+
+| Name   | Path                    | Count |
+|:-------|:------------------------|------:|
+| config | [/config](../config.md) |     1 |
+
+### Std imports
+
+| Name | Path     | Count |
+|:-----|:---------|------:|
+| flag | flag     |     1 |
+| slog | log/slog |     1 |
+| os   | os       |     1 |
 
 ## Used by
 
-|     Name      |                     Path                      |
-|:-------------:|:---------------------------------------------:|
+| Name          | Path                                          |
+|:--------------|:----------------------------------------------|
 | configremaper | [/cmd/configremaper](../cmd/configremaper.md) |
 
 ## Scheme

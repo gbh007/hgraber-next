@@ -2,23 +2,35 @@
 
 ## Imports
 
-|     Name      |                           Path                           | Inner | Count |
-|:-------------:|:--------------------------------------------------------:|:-----:|:-----:|
-|    context    |                         context                          |  ❌   |   7   |
-| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |  ✅   |   7   |
-|   serverapi   |     [/openapi/serverapi](../../openapi/serverapi.md)     |  ✅   |   6   |
-|      bff      |            [/domain/bff](../../domain/bff.md)            |  ✅   |   5   |
-|      pkg      |                   [/pkg](../../pkg.md)                   |  ✅   |   5   |
-|     core      |           [/domain/core](../../domain/core.md)           |  ✅   |   4   |
-|     uuid      |                  github.com/google/uuid                  |  ❌   |   1   |
-|     trace     |              go.opentelemetry.io/otel/trace              |  ❌   |   1   |
-|      io       |                            io                            |  ❌   |   1   |
-|     slog      |                         log/slog                         |  ❌   |   1   |
+### Inner imports
+
+| Name          | Path                                                     | Count |
+|:--------------|:---------------------------------------------------------|------:|
+| serverapi     | [/openapi/serverapi](../../openapi/serverapi.md)         |     6 |
+| bff           | [/domain/bff](../../domain/bff.md)                       |     5 |
+| pkg           | [/pkg](../../pkg.md)                                     |     5 |
+| core          | [/domain/core](../../domain/core.md)                     |     4 |
+| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |     3 |
+
+### External imports
+
+| Name  | Path                           | Count |
+|:------|:-------------------------------|------:|
+| uuid  | github.com/google/uuid         |     1 |
+| trace | go.opentelemetry.io/otel/trace |     1 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     7 |
+| io      | io       |     1 |
+| slog    | log/slog |     1 |
 
 ## Used by
 
-|   Name    |                   Path                    |
-|:---------:|:-----------------------------------------:|
+| Name      | Path                                      |
+|:----------|:------------------------------------------|
 | apiserver | [/controllers/apiserver](../apiserver.md) |
 
 ## Scheme
@@ -26,7 +38,7 @@
 ```mermaid
 erDiagram
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/deduplicatehandlers" : x1
-    "/controllers/apiserver/deduplicatehandlers" ||--|{ "/controllers/apiserver/apiservercore" : x7
+    "/controllers/apiserver/deduplicatehandlers" ||--|{ "/controllers/apiserver/apiservercore" : x3
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/bff" : x5
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/core" : x4
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/openapi/serverapi" : x6

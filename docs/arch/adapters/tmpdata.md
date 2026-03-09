@@ -2,19 +2,31 @@
 
 ## Imports
 
-|    Name     |                      Path                       | Inner | Count |
-|:-----------:|:-----------------------------------------------:|:-----:|:-----:|
-| agentmodel  |  [/domain/agentmodel](../domain/agentmodel.md)  |  ✅   |   2   |
-|   fsmodel   |     [/domain/fsmodel](../domain/fsmodel.md)     |  ✅   |   2   |
-| systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |  ✅   |   2   |
-|    uuid     |             github.com/google/uuid              |  ❌   |   2   |
-|     pkg     |                [/pkg](../pkg.md)                |  ✅   |   1   |
-|    sync     |                      sync                       |  ❌   |   1   |
+### Inner imports
+
+| Name        | Path                                            | Count |
+|:------------|:------------------------------------------------|------:|
+| agentmodel  | [/domain/agentmodel](../domain/agentmodel.md)   |     2 |
+| fsmodel     | [/domain/fsmodel](../domain/fsmodel.md)         |     2 |
+| systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |     2 |
+| pkg         | [/pkg](../pkg.md)                               |     1 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     2 |
+
+### Std imports
+
+| Name | Path | Count |
+|:-----|:-----|------:|
+| sync | sync |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme

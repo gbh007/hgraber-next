@@ -2,28 +2,40 @@
 
 ## Imports
 
-|    Name    |                     Path                      | Inner | Count |
-|:----------:|:---------------------------------------------:|:-----:|:-----:|
-|  context   |                    context                    |  ❌   |   3   |
-|    core    |       [/domain/core](../domain/core.md)       |  ✅   |   3   |
-|    uuid    |            github.com/google/uuid             |  ❌   |   3   |
-|     io     |                      io                       |  ❌   |   3   |
-|    zip     |                  archive/zip                  |  ❌   |   2   |
-|   bytes    |                     bytes                     |  ❌   |   2   |
-|    fmt     |                      fmt                      |  ❌   |   2   |
-| agentmodel | [/domain/agentmodel](../domain/agentmodel.md) |  ✅   |   2   |
-|  parsing   |    [/domain/parsing](../domain/parsing.md)    |  ✅   |   2   |
-|  external  |          [/external](../external.md)          |  ✅   |   2   |
-|    slog    |                   log/slog                    |  ❌   |   2   |
-|   errors   |                    errors                     |  ❌   |   1   |
-|    pkg     |               [/pkg](../pkg.md)               |  ✅   |   1   |
-|    url     |                    net/url                    |  ❌   |   1   |
-|    time    |                     time                      |  ❌   |   1   |
+### Inner imports
+
+| Name       | Path                                          | Count |
+|:-----------|:----------------------------------------------|------:|
+| core       | [/domain/core](../domain/core.md)             |     3 |
+| agentmodel | [/domain/agentmodel](../domain/agentmodel.md) |     2 |
+| parsing    | [/domain/parsing](../domain/parsing.md)       |     2 |
+| external   | [/external](../external.md)                   |     2 |
+| pkg        | [/pkg](../pkg.md)                             |     1 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     3 |
+
+### Std imports
+
+| Name    | Path        | Count |
+|:--------|:------------|------:|
+| context | context     |     3 |
+| io      | io          |     3 |
+| zip     | archive/zip |     2 |
+| bytes   | bytes       |     2 |
+| fmt     | fmt         |     2 |
+| slog    | log/slog    |     2 |
+| errors  | errors      |     1 |
+| url     | net/url     |     1 |
+| time    | time        |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme

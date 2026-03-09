@@ -2,198 +2,204 @@
 
 ## Main packages
 
-|       Name       |                       Path                       |
-|:----------------:|:------------------------------------------------:|
-|  configremaper   |    [/cmd/configremaper](cmd/configremaper.md)    |
-| grafanagenerator | [/cmd/grafanagenerator](cmd/grafanagenerator.md) |
-|      server      |           [/cmd/server](cmd/server.md)           |
+| Name             | Path                                             | Description |
+|:-----------------|:-------------------------------------------------|:------------|
+| .hidden          | [/.hidden](.hidden.md)                           |             |
+| configremaper    | [/cmd/configremaper](cmd/configremaper.md)       |             |
+| grafanagenerator | [/cmd/grafanagenerator](cmd/grafanagenerator.md) |             |
+| server           | [/cmd/server](cmd/server.md)                     |             |
 
 ## Inner packages
 
-|        Name         |                                             Path                                             |
-|:-------------------:|:--------------------------------------------------------------------------------------------:|
-|        agent        |                             [/adapters/agent](adapters/agent.md)                             |
-|       adapter       |            [/adapters/agent/internal/adapter](adapters/agent/internal/adapter.md)            |
-|       agentfs       |                           [/adapters/agentfs](adapters/agentfs.md)                           |
-|     filestorage     |                       [/adapters/filestorage](adapters/filestorage.md)                       |
-|     localfiles      |                        [/adapters/localfiles](adapters/localfiles.md)                        |
-|       metric        |                            [/adapters/metric](adapters/metric.md)                            |
-|      generator      |                  [/adapters/metric/generator](adapters/metric/generator.md)                  |
-|    bookandpages     |     [/adapters/metric/generator/bookandpages](adapters/metric/generator/bookandpages.md)     |
-|    databasepanel    |    [/adapters/metric/generator/databasepanel](adapters/metric/generator/databasepanel.md)    |
-|    generatorcore    |    [/adapters/metric/generator/generatorcore](adapters/metric/generator/generatorcore.md)    |
-|   httpserverpanel   |  [/adapters/metric/generator/httpserverpanel](adapters/metric/generator/httpserverpanel.md)  |
-|     logspannel      |       [/adapters/metric/generator/logspannel](adapters/metric/generator/logspannel.md)       |
-|     otherpanel      |       [/adapters/metric/generator/otherpanel](adapters/metric/generator/otherpanel.md)       |
-|     simpleinfo      |       [/adapters/metric/generator/simpleinfo](adapters/metric/generator/simpleinfo.md)       |
-|      statistic      |        [/adapters/metric/generator/statistic](adapters/metric/generator/statistic.md)        |
-|  workersandagents   | [/adapters/metric/generator/workersandagents](adapters/metric/generator/workersandagents.md) |
-|     metricagent     |                [/adapters/metric/metricagent](adapters/metric/metricagent.md)                |
-|     metriccore      |                 [/adapters/metric/metriccore](adapters/metric/metriccore.md)                 |
-|   metricdatabase    |             [/adapters/metric/metricdatabase](adapters/metric/metricdatabase.md)             |
-|      metricfs       |                   [/adapters/metric/metricfs](adapters/metric/metricfs.md)                   |
-|     metrichttp      |                 [/adapters/metric/metrichttp](adapters/metric/metrichttp.md)                 |
-|    metricserver     |               [/adapters/metric/metricserver](adapters/metric/metricserver.md)               |
-|   metricstatistic   |            [/adapters/metric/metricstatistic](adapters/metric/metricstatistic.md)            |
-|     postgresql      |                        [/adapters/postgresql](adapters/postgresql.md)                        |
-|        agent        |         [/adapters/postgresql/internal/agent](adapters/postgresql/internal/agent.md)         |
-|      attribute      |     [/adapters/postgresql/internal/attribute](adapters/postgresql/internal/attribute.md)     |
-|        book         |          [/adapters/postgresql/internal/book](adapters/postgresql/internal/book.md)          |
-|      deadhash       |      [/adapters/postgresql/internal/deadhash](adapters/postgresql/internal/deadhash.md)      |
-|        file         |          [/adapters/postgresql/internal/file](adapters/postgresql/internal/file.md)          |
-|        label        |         [/adapters/postgresql/internal/label](adapters/postgresql/internal/label.md)         |
-|      massload       |      [/adapters/postgresql/internal/massload](adapters/postgresql/internal/massload.md)      |
-|        model        |         [/adapters/postgresql/internal/model](adapters/postgresql/internal/model.md)         |
-|        other        |         [/adapters/postgresql/internal/other](adapters/postgresql/internal/other.md)         |
-|        page         |          [/adapters/postgresql/internal/page](adapters/postgresql/internal/page.md)          |
-|     repository      |    [/adapters/postgresql/internal/repository](adapters/postgresql/internal/repository.md)    |
-|      urlmirror      |     [/adapters/postgresql/internal/urlmirror](adapters/postgresql/internal/urlmirror.md)     |
-|       tmpdata       |                           [/adapters/tmpdata](adapters/tmpdata.md)                           |
-|    configremaper    |                  [/application/configremaper](application/configremaper.md)                  |
-|       server        |                         [/application/server](application/server.md)                         |
-|    configremaper    |                          [/cmd/configremaper](cmd/configremaper.md)                          |
-|  grafanagenerator   |                       [/cmd/grafanagenerator](cmd/grafanagenerator.md)                       |
-|       server        |                                 [/cmd/server](cmd/server.md)                                 |
-|       config        |                                     [/config](config.md)                                     |
-|      apiagent       |                       [/controllers/apiagent](controllers/apiagent.md)                       |
-|      apiserver      |                      [/controllers/apiserver](controllers/apiserver.md)                      |
-|    agenthandlers    |        [/controllers/apiserver/agenthandlers](controllers/apiserver/agenthandlers.md)        |
-|    apiservercore    |        [/controllers/apiserver/apiservercore](controllers/apiserver/apiservercore.md)        |
-|  attributehandlers  |    [/controllers/apiserver/attributehandlers](controllers/apiserver/attributehandlers.md)    |
-|    bookhandlers     |         [/controllers/apiserver/bookhandlers](controllers/apiserver/bookhandlers.md)         |
-| deduplicatehandlers |  [/controllers/apiserver/deduplicatehandlers](controllers/apiserver/deduplicatehandlers.md)  |
-|     fshandlers      |           [/controllers/apiserver/fshandlers](controllers/apiserver/fshandlers.md)           |
-|   hproxyhandlers    |       [/controllers/apiserver/hproxyhandlers](controllers/apiserver/hproxyhandlers.md)       |
-|    labelhandlers    |        [/controllers/apiserver/labelhandlers](controllers/apiserver/labelhandlers.md)        |
-|  massloadhandlers   |     [/controllers/apiserver/massloadhandlers](controllers/apiserver/massloadhandlers.md)     |
-|   systemhandlers    |       [/controllers/apiserver/systemhandlers](controllers/apiserver/systemhandlers.md)       |
-|        async        |                          [/controllers/async](controllers/async.md)                          |
-|       worker        |                [/controllers/internal/worker](controllers/internal/worker.md)                |
-|    workermanager    |                  [/controllers/workermanager](controllers/workermanager.md)                  |
-|     agentmodel      |                          [/domain/agentmodel](domain/agentmodel.md)                          |
-|         bff         |                                 [/domain/bff](domain/bff.md)                                 |
-|        core         |                                [/domain/core](domain/core.md)                                |
-|       fsmodel       |                             [/domain/fsmodel](domain/fsmodel.md)                             |
-|     hproxymodel     |                         [/domain/hproxymodel](domain/hproxymodel.md)                         |
-|    massloadmodel    |                       [/domain/massloadmodel](domain/massloadmodel.md)                       |
-|       parsing       |                             [/domain/parsing](domain/parsing.md)                             |
-|     systemmodel     |                         [/domain/systemmodel](domain/systemmodel.md)                         |
-|      external       |                                   [/external](external.md)                                   |
-|      agentapi       |                           [/openapi/agentapi](openapi/agentapi.md)                           |
-|      serverapi      |                          [/openapi/serverapi](openapi/serverapi.md)                          |
-|         pkg         |                                        [/pkg](pkg.md)                                        |
-|    agentusecase     |                      [/usecases/agentusecase](usecases/agentusecase.md)                      |
-|  attributeusecase   |                  [/usecases/attributeusecase](usecases/attributeusecase.md)                  |
-|     bffusecase      |                        [/usecases/bffusecase](usecases/bffusecase.md)                        |
-|     bookusecase     |                       [/usecases/bookusecase](usecases/bookusecase.md)                       |
-|   cleanupusecase    |                    [/usecases/cleanupusecase](usecases/cleanupusecase.md)                    |
-| deduplicatorusecase |               [/usecases/deduplicatorusecase](usecases/deduplicatorusecase.md)               |
-|    exportusecase    |                     [/usecases/exportusecase](usecases/exportusecase.md)                     |
-|  filesystemusecase  |                 [/usecases/filesystemusecase](usecases/filesystemusecase.md)                 |
-|    hproxyusecase    |                     [/usecases/hproxyusecase](usecases/hproxyusecase.md)                     |
-|    labelusecase     |                      [/usecases/labelusecase](usecases/labelusecase.md)                      |
-|   massloadusecase   |                   [/usecases/massloadusecase](usecases/massloadusecase.md)                   |
-|   parsingusecase    |                    [/usecases/parsingusecase](usecases/parsingusecase.md)                    |
-|  rebuilderusecase   |                  [/usecases/rebuilderusecase](usecases/rebuilderusecase.md)                  |
-|    systemusecase    |                     [/usecases/systemusecase](usecases/systemusecase.md)                     |
-|       version       |                                    [/version](version.md)                                    |
+| Name                | Path                                                                                         | Description |
+|:--------------------|:---------------------------------------------------------------------------------------------|:------------|
+| agent               | [/adapters/agent](adapters/agent.md)                                                         |             |
+| adapter             | [/adapters/agent/internal/adapter](adapters/agent/internal/adapter.md)                       |             |
+| agentfs             | [/adapters/agentfs](adapters/agentfs.md)                                                     |             |
+| filestorage         | [/adapters/filestorage](adapters/filestorage.md)                                             |             |
+| localfiles          | [/adapters/localfiles](adapters/localfiles.md)                                               |             |
+| metric              | [/adapters/metric](adapters/metric.md)                                                       |             |
+| generator           | [/adapters/metric/generator](adapters/metric/generator.md)                                   |             |
+| bookandpages        | [/adapters/metric/generator/bookandpages](adapters/metric/generator/bookandpages.md)         |             |
+| databasepanel       | [/adapters/metric/generator/databasepanel](adapters/metric/generator/databasepanel.md)       |             |
+| generatorcore       | [/adapters/metric/generator/generatorcore](adapters/metric/generator/generatorcore.md)       |             |
+| httpserverpanel     | [/adapters/metric/generator/httpserverpanel](adapters/metric/generator/httpserverpanel.md)   |             |
+| logspannel          | [/adapters/metric/generator/logspannel](adapters/metric/generator/logspannel.md)             |             |
+| otherpanel          | [/adapters/metric/generator/otherpanel](adapters/metric/generator/otherpanel.md)             |             |
+| simpleinfo          | [/adapters/metric/generator/simpleinfo](adapters/metric/generator/simpleinfo.md)             |             |
+| statistic           | [/adapters/metric/generator/statistic](adapters/metric/generator/statistic.md)               |             |
+| workersandagents    | [/adapters/metric/generator/workersandagents](adapters/metric/generator/workersandagents.md) |             |
+| metricagent         | [/adapters/metric/metricagent](adapters/metric/metricagent.md)                               |             |
+| metriccore          | [/adapters/metric/metriccore](adapters/metric/metriccore.md)                                 |             |
+| metricdatabase      | [/adapters/metric/metricdatabase](adapters/metric/metricdatabase.md)                         |             |
+| metricfs            | [/adapters/metric/metricfs](adapters/metric/metricfs.md)                                     |             |
+| metrichttp          | [/adapters/metric/metrichttp](adapters/metric/metrichttp.md)                                 |             |
+| metricserver        | [/adapters/metric/metricserver](adapters/metric/metricserver.md)                             |             |
+| metricstatistic     | [/adapters/metric/metricstatistic](adapters/metric/metricstatistic.md)                       |             |
+| postgresql          | [/adapters/postgresql](adapters/postgresql.md)                                               |             |
+| agent               | [/adapters/postgresql/internal/agent](adapters/postgresql/internal/agent.md)                 |             |
+| attribute           | [/adapters/postgresql/internal/attribute](adapters/postgresql/internal/attribute.md)         |             |
+| book                | [/adapters/postgresql/internal/book](adapters/postgresql/internal/book.md)                   |             |
+| deadhash            | [/adapters/postgresql/internal/deadhash](adapters/postgresql/internal/deadhash.md)           |             |
+| file                | [/adapters/postgresql/internal/file](adapters/postgresql/internal/file.md)                   |             |
+| label               | [/adapters/postgresql/internal/label](adapters/postgresql/internal/label.md)                 |             |
+| massload            | [/adapters/postgresql/internal/massload](adapters/postgresql/internal/massload.md)           |             |
+| model               | [/adapters/postgresql/internal/model](adapters/postgresql/internal/model.md)                 |             |
+| other               | [/adapters/postgresql/internal/other](adapters/postgresql/internal/other.md)                 |             |
+| page                | [/adapters/postgresql/internal/page](adapters/postgresql/internal/page.md)                   |             |
+| repository          | [/adapters/postgresql/internal/repository](adapters/postgresql/internal/repository.md)       |             |
+| urlmirror           | [/adapters/postgresql/internal/urlmirror](adapters/postgresql/internal/urlmirror.md)         |             |
+| tmpdata             | [/adapters/tmpdata](adapters/tmpdata.md)                                                     |             |
+| configremaper       | [/application/configremaper](application/configremaper.md)                                   |             |
+| server              | [/application/server](application/server.md)                                                 |             |
+| config              | [/config](config.md)                                                                         |             |
+| apiagent            | [/controllers/apiagent](controllers/apiagent.md)                                             |             |
+| apiserver           | [/controllers/apiserver](controllers/apiserver.md)                                           |             |
+| agenthandlers       | [/controllers/apiserver/agenthandlers](controllers/apiserver/agenthandlers.md)               |             |
+| apiservercore       | [/controllers/apiserver/apiservercore](controllers/apiserver/apiservercore.md)               |             |
+| attributehandlers   | [/controllers/apiserver/attributehandlers](controllers/apiserver/attributehandlers.md)       |             |
+| bookhandlers        | [/controllers/apiserver/bookhandlers](controllers/apiserver/bookhandlers.md)                 |             |
+| deduplicatehandlers | [/controllers/apiserver/deduplicatehandlers](controllers/apiserver/deduplicatehandlers.md)   |             |
+| fshandlers          | [/controllers/apiserver/fshandlers](controllers/apiserver/fshandlers.md)                     |             |
+| hproxyhandlers      | [/controllers/apiserver/hproxyhandlers](controllers/apiserver/hproxyhandlers.md)             |             |
+| labelhandlers       | [/controllers/apiserver/labelhandlers](controllers/apiserver/labelhandlers.md)               |             |
+| massloadhandlers    | [/controllers/apiserver/massloadhandlers](controllers/apiserver/massloadhandlers.md)         |             |
+| systemhandlers      | [/controllers/apiserver/systemhandlers](controllers/apiserver/systemhandlers.md)             |             |
+| async               | [/controllers/async](controllers/async.md)                                                   |             |
+| worker              | [/controllers/internal/worker](controllers/internal/worker.md)                               |             |
+| workermanager       | [/controllers/workermanager](controllers/workermanager.md)                                   |             |
+| agentmodel          | [/domain/agentmodel](domain/agentmodel.md)                                                   |             |
+| bff                 | [/domain/bff](domain/bff.md)                                                                 |             |
+| core                | [/domain/core](domain/core.md)                                                               |             |
+| fsmodel             | [/domain/fsmodel](domain/fsmodel.md)                                                         |             |
+| hproxymodel         | [/domain/hproxymodel](domain/hproxymodel.md)                                                 |             |
+| massloadmodel       | [/domain/massloadmodel](domain/massloadmodel.md)                                             |             |
+| parsing             | [/domain/parsing](domain/parsing.md)                                                         |             |
+| systemmodel         | [/domain/systemmodel](domain/systemmodel.md)                                                 |             |
+| mcp                 | [/experimental/mcp](experimental/mcp.md)                                                     |             |
+| external            | [/external](external.md)                                                                     |             |
+| agentapi            | [/openapi/agentapi](openapi/agentapi.md)                                                     |             |
+| serverapi           | [/openapi/serverapi](openapi/serverapi.md)                                                   |             |
+| pkg                 | [/pkg](pkg.md)                                                                               |             |
+| agentusecase        | [/usecases/agentusecase](usecases/agentusecase.md)                                           |             |
+| attributeusecase    | [/usecases/attributeusecase](usecases/attributeusecase.md)                                   |             |
+| bffusecase          | [/usecases/bffusecase](usecases/bffusecase.md)                                               |             |
+| bookusecase         | [/usecases/bookusecase](usecases/bookusecase.md)                                             |             |
+| cleanupusecase      | [/usecases/cleanupusecase](usecases/cleanupusecase.md)                                       |             |
+| deduplicatorusecase | [/usecases/deduplicatorusecase](usecases/deduplicatorusecase.md)                             |             |
+| exportusecase       | [/usecases/exportusecase](usecases/exportusecase.md)                                         |             |
+| filesystemusecase   | [/usecases/filesystemusecase](usecases/filesystemusecase.md)                                 |             |
+| hproxyusecase       | [/usecases/hproxyusecase](usecases/hproxyusecase.md)                                         |             |
+| labelusecase        | [/usecases/labelusecase](usecases/labelusecase.md)                                           |             |
+| massloadusecase     | [/usecases/massloadusecase](usecases/massloadusecase.md)                                     |             |
+| parsingusecase      | [/usecases/parsingusecase](usecases/parsingusecase.md)                                       |             |
+| rebuilderusecase    | [/usecases/rebuilderusecase](usecases/rebuilderusecase.md)                                   |             |
+| systemusecase       | [/usecases/systemusecase](usecases/systemusecase.md)                                         |             |
+| version             | [/version](version.md)                                                                       |             |
 
 ## External imports
 
-|     Name      |                              Path                               | Count |
-|:-------------:|:---------------------------------------------------------------:|:-----:|
-|    context    |                             context                             |  395  |
-|      fmt      |                               fmt                               |  307  |
-|     uuid      |                     github.com/google/uuid                      |  164  |
-|   squirrel    |                 github.com/Masterminds/squirrel                 |  111  |
-|     time      |                              time                               |  93   |
-|     slog      |                            log/slog                             |  90   |
-|      url      |                             net/url                             |  69   |
-|    errors     |                             errors                              |  64   |
-|      io       |                               io                                |  45   |
-|     trace     |                 go.opentelemetry.io/otel/trace                  |  43   |
-|      sql      |                          database/sql                           |  36   |
-|     http      |                            net/http                             |  30   |
-|  timeseries   |     github.com/grafana/grafana-foundation-sdk/go/timeseries     |  26   |
-|      v5       |                     github.com/jackc/pgx/v5                     |  24   |
-|    strings    |                             strings                             |  22   |
-|    errors     |                   github.com/go-faster/errors                   |  20   |
-|   dashboard   |     github.com/grafana/grafana-foundation-sdk/go/dashboard      |  17   |
-|    promql     |           github.com/grafana/promql-builder/go/promql           |  17   |
-|  prometheus   |         github.com/prometheus/client_golang/prometheus          |  17   |
-|  ogenerrors   |               github.com/ogen-go/ogen/ogenerrors                |  16   |
-|    slices     |                             slices                              |  16   |
-|      cog      |        github.com/grafana/grafana-foundation-sdk/go/cog         |  15   |
-|   variants    |    github.com/grafana/grafana-foundation-sdk/go/cog/variants    |  15   |
-|     bytes     |                              bytes                              |  14   |
-|  prometheus   |     github.com/grafana/grafana-foundation-sdk/go/prometheus     |  14   |
-|     http      |                  github.com/ogen-go/ogen/http                   |  12   |
-|   validate    |                github.com/ogen-go/ogen/validate                 |  12   |
-|      os       |                               os                                |  12   |
-|      jx       |                     github.com/go-faster/jx                     |  10   |
-|  middleware   |               github.com/ogen-go/ogen/middleware                |  10   |
-|      uri      |                   github.com/ogen-go/ogen/uri                   |  10   |
-|    strconv    |                             strconv                             |   9   |
-|     conv      |                  github.com/ogen-go/ogen/conv                   |   8   |
-|   attribute   |               go.opentelemetry.io/otel/attribute                |   8   |
-|     path      |                              path                               |   8   |
-|     sync      |                              sync                               |   8   |
-|     otel      |                    go.opentelemetry.io/otel                     |   7   |
-|      zip      |                           archive/zip                           |   6   |
-|     json      |                          encoding/json                          |   6   |
-|   barchart    |      github.com/grafana/grafana-foundation-sdk/go/barchart      |   6   |
-|    common     |       github.com/grafana/grafana-foundation-sdk/go/common       |   6   |
-|     codes     |                 go.opentelemetry.io/otel/codes                  |   6   |
-|    metric     |                 go.opentelemetry.io/otel/metric                 |   6   |
-|     mime      |                              mime                               |   6   |
-|    runtime    |                             runtime                             |   5   |
-|     stat      |        github.com/grafana/grafana-foundation-sdk/go/stat        |   4   |
-|  propagation  |              go.opentelemetry.io/otel/propagation               |   4   |
-|    v1.26.0    |            go.opentelemetry.io/otel/semconv/v1.26.0             |   4   |
-|     flag      |                              flag                               |   3   |
-|     table     |       github.com/grafana/grafana-foundation-sdk/go/table        |   3   |
-| pyroscope-go  |                 github.com/grafana/pyroscope-go                 |   3   |
-|     toml      |                   github.com/BurntSushi/toml                    |   2   |
-|    heatmap    |      github.com/grafana/grafana-foundation-sdk/go/heatmap       |   2   |
-|   piechart    |      github.com/grafana/grafana-foundation-sdk/go/piechart      |   2   |
-|   envconfig   |              github.com/kelseyhightower/envconfig               |   2   |
-|     json      |                  github.com/ogen-go/ogen/json                   |   2   |
-|   otelogen    |                github.com/ogen-go/ogen/otelogen                 |   2   |
-|    assert     |               github.com/stretchr/testify/assert                |   2   |
-|    yaml.v3    |                        gopkg.in/yaml.v3                         |   2   |
-|     bits      |                            math/bits                            |   2   |
-|    atomic     |                           sync/atomic                           |   2   |
-|    syscall    |                             syscall                             |   2   |
-|    testing    |                             testing                             |   2   |
-|      md5      |                           crypto/md5                            |   1   |
-|    sha256     |                          crypto/sha256                          |   1   |
-|     embed     |                              embed                              |   1   |
-|    strfmt     |                  github.com/go-openapi/strfmt                   |   1   |
-|    plugins    |    github.com/grafana/grafana-foundation-sdk/go/cog/plugins     |   1   |
-|     logs      |        github.com/grafana/grafana-foundation-sdk/go/logs        |   1   |
-|     loki      |        github.com/grafana/grafana-foundation-sdk/go/loki        |   1   |
-|     units     |       github.com/grafana/grafana-foundation-sdk/go/units        |   1   |
-|    client     |       github.com/grafana/grafana-openapi-client-go/client       |   1   |
-|    models     |       github.com/grafana/grafana-openapi-client-go/models       |   1   |
-|      cog      |            github.com/grafana/promql-builder/go/cog             |   1   |
-|    pgxpool    |                 github.com/jackc/pgx/v5/pgxpool                 |   1   |
-|    stdlib     |                 github.com/jackc/pgx/v5/stdlib                  |   1   |
-|   godotenv    |                    github.com/joho/godotenv                     |   1   |
-|      v3       |                   github.com/pressly/goose/v3                   |   1   |
-|  collectors   |    github.com/prometheus/client_golang/prometheus/collectors    |   1   |
-|   promhttp    |     github.com/prometheus/client_golang/prometheus/promhttp     |   1   |
-|    require    |               github.com/stretchr/testify/require               |   1   |
-| otlptracehttp | go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp |   1   |
-|   resource    |              go.opentelemetry.io/otel/sdk/resource              |   1   |
-|     trace     |               go.opentelemetry.io/otel/sdk/trace                |   1   |
-|    v1.20.0    |            go.opentelemetry.io/otel/semconv/v1.20.0             |   1   |
-|     noop      |               go.opentelemetry.io/otel/trace/noop               |   1   |
-|     unix      |                      golang.org/x/sys/unix                      |   1   |
-|     maps      |                              maps                               |   1   |
-|     math      |                              math                               |   1   |
-|    signal     |                            os/signal                            |   1   |
-|    regexp     |                             regexp                              |   1   |
-|   template    |                          text/template                          |   1   |
+| Name          | Path                                                            | Count |
+|:--------------|:----------------------------------------------------------------|------:|
+| uuid          | github.com/google/uuid                                          |   168 |
+| squirrel      | github.com/Masterminds/squirrel                                 |   127 |
+| trace         | go.opentelemetry.io/otel/trace                                  |    44 |
+| v5            | github.com/jackc/pgx/v5                                         |    31 |
+| timeseries    | github.com/grafana/grafana-foundation-sdk/go/timeseries         |    26 |
+| errors        | github.com/go-faster/errors                                     |    20 |
+| ogenerrors    | github.com/ogen-go/ogen/ogenerrors                              |    18 |
+| dashboard     | github.com/grafana/grafana-foundation-sdk/go/dashboard          |    17 |
+| promql        | github.com/grafana/promql-builder/go/promql                     |    17 |
+| prometheus    | github.com/prometheus/client_golang/prometheus                  |    17 |
+| cog           | github.com/grafana/grafana-foundation-sdk/go/cog                |    15 |
+| variants      | github.com/grafana/grafana-foundation-sdk/go/cog/variants       |    15 |
+| prometheus    | github.com/grafana/grafana-foundation-sdk/go/prometheus         |    14 |
+| http          | github.com/ogen-go/ogen/http                                    |    14 |
+| validate      | github.com/ogen-go/ogen/validate                                |    14 |
+| jx            | github.com/go-faster/jx                                         |    10 |
+| middleware    | github.com/ogen-go/ogen/middleware                              |    10 |
+| uri           | github.com/ogen-go/ogen/uri                                     |    10 |
+| attribute     | go.opentelemetry.io/otel/attribute                              |    10 |
+| conv          | github.com/ogen-go/ogen/conv                                    |     8 |
+| server        | github.com/mark3labs/mcp-go/server                              |     7 |
+| otel          | go.opentelemetry.io/otel                                        |     7 |
+| barchart      | github.com/grafana/grafana-foundation-sdk/go/barchart           |     6 |
+| common        | github.com/grafana/grafana-foundation-sdk/go/common             |     6 |
+| mcp           | github.com/mark3labs/mcp-go/mcp                                 |     6 |
+| codes         | go.opentelemetry.io/otel/codes                                  |     6 |
+| metric        | go.opentelemetry.io/otel/metric                                 |     6 |
+| stat          | github.com/grafana/grafana-foundation-sdk/go/stat               |     4 |
+| propagation   | go.opentelemetry.io/otel/propagation                            |     4 |
+| v1.37.0       | go.opentelemetry.io/otel/semconv/v1.37.0                        |     4 |
+| table         | github.com/grafana/grafana-foundation-sdk/go/table              |     3 |
+| pyroscope-go  | github.com/grafana/pyroscope-go                                 |     3 |
+| toml          | github.com/BurntSushi/toml                                      |     2 |
+| heatmap       | github.com/grafana/grafana-foundation-sdk/go/heatmap            |     2 |
+| piechart      | github.com/grafana/grafana-foundation-sdk/go/piechart           |     2 |
+| envconfig     | github.com/kelseyhightower/envconfig                            |     2 |
+| json          | github.com/ogen-go/ogen/json                                    |     2 |
+| otelogen      | github.com/ogen-go/ogen/otelogen                                |     2 |
+| assert        | github.com/stretchr/testify/assert                              |     2 |
+| yaml.v3       | gopkg.in/yaml.v3                                                |     2 |
+| strfmt        | github.com/go-openapi/strfmt                                    |     1 |
+| plugins       | github.com/grafana/grafana-foundation-sdk/go/cog/plugins        |     1 |
+| logs          | github.com/grafana/grafana-foundation-sdk/go/logs               |     1 |
+| loki          | github.com/grafana/grafana-foundation-sdk/go/loki               |     1 |
+| units         | github.com/grafana/grafana-foundation-sdk/go/units              |     1 |
+| client        | github.com/grafana/grafana-openapi-client-go/client             |     1 |
+| models        | github.com/grafana/grafana-openapi-client-go/models             |     1 |
+| cog           | github.com/grafana/promql-builder/go/cog                        |     1 |
+| pgxpool       | github.com/jackc/pgx/v5/pgxpool                                 |     1 |
+| stdlib        | github.com/jackc/pgx/v5/stdlib                                  |     1 |
+| godotenv      | github.com/joho/godotenv                                        |     1 |
+| v3            | github.com/pressly/goose/v3                                     |     1 |
+| collectors    | github.com/prometheus/client_golang/prometheus/collectors       |     1 |
+| promhttp      | github.com/prometheus/client_golang/prometheus/promhttp         |     1 |
+| require       | github.com/stretchr/testify/require                             |     1 |
+| otlptracehttp | go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp |     1 |
+| resource      | go.opentelemetry.io/otel/sdk/resource                           |     1 |
+| trace         | go.opentelemetry.io/otel/sdk/trace                              |     1 |
+| v1.20.0       | go.opentelemetry.io/otel/semconv/v1.20.0                        |     1 |
+| noop          | go.opentelemetry.io/otel/trace/noop                             |     1 |
+| unix          | golang.org/x/sys/unix                                           |     1 |
+
+## Std imports
+
+| Name     | Path          | Count |
+|:---------|:--------------|------:|
+| context  | context       |   404 |
+| fmt      | fmt           |   316 |
+| time     | time          |    94 |
+| slog     | log/slog      |    93 |
+| url      | net/url       |    73 |
+| errors   | errors        |    68 |
+| http     | net/http      |    53 |
+| io       | io            |    47 |
+| sql      | database/sql  |    39 |
+| strings  | strings       |    27 |
+| bytes    | bytes         |    18 |
+| slices   | slices        |    18 |
+| os       | os            |    13 |
+| strconv  | strconv       |    11 |
+| path     | path          |     8 |
+| sync     | sync          |     8 |
+| zip      | archive/zip   |     6 |
+| json     | encoding/json |     6 |
+| mime     | mime          |     6 |
+| runtime  | runtime       |     5 |
+| flag     | flag          |     3 |
+| maps     | maps          |     3 |
+| bits     | math/bits     |     2 |
+| regexp   | regexp        |     2 |
+| atomic   | sync/atomic   |     2 |
+| syscall  | syscall       |     2 |
+| testing  | testing       |     2 |
+| md5      | crypto/md5    |     1 |
+| sha256   | crypto/sha256 |     1 |
+| embed    | embed         |     1 |
+| math     | math          |     1 |
+| signal   | os/signal     |     1 |
+| template | text/template |     1 |
 
 ## Scheme
 
@@ -204,11 +210,10 @@ erDiagram
     "/adapters/agent" ||--|{ "/domain/core" : x1
     "/adapters/agent" ||--|{ "/domain/fsmodel" : x1
     "/adapters/agent" ||--|{ "/domain/hproxymodel" : x1
-    "/adapters/agent/internal/adapter" ||--|{ "/domain/agentmodel" : x10
-    "/adapters/agent/internal/adapter" ||--|{ "/domain/core" : x1
+    "/adapters/agent/internal/adapter" ||--|{ "/domain/agentmodel" : x9
     "/adapters/agent/internal/adapter" ||--|{ "/domain/fsmodel" : x1
     "/adapters/agent/internal/adapter" ||--|{ "/domain/hproxymodel" : x1
-    "/adapters/agent/internal/adapter" ||--|{ "/openapi/agentapi" : x11
+    "/adapters/agent/internal/adapter" ||--|{ "/openapi/agentapi" : x12
     "/adapters/agent/internal/adapter" ||--|{ "/pkg" : x6
     "/adapters/agentfs" ||--|{ "/domain/fsmodel" : x1
     "/adapters/filestorage" ||--|{ "/adapters/agentfs" : x1
@@ -282,41 +287,43 @@ erDiagram
     "/adapters/postgresql" ||--|{ "/adapters/postgresql/internal/page" : x1
     "/adapters/postgresql" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql" ||--|{ "/adapters/postgresql/internal/urlmirror" : x1
-    "/adapters/postgresql/internal/agent" ||--|{ "/adapters/postgresql/internal/model" : x2
+    "/adapters/postgresql/internal/agent" ||--|{ "/adapters/postgresql/internal/model" : x5
     "/adapters/postgresql/internal/agent" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/agent" ||--|{ "/domain/core" : x5
-    "/adapters/postgresql/internal/attribute" ||--|{ "/adapters/postgresql/internal/model" : x5
+    "/adapters/postgresql/internal/attribute" ||--|{ "/adapters/postgresql/internal/model" : x21
     "/adapters/postgresql/internal/attribute" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/attribute" ||--|{ "/domain/core" : x15
-    "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/model" : x7
+    "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/model" : x17
     "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/book" ||--|{ "/domain/core" : x15
+    "/adapters/postgresql/internal/deadhash" ||--|{ "/adapters/postgresql/internal/model" : x5
     "/adapters/postgresql/internal/deadhash" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/deadhash" ||--|{ "/domain/core" : x5
     "/adapters/postgresql/internal/deadhash" ||--|{ "/pkg" : x1
-    "/adapters/postgresql/internal/file" ||--|{ "/adapters/postgresql/internal/model" : x10
+    "/adapters/postgresql/internal/file" ||--|{ "/adapters/postgresql/internal/model" : x17
     "/adapters/postgresql/internal/file" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/file" ||--|{ "/domain/core" : x11
     "/adapters/postgresql/internal/file" ||--|{ "/domain/fsmodel" : x5
-    "/adapters/postgresql/internal/label" ||--|{ "/adapters/postgresql/internal/model" : x3
+    "/adapters/postgresql/internal/label" ||--|{ "/adapters/postgresql/internal/model" : x11
     "/adapters/postgresql/internal/label" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/label" ||--|{ "/domain/core" : x9
-    "/adapters/postgresql/internal/massload" ||--|{ "/adapters/postgresql/internal/model" : x16
+    "/adapters/postgresql/internal/massload" ||--|{ "/adapters/postgresql/internal/model" : x24
     "/adapters/postgresql/internal/massload" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/massload" ||--|{ "/domain/massloadmodel" : x21
-    "/adapters/postgresql/internal/model" ||--|{ "/domain/core" : x8
+    "/adapters/postgresql/internal/model" ||--|{ "/domain/core" : x12
     "/adapters/postgresql/internal/model" ||--|{ "/domain/fsmodel" : x1
-    "/adapters/postgresql/internal/model" ||--|{ "/domain/massloadmodel" : x1
+    "/adapters/postgresql/internal/model" ||--|{ "/domain/massloadmodel" : x4
     "/adapters/postgresql/internal/model" ||--|{ "/domain/parsing" : x1
     "/adapters/postgresql/internal/model" ||--|{ "/pkg" : x1
+    "/adapters/postgresql/internal/other" ||--|{ "/adapters/postgresql/internal/model" : x1
     "/adapters/postgresql/internal/other" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/other" ||--|{ "/domain/fsmodel" : x1
     "/adapters/postgresql/internal/other" ||--|{ "/domain/systemmodel" : x1
-    "/adapters/postgresql/internal/page" ||--|{ "/adapters/postgresql/internal/model" : x11
+    "/adapters/postgresql/internal/page" ||--|{ "/adapters/postgresql/internal/model" : x22
     "/adapters/postgresql/internal/page" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/page" ||--|{ "/domain/core" : x17
     "/adapters/postgresql/internal/repository" ||--|{ "/pkg" : x1
-    "/adapters/postgresql/internal/urlmirror" ||--|{ "/adapters/postgresql/internal/model" : x4
+    "/adapters/postgresql/internal/urlmirror" ||--|{ "/adapters/postgresql/internal/model" : x5
     "/adapters/postgresql/internal/urlmirror" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/urlmirror" ||--|{ "/domain/parsing" : x4
     "/adapters/tmpdata" ||--|{ "/domain/agentmodel" : x2
@@ -336,6 +343,7 @@ erDiagram
     "/application/server" ||--|{ "/controllers/workermanager" : x3
     "/application/server" ||--|{ "/domain/core" : x1
     "/application/server" ||--|{ "/domain/systemmodel" : x1
+    "/application/server" ||--|{ "/experimental/mcp" : x1
     "/application/server" ||--|{ "/pkg" : x1
     "/application/server" ||--|{ "/usecases/agentusecase" : x2
     "/application/server" ||--|{ "/usecases/attributeusecase" : x2
@@ -358,10 +366,10 @@ erDiagram
     "/cmd/server" ||--|{ "/application/server" : x1
     "/controllers/apiagent" ||--|{ "/domain/agentmodel" : x3
     "/controllers/apiagent" ||--|{ "/domain/core" : x2
-    "/controllers/apiagent" ||--|{ "/openapi/agentapi" : x9
+    "/controllers/apiagent" ||--|{ "/openapi/agentapi" : x10
     "/controllers/apiagent" ||--|{ "/pkg" : x3
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/agenthandlers" : x1
-    "/controllers/apiserver" ||--|{ "/controllers/apiserver/apiservercore" : x1
+    "/controllers/apiserver" ||--|{ "/controllers/apiserver/apiservercore" : x2
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/attributehandlers" : x1
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/bookhandlers" : x1
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/deduplicatehandlers" : x1
@@ -370,8 +378,8 @@ erDiagram
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/labelhandlers" : x1
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/massloadhandlers" : x1
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/systemhandlers" : x1
-    "/controllers/apiserver" ||--|{ "/openapi/serverapi" : x3
-    "/controllers/apiserver/agenthandlers" ||--|{ "/controllers/apiserver/apiservercore" : x7
+    "/controllers/apiserver" ||--|{ "/openapi/serverapi" : x4
+    "/controllers/apiserver/agenthandlers" ||--|{ "/controllers/apiserver/apiservercore" : x5
     "/controllers/apiserver/agenthandlers" ||--|{ "/domain/agentmodel" : x2
     "/controllers/apiserver/agenthandlers" ||--|{ "/domain/core" : x6
     "/controllers/apiserver/agenthandlers" ||--|{ "/openapi/serverapi" : x6
@@ -381,39 +389,39 @@ erDiagram
     "/controllers/apiserver/apiservercore" ||--|{ "/domain/fsmodel" : x1
     "/controllers/apiserver/apiservercore" ||--|{ "/openapi/serverapi" : x3
     "/controllers/apiserver/apiservercore" ||--|{ "/pkg" : x1
-    "/controllers/apiserver/attributehandlers" ||--|{ "/controllers/apiserver/apiservercore" : x13
+    "/controllers/apiserver/attributehandlers" ||--|{ "/controllers/apiserver/apiservercore" : x5
     "/controllers/apiserver/attributehandlers" ||--|{ "/domain/core" : x9
     "/controllers/apiserver/attributehandlers" ||--|{ "/openapi/serverapi" : x12
     "/controllers/apiserver/attributehandlers" ||--|{ "/pkg" : x4
-    "/controllers/apiserver/bookhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x11
+    "/controllers/apiserver/bookhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x10
     "/controllers/apiserver/bookhandlers" ||--|{ "/domain/bff" : x3
     "/controllers/apiserver/bookhandlers" ||--|{ "/domain/core" : x10
     "/controllers/apiserver/bookhandlers" ||--|{ "/openapi/serverapi" : x10
     "/controllers/apiserver/bookhandlers" ||--|{ "/pkg" : x2
-    "/controllers/apiserver/deduplicatehandlers" ||--|{ "/controllers/apiserver/apiservercore" : x7
+    "/controllers/apiserver/deduplicatehandlers" ||--|{ "/controllers/apiserver/apiservercore" : x3
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/bff" : x5
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/domain/core" : x4
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/openapi/serverapi" : x6
     "/controllers/apiserver/deduplicatehandlers" ||--|{ "/pkg" : x5
-    "/controllers/apiserver/fshandlers" ||--|{ "/controllers/apiserver/apiservercore" : x12
+    "/controllers/apiserver/fshandlers" ||--|{ "/controllers/apiserver/apiservercore" : x7
     "/controllers/apiserver/fshandlers" ||--|{ "/domain/core" : x4
     "/controllers/apiserver/fshandlers" ||--|{ "/domain/fsmodel" : x4
     "/controllers/apiserver/fshandlers" ||--|{ "/openapi/serverapi" : x11
     "/controllers/apiserver/fshandlers" ||--|{ "/pkg" : x1
-    "/controllers/apiserver/hproxyhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x4
+    "/controllers/apiserver/hproxyhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x3
     "/controllers/apiserver/hproxyhandlers" ||--|{ "/domain/hproxymodel" : x3
     "/controllers/apiserver/hproxyhandlers" ||--|{ "/openapi/serverapi" : x4
     "/controllers/apiserver/hproxyhandlers" ||--|{ "/pkg" : x2
-    "/controllers/apiserver/labelhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x9
+    "/controllers/apiserver/labelhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x3
     "/controllers/apiserver/labelhandlers" ||--|{ "/domain/core" : x7
     "/controllers/apiserver/labelhandlers" ||--|{ "/openapi/serverapi" : x8
     "/controllers/apiserver/labelhandlers" ||--|{ "/pkg" : x2
-    "/controllers/apiserver/massloadhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x17
+    "/controllers/apiserver/massloadhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x4
     "/controllers/apiserver/massloadhandlers" ||--|{ "/domain/core" : x1
     "/controllers/apiserver/massloadhandlers" ||--|{ "/domain/massloadmodel" : x10
     "/controllers/apiserver/massloadhandlers" ||--|{ "/openapi/serverapi" : x16
     "/controllers/apiserver/massloadhandlers" ||--|{ "/pkg" : x3
-    "/controllers/apiserver/systemhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x11
+    "/controllers/apiserver/systemhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x5
     "/controllers/apiserver/systemhandlers" ||--|{ "/domain/core" : x1
     "/controllers/apiserver/systemhandlers" ||--|{ "/domain/parsing" : x5
     "/controllers/apiserver/systemhandlers" ||--|{ "/domain/systemmodel" : x4
@@ -434,6 +442,11 @@ erDiagram
     "/domain/core" ||--|{ "/pkg" : x1
     "/domain/fsmodel" ||--|{ "/domain/core" : x1
     "/domain/parsing" ||--|{ "/domain/core" : x1
+    "/experimental/mcp" ||--|{ "/domain/bff" : x2
+    "/experimental/mcp" ||--|{ "/domain/core" : x5
+    "/experimental/mcp" ||--|{ "/domain/hproxymodel" : x1
+    "/experimental/mcp" ||--|{ "/domain/parsing" : x2
+    "/experimental/mcp" ||--|{ "/pkg" : x3
     "/external" ||--|{ "/domain/core" : x3
     "/external" ||--|{ "/pkg" : x2
     "/usecases/agentusecase" ||--|{ "/domain/agentmodel" : x2
@@ -444,7 +457,8 @@ erDiagram
     "/usecases/bffusecase" ||--|{ "/domain/bff" : x4
     "/usecases/bffusecase" ||--|{ "/domain/core" : x3
     "/usecases/bffusecase" ||--|{ "/domain/fsmodel" : x1
-    "/usecases/bffusecase" ||--|{ "/pkg" : x1
+    "/usecases/bffusecase" ||--|{ "/domain/massloadmodel" : x2
+    "/usecases/bffusecase" ||--|{ "/pkg" : x2
     "/usecases/bookusecase" ||--|{ "/domain/core" : x3
     "/usecases/cleanupusecase" ||--|{ "/domain/core" : x5
     "/usecases/cleanupusecase" ||--|{ "/domain/fsmodel" : x3

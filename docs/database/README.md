@@ -5,7 +5,7 @@
 | Name | Columns | Comment | Type |
 | ---- | ------- | ------- | ---- |
 | [public.goose_db_version](public.goose_db_version.md) | 4 |  | BASE TABLE |
-| [public.books](public.books.md) | 11 |  | BASE TABLE |
+| [public.books](public.books.md) | 19 |  | BASE TABLE |
 | [public.files](public.files.md) | 9 |  | BASE TABLE |
 | [public.pages](public.pages.md) | 8 |  | BASE TABLE |
 | [public.attributes](public.attributes.md) | 5 |  | BASE TABLE |
@@ -65,6 +65,14 @@ erDiagram
   boolean verified
   timestamp_with_time_zone verified_at
   boolean is_rebuild
+  integer calc_page_count
+  integer calc_file_count
+  integer calc_dead_hash_count
+  bigint calc_page_size
+  bigint calc_file_size
+  bigint calc_dead_hash_size
+  timestamp_with_time_zone calculated_at
+  bigint calc_avg_page_size
 }
 "public.files" {
   uuid id

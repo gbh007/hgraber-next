@@ -49,6 +49,14 @@ erDiagram
   boolean verified
   timestamp_with_time_zone verified_at
   boolean is_rebuild
+  integer calc_page_count
+  integer calc_file_count
+  integer calc_dead_hash_count
+  bigint calc_page_size
+  bigint calc_file_size
+  bigint calc_dead_hash_size
+  timestamp_with_time_zone calculated_at
+  bigint calc_avg_page_size
 }
 "public.attributes" {
   text code

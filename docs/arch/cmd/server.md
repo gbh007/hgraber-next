@@ -2,14 +2,21 @@
 
 ## Imports
 
-|  Name   |                      Path                       | Inner | Count |
-|:-------:|:-----------------------------------------------:|:-----:|:-----:|
-| context |                     context                     |  ❌   |   1   |
-| server  | [/application/server](../application/server.md) |  ✅   |   1   |
-|  slog   |                    log/slog                     |  ❌   |   1   |
-|   os    |                       os                        |  ❌   |   1   |
-| signal  |                    os/signal                    |  ❌   |   1   |
-| syscall |                     syscall                     |  ❌   |   1   |
+### Inner imports
+
+| Name   | Path                                            | Count |
+|:-------|:------------------------------------------------|------:|
+| server | [/application/server](../application/server.md) |     1 |
+
+### Std imports
+
+| Name    | Path      | Count |
+|:--------|:----------|------:|
+| context | context   |     1 |
+| slog    | log/slog  |     1 |
+| os      | os        |     1 |
+| signal  | os/signal |     1 |
+| syscall | syscall   |     1 |
 
 ## Scheme
 

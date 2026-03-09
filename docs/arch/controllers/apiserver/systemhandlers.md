@@ -2,26 +2,38 @@
 
 ## Imports
 
-|     Name      |                           Path                           | Inner | Count |
-|:-------------:|:--------------------------------------------------------:|:-----:|:-----:|
-|    context    |                         context                          |  ❌   |  13   |
-|   serverapi   |     [/openapi/serverapi](../../openapi/serverapi.md)     |  ✅   |  12   |
-| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |  ✅   |  11   |
-|    parsing    |        [/domain/parsing](../../domain/parsing.md)        |  ✅   |   5   |
-|  systemmodel  |    [/domain/systemmodel](../../domain/systemmodel.md)    |  ✅   |   4   |
-|      pkg      |                   [/pkg](../../pkg.md)                   |  ✅   |   4   |
-|     core      |           [/domain/core](../../domain/core.md)           |  ✅   |   1   |
-|     uuid      |                  github.com/google/uuid                  |  ❌   |   1   |
-|     trace     |              go.opentelemetry.io/otel/trace              |  ❌   |   1   |
-|      io       |                            io                            |  ❌   |   1   |
-|     slog      |                         log/slog                         |  ❌   |   1   |
-|      url      |                         net/url                          |  ❌   |   1   |
-|    slices     |                          slices                          |  ❌   |   1   |
+### Inner imports
+
+| Name          | Path                                                     | Count |
+|:--------------|:---------------------------------------------------------|------:|
+| serverapi     | [/openapi/serverapi](../../openapi/serverapi.md)         |    12 |
+| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |     5 |
+| parsing       | [/domain/parsing](../../domain/parsing.md)               |     5 |
+| systemmodel   | [/domain/systemmodel](../../domain/systemmodel.md)       |     4 |
+| pkg           | [/pkg](../../pkg.md)                                     |     4 |
+| core          | [/domain/core](../../domain/core.md)                     |     1 |
+
+### External imports
+
+| Name  | Path                           | Count |
+|:------|:-------------------------------|------:|
+| uuid  | github.com/google/uuid         |     1 |
+| trace | go.opentelemetry.io/otel/trace |     1 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |    13 |
+| io      | io       |     1 |
+| slog    | log/slog |     1 |
+| url     | net/url  |     1 |
+| slices  | slices   |     1 |
 
 ## Used by
 
-|   Name    |                   Path                    |
-|:---------:|:-----------------------------------------:|
+| Name      | Path                                      |
+|:----------|:------------------------------------------|
 | apiserver | [/controllers/apiserver](../apiserver.md) |
 
 ## Scheme
@@ -29,7 +41,7 @@
 ```mermaid
 erDiagram
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/systemhandlers" : x1
-    "/controllers/apiserver/systemhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x11
+    "/controllers/apiserver/systemhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x5
     "/controllers/apiserver/systemhandlers" ||--|{ "/domain/core" : x1
     "/controllers/apiserver/systemhandlers" ||--|{ "/domain/parsing" : x5
     "/controllers/apiserver/systemhandlers" ||--|{ "/domain/systemmodel" : x4

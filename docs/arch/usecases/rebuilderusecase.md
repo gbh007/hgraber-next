@@ -2,23 +2,35 @@
 
 ## Imports
 
-|  Name   |               Path                | Inner | Count |
-|:-------:|:---------------------------------:|:-----:|:-----:|
-| context |              context              |  ❌   |  10   |
-|  core   | [/domain/core](../domain/core.md) |  ✅   |  10   |
-|   fmt   |                fmt                |  ❌   |   8   |
-|  uuid   |      github.com/google/uuid       |  ❌   |   6   |
-|  time   |               time                |  ❌   |   4   |
-|  slog   |             log/slog              |  ❌   |   2   |
-| slices  |              slices               |  ❌   |   2   |
-|   pkg   |         [/pkg](../pkg.md)         |  ✅   |   1   |
-|  trace  |  go.opentelemetry.io/otel/trace   |  ❌   |   1   |
-|  maps   |               maps                |  ❌   |   1   |
+### Inner imports
+
+| Name | Path                              | Count |
+|:-----|:----------------------------------|------:|
+| core | [/domain/core](../domain/core.md) |    10 |
+| pkg  | [/pkg](../pkg.md)                 |     1 |
+
+### External imports
+
+| Name  | Path                           | Count |
+|:------|:-------------------------------|------:|
+| uuid  | github.com/google/uuid         |     6 |
+| trace | go.opentelemetry.io/otel/trace |     1 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |    10 |
+| fmt     | fmt      |     8 |
+| time    | time     |     4 |
+| slog    | log/slog |     2 |
+| slices  | slices   |     2 |
+| maps    | maps     |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme

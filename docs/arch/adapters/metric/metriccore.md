@@ -2,29 +2,36 @@
 
 ## Imports
 
-|    Name    |                      Path                      | Inner | Count |
-|:----------:|:----------------------------------------------:|:-----:|:-----:|
-| prometheus | github.com/prometheus/client_golang/prometheus |  ❌   |   2   |
-|  version   |          [/version](../../version.md)          |  ✅   |   1   |
+### Inner imports
+
+| Name    | Path                         | Count |
+|:--------|:-----------------------------|------:|
+| version | [/version](../../version.md) |     1 |
+
+### External imports
+
+| Name       | Path                                           | Count |
+|:-----------|:-----------------------------------------------|------:|
+| prometheus | github.com/prometheus/client_golang/prometheus |     2 |
 
 ## Used by
 
-|       Name       |                                     Path                                     |
-|:----------------:|:----------------------------------------------------------------------------:|
-|      metric      |                       [/adapters/metric](../metric.md)                       |
-|    generator     |                  [/adapters/metric/generator](generator.md)                  |
-|   bookandpages   |     [/adapters/metric/generator/bookandpages](generator/bookandpages.md)     |
-|  generatorcore   |    [/adapters/metric/generator/generatorcore](generator/generatorcore.md)    |
-| httpserverpanel  |  [/adapters/metric/generator/httpserverpanel](generator/httpserverpanel.md)  |
-|    otherpanel    |       [/adapters/metric/generator/otherpanel](generator/otherpanel.md)       |
-|    simpleinfo    |       [/adapters/metric/generator/simpleinfo](generator/simpleinfo.md)       |
+| Name             | Path                                                                         |
+|:-----------------|:-----------------------------------------------------------------------------|
+| metric           | [/adapters/metric](../metric.md)                                             |
+| generator        | [/adapters/metric/generator](generator.md)                                   |
+| bookandpages     | [/adapters/metric/generator/bookandpages](generator/bookandpages.md)         |
+| generatorcore    | [/adapters/metric/generator/generatorcore](generator/generatorcore.md)       |
+| httpserverpanel  | [/adapters/metric/generator/httpserverpanel](generator/httpserverpanel.md)   |
+| otherpanel       | [/adapters/metric/generator/otherpanel](generator/otherpanel.md)             |
+| simpleinfo       | [/adapters/metric/generator/simpleinfo](generator/simpleinfo.md)             |
 | workersandagents | [/adapters/metric/generator/workersandagents](generator/workersandagents.md) |
-|   metricagent    |                [/adapters/metric/metricagent](metricagent.md)                |
-|  metricdatabase  |             [/adapters/metric/metricdatabase](metricdatabase.md)             |
-|     metricfs     |                   [/adapters/metric/metricfs](metricfs.md)                   |
-|    metrichttp    |                 [/adapters/metric/metrichttp](metrichttp.md)                 |
-|   metricserver   |               [/adapters/metric/metricserver](metricserver.md)               |
-| metricstatistic  |            [/adapters/metric/metricstatistic](metricstatistic.md)            |
+| metricagent      | [/adapters/metric/metricagent](metricagent.md)                               |
+| metricdatabase   | [/adapters/metric/metricdatabase](metricdatabase.md)                         |
+| metricfs         | [/adapters/metric/metricfs](metricfs.md)                                     |
+| metrichttp       | [/adapters/metric/metrichttp](metrichttp.md)                                 |
+| metricserver     | [/adapters/metric/metricserver](metricserver.md)                             |
+| metricstatistic  | [/adapters/metric/metricstatistic](metricstatistic.md)                       |
 
 ## Scheme
 

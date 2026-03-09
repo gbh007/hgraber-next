@@ -2,14 +2,16 @@
 
 ## Imports
 
-|  Name   |  Path   | Inner | Count |
-|:-------:|:-------:|:-----:|:-----:|
-| runtime | runtime |  ❌   |   1   |
+### Std imports
+
+| Name    | Path    | Count |
+|:--------|:--------|------:|
+| runtime | runtime |     1 |
 
 ## Used by
 
-|    Name    |                             Path                             |
-|:----------:|:------------------------------------------------------------:|
+| Name       | Path                                                         |
+|:-----------|:-------------------------------------------------------------|
 | metriccore | [/adapters/metric/metriccore](adapters/metric/metriccore.md) |
 
 ## Scheme

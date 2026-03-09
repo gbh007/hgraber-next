@@ -2,29 +2,36 @@
 
 ## Imports
 
-|  Name   |          Path          | Inner | Count |
-|:-------:|:----------------------:|:-----:|:-----:|
-| context |        context         |  ❌   |   1   |
-|  uuid   | github.com/google/uuid |  ❌   |   1   |
-|  time   |          time          |  ❌   |   1   |
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     1 |
+
+### Std imports
+
+| Name    | Path    | Count |
+|:--------|:--------|------:|
+| context | context |     1 |
+| time    | time    |     1 |
 
 ## Used by
 
-|        Name         |                                        Path                                         |
-|:-------------------:|:-----------------------------------------------------------------------------------:|
-|       metric        |                      [/adapters/metric](../adapters/metric.md)                      |
-|    metricserver     |         [/adapters/metric/metricserver](../adapters/metric/metricserver.md)         |
-|        other        |   [/adapters/postgresql/internal/other](../adapters/postgresql/internal/other.md)   |
-|       tmpdata       |                     [/adapters/tmpdata](../adapters/tmpdata.md)                     |
-|       server        |                   [/application/server](../application/server.md)                   |
-|   systemhandlers    | [/controllers/apiserver/systemhandlers](../controllers/apiserver/systemhandlers.md) |
-|    workermanager    |            [/controllers/workermanager](../controllers/workermanager.md)            |
-|  attributeusecase   |            [/usecases/attributeusecase](../usecases/attributeusecase.md)            |
-|   cleanupusecase    |              [/usecases/cleanupusecase](../usecases/cleanupusecase.md)              |
-| deduplicatorusecase |         [/usecases/deduplicatorusecase](../usecases/deduplicatorusecase.md)         |
-|    labelusecase     |                [/usecases/labelusecase](../usecases/labelusecase.md)                |
-|   massloadusecase   |             [/usecases/massloadusecase](../usecases/massloadusecase.md)             |
-|    systemusecase    |               [/usecases/systemusecase](../usecases/systemusecase.md)               |
+| Name                | Path                                                                                |
+|:--------------------|:------------------------------------------------------------------------------------|
+| metric              | [/adapters/metric](../adapters/metric.md)                                           |
+| metricserver        | [/adapters/metric/metricserver](../adapters/metric/metricserver.md)                 |
+| other               | [/adapters/postgresql/internal/other](../adapters/postgresql/internal/other.md)     |
+| tmpdata             | [/adapters/tmpdata](../adapters/tmpdata.md)                                         |
+| server              | [/application/server](../application/server.md)                                     |
+| systemhandlers      | [/controllers/apiserver/systemhandlers](../controllers/apiserver/systemhandlers.md) |
+| workermanager       | [/controllers/workermanager](../controllers/workermanager.md)                       |
+| attributeusecase    | [/usecases/attributeusecase](../usecases/attributeusecase.md)                       |
+| cleanupusecase      | [/usecases/cleanupusecase](../usecases/cleanupusecase.md)                           |
+| deduplicatorusecase | [/usecases/deduplicatorusecase](../usecases/deduplicatorusecase.md)                 |
+| labelusecase        | [/usecases/labelusecase](../usecases/labelusecase.md)                               |
+| massloadusecase     | [/usecases/massloadusecase](../usecases/massloadusecase.md)                         |
+| systemusecase       | [/usecases/systemusecase](../usecases/systemusecase.md)                             |
 
 ## Scheme
 

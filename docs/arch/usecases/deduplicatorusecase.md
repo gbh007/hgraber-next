@@ -2,30 +2,42 @@
 
 ## Imports
 
-|    Name     |                      Path                       | Inner | Count |
-|:-----------:|:-----------------------------------------------:|:-----:|:-----:|
-|   context   |                     context                     |  ❌   |  12   |
-|    core     |        [/domain/core](../domain/core.md)        |  ✅   |  12   |
-|     fmt     |                       fmt                       |  ❌   |  11   |
-|    uuid     |             github.com/google/uuid              |  ❌   |  10   |
-|     bff     |         [/domain/bff](../domain/bff.md)         |  ✅   |   5   |
-|   slices    |                     slices                      |  ❌   |   5   |
-|    time     |                      time                       |  ❌   |   4   |
-|     zip     |                   archive/zip                   |  ❌   |   1   |
-|    bytes    |                      bytes                      |  ❌   |   1   |
-|   errors    |                     errors                      |  ❌   |   1   |
-| systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |  ✅   |   1   |
-|  external   |           [/external](../external.md)           |  ✅   |   1   |
-|     pkg     |                [/pkg](../pkg.md)                |  ✅   |   1   |
-|    trace    |         go.opentelemetry.io/otel/trace          |  ❌   |   1   |
-|     io      |                       io                        |  ❌   |   1   |
-|    slog     |                    log/slog                     |  ❌   |   1   |
-|    path     |                      path                       |  ❌   |   1   |
+### Inner imports
+
+| Name        | Path                                            | Count |
+|:------------|:------------------------------------------------|------:|
+| core        | [/domain/core](../domain/core.md)               |    12 |
+| bff         | [/domain/bff](../domain/bff.md)                 |     5 |
+| systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |     1 |
+| external    | [/external](../external.md)                     |     1 |
+| pkg         | [/pkg](../pkg.md)                               |     1 |
+
+### External imports
+
+| Name  | Path                           | Count |
+|:------|:-------------------------------|------:|
+| uuid  | github.com/google/uuid         |    10 |
+| trace | go.opentelemetry.io/otel/trace |     1 |
+
+### Std imports
+
+| Name    | Path        | Count |
+|:--------|:------------|------:|
+| context | context     |    12 |
+| fmt     | fmt         |    11 |
+| slices  | slices      |     5 |
+| time    | time        |     4 |
+| zip     | archive/zip |     1 |
+| bytes   | bytes       |     1 |
+| errors  | errors      |     1 |
+| io      | io          |     1 |
+| slog    | log/slog    |     1 |
+| path    | path        |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme

@@ -2,27 +2,39 @@
 
 ## Imports
 
-|     Name      |                        Path                         | Inner | Count |
-|:-------------:|:---------------------------------------------------:|:-----:|:-----:|
-|    context    |                       context                       |  ❌   |  11   |
-|     slog      |                      log/slog                       |  ❌   |  11   |
-|    worker     | [/controllers/internal/worker](internal/worker.md)  |  ✅   |  10   |
-|     trace     |           go.opentelemetry.io/otel/trace            |  ❌   |  10   |
-|      pkg      |                  [/pkg](../pkg.md)                  |  ✅   |   9   |
-|     uuid      |               github.com/google/uuid                |  ❌   |   4   |
-|     core      |          [/domain/core](../domain/core.md)          |  ✅   |   3   |
-|  agentmodel   |    [/domain/agentmodel](../domain/agentmodel.md)    |  ✅   |   2   |
-| massloadmodel | [/domain/massloadmodel](../domain/massloadmodel.md) |  ✅   |   2   |
-|  systemmodel  |   [/domain/systemmodel](../domain/systemmodel.md)   |  ✅   |   2   |
-|    fsmodel    |       [/domain/fsmodel](../domain/fsmodel.md)       |  ✅   |   1   |
-|    parsing    |       [/domain/parsing](../domain/parsing.md)       |  ✅   |   1   |
-|     sync      |                        sync                         |  ❌   |   1   |
-|     time      |                        time                         |  ❌   |   1   |
+### Inner imports
+
+| Name          | Path                                                | Count |
+|:--------------|:----------------------------------------------------|------:|
+| worker        | [/controllers/internal/worker](internal/worker.md)  |    10 |
+| pkg           | [/pkg](../pkg.md)                                   |     9 |
+| core          | [/domain/core](../domain/core.md)                   |     3 |
+| agentmodel    | [/domain/agentmodel](../domain/agentmodel.md)       |     2 |
+| massloadmodel | [/domain/massloadmodel](../domain/massloadmodel.md) |     2 |
+| systemmodel   | [/domain/systemmodel](../domain/systemmodel.md)     |     2 |
+| fsmodel       | [/domain/fsmodel](../domain/fsmodel.md)             |     1 |
+| parsing       | [/domain/parsing](../domain/parsing.md)             |     1 |
+
+### External imports
+
+| Name  | Path                           | Count |
+|:------|:-------------------------------|------:|
+| trace | go.opentelemetry.io/otel/trace |    10 |
+| uuid  | github.com/google/uuid         |     4 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |    11 |
+| slog    | log/slog |    11 |
+| sync    | sync     |     1 |
+| time    | time     |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme

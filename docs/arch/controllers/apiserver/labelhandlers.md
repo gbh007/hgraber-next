@@ -2,21 +2,33 @@
 
 ## Imports
 
-|     Name      |                           Path                           | Inner | Count |
-|:-------------:|:--------------------------------------------------------:|:-----:|:-----:|
-|    context    |                         context                          |  ❌   |   9   |
-| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |  ✅   |   9   |
-|   serverapi   |     [/openapi/serverapi](../../openapi/serverapi.md)     |  ✅   |   8   |
-|     core      |           [/domain/core](../../domain/core.md)           |  ✅   |   7   |
-|      pkg      |                   [/pkg](../../pkg.md)                   |  ✅   |   2   |
-|     uuid      |                  github.com/google/uuid                  |  ❌   |   1   |
-|     trace     |              go.opentelemetry.io/otel/trace              |  ❌   |   1   |
-|     slog      |                         log/slog                         |  ❌   |   1   |
+### Inner imports
+
+| Name          | Path                                                     | Count |
+|:--------------|:---------------------------------------------------------|------:|
+| serverapi     | [/openapi/serverapi](../../openapi/serverapi.md)         |     8 |
+| core          | [/domain/core](../../domain/core.md)                     |     7 |
+| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |     3 |
+| pkg           | [/pkg](../../pkg.md)                                     |     2 |
+
+### External imports
+
+| Name  | Path                           | Count |
+|:------|:-------------------------------|------:|
+| uuid  | github.com/google/uuid         |     1 |
+| trace | go.opentelemetry.io/otel/trace |     1 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     9 |
+| slog    | log/slog |     1 |
 
 ## Used by
 
-|   Name    |                   Path                    |
-|:---------:|:-----------------------------------------:|
+| Name      | Path                                      |
+|:----------|:------------------------------------------|
 | apiserver | [/controllers/apiserver](../apiserver.md) |
 
 ## Scheme
@@ -24,7 +36,7 @@
 ```mermaid
 erDiagram
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/labelhandlers" : x1
-    "/controllers/apiserver/labelhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x9
+    "/controllers/apiserver/labelhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x3
     "/controllers/apiserver/labelhandlers" ||--|{ "/domain/core" : x7
     "/controllers/apiserver/labelhandlers" ||--|{ "/openapi/serverapi" : x8
     "/controllers/apiserver/labelhandlers" ||--|{ "/pkg" : x2

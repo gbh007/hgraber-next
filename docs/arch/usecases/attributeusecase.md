@@ -2,23 +2,35 @@
 
 ## Imports
 
-|    Name     |                      Path                       | Inner | Count |
-|:-----------:|:-----------------------------------------------:|:-----:|:-----:|
-|   context   |                     context                     |  ❌   |   5   |
-|    core     |        [/domain/core](../domain/core.md)        |  ✅   |   5   |
-|     fmt     |                       fmt                       |  ❌   |   4   |
-|   slices    |                     slices                      |  ❌   |   3   |
-|   strings   |                     strings                     |  ❌   |   2   |
-|    time     |                      time                       |  ❌   |   2   |
-|   errors    |                     errors                      |  ❌   |   1   |
-| systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |  ✅   |   1   |
-|    uuid     |             github.com/google/uuid              |  ❌   |   1   |
-|    slog     |                    log/slog                     |  ❌   |   1   |
+### Inner imports
+
+| Name        | Path                                            | Count |
+|:------------|:------------------------------------------------|------:|
+| core        | [/domain/core](../domain/core.md)               |     5 |
+| systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |     1 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     1 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     5 |
+| fmt     | fmt      |     4 |
+| slices  | slices   |     3 |
+| strings | strings  |     2 |
+| time    | time     |     2 |
+| errors  | errors   |     1 |
+| slog    | log/slog |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme

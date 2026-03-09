@@ -2,19 +2,26 @@
 
 ## Imports
 
-|    Name    |                      Path                      | Inner | Count |
-|:----------:|:----------------------------------------------:|:-----:|:-----:|
-| metriccore |  [/adapters/metric/metriccore](metriccore.md)  |  ✅   |   2   |
-| prometheus | github.com/prometheus/client_golang/prometheus |  ❌   |   2   |
+### Inner imports
+
+| Name       | Path                                         | Count |
+|:-----------|:---------------------------------------------|------:|
+| metriccore | [/adapters/metric/metriccore](metriccore.md) |     2 |
+
+### External imports
+
+| Name       | Path                                           | Count |
+|:-----------|:-----------------------------------------------|------:|
+| prometheus | github.com/prometheus/client_golang/prometheus |     2 |
 
 ## Used by
 
-|     Name     |                                 Path                                 |
-|:------------:|:--------------------------------------------------------------------:|
-|    metric    |                   [/adapters/metric](../metric.md)                   |
+| Name         | Path                                                                 |
+|:-------------|:---------------------------------------------------------------------|
+| metric       | [/adapters/metric](../metric.md)                                     |
 | bookandpages | [/adapters/metric/generator/bookandpages](generator/bookandpages.md) |
-|  otherpanel  |   [/adapters/metric/generator/otherpanel](generator/otherpanel.md)   |
-|  simpleinfo  |   [/adapters/metric/generator/simpleinfo](generator/simpleinfo.md)   |
+| otherpanel   | [/adapters/metric/generator/otherpanel](generator/otherpanel.md)     |
+| simpleinfo   | [/adapters/metric/generator/simpleinfo](generator/simpleinfo.md)     |
 
 ## Scheme
 

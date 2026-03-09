@@ -2,26 +2,38 @@
 
 ## Imports
 
-|    Name    |                           Path                            | Inner | Count |
-|:----------:|:---------------------------------------------------------:|:-----:|:-----:|
-|  context   |                          context                          |  ❌   |  19   |
-|    fmt     |                            fmt                            |  ❌   |  19   |
-|    core    |          [/domain/core](../../../domain/core.md)          |  ✅   |  15   |
-|  squirrel  |              github.com/Masterminds/squirrel              |  ❌   |  14   |
-|    uuid    |                  github.com/google/uuid                   |  ❌   |  12   |
-|   model    |      [/adapters/postgresql/internal/model](model.md)      |  ✅   |   7   |
-|    sql     |                       database/sql                        |  ❌   |   4   |
-|   errors   |                          errors                           |  ❌   |   2   |
-|    time    |                           time                            |  ❌   |   2   |
-| repository | [/adapters/postgresql/internal/repository](repository.md) |  ✅   |   1   |
-|     v5     |                  github.com/jackc/pgx/v5                  |  ❌   |   1   |
-|    slog    |                         log/slog                          |  ❌   |   1   |
-|    url     |                          net/url                          |  ❌   |   1   |
+### Inner imports
+
+| Name       | Path                                                      | Count |
+|:-----------|:----------------------------------------------------------|------:|
+| model      | [/adapters/postgresql/internal/model](model.md)           |    17 |
+| core       | [/domain/core](../../../domain/core.md)                   |    15 |
+| repository | [/adapters/postgresql/internal/repository](repository.md) |     1 |
+
+### External imports
+
+| Name     | Path                            | Count |
+|:---------|:--------------------------------|------:|
+| squirrel | github.com/Masterminds/squirrel |    17 |
+| uuid     | github.com/google/uuid          |    12 |
+| v5       | github.com/jackc/pgx/v5         |     1 |
+
+### Std imports
+
+| Name    | Path         | Count |
+|:--------|:-------------|------:|
+| context | context      |    19 |
+| fmt     | fmt          |    19 |
+| sql     | database/sql |     4 |
+| errors  | errors       |     2 |
+| time    | time         |     2 |
+| slog    | log/slog     |     1 |
+| url     | net/url      |     1 |
 
 ## Used by
 
-|    Name    |                    Path                     |
-|:----------:|:-------------------------------------------:|
+| Name       | Path                                        |
+|:-----------|:--------------------------------------------|
 | postgresql | [/adapters/postgresql](../../postgresql.md) |
 
 ## Scheme
@@ -29,7 +41,7 @@
 ```mermaid
 erDiagram
     "/adapters/postgresql" ||--|{ "/adapters/postgresql/internal/book" : x1
-    "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/model" : x7
+    "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/model" : x17
     "/adapters/postgresql/internal/book" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/book" ||--|{ "/domain/core" : x15
 ```

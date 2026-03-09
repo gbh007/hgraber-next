@@ -2,37 +2,49 @@
 
 ## Imports
 
-|  Name  |          Path           | Inner | Count |
-|:------:|:-----------------------:|:-----:|:-----:|
-|  core  | [/domain/core](core.md) |  ✅   |   2   |
-|  uuid  | github.com/google/uuid  |  ❌   |   2   |
-| errors |         errors          |  ❌   |   1   |
-|   io   |           io            |  ❌   |   1   |
-|  url   |         net/url         |  ❌   |   1   |
-|  time  |          time           |  ❌   |   1   |
+### Inner imports
+
+| Name | Path                    | Count |
+|:-----|:------------------------|------:|
+| core | [/domain/core](core.md) |     2 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     2 |
+
+### Std imports
+
+| Name   | Path    | Count |
+|:-------|:--------|------:|
+| errors | errors  |     1 |
+| io     | io      |     1 |
+| url    | net/url |     1 |
+| time   | time    |     1 |
 
 ## Used by
 
-|      Name       |                                       Path                                        |
-|:---------------:|:---------------------------------------------------------------------------------:|
-|      agent      |                      [/adapters/agent](../adapters/agent.md)                      |
-|     adapter     |     [/adapters/agent/internal/adapter](../adapters/agent/internal/adapter.md)     |
-|     tmpdata     |                    [/adapters/tmpdata](../adapters/tmpdata.md)                    |
-|    apiagent     |                [/controllers/apiagent](../controllers/apiagent.md)                |
-|  agenthandlers  | [/controllers/apiserver/agenthandlers](../controllers/apiserver/agenthandlers.md) |
-|  workermanager  |           [/controllers/workermanager](../controllers/workermanager.md)           |
-|  agentusecase   |               [/usecases/agentusecase](../usecases/agentusecase.md)               |
-|  exportusecase  |              [/usecases/exportusecase](../usecases/exportusecase.md)              |
-|  hproxyusecase  |              [/usecases/hproxyusecase](../usecases/hproxyusecase.md)              |
-| massloadusecase |            [/usecases/massloadusecase](../usecases/massloadusecase.md)            |
-| parsingusecase  |             [/usecases/parsingusecase](../usecases/parsingusecase.md)             |
+| Name            | Path                                                                              |
+|:----------------|:----------------------------------------------------------------------------------|
+| agent           | [/adapters/agent](../adapters/agent.md)                                           |
+| adapter         | [/adapters/agent/internal/adapter](../adapters/agent/internal/adapter.md)         |
+| tmpdata         | [/adapters/tmpdata](../adapters/tmpdata.md)                                       |
+| apiagent        | [/controllers/apiagent](../controllers/apiagent.md)                               |
+| agenthandlers   | [/controllers/apiserver/agenthandlers](../controllers/apiserver/agenthandlers.md) |
+| workermanager   | [/controllers/workermanager](../controllers/workermanager.md)                     |
+| agentusecase    | [/usecases/agentusecase](../usecases/agentusecase.md)                             |
+| exportusecase   | [/usecases/exportusecase](../usecases/exportusecase.md)                           |
+| hproxyusecase   | [/usecases/hproxyusecase](../usecases/hproxyusecase.md)                           |
+| massloadusecase | [/usecases/massloadusecase](../usecases/massloadusecase.md)                       |
+| parsingusecase  | [/usecases/parsingusecase](../usecases/parsingusecase.md)                         |
 
 ## Scheme
 
 ```mermaid
 erDiagram
     "/adapters/agent" ||--|{ "/domain/agentmodel" : x1
-    "/adapters/agent/internal/adapter" ||--|{ "/domain/agentmodel" : x10
+    "/adapters/agent/internal/adapter" ||--|{ "/domain/agentmodel" : x9
     "/adapters/tmpdata" ||--|{ "/domain/agentmodel" : x2
     "/controllers/apiagent" ||--|{ "/domain/agentmodel" : x3
     "/controllers/apiserver/agenthandlers" ||--|{ "/domain/agentmodel" : x2

@@ -2,28 +2,41 @@
 
 ## Imports
 
-|     Name      |                           Path                           | Inner | Count |
-|:-------------:|:--------------------------------------------------------:|:-----:|:-----:|
-|    context    |                         context                          |  ❌   |  12   |
-| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |  ✅   |  12   |
-|   serverapi   |     [/openapi/serverapi](../../openapi/serverapi.md)     |  ✅   |  11   |
-|     core      |           [/domain/core](../../domain/core.md)           |  ✅   |   4   |
-|    fsmodel    |        [/domain/fsmodel](../../domain/fsmodel.md)        |  ✅   |   4   |
-|    errors     |                          errors                          |  ❌   |   2   |
-|     uuid      |                  github.com/google/uuid                  |  ❌   |   2   |
-|      io       |                            io                            |  ❌   |   2   |
-|      pkg      |                   [/pkg](../../pkg.md)                   |  ✅   |   1   |
-|     trace     |              go.opentelemetry.io/otel/trace              |  ❌   |   1   |
-|     slog      |                         log/slog                         |  ❌   |   1   |
-|     mime      |                           mime                           |  ❌   |   1   |
-|      url      |                         net/url                          |  ❌   |   1   |
-|     path      |                           path                           |  ❌   |   1   |
-|    strings    |                         strings                          |  ❌   |   1   |
+### Inner imports
+
+| Name          | Path                                                     | Count |
+|:--------------|:---------------------------------------------------------|------:|
+| serverapi     | [/openapi/serverapi](../../openapi/serverapi.md)         |    11 |
+| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |     7 |
+| core          | [/domain/core](../../domain/core.md)                     |     4 |
+| fsmodel       | [/domain/fsmodel](../../domain/fsmodel.md)               |     4 |
+| pkg           | [/pkg](../../pkg.md)                                     |     1 |
+
+### External imports
+
+| Name  | Path                           | Count |
+|:------|:-------------------------------|------:|
+| uuid  | github.com/google/uuid         |     2 |
+| trace | go.opentelemetry.io/otel/trace |     1 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |    12 |
+| errors  | errors   |     2 |
+| io      | io       |     2 |
+| http    | net/http |     2 |
+| slog    | log/slog |     1 |
+| mime    | mime     |     1 |
+| url     | net/url  |     1 |
+| path    | path     |     1 |
+| strings | strings  |     1 |
 
 ## Used by
 
-|   Name    |                   Path                    |
-|:---------:|:-----------------------------------------:|
+| Name      | Path                                      |
+|:----------|:------------------------------------------|
 | apiserver | [/controllers/apiserver](../apiserver.md) |
 
 ## Scheme
@@ -31,7 +44,7 @@
 ```mermaid
 erDiagram
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/fshandlers" : x1
-    "/controllers/apiserver/fshandlers" ||--|{ "/controllers/apiserver/apiservercore" : x12
+    "/controllers/apiserver/fshandlers" ||--|{ "/controllers/apiserver/apiservercore" : x7
     "/controllers/apiserver/fshandlers" ||--|{ "/domain/core" : x4
     "/controllers/apiserver/fshandlers" ||--|{ "/domain/fsmodel" : x4
     "/controllers/apiserver/fshandlers" ||--|{ "/openapi/serverapi" : x11

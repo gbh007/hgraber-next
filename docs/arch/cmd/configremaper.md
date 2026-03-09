@@ -2,10 +2,12 @@
 
 ## Imports
 
-|     Name      |                             Path                              | Inner | Count |
-|:-------------:|:-------------------------------------------------------------:|:-----:|:-----:|
-| configremaper | [/application/configremaper](../application/configremaper.md) |  ✅   |   1   |
-|    config     |                    [/config](../config.md)                    |  ✅   |   1   |
+### Inner imports
+
+| Name          | Path                                                          | Count |
+|:--------------|:--------------------------------------------------------------|------:|
+| configremaper | [/application/configremaper](../application/configremaper.md) |     1 |
+| config        | [/config](../config.md)                                       |     1 |
 
 ## Scheme
 

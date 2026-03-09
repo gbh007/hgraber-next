@@ -2,23 +2,36 @@
 
 ## Imports
 
-|  Name   |                  Path                   | Inner | Count |
-|:-------:|:---------------------------------------:|:-----:|:-----:|
-| context |                 context                 |  ❌   |   4   |
-|   bff   |     [/domain/bff](../domain/bff.md)     |  ✅   |   4   |
-|   fmt   |                   fmt                   |  ❌   |   3   |
-|  core   |    [/domain/core](../domain/core.md)    |  ✅   |   3   |
-|  uuid   |         github.com/google/uuid          |  ❌   |   3   |
-| errors  |                 errors                  |  ❌   |   1   |
-| fsmodel | [/domain/fsmodel](../domain/fsmodel.md) |  ✅   |   1   |
-|   pkg   |            [/pkg](../pkg.md)            |  ✅   |   1   |
-|  slog   |                log/slog                 |  ❌   |   1   |
-| slices  |                 slices                  |  ❌   |   1   |
+### Inner imports
+
+| Name          | Path                                                | Count |
+|:--------------|:----------------------------------------------------|------:|
+| bff           | [/domain/bff](../domain/bff.md)                     |     4 |
+| core          | [/domain/core](../domain/core.md)                   |     3 |
+| massloadmodel | [/domain/massloadmodel](../domain/massloadmodel.md) |     2 |
+| pkg           | [/pkg](../pkg.md)                                   |     2 |
+| fsmodel       | [/domain/fsmodel](../domain/fsmodel.md)             |     1 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     3 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     4 |
+| fmt     | fmt      |     3 |
+| slog    | log/slog |     2 |
+| errors  | errors   |     1 |
+| slices  | slices   |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme
@@ -29,7 +42,8 @@ erDiagram
     "/usecases/bffusecase" ||--|{ "/domain/bff" : x4
     "/usecases/bffusecase" ||--|{ "/domain/core" : x3
     "/usecases/bffusecase" ||--|{ "/domain/fsmodel" : x1
-    "/usecases/bffusecase" ||--|{ "/pkg" : x1
+    "/usecases/bffusecase" ||--|{ "/domain/massloadmodel" : x2
+    "/usecases/bffusecase" ||--|{ "/pkg" : x2
 ```
 
 ---

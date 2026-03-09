@@ -2,25 +2,37 @@
 
 ## Imports
 
-|  Name   |                  Path                   | Inner | Count |
-|:-------:|:---------------------------------------:|:-----:|:-----:|
-|   fmt   |                   fmt                   |  ❌   |   5   |
-|  uuid   |         github.com/google/uuid          |  ❌   |   5   |
-|   os    |                   os                    |  ❌   |   5   |
-| context |                 context                 |  ❌   |   4   |
-|  slog   |                log/slog                 |  ❌   |   4   |
-| errors  |                 errors                  |  ❌   |   3   |
-|  core   |    [/domain/core](../domain/core.md)    |  ✅   |   2   |
-|   io    |                   io                    |  ❌   |   2   |
-|  path   |                  path                   |  ❌   |   2   |
-|  bytes  |                  bytes                  |  ❌   |   1   |
-| fsmodel | [/domain/fsmodel](../domain/fsmodel.md) |  ✅   |   1   |
-|  unix   |          golang.org/x/sys/unix          |  ❌   |   1   |
+### Inner imports
+
+| Name    | Path                                    | Count |
+|:--------|:----------------------------------------|------:|
+| core    | [/domain/core](../domain/core.md)       |     2 |
+| fsmodel | [/domain/fsmodel](../domain/fsmodel.md) |     1 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     5 |
+| unix | golang.org/x/sys/unix  |     1 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| fmt     | fmt      |     5 |
+| os      | os       |     5 |
+| context | context  |     4 |
+| slog    | log/slog |     4 |
+| errors  | errors   |     3 |
+| io      | io       |     2 |
+| path    | path     |     2 |
+| bytes   | bytes    |     1 |
 
 ## Used by
 
-|    Name     |                  Path                   |
-|:-----------:|:---------------------------------------:|
+| Name        | Path                                    |
+|:------------|:----------------------------------------|
 | filestorage | [/adapters/filestorage](filestorage.md) |
 
 ## Scheme

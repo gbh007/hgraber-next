@@ -2,16 +2,23 @@
 
 ## Imports
 
-|    Name    |                      Path                      | Inner | Count |
-|:----------:|:----------------------------------------------:|:-----:|:-----:|
-| prometheus | github.com/prometheus/client_golang/prometheus |  ❌   |   2   |
-| metriccore |  [/adapters/metric/metriccore](metriccore.md)  |  ✅   |   1   |
+### Inner imports
+
+| Name       | Path                                         | Count |
+|:-----------|:---------------------------------------------|------:|
+| metriccore | [/adapters/metric/metriccore](metriccore.md) |     1 |
+
+### External imports
+
+| Name       | Path                                           | Count |
+|:-----------|:-----------------------------------------------|------:|
+| prometheus | github.com/prometheus/client_golang/prometheus |     2 |
 
 ## Used by
 
-|      Name       |                                    Path                                    |
-|:---------------:|:--------------------------------------------------------------------------:|
-|     metric      |                      [/adapters/metric](../metric.md)                      |
+| Name            | Path                                                                       |
+|:----------------|:---------------------------------------------------------------------------|
+| metric          | [/adapters/metric](../metric.md)                                           |
 | httpserverpanel | [/adapters/metric/generator/httpserverpanel](generator/httpserverpanel.md) |
 
 ## Scheme

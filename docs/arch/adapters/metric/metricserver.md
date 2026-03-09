@@ -2,21 +2,33 @@
 
 ## Imports
 
-|    Name     |                        Path                        | Inner | Count |
-|:-----------:|:--------------------------------------------------:|:-----:|:-----:|
-| prometheus  |   github.com/prometheus/client_golang/prometheus   |  ❌   |   3   |
-| metriccore  |    [/adapters/metric/metriccore](metriccore.md)    |  ✅   |   2   |
-|   context   |                      context                       |  ❌   |   1   |
-| systemmodel | [/domain/systemmodel](../../domain/systemmodel.md) |  ✅   |   1   |
+### Inner imports
+
+| Name        | Path                                               | Count |
+|:------------|:---------------------------------------------------|------:|
+| metriccore  | [/adapters/metric/metriccore](metriccore.md)       |     2 |
+| systemmodel | [/domain/systemmodel](../../domain/systemmodel.md) |     1 |
+
+### External imports
+
+| Name       | Path                                           | Count |
+|:-----------|:-----------------------------------------------|------:|
+| prometheus | github.com/prometheus/client_golang/prometheus |     3 |
+
+### Std imports
+
+| Name    | Path    | Count |
+|:--------|:--------|------:|
+| context | context |     1 |
 
 ## Used by
 
-|       Name       |                                     Path                                     |
-|:----------------:|:----------------------------------------------------------------------------:|
-|      metric      |                       [/adapters/metric](../metric.md)                       |
-|   bookandpages   |     [/adapters/metric/generator/bookandpages](generator/bookandpages.md)     |
-|    otherpanel    |       [/adapters/metric/generator/otherpanel](generator/otherpanel.md)       |
-|    simpleinfo    |       [/adapters/metric/generator/simpleinfo](generator/simpleinfo.md)       |
+| Name             | Path                                                                         |
+|:-----------------|:-----------------------------------------------------------------------------|
+| metric           | [/adapters/metric](../metric.md)                                             |
+| bookandpages     | [/adapters/metric/generator/bookandpages](generator/bookandpages.md)         |
+| otherpanel       | [/adapters/metric/generator/otherpanel](generator/otherpanel.md)             |
+| simpleinfo       | [/adapters/metric/generator/simpleinfo](generator/simpleinfo.md)             |
 | workersandagents | [/adapters/metric/generator/workersandagents](generator/workersandagents.md) |
 
 ## Scheme

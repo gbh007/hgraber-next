@@ -2,24 +2,36 @@
 
 ## Imports
 
-|     Name      |                           Path                           | Inner | Count |
-|:-------------:|:--------------------------------------------------------:|:-----:|:-----:|
-|    context    |                         context                          |  ❌   |   4   |
-| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |  ✅   |   4   |
-|   serverapi   |     [/openapi/serverapi](../../openapi/serverapi.md)     |  ✅   |   4   |
-|  hproxymodel  |    [/domain/hproxymodel](../../domain/hproxymodel.md)    |  ✅   |   3   |
-|      pkg      |                   [/pkg](../../pkg.md)                   |  ✅   |   2   |
-|     trace     |              go.opentelemetry.io/otel/trace              |  ❌   |   1   |
-|      io       |                            io                            |  ❌   |   1   |
-|     slog      |                         log/slog                         |  ❌   |   1   |
-|     mime      |                           mime                           |  ❌   |   1   |
-|      url      |                         net/url                          |  ❌   |   1   |
-|     path      |                           path                           |  ❌   |   1   |
+### Inner imports
+
+| Name          | Path                                                     | Count |
+|:--------------|:---------------------------------------------------------|------:|
+| serverapi     | [/openapi/serverapi](../../openapi/serverapi.md)         |     4 |
+| apiservercore | [/controllers/apiserver/apiservercore](apiservercore.md) |     3 |
+| hproxymodel   | [/domain/hproxymodel](../../domain/hproxymodel.md)       |     3 |
+| pkg           | [/pkg](../../pkg.md)                                     |     2 |
+
+### External imports
+
+| Name  | Path                           | Count |
+|:------|:-------------------------------|------:|
+| trace | go.opentelemetry.io/otel/trace |     1 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     4 |
+| io      | io       |     1 |
+| slog    | log/slog |     1 |
+| mime    | mime     |     1 |
+| url     | net/url  |     1 |
+| path    | path     |     1 |
 
 ## Used by
 
-|   Name    |                   Path                    |
-|:---------:|:-----------------------------------------:|
+| Name      | Path                                      |
+|:----------|:------------------------------------------|
 | apiserver | [/controllers/apiserver](../apiserver.md) |
 
 ## Scheme
@@ -27,7 +39,7 @@
 ```mermaid
 erDiagram
     "/controllers/apiserver" ||--|{ "/controllers/apiserver/hproxyhandlers" : x1
-    "/controllers/apiserver/hproxyhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x4
+    "/controllers/apiserver/hproxyhandlers" ||--|{ "/controllers/apiserver/apiservercore" : x3
     "/controllers/apiserver/hproxyhandlers" ||--|{ "/domain/hproxymodel" : x3
     "/controllers/apiserver/hproxyhandlers" ||--|{ "/openapi/serverapi" : x4
     "/controllers/apiserver/hproxyhandlers" ||--|{ "/pkg" : x2

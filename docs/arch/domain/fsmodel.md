@@ -2,32 +2,44 @@
 
 ## Imports
 
-| Name |          Path           | Inner | Count |
-|:----:|:-----------------------:|:-----:|:-----:|
-| core | [/domain/core](core.md) |  ✅   |   1   |
-| uuid | github.com/google/uuid  |  ❌   |   1   |
-| url  |         net/url         |  ❌   |   1   |
-| time |          time           |  ❌   |   1   |
+### Inner imports
+
+| Name | Path                    | Count |
+|:-----|:------------------------|------:|
+| core | [/domain/core](core.md) |     1 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     1 |
+
+### Std imports
+
+| Name | Path    | Count |
+|:-----|:--------|------:|
+| url  | net/url |     1 |
+| time | time    |     1 |
 
 ## Used by
 
-|       Name        |                                       Path                                        |
-|:-----------------:|:---------------------------------------------------------------------------------:|
-|       agent       |                      [/adapters/agent](../adapters/agent.md)                      |
-|      adapter      |     [/adapters/agent/internal/adapter](../adapters/agent/internal/adapter.md)     |
-|      agentfs      |                    [/adapters/agentfs](../adapters/agentfs.md)                    |
-|    filestorage    |                [/adapters/filestorage](../adapters/filestorage.md)                |
-|    localfiles     |                 [/adapters/localfiles](../adapters/localfiles.md)                 |
-|       file        |   [/adapters/postgresql/internal/file](../adapters/postgresql/internal/file.md)   |
-|       model       |  [/adapters/postgresql/internal/model](../adapters/postgresql/internal/model.md)  |
-|       other       |  [/adapters/postgresql/internal/other](../adapters/postgresql/internal/other.md)  |
-|      tmpdata      |                    [/adapters/tmpdata](../adapters/tmpdata.md)                    |
-|   apiservercore   | [/controllers/apiserver/apiservercore](../controllers/apiserver/apiservercore.md) |
-|    fshandlers     |    [/controllers/apiserver/fshandlers](../controllers/apiserver/fshandlers.md)    |
-|   workermanager   |           [/controllers/workermanager](../controllers/workermanager.md)           |
-|    bffusecase     |                 [/usecases/bffusecase](../usecases/bffusecase.md)                 |
-|  cleanupusecase   |             [/usecases/cleanupusecase](../usecases/cleanupusecase.md)             |
-| filesystemusecase |          [/usecases/filesystemusecase](../usecases/filesystemusecase.md)          |
+| Name              | Path                                                                              |
+|:------------------|:----------------------------------------------------------------------------------|
+| agent             | [/adapters/agent](../adapters/agent.md)                                           |
+| adapter           | [/adapters/agent/internal/adapter](../adapters/agent/internal/adapter.md)         |
+| agentfs           | [/adapters/agentfs](../adapters/agentfs.md)                                       |
+| filestorage       | [/adapters/filestorage](../adapters/filestorage.md)                               |
+| localfiles        | [/adapters/localfiles](../adapters/localfiles.md)                                 |
+| file              | [/adapters/postgresql/internal/file](../adapters/postgresql/internal/file.md)     |
+| model             | [/adapters/postgresql/internal/model](../adapters/postgresql/internal/model.md)   |
+| other             | [/adapters/postgresql/internal/other](../adapters/postgresql/internal/other.md)   |
+| tmpdata           | [/adapters/tmpdata](../adapters/tmpdata.md)                                       |
+| apiservercore     | [/controllers/apiserver/apiservercore](../controllers/apiserver/apiservercore.md) |
+| fshandlers        | [/controllers/apiserver/fshandlers](../controllers/apiserver/fshandlers.md)       |
+| workermanager     | [/controllers/workermanager](../controllers/workermanager.md)                     |
+| bffusecase        | [/usecases/bffusecase](../usecases/bffusecase.md)                                 |
+| cleanupusecase    | [/usecases/cleanupusecase](../usecases/cleanupusecase.md)                         |
+| filesystemusecase | [/usecases/filesystemusecase](../usecases/filesystemusecase.md)                   |
 
 ## Scheme
 

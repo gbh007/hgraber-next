@@ -2,37 +2,49 @@
 
 ## Imports
 
-|    Name     |                     Path                      | Inner | Count |
-|:-----------:|:---------------------------------------------:|:-----:|:-----:|
-|   context   |                    context                    |  ❌   |  10   |
-|  agentapi   |  [/openapi/agentapi](../openapi/agentapi.md)  |  ✅   |   9   |
-|    slog     |                   log/slog                    |  ❌   |   4   |
-|    http     |                   net/http                    |  ❌   |   4   |
-|   errors    |                    errors                     |  ❌   |   3   |
-| agentmodel  | [/domain/agentmodel](../domain/agentmodel.md) |  ✅   |   3   |
-|     pkg     |               [/pkg](../pkg.md)               |  ✅   |   3   |
-|    time     |                     time                      |  ❌   |   3   |
-|    bytes    |                     bytes                     |  ❌   |   2   |
-|     fmt     |                      fmt                      |  ❌   |   2   |
-|    core     |       [/domain/core](../domain/core.md)       |  ✅   |   2   |
-|     io      |                      io                       |  ❌   |   2   |
-|     url     |                    net/url                    |  ❌   |   2   |
-|    json     |                 encoding/json                 |  ❌   |   1   |
-|    uuid     |            github.com/google/uuid             |  ❌   |   1   |
-| middleware  |      github.com/ogen-go/ogen/middleware       |  ❌   |   1   |
-| ogenerrors  |      github.com/ogen-go/ogen/ogenerrors       |  ❌   |   1   |
-|  validate   |       github.com/ogen-go/ogen/validate        |  ❌   |   1   |
-|    otel     |           go.opentelemetry.io/otel            |  ❌   |   1   |
-| propagation |     go.opentelemetry.io/otel/propagation      |  ❌   |   1   |
-|    trace    |        go.opentelemetry.io/otel/trace         |  ❌   |   1   |
-|   runtime   |                    runtime                    |  ❌   |   1   |
-|   strconv   |                    strconv                    |  ❌   |   1   |
-|   strings   |                    strings                    |  ❌   |   1   |
+### Inner imports
+
+| Name       | Path                                          | Count |
+|:-----------|:----------------------------------------------|------:|
+| agentapi   | [/openapi/agentapi](../openapi/agentapi.md)   |    10 |
+| agentmodel | [/domain/agentmodel](../domain/agentmodel.md) |     3 |
+| pkg        | [/pkg](../pkg.md)                             |     3 |
+| core       | [/domain/core](../domain/core.md)             |     2 |
+
+### External imports
+
+| Name        | Path                                 | Count |
+|:------------|:-------------------------------------|------:|
+| ogenerrors  | github.com/ogen-go/ogen/ogenerrors   |     2 |
+| validate    | github.com/ogen-go/ogen/validate     |     2 |
+| uuid        | github.com/google/uuid               |     1 |
+| middleware  | github.com/ogen-go/ogen/middleware   |     1 |
+| otel        | go.opentelemetry.io/otel             |     1 |
+| propagation | go.opentelemetry.io/otel/propagation |     1 |
+| trace       | go.opentelemetry.io/otel/trace       |     1 |
+
+### Std imports
+
+| Name    | Path          | Count |
+|:--------|:--------------|------:|
+| context | context       |    11 |
+| http    | net/http      |     6 |
+| errors  | errors        |     4 |
+| slog    | log/slog      |     4 |
+| time    | time          |     3 |
+| bytes   | bytes         |     2 |
+| fmt     | fmt           |     2 |
+| io      | io            |     2 |
+| url     | net/url       |     2 |
+| strconv | strconv       |     2 |
+| json    | encoding/json |     1 |
+| runtime | runtime       |     1 |
+| strings | strings       |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme
@@ -42,7 +54,7 @@ erDiagram
     "/application/server" ||--|{ "/controllers/apiagent" : x1
     "/controllers/apiagent" ||--|{ "/domain/agentmodel" : x3
     "/controllers/apiagent" ||--|{ "/domain/core" : x2
-    "/controllers/apiagent" ||--|{ "/openapi/agentapi" : x9
+    "/controllers/apiagent" ||--|{ "/openapi/agentapi" : x10
     "/controllers/apiagent" ||--|{ "/pkg" : x3
 ```
 

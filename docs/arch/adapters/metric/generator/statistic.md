@@ -2,22 +2,29 @@
 
 ## Imports
 
-|      Name       |                             Path                             | Inner | Count |
-|:---------------:|:------------------------------------------------------------:|:-----:|:-----:|
-|  generatorcore  | [/adapters/metric/generator/generatorcore](generatorcore.md) |  ✅   |   2   |
-|     heatmap     |     github.com/grafana/grafana-foundation-sdk/go/heatmap     |  ❌   |   2   |
-| metricstatistic |  [/adapters/metric/metricstatistic](../metricstatistic.md)   |  ✅   |   1   |
-|       cog       |       github.com/grafana/grafana-foundation-sdk/go/cog       |  ❌   |   1   |
-|    variants     |  github.com/grafana/grafana-foundation-sdk/go/cog/variants   |  ❌   |   1   |
-|     common      |     github.com/grafana/grafana-foundation-sdk/go/common      |  ❌   |   1   |
-|    dashboard    |    github.com/grafana/grafana-foundation-sdk/go/dashboard    |  ❌   |   1   |
-|   prometheus    |   github.com/grafana/grafana-foundation-sdk/go/prometheus    |  ❌   |   1   |
-|     promql      |         github.com/grafana/promql-builder/go/promql          |  ❌   |   1   |
+### Inner imports
+
+| Name            | Path                                                         | Count |
+|:----------------|:-------------------------------------------------------------|------:|
+| generatorcore   | [/adapters/metric/generator/generatorcore](generatorcore.md) |     2 |
+| metricstatistic | [/adapters/metric/metricstatistic](../metricstatistic.md)    |     1 |
+
+### External imports
+
+| Name       | Path                                                      | Count |
+|:-----------|:----------------------------------------------------------|------:|
+| heatmap    | github.com/grafana/grafana-foundation-sdk/go/heatmap      |     2 |
+| cog        | github.com/grafana/grafana-foundation-sdk/go/cog          |     1 |
+| variants   | github.com/grafana/grafana-foundation-sdk/go/cog/variants |     1 |
+| common     | github.com/grafana/grafana-foundation-sdk/go/common       |     1 |
+| dashboard  | github.com/grafana/grafana-foundation-sdk/go/dashboard    |     1 |
+| prometheus | github.com/grafana/grafana-foundation-sdk/go/prometheus   |     1 |
+| promql     | github.com/grafana/promql-builder/go/promql               |     1 |
 
 ## Used by
 
-|   Name    |                     Path                      |
-|:---------:|:---------------------------------------------:|
+| Name      | Path                                          |
+|:----------|:----------------------------------------------|
 | generator | [/adapters/metric/generator](../generator.md) |
 
 ## Scheme

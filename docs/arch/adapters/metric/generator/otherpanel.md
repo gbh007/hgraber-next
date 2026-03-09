@@ -2,21 +2,33 @@
 
 ## Imports
 
-|     Name      |                             Path                             | Inner | Count |
-|:-------------:|:------------------------------------------------------------:|:-----:|:-----:|
-| generatorcore | [/adapters/metric/generator/generatorcore](generatorcore.md) |  ✅   |   5   |
-|      fmt      |                             fmt                              |  ❌   |   4   |
-|  timeseries   |   github.com/grafana/grafana-foundation-sdk/go/timeseries    |  ❌   |   4   |
-|  metriccore   |       [/adapters/metric/metriccore](../metriccore.md)        |  ✅   |   3   |
-|   metricfs    |         [/adapters/metric/metricfs](../metricfs.md)          |  ✅   |   3   |
-| metricserver  |     [/adapters/metric/metricserver](../metricserver.md)      |  ✅   |   1   |
-|   dashboard   |    github.com/grafana/grafana-foundation-sdk/go/dashboard    |  ❌   |   1   |
-|    promql     |         github.com/grafana/promql-builder/go/promql          |  ❌   |   1   |
+### Inner imports
+
+| Name          | Path                                                         | Count |
+|:--------------|:-------------------------------------------------------------|------:|
+| generatorcore | [/adapters/metric/generator/generatorcore](generatorcore.md) |     5 |
+| metriccore    | [/adapters/metric/metriccore](../metriccore.md)              |     3 |
+| metricfs      | [/adapters/metric/metricfs](../metricfs.md)                  |     3 |
+| metricserver  | [/adapters/metric/metricserver](../metricserver.md)          |     1 |
+
+### External imports
+
+| Name       | Path                                                    | Count |
+|:-----------|:--------------------------------------------------------|------:|
+| timeseries | github.com/grafana/grafana-foundation-sdk/go/timeseries |     4 |
+| dashboard  | github.com/grafana/grafana-foundation-sdk/go/dashboard  |     1 |
+| promql     | github.com/grafana/promql-builder/go/promql             |     1 |
+
+### Std imports
+
+| Name | Path | Count |
+|:-----|:-----|------:|
+| fmt  | fmt  |     4 |
 
 ## Used by
 
-|   Name    |                     Path                      |
-|:---------:|:---------------------------------------------:|
+| Name      | Path                                          |
+|:----------|:----------------------------------------------|
 | generator | [/adapters/metric/generator](../generator.md) |
 
 ## Scheme

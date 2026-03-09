@@ -2,16 +2,18 @@
 
 ## Imports
 
-|  Name   |   Path   | Inner | Count |
-|:-------:|:--------:|:-----:|:-----:|
-| context | context  |  ❌   |   1   |
-|   fmt   |   fmt    |  ❌   |   1   |
-|  slog   | log/slog |  ❌   |   1   |
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     1 |
+| fmt     | fmt      |     1 |
+| slog    | log/slog |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme

@@ -2,23 +2,34 @@
 
 ## Imports
 
-|    Name    |                           Path                            | Inner | Count |
-|:----------:|:---------------------------------------------------------:|:-----:|:-----:|
-|  context   |                          context                          |  ❌   |  17   |
-|    fmt     |                            fmt                            |  ❌   |  17   |
-|  squirrel  |              github.com/Masterminds/squirrel              |  ❌   |  15   |
-|    core    |          [/domain/core](../../../domain/core.md)          |  ✅   |  11   |
-|   model    |      [/adapters/postgresql/internal/model](model.md)      |  ✅   |  10   |
-|    uuid    |                  github.com/google/uuid                   |  ❌   |   9   |
-|  fsmodel   |       [/domain/fsmodel](../../../domain/fsmodel.md)       |  ✅   |   5   |
-|    sql     |                       database/sql                        |  ❌   |   1   |
-| repository | [/adapters/postgresql/internal/repository](repository.md) |  ✅   |   1   |
-|  strings   |                          strings                          |  ❌   |   1   |
+### Inner imports
+
+| Name       | Path                                                      | Count |
+|:-----------|:----------------------------------------------------------|------:|
+| model      | [/adapters/postgresql/internal/model](model.md)           |    17 |
+| core       | [/domain/core](../../../domain/core.md)                   |    11 |
+| fsmodel    | [/domain/fsmodel](../../../domain/fsmodel.md)             |     5 |
+| repository | [/adapters/postgresql/internal/repository](repository.md) |     1 |
+
+### External imports
+
+| Name     | Path                            | Count |
+|:---------|:--------------------------------|------:|
+| squirrel | github.com/Masterminds/squirrel |    17 |
+| uuid     | github.com/google/uuid          |     9 |
+
+### Std imports
+
+| Name    | Path         | Count |
+|:--------|:-------------|------:|
+| context | context      |    17 |
+| fmt     | fmt          |    17 |
+| sql     | database/sql |     1 |
 
 ## Used by
 
-|    Name    |                    Path                     |
-|:----------:|:-------------------------------------------:|
+| Name       | Path                                        |
+|:-----------|:--------------------------------------------|
 | postgresql | [/adapters/postgresql](../../postgresql.md) |
 
 ## Scheme
@@ -26,7 +37,7 @@
 ```mermaid
 erDiagram
     "/adapters/postgresql" ||--|{ "/adapters/postgresql/internal/file" : x1
-    "/adapters/postgresql/internal/file" ||--|{ "/adapters/postgresql/internal/model" : x10
+    "/adapters/postgresql/internal/file" ||--|{ "/adapters/postgresql/internal/model" : x17
     "/adapters/postgresql/internal/file" ||--|{ "/adapters/postgresql/internal/repository" : x1
     "/adapters/postgresql/internal/file" ||--|{ "/domain/core" : x11
     "/adapters/postgresql/internal/file" ||--|{ "/domain/fsmodel" : x5

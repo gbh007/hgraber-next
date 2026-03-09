@@ -2,20 +2,32 @@
 
 ## Imports
 
-|     Name      |                             Path                             | Inner | Count |
-|:-------------:|:------------------------------------------------------------:|:-----:|:-----:|
-| generatorcore | [/adapters/metric/generator/generatorcore](generatorcore.md) |  ✅   |   7   |
-|      fmt      |                             fmt                              |  ❌   |   6   |
-|  timeseries   |   github.com/grafana/grafana-foundation-sdk/go/timeseries    |  ❌   |   6   |
-|  metricagent  |      [/adapters/metric/metricagent](../metricagent.md)       |  ✅   |   3   |
-|  metriccore   |       [/adapters/metric/metriccore](../metriccore.md)        |  ✅   |   3   |
-| metricserver  |     [/adapters/metric/metricserver](../metricserver.md)      |  ✅   |   3   |
-|   dashboard   |    github.com/grafana/grafana-foundation-sdk/go/dashboard    |  ❌   |   1   |
+### Inner imports
+
+| Name          | Path                                                         | Count |
+|:--------------|:-------------------------------------------------------------|------:|
+| generatorcore | [/adapters/metric/generator/generatorcore](generatorcore.md) |     7 |
+| metricagent   | [/adapters/metric/metricagent](../metricagent.md)            |     3 |
+| metriccore    | [/adapters/metric/metriccore](../metriccore.md)              |     3 |
+| metricserver  | [/adapters/metric/metricserver](../metricserver.md)          |     3 |
+
+### External imports
+
+| Name       | Path                                                    | Count |
+|:-----------|:--------------------------------------------------------|------:|
+| timeseries | github.com/grafana/grafana-foundation-sdk/go/timeseries |     6 |
+| dashboard  | github.com/grafana/grafana-foundation-sdk/go/dashboard  |     1 |
+
+### Std imports
+
+| Name | Path | Count |
+|:-----|:-----|------:|
+| fmt  | fmt  |     6 |
 
 ## Used by
 
-|   Name    |                     Path                      |
-|:---------:|:---------------------------------------------:|
+| Name      | Path                                          |
+|:----------|:----------------------------------------------|
 | generator | [/adapters/metric/generator](../generator.md) |
 
 ## Scheme

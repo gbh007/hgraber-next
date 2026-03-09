@@ -17,6 +17,14 @@
 | verified | boolean | false | false |  |  |  |
 | verified_at | timestamp with time zone |  | true |  |  |  |
 | is_rebuild | boolean | false | false |  |  |  |
+| calc_page_count | integer |  | true |  |  |  |
+| calc_file_count | integer |  | true |  |  |  |
+| calc_dead_hash_count | integer |  | true |  |  |  |
+| calc_page_size | bigint |  | true |  |  |  |
+| calc_file_size | bigint |  | true |  |  |  |
+| calc_dead_hash_size | bigint |  | true |  |  |  |
+| calculated_at | timestamp with time zone |  | true |  |  |  |
+| calc_avg_page_size | bigint |  | true |  |  |  |
 
 ## Constraints
 
@@ -58,6 +66,14 @@ erDiagram
   boolean verified
   timestamp_with_time_zone verified_at
   boolean is_rebuild
+  integer calc_page_count
+  integer calc_file_count
+  integer calc_dead_hash_count
+  bigint calc_page_size
+  bigint calc_file_size
+  bigint calc_dead_hash_size
+  timestamp_with_time_zone calculated_at
+  bigint calc_avg_page_size
 }
 "public.pages" {
   uuid book_id FK

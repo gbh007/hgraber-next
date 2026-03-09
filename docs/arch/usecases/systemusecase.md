@@ -2,18 +2,30 @@
 
 ## Imports
 
-|    Name     |                      Path                       | Inner | Count |
-|:-----------:|:-----------------------------------------------:|:-----:|:-----:|
-|   context   |                     context                     |  ❌   |   4   |
-| systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |  ✅   |   3   |
-|     fmt     |                       fmt                       |  ❌   |   2   |
-|    uuid     |             github.com/google/uuid              |  ❌   |   2   |
-|    slog     |                    log/slog                     |  ❌   |   1   |
+### Inner imports
+
+| Name        | Path                                            | Count |
+|:------------|:------------------------------------------------|------:|
+| systemmodel | [/domain/systemmodel](../domain/systemmodel.md) |     3 |
+
+### External imports
+
+| Name | Path                   | Count |
+|:-----|:-----------------------|------:|
+| uuid | github.com/google/uuid |     2 |
+
+### Std imports
+
+| Name    | Path     | Count |
+|:--------|:---------|------:|
+| context | context  |     4 |
+| fmt     | fmt      |     2 |
+| slog    | log/slog |     1 |
 
 ## Used by
 
-|  Name  |                      Path                       |
-|:------:|:-----------------------------------------------:|
+| Name   | Path                                            |
+|:-------|:------------------------------------------------|
 | server | [/application/server](../application/server.md) |
 
 ## Scheme
