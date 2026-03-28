@@ -44,18 +44,26 @@ func (g Generator) WithTagAndAnnotation(builder *dashboard.DashboardBuilder) *da
 		)
 	}
 
-	builder.Annotation( // TODO: перенастроить как будут изменения в либе графаны
+	builder.Annotation(
 		dashboard.
 			NewAnnotationQueryBuilder().
-			Enable(false).
-			Expr(promql.Mul(
-				promql.
-					Vector(metriccore.VersionInfoName).
-					Labels(generatorcore.ServiceFilterPromQL),
-				promql.N(1000), //nolint:mnd // будет исправлено позднее
-			).String()).
+			Enable(true).
+			Expr(
+				promql.Sum(
+					promql.Changes(
+						promql.
+							Vector(metriccore.VersionInfoName).
+							Labels(generatorcore.ServiceFilterPromQL),
+					),
+				).
+					By([]string{metriccore.ServiceNameLabel}).
+					String(),
+			).
 			IconColor("super-light-blue").
+			Placement(dashboard.AnnotationQueryPlacementInControlsMenu).
 			Name("app started (metrics)").
+			// TODO: перенастроить как будут изменения в либе графаны
+			// Title(fmt.Sprintf("{{%s}}", metriccore.ServiceNameLabel)).
 			Datasource(generatorcore.MetricDatasource),
 	)
 

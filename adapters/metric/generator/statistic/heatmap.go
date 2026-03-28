@@ -32,7 +32,7 @@ func Heatmap(title, metric, unit string) *heatmap.PanelBuilder {
 				Interval(generatorcore.NameToVar(generatorcore.DeltaVariableName)).
 				LegendFormat(generatorcore.LegendAuto),
 		}).
-		Mode(common.TooltipDisplayModeSingle).
+		Tooltip(heatmap.NewHeatmapTooltipBuilder().Mode(common.TooltipDisplayModeSingle)).
 		YAxis(heatmap.NewYAxisConfigBuilder().Unit(unit)).
 		CellValues(
 			heatmap.

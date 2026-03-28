@@ -9,7 +9,7 @@ require (
 	github.com/go-faster/jx v1.2.0
 	github.com/go-openapi/strfmt v0.25.0
 	github.com/google/uuid v1.6.0
-	github.com/grafana/grafana-foundation-sdk/go v0.0.9
+	github.com/grafana/grafana-foundation-sdk/go v0.0.12
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20251202103709-7ef691d4df1d
 	github.com/grafana/promql-builder/go v0.0.0-20250916111012-8fa9625b89a3
 	github.com/grafana/pyroscope-go v1.2.7
