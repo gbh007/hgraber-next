@@ -88,6 +88,7 @@ type config interface {
 	GetToken() string
 	GetLogErrorHandler() bool
 	GetDebug() bool
+	GetUseHeaderExternalAddr() bool
 }
 
 type metricProvider interface {
@@ -116,9 +117,10 @@ type Controller struct {
 
 	ogenServer *serverapi.Server
 
-	staticDir  string
-	serverAddr string
-	token      string
+	staticDir             string
+	serverAddr            string
+	token                 string
+	useHeaderExternalAddr bool
 }
 
 func New( //revive:disable:argument-limit // будет исправлено позднее
@@ -145,7 +147,6 @@ func New( //revive:disable:argument-limit // будет исправлено п�
 		tracer,
 		config,
 		fsUseCases,
-		config.GetDebug(),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("init core handlers: %w", err)
@@ -227,14 +228,15 @@ func New( //revive:disable:argument-limit // будет исправлено п�
 			massloadUseCases,
 		),
 
-		logger:          logger,
-		tracer:          tracer,
-		metricProvider:  metricProvider,
-		serverAddr:      config.GetAddr(),
-		debug:           config.GetDebug(),
-		logErrorHandler: config.GetLogErrorHandler(),
-		staticDir:       config.GetStaticDir(),
-		token:           config.GetToken(),
+		logger:                logger,
+		tracer:                tracer,
+		metricProvider:        metricProvider,
+		serverAddr:            config.GetAddr(),
+		debug:                 config.GetDebug(),
+		logErrorHandler:       config.GetLogErrorHandler(),
+		staticDir:             config.GetStaticDir(),
+		token:                 config.GetToken(),
+		useHeaderExternalAddr: config.GetUseHeaderExternalAddr(),
 	}
 
 	ogenServer, err := serverapi.NewServer(

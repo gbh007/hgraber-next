@@ -23,7 +23,7 @@ func (c *HProxyHandlersController) APIHproxyListPost(
 			return serverapi.APIHproxyListPostOKBooksItem{
 				ExtURL:     b.ExtURL,
 				Name:       apiservercore.OptString(b.Name),
-				PreviewURL: c.filePreview(b.ExtURL, b.ExtPreviewURL),
+				PreviewURL: c.filePreview(ctx, b.ExtURL, b.ExtPreviewURL),
 				ExistsIds:  b.ExistsIDs,
 			}
 		}),

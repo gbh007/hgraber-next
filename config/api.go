@@ -1,12 +1,13 @@
 package config
 
 type API struct {
-	Addr            string `toml:"addr" yaml:"addr" envconfig:"ADDR"`
-	ExternalAddr    string `toml:"external_addr" yaml:"external_addr" envconfig:"EXTERNAL_ADDR"`
-	StaticDir       string `toml:"static_dir" yaml:"static_dir" envconfig:"STATIC_DIR"`
-	Token           string `toml:"token" yaml:"token" envconfig:"TOKEN"`
-	LogErrorHandler bool   `toml:"log_error_handler" yaml:"log_error_handler" envconfig:"LOG_ERROR_HANDLER"`
-	Debug           bool   `toml:"debug" yaml:"debug" envconfig:"DEBUG"`
+	Addr                  string `toml:"addr" yaml:"addr" envconfig:"ADDR"`
+	ExternalAddr          string `toml:"external_addr" yaml:"external_addr" envconfig:"EXTERNAL_ADDR"`
+	StaticDir             string `toml:"static_dir" yaml:"static_dir" envconfig:"STATIC_DIR"`
+	Token                 string `toml:"token" yaml:"token" envconfig:"TOKEN"`
+	LogErrorHandler       bool   `toml:"log_error_handler" yaml:"log_error_handler" envconfig:"LOG_ERROR_HANDLER"`
+	Debug                 bool   `toml:"debug" yaml:"debug" envconfig:"DEBUG"`
+	UseHeaderExternalAddr bool   `toml:"use_header_external_addr" yaml:"use_header_external_addr" envconfig:"USE_HEADER_EXTERNAL_ADDR"`
 }
 
 func (a API) GetAddr() string {
@@ -31,6 +32,10 @@ func (a API) GetLogErrorHandler() bool {
 
 func (a API) GetDebug() bool {
 	return a.Debug
+}
+
+func (a API) GetUseHeaderExternalAddr() bool {
+	return a.UseHeaderExternalAddr
 }
 
 func APIDefault() API {

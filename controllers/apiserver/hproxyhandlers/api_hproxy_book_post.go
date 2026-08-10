@@ -27,13 +27,13 @@ func (c *HProxyHandlersController) APIHproxyBookPost(
 	return &serverapi.APIHproxyBookPostOK{
 		Name:       book.Name,
 		ExtURL:     book.ExURL,
-		PreviewURL: c.filePreview(book.ExURL, book.PreviewURL),
+		PreviewURL: c.filePreview(ctx, book.ExURL, book.PreviewURL),
 		PageCount:  book.PageCount,
 		ExistsIds:  book.ExistsIDs,
 		Pages: pkg.Map(book.Pages, func(p hproxymodel.BookPage) serverapi.APIHproxyBookPostOKPagesItem {
 			return serverapi.APIHproxyBookPostOKPagesItem{
 				PageNumber: p.PageNumber,
-				PreviewURL: c.apiCore.GetHProxyFileURL(book.ExURL, p.ExtPreviewURL),
+				PreviewURL: c.apiCore.GetHProxyFileURL(ctx, book.ExURL, p.ExtPreviewURL),
 			}
 		}),
 		Attributes: pkg.Map(

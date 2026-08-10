@@ -15,10 +15,9 @@ type FSUseCases interface {
 }
 
 type config interface {
-	GetAddr() string
 	GetExternalAddr() string
-	GetStaticDir() string
-	GetToken() string
+	GetDebug() bool
+	GetUseHeaderExternalAddr() bool
 }
 
 type Controller struct {
@@ -30,6 +29,7 @@ type Controller struct {
 
 	externalServerScheme       string
 	externalServerHostWithPort string
+	useHeaderExternalAddr      bool
 }
 
 func New(
@@ -37,7 +37,6 @@ func New(
 	tracer trace.Tracer,
 	config config,
 	fsUseCases FSUseCases,
-	debug bool,
 ) (*Controller, error) {
 	u, err := url.Parse(config.GetExternalAddr())
 	if err != nil {
@@ -50,7 +49,8 @@ func New(
 		externalServerScheme:       u.Scheme,
 		externalServerHostWithPort: u.Host,
 		fsUseCases:                 fsUseCases,
-		debug:                      debug,
+		debug:                      config.GetDebug(),
+		useHeaderExternalAddr:      config.GetUseHeaderExternalAddr(),
 	}
 
 	return c, nil

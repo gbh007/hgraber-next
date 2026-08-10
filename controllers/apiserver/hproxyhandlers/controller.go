@@ -47,10 +47,10 @@ func New(
 	return c
 }
 
-func (c *HProxyHandlersController) filePreview(bookURL url.URL, imageURL *url.URL) serverapi.OptURI {
+func (c *HProxyHandlersController) filePreview(ctx context.Context, bookURL url.URL, imageURL *url.URL) serverapi.OptURI {
 	if imageURL == nil {
 		return serverapi.OptURI{}
 	}
 
-	return serverapi.NewOptURI(c.apiCore.GetHProxyFileURL(bookURL, *imageURL))
+	return serverapi.NewOptURI(c.apiCore.GetHProxyFileURL(ctx, bookURL, *imageURL))
 }

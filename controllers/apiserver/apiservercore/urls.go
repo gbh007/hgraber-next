@@ -9,6 +9,13 @@ import (
 	"github.com/google/uuid"
 )
 
+type ExternalAddrCtxKey struct{}
+
+type ExternalAddr struct {
+	Scheme string
+	Host   string
+}
+
 func (c *Controller) GetFileURL(ctx context.Context, fileID uuid.UUID, ext string, fsID uuid.UUID) url.URL {
 	if c.fsUseCases != nil {
 		// FIXME: подумать над местом получше,
@@ -30,9 +37,17 @@ func (c *Controller) GetFileURL(ctx context.Context, fileID uuid.UUID, ext strin
 		}
 	}
 
+	addr, ok := ctx.Value(ExternalAddrCtxKey{}).(ExternalAddr)
+	if !c.useHeaderExternalAddr || !ok {
+		addr = ExternalAddr{
+			Scheme: c.externalServerScheme,
+			Host:   c.externalServerHostWithPort,
+		}
+	}
+
 	u := url.URL{
-		Scheme: c.externalServerScheme,
-		Host:   c.externalServerHostWithPort,
+		Scheme: addr.Scheme,
+		Host:   addr.Host,
 		Path:   "/api/file/" + fileID.String() + ext,
 	}
 
@@ -43,10 +58,18 @@ func (c *Controller) GetFileURL(ctx context.Context, fileID uuid.UUID, ext strin
 	return u
 }
 
-func (c *Controller) GetHProxyFileURL(bookURL, imageURL url.URL) url.URL {
+func (c *Controller) GetHProxyFileURL(ctx context.Context, bookURL, imageURL url.URL) url.URL {
+	addr, ok := ctx.Value(ExternalAddrCtxKey{}).(ExternalAddr)
+	if !c.useHeaderExternalAddr || !ok {
+		addr = ExternalAddr{
+			Scheme: c.externalServerScheme,
+			Host:   c.externalServerHostWithPort,
+		}
+	}
+
 	u := url.URL{
-		Scheme: c.externalServerScheme,
-		Host:   c.externalServerHostWithPort,
+		Scheme: addr.Scheme,
+		Host:   addr.Host,
 		Path:   "/api/hproxy/file",
 	}
 

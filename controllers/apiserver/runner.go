@@ -5,11 +5,14 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
+
+	"github.com/gbh007/hgraber-next/controllers/apiserver/apiservercore"
 )
 
 func (c *Controller) Name() string {
@@ -26,7 +29,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	}
 
 	mux.Handle("/metrics", promhttp.HandlerFor(c.metricProvider.Registry(), promhttp.HandlerOpts{}))
-	mux.Handle("/api/", otelPropagation(c.logIO(cors(c.ogenServer))))
+	mux.Handle("/api/", otelPropagation(c.logIO(cors(c.injectExternalAddr(c.ogenServer)))))
 
 	server := &http.Server{ //nolint:gosec // будет исправлено позднее
 		Handler:  mux,
@@ -90,5 +93,47 @@ func otelPropagation(next http.Handler) http.Handler {
 		if next != nil {
 			next.ServeHTTP(w, r.WithContext(ctx))
 		}
+	})
+}
+
+func (cnt *Controller) injectExternalAddr(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !cnt.useHeaderExternalAddr {
+			next.ServeHTTP(w, r)
+
+			return
+		}
+
+		scheme := r.Header.Get("X-Forwarded-Proto")
+		if scheme == "" {
+			scheme = r.URL.Scheme
+		}
+
+		if scheme == "" {
+			scheme = "http"
+			if r.TLS != nil {
+				scheme = "https"
+			}
+		}
+
+		scheme, _, _ = strings.Cut(scheme, ",")
+
+		host := r.Header.Get("X-Forwarded-Host")
+		if host == "" {
+			host = r.Host
+		}
+
+		host, _, _ = strings.Cut(host, ",")
+
+		ctx := context.WithValue(
+			r.Context(),
+			apiservercore.ExternalAddrCtxKey{},
+			apiservercore.ExternalAddr{
+				Scheme: scheme,
+				Host:   host,
+			},
+		)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

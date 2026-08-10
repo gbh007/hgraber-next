@@ -96,6 +96,7 @@ try_reconnect = true
 [api]
 addr = "127.0.0.1:8080"
 external_addr = "http://localhost:8080"
+use_header_external_addr = true
 static_dir = "internal/controllers/apiserver/internal/static"
 token = "local-next"
 log_error_handler = false
