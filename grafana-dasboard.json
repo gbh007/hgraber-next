@@ -14,7 +14,7 @@
    "fiscalYearStartMonth": 0,
    "weekStart": "monday",
    "refresh": "1m",
-   "schemaVersion": 39,
+   "schemaVersion": 42,
    "panels": [
       {
          "type": "row",
@@ -37,7 +37,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "{{type}}",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -56,6 +55,7 @@
             "x": 0,
             "y": 1
          },
+         "repeatDirection": "h",
          "fieldConfig": {
             "defaults": {
                "unit": "short",
@@ -80,7 +80,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "{{type}}",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -99,6 +98,7 @@
             "x": 6,
             "y": 1
          },
+         "repeatDirection": "h",
          "fieldConfig": {
             "defaults": {
                "unit": "short",
@@ -123,7 +123,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "На диске",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -134,7 +133,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "В страницах",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -153,6 +151,7 @@
             "x": 12,
             "y": 1
          },
+         "repeatDirection": "h",
          "fieldConfig": {
             "defaults": {
                "unit": "bytes",
@@ -177,7 +176,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "{{fs_id}}",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -196,6 +194,7 @@
             "x": 18,
             "y": 1
          },
+         "repeatDirection": "h",
          "fieldConfig": {
             "defaults": {
                "unit": "percentunit",
@@ -220,7 +219,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "{{type}}",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -239,6 +237,7 @@
             "x": 0,
             "y": 4
          },
+         "repeatDirection": "h",
          "fieldConfig": {
             "defaults": {
                "unit": "short",
@@ -263,7 +262,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "{{type}}",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -282,6 +280,7 @@
             "x": 6,
             "y": 4
          },
+         "repeatDirection": "h",
          "fieldConfig": {
             "defaults": {
                "unit": "short",
@@ -306,7 +305,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "{{type}}",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -325,6 +323,7 @@
             "x": 12,
             "y": 4
          },
+         "repeatDirection": "h",
          "fieldConfig": {
             "defaults": {
                "unit": "short",
@@ -349,7 +348,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "На диске",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -360,7 +358,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "В страницах",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -379,6 +376,7 @@
             "x": 18,
             "y": 4
          },
+         "repeatDirection": "h",
          "fieldConfig": {
             "defaults": {
                "unit": "bytes",
@@ -403,7 +401,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "{{success}}",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -422,6 +419,7 @@
             "x": 0,
             "y": 10
          },
+         "repeatDirection": "h",
          "options": {
             "pieType": "donut",
             "tooltip": {
@@ -498,7 +496,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "{{fs_id}}",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -517,6 +514,7 @@
             "x": 6,
             "y": 10
          },
+         "repeatDirection": "h",
          "options": {
             "pieType": "donut",
             "tooltip": {
@@ -562,7 +560,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "{{worker_name}}/{{success}}",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -581,6 +578,7 @@
             "x": 12,
             "y": 10
          },
+         "repeatDirection": "h",
          "options": {
             "orientation": "auto",
             "barRadius": 0,
@@ -631,7 +629,6 @@
                "instant": true,
                "range": false,
                "legendFormat": "{{parser_name}} -\u003e {{action}}",
-               "refId": "",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${metrics}"
@@ -650,6 +647,7 @@
             "x": 18,
             "y": 10
          },
+         "repeatDirection": "h",
          "options": {
             "orientation": "auto",
             "barRadius": 0,
@@ -709,18 +707,13 @@
          "type": "logs",
          "targets": [
             {
-               "expr": "{service_name=~\"$service_name\"}",
-               "refId": "",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${logs}"
-               }
+               "expr": "service_name : ($service_name)"
             }
          ],
          "title": "Logs",
          "transparent": false,
          "datasource": {
-            "type": "loki",
+            "type": "victoriametrics-logs-datasource",
             "uid": "${logs}"
          },
          "gridPos": {
@@ -729,6 +722,7 @@
             "x": 0,
             "y": 20
          },
+         "repeatDirection": "h",
          "options": {
             "showLabels": false,
             "showCommonLabels": false,
@@ -758,8 +752,7 @@
                "targets": [
                   {
                      "expr": "sum by (type) (delta(hgraber_next_server_book_total{service_name=~\"$service_name\"}[$__rate_interval]))",
-                     "legendFormat": "{{type}}",
-                     "refId": ""
+                     "legendFormat": "{{type}}"
                   }
                ],
                "title": "Book delta count",
@@ -774,6 +767,7 @@
                   "x": 0,
                   "y": 33
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -812,8 +806,7 @@
                "targets": [
                   {
                      "expr": "sum by (type) (delta(hgraber_next_server_page_total{service_name=~\"$service_name\"}[$__rate_interval]))",
-                     "legendFormat": "{{type}}",
-                     "refId": ""
+                     "legendFormat": "{{type}}"
                   }
                ],
                "title": "Page delta count",
@@ -828,6 +821,7 @@
                   "x": 12,
                   "y": 33
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -866,8 +860,7 @@
                "targets": [
                   {
                      "expr": "sum by (type, fs_id) (delta(hgraber_next_fs_file_total{service_name=~\"$service_name\"}[$__rate_interval]))",
-                     "legendFormat": "{{type}} -\u003e {{fs_id}}",
-                     "refId": ""
+                     "legendFormat": "{{type}} -\u003e {{fs_id}}"
                   }
                ],
                "title": "File delta count",
@@ -882,6 +875,7 @@
                   "x": 0,
                   "y": 42
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -920,8 +914,7 @@
                "targets": [
                   {
                      "expr": "sum by (type, fs_id) (delta(hgraber_next_fs_file_bytes{service_name=~\"$service_name\"}[$__rate_interval]))",
-                     "legendFormat": "{{type}} -\u003e {{fs_id}}",
-                     "refId": ""
+                     "legendFormat": "{{type}} -\u003e {{fs_id}}"
                   }
                ],
                "title": "File delta size",
@@ -936,6 +929,7 @@
                   "x": 12,
                   "y": 42
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -974,8 +968,7 @@
                "targets": [
                   {
                      "expr": "sum by (type) (hgraber_next_server_book_total{service_name=~\"$service_name\"})",
-                     "legendFormat": "{{type}}",
-                     "refId": ""
+                     "legendFormat": "{{type}}"
                   }
                ],
                "title": "Book count",
@@ -990,6 +983,7 @@
                   "x": 0,
                   "y": 51
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -1028,8 +1022,7 @@
                "targets": [
                   {
                      "expr": "sum by (type) (hgraber_next_server_page_total{service_name=~\"$service_name\"})",
-                     "legendFormat": "{{type}}",
-                     "refId": ""
+                     "legendFormat": "{{type}}"
                   }
                ],
                "title": "Page count",
@@ -1044,6 +1037,7 @@
                   "x": 12,
                   "y": 51
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -1082,8 +1076,7 @@
                "targets": [
                   {
                      "expr": "sum by (type, fs_id) (hgraber_next_fs_file_total{service_name=~\"$service_name\"})",
-                     "legendFormat": "{{type}} -\u003e {{fs_id}}",
-                     "refId": ""
+                     "legendFormat": "{{type}} -\u003e {{fs_id}}"
                   }
                ],
                "title": "File count",
@@ -1098,6 +1091,7 @@
                   "x": 0,
                   "y": 60
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -1136,8 +1130,7 @@
                "targets": [
                   {
                      "expr": "sum by (type, fs_id) (hgraber_next_fs_file_bytes{service_name=~\"$service_name\"})",
-                     "legendFormat": "{{type}} -\u003e {{fs_id}}",
-                     "refId": ""
+                     "legendFormat": "{{type}} -\u003e {{fs_id}}"
                   }
                ],
                "title": "File size",
@@ -1152,6 +1145,7 @@
                   "x": 12,
                   "y": 60
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -1206,7 +1200,6 @@
                      "expr": "sum by (le) (hgraber_next_statistic_book_size_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "refId": "",
                      "interval": "$deltaInterval"
                   }
                ],
@@ -1222,6 +1215,7 @@
                   "x": 0,
                   "y": 70
                },
+               "repeatDirection": "h",
                "options": {
                   "calculate": false,
                   "color": {
@@ -1247,7 +1241,7 @@
                      "show": true
                   },
                   "tooltip": {
-                     "mode": ""
+                     "mode": "single"
                   },
                   "exemplars": {
                      "color": "rgba(255,0,255,0.7)"
@@ -1276,7 +1270,6 @@
                      "expr": "sum by (le) (hgraber_next_statistic_page_size_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "refId": "",
                      "interval": "$deltaInterval"
                   }
                ],
@@ -1292,6 +1285,7 @@
                   "x": 8,
                   "y": 70
                },
+               "repeatDirection": "h",
                "options": {
                   "calculate": false,
                   "color": {
@@ -1317,7 +1311,7 @@
                      "show": true
                   },
                   "tooltip": {
-                     "mode": ""
+                     "mode": "single"
                   },
                   "exemplars": {
                      "color": "rgba(255,0,255,0.7)"
@@ -1346,7 +1340,6 @@
                      "expr": "sum by (le) (hgraber_next_statistic_page_in_book_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "refId": "",
                      "interval": "$deltaInterval"
                   }
                ],
@@ -1362,6 +1355,7 @@
                   "x": 16,
                   "y": 70
                },
+               "repeatDirection": "h",
                "options": {
                   "calculate": false,
                   "color": {
@@ -1387,7 +1381,7 @@
                      "show": true
                   },
                   "tooltip": {
-                     "mode": ""
+                     "mode": "single"
                   },
                   "exemplars": {
                      "color": "rgba(255,0,255,0.7)"
@@ -1416,7 +1410,6 @@
                      "expr": "sum by (le) (hgraber_next_statistic_pages_size_by_author_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "refId": "",
                      "interval": "$deltaInterval"
                   }
                ],
@@ -1432,6 +1425,7 @@
                   "x": 0,
                   "y": 79
                },
+               "repeatDirection": "h",
                "options": {
                   "calculate": false,
                   "color": {
@@ -1457,7 +1451,7 @@
                      "show": true
                   },
                   "tooltip": {
-                     "mode": ""
+                     "mode": "single"
                   },
                   "exemplars": {
                      "color": "rgba(255,0,255,0.7)"
@@ -1486,7 +1480,6 @@
                      "expr": "sum by (le) (hgraber_next_statistic_books_by_author_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "refId": "",
                      "interval": "$deltaInterval"
                   }
                ],
@@ -1502,6 +1495,7 @@
                   "x": 8,
                   "y": 79
                },
+               "repeatDirection": "h",
                "options": {
                   "calculate": false,
                   "color": {
@@ -1527,7 +1521,7 @@
                      "show": true
                   },
                   "tooltip": {
-                     "mode": ""
+                     "mode": "single"
                   },
                   "exemplars": {
                      "color": "rgba(255,0,255,0.7)"
@@ -1556,7 +1550,6 @@
                      "expr": "sum by (le) (hgraber_next_statistic_pages_by_author_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "refId": "",
                      "interval": "$deltaInterval"
                   }
                ],
@@ -1572,6 +1565,7 @@
                   "x": 16,
                   "y": 79
                },
+               "repeatDirection": "h",
                "options": {
                   "calculate": false,
                   "color": {
@@ -1597,7 +1591,7 @@
                      "show": true
                   },
                   "tooltip": {
-                     "mode": ""
+                     "mode": "single"
                   },
                   "exemplars": {
                      "color": "rgba(255,0,255,0.7)"
@@ -1638,8 +1632,7 @@
                "targets": [
                   {
                      "expr": "(sum by (action, parser_name) (rate(hgraber_next_agent_parser_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (action, parser_name) (rate(hgraber_next_agent_parser_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
-                     "legendFormat": "{{parser_name}} -\u003e {{action}}",
-                     "refId": ""
+                     "legendFormat": "{{parser_name}} -\u003e {{action}}"
                   }
                ],
                "title": "Agent parsing avg latency",
@@ -1654,6 +1647,7 @@
                   "x": 0,
                   "y": 89
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -1692,8 +1686,7 @@
                "targets": [
                   {
                      "expr": "sum by (action, parser_name) (rate(hgraber_next_agent_parser_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
-                     "legendFormat": "{{parser_name}} -\u003e {{action}}",
-                     "refId": ""
+                     "legendFormat": "{{parser_name}} -\u003e {{action}}"
                   }
                ],
                "title": "Agent parsing RPS",
@@ -1708,6 +1701,7 @@
                   "x": 12,
                   "y": 89
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -1746,8 +1740,7 @@
                "targets": [
                   {
                      "expr": "(sum by (worker_name) (rate(hgraber_next_server_worker_execution_task_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (worker_name) (rate(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
-                     "legendFormat": "{{worker_name}}",
-                     "refId": ""
+                     "legendFormat": "{{worker_name}}"
                   }
                ],
                "title": "Worker avg latency",
@@ -1762,6 +1755,7 @@
                   "x": 0,
                   "y": 98
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -1800,8 +1794,7 @@
                "targets": [
                   {
                      "expr": "sum by (worker_name) (rate(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
-                     "legendFormat": "{{worker_name}}",
-                     "refId": ""
+                     "legendFormat": "{{worker_name}}"
                   }
                ],
                "title": "Worker RPS",
@@ -1816,6 +1809,7 @@
                   "x": 12,
                   "y": 98
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -1854,8 +1848,7 @@
                "targets": [
                   {
                      "expr": "sum by (worker_name, counter) (hgraber_next_server_worker_total{service_name=~\"$service_name\"})",
-                     "legendFormat": "{{worker_name}} -\u003e {{counter}}",
-                     "refId": ""
+                     "legendFormat": "{{worker_name}} -\u003e {{counter}}"
                   }
                ],
                "title": "Worker stat",
@@ -1870,6 +1863,7 @@
                   "x": 0,
                   "y": 107
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -1908,8 +1902,7 @@
                "targets": [
                   {
                      "expr": "sum by (action) (rate(hgraber_next_agent_web_cache_total{service_name=~\"$service_name\"}[$__rate_interval]))",
-                     "legendFormat": "{{action}}",
-                     "refId": ""
+                     "legendFormat": "{{action}}"
                   }
                ],
                "title": "Web cache RPS",
@@ -1924,6 +1917,7 @@
                   "x": 12,
                   "y": 107
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -1976,8 +1970,7 @@
                "targets": [
                   {
                      "expr": "(1) - ((sum by (fs_id) (hgraber_next_fs_file_bytes{service_name=~\"$service_name\",type=\"fs\",service_type=\"server\"})) / (sum by (fs_id) (hgraber_next_fs_file_bytes{service_name=~\"$service_name\",type=\"page\",service_type=\"server\"})))",
-                     "legendFormat": "{{fs_id}}",
-                     "refId": ""
+                     "legendFormat": "{{fs_id}}"
                   }
                ],
                "title": "FS Compression",
@@ -1992,6 +1985,7 @@
                   "x": 0,
                   "y": 117
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2030,8 +2024,7 @@
                "targets": [
                   {
                      "expr": "sum by (scrape_name) (hgraber_next_server_info_scrape_duration_seconds{service_name=~\"$service_name\"})",
-                     "legendFormat": "{{scrape_name}}",
-                     "refId": ""
+                     "legendFormat": "{{scrape_name}}"
                   }
                ],
                "title": "Worker stat",
@@ -2046,6 +2039,7 @@
                   "x": 12,
                   "y": 117
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2084,8 +2078,7 @@
                "targets": [
                   {
                      "expr": "(sum by (service_type, action, fs_id) (rate(hgraber_next_fs_action_seconds_sum{service_name=~\"$service_name\"}[$__rate_interval]))) / (sum by (service_type, action, fs_id) (rate(hgraber_next_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval])))",
-                     "legendFormat": "{{service_type}}/{{action}} -\u003e {{fs_id}}",
-                     "refId": ""
+                     "legendFormat": "{{service_type}}/{{action}} -\u003e {{fs_id}}"
                   }
                ],
                "title": "FS latency",
@@ -2100,6 +2093,7 @@
                   "x": 0,
                   "y": 126
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2138,8 +2132,7 @@
                "targets": [
                   {
                      "expr": "sum by (action, fs_id) (rate(hgraber_next_fs_action_seconds_count{service_name=~\"$service_name\"}[$__rate_interval]))",
-                     "legendFormat": "{{service_type}}/{{action}} -\u003e {{fs_id}}",
-                     "refId": ""
+                     "legendFormat": "{{service_type}}/{{action}} -\u003e {{fs_id}}"
                   }
                ],
                "title": "FS RPS",
@@ -2154,6 +2147,7 @@
                   "x": 12,
                   "y": 126
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2206,8 +2200,7 @@
                "targets": [
                   {
                      "expr": "histogram_quantile(0.95, sum by (le, service_name, server_addr, operation, status) (rate(hgraber_next_http_server_handle_duration_bucket{service_name=~\"$service_name\"}[$__rate_interval])))",
-                     "legendFormat": "{{service_name}} {{server_addr}}/{{operation}} -\u003e {{status}}",
-                     "refId": ""
+                     "legendFormat": "{{service_name}} {{server_addr}}/{{operation}} -\u003e {{status}}"
                   }
                ],
                "title": "Latency Q95",
@@ -2222,6 +2215,7 @@
                   "x": 0,
                   "y": 136
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2260,8 +2254,7 @@
                "targets": [
                   {
                      "expr": "sum by (service_name, server_addr, operation, status) (rate(hgraber_next_http_server_handle_duration_count{service_name=~\"$service_name\"}[$__rate_interval]))",
-                     "legendFormat": "{{service_name}} {{server_addr}}/{{operation}} -\u003e {{status}}",
-                     "refId": ""
+                     "legendFormat": "{{service_name}} {{server_addr}}/{{operation}} -\u003e {{status}}"
                   }
                ],
                "title": "RPS",
@@ -2276,6 +2269,7 @@
                   "x": 12,
                   "y": 136
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2314,8 +2308,7 @@
                "targets": [
                   {
                      "expr": "sum by (service_name, server_addr, operation) (hgraber_next_http_server_active_handlers_total{service_name=~\"$service_name\"})",
-                     "legendFormat": "{{service_name}} {{server_addr}}/{{operation}}",
-                     "refId": ""
+                     "legendFormat": "{{service_name}} {{server_addr}}/{{operation}}"
                   }
                ],
                "title": "Active request",
@@ -2330,6 +2323,7 @@
                   "x": 0,
                   "y": 145
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2371,8 +2365,7 @@
                      "instant": true,
                      "range": false,
                      "format": "table",
-                     "legendFormat": "{{service_name}} {{server_addr}}/{{operation}} -\u003e {{status}}",
-                     "refId": ""
+                     "legendFormat": "{{service_name}} {{server_addr}}/{{operation}} -\u003e {{status}}"
                   }
                ],
                "title": "Slow request",
@@ -2387,6 +2380,7 @@
                   "x": 12,
                   "y": 145
                },
+               "repeatDirection": "h",
                "options": {
                   "frameIndex": 0,
                   "showHeader": true,
@@ -2443,8 +2437,7 @@
                "targets": [
                   {
                      "expr": "histogram_quantile(0.95, sum by (le, stmt, db) (rate(hgraber_next_database_request_duration_bucket{service_name=~\"$service_name\"}[$__rate_interval])))",
-                     "legendFormat": "{{db}} -\u003e {{stmt}}",
-                     "refId": ""
+                     "legendFormat": "{{db}} -\u003e {{stmt}}"
                   }
                ],
                "title": "Latency Q95",
@@ -2459,6 +2452,7 @@
                   "x": 0,
                   "y": 155
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2497,8 +2491,7 @@
                "targets": [
                   {
                      "expr": "sum by (stmt, db) (rate(hgraber_next_database_request_duration_count{service_name=~\"$service_name\"}[$__rate_interval]))",
-                     "legendFormat": "{{db}} -\u003e {{stmt}}",
-                     "refId": ""
+                     "legendFormat": "{{db}} -\u003e {{stmt}}"
                   }
                ],
                "title": "RPS",
@@ -2513,6 +2506,7 @@
                   "x": 12,
                   "y": 155
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2551,8 +2545,7 @@
                "targets": [
                   {
                      "expr": "sum by (db) (hgraber_next_database_active_request{service_name=~\"$service_name\"})",
-                     "legendFormat": "{{db}}",
-                     "refId": ""
+                     "legendFormat": "{{db}}"
                   }
                ],
                "title": "Active request",
@@ -2567,6 +2560,7 @@
                   "x": 0,
                   "y": 164
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2605,8 +2599,7 @@
                "targets": [
                   {
                      "expr": "sum by (db) (hgraber_next_database_open_connection{service_name=~\"$service_name\"})",
-                     "legendFormat": "{{db}}",
-                     "refId": ""
+                     "legendFormat": "{{db}}"
                   }
                ],
                "title": "Open connection",
@@ -2621,6 +2614,7 @@
                   "x": 12,
                   "y": 164
                },
+               "repeatDirection": "h",
                "options": {
                   "legend": {
                      "displayMode": "table",
@@ -2662,8 +2656,7 @@
                      "instant": true,
                      "range": false,
                      "format": "table",
-                     "legendFormat": "{{db}} -\u003e {{stmt}}",
-                     "refId": ""
+                     "legendFormat": "{{db}} -\u003e {{stmt}}"
                   }
                ],
                "title": "Slow request",
@@ -2678,6 +2671,7 @@
                   "x": 0,
                   "y": 173
                },
+               "repeatDirection": "h",
                "options": {
                   "frameIndex": 0,
                   "showHeader": true,
@@ -2724,8 +2718,9 @@
             "type": "datasource",
             "name": "logs",
             "skipUrlSync": false,
-            "query": "loki",
+            "query": "victoriametrics-logs-datasource",
             "multi": false,
+            "allowCustomValue": true,
             "includeAll": false,
             "auto": false,
             "auto_min": "10s",
@@ -2737,6 +2732,7 @@
             "skipUrlSync": false,
             "query": "prometheus",
             "multi": false,
+            "allowCustomValue": true,
             "includeAll": false,
             "auto": false,
             "auto_min": "10s",
@@ -2765,6 +2761,7 @@
                ]
             },
             "multi": true,
+            "allowCustomValue": true,
             "refresh": 2,
             "includeAll": false,
             "auto": false,
@@ -2782,6 +2779,7 @@
                "value": "4h"
             },
             "multi": false,
+            "allowCustomValue": true,
             "includeAll": false,
             "auto": true,
             "auto_min": "10s",
@@ -2792,28 +2790,17 @@
    "annotations": {
       "list": [
          {
-            "name": "app started (logs)",
-            "datasource": {
-               "type": "loki",
-               "uid": "${logs}"
-            },
-            "enable": true,
-            "hide": false,
-            "iconColor": "super-light-purple",
-            "builtIn": 0,
-            "expr": "{service_name=~\"$service_name\"} |= `application start`"
-         },
-         {
             "name": "app started (metrics)",
             "datasource": {
                "type": "prometheus",
                "uid": "${metrics}"
             },
-            "enable": false,
+            "enable": true,
             "hide": false,
             "iconColor": "super-light-blue",
             "builtIn": 0,
-            "expr": "(hgraber_next_version_info{service_name=~\"$service_name\"}) * (1000)"
+            "placement": "inControlsMenu",
+            "expr": "sum by (service_name) (changes(hgraber_next_version_info{service_name=~\"$service_name\"}))"
          }
       ]
    },
@@ -2826,6 +2813,7 @@
          "url": "https://github.com/gbh007/hgraber-next",
          "tags": [],
          "asDropdown": false,
+         "placement": "inControlsMenu",
          "targetBlank": true,
          "includeVars": false,
          "keepTime": false
@@ -2839,6 +2827,7 @@
             "hgnext"
          ],
          "asDropdown": true,
+         "placement": "inControlsMenu",
          "targetBlank": true,
          "includeVars": false,
          "keepTime": true

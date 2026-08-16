@@ -1,0 +1,14 @@
+.dockerignore
+.git
+
+*.toml
+*.env
+*.db
+
+.hidden
+
+/bin
+/docs
+
+frontend/dist
+frontend/node_modules

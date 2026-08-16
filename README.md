@@ -206,7 +206,7 @@ timeline
 
 1. Скопировать файл `config-dashboard-example.toml` в `config-dashboard.toml`
 2. Изменить настройки `config-dashboard.toml` на нужные
-3. Запустить генерацию `make grafana`
+3. Запустить генерацию `task go:generate:grafana`
 
 Docker compose
 
@@ -252,9 +252,8 @@ scrape_configs:
 
 ```bash
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
-bash build.bash
 
-docker build --build-arg "BINARY_PATH=_build/server-linux-amd64" -t hgraber-next-server:latest .
+docker build -t hgraber-next-server:latest .
 docker compose -f "${DC_PATH}/docker-compose.yml" up -d --remove-orphans
 
 go run cmd/grafanagenerator/main.go --config "${DC_PATH}/dashboard.toml"
