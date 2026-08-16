@@ -1,0 +1,18 @@
+div.pageView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: calc(50vw - 20px);
+    height: calc(90vh - 60px);
+}
+
+div.pageViewActions {
+    align-self: stretch;
+    display: flex;
+    justify-content: space-between;
+}
+
+span.pageViewActionsPageNavigate {
+    padding: 5px;
+}

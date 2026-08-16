@@ -1,0 +1,18 @@
+span.page {
+    border-radius: 3px;
+    padding: 3px;
+    margin: 2px;
+    min-width: 20px;
+    background: var(--app-secondary);
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+}
+
+span.page[data-separator='true'] {
+    background: var(--app-background);
+}
+
+span.page[data-current='true'] {
+    background: var(--app-primary);
+}

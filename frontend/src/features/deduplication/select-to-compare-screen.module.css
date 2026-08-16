@@ -1,0 +1,15 @@
+div.preview {
+    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(min(300px, 100vw - 20px), 1fr)
+    );
+}
+
+div.preview > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+}

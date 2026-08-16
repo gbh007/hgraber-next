@@ -1,0 +1,194 @@
+:root {
+    --app-background: #dfdfdf;
+    --container-background: #fff;
+    --app-primary: #ffa500;
+    --app-secondary: #fff0d6;
+    --app-color: #000;
+    --app-error-background: #fd000047;
+    --app-font-family: system-ui;
+    --app-border-color: var(--app-primary);
+    --app-disabled-background-color: var(--app-background);
+    --app-disabled-color: var(--app-color);
+    --app-attribute-color: var(--app-color);
+    --app-attribute-background-color: var(--app-background);
+
+    --app-color-danger: #f00;
+    --app-color-danger-lite: #b00;
+    --app-color-good: #008b33;
+
+    --app-agent-status-color-ok: green;
+    --app-agent-status-color-error: red;
+    --app-agent-status-color-warning: yellow;
+    --app-agent-status-color-offline: gray;
+    --app-agent-status-color-unknown: purple;
+}
+
+[data-theme='dark'] {
+    --app-background: #2d2d2d;
+    --container-background: #1f1f1f;
+    --app-primary: #000000;
+    --app-secondary: #414141;
+    --app-color: #bcbcbc;
+    --app-error-background: #fd000047;
+    --app-font-family: system-ui;
+    --app-border-color: #6d6d6d;
+    --app-disabled-background-color: #c2c2c2;
+    --app-disabled-color: #000000;
+    --app-attribute-color: var(--app-color);
+    --app-attribute-background-color: #464646;
+
+    --app-color-danger: #f00;
+    --app-color-danger-lite: #b00;
+    --app-color-good: #008b33;
+
+    --app-agent-status-color-ok: green;
+    --app-agent-status-color-error: red;
+    --app-agent-status-color-warning: yellow;
+    --app-agent-status-color-offline: gray;
+    --app-agent-status-color-unknown: purple;
+}
+
+[data-theme='dark'] Link,
+[data-theme='dark'] a {
+    color: #5858ff;
+}
+
+[data-theme='dark'] Link:visited,
+[data-theme='dark'] a:visited {
+    color: #7b7bb9;
+}
+
+dialog {
+    color: var(--app-color);
+    font-family: var(--app-font-family);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    padding: 0px;
+    min-height: 100vh;
+    font-family: var(--app-font-family);
+}
+
+div.app-header {
+    background: var(--app-primary);
+    min-height: 10px;
+    padding: 10px;
+}
+
+div.app-header {
+    border-radius: 0px 0px 10px 10px;
+    display: flex;
+    justify-content: space-between;
+}
+div.app-header > Link:visited,
+div.app-header > a:visited,
+div.app-header > Link,
+div.app-header > a {
+    text-decoration: none;
+    color: var(--app-color);
+    border-radius: 5px;
+    padding: 5px;
+    background: var(--app-secondary);
+    font-family: var(--app-font-family);
+}
+
+div.app-body {
+    padding: 10px;
+    flex-grow: 1;
+}
+
+div.app-error-container {
+    padding: 10px;
+    background: var(--app-error-background);
+}
+
+div.app-container {
+    background: var(--container-background);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+Link.app-button:visited,
+a.app-button:visited,
+Link.app-button,
+a.app-button,
+button.app {
+    border: 1px solid var(--app-border-color);
+    background: var(--app-secondary);
+    border-radius: 3px;
+    padding: 3px;
+    box-sizing: border-box;
+    font-family: var(--app-font-family);
+    font-size: small;
+    cursor: pointer;
+    color: var(--app-color);
+}
+
+button.app {
+    text-decoration: none;
+}
+
+Link.app-button,
+a.app-button {
+    text-decoration: underline;
+    text-align: center;
+}
+
+Link.app-button:hover,
+a.app-button:hover,
+button.app:hover {
+    border: 1px solid var(--app-secondary);
+    background: var(--app-primary);
+}
+
+button.app:disabled {
+    background: var(--app-disabled-background-color);
+    color: var(--app-disabled-color);
+}
+
+select.app,
+textarea.app,
+input.app {
+    border: 1px solid var(--app-border-color);
+    color: var(--app-color);
+    background: var(--container-background);
+    border-radius: 3px;
+    padding: 3px;
+    box-sizing: border-box;
+    font-family: var(--app-font-family);
+}
+
+select.app:focus,
+textarea.app:focus,
+input.app:focus {
+    border: 1px dotted var(--app-border-color);
+    background: var(--app-secondary);
+}
+
+select.app:disabled,
+textarea.app:disabled,
+input.app:disabled {
+    background: var(--app-disabled-background-color);
+    color: var(--app-disabled-color);
+}
+
+details.app {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+details.app > summary {
+    user-select: none;
+    cursor: pointer;
+}
+
+pre.app {
+    padding: 3px;
+    box-sizing: border-box;
+    font-family: var(--app-font-family);
+    color: var(--app-color);
+}

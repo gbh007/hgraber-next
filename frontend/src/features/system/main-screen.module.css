@@ -1,0 +1,6 @@
+.statAlign:nth-child(odd) {
+    text-align: left;
+}
+.statAlign:nth-child(even) {
+    text-align: right;
+}
