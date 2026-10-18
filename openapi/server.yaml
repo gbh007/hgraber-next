@@ -1386,6 +1386,9 @@ paths:
                 read_only_mode:
                   type: boolean
                   description: Пометить книги подтвержденными
+                max_authors:
+                  type: integer
+                  description: Максимальное количество авторов (экспериментальная опция)
               required:
                 - urls
       responses:
@@ -1405,6 +1408,9 @@ paths:
                   duplicate_count:
                     type: integer
                     description: Количество дубликатов (пропущенных)
+                  skipped_count:
+                    type: integer
+                    description: Количество пропущенных (фильтрация)
                   error_count:
                     type: integer
                     description: Количество неудачных обработок
@@ -1427,6 +1433,9 @@ paths:
                         is_duplicate:
                           type: boolean
                           description: Эта дубликат другой книги
+                        is_skipped:
+                          type: boolean
+                          description: Эта книга пропущена
                         duplicate_ids:
                           type: array
                           description: ID книг в системе которую дублирует текущая
@@ -1447,10 +1456,12 @@ paths:
                         - url
                         - is_duplicate
                         - is_handled
+                        - is_skipped
                 required:
                   - total_count
                   - loaded_count
                   - duplicate_count
+                  - skipped_count
                   - error_count
                   - details
         default:

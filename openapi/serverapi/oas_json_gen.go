@@ -14668,6 +14668,10 @@ func (s *APIParsingHandlePostOK) encodeFields(e *jx.Encoder) {
 		e.Int(s.DuplicateCount)
 	}
 	{
+		e.FieldStart("skipped_count")
+		e.Int(s.SkippedCount)
+	}
+	{
 		e.FieldStart("error_count")
 		e.Int(s.ErrorCount)
 	}
@@ -14691,13 +14695,14 @@ func (s *APIParsingHandlePostOK) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIParsingHandlePostOK = [6]string{
+var jsonFieldsNameOfAPIParsingHandlePostOK = [7]string{
 	0: "total_count",
 	1: "loaded_count",
 	2: "duplicate_count",
-	3: "error_count",
-	4: "not_handled",
-	5: "details",
+	3: "skipped_count",
+	4: "error_count",
+	5: "not_handled",
+	6: "details",
 }
 
 // Decode decodes APIParsingHandlePostOK from json.
@@ -14745,8 +14750,20 @@ func (s *APIParsingHandlePostOK) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"duplicate_count\"")
 			}
-		case "error_count":
+		case "skipped_count":
 			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int()
+				s.SkippedCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"skipped_count\"")
+			}
+		case "error_count":
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Int()
 				s.ErrorCount = int(v)
@@ -14777,7 +14794,7 @@ func (s *APIParsingHandlePostOK) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"not_handled\"")
 			}
 		case "details":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				s.Details = make([]APIParsingHandlePostOKDetailsItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -14804,7 +14821,7 @@ func (s *APIParsingHandlePostOK) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00101111,
+		0b01011111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -14868,6 +14885,10 @@ func (s *APIParsingHandlePostOKDetailsItem) encodeFields(e *jx.Encoder) {
 		e.Bool(s.IsDuplicate)
 	}
 	{
+		e.FieldStart("is_skipped")
+		e.Bool(s.IsSkipped)
+	}
+	{
 		if s.DuplicateIds != nil {
 			e.FieldStart("duplicate_ids")
 			e.ArrStart()
@@ -14895,13 +14916,14 @@ func (s *APIParsingHandlePostOKDetailsItem) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIParsingHandlePostOKDetailsItem = [6]string{
+var jsonFieldsNameOfAPIParsingHandlePostOKDetailsItem = [7]string{
 	0: "url",
 	1: "is_duplicate",
-	2: "duplicate_ids",
-	3: "is_handled",
-	4: "id",
-	5: "error_reason",
+	2: "is_skipped",
+	3: "duplicate_ids",
+	4: "is_handled",
+	5: "id",
+	6: "error_reason",
 }
 
 // Decode decodes APIParsingHandlePostOKDetailsItem from json.
@@ -14937,6 +14959,18 @@ func (s *APIParsingHandlePostOKDetailsItem) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"is_duplicate\"")
 			}
+		case "is_skipped":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Bool()
+				s.IsSkipped = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"is_skipped\"")
+			}
 		case "duplicate_ids":
 			if err := func() error {
 				s.DuplicateIds = make([]uuid.UUID, 0)
@@ -14957,7 +14991,7 @@ func (s *APIParsingHandlePostOKDetailsItem) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"duplicate_ids\"")
 			}
 		case "is_handled":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Bool()
 				s.IsHandled = bool(v)
@@ -14998,7 +15032,7 @@ func (s *APIParsingHandlePostOKDetailsItem) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001011,
+		0b00010111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -15079,13 +15113,20 @@ func (s *APIParsingHandlePostReq) encodeFields(e *jx.Encoder) {
 			s.ReadOnlyMode.Encode(e)
 		}
 	}
+	{
+		if s.MaxAuthors.Set {
+			e.FieldStart("max_authors")
+			s.MaxAuthors.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIParsingHandlePostReq = [4]string{
+var jsonFieldsNameOfAPIParsingHandlePostReq = [5]string{
 	0: "urls",
 	1: "is_multi",
 	2: "auto_verify",
 	3: "read_only_mode",
+	4: "max_authors",
 }
 
 // Decode decodes APIParsingHandlePostReq from json.
@@ -15146,6 +15187,16 @@ func (s *APIParsingHandlePostReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"read_only_mode\"")
+			}
+		case "max_authors":
+			if err := func() error {
+				s.MaxAuthors.Reset()
+				if err := s.MaxAuthors.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"max_authors\"")
 			}
 		default:
 			return d.Skip()

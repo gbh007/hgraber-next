@@ -11,6 +11,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/domain/agentmodel"
 	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/domain/parsing"
 )
 
@@ -54,6 +55,7 @@ type agentSystem interface {
 		urls []agentmodel.AgentPageURL,
 	) ([]agentmodel.AgentPageCheckResult, error)
 	BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]agentmodel.AgentBookCheckResult, error)
+	HProxyBook(ctx context.Context, agentID uuid.UUID, u url.URL, pageLimit *int) (hproxymodel.Book, error)
 }
 
 type fileStorage interface {

@@ -27,6 +27,7 @@ export function HProxyListScreen() {
 
     const [currentURL, setCurrentURL] = useState('')
     const [isReadOnlyMode, setIsReadOnlyMode] = useState(false)
+    const [maxAuthors, setMaxAuthors] = useState(0)
 
     useEffect(() => {
         const u = searchParams.get('url')
@@ -97,6 +98,20 @@ export function HProxyListScreen() {
                         autoComplete='off'
                     />
                 </label>
+
+                <label>
+                    <span>Максимум авторов</span>
+                    <input
+                        className='app'
+                        onChange={(e) => {
+                            setMaxAuthors(e.target.valueAsNumber)
+                        }}
+                        type='number'
+                        value={maxAuthors}
+                        autoComplete='off'
+                    />
+                </label>
+
                 <button
                     className='app'
                     onClick={() => {
@@ -108,8 +123,10 @@ export function HProxyListScreen() {
                                 hProxyListResponse.data?.books?.map(
                                     (b) => b.ext_url
                                 ) ?? [],
+                            max_authors: maxAuthors,
                         })
                     }}
+                    disabled={systemHandleResponse.isLoading}
                 >
                     Загрузить страницу
                 </button>
@@ -121,8 +138,10 @@ export function HProxyListScreen() {
                             is_multi: true,
                             read_only_mode: isReadOnlyMode,
                             urls: [currentURL],
+                            max_authors: maxAuthors,
                         })
                     }}
+                    disabled={systemHandleResponse.isLoading}
                 >
                     Загрузить все
                 </button>
@@ -144,6 +163,10 @@ export function HProxyListScreen() {
                     <div>
                         <b>Дубликаты: </b>
                         {systemHandleResponse.data?.duplicate_count || 0}
+                    </div>
+                    <div>
+                        <b>Пропущено: </b>
+                        {systemHandleResponse.data?.skipped_count || 0}
                     </div>
                     <div>
                         <b>Ошибки: </b>

@@ -40,7 +40,7 @@ tasks:
   go:generate:
     cmds:
       - go tool ogen --target openapi/agentapi -package agentapi --clean openapi/agent.yaml
-      - ggo tool ogen --target openapi/serverapi -package serverapi --clean openapi/server.yaml
+      - go tool ogen --target openapi/serverapi -package serverapi --clean openapi/server.yaml
 
   go:generate:config:
     cmds:

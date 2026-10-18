@@ -15,6 +15,8 @@ type BookHandleResult struct {
 	IsHandled bool
 	ID        uuid.UUID
 
+	IsSkipped bool
+
 	ErrorReason string
 }
 

@@ -17,6 +17,7 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 		result, err := c.parseUseCases.NewBooksMulti(ctx, req.Urls, parsing.ParseFlags{
 			AutoVerify: req.AutoVerify.Value,
 			ReadOnly:   req.ReadOnlyMode.Value,
+			MaxAuthors: req.MaxAuthors.Value,
 		})
 		if err != nil {
 			return nil, err
@@ -26,6 +27,7 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 			TotalCount:     result.Details.TotalCount,
 			LoadedCount:    result.Details.LoadedCount,
 			DuplicateCount: result.Details.DuplicateCount,
+			SkippedCount:   result.Details.SkippedCount,
 			ErrorCount:     result.Details.ErrorCount,
 			// Поскольку в запросе адреса для массовой обработки, то как не обработанные отдаем их же.
 			NotHandled: result.NotHandled,
@@ -36,6 +38,7 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 	result, err := c.parseUseCases.NewBooks(ctx, req.Urls, parsing.ParseFlags{
 		AutoVerify: req.AutoVerify.Value,
 		ReadOnly:   req.ReadOnlyMode.Value,
+		MaxAuthors: req.MaxAuthors.Value,
 	})
 	if err != nil {
 		return nil, err
@@ -45,6 +48,7 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 		TotalCount:     result.TotalCount,
 		LoadedCount:    result.LoadedCount,
 		DuplicateCount: result.DuplicateCount,
+		SkippedCount:   result.SkippedCount,
 		ErrorCount:     result.ErrorCount,
 		NotHandled:     result.NotHandled,
 		Details:        convertAPIParsingHandlePostOKDetails(result.Details),
@@ -58,6 +62,7 @@ func convertAPIParsingHandlePostOKDetails(
 		return serverapi.APIParsingHandlePostOKDetailsItem{
 			URL:          b.URL,
 			IsDuplicate:  b.IsDuplicate,
+			IsSkipped:    b.IsSkipped,
 			DuplicateIds: b.DuplicateIDs,
 			IsHandled:    b.IsHandled,
 			ID:           apiservercore.OptUUID(b.ID),

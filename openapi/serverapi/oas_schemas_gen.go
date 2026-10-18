@@ -5363,6 +5363,8 @@ type APIParsingHandlePostOK struct {
 	LoadedCount int `json:"loaded_count"`
 	// Количество дубликатов (пропущенных).
 	DuplicateCount int `json:"duplicate_count"`
+	// Количество пропущенных (фильтрация).
+	SkippedCount int `json:"skipped_count"`
 	// Количество неудачных обработок.
 	ErrorCount int `json:"error_count"`
 	// Не обработанные ссылки.
@@ -5384,6 +5386,11 @@ func (s *APIParsingHandlePostOK) GetLoadedCount() int {
 // GetDuplicateCount returns the value of DuplicateCount.
 func (s *APIParsingHandlePostOK) GetDuplicateCount() int {
 	return s.DuplicateCount
+}
+
+// GetSkippedCount returns the value of SkippedCount.
+func (s *APIParsingHandlePostOK) GetSkippedCount() int {
+	return s.SkippedCount
 }
 
 // GetErrorCount returns the value of ErrorCount.
@@ -5416,6 +5423,11 @@ func (s *APIParsingHandlePostOK) SetDuplicateCount(val int) {
 	s.DuplicateCount = val
 }
 
+// SetSkippedCount sets the value of SkippedCount.
+func (s *APIParsingHandlePostOK) SetSkippedCount(val int) {
+	s.SkippedCount = val
+}
+
 // SetErrorCount sets the value of ErrorCount.
 func (s *APIParsingHandlePostOK) SetErrorCount(val int) {
 	s.ErrorCount = val
@@ -5436,6 +5448,8 @@ type APIParsingHandlePostOKDetailsItem struct {
 	URL url.URL `json:"url"`
 	// Эта дубликат другой книги.
 	IsDuplicate bool `json:"is_duplicate"`
+	// Эта книга пропущена.
+	IsSkipped bool `json:"is_skipped"`
 	// ID книг в системе которую дублирует текущая.
 	DuplicateIds []uuid.UUID `json:"duplicate_ids"`
 	// Книга успешно обработана и добавлена в систему.
@@ -5454,6 +5468,11 @@ func (s *APIParsingHandlePostOKDetailsItem) GetURL() url.URL {
 // GetIsDuplicate returns the value of IsDuplicate.
 func (s *APIParsingHandlePostOKDetailsItem) GetIsDuplicate() bool {
 	return s.IsDuplicate
+}
+
+// GetIsSkipped returns the value of IsSkipped.
+func (s *APIParsingHandlePostOKDetailsItem) GetIsSkipped() bool {
+	return s.IsSkipped
 }
 
 // GetDuplicateIds returns the value of DuplicateIds.
@@ -5486,6 +5505,11 @@ func (s *APIParsingHandlePostOKDetailsItem) SetIsDuplicate(val bool) {
 	s.IsDuplicate = val
 }
 
+// SetIsSkipped sets the value of IsSkipped.
+func (s *APIParsingHandlePostOKDetailsItem) SetIsSkipped(val bool) {
+	s.IsSkipped = val
+}
+
 // SetDuplicateIds sets the value of DuplicateIds.
 func (s *APIParsingHandlePostOKDetailsItem) SetDuplicateIds(val []uuid.UUID) {
 	s.DuplicateIds = val
@@ -5515,6 +5539,9 @@ type APIParsingHandlePostReq struct {
 	AutoVerify OptBool `json:"auto_verify"`
 	// Пометить книги подтвержденными.
 	ReadOnlyMode OptBool `json:"read_only_mode"`
+	// Максимальное количество авторов (экспериментальная
+	// опция).
+	MaxAuthors OptInt `json:"max_authors"`
 }
 
 // GetUrls returns the value of Urls.
@@ -5537,6 +5564,11 @@ func (s *APIParsingHandlePostReq) GetReadOnlyMode() OptBool {
 	return s.ReadOnlyMode
 }
 
+// GetMaxAuthors returns the value of MaxAuthors.
+func (s *APIParsingHandlePostReq) GetMaxAuthors() OptInt {
+	return s.MaxAuthors
+}
+
 // SetUrls sets the value of Urls.
 func (s *APIParsingHandlePostReq) SetUrls(val []url.URL) {
 	s.Urls = val
@@ -5555,6 +5587,11 @@ func (s *APIParsingHandlePostReq) SetAutoVerify(val OptBool) {
 // SetReadOnlyMode sets the value of ReadOnlyMode.
 func (s *APIParsingHandlePostReq) SetReadOnlyMode(val OptBool) {
 	s.ReadOnlyMode = val
+}
+
+// SetMaxAuthors sets the value of MaxAuthors.
+func (s *APIParsingHandlePostReq) SetMaxAuthors(val OptInt) {
+	s.MaxAuthors = val
 }
 
 // APIParsingMirrorCreatePostNoContent is response for APIParsingMirrorCreatePost operation.

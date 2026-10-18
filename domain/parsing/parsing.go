@@ -9,12 +9,15 @@ import (
 type ParseFlags struct {
 	AutoVerify bool
 	ReadOnly   bool
+	// TODO: временное размещение
+	MaxAuthors int
 }
 
 type FirstHandleMultipleResult struct {
 	TotalCount     int
 	LoadedCount    int
 	DuplicateCount int
+	SkippedCount   int
 	ErrorCount     int
 	NotHandled     []url.URL
 	Details        []BookHandleResult
@@ -37,6 +40,15 @@ func (result *FirstHandleMultipleResult) RegisterDuplicate(u url.URL, ids []uuid
 		URL:          u,
 		IsDuplicate:  true,
 		DuplicateIDs: ids,
+	})
+}
+
+func (result *FirstHandleMultipleResult) RegisterSkipped(u url.URL) {
+	result.TotalCount++
+	result.SkippedCount++
+	result.Details = append(result.Details, BookHandleResult{
+		URL:       u,
+		IsSkipped: true,
 	})
 }
 
