@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
@@ -25,6 +26,12 @@ type Requester interface {
 	RequestStringWithRedirect(ctx context.Context, URL string) (string, string, error)
 	RequestPost(ctx context.Context, u string, headers http.Header, body io.Reader) ([]byte, error)
 }
+
+type MetricProvider interface {
+	RegisterParserActionTime(action, parserName string, d time.Duration)
+}
+
+type NewParser = func(Requester, MetricProvider) parsing.Parser
 
 type CoreParser struct {
 	Requester Requester

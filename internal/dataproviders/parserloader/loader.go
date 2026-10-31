@@ -5,13 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log/slog"
 	"net/url"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/hgraber_local"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/mock"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/request"
 	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
@@ -23,44 +19,6 @@ type metricProvider interface {
 type Loader struct {
 	parsers        []parsing.Parser
 	metricProvider metricProvider
-}
-
-func NewDefaultParsers(
-	logger *slog.Logger,
-	hgToken string,
-	timeout time.Duration,
-	enabledParsers []string,
-	cache request.Cache,
-	logErrors bool,
-	defaultUserAgent string,
-) []parsing.Parser {
-	requester := request.New(logger, timeout, nil, logErrors, cache, defaultUserAgent)
-
-	parsers := make([]parsing.Parser, 0, len(enabledParsers))
-
-	for _, code := range enabledParsers {
-		var p parsing.Parser
-
-		switch code {
-		case "mock":
-			p = mock.New(requester)
-
-		case "hgraber_local":
-			p = hgraber_local.New(requester, hgToken)
-
-		default:
-			logger.Warn(
-				"unknown parser code",
-				slog.String("code", code),
-			)
-
-			continue
-		}
-
-		parsers = append(parsers, p)
-	}
-
-	return parsers
 }
 
 func New(

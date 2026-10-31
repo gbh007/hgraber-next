@@ -23,7 +23,7 @@ type Parser struct {
 	common.CoreParser
 }
 
-func New(r common.Requester) *Parser {
+func New(r common.Requester, _ common.MetricProvider) parsing.Parser {
 	return &Parser{
 		CoreParser: common.NewCoreParser(r, []string{
 			"http://localhost",

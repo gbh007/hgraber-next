@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"path"
 	"strconv"
 	"strings"
@@ -30,13 +31,13 @@ type Parser struct {
 	token string
 }
 
-func New(r common.Requester, token string) *Parser {
+func New(r common.Requester, _ common.MetricProvider) parsing.Parser {
 	return &Parser{
 		CoreParser: common.NewCoreParser(r, []string{
 			"hg4://",
 			"hgraber4://",
 		}, "hgraber_local"),
-		token: token,
+		token: os.Getenv("HGRABER_PARSER_HG4_TOKEN"),
 	}
 }
 

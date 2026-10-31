@@ -13,16 +13,21 @@ func AgentDefaultDebugServer() AgentDebugServer {
 }
 
 type AgentParsers struct {
-	HG4Token string            `toml:"hg4_token" yaml:"hg4_token" envconfig:"HG4_TOKEN"`
-	Enabled  []string          `toml:"enabled" yaml:"enabled" envconfig:"ENABLED"`
-	Cache    AgentParsersCache `toml:"cache" yaml:"cache" envconfig:"CACHE"`
+	Enabled   []string          `toml:"enabled" yaml:"enabled" envconfig:"ENABLED"`
+	Cache     AgentParsersCache `toml:"cache" yaml:"cache" envconfig:"CACHE"`
+	UserAgent string            `toml:"user_agent" yaml:"user_agent" envconfig:"USER_AGENT"`
+	Proxy     AgentParsersProxy `toml:"proxy" yaml:"proxy" envconfig:"PROXY"`
+}
 
-	UserAgent string `toml:"user_agent" yaml:"user_agent" envconfig:"USER_AGENT"`
+type AgentParsersProxy struct {
+	Host    string   `toml:"host" yaml:"host" envconfig:"HOST"`
+	User    string   `toml:"user" yaml:"user" envconfig:"USER"`
+	Pass    string   `toml:"pass" yaml:"pass" envconfig:"PASS"`
+	Enabled []string `toml:"enabled" yaml:"enabled" envconfig:"ENABLED"`
 }
 
 func AgentDefaultParsers() *AgentParsers {
 	return &AgentParsers{
-		HG4Token: "",
 		Enabled: []string{
 			"mock",
 			"hgraber_local",
