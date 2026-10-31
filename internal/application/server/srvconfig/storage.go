@@ -1,4 +1,4 @@
-package config
+package srvconfig
 
 type ServerStorage struct {
 	DebugPGX       bool   `toml:"debug_pgx" yaml:"debug_pgx" envconfig:"DEBUG_PGX"`

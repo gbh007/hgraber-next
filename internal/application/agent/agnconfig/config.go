@@ -1,4 +1,4 @@
-package config
+package agnconfig
 
 import "time"
 

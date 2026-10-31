@@ -10,7 +10,7 @@ import (
 	goapi "github.com/grafana/grafana-openapi-client-go/client"
 	"github.com/grafana/grafana-openapi-client-go/models"
 
-	"github.com/gbh007/hgraber-next/internal/config"
+	"github.com/gbh007/hgraber-next/external/config"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/metric/generator"
 )
 

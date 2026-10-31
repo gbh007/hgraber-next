@@ -9,7 +9,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/trace/noop"
 
-	"github.com/gbh007/hgraber-next/internal/config"
+	"github.com/gbh007/hgraber-next/internal/application/server/srvconfig"
 	"github.com/gbh007/hgraber-next/internal/controllers/async"
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/agentapi"
@@ -34,7 +34,7 @@ import (
 )
 
 type App struct {
-	Config config.ServerConfig
+	Config srvconfig.ServerConfig
 	Logger *slog.Logger
 	Tracer trace.Tracer
 

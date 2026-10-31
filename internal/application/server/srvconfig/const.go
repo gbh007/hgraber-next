@@ -1,4 +1,4 @@
-package config
+package srvconfig
 
 import "time"
 
@@ -8,10 +8,4 @@ const (
 
 	DefaultMEtricScrapePeriodMainInfo      = 10 * time.Second
 	DefaultMEtricScrapePeriodBookStatistic = time.Hour
-
-	YamlIndent    = 2
-	ConfigExtYaml = ".yaml"
-	ConfigExtYml  = ".yml"
-	ConfigExtToml = ".toml"
-	ConfigExtEnv  = ".env"
 )

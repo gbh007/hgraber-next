@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/gbh007/hgraber-next/internal/agent/config"
+	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
 	"github.com/gbh007/hgraber-next/internal/application/agent"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/agentparsecache"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
@@ -29,7 +29,7 @@ func main() {
 	agent.Serve(ctx, func(
 		ctx context.Context,
 		logger *slog.Logger,
-		cfg config.AgentConfig[config.AgentParsers],
+		cfg agnconfig.AgentConfig[agnconfig.AgentParsers],
 		async agent.Async,
 		metricProvider *metric.MetricProvider,
 	) ([]parsing.Parser, error) {
@@ -66,5 +66,5 @@ func main() {
 			cfg.Log.RequestErrors,
 			cfg.Parsers.UserAgent,
 		), nil
-	}, config.AgentDefaultParsers)
+	}, agnconfig.AgentDefaultParsers)
 }

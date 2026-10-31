@@ -6,24 +6,24 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/gbh007/hgraber-next/internal/agent/config"
-	hgconfig "github.com/gbh007/hgraber-next/internal/config"
+	"github.com/gbh007/hgraber-next/external/config"
+	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
 
 	"go.opentelemetry.io/otel/trace"
 )
 
-func parseConfig[T any](defaultParsers func() *T) (config.AgentConfig[T], bool, error) {
+func parseConfig[T any](defaultParsers func() *T) (agnconfig.AgentConfig[T], bool, error) {
 	configPath := flag.String("config", "config.yaml", "path to config")
 	scan := flag.Bool("scan", false, "scan zip file to register in db")
 	useEnv := flag.Bool("use-env", false, "use env config")
 	flag.Parse()
 
-	c, err := hgconfig.ImportConfig(*configPath, *useEnv, config.AgentDefaultConfigWrapped(defaultParsers))
+	c, err := config.ImportConfig(*configPath, *useEnv, agnconfig.AgentDefaultConfigWrapped(defaultParsers))
 
 	return c, *scan, err
 }
 
-func initLogger[T any](cfg config.AgentConfig[T]) *slog.Logger {
+func initLogger[T any](cfg agnconfig.AgentConfig[T]) *slog.Logger {
 	slogOpt := &slog.HandlerOptions{
 		AddSource: cfg.Log.IncludeSource,
 		Level:     cfg.Log.SlogLevel(),

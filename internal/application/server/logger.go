@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/gbh007/hgraber-next/internal/config"
+	"github.com/gbh007/hgraber-next/internal/application/server/srvconfig"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -14,7 +14,7 @@ type logHandler struct {
 	slog.Handler
 }
 
-func initLogger(cfg config.ServerConfig) *slog.Logger {
+func initLogger(cfg srvconfig.ServerConfig) *slog.Logger {
 	slogOpt := &slog.HandlerOptions{
 		AddSource: cfg.Log.IncludeSource,
 		Level:     cfg.Log.SlogLevel(),

@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/agent/config"
+	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
 	"github.com/gbh007/hgraber-next/internal/controllers/agentapi"
 	"github.com/gbh007/hgraber-next/internal/controllers/agentdebugserver"
 	"github.com/gbh007/hgraber-next/internal/controllers/async"
@@ -34,7 +34,7 @@ type Async interface {
 type ParserInit[T any] func(
 	ctx context.Context,
 	logger *slog.Logger,
-	cfg config.AgentConfig[T],
+	cfg agnconfig.AgentConfig[T],
 	async Async,
 	metricProvider *metric.MetricProvider,
 ) ([]parsing.Parser, error)

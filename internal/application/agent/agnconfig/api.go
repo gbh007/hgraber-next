@@ -1,4 +1,4 @@
-package config
+package agnconfig
 
 type AgentAPI struct {
 	Addr            string `toml:"addr" yaml:"addr" envconfig:"ADDR"`

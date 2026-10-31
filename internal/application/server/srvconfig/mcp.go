@@ -1,4 +1,4 @@
-package config
+package srvconfig
 
 type ServerMCPServer struct {
 	Addr   string `toml:"addr" yaml:"addr" envconfig:"ADDR"`

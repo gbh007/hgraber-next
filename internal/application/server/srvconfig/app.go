@@ -1,4 +1,4 @@
-package config
+package srvconfig
 
 type ServerApplication struct {
 	Metric        ServerMetric    `toml:"metric" yaml:"metric" envconfig:"METRIC"`

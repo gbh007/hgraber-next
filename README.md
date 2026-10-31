@@ -16,7 +16,6 @@
 - [Схема взаимодействия](#схема-взаимодействия)
 - [Пример настройка логов и метрик (Grafana stack)](#пример-настройка-логов-и-метрик-grafana-stack)
 - [Пример настройки CD в Jenkins](#пример-настройки-cd-в-jenkins)
-- [Дефолтная конфигурация и перекодировании конфигурации](#дефолтная-конфигурация-и-перекодировании-конфигурации)
 - [Планы на следующую версию](#планы-на-следующую-версию)
 - [Прошлые версии](#прошлые-версии)
 
@@ -263,24 +262,6 @@ docker compose -f "${DC_PATH}/docker-compose.yml" up -d --remove-orphans
 
 go run cmd/grafanagenerator/main.go --config "${DC_PATH}/dashboard.toml"
 ```
-
-## Дефолтная конфигурация и перекодировании конфигурации
-
-Для этого есть специальная утилита `configremaper`
-
-**Важно:** могут быть нюансы с переносом в env формат
-
-Для ее сборки
-
-> go build -o ./bin/build/configremaper ./cmd/configremaper
-
-Для генерации дефолтной конфигурации (поддерживается `.yaml`, `.yml`, `.toml`, `.env`)
-
-> ./bin/build/configremaper --out config-generated.yaml
-
-Для переноса конфига между форматами
-
-> ./bin/build/configremaper -in config.yaml -out config.toml
 
 ## Планы на следующую версию
 

@@ -1,31 +1,30 @@
-package config
+package srvconfig
 
 import (
 	"log/slog"
 	"strings"
 )
 
-type AgentLog struct {
+type Log struct {
 	IncludeSource bool   `toml:"include_source" yaml:"include_source" envconfig:"INCLUDE_SOURCE"`
 	Level         string `toml:"level" yaml:"level" envconfig:"LEVEL"`
-	RequestErrors bool   `toml:"request_errors" yaml:"request_errors" envconfig:"REQUEST_ERRORS"`
 }
 
-func AgentLogDefault() AgentLog {
-	return AgentLog{
+func LogDefault() Log {
+	return Log{
 		Level: "info",
 	}
 }
 
-func (l AgentLog) SlogLevel() slog.Level {
+func (l Log) SlogLevel() slog.Level {
 	switch strings.ToLower(l.Level) {
-	case "debug":
+	case "debug", "dbg":
 		return slog.LevelDebug
-	case "info":
+	case "info", "inf":
 		return slog.LevelInfo
-	case "warn", "warning":
+	case "warn", "warning", "wrn":
 		return slog.LevelWarn
-	case "error":
+	case "error", "err":
 		return slog.LevelError
 	default:
 		return slog.LevelInfo

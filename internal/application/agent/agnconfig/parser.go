@@ -1,4 +1,4 @@
-package config
+package agnconfig
 
 import "time"
 
@@ -13,8 +13,8 @@ func AgentDefaultDebugServer() AgentDebugServer {
 }
 
 type AgentParsers struct {
-	HG4Token string       `toml:"hg4_token" yaml:"hg4_token" envconfig:"HG4_TOKEN"`
-	Enabled  []string     `toml:"enabled" yaml:"enabled" envconfig:"ENABLED"`
+	HG4Token string            `toml:"hg4_token" yaml:"hg4_token" envconfig:"HG4_TOKEN"`
+	Enabled  []string          `toml:"enabled" yaml:"enabled" envconfig:"ENABLED"`
 	Cache    AgentParsersCache `toml:"cache" yaml:"cache" envconfig:"CACHE"`
 
 	UserAgent string `toml:"user_agent" yaml:"user_agent" envconfig:"USER_AGENT"`

@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/agent/config"
+	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
@@ -17,7 +17,7 @@ type ParsingUseCases interface {
 }
 
 type Controller[T any] struct {
-	config          config.AgentConfig[T]
+	config          agnconfig.AgentConfig[T]
 	logger          *slog.Logger
 	parsing         ParsingUseCases
 	addr            string
@@ -26,7 +26,7 @@ type Controller[T any] struct {
 }
 
 func New[T any](
-	config config.AgentConfig[T],
+	config agnconfig.AgentConfig[T],
 	logger *slog.Logger,
 	parsing ParsingUseCases,
 ) *Controller[T] {

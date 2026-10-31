@@ -42,13 +42,6 @@ tasks:
       - go tool ogen --target openapi/agentapi -package agentapi --clean openapi/agent.yaml
       - go tool ogen --target openapi/serverapi -package serverapi --clean openapi/server.yaml
 
-  go:generate:config:
-    cmds:
-      - "go build -trimpath -o {{ .SERVICE_BIN }}/configremaper  ./cmd/configremaper"
-      - "{{ .SERVICE_BIN }}/configremaper --out config-generated.yaml"
-      - "{{ .SERVICE_BIN }}/configremaper --out config-generated.env"
-      - "{{ .SERVICE_BIN }}/configremaper --out config-generated.toml"
-
   go:generate:grafana:
     cmds:
       - "go build -trimpath -o {{ .SERVICE_BIN }}/grafanagenerator  ./cmd/grafanagenerator"

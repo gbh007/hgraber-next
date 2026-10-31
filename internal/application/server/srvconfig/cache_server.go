@@ -1,4 +1,4 @@
-package config
+package srvconfig
 
 type ServerAgentServer struct {
 	Addr            string `toml:"addr" yaml:"addr" envconfig:"ADDR"`

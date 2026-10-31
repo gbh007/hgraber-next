@@ -6,11 +6,11 @@ import (
 
 	"github.com/grafana/pyroscope-go"
 
-	"github.com/gbh007/hgraber-next/internal/agent/config"
+	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
-func initPyroscope[T any](logger *slog.Logger, cfg config.AgentConfig[T]) (*pyroscope.Profiler, error) {
+func initPyroscope[T any](logger *slog.Logger, cfg agnconfig.AgentConfig[T]) (*pyroscope.Profiler, error) {
 	runtime.SetMutexProfileFraction(cfg.Application.Pyroscope.Rate)
 	runtime.SetBlockProfileRate(cfg.Application.Pyroscope.Rate)
 

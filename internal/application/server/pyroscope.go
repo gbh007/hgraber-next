@@ -5,12 +5,12 @@ import (
 	"log/slog"
 	"runtime"
 
-	"github.com/gbh007/hgraber-next/internal/config"
+	"github.com/gbh007/hgraber-next/internal/application/server/srvconfig"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/grafana/pyroscope-go"
 )
 
-func initPyroscope(logger *slog.Logger, cfg config.ServerConfig) (*pyroscope.Profiler, error) {
+func initPyroscope(logger *slog.Logger, cfg srvconfig.ServerConfig) (*pyroscope.Profiler, error) {
 	runtime.SetMutexProfileFraction(cfg.Application.Pyroscope.Rate)
 	runtime.SetBlockProfileRate(cfg.Application.Pyroscope.Rate)
 

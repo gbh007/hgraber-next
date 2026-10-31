@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"net/http"
 
-	"github.com/gbh007/hgraber-next/internal/config"
+	"github.com/gbh007/hgraber-next/external/config"
 	"github.com/labstack/echo/v4"
 )
 
