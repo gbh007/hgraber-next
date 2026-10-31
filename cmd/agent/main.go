@@ -9,10 +9,10 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/agent/config"
 	"github.com/gbh007/hgraber-next/internal/application/agent"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/loader"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/agentparsecache"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/parserloader"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/request"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/webcache"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
 
@@ -42,7 +42,7 @@ func main() {
 		var cache request.Cache
 
 		if cfg.Parsers.Cache.Enabled {
-			wc, err := webcache.New(
+			wc, err := agentparsecache.New(
 				cfg.Parsers.Cache.Path,
 				logger,
 				cfg.Parsers.Cache.TTL,
@@ -57,7 +57,7 @@ func main() {
 			cache = wc
 		}
 
-		return loader.NewDefaultParsers(
+		return parserloader.NewDefaultParsers(
 			logger,
 			cfg.Parsers.HG4Token,
 			cfg.Application.ClientTimeout,

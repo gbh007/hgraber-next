@@ -10,12 +10,12 @@ import (
 	"github.com/gbh007/hgraber-next/internal/controllers/api"
 	"github.com/gbh007/hgraber-next/internal/controllers/async"
 	"github.com/gbh007/hgraber-next/internal/controllers/debugserver"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/datafs"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/importfs"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/loader"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/agentdb"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/agentimportfs"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/localfs"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/masterapi"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/storage"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/parserloader"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
@@ -109,8 +109,8 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 		agentUseCases   api.ParsingUseCases
 		highwayUseCases api.HighwayUseCases
 
-		importStorageRaw *importfs.Storage
-		dbRaw            *storage.Storage
+		importStorageRaw *agentimportfs.Storage
+		dbRaw            *agentdb.Storage
 		mAPI             *masterapi.Client
 	)
 
@@ -125,7 +125,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 	}
 
 	if len(parsers) > 0 {
-		loader := loader.New(parsers, metricProvider)
+		loader := parserloader.New(parsers, metricProvider)
 		agentUseCases = agentUC.New(logger, loader)
 
 		logger.DebugContext(
@@ -134,7 +134,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 	}
 
 	if cfg.FSBase.ImportPath != "" {
-		importStorageRaw, err = importfs.New(
+		importStorageRaw, err = agentimportfs.New(
 			logger,
 			metricProvider,
 			cfg.FSBase.ImportPath,
@@ -159,7 +159,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 	}
 
 	if cfg.FSBase.FilePath != "" {
-		fileStorage, err = datafs.New(logger, metricProvider, cfg.FSBase.FilePath)
+		fileStorage, err = localfs.New(cfg.FSBase.FilePath, logger)
 		if err != nil {
 			logger.ErrorContext(
 				ctx, "fail init data fs",
@@ -176,7 +176,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 	}
 
 	if cfg.Sqlite.FilePath != "" {
-		dbRaw, err = storage.New(ctx, logger, metricProvider, cfg.Sqlite.FilePath)
+		dbRaw, err = agentdb.New(ctx, logger, metricProvider, cfg.Sqlite.FilePath)
 		if err != nil {
 			logger.ErrorContext(
 				ctx, "fail init db",
