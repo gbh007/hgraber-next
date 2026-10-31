@@ -1,13 +1,13 @@
 package srvconfig
 
 type ServerStorage struct {
-	DebugPGX       bool   `toml:"debug_pgx" yaml:"debug_pgx" envconfig:"DEBUG_PGX"`
-	Connection     string `toml:"connection" yaml:"connection" envconfig:"CONNECTION"`
-	MaxConnections int32  `toml:"max_connections" yaml:"max_connections" envconfig:"MAX_CONNECTIONS"`
+	DebugPGX       bool   `toml:"debug_pgx"`
+	Connection     string `toml:"connection"`
+	MaxConnections int32  `toml:"max_connections"`
 }
 
 type ServerFileStorage struct {
-	TryReconnect bool `toml:"try_reconnect" yaml:"try_reconnect" envconfig:"TRY_RECONNECT"`
+	TryReconnect bool `toml:"try_reconnect"`
 }
 
 func ServerStorageDefault() ServerStorage {

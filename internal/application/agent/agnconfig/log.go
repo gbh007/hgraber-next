@@ -5,10 +5,11 @@ import (
 	"strings"
 )
 
+// FIXME: слить с серверным
 type AgentLog struct {
-	IncludeSource bool   `toml:"include_source" yaml:"include_source" envconfig:"INCLUDE_SOURCE"`
-	Level         string `toml:"level" yaml:"level" envconfig:"LEVEL"`
-	RequestErrors bool   `toml:"request_errors" yaml:"request_errors" envconfig:"REQUEST_ERRORS"`
+	IncludeSource bool   `toml:"include_source"`
+	Level         string `toml:"level"`
+	RequestErrors bool   `toml:"request_errors"`
 }
 
 func AgentLogDefault() AgentLog {

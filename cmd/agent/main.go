@@ -29,16 +29,10 @@ func main() {
 	agent.Serve(ctx, func(
 		ctx context.Context,
 		logger *slog.Logger,
-		cfg agnconfig.AgentConfig[agnconfig.AgentParsers],
+		cfg agnconfig.AgentConfig,
 		async agent.Async,
 		metricProvider *metric.MetricProvider,
 	) ([]parsing.Parser, error) {
-		if cfg.Parsers == nil {
-			logger.DebugContext(ctx, "nil parser config, skipping")
-
-			return []parsing.Parser{}, nil
-		}
-
 		var cache request.Cache
 
 		if cfg.Parsers.Cache.Enabled {
@@ -60,11 +54,11 @@ func main() {
 		return parserloader.NewDefaultParsers(
 			logger,
 			cfg.Application.ClientTimeout,
-			*cfg.Parsers,
+			cfg.Parsers,
 			cache,
 			metricProvider,
 			cfg.Log.RequestErrors,
 			cfg.Parsers.UserAgent,
 		), nil
-	}, agnconfig.AgentDefaultParsers)
+	})
 }

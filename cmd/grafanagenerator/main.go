@@ -35,7 +35,7 @@ func main() {
 
 	flag.Parse()
 
-	cfg, err := config.ImportConfig(*configPath, false, func() Config { return Config{} })
+	cfg, err := config.ImportConfig(*configPath, func() Config { return Config{} })
 	if err != nil {
 		panic(err)
 	}

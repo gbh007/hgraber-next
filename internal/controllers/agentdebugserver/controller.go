@@ -16,8 +16,8 @@ type ParsingUseCases interface {
 	MultiHandle(ctx context.Context, multiUrl url.URL) ([]serveragentdto.AgentBookCheckResult, error)
 }
 
-type Controller[T any] struct {
-	config          agnconfig.AgentConfig[T]
+type Controller struct {
+	config          agnconfig.AgentConfig
 	logger          *slog.Logger
 	parsing         ParsingUseCases
 	addr            string
@@ -25,12 +25,12 @@ type Controller[T any] struct {
 	logErrorHandler bool
 }
 
-func New[T any](
-	config agnconfig.AgentConfig[T],
+func New(
+	config agnconfig.AgentConfig,
 	logger *slog.Logger,
 	parsing ParsingUseCases,
-) *Controller[T] {
-	c := &Controller[T]{
+) *Controller {
+	c := &Controller{
 		config:          config,
 		logger:          logger,
 		parsing:         parsing,

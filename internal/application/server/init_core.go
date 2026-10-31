@@ -46,22 +46,6 @@ func (a *App) initCore(ctx context.Context) error {
 		return fmt.Errorf("fail init metrics: %w", err)
 	}
 
-	if a.Config.Application.Pyroscope.Endpoint != "" {
-		a.pyroscopeProfiler, err = initPyroscope(a.Logger, a.Config)
-		if err != nil {
-			return fmt.Errorf("fail init pyroscope: %w", err)
-		}
-
-		defer a.pyroscopeProfiler.Stop() //nolint:errcheck // будет исправлено позднее
-	}
-
-	if a.Config.Application.TraceEndpoint != "" {
-		err := initTrace(ctx, a.Config.Application.TraceEndpoint, a.Config.Application.ServiceName)
-		if err != nil {
-			return fmt.Errorf("fail init otel: %w", err)
-		}
-	}
-
 	a.Tracer = otel.GetTracerProvider().Tracer("hgraber-next")
 
 	a.asyncController = async.New(a.Logger)

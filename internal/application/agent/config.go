@@ -12,18 +12,17 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func parseConfig[T any](defaultParsers func() *T) (agnconfig.AgentConfig[T], bool, error) {
+func parseConfig() (agnconfig.AgentConfig, bool, error) {
 	configPath := flag.String("config", "config.yaml", "path to config")
 	scan := flag.Bool("scan", false, "scan zip file to register in db")
-	useEnv := flag.Bool("use-env", false, "use env config")
 	flag.Parse()
 
-	c, err := config.ImportConfig(*configPath, *useEnv, agnconfig.AgentDefaultConfigWrapped(defaultParsers))
+	c, err := config.ImportConfig(*configPath, agnconfig.AgentDefaultConfigWrapped())
 
 	return c, *scan, err
 }
 
-func initLogger[T any](cfg agnconfig.AgentConfig[T]) *slog.Logger {
+func initLogger(cfg agnconfig.AgentConfig) *slog.Logger {
 	slogOpt := &slog.HandlerOptions{
 		AddSource: cfg.Log.IncludeSource,
 		Level:     cfg.Log.SlogLevel(),

@@ -8,10 +8,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (cnt *Controller[T]) pageConfig(c echo.Context) error {
+func (cnt *Controller) pageConfig(c echo.Context) error {
 	buff := &bytes.Buffer{}
 
-	err := config.ExportToWriter(buff, &cnt.config, ".yaml")
+	err := config.ExportToWriter(buff, cnt.config)
 	if err != nil {
 		return err
 	}

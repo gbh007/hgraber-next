@@ -1,10 +1,10 @@
 package agnconfig
 
 type AgentAPI struct {
-	Addr            string `toml:"addr" yaml:"addr" envconfig:"ADDR"`
-	Token           string `toml:"token" yaml:"token" envconfig:"TOKEN"`
-	LogErrorHandler bool   `toml:"log_error_handler" yaml:"log_error_handler" envconfig:"LOG_ERROR_HANDLER"`
-	Debug           bool   `toml:"debug" yaml:"debug" envconfig:"DEBUG"`
+	Addr            string `toml:"addr"`
+	Token           string `toml:"token"`
+	LogErrorHandler bool   `toml:"log_error_handler"`
+	Debug           bool   `toml:"debug"`
 }
 
 func (a AgentAPI) GetAddr() string {

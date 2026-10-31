@@ -13,5 +13,5 @@ func parseConfig() (srvconfig.ServerConfig, error) {
 	flag.Parse()
 
 	//nolint:wrapcheck // здесь обертка не нужна
-	return config.ImportConfig(*configPath, true, srvconfig.ServerConfigDefault)
+	return config.ImportConfig(*configPath, srvconfig.ServerConfigDefault)
 }

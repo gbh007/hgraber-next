@@ -3,9 +3,9 @@ package agnconfig
 import "time"
 
 type AgentDebugServer struct {
-	Addr            string `toml:"addr" yaml:"addr" envconfig:"ADDR"`
-	LogErrorHandler bool   `toml:"log_error_handler" yaml:"log_error_handler" envconfig:"LOG_ERROR_HANDLER"`
-	Debug           bool   `toml:"debug" yaml:"debug" envconfig:"DEBUG"`
+	Addr            string `toml:"addr"`
+	LogErrorHandler bool   `toml:"log_error_handler"`
+	Debug           bool   `toml:"debug"`
 }
 
 func AgentDefaultDebugServer() AgentDebugServer {
@@ -13,21 +13,21 @@ func AgentDefaultDebugServer() AgentDebugServer {
 }
 
 type AgentParsers struct {
-	Enabled   []string          `toml:"enabled" yaml:"enabled" envconfig:"ENABLED"`
-	Cache     AgentParsersCache `toml:"cache" yaml:"cache" envconfig:"CACHE"`
-	UserAgent string            `toml:"user_agent" yaml:"user_agent" envconfig:"USER_AGENT"`
-	Proxy     AgentParsersProxy `toml:"proxy" yaml:"proxy" envconfig:"PROXY"`
+	Enabled   []string          `toml:"enabled"`
+	Cache     AgentParsersCache `toml:"cache"`
+	UserAgent string            `toml:"user_agent"`
+	Proxy     AgentParsersProxy `toml:"proxy"`
 }
 
 type AgentParsersProxy struct {
-	Host    string   `toml:"host" yaml:"host" envconfig:"HOST"`
-	User    string   `toml:"user" yaml:"user" envconfig:"USER"`
-	Pass    string   `toml:"pass" yaml:"pass" envconfig:"PASS"`
-	Enabled []string `toml:"enabled" yaml:"enabled" envconfig:"ENABLED"`
+	Host    string   `toml:"host"`
+	User    string   `toml:"user"`
+	Pass    string   `toml:"pass"`
+	Enabled []string `toml:"enabled"`
 }
 
-func AgentDefaultParsers() *AgentParsers {
-	return &AgentParsers{
+func AgentDefaultParsers() AgentParsers {
+	return AgentParsers{
 		Enabled: []string{
 			"mock",
 			"hgraber_local",
@@ -37,10 +37,10 @@ func AgentDefaultParsers() *AgentParsers {
 }
 
 type AgentParsersCache struct {
-	Enabled       bool          `toml:"enabled" yaml:"enabled" envconfig:"ENABLED"`
-	Path          string        `toml:"path" yaml:"path" envconfig:"PATH"`
-	TTL           time.Duration `toml:"ttl" yaml:"ttl" envconfig:"TTL"`
-	CleanInterval time.Duration `toml:"clean_interval" yaml:"clean_interval" envconfig:"CLEAN_INTERVAL"`
+	Enabled       bool          `toml:"enabled"`
+	Path          string        `toml:"path"`
+	TTL           time.Duration `toml:"ttl"`
+	CleanInterval time.Duration `toml:"clean_interval"`
 }
 
 func AgentDefaultParsersCache() AgentParsersCache {

@@ -24,7 +24,7 @@ type parseRequest struct {
 	AsMulti bool   `form:"as-multi" query:"as-multi"`
 }
 
-func (cnt *Controller[T]) pageParsing(c echo.Context) error {
+func (cnt *Controller) pageParsing(c echo.Context) error {
 	if c.Request().Method == http.MethodGet {
 		return c.Render(http.StatusOK, "parsing.html.gotmpl", nil)
 	}

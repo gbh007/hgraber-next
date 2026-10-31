@@ -4,16 +4,10 @@ level = "info"
 
 [application]
 service_name = "hgraber-next-local-test"
-trace_endpoint = ""
 
 [application.metric.scrape_period]
 main_info = "10s"
 book_statistic = "1h"
-
-[application.pyroscope]
-endpoint = ""
-debug = false
-rate = 5
 
 [parsing]
 parse_book_timeout = "5m"

@@ -6,8 +6,8 @@ import (
 )
 
 type Log struct {
-	IncludeSource bool   `toml:"include_source" yaml:"include_source" envconfig:"INCLUDE_SOURCE"`
-	Level         string `toml:"level" yaml:"level" envconfig:"LEVEL"`
+	IncludeSource bool   `toml:"include_source"`
+	Level         string `toml:"level"`
 }
 
 func LogDefault() Log {

@@ -1,8 +1,8 @@
 package srvconfig
 
 type ServerMCPServer struct {
-	Addr   string `toml:"addr" yaml:"addr" envconfig:"ADDR"`
-	Token  string `toml:"token" yaml:"token" envconfig:"TOKEN"`
-	Debug  bool   `toml:"debug" yaml:"debug" envconfig:"DEBUG"`
-	Mutate bool   `toml:"mutate" yaml:"mutate" envconfig:"MUTATE"`
+	Addr   string `toml:"addr"`
+	Token  string `toml:"token"`
+	Debug  bool   `toml:"debug"`
+	Mutate bool   `toml:"mutate"`
 }

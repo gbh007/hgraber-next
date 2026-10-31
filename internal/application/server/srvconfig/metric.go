@@ -3,12 +3,12 @@ package srvconfig
 import "time"
 
 type ServerMetric struct {
-	ScrapePeriod ServerMetricScrapePeriod `toml:"scrape_period" yaml:"scrape_period" envconfig:"SCRAPE_PERIOD"`
+	ScrapePeriod ServerMetricScrapePeriod `toml:"scrape_period"`
 }
 
 type ServerMetricScrapePeriod struct {
-	MainInfo      time.Duration `toml:"main_info" yaml:"main_info" envconfig:"MAIN_INFO"`
-	BookStatistic time.Duration `toml:"book_statistic" yaml:"book_statistic" envconfig:"BOOK_STATISTIC"`
+	MainInfo      time.Duration `toml:"main_info"`
+	BookStatistic time.Duration `toml:"book_statistic"`
 }
 
 func ServerMetricDefault() ServerMetric {

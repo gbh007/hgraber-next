@@ -31,16 +31,16 @@ type Async interface {
 	RegisterAfterStop(handler func())
 }
 
-type ParserInit[T any] func(
+type ParserInit = func(
 	ctx context.Context,
 	logger *slog.Logger,
-	cfg agnconfig.AgentConfig[T],
+	cfg agnconfig.AgentConfig,
 	async Async,
 	metricProvider *metric.MetricProvider,
 ) ([]parsing.Parser, error)
 
-func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers func() *T) {
-	cfg, needScan, err := parseConfig[T](defaultParsers)
+func Serve(ctx context.Context, parserInit ParserInit) {
+	cfg, needScan, err := parseConfig()
 	if err != nil {
 		// Поскольку на этот момент нет ни логгера ни вообще ничего то выкидываем панику.
 		panic(err)
@@ -67,36 +67,6 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 		)
 
 		os.Exit(1)
-	}
-
-	if cfg.Application.Pyroscope.Endpoint != "" {
-		profiler, err := initPyroscope(logger, cfg)
-		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail init pyroscope",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
-		}
-
-		defer profiler.Stop() //nolint:errcheck // будет исправлено позднее
-	}
-
-	if cfg.Application.TraceEndpoint != "" {
-		err := initTrace(
-			ctx,
-			cfg.Application.TraceEndpoint,
-			cfg.Application.ServiceName,
-		)
-		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail init otel",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
-		}
 	}
 
 	tracer := otel.GetTracerProvider().Tracer("hgraber-next-agent")
@@ -273,7 +243,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 	}
 
 	if cfg.DebugServer.Addr != "" && agentUseCases != nil {
-		async.RegisterRunner(agentdebugserver.New[T](
+		async.RegisterRunner(agentdebugserver.New(
 			cfg,
 			logger,
 			agentUseCases,

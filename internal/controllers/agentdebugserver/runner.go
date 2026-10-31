@@ -12,11 +12,11 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func (c *Controller[T]) Name() string {
+func (c *Controller) Name() string {
 	return "api server"
 }
 
-func (c *Controller[T]) Start(parentCtx context.Context) (chan struct{}, error) {
+func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	done := make(chan struct{})
 
 	l := slog.NewLogLogger(c.logger.Handler(), slog.LevelError)

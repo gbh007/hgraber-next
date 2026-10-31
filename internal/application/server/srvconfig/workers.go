@@ -5,10 +5,10 @@ import (
 )
 
 type ServerWorker struct {
-	Name      string        `toml:"name" yaml:"name" envconfig:"NAME"`
-	Count     int32         `toml:"count" yaml:"count" envconfig:"COUNT"`
-	QueueSize int           `toml:"queue_size" yaml:"queue_size" envconfig:"QUEUE_SIZE"`
-	Interval  time.Duration `toml:"interval" yaml:"interval" envconfig:"INTERVAL"`
+	Name      string        `toml:"name"`
+	Count     int32         `toml:"count"`
+	QueueSize int           `toml:"queue_size"`
+	Interval  time.Duration `toml:"interval"`
 }
 
 func (w ServerWorker) GetName() string {
