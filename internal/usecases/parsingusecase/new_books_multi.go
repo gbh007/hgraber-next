@@ -118,7 +118,7 @@ urlLoop:
 					pageCountLimit := 0
 					needSkip := false
 
-					extendInfo, err := uc.agentSystem.HProxyBook(ctx, agent.ID, u, &pageCountLimit)
+					extendInfo, err := uc.agentSystem.BookParse(ctx, agent.ID, u, &pageCountLimit)
 					if err != nil {
 						return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
 							"agent (%s) get book detail info (%s): %w", agent.ID.String(), u.String(), err,

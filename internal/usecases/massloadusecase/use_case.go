@@ -7,11 +7,11 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/systemmodel"
 )
 
@@ -58,7 +58,7 @@ type storage interface {
 
 type agentSystem interface {
 	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error)
-	HProxyList(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.List, error)
+	ParseList(ctx context.Context, agentID uuid.UUID, u url.URL, onePage bool) (hproxymodel.List, error)
 }
 
 type UseCase struct {

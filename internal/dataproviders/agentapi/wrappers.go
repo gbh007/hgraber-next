@@ -74,26 +74,3 @@ func (c *Client) Status(ctx context.Context, agentID uuid.UUID) (serveragentdto.
 
 	return adapter.Status(ctx) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
-
-func (c *Client) HProxyList(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.List, error) {
-	adapter, err := c.getAdapter(agentID)
-	if err != nil {
-		return hproxymodel.List{}, err
-	}
-
-	return adapter.HProxyList(ctx, u) //nolint:wrapcheck // это обычный врапер, обертка не требуется
-}
-
-func (c *Client) HProxyBook(
-	ctx context.Context,
-	agentID uuid.UUID,
-	u url.URL,
-	pageLimit *int,
-) (hproxymodel.Book, error) {
-	adapter, err := c.getAdapter(agentID)
-	if err != nil {
-		return hproxymodel.Book{}, err
-	}
-
-	return adapter.HProxyBook(ctx, u, pageLimit) //nolint:wrapcheck // это обычный врапер, обертка не требуется
-}

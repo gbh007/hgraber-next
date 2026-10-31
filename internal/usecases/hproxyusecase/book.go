@@ -7,10 +7,10 @@ import (
 	"log/slog"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 //nolint:gocognit,cyclop,funlen // будет исправлено позднее
@@ -51,7 +51,7 @@ func (uc *UseCase) Book(ctx context.Context, u url.URL, pageLimit *int) (hproxym
 				continue
 			}
 
-			book, err := uc.agentSystem.HProxyBook(ctx, agent.ID, u, pageLimit)
+			book, err := uc.agentSystem.BookParse(ctx, agent.ID, u, pageLimit)
 			if err != nil {
 				return hproxymodel.Book{}, fmt.Errorf("parse book: %w", err)
 			}

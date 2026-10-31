@@ -20,7 +20,7 @@ func (c *Controller) APIV2ParsingListPost(
 		}
 	}
 
-	list, err := c.parsingUseCases.HProxyList(ctx, req.URL)
+	list, err := c.parsingUseCases.HProxyList(ctx, req.URL, req.OnePage.Value)
 	if err != nil {
 		return nil, err
 	}

@@ -6,7 +6,7 @@ import (
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/external/parserdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 func (uc *UseCase) HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error) {
@@ -23,13 +23,28 @@ func (uc *UseCase) HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (p
 	return details, nil
 }
 
-func (uc *UseCase) HProxyList(ctx context.Context, u url.URL) (parserdto.BookList, error) {
-	list, err := uc.loader.HProxyList(ctx, u)
-	if err != nil {
-		return parserdto.BookList{}, fmt.Errorf("loader: %w", err)
+func (uc *UseCase) HProxyList(ctx context.Context, u url.URL, onePage bool) (parserdto.BookList, error) {
+	nextUrl := &u
+
+	list := parserdto.BookList{}
+
+	for nextUrl != nil {
+		units, err := uc.loader.HProxyList(ctx, u)
+		if err != nil {
+			return parserdto.BookList{}, fmt.Errorf("loader: %w", err)
+		}
+
+		list.Units = append(list.Units, units.Units...)
+		list.NextURL = units.NextURL
+
+		if onePage {
+			nextUrl = nil
+		} else {
+			nextUrl = units.NextURL
+		}
 	}
 
-	list.Units = pkg.SliceFilter(list.Units, func(u parserdto.BookListUnit) bool {
+	list.Units = lo.Filter(list.Units, func(u parserdto.BookListUnit, _ int) bool {
 		return u.Type != parserdto.UnknownHProxyListUnitType
 	})
 

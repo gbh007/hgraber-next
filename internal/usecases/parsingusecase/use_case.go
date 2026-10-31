@@ -50,7 +50,6 @@ type agentSystem interface {
 	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error)
 	PageLoad(ctx context.Context, agentID uuid.UUID, u serveragentdto.AgentPageURL) (io.Reader, error)
 	ParseList(ctx context.Context, agentID uuid.UUID, u url.URL, onePage bool) (hproxymodel.List, error)
-	HProxyBook(ctx context.Context, agentID uuid.UUID, u url.URL, pageLimit *int) (hproxymodel.Book, error)
 }
 
 type fileStorage interface {

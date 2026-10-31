@@ -9,9 +9,9 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 type handledExternalURL struct {
@@ -94,7 +94,7 @@ agentSearch:
 			slog.String("url", nextURL.String()),
 		)
 
-		list, err := uc.agentSystem.HProxyList(ctx, agentID, *nextURL)
+		list, err := uc.agentSystem.ParseList(ctx, agentID, *nextURL, true)
 		if err != nil {
 			return handledExternalURL{}, fmt.Errorf("parse list: %w", err)
 		}

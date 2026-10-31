@@ -7,10 +7,10 @@ import (
 	"log/slog"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 func (uc *UseCase) List(ctx context.Context, u url.URL) (hproxymodel.List, error) {
@@ -52,7 +52,7 @@ func (uc *UseCase) List(ctx context.Context, u url.URL) (hproxymodel.List, error
 				continue
 			}
 
-			list, err := uc.agentSystem.HProxyList(ctx, agent.ID, u)
+			list, err := uc.agentSystem.ParseList(ctx, agent.ID, u, true)
 			if err != nil {
 				return hproxymodel.List{}, fmt.Errorf("parse list: %w", err)
 			}

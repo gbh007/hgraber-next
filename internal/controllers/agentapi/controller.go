@@ -33,7 +33,7 @@ type ParsingUseCases interface {
 	MultiHandle(ctx context.Context, multiUrl url.URL) ([]serveragentdto.AgentBookCheckResult, error)
 
 	HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error)
-	HProxyList(ctx context.Context, u url.URL) (parserdto.BookList, error)
+	HProxyList(ctx context.Context, u url.URL, onePage bool) (parserdto.BookList, error)
 }
 
 type ImportUseCases interface {
