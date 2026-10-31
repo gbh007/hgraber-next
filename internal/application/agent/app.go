@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/gbh007/hgraber-next/internal/agent/config"
-	"github.com/gbh007/hgraber-next/internal/controllers/api"
+	"github.com/gbh007/hgraber-next/internal/controllers/agentapi"
+	"github.com/gbh007/hgraber-next/internal/controllers/agentdebugserver"
 	"github.com/gbh007/hgraber-next/internal/controllers/async"
-	"github.com/gbh007/hgraber-next/internal/controllers/debugserver"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/agentdb"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/agentimportfs"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/localfs"
@@ -19,10 +19,10 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
-	agentUC "github.com/gbh007/hgraber-next/internal/usecases/agent"
-	"github.com/gbh007/hgraber-next/internal/usecases/highway"
-	"github.com/gbh007/hgraber-next/internal/usecases/importapi"
-	"github.com/gbh007/hgraber-next/internal/usecases/importdeduplicator"
+	"github.com/gbh007/hgraber-next/internal/usecases/agenthighway"
+	"github.com/gbh007/hgraber-next/internal/usecases/agentimportapiuc"
+	"github.com/gbh007/hgraber-next/internal/usecases/agentimportdeduplicatoruc"
+	"github.com/gbh007/hgraber-next/internal/usecases/agentparseruc"
 	"go.opentelemetry.io/otel"
 )
 
@@ -104,10 +104,10 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 	async := async.New(logger)
 
 	var (
-		importStorage   api.ImportUseCases
-		fileStorage     api.FileUseCases
-		agentUseCases   api.ParsingUseCases
-		highwayUseCases api.HighwayUseCases
+		importStorage   agentapi.ImportUseCases
+		fileStorage     agentapi.FileUseCases
+		agentUseCases   agentapi.ParsingUseCases
+		highwayUseCases agentapi.HighwayUseCases
 
 		importStorageRaw *agentimportfs.Storage
 		dbRaw            *agentdb.Storage
@@ -126,7 +126,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 
 	if len(parsers) > 0 {
 		loader := parserloader.New(parsers, metricProvider)
-		agentUseCases = agentUC.New(logger, loader)
+		agentUseCases = agentparseruc.New(logger, loader)
 
 		logger.DebugContext(
 			ctx, "use parsing",
@@ -206,7 +206,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 			os.Exit(1)
 		}
 
-		err = importdeduplicator.New(logger, importStorageRaw, dbRaw, mAPI).ScanZips(ctx)
+		err = agentimportdeduplicatoruc.New(logger, importStorageRaw, dbRaw, mAPI).ScanZips(ctx)
 		if err != nil {
 			logger.ErrorContext(
 				ctx, "fail scan zips",
@@ -220,7 +220,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 	}
 
 	if cfg.FSBase.EnableDeduplication && dbRaw != nil && importStorageRaw != nil {
-		importStorage = importapi.New(logger, dbRaw, importStorageRaw)
+		importStorage = agentimportapiuc.New(logger, dbRaw, importStorageRaw)
 
 		logger.DebugContext(ctx, "use export deduplication")
 	}
@@ -236,7 +236,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 			os.Exit(1)
 		}
 
-		highwayUseCases = highway.New(
+		highwayUseCases = agenthighway.New(
 			tokenizer,
 			cfg.Highway.TokenLifetime,
 			fileStorage,
@@ -248,7 +248,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 	})
 
 	if cfg.API.Addr != "" {
-		apiController, err := api.New(
+		apiController, err := agentapi.New(
 			cfg.API,
 			time.Now(),
 			logger,
@@ -273,7 +273,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 	}
 
 	if cfg.DebugServer.Addr != "" && agentUseCases != nil {
-		async.RegisterRunner(debugserver.New[T](
+		async.RegisterRunner(agentdebugserver.New[T](
 			cfg,
 			logger,
 			agentUseCases,
