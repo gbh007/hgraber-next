@@ -8,7 +8,7 @@ import (
 	"log/slog"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
@@ -23,7 +23,7 @@ func (uc *UseCase) Image(ctx context.Context, bookURL, imageURL url.URL) (io.Rea
 	for _, agent := range agents {
 		pagesInfo, err := uc.agentSystem.PagesCheck(
 			ctx, agent.ID,
-			[]agentmodel.AgentPageURL{
+			[]serveragentdto.AgentPageURL{
 				{
 					BookURL:  bookURL,
 					ImageURL: imageURL,
@@ -31,7 +31,7 @@ func (uc *UseCase) Image(ctx context.Context, bookURL, imageURL url.URL) (io.Rea
 			},
 		)
 
-		if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
+		if errors.Is(err, serveragentdto.ErrAgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),
@@ -56,7 +56,7 @@ func (uc *UseCase) Image(ctx context.Context, bookURL, imageURL url.URL) (io.Rea
 				continue
 			}
 
-			r, err := uc.agentSystem.PageLoad(ctx, agent.ID, agentmodel.AgentPageURL{
+			r, err := uc.agentSystem.PageLoad(ctx, agent.ID, serveragentdto.AgentPageURL{
 				BookURL:  bookURL,
 				ImageURL: imageURL,
 			})

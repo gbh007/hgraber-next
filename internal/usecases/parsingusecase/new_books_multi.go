@@ -10,7 +10,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
@@ -47,7 +47,7 @@ urlLoop:
 		for _, agent := range agents {
 			booksInfo, err := uc.agentSystem.BooksCheckMultiple(ctx, agent.ID, multiURL)
 
-			if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
+			if errors.Is(err, serveragentdto.ErrAgentAPIOffline) {
 				uc.logger.DebugContext(
 					ctx, "agent api offline",
 					slog.String("agent_id", agent.ID.String()),

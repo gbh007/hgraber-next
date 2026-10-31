@@ -1,0 +1,52 @@
+package simpleinfo
+
+import (
+	"fmt"
+
+	"github.com/grafana/grafana-foundation-sdk/go/cog"
+	"github.com/grafana/grafana-foundation-sdk/go/cog/variants"
+	"github.com/grafana/grafana-foundation-sdk/go/prometheus"
+	"github.com/grafana/grafana-foundation-sdk/go/stat"
+	"github.com/grafana/promql-builder/go/promql"
+
+	"github.com/gbh007/hgraber-next/internal/dataproviders/metric/generator/generatorcore"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/metric/metriccore"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/metric/metricfs"
+)
+
+func FSCompression() *stat.PanelBuilder {
+	query := promql.Sub(
+		promql.N(1),
+		promql.Div(
+			promql.Sum(
+				promql.
+					Vector(metricfs.FileBytesName).
+					Labels(generatorcore.ServiceFilterPromQL).
+					Label(metriccore.ServiceTypeLabel, metriccore.ServiceTypeLabelValueServer).
+					Label(metriccore.TypeLabel, metricfs.TypeLabelValueFS),
+			).By([]string{metricfs.FSIDLabel}),
+			promql.Sum(
+				promql.
+					Vector(metricfs.FileBytesName).
+					Labels(generatorcore.ServiceFilterPromQL).
+					Label(metriccore.ServiceTypeLabel, metriccore.ServiceTypeLabelValueServer).
+					Label(metriccore.TypeLabel, metricfs.TypeLabelValuePage),
+			).By([]string{metricfs.FSIDLabel}),
+		),
+	)
+
+	return stat.
+		NewPanelBuilder().
+		Title("FS Compression").
+		Targets([]cog.Builder[variants.Dataquery]{
+			prometheus.
+				NewDataqueryBuilder().
+				Expr(query.String()).
+				Instant().
+				LegendFormat(fmt.Sprintf("{{%s}}", metricfs.FSIDLabel)).
+				Datasource(generatorcore.MetricDatasource),
+		}).
+		Unit(generatorcore.UnitPercent0_1).
+		Thresholds(generatorcore.GreenTrashHold()).
+		Datasource(generatorcore.MetricDatasource)
+}

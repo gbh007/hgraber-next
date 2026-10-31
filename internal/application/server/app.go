@@ -9,15 +9,15 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/trace/noop"
 
-	"github.com/gbh007/hgraber-next/internal/adapters/agent"
-	"github.com/gbh007/hgraber-next/internal/adapters/filestorage"
-	"github.com/gbh007/hgraber-next/internal/adapters/metric"
-	"github.com/gbh007/hgraber-next/internal/adapters/postgresql"
-	"github.com/gbh007/hgraber-next/internal/adapters/tmpdata"
 	"github.com/gbh007/hgraber-next/internal/config"
 	"github.com/gbh007/hgraber-next/internal/controllers/async"
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager"
-	"github.com/gbh007/hgraber-next/internal/usecases/agentusecase"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/agentapi"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/filestorage"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/serverdb"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/tmpdata"
+	"github.com/gbh007/hgraber-next/internal/usecases/agentmanagesuc"
 	"github.com/gbh007/hgraber-next/internal/usecases/attributeusecase"
 	"github.com/gbh007/hgraber-next/internal/usecases/bffusecase"
 	"github.com/gbh007/hgraber-next/internal/usecases/bookusecase"
@@ -41,8 +41,8 @@ type App struct {
 	pyroscopeProfiler *pyroscope.Profiler
 
 	metricProvider     *metric.MetricProvider
-	storage            *postgresql.Repo
-	agentSystem        *agent.Client
+	storage            *serverdb.Repo
+	agentSystem        *agentapi.Client
 	fileStorageAdapter *filestorage.Storage
 	tmpStorage         *tmpdata.Storage
 
@@ -58,7 +58,7 @@ type App struct {
 	labelUseCases       *labelusecase.UseCase
 	massloadUseCases    *massloadusecase.UseCase
 	systemUseCases      *systemusecase.UseCase
-	agentUseCases       *agentusecase.UseCase
+	agentUseCases       *agentmanagesuc.UseCase
 	hProxyUseCases      *hproxyusecase.UseCase
 
 	asyncController   *async.Controller

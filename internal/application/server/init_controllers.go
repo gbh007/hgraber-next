@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/controllers/apiagent"
-	"github.com/gbh007/hgraber-next/internal/controllers/apiserver"
+	"github.com/gbh007/hgraber-next/internal/controllers/agentcacheapi"
+	"github.com/gbh007/hgraber-next/internal/controllers/serverapi"
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager"
 	"github.com/gbh007/hgraber-next/internal/domain/systemmodel"
 	"github.com/gbh007/hgraber-next/internal/experimental/mcp"
@@ -68,7 +68,7 @@ func (a *App) initControllers(_ context.Context) error {
 
 	a.workersController.AddUnits(workerUnits...)
 
-	apiController, err := apiserver.New(
+	apiController, err := serverapi.New(
 		a.Logger,
 		a.Tracer,
 		a.Config.API,
@@ -94,7 +94,7 @@ func (a *App) initControllers(_ context.Context) error {
 	a.asyncController.RegisterRunner(apiController)
 
 	if a.Config.AgentServer.Addr != "" {
-		apiAgentController, err := apiagent.New(
+		apiAgentController, err := agentcacheapi.New(
 			a.Config.AgentServer,
 			time.Now(),
 			a.Logger,

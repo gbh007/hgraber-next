@@ -8,9 +8,9 @@ import (
 
 	"go.opentelemetry.io/otel"
 
-	"github.com/gbh007/hgraber-next/internal/adapters/metric"
 	"github.com/gbh007/hgraber-next/internal/controllers/async"
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
 )
 
 func (a *App) initLogger() {

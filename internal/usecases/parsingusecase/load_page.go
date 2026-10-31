@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
@@ -22,7 +22,7 @@ func (uc *UseCase) DownloadPage(ctx context.Context, agentID uuid.UUID, page cor
 		return fmt.Errorf("get fs id for download: %w", err)
 	}
 
-	body, err := uc.agentSystem.PageLoad(ctx, agentID, agentmodel.AgentPageURL{
+	body, err := uc.agentSystem.PageLoad(ctx, agentID, serveragentdto.AgentPageURL{
 		BookURL:  *page.BookURL,
 		ImageURL: *page.ImageURL,
 	})

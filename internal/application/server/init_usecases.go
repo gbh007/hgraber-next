@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/gbh007/hgraber-next/internal/usecases/agentusecase"
+	"github.com/gbh007/hgraber-next/internal/usecases/agentmanagesuc"
 	"github.com/gbh007/hgraber-next/internal/usecases/attributeusecase"
 	"github.com/gbh007/hgraber-next/internal/usecases/bffusecase"
 	"github.com/gbh007/hgraber-next/internal/usecases/bookusecase"
@@ -64,7 +64,7 @@ func (a *App) initUseCases() {
 		a.attributeUseCases,
 	)
 
-	a.agentUseCases = agentusecase.New(a.Logger, a.agentSystem, a.storage)
+	a.agentUseCases = agentmanagesuc.New(a.Logger, a.agentSystem, a.storage)
 	a.hProxyUseCases = hproxyusecase.New(
 		a.Logger,
 		a.storage,

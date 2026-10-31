@@ -7,7 +7,7 @@ import (
 	"log/slog"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
@@ -26,7 +26,7 @@ func (uc *UseCase) Book(ctx context.Context, u url.URL, pageLimit *int) (hproxym
 	for _, agent := range agents {
 		info, err := uc.agentSystem.BooksCheck(ctx, agent.ID, []url.URL{u})
 
-		if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
+		if errors.Is(err, serveragentdto.ErrAgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),

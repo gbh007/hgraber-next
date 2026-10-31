@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
@@ -46,15 +46,15 @@ type storage interface {
 }
 
 type agentSystem interface {
-	BookParse(ctx context.Context, agentID uuid.UUID, u url.URL) (agentmodel.AgentBookDetails, error)
-	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error)
-	PageLoad(ctx context.Context, agentID uuid.UUID, u agentmodel.AgentPageURL) (io.Reader, error)
+	BookParse(ctx context.Context, agentID uuid.UUID, u url.URL) (serveragentdto.AgentBookDetails, error)
+	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error)
+	PageLoad(ctx context.Context, agentID uuid.UUID, u serveragentdto.AgentPageURL) (io.Reader, error)
 	PagesCheck(
 		ctx context.Context,
 		agentID uuid.UUID,
-		urls []agentmodel.AgentPageURL,
-	) ([]agentmodel.AgentPageCheckResult, error)
-	BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]agentmodel.AgentBookCheckResult, error)
+		urls []serveragentdto.AgentPageURL,
+	) ([]serveragentdto.AgentPageCheckResult, error)
+	BooksCheckMultiple(ctx context.Context, agentID uuid.UUID, u url.URL) ([]serveragentdto.AgentBookCheckResult, error)
 	HProxyBook(ctx context.Context, agentID uuid.UUID, u url.URL, pageLimit *int) (hproxymodel.Book, error)
 }
 

@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/external"
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 )
@@ -24,8 +24,8 @@ func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter core.Bo
 	}
 
 	uc.tmpStorage.AddToExport(
-		pkg.Map(books, func(bookID uuid.UUID) agentmodel.BookToExport {
-			return agentmodel.BookToExport{
+		pkg.Map(books, func(bookID uuid.UUID) serveragentdto.BookToExport {
+			return serveragentdto.BookToExport{
 				AgentID:           agentID,
 				BookID:            bookID,
 				DeleteAfterExport: deleteAfter,
@@ -36,15 +36,15 @@ func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter core.Bo
 	return nil
 }
 
-func (uc *UseCase) ExportList() []agentmodel.BookToExport {
+func (uc *UseCase) ExportList() []serveragentdto.BookToExport {
 	return uc.tmpStorage.ExportList()
 }
 
-func (uc *UseCase) ExportArchive(ctx context.Context, toExport agentmodel.BookToExport, retry bool) error {
+func (uc *UseCase) ExportArchive(ctx context.Context, toExport serveragentdto.BookToExport, retry bool) error {
 	bookContainer, err := uc.bookAdapter.BookRaw(ctx, toExport.BookID)
 	if err != nil {
 		if retry {
-			uc.tmpStorage.AddToExport([]agentmodel.BookToExport{toExport})
+			uc.tmpStorage.AddToExport([]serveragentdto.BookToExport{toExport})
 		}
 
 		return fmt.Errorf("get book container %s: %w", toExport.BookID.String(), err)
@@ -53,13 +53,13 @@ func (uc *UseCase) ExportArchive(ctx context.Context, toExport agentmodel.BookTo
 	body, err := uc.newArchive(ctx, bookContainer)
 	if err != nil {
 		if retry {
-			uc.tmpStorage.AddToExport([]agentmodel.BookToExport{toExport})
+			uc.tmpStorage.AddToExport([]serveragentdto.BookToExport{toExport})
 		}
 
 		return fmt.Errorf("make archive %s: %w", toExport.BookID.String(), err)
 	}
 
-	err = uc.agentSystem.ExportArchive(ctx, toExport.AgentID, agentmodel.AgentExportData{
+	err = uc.agentSystem.ExportArchive(ctx, toExport.AgentID, serveragentdto.AgentExportData{
 		BookID:   bookContainer.Book.ID,
 		BookName: bookContainer.Book.Name,
 		BookURL:  bookContainer.Book.OriginURL,
@@ -67,7 +67,7 @@ func (uc *UseCase) ExportArchive(ctx context.Context, toExport agentmodel.BookTo
 	})
 	if err != nil {
 		if retry {
-			uc.tmpStorage.AddToExport([]agentmodel.BookToExport{toExport})
+			uc.tmpStorage.AddToExport([]serveragentdto.BookToExport{toExport})
 		}
 
 		return fmt.Errorf("export archive %s to agent: %w", toExport.BookID.String(), err)
@@ -77,7 +77,7 @@ func (uc *UseCase) ExportArchive(ctx context.Context, toExport agentmodel.BookTo
 		err = uc.storage.MarkBookAsDeleted(ctx, toExport.BookID)
 		if err != nil {
 			if retry {
-				uc.tmpStorage.AddToExport([]agentmodel.BookToExport{toExport})
+				uc.tmpStorage.AddToExport([]serveragentdto.BookToExport{toExport})
 			}
 
 			return fmt.Errorf("delete book after export %s: %w", toExport.BookID.String(), err)

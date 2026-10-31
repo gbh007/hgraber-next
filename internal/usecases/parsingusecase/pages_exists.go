@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 func (uc *UseCase) PagesExists(
 	ctx context.Context,
-	urls []agentmodel.AgentPageURL,
-) ([]agentmodel.AgentPageCheckResult, error) {
-	result := make([]agentmodel.AgentPageCheckResult, 0, len(urls))
+	urls []serveragentdto.AgentPageURL,
+) ([]serveragentdto.AgentPageCheckResult, error) {
+	result := make([]serveragentdto.AgentPageCheckResult, 0, len(urls))
 
 urlLoop:
 	for _, u := range urls {
@@ -22,7 +22,7 @@ urlLoop:
 
 		for _, p := range pages {
 			if p.IsLoaded() {
-				result = append(result, agentmodel.AgentPageCheckResult{
+				result = append(result, serveragentdto.AgentPageCheckResult{
 					BookURL:    u.BookURL,
 					ImageURL:   u.ImageURL,
 					IsPossible: true,
@@ -32,7 +32,7 @@ urlLoop:
 			}
 		}
 
-		result = append(result, agentmodel.AgentPageCheckResult{
+		result = append(result, serveragentdto.AgentPageCheckResult{
 			BookURL:       u.BookURL,
 			ImageURL:      u.ImageURL,
 			IsUnsupported: true,

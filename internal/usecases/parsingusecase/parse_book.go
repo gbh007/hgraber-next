@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 )
@@ -60,7 +60,7 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.B
 	err = uc.storage.UpdateBookPages(
 		ctx,
 		book.ID,
-		pkg.Map(info.Pages, func(p agentmodel.AgentBookDetailsPagesItem) core.Page {
+		pkg.Map(info.Pages, func(p serveragentdto.AgentBookDetailsPagesItem) core.Page {
 			return core.Page{
 				BookID:     book.ID,
 				PageNumber: p.PageNumber,

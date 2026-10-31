@@ -1,0 +1,45 @@
+package fshandlers
+
+import (
+	"context"
+
+	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
+	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
+	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/gbh007/hgraber-next/openapi/serverapi"
+)
+
+func (c *FSHandlersController) APIFsListPost(
+	ctx context.Context,
+	req *serverapi.APIFsListPostReq,
+) (*serverapi.APIFsListPostOK, error) {
+	storages, err := c.fsUseCases.FileStoragesWithStatus(
+		ctx,
+		req.IncludeDbFileSize.Value,
+		req.IncludeAvailableSize.Value,
+	)
+	if err != nil {
+		return nil, err //nolint:wrapcheck // будет исправлено позднее
+	}
+
+	return &serverapi.APIFsListPostOK{
+		FileSystems: pkg.Map(storages, func(raw fsmodel.FSWithStatus) serverapi.APIFsListPostOKFileSystemsItem {
+			return serverapi.APIFsListPostOKFileSystemsItem{
+				Info:                apiservercore.ConvertFileSystemInfoToAPI(raw.Info),
+				IsLegacy:            raw.IsLegacy,
+				DbFilesInfo:         apiservercore.ConvertFSDBFilesInfoToAPI(raw.DBFile),
+				DbInvalidFilesInfo:  apiservercore.ConvertFSDBFilesInfoToAPI(raw.DBInvalidFile),
+				DbDetachedFilesInfo: apiservercore.ConvertFSDBFilesInfoToAPI(raw.DBDetachedFile),
+				AvailableSize: serverapi.OptInt64{
+					Value: raw.AvailableSize,
+					Set:   raw.AvailableSize > 0,
+				},
+				AvailableSizeFormatted: serverapi.OptString{
+					Value: core.PrettySize(raw.AvailableSize),
+					Set:   raw.AvailableSize > 0,
+				},
+			}
+		}),
+	}, nil
+}

@@ -1,0 +1,56 @@
+package httpserverpanel
+
+import (
+	"fmt"
+
+	"github.com/grafana/grafana-foundation-sdk/go/table"
+	"github.com/grafana/promql-builder/go/promql"
+
+	"github.com/gbh007/hgraber-next/internal/dataproviders/metric/generator/generatorcore"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/metric/metriccore"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/metric/metrichttp"
+)
+
+func SlowRequest() *table.PanelBuilder {
+	query := promql.Div(
+		promql.Sum(
+			promql.
+				Vector(metrichttp.ServerHandleDurationName+"_sum").
+				Labels(generatorcore.ServiceFilterPromQL),
+		).
+			By([]string{
+				metriccore.ServiceNameLabel,
+				metrichttp.ServerAddrLabelName,
+				metrichttp.OperationLabelName,
+				metrichttp.StatusLabelName,
+			}),
+		promql.Sum(
+			promql.
+				Vector(metrichttp.ServerHandleDurationName+"_count").
+				Labels(generatorcore.ServiceFilterPromQL),
+		).
+			By([]string{
+				metriccore.ServiceNameLabel,
+				metrichttp.ServerAddrLabelName,
+				metrichttp.OperationLabelName,
+				metrichttp.StatusLabelName,
+			}),
+	)
+
+	return generatorcore.SimpleTablePanel(
+		[]generatorcore.PromQLExpr{
+			{
+				Query: query.String(),
+				Legend: fmt.Sprintf(
+					"{{%s}} {{%s}}/{{%s}} -> {{%s}}",
+					metriccore.ServiceNameLabel,
+					metrichttp.ServerAddrLabelName,
+					metrichttp.OperationLabelName,
+					metrichttp.StatusLabelName,
+				),
+			},
+		},
+		"Slow request",
+		generatorcore.UnitSecond,
+	)
+}

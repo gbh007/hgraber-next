@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 	"github.com/gbh007/hgraber-next/internal/pkg"
@@ -44,8 +44,8 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownlo
 
 	toDownload := make([]parsing.PageForDownloadWithAgent, 0, len(pages))
 
-	urlMap := pkg.SliceToMap(pages, func(p core.PageForDownload) (agentmodel.AgentPageURL, core.PageForDownload) {
-		return agentmodel.AgentPageURL{
+	urlMap := pkg.SliceToMap(pages, func(p core.PageForDownload) (serveragentdto.AgentPageURL, core.PageForDownload) {
+		return serveragentdto.AgentPageURL{
 			BookURL:  *p.BookURL,
 			ImageURL: *p.ImageURL,
 		}, p
@@ -58,12 +58,12 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownlo
 
 		pagesInfo, err := uc.agentSystem.PagesCheck(
 			ctx, agent.ID,
-			pkg.MapToSlice(urlMap, func(u agentmodel.AgentPageURL, _ core.PageForDownload) agentmodel.AgentPageURL {
+			pkg.MapToSlice(urlMap, func(u serveragentdto.AgentPageURL, _ core.PageForDownload) serveragentdto.AgentPageURL {
 				return u
 			}),
 		)
 
-		if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
+		if errors.Is(err, serveragentdto.ErrAgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),
@@ -88,7 +88,7 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownlo
 				continue
 			}
 
-			u := agentmodel.AgentPageURL{
+			u := serveragentdto.AgentPageURL{
 				BookURL:  info.BookURL,
 				ImageURL: info.ImageURL,
 			}

@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
@@ -41,12 +41,12 @@ type storage interface {
 }
 
 type agentSystem interface {
-	ExportArchive(ctx context.Context, agentID uuid.UUID, data agentmodel.AgentExportData) error
+	ExportArchive(ctx context.Context, agentID uuid.UUID, data serveragentdto.AgentExportData) error
 }
 
 type tmpStorage interface {
-	AddToExport(books []agentmodel.BookToExport)
-	ExportList() []agentmodel.BookToExport
+	AddToExport(books []serveragentdto.BookToExport)
+	ExportList() []serveragentdto.BookToExport
 }
 
 type bookAdapter interface {

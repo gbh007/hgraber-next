@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 // TODO: тут вообще по факту не модели агента должны быть
-func (uc *UseCase) BooksExists(ctx context.Context, urls []url.URL) ([]agentmodel.AgentBookCheckResult, error) {
-	result := make([]agentmodel.AgentBookCheckResult, 0, len(urls))
+func (uc *UseCase) BooksExists(ctx context.Context, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error) {
+	result := make([]serveragentdto.AgentBookCheckResult, 0, len(urls))
 
 urlLoop:
 	for _, u := range urls {
@@ -27,7 +27,7 @@ urlLoop:
 
 			// Только загруженные и не пересобранные книги считаем доступными.
 			if book.IsLoaded() && !book.Book.IsRebuild {
-				result = append(result, agentmodel.AgentBookCheckResult{
+				result = append(result, serveragentdto.AgentBookCheckResult{
 					URL:        u,
 					IsPossible: true,
 				})
@@ -36,7 +36,7 @@ urlLoop:
 			}
 		}
 
-		result = append(result, agentmodel.AgentBookCheckResult{
+		result = append(result, serveragentdto.AgentBookCheckResult{
 			URL:           u,
 			IsUnsupported: true,
 		})

@@ -7,19 +7,19 @@ import (
 	"log/slog"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
-func (uc *UseCase) BooksToParse(ctx context.Context) ([]agentmodel.BookWithAgent, error) {
+func (uc *UseCase) BooksToParse(ctx context.Context) ([]serveragentdto.BookWithAgent, error) {
 	books, err := uc.storage.UnprocessedBooks(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("books from storage: %w", err)
 	}
 
 	if len(books) == 0 {
-		return []agentmodel.BookWithAgent{}, nil
+		return []serveragentdto.BookWithAgent{}, nil
 	}
 
 	agents, err := uc.storage.Agents(ctx, core.AgentFilter{
@@ -41,7 +41,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]agentmodel.BookWithAgent
 		return hasURL
 	})
 
-	toParse := make([]agentmodel.BookWithAgent, 0, len(books))
+	toParse := make([]serveragentdto.BookWithAgent, 0, len(books))
 
 	urlMap := pkg.SliceToMap(books, func(b core.Book) (url.URL, core.Book) {
 		return *b.OriginURL, b
@@ -60,7 +60,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]agentmodel.BookWithAgent
 			}),
 		)
 
-		if errors.Is(err, agentmodel.ErrAgentAPIOffline) {
+		if errors.Is(err, serveragentdto.ErrAgentAPIOffline) {
 			uc.logger.DebugContext(
 				ctx, "agent api offline",
 				slog.String("agent_id", agent.ID.String()),
@@ -90,7 +90,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]agentmodel.BookWithAgent
 				continue
 			}
 
-			toParse = append(toParse, agentmodel.BookWithAgent{
+			toParse = append(toParse, serveragentdto.BookWithAgent{
 				Book:    book,
 				AgentID: agent.ID,
 			})
