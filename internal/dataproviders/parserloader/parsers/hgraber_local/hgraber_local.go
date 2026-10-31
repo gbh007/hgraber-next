@@ -15,25 +15,25 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/common"
-	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/external/parserdto"
+	"github.com/gbh007/hgraber-next/external/parserdto/legacyadapter"
 )
 
 // Проверка соответствия базового типа
 var (
-	_ parsing.Parser = (*Parser)(nil)
+	_ parserdto.Parser = (*Parser)(nil)
 
 	ParserError = errors.New("parser hgraber_v4")
 )
 
 type Parser struct {
-	common.CoreParser
+	parserdto.CoreParser
 	token string
 }
 
-func New(r common.Requester, _ common.MetricProvider) parsing.Parser {
+func New(r parserdto.Requester, _ parserdto.MetricProvider) parserdto.Parser {
 	return &Parser{
-		CoreParser: common.NewCoreParser(r, []string{
+		CoreParser: parserdto.NewCoreParser(r, []string{
 			"hg4://",
 			"hgraber4://",
 		}, "hgraber_local"),
@@ -41,7 +41,7 @@ func New(r common.Requester, _ common.MetricProvider) parsing.Parser {
 	}
 }
 
-func (p *Parser) Load(ctx context.Context, u url.URL) (parsing.BookParser, error) {
+func (p *Parser) Load(ctx context.Context, u url.URL) (parserdto.BookParser, error) {
 	bookParser := BookParser{}
 
 	id, err := strconv.Atoi(strings.TrimPrefix(u.Path, "/"))
@@ -69,7 +69,7 @@ func (p *Parser) Load(ctx context.Context, u url.URL) (parsing.BookParser, error
 		return nil, fmt.Errorf("%w: unmarshal: %w", ParserError, err)
 	}
 
-	return common.NewLegacyParserAdapter(bookParser, u), nil
+	return legacyadapter.New(bookParser, u), nil
 }
 
 func (p *Parser) headers() http.Header {
@@ -97,11 +97,11 @@ func (p BookParser) Name(ctx context.Context) (string, error) {
 	return p.body.Name, nil
 }
 
-func (p BookParser) Pages(ctx context.Context) ([]parsing.RawPage, error) {
-	result := make([]parsing.RawPage, len(p.body.Pages))
+func (p BookParser) Pages(ctx context.Context) ([]legacyadapter.Page, error) {
+	result := make([]legacyadapter.Page, len(p.body.Pages))
 
 	for i, p := range p.body.Pages {
-		result[i] = parsing.RawPage{
+		result[i] = legacyadapter.Page{
 			PageNumber: p.PageNumber,
 			URL:        p.PreviewURL,
 			Ext:        path.Ext(p.PreviewURL), // FIXME: а сработает?

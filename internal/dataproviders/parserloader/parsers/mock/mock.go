@@ -8,30 +8,30 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/common"
-	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/external/parserdto"
+	"github.com/gbh007/hgraber-next/external/parserdto/legacyadapter"
 )
 
 // Проверка соответствия базового типа
 var (
-	_ parsing.Parser = (*Parser)(nil)
+	_ parserdto.Parser = (*Parser)(nil)
 
 	ParserError = errors.New("parser mock")
 )
 
 type Parser struct {
-	common.CoreParser
+	parserdto.CoreParser
 }
 
-func New(r common.Requester, _ common.MetricProvider) parsing.Parser {
+func New(r parserdto.Requester, _ parserdto.MetricProvider) parserdto.Parser {
 	return &Parser{
-		CoreParser: common.NewCoreParser(r, []string{
+		CoreParser: parserdto.NewCoreParser(r, []string{
 			"http://localhost",
 		}, "mock"),
 	}
 }
 
-func (p *Parser) Load(ctx context.Context, u url.URL) (parsing.BookParser, error) {
+func (p *Parser) Load(ctx context.Context, u url.URL) (parserdto.BookParser, error) {
 	bookParser := BookParser{
 		url: u.String(),
 	}
@@ -47,20 +47,20 @@ func (p *Parser) Load(ctx context.Context, u url.URL) (parsing.BookParser, error
 
 	bookParser.body = body
 
-	return common.NewLegacyParserAdapter(bookParser, u), nil
+	return legacyadapter.New(bookParser, u), nil
 }
 
 type BookParser struct {
 	url, body string
 }
 
-func (p BookParser) Pages(ctx context.Context) ([]parsing.RawPage, error) {
-	result := make([]parsing.RawPage, 0)
+func (p BookParser) Pages(ctx context.Context) ([]legacyadapter.Page, error) {
+	result := make([]legacyadapter.Page, 0)
 
 	rp := `(?sm)` + regexp.QuoteMeta(`<a href="`) + `(.+?)\.(.+?)` + regexp.QuoteMeta(`">`)
 	for i, name := range regexp.MustCompile(rp).FindAllStringSubmatch(p.body, -1) {
 		if len(name) > 1 {
-			result = append(result, parsing.RawPage{
+			result = append(result, legacyadapter.Page{
 				PageNumber: i + 1,
 				URL:        p.url + "/" + strings.TrimSpace(name[1]) + "." + strings.TrimSpace(name[2]),
 				Ext:        name[2],

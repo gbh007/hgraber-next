@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
@@ -32,8 +33,8 @@ type ParsingUseCases interface {
 	CheckPages(ctx context.Context, pages []serveragentdto.AgentPageURL) ([]serveragentdto.AgentPageCheckResult, error)
 	MultiHandle(ctx context.Context, multiUrl url.URL) ([]serveragentdto.AgentBookCheckResult, error)
 
-	HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (agentdto.HProxyBookDetails, error)
-	HProxyList(ctx context.Context, u url.URL) (agentdto.HProxyList, error)
+	HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error)
+	HProxyList(ctx context.Context, u url.URL) (parserdto.BookList, error)
 }
 
 type ImportUseCases interface {

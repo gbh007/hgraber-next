@@ -7,13 +7,13 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/application/agent"
 	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/agentparsecache"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/parserloader"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/request"
-	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 		cfg agnconfig.AgentConfig,
 		async agent.Async,
 		metricProvider *metric.MetricProvider,
-	) ([]parsing.Parser, error) {
+	) ([]parserdto.Parser, error) {
 		var cache request.Cache
 
 		if cfg.Parsers.Cache.Enabled {

@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
 	"github.com/gbh007/hgraber-next/internal/controllers/agentapi"
 	"github.com/gbh007/hgraber-next/internal/controllers/agentdebugserver"
@@ -16,7 +17,6 @@ import (
 	"github.com/gbh007/hgraber-next/internal/dataproviders/masterapi"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/parserloader"
-	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/internal/usecases/agenthighway"
@@ -37,7 +37,7 @@ type ParserInit = func(
 	cfg agnconfig.AgentConfig,
 	async Async,
 	metricProvider *metric.MetricProvider,
-) ([]parsing.Parser, error)
+) ([]parserdto.Parser, error)
 
 func Serve(ctx context.Context, parserInit ParserInit) {
 	cfg, needScan, err := parseConfig()
@@ -213,7 +213,7 @@ func Serve(ctx context.Context, parserInit ParserInit) {
 		)
 	}
 
-	parserNames := pkg.Map(parsers, func(parser parsing.Parser) string {
+	parserNames := pkg.Map(parsers, func(parser parserdto.Parser) string {
 		return parser.Name()
 	})
 

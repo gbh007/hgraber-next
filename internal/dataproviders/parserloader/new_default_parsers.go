@@ -5,12 +5,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/common"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/hgraber_local"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/mock"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/parserloader/parsers/hgraber_local"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/parserloader/parsers/mock"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/request"
-	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"golang.org/x/net/proxy"
 )
@@ -23,15 +22,15 @@ func NewDefaultParsers(
 	metricProvider metricProvider,
 	logErrors bool,
 	defaultUserAgent string,
-) []parsing.Parser {
+) []parserdto.Parser {
 	var (
 		withProxy      map[string]struct{}
 		proxyRequester *request.Requester
-		parserInits    map[string]common.NewParser
+		parserInits    map[string]parserdto.NewParser
 	)
 
 	// FIXME: поработать над этим блоком пока прибиваем гвоздями
-	parserInits = map[string]common.NewParser{
+	parserInits = map[string]parserdto.NewParser{
 		"mock":          mock.New,
 		"hgraber_local": hgraber_local.New,
 	}
@@ -67,7 +66,7 @@ func NewDefaultParsers(
 
 	requester := request.New(logger, timeout, nil, logErrors, cache, defaultUserAgent)
 
-	parsers := make([]parsing.Parser, 0, len(cfg.Enabled))
+	parsers := make([]parserdto.Parser, 0, len(cfg.Enabled))
 
 	for _, code := range cfg.Enabled {
 		rq := requester

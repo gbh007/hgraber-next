@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
+	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
@@ -29,13 +29,13 @@ func (c *Controller) APIHproxyParseListPost(ctx context.Context, req *agentapi.A
 	}
 
 	return &agentapi.APIHproxyParseListPostOK{
-		Results: pkg.Map(list.Units, func(u agentdto.HProxyListUnit) agentapi.APIHproxyParseListPostOKResultsItem {
+		Results: pkg.Map(list.Units, func(u parserdto.BookListUnit) agentapi.APIHproxyParseListPostOKResultsItem {
 			var t agentapi.APIHproxyParseListPostOKResultsItemType
 
 			switch u.Type {
-			case agentdto.DetailsHProxyListUnitType:
+			case parserdto.DetailsHProxyListUnitType:
 				t = agentapi.APIHproxyParseListPostOKResultsItemTypeDetails
-			case agentdto.ListHProxyListUnitType:
+			case parserdto.ListHProxyListUnitType:
 				t = agentapi.APIHproxyParseListPostOKResultsItemTypeList
 			}
 

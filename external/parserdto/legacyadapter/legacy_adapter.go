@@ -1,19 +1,25 @@
-package common
+package legacyadapter
 
 import (
 	"context"
 	"fmt"
 	"net/url"
 
+	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
+type Page struct {
+	PageNumber int
+	URL        string
+	Ext        string
+}
+
 type legacyParser interface {
 	Name(ctx context.Context) (string, error)
-	Pages(ctx context.Context) ([]parsing.RawPage, error)
+	Pages(ctx context.Context) ([]Page, error)
 	Tags(ctx context.Context) ([]string, error)
 	Authors(ctx context.Context) ([]string, error)
 	Characters(ctx context.Context) ([]string, error)
@@ -23,48 +29,23 @@ type legacyParser interface {
 	Groups(ctx context.Context) ([]string, error)
 }
 
-func ParseBookAttr(ctx context.Context, p legacyParser, attr string) ([]string, error) {
-	switch attr {
-	case core.AttributeCodeAuthor:
-		return p.Authors(ctx)
-
-	case core.AttributeCodeCategory:
-		return p.Categories(ctx)
-
-	case core.AttributeCodeCharacter:
-		return p.Characters(ctx)
-
-	case core.AttributeCodeGroup:
-		return p.Groups(ctx)
-
-	case core.AttributeCodeLanguage:
-		return p.Languages(ctx)
-
-	case core.AttributeCodeParody:
-		return p.Parodies(ctx)
-
-	case core.AttributeCodeTag:
-		return p.Tags(ctx)
-
-	default:
-		return []string{}, parsing.UnknownAttributeError
-	}
-}
-
-type LegacyParserAdapter struct {
-	BookParser
+type Adapter struct {
 	old legacyParser
 	u   url.URL
 }
 
-func NewLegacyParserAdapter(old legacyParser, u url.URL) LegacyParserAdapter {
-	return LegacyParserAdapter{
+func New(old legacyParser, u url.URL) Adapter {
+	return Adapter{
 		old: old,
 		u:   u,
 	}
 }
 
-func (adapter LegacyParserAdapter) BookDetails(ctx context.Context) (serveragentdto.AgentBookDetails, error) {
+func (Adapter) HProxyBookDetails(ctx context.Context, pageLimit *int) (parserdto.Book, error) {
+	return parserdto.Book{}, nil
+}
+
+func (adapter Adapter) BookDetails(ctx context.Context) (serveragentdto.AgentBookDetails, error) {
 	details := serveragentdto.AgentBookDetails{
 		URL: adapter.u,
 	}
@@ -82,7 +63,7 @@ func (adapter LegacyParserAdapter) BookDetails(ctx context.Context) (serveragent
 	}
 
 	details.PageCount = len(pages)
-	details.Pages, err = pkg.MapWithError(pages, func(p parsing.RawPage) (serveragentdto.AgentBookDetailsPagesItem, error) {
+	details.Pages, err = pkg.MapWithError(pages, func(p Page) (serveragentdto.AgentBookDetailsPagesItem, error) {
 		u, err := url.Parse(p.URL)
 		if err != nil {
 			return serveragentdto.AgentBookDetailsPagesItem{}, fmt.Errorf("page %d: %w", p.PageNumber, err)

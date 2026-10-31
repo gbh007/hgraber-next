@@ -8,8 +8,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
-	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/external/parserdto"
 )
 
 type metricProvider interface {
@@ -17,12 +16,12 @@ type metricProvider interface {
 }
 
 type Loader struct {
-	parsers        []parsing.Parser
+	parsers        []parserdto.Parser
 	metricProvider metricProvider
 }
 
 func New(
-	parsers []parsing.Parser,
+	parsers []parserdto.Parser,
 	metricProvider metricProvider,
 ) *Loader {
 	return &Loader{
@@ -31,19 +30,19 @@ func New(
 	}
 }
 
-func (l *Loader) getParser(u url.URL) (parsing.Parser, error) {
+func (l *Loader) getParser(u url.URL) (parserdto.Parser, error) {
 	for _, p := range l.parsers {
 		if p.CanParse(u) {
 			return p, nil
 		}
 	}
 
-	return nil, parsing.InvalidLinkError
+	return nil, parserdto.InvalidLinkError
 }
 
 func (l *Loader) HasParser(ctx context.Context, u url.URL) (bool, error) {
 	_, err := l.getParser(u)
-	if errors.Is(err, parsing.InvalidLinkError) {
+	if errors.Is(err, parserdto.InvalidLinkError) {
 		return false, nil
 	}
 
@@ -54,7 +53,7 @@ func (l *Loader) HasParser(ctx context.Context, u url.URL) (bool, error) {
 	return true, nil
 }
 
-func (l *Loader) Load(ctx context.Context, u url.URL) (parsing.BookParser, error) {
+func (l *Loader) Load(ctx context.Context, u url.URL) (parserdto.BookParser, error) {
 	startAt := time.Now()
 
 	p, err := l.getParser(u)
@@ -114,12 +113,12 @@ func (l *Loader) AllBooks(ctx context.Context, u url.URL) ([]string, error) {
 	return data, nil
 }
 
-func (l *Loader) HProxyList(ctx context.Context, u url.URL) (agentdto.HProxyList, error) {
+func (l *Loader) HProxyList(ctx context.Context, u url.URL) (parserdto.BookList, error) {
 	startAt := time.Now()
 
 	p, err := l.getParser(u)
 	if err != nil {
-		return agentdto.HProxyList{}, err
+		return parserdto.BookList{}, err
 	}
 
 	defer func() {
@@ -128,7 +127,7 @@ func (l *Loader) HProxyList(ctx context.Context, u url.URL) (agentdto.HProxyList
 
 	data, err := p.HProxyList(ctx, u)
 	if err != nil {
-		return agentdto.HProxyList{}, fmt.Errorf("load hproxy list: %w", err)
+		return parserdto.BookList{}, fmt.Errorf("load hproxy list: %w", err)
 	}
 
 	return data, nil

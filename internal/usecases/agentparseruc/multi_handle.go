@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
@@ -15,7 +15,7 @@ func (uc *UseCase) MultiHandle(ctx context.Context, multiUrl url.URL) ([]servera
 
 	urls, err := uc.loader.AllBooks(ctx, multiUrl)
 	// FIXME: подумать как лучше это сделать
-	if errors.Is(err, parsing.InvalidLinkError) {
+	if errors.Is(err, parserdto.InvalidLinkError) {
 		return []serveragentdto.AgentBookCheckResult{}, nil
 	}
 
