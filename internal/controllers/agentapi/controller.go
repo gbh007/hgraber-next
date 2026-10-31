@@ -28,12 +28,10 @@ type metricProvider interface {
 
 type ParsingUseCases interface {
 	CheckBooks(ctx context.Context, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error)
-	ParseBook(ctx context.Context, u url.URL) (serveragentdto.AgentBookDetails, error)
-	DownloadPage(ctx context.Context, bookURL, imageURL url.URL) (io.Reader, error)
-	MultiHandle(ctx context.Context, multiUrl url.URL) ([]serveragentdto.AgentBookCheckResult, error)
 
-	HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error)
-	HProxyList(ctx context.Context, u url.URL, onePage bool) (parserdto.BookList, error)
+	Image(ctx context.Context, bookURL, imageURL url.URL) (io.ReadCloser, error)
+	Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error)
+	List(ctx context.Context, u url.URL, onePage bool) (parserdto.BookList, error)
 }
 
 type ImportUseCases interface {

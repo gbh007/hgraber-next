@@ -39,6 +39,7 @@ func (a *Adapter) BookParse(ctx context.Context, u url.URL, pageLimit *int) (hpr
 			return hproxymodel.BookPage{
 				PageNumber:    p.PageNumber,
 				ExtPreviewURL: p.URL,
+				Filename:      p.Filename,
 			}
 		}),
 		Attributes: lo.Map(

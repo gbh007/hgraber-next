@@ -3,11 +3,9 @@ package parserdto
 import (
 	"context"
 	"fmt"
-	"html"
 	"io"
 	"net/http"
 	"net/url"
-	"regexp"
 	"strings"
 	"time"
 )
@@ -48,8 +46,8 @@ func (cp CoreParser) Name() string {
 	return cp.name
 }
 
-func (cp CoreParser) Load(ctx context.Context, u url.URL) (BookParser, error) {
-	return nil, fmt.Errorf("unimplemented in core parser")
+func (cp CoreParser) Book(ctx context.Context, u url.URL, pageLimit *int) (Book, error) {
+	return Book{}, fmt.Errorf("unimplemented in core parser")
 }
 
 func (cp CoreParser) CanParse(u url.URL) bool {
@@ -62,11 +60,7 @@ func (cp CoreParser) CanParse(u url.URL) bool {
 	return false
 }
 
-func (cp CoreParser) AllBooks(ctx context.Context, u url.URL) ([]string, error) {
-	return nil, nil
-}
-
-func (cp CoreParser) LoadImage(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error) {
+func (cp CoreParser) Image(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error) {
 	data, err := cp.Requester.Request(ctx, u.String(), nil)
 	if err != nil {
 		return nil, err
@@ -75,29 +69,6 @@ func (cp CoreParser) LoadImage(ctx context.Context, u url.URL, bookUrl url.URL) 
 	return data, nil
 }
 
-func (cp CoreParser) HProxyList(ctx context.Context, u url.URL) (BookList, error) {
+func (cp CoreParser) List(ctx context.Context, u url.URL) (BookList, error) {
 	return BookList{}, nil
-}
-
-func TrimLastSlash(URL string, count int) string {
-	c := 0
-
-	ind := strings.LastIndexFunc(URL, func(r rune) bool {
-		if r != rune('/') {
-			return false
-		}
-		c++
-		return c == count
-	})
-
-	return URL[:ind]
-}
-
-func OneMatch(rgx *regexp.Regexp, raw string) (string, bool) {
-	res := rgx.FindAllStringSubmatch(raw, -1)
-	if len(res) < 1 || len(res[0]) != 2 {
-		return "", false
-	}
-
-	return strings.TrimSpace(html.UnescapeString(res[0][1])), true
 }

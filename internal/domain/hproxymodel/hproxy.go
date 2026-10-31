@@ -27,6 +27,7 @@ type List struct {
 
 type BookPage struct {
 	PageNumber    int
+	Filename      string
 	ExtPreviewURL url.URL
 }
 

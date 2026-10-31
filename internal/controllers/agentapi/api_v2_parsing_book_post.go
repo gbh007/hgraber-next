@@ -26,7 +26,7 @@ func (c *Controller) APIV2ParsingBookPost(
 		pageLimit = &req.PageLimit.Value
 	}
 
-	details, err := c.parsingUseCases.HProxyBook(ctx, req.URL, pageLimit)
+	details, err := c.parsingUseCases.Book(ctx, req.URL, pageLimit)
 	if err != nil {
 		return nil, err
 	}

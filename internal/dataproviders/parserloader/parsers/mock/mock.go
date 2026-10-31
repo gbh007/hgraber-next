@@ -31,7 +31,7 @@ func New(r parserdto.Requester, _ parserdto.MetricProvider) parserdto.Parser {
 	}
 }
 
-func (p *Parser) Load(ctx context.Context, u url.URL) (parserdto.BookParser, error) {
+func (p *Parser) Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error) {
 	bookParser := BookParser{
 		url: u.String(),
 	}
@@ -42,12 +42,12 @@ func (p *Parser) Load(ctx context.Context, u url.URL) (parserdto.BookParser, err
 
 	body, err := p.Requester.RequestString(ctx, u.String())
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ParserError, err)
+		return parserdto.Book{}, fmt.Errorf("%w: %w", ParserError, err)
 	}
 
 	bookParser.body = body
 
-	return legacyadapter.New(bookParser, u), nil
+	return legacyadapter.Convert(ctx, u, bookParser)
 }
 
 type BookParser struct {

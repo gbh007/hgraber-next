@@ -12,10 +12,11 @@ import (
 	"path"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
+	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/domian/archivemodel"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/labstack/echo/v4"
+	"github.com/samber/lo"
 )
 
 type parseRequest struct {
@@ -46,7 +47,7 @@ func (cnt *Controller) pageParsing(c echo.Context) error {
 	}
 
 	if req.AsMulti {
-		urls, err := cnt.parsing.MultiHandle(c.Request().Context(), *u)
+		urls, err := cnt.parsing.List(c.Request().Context(), *u, false)
 		if err != nil {
 			return c.Render(http.StatusOK, "parsing.html.gotmpl", map[string]any{
 				"error": err,
@@ -54,13 +55,13 @@ func (cnt *Controller) pageParsing(c echo.Context) error {
 		}
 
 		return c.Render(http.StatusOK, "parsing.html.gotmpl", map[string]any{
-			"urls": pkg.Map(urls, func(raw serveragentdto.AgentBookCheckResult) string {
-				return raw.URL.String()
+			"urls": lo.FilterMap(urls.Units, func(raw parserdto.BookListUnit, _ int) (string, bool) {
+				return raw.LinkURL.String(), raw.Type == parserdto.DetailsHProxyListUnitType
 			}),
 		})
 	}
 
-	details, err := cnt.parsing.ParseBook(c.Request().Context(), *u)
+	details, err := cnt.parsing.Book(c.Request().Context(), *u, nil)
 	if err != nil {
 		return c.Render(http.StatusOK, "parsing.html.gotmpl", map[string]any{
 			"error": err,
@@ -79,13 +80,15 @@ func (cnt *Controller) pageParsing(c echo.Context) error {
 			PageCount:        details.PageCount,
 			CreateAt:         time.Now(),
 			AttributesParsed: true,
-			Attributes: pkg.Map(details.Attributes, func(raw serveragentdto.AgentBookDetailsAttributesItem) archivemodel.Attribute {
+			Attributes: pkg.Map(details.Attributes, func(raw parserdto.Attribute) archivemodel.Attribute {
 				return archivemodel.Attribute{
-					Code:   raw.Code,
-					Values: raw.Values,
+					Code: raw.Code,
+					Values: pkg.Map(raw.Values, func(v parserdto.AttributeValue) string {
+						return v.Value
+					}),
 				}
 			}),
-			Pages: pkg.Map(details.Pages, func(p serveragentdto.AgentBookDetailsPagesItem) archivemodel.Page {
+			Pages: pkg.Map(details.Pages, func(p parserdto.Page) archivemodel.Page {
 				return archivemodel.Page{
 					PageNumber: p.PageNumber,
 					Ext:        path.Ext(p.Filename),
@@ -113,7 +116,7 @@ func (cnt *Controller) pageParsing(c echo.Context) error {
 
 	buff := &bytes.Buffer{}
 
-	pageUrls := pkg.SliceToMap(details.Pages, func(p serveragentdto.AgentBookDetailsPagesItem) (int, url.URL) {
+	pageUrls := pkg.SliceToMap(details.Pages, func(p parserdto.Page) (int, url.URL) {
 		return p.PageNumber, p.URL
 	})
 
@@ -128,7 +131,7 @@ func (cnt *Controller) pageParsing(c echo.Context) error {
 				return nil, fmt.Errorf("missing page %d", pageNumber)
 			}
 
-			return cnt.parsing.DownloadPage(ctx, details.URL, u)
+			return cnt.parsing.Image(ctx, details.URL, u)
 		},
 		info,
 	)

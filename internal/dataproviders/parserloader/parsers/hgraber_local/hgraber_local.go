@@ -41,12 +41,12 @@ func New(r parserdto.Requester, _ parserdto.MetricProvider) parserdto.Parser {
 	}
 }
 
-func (p *Parser) Load(ctx context.Context, u url.URL) (parserdto.BookParser, error) {
+func (p *Parser) Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error) {
 	bookParser := BookParser{}
 
 	id, err := strconv.Atoi(strings.TrimPrefix(u.Path, "/"))
 	if err != nil {
-		return nil, fmt.Errorf("%w: parse book id: %w", ParserError, err)
+		return parserdto.Book{}, fmt.Errorf("%w: parse book id: %w", ParserError, err)
 	}
 
 	u.Scheme = "http"
@@ -56,20 +56,20 @@ func (p *Parser) Load(ctx context.Context, u url.URL) (parserdto.BookParser, err
 		"id": id,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("%w: marshal request body: %w", ParserError, err)
+		return parserdto.Book{}, fmt.Errorf("%w: marshal request body: %w", ParserError, err)
 	}
 
 	raw, err := p.Requester.RequestPost(ctx, u.String(), p.headers(), bytes.NewReader(requestBody))
 	if err != nil {
-		return nil, fmt.Errorf("%w: request: %w", ParserError, err)
+		return parserdto.Book{}, fmt.Errorf("%w: request: %w", ParserError, err)
 	}
 
 	err = json.Unmarshal(raw, &bookParser.body)
 	if err != nil {
-		return nil, fmt.Errorf("%w: unmarshal: %w", ParserError, err)
+		return parserdto.Book{}, fmt.Errorf("%w: unmarshal: %w", ParserError, err)
 	}
 
-	return legacyadapter.New(bookParser, u), nil
+	return legacyadapter.Convert(ctx, u, bookParser)
 }
 
 func (p *Parser) headers() http.Header {
@@ -80,7 +80,7 @@ func (p *Parser) headers() http.Header {
 	return headers
 }
 
-func (p *Parser) LoadImage(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error) {
+func (p *Parser) Image(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error) {
 	data, err := p.Requester.Request(ctx, u.String(), p.headers())
 	if err != nil {
 		return nil, err

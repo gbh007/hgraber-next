@@ -11,10 +11,9 @@ import (
 
 type loader interface {
 	HasParser(ctx context.Context, u url.URL) (bool, error)
-	Load(ctx context.Context, u url.URL) (parserdto.BookParser, error)
-	LoadImage(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error)
-	AllBooks(ctx context.Context, u url.URL) ([]string, error)
-	HProxyList(ctx context.Context, u url.URL) (parserdto.BookList, error)
+	Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error)
+	Image(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error)
+	List(ctx context.Context, u url.URL) (parserdto.BookList, error)
 }
 
 type UseCase struct {

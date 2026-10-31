@@ -18,7 +18,7 @@ func (c *Controller) APIV2ParsingPagePost(
 		}
 	}
 
-	body, err := c.parsingUseCases.DownloadPage(ctx, req.BookURL, req.ImageURL)
+	body, err := c.parsingUseCases.Image(ctx, req.BookURL, req.ImageURL)
 	if err != nil {
 		return agentapi.APIV2ParsingPagePostOK{}, err
 	}

@@ -6,14 +6,14 @@ import (
 	"log/slog"
 	"net/url"
 
+	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 type ParsingUseCases interface {
-	ParseBook(ctx context.Context, u url.URL) (serveragentdto.AgentBookDetails, error)
-	DownloadPage(ctx context.Context, bookURL, imageURL url.URL) (io.Reader, error)
-	MultiHandle(ctx context.Context, multiUrl url.URL) ([]serveragentdto.AgentBookCheckResult, error)
+	Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error)
+	Image(ctx context.Context, bookURL, imageURL url.URL) (io.ReadCloser, error)
+	List(ctx context.Context, u url.URL, onePage bool) (parserdto.BookList, error)
 }
 
 type Controller struct {

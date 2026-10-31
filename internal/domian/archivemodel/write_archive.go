@@ -49,6 +49,11 @@ func WriteArchive(
 			return fmt.Errorf("get page body: %w", err)
 		}
 
+		if closer, ok := pageBody.(io.Closer); ok {
+			// TODO: да дефер в форе, но лучше закрыть их в самом конце чем не закрывать
+			defer closer.Close()
+		}
+
 		filename := fmt.Sprintf("%d%s", p.PageNumber, p.Ext)
 
 		if !strings.HasPrefix(p.Ext, ".") {

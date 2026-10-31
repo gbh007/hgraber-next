@@ -53,27 +53,27 @@ func (l *Loader) HasParser(ctx context.Context, u url.URL) (bool, error) {
 	return true, nil
 }
 
-func (l *Loader) Load(ctx context.Context, u url.URL) (parserdto.BookParser, error) {
+func (l *Loader) Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error) {
 	startAt := time.Now()
 
 	p, err := l.getParser(u)
 	if err != nil {
-		return nil, fmt.Errorf("get parser: %w", err)
+		return parserdto.Book{}, fmt.Errorf("get parser: %w", err)
 	}
 
 	defer func() {
 		l.metricProvider.RegisterParserActionTime("loader_load", p.Name(), time.Since(startAt))
 	}()
 
-	bookParser, err := p.Load(ctx, u)
+	bookParser, err := p.Book(ctx, u, pageLimit)
 	if err != nil {
-		return nil, fmt.Errorf("load: %w", err)
+		return parserdto.Book{}, fmt.Errorf("load: %w", err)
 	}
 
 	return bookParser, nil
 }
 
-func (l *Loader) LoadImage(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error) {
+func (l *Loader) Image(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error) {
 	startAt := time.Now()
 
 	p, err := l.getParser(bookUrl)
@@ -85,7 +85,7 @@ func (l *Loader) LoadImage(ctx context.Context, u url.URL, bookUrl url.URL) (io.
 		l.metricProvider.RegisterParserActionTime("loader_load_image", p.Name(), time.Since(startAt))
 	}()
 
-	data, err := p.LoadImage(ctx, u, bookUrl)
+	data, err := p.Image(ctx, u, bookUrl)
 	if err != nil {
 		return nil, fmt.Errorf("load image: %w", err)
 	}
@@ -93,27 +93,7 @@ func (l *Loader) LoadImage(ctx context.Context, u url.URL, bookUrl url.URL) (io.
 	return data, nil
 }
 
-func (l *Loader) AllBooks(ctx context.Context, u url.URL) ([]string, error) {
-	startAt := time.Now()
-
-	p, err := l.getParser(u)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() {
-		l.metricProvider.RegisterParserActionTime("loader_all_books", p.Name(), time.Since(startAt))
-	}()
-
-	data, err := p.AllBooks(ctx, u)
-	if err != nil {
-		return nil, fmt.Errorf("load books: %w", err)
-	}
-
-	return data, nil
-}
-
-func (l *Loader) HProxyList(ctx context.Context, u url.URL) (parserdto.BookList, error) {
+func (l *Loader) List(ctx context.Context, u url.URL) (parserdto.BookList, error) {
 	startAt := time.Now()
 
 	p, err := l.getParser(u)
@@ -125,7 +105,7 @@ func (l *Loader) HProxyList(ctx context.Context, u url.URL) (parserdto.BookList,
 		l.metricProvider.RegisterParserActionTime("loader_hproxy_list", p.Name(), time.Since(startAt))
 	}()
 
-	data, err := p.HProxyList(ctx, u)
+	data, err := p.List(ctx, u)
 	if err != nil {
 		return parserdto.BookList{}, fmt.Errorf("load hproxy list: %w", err)
 	}

@@ -64,10 +64,9 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.B
 			return core.Page{
 				BookID:     book.ID,
 				PageNumber: p.PageNumber,
-				// FIXME: подумать над способом лучше
-				Ext:       path.Ext(p.ExtPreviewURL.Path),
-				OriginURL: &p.ExtPreviewURL,
-				CreateAt:  time.Now(),
+				Ext:        path.Ext(p.Filename),
+				OriginURL:  &p.ExtPreviewURL,
+				CreateAt:   time.Now(),
 			}
 		}),
 	)
