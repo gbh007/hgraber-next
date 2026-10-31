@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
@@ -18,7 +18,7 @@ func (c *Controller) APIFsGetGet(ctx context.Context, params agentapi.APIFsGetGe
 	}
 
 	body, err := c.fileUseCase.Get(ctx, params.FileID)
-	if errors.Is(err, entities.FileNotFoundError) {
+	if errors.Is(err, core.ErrFileNotFound) {
 		return agentapi.APIFsGetGetOK{}, apiError{
 			Code:    http.StatusNotFound,
 			Details: err.Error(),

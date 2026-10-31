@@ -1,4 +1,4 @@
-package entities
+package agentdto
 
 import (
 	"net/url"

@@ -9,7 +9,7 @@ import (
 	"path"
 	"slices"
 
-	"github.com/gbh007/hgraber-next/external"
+	"github.com/gbh007/hgraber-next/internal/domian/archivemodel"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
@@ -30,7 +30,7 @@ func (uc *UseCase) ArchiveEntryPercentage(
 	archiveHashes := make([]core.PageWithHash, 0, core.AvgPageCountInBook) // Точный размер заранее не определить
 	md5Sums := make([]string, 0, core.AvgPageCountInBook)                  // Точный размер заранее не определить
 
-	_, err = external.ReadArchive(ctx, zipReader, external.ReadArchiveOptions{
+	_, err = archivemodel.ReadArchive(ctx, zipReader, archivemodel.ReadArchiveOptions{
 		HandlePageBody: func(ctx context.Context, pageNumber int, filename string, body io.Reader) error {
 			hash, err := core.HashFile(body)
 			if err != nil {

@@ -8,22 +8,22 @@ import (
 	"path"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
 	"github.com/google/uuid"
 )
 
-func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (entities.FSState, error) {
+func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (fsmodel.FSState, error) {
 	startAt := time.Now()
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("state", nil, time.Since(startAt))
 	}()
 
-	var state entities.FSState
+	var state fsmodel.FSState
 
 	if includeFileIDs || includeFileSizes {
 		entries, err := os.ReadDir(s.fsPath)
 		if err != nil {
-			return entities.FSState{}, fmt.Errorf("local fs: scan dir: %w", err)
+			return fsmodel.FSState{}, fmt.Errorf("local fs: scan dir: %w", err)
 		}
 
 		if includeFileIDs {
@@ -31,7 +31,7 @@ func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bo
 		}
 
 		if includeFileSizes {
-			state.Files = make([]entities.FSStateFile, 0, len(entries))
+			state.Files = make([]fsmodel.FSStateFile, 0, len(entries))
 		}
 
 		for _, e := range entries {
@@ -54,10 +54,10 @@ func (s *Storage) State(ctx context.Context, includeFileIDs, includeFileSizes bo
 			if includeFileSizes {
 				stat, err := os.Stat(path.Join(s.fsPath, e.Name()))
 				if err != nil {
-					return entities.FSState{}, fmt.Errorf("get file (%s) stat: %w", e.Name(), err)
+					return fsmodel.FSState{}, fmt.Errorf("get file (%s) stat: %w", e.Name(), err)
 				}
 
-				state.Files = append(state.Files, entities.FSStateFile{
+				state.Files = append(state.Files, fsmodel.FSStateFile{
 					ID:        id,
 					Size:      stat.Size(),
 					CreatedAt: stat.ModTime(),

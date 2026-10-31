@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
@@ -23,7 +23,7 @@ func (c *Controller) APIImportArchivePost(ctx context.Context, req agentapi.APII
 		u = &params.BookURL.Value
 	}
 
-	err := c.importUseCase.Create(ctx, entities.ImportData{
+	err := c.importUseCase.Create(ctx, agentdto.ImportData{
 		BookID:   params.BookID,
 		BookName: params.BookName,
 		Body:     req.Data,

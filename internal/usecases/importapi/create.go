@@ -6,10 +6,10 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
 )
 
-func (uc *UseCase) Create(ctx context.Context, data entities.ImportData) error {
+func (uc *UseCase) Create(ctx context.Context, data agentdto.ImportData) error {
 	c, err := uc.storage.ImportedCountByID(ctx, data.BookID)
 	if err != nil {
 		return fmt.Errorf("check import count by id: %w", err)
@@ -46,7 +46,7 @@ func (uc *UseCase) Create(ctx context.Context, data entities.ImportData) error {
 		return fmt.Errorf("create file in import fs: %w", err)
 	}
 
-	err = uc.storage.CreateImport(ctx, entities.ImportInfo{
+	err = uc.storage.CreateImport(ctx, agentdto.ImportInfo{
 		BookID:     data.BookID,
 		BookURL:    data.BookURL,
 		FSPath:     relativePath,

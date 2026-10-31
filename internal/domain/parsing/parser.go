@@ -1,4 +1,4 @@
-package hgraber
+package parsing
 
 import (
 	"context"
@@ -6,7 +6,8 @@ import (
 	"io"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 var (
@@ -22,10 +23,16 @@ type Parser interface {
 	AllBooks(ctx context.Context, u url.URL) ([]string, error)
 	LoadImage(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error)
 
-	HProxyList(ctx context.Context, u url.URL) (entities.HProxyList, error)
+	HProxyList(ctx context.Context, u url.URL) (agentdto.HProxyList, error)
 }
 
 type BookParser interface {
-	BookDetails(ctx context.Context) (entities.AgentBookDetails, error)
-	HProxyBookDetails(ctx context.Context, pageLimit *int) (entities.HProxyBookDetails, error)
+	BookDetails(ctx context.Context) (serveragentdto.AgentBookDetails, error)
+	HProxyBookDetails(ctx context.Context, pageLimit *int) (agentdto.HProxyBookDetails, error)
+}
+
+type RawPage struct {
+	PageNumber int
+	URL        string
+	Ext        string
 }

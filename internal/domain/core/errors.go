@@ -6,6 +6,7 @@ var (
 	ErrBookNotFound           = errors.New("book not found")
 	ErrPageNotFound           = errors.New("page not found")
 	ErrFileNotFound           = errors.New("file not found")
+	ErrFileAlreadyExists      = errors.New("file already exists")
 	ErrAgentNotFound          = errors.New("agent not found")
 	ErrBookAlreadyExists      = errors.New("book already exists")
 	ErrAttributeRemapNotFound = errors.New("attribute remap not found")

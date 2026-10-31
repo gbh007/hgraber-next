@@ -8,10 +8,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
 )
 
-func (s *Storage) Create(ctx context.Context, data entities.ImportData) error {
+func (s *Storage) Create(ctx context.Context, data agentdto.ImportData) error {
 	_, err := s.create(ctx, data)
 	if err != nil {
 		return err
@@ -20,11 +20,11 @@ func (s *Storage) Create(ctx context.Context, data entities.ImportData) error {
 	return nil
 }
 
-func (s *Storage) CreateImport(ctx context.Context, data entities.ImportData) (string, error) {
+func (s *Storage) CreateImport(ctx context.Context, data agentdto.ImportData) (string, error) {
 	return s.create(ctx, data)
 }
 
-func (s *Storage) create(ctx context.Context, data entities.ImportData) (string, error) {
+func (s *Storage) create(ctx context.Context, data agentdto.ImportData) (string, error) {
 	startAt := time.Now()
 	defer func() {
 		s.metricProvider.RegisterFSActionTime("create_import", nil, time.Since(startAt))

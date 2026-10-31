@@ -4,16 +4,16 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
-func (uc *UseCase) CheckBooks(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error) {
-	result := make([]entities.AgentBookCheckResult, 0, len(urls))
+func (uc *UseCase) CheckBooks(ctx context.Context, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error) {
+	result := make([]serveragentdto.AgentBookCheckResult, 0, len(urls))
 
 	for _, u := range urls {
 		hasParser, err := uc.loader.HasParser(ctx, u)
 		if err != nil {
-			result = append(result, entities.AgentBookCheckResult{
+			result = append(result, serveragentdto.AgentBookCheckResult{
 				URL:         u,
 				HasError:    true,
 				ErrorReason: err.Error(),
@@ -23,7 +23,7 @@ func (uc *UseCase) CheckBooks(ctx context.Context, urls []url.URL) ([]entities.A
 		}
 
 		if !hasParser {
-			result = append(result, entities.AgentBookCheckResult{
+			result = append(result, serveragentdto.AgentBookCheckResult{
 				URL:           u,
 				IsUnsupported: true,
 			})
@@ -31,7 +31,7 @@ func (uc *UseCase) CheckBooks(ctx context.Context, urls []url.URL) ([]entities.A
 			continue
 		}
 
-		singleResult := entities.AgentBookCheckResult{
+		singleResult := serveragentdto.AgentBookCheckResult{
 			URL:        u,
 			IsPossible: true,
 		}

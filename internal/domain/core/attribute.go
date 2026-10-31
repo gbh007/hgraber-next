@@ -21,6 +21,16 @@ const (
 	AttributeCodeTag       = "tag"
 )
 
+var AllAttributes = []string{
+	AttributeCodeTag,
+	AttributeCodeAuthor,
+	AttributeCodeCharacter,
+	AttributeCodeLanguage,
+	AttributeCodeCategory,
+	AttributeCodeParody,
+	AttributeCodeGroup,
+}
+
 type AttributeVariant struct {
 	Code  string
 	Value string

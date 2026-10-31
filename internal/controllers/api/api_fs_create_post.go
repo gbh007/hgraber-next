@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
@@ -18,7 +18,7 @@ func (c *Controller) APIFsCreatePost(ctx context.Context, req agentapi.APIFsCrea
 	}
 
 	err := c.fileUseCase.Create(ctx, params.FileID, req.Data)
-	if errors.Is(err, entities.FileAlreadyExistsError) {
+	if errors.Is(err, core.ErrFileAlreadyExists) {
 		return apiError{
 			Code:    http.StatusConflict,
 			Details: err.Error(),

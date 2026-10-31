@@ -16,8 +16,8 @@ import (
 	"github.com/gbh007/hgraber-next/internal/dataproviders/masterapi"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/storage"
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
-	"github.com/gbh007/hgraber-next/internal/domain/hgraber"
+	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	agentUC "github.com/gbh007/hgraber-next/internal/usecases/agent"
 	"github.com/gbh007/hgraber-next/internal/usecases/highway"
@@ -37,7 +37,7 @@ type ParserInit[T any] func(
 	cfg config.AgentConfig[T],
 	async Async,
 	metricProvider *metric.MetricProvider,
-) ([]hgraber.Parser, error)
+) ([]parsing.Parser, error)
 
 func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers func() *T) {
 	cfg, needScan, err := parseConfig[T](defaultParsers)
@@ -226,7 +226,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 	}
 
 	if fileStorage != nil && cfg.Highway.PrivateKey != "" && cfg.Highway.TokenLifetime > 0 {
-		tokenizer, err := entities.NewSimpleHighwayTokenizer(cfg.Highway.PrivateKey)
+		tokenizer, err := serveragentdto.NewSimpleHighwayTokenizer(cfg.Highway.PrivateKey)
 		if err != nil {
 			logger.ErrorContext(
 				ctx, "fail init highway tokenizer",
@@ -243,7 +243,7 @@ func Serve[T any](ctx context.Context, parserInit ParserInit[T], defaultParsers 
 		)
 	}
 
-	parserNames := pkg.Map(parsers, func(parser hgraber.Parser) string {
+	parserNames := pkg.Map(parsers, func(parser parsing.Parser) string {
 		return parser.Name()
 	})
 

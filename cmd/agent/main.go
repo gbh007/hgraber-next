@@ -13,7 +13,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/request"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/webcache"
-	"github.com/gbh007/hgraber-next/internal/domain/hgraber"
+	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
 
 func main() {
@@ -32,11 +32,11 @@ func main() {
 		cfg config.AgentConfig[config.AgentParsers],
 		async agent.Async,
 		metricProvider *metric.MetricProvider,
-	) ([]hgraber.Parser, error) {
+	) ([]parsing.Parser, error) {
 		if cfg.Parsers == nil {
 			logger.DebugContext(ctx, "nil parser config, skipping")
 
-			return []hgraber.Parser{}, nil
+			return []parsing.Parser{}, nil
 		}
 
 		var cache request.Cache

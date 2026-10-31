@@ -8,7 +8,9 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
+	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 	"github.com/prometheus/client_golang/prometheus"
 	"go.opentelemetry.io/otel/trace"
@@ -24,25 +26,25 @@ type metricProvider interface {
 }
 
 type ParsingUseCases interface {
-	CheckBooks(ctx context.Context, urls []url.URL) ([]entities.AgentBookCheckResult, error)
-	ParseBook(ctx context.Context, u url.URL) (entities.AgentBookDetails, error)
+	CheckBooks(ctx context.Context, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error)
+	ParseBook(ctx context.Context, u url.URL) (serveragentdto.AgentBookDetails, error)
 	DownloadPage(ctx context.Context, bookURL, imageURL url.URL) (io.Reader, error)
-	CheckPages(ctx context.Context, pages []entities.AgentPageURL) ([]entities.AgentPageCheckResult, error)
-	MultiHandle(ctx context.Context, multiUrl url.URL) ([]entities.AgentBookCheckResult, error)
+	CheckPages(ctx context.Context, pages []serveragentdto.AgentPageURL) ([]serveragentdto.AgentPageCheckResult, error)
+	MultiHandle(ctx context.Context, multiUrl url.URL) ([]serveragentdto.AgentBookCheckResult, error)
 
-	HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (entities.HProxyBookDetails, error)
-	HProxyList(ctx context.Context, u url.URL) (entities.HProxyList, error)
+	HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (agentdto.HProxyBookDetails, error)
+	HProxyList(ctx context.Context, u url.URL) (agentdto.HProxyList, error)
 }
 
 type ImportUseCases interface {
-	Create(ctx context.Context, data entities.ImportData) error
+	Create(ctx context.Context, data agentdto.ImportData) error
 }
 
 type FileUseCases interface {
 	Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error
 	Delete(ctx context.Context, fileID uuid.UUID) error
 	Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error)
-	State(ctx context.Context, includeFileIDs, includeFileSizes bool) (entities.FSState, error)
+	State(ctx context.Context, includeFileIDs, includeFileSizes bool) (fsmodel.FSState, error)
 }
 
 type HighwayUseCases interface {

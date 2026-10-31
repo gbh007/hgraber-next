@@ -5,7 +5,7 @@ import (
 	"io"
 	"log/slog"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
 )
 
 type importFS interface {
@@ -14,7 +14,7 @@ type importFS interface {
 }
 
 type storage interface {
-	CreateImport(ctx context.Context, info entities.ImportInfo) error
+	CreateImport(ctx context.Context, info agentdto.ImportInfo) error
 	CreateMissing(ctx context.Context, path string, maxEntryPercentage float64) error
 
 	ImportedCountByRelativePath(ctx context.Context, path string) (int, error)
@@ -22,7 +22,7 @@ type storage interface {
 }
 
 type masterAPI interface {
-	DeduplicateArchive(ctx context.Context, body io.Reader) ([]entities.DeduplicateArchiveResult, error)
+	DeduplicateArchive(ctx context.Context, body io.Reader) ([]agentdto.DeduplicateArchiveResult, error)
 }
 
 type UseCase struct {

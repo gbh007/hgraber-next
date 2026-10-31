@@ -1,4 +1,4 @@
-package external
+package archivemodel
 
 import (
 	"encoding/json"

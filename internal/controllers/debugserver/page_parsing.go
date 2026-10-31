@@ -12,9 +12,9 @@ import (
 	"path"
 	"time"
 
+	"github.com/gbh007/hgraber-next/internal/domian/archivemodel"
 	"github.com/gbh007/hgraber-next/internal/controllers/debugserver/model"
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
-	"github.com/gbh007/hgraber-next/external"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/labstack/echo/v4"
 )
@@ -49,7 +49,7 @@ func (cnt *Controller[T]) pageParsing(c echo.Context) error {
 		}
 
 		return c.Render(http.StatusOK, "parsing.html.gotmpl", map[string]any{
-			"urls": pkg.Map(urls, func(raw entities.AgentBookCheckResult) string {
+			"urls": pkg.Map(urls, func(raw serveragentdto.AgentBookCheckResult) string {
 				return raw.URL.String()
 			}),
 		})
@@ -62,26 +62,26 @@ func (cnt *Controller[T]) pageParsing(c echo.Context) error {
 		})
 	}
 
-	info := external.Info{
+	info := archivemodel.Info{
 		Version: "1.0.0",
-		Meta: external.Meta{
+		Meta: archivemodel.Meta{
 			Exported:    time.Now().UTC(),
 			ServiceName: "hgraber next agent",
 		},
-		Data: external.Book{
+		Data: archivemodel.Book{
 			Name:             details.Name,
 			OriginURL:        details.URL.String(),
 			PageCount:        details.PageCount,
 			CreateAt:         time.Now(),
 			AttributesParsed: true,
-			Attributes: pkg.Map(details.Attributes, func(raw entities.AgentBookDetailsAttributesItem) external.Attribute {
-				return external.Attribute{
+			Attributes: pkg.Map(details.Attributes, func(raw serveragentdto.AgentBookDetailsAttributesItem) archivemodel.Attribute {
+				return archivemodel.Attribute{
 					Code:   raw.Code,
 					Values: raw.Values,
 				}
 			}),
-			Pages: pkg.Map(details.Pages, func(p entities.AgentBookDetailsPagesItem) external.Page {
-				return external.Page{
+			Pages: pkg.Map(details.Pages, func(p serveragentdto.AgentBookDetailsPagesItem) archivemodel.Page {
+				return archivemodel.Page{
 					PageNumber: p.PageNumber,
 					Ext:        path.Ext(p.Filename),
 					OriginURL:  p.URL.String(),
@@ -108,13 +108,13 @@ func (cnt *Controller[T]) pageParsing(c echo.Context) error {
 
 	buff := &bytes.Buffer{}
 
-	pageUrls := pkg.SliceToMap(details.Pages, func(p entities.AgentBookDetailsPagesItem) (int, url.URL) {
+	pageUrls := pkg.SliceToMap(details.Pages, func(p serveragentdto.AgentBookDetailsPagesItem) (int, url.URL) {
 		return p.PageNumber, p.URL
 	})
 
 	zipWriter := zip.NewWriter(buff)
 
-	err = external.WriteArchive(
+	err = archivemodel.WriteArchive(
 		c.Request().Context(),
 		zipWriter,
 		func(ctx context.Context, pageNumber int) (io.Reader, error) {

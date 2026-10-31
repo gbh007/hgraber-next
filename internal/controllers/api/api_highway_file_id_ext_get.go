@@ -6,7 +6,7 @@ import (
 	"mime"
 	"net/http"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
@@ -34,7 +34,7 @@ func (c *Controller) APIHighwayFileIDExtGet(ctx context.Context, params agentapi
 	}
 
 	body, err := c.highwayUseCase.Get(ctx, params.ID)
-	if errors.Is(err, entities.FileNotFoundError) {
+	if errors.Is(err, core.ErrFileNotFound) {
 		return nil, apiError{
 			Code:    http.StatusNotFound,
 			Details: err.Error(),

@@ -10,13 +10,13 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/gbh007/hgraber-next/internal/domain/hgraber"
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
+	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
 
 // Проверка соответствия базового типа
 var (
-	_ hgraber.Parser = (*CoreParser)(nil)
+	_ parsing.Parser = (*CoreParser)(nil)
 )
 
 type Requester interface {
@@ -44,7 +44,7 @@ func (cp CoreParser) Name() string {
 	return cp.name
 }
 
-func (cp CoreParser) Load(ctx context.Context, u url.URL) (hgraber.BookParser, error) {
+func (cp CoreParser) Load(ctx context.Context, u url.URL) (parsing.BookParser, error) {
 	return nil, fmt.Errorf("unimplemented in core parser")
 }
 
@@ -71,8 +71,8 @@ func (cp CoreParser) LoadImage(ctx context.Context, u url.URL, bookUrl url.URL) 
 	return data, nil
 }
 
-func (cp CoreParser) HProxyList(ctx context.Context, u url.URL) (entities.HProxyList, error) {
-	return entities.HProxyList{}, nil
+func (cp CoreParser) HProxyList(ctx context.Context, u url.URL) (agentdto.HProxyList, error) {
+	return agentdto.HProxyList{}, nil
 }
 
 func TrimLastSlash(URL string, count int) string {

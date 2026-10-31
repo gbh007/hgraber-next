@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
@@ -36,7 +36,7 @@ func (c *Controller) APIFsInfoPost(ctx context.Context, req *agentapi.APIFsInfoP
 			Value: state.AvailableSize,
 			Set:   state.AvailableSize > 0,
 		},
-		Files: pkg.Map(state.Files, func(raw entities.FSStateFile) agentapi.APIFsInfoPostOKFilesItem {
+		Files: pkg.Map(state.Files, func(raw fsmodel.FSStateFile) agentapi.APIFsInfoPostOKFilesItem {
 			return agentapi.APIFsInfoPostOKFilesItem{
 				ID:        raw.ID,
 				Size:      raw.Size,

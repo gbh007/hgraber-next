@@ -12,7 +12,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/external"
+	"github.com/gbh007/hgraber-next/internal/domian/archivemodel"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
@@ -41,10 +41,10 @@ func (uc *UseCase) ImportArchive(
 
 	pageData := make(map[int]uuid.UUID, core.AvgPageCountInBook)
 
-	info, err := external.ReadArchive(
+	info, err := archivemodel.ReadArchive(
 		ctx,
 		zipReader,
-		external.ReadArchiveOptions{
+		archivemodel.ReadArchiveOptions{
 			HandlePageBody: func(ctx context.Context, pageNumber int, _ string, body io.Reader) error {
 				fileID := uuid.Must(uuid.NewV7())
 
@@ -60,11 +60,11 @@ func (uc *UseCase) ImportArchive(
 		},
 	)
 
-	if errors.Is(err, external.ErrBookInfoNotFound) {
+	if errors.Is(err, archivemodel.ErrBookInfoNotFound) {
 		return uuid.Nil, fmt.Errorf("missing book info: %w", core.ErrBookNotFound)
 	}
 
-	book, err := external.BookToEntity(info.Data)
+	book, err := archivemodel.BookToEntity(info.Data)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("convert info: %w", err)
 	}

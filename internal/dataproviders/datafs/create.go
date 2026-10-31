@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/google/uuid"
 )
 
@@ -27,7 +27,7 @@ func (s *Storage) Create(ctx context.Context, fileID uuid.UUID, body io.Reader) 
 	}
 
 	if info != nil {
-		return fmt.Errorf("local fs: %w", entities.FileAlreadyExistsError)
+		return fmt.Errorf("local fs: %w", core.ErrFileAlreadyExists)
 	}
 
 	f, err := os.Create(filepath)

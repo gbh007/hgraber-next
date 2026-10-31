@@ -8,3 +8,5 @@
 /experimental/*.json
 /bin
 /config-agent.*
+*.db
+*.sqlite

@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/google/uuid"
 )
 
@@ -21,7 +21,7 @@ func (s *Storage) Delete(ctx context.Context, fileID uuid.UUID) error {
 
 	err := os.Remove(filepath)
 	if errors.Is(err, os.ErrNotExist) {
-		return fmt.Errorf("local fs: %w", entities.FileNotFoundError)
+		return fmt.Errorf("local fs: %w", core.ErrFileNotFound)
 	}
 
 	if err != nil {

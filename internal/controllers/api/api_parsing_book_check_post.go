@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
@@ -27,8 +27,8 @@ func (c *Controller) APIParsingBookCheckPost(ctx context.Context, req *agentapi.
 	}, nil
 }
 
-func convertBooksCheckResultResult(result []entities.AgentBookCheckResult) []agentapi.BooksCheckResultResultItem {
-	return pkg.Map(result, func(v entities.AgentBookCheckResult) agentapi.BooksCheckResultResultItem {
+func convertBooksCheckResultResult(result []serveragentdto.AgentBookCheckResult) []agentapi.BooksCheckResultResultItem {
+	return pkg.Map(result, func(v serveragentdto.AgentBookCheckResult) agentapi.BooksCheckResultResultItem {
 		switch {
 		case v.IsPossible:
 			return agentapi.BooksCheckResultResultItem{

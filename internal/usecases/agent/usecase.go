@@ -6,16 +6,16 @@ import (
 	"log/slog"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/hgraber"
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
+	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
 
 type loader interface {
 	HasParser(ctx context.Context, u url.URL) (bool, error)
-	Load(ctx context.Context, u url.URL) (hgraber.BookParser, error)
+	Load(ctx context.Context, u url.URL) (parsing.BookParser, error)
 	LoadImage(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error)
 	AllBooks(ctx context.Context, u url.URL) ([]string, error)
-	HProxyList(ctx context.Context, u url.URL) (entities.HProxyList, error)
+	HProxyList(ctx context.Context, u url.URL) (agentdto.HProxyList, error)
 }
 
 type UseCase struct {

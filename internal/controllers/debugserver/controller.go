@@ -7,13 +7,13 @@ import (
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/internal/agent/config"
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 type ParsingUseCases interface {
-	ParseBook(ctx context.Context, u url.URL) (entities.AgentBookDetails, error)
+	ParseBook(ctx context.Context, u url.URL) (serveragentdto.AgentBookDetails, error)
 	DownloadPage(ctx context.Context, bookURL, imageURL url.URL) (io.Reader, error)
-	MultiHandle(ctx context.Context, multiUrl url.URL) ([]entities.AgentBookCheckResult, error)
+	MultiHandle(ctx context.Context, multiUrl url.URL) ([]serveragentdto.AgentBookCheckResult, error)
 }
 
 type Controller[T any] struct {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
@@ -33,17 +33,17 @@ func (c *Controller) APIHproxyParseBookPost(ctx context.Context, req *agentapi.A
 		URL:        details.URL,
 		PreviewURL: OptURL(details.PreviewURL),
 		PageCount:  details.PageCount,
-		Pages: pkg.Map(details.Pages, func(p entities.HProxyBookDetailsPagesItem) agentapi.APIHproxyParseBookPostOKPagesItem {
+		Pages: pkg.Map(details.Pages, func(p agentdto.HProxyBookDetailsPagesItem) agentapi.APIHproxyParseBookPostOKPagesItem {
 			return agentapi.APIHproxyParseBookPostOKPagesItem{
 				PageNumber: p.PageNumber,
 				URL:        p.URL,
 				Filename:   p.Filename,
 			}
 		}),
-		Attributes: pkg.Map(details.Attributes, func(attr entities.HProxyBookDetailsAttributesItem) agentapi.APIHproxyParseBookPostOKAttributesItem {
+		Attributes: pkg.Map(details.Attributes, func(attr agentdto.HProxyBookDetailsAttributesItem) agentapi.APIHproxyParseBookPostOKAttributesItem {
 			return agentapi.APIHproxyParseBookPostOKAttributesItem{
 				Code: attr.Code,
-				Values: pkg.Map(attr.Values, func(v entities.HProxyBookDetailsAttributesValueItem) agentapi.APIHproxyParseBookPostOKAttributesItemValuesItem {
+				Values: pkg.Map(attr.Values, func(v agentdto.HProxyBookDetailsAttributesValueItem) agentapi.APIHproxyParseBookPostOKAttributesItemValuesItem {
 					return agentapi.APIHproxyParseBookPostOKAttributesItemValuesItem{
 						Name: v.Value,
 						URL:  OptURL(v.URL),

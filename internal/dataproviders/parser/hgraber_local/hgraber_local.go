@@ -14,13 +14,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/hgraber"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/common"
+	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
 
 // Проверка соответствия базового типа
 var (
-	_ hgraber.Parser = (*Parser)(nil)
+	_ parsing.Parser = (*Parser)(nil)
 
 	ParserError = errors.New("parser hgraber_v4")
 )
@@ -40,7 +40,7 @@ func New(r common.Requester, token string) *Parser {
 	}
 }
 
-func (p *Parser) Load(ctx context.Context, u url.URL) (hgraber.BookParser, error) {
+func (p *Parser) Load(ctx context.Context, u url.URL) (parsing.BookParser, error) {
 	bookParser := BookParser{}
 
 	id, err := strconv.Atoi(strings.TrimPrefix(u.Path, "/"))
@@ -96,11 +96,11 @@ func (p BookParser) Name(ctx context.Context) (string, error) {
 	return p.body.Name, nil
 }
 
-func (p BookParser) Pages(ctx context.Context) ([]hgraber.Page, error) {
-	result := make([]hgraber.Page, len(p.body.Pages))
+func (p BookParser) Pages(ctx context.Context) ([]parsing.RawPage, error) {
+	result := make([]parsing.RawPage, len(p.body.Pages))
 
 	for i, p := range p.body.Pages {
-		result[i] = hgraber.Page{
+		result[i] = parsing.RawPage{
 			PageNumber: p.PageNumber,
 			URL:        p.PreviewURL,
 			Ext:        path.Ext(p.PreviewURL), // FIXME: а сработает?

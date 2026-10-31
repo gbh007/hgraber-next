@@ -9,11 +9,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/hgraber"
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/hgraber_local"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/mock"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/request"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
+	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
 
 type metricProvider interface {
@@ -21,7 +21,7 @@ type metricProvider interface {
 }
 
 type Loader struct {
-	parsers        []hgraber.Parser
+	parsers        []parsing.Parser
 	metricProvider metricProvider
 }
 
@@ -33,13 +33,13 @@ func NewDefaultParsers(
 	cache request.Cache,
 	logErrors bool,
 	defaultUserAgent string,
-) []hgraber.Parser {
+) []parsing.Parser {
 	requester := request.New(logger, timeout, nil, logErrors, cache, defaultUserAgent)
 
-	parsers := make([]hgraber.Parser, 0, len(enabledParsers))
+	parsers := make([]parsing.Parser, 0, len(enabledParsers))
 
 	for _, code := range enabledParsers {
-		var p hgraber.Parser
+		var p parsing.Parser
 
 		switch code {
 		case "mock":
@@ -64,7 +64,7 @@ func NewDefaultParsers(
 }
 
 func New(
-	parsers []hgraber.Parser,
+	parsers []parsing.Parser,
 	metricProvider metricProvider,
 ) *Loader {
 	return &Loader{
@@ -73,19 +73,19 @@ func New(
 	}
 }
 
-func (l *Loader) getParser(u url.URL) (hgraber.Parser, error) {
+func (l *Loader) getParser(u url.URL) (parsing.Parser, error) {
 	for _, p := range l.parsers {
 		if p.CanParse(u) {
 			return p, nil
 		}
 	}
 
-	return nil, hgraber.InvalidLinkError
+	return nil, parsing.InvalidLinkError
 }
 
 func (l *Loader) HasParser(ctx context.Context, u url.URL) (bool, error) {
 	_, err := l.getParser(u)
-	if errors.Is(err, hgraber.InvalidLinkError) {
+	if errors.Is(err, parsing.InvalidLinkError) {
 		return false, nil
 	}
 
@@ -96,7 +96,7 @@ func (l *Loader) HasParser(ctx context.Context, u url.URL) (bool, error) {
 	return true, nil
 }
 
-func (l *Loader) Load(ctx context.Context, u url.URL) (hgraber.BookParser, error) {
+func (l *Loader) Load(ctx context.Context, u url.URL) (parsing.BookParser, error) {
 	startAt := time.Now()
 
 	p, err := l.getParser(u)
@@ -156,12 +156,12 @@ func (l *Loader) AllBooks(ctx context.Context, u url.URL) ([]string, error) {
 	return data, nil
 }
 
-func (l *Loader) HProxyList(ctx context.Context, u url.URL) (entities.HProxyList, error) {
+func (l *Loader) HProxyList(ctx context.Context, u url.URL) (agentdto.HProxyList, error) {
 	startAt := time.Now()
 
 	p, err := l.getParser(u)
 	if err != nil {
-		return entities.HProxyList{}, err
+		return agentdto.HProxyList{}, err
 	}
 
 	defer func() {
@@ -170,7 +170,7 @@ func (l *Loader) HProxyList(ctx context.Context, u url.URL) (entities.HProxyList
 
 	data, err := p.HProxyList(ctx, u)
 	if err != nil {
-		return entities.HProxyList{}, fmt.Errorf("load hproxy list: %w", err)
+		return agentdto.HProxyList{}, fmt.Errorf("load hproxy list: %w", err)
 	}
 
 	return data, nil

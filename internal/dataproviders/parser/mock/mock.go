@@ -8,13 +8,13 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/gbh007/hgraber-next/internal/domain/hgraber"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/parser/common"
+	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 )
 
 // Проверка соответствия базового типа
 var (
-	_ hgraber.Parser = (*Parser)(nil)
+	_ parsing.Parser = (*Parser)(nil)
 
 	ParserError = errors.New("parser mock")
 )
@@ -31,7 +31,7 @@ func New(r common.Requester) *Parser {
 	}
 }
 
-func (p *Parser) Load(ctx context.Context, u url.URL) (hgraber.BookParser, error) {
+func (p *Parser) Load(ctx context.Context, u url.URL) (parsing.BookParser, error) {
 	bookParser := BookParser{
 		url: u.String(),
 	}
@@ -54,13 +54,13 @@ type BookParser struct {
 	url, body string
 }
 
-func (p BookParser) Pages(ctx context.Context) ([]hgraber.Page, error) {
-	result := make([]hgraber.Page, 0)
+func (p BookParser) Pages(ctx context.Context) ([]parsing.RawPage, error) {
+	result := make([]parsing.RawPage, 0)
 
 	rp := `(?sm)` + regexp.QuoteMeta(`<a href="`) + `(.+?)\.(.+?)` + regexp.QuoteMeta(`">`)
 	for i, name := range regexp.MustCompile(rp).FindAllStringSubmatch(p.body, -1) {
 		if len(name) > 1 {
-			result = append(result, hgraber.Page{
+			result = append(result, parsing.RawPage{
 				PageNumber: i + 1,
 				URL:        p.url + "/" + strings.TrimSpace(name[1]) + "." + strings.TrimSpace(name[2]),
 				Ext:        name[2],

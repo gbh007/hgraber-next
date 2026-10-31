@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
@@ -17,8 +17,8 @@ func (c *Controller) APIParsingPageCheckPost(ctx context.Context, req *agentapi.
 		}
 	}
 
-	result, err := c.parsingUseCases.CheckPages(ctx, pkg.Map(req.Urls, func(u agentapi.APIParsingPageCheckPostReqUrlsItem) entities.AgentPageURL {
-		return entities.AgentPageURL{
+	result, err := c.parsingUseCases.CheckPages(ctx, pkg.Map(req.Urls, func(u agentapi.APIParsingPageCheckPostReqUrlsItem) serveragentdto.AgentPageURL {
+		return serveragentdto.AgentPageURL{
 			BookURL:  u.BookURL,
 			ImageURL: u.ImageURL,
 		}
@@ -28,7 +28,7 @@ func (c *Controller) APIParsingPageCheckPost(ctx context.Context, req *agentapi.
 	}
 
 	return &agentapi.APIParsingPageCheckPostOK{
-		Result: pkg.Map(result, func(p entities.AgentPageCheckResult) agentapi.APIParsingPageCheckPostOKResultItem {
+		Result: pkg.Map(result, func(p serveragentdto.AgentPageCheckResult) agentapi.APIParsingPageCheckPostOKResultItem {
 			item := agentapi.APIParsingPageCheckPostOKResultItem{
 				BookURL:  p.BookURL,
 				ImageURL: p.ImageURL,

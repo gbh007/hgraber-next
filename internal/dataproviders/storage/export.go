@@ -5,11 +5,11 @@ import (
 	"database/sql"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
 	"github.com/google/uuid"
 )
 
-func (s *Storage) CreateImport(ctx context.Context, info entities.ImportInfo) error {
+func (s *Storage) CreateImport(ctx context.Context, info agentdto.ImportInfo) error {
 	_, err := s.db.ExecContext(
 		ctx,
 		`INSERT INTO import_infos (book_id, book_url, relative_path, imported_at) VALUES (?,?,?,?) ON CONFLICT DO NOTHING;`,

@@ -6,17 +6,17 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/hgraber"
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
-func (uc *UseCase) MultiHandle(ctx context.Context, multiUrl url.URL) ([]entities.AgentBookCheckResult, error) {
-	result := make([]entities.AgentBookCheckResult, 0, 100)
+func (uc *UseCase) MultiHandle(ctx context.Context, multiUrl url.URL) ([]serveragentdto.AgentBookCheckResult, error) {
+	result := make([]serveragentdto.AgentBookCheckResult, 0, 100)
 
 	urls, err := uc.loader.AllBooks(ctx, multiUrl)
 	// FIXME: подумать как лучше это сделать
-	if errors.Is(err, hgraber.InvalidLinkError) {
-		return []entities.AgentBookCheckResult{}, nil
+	if errors.Is(err, parsing.InvalidLinkError) {
+		return []serveragentdto.AgentBookCheckResult{}, nil
 	}
 
 	if err != nil {
@@ -29,7 +29,7 @@ func (uc *UseCase) MultiHandle(ctx context.Context, multiUrl url.URL) ([]entitie
 			return nil, fmt.Errorf("url parse (%s): %w", stringURL, err)
 		}
 
-		singleResult := entities.AgentBookCheckResult{
+		singleResult := serveragentdto.AgentBookCheckResult{
 			URL:        *u,
 			IsPossible: true,
 		}

@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/external"
+	"github.com/gbh007/hgraber-next/internal/domian/archivemodel"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/pkg"
@@ -105,7 +105,7 @@ func (uc *UseCase) newArchive(ctx context.Context, book core.BookContainer) (io.
 	zipFile := &bytes.Buffer{}
 	zipWriter := zip.NewWriter(zipFile)
 
-	err := external.WriteArchiveAdapter(ctx, zipWriter, uc.fileStorage, book)
+	err := archivemodel.WriteArchiveAdapter(ctx, zipWriter, uc.fileStorage, book)
 	if err != nil {
 		return nil, fmt.Errorf("write archive: %w", err)
 	}

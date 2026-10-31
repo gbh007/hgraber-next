@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/domain/entities"
+	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
 )
 
 const minEntryPercentage = 0.9999 // Считаем допустимой погрешностью 1 страницу на 10 000.
@@ -57,7 +57,7 @@ func (uc *UseCase) ScanZips(ctx context.Context) error {
 		for _, match := range matches {
 			if match.EntryPercentage > minEntryPercentage &&
 				match.ReverseEntryPercentage > minEntryPercentage {
-				err = uc.storage.CreateImport(ctx, entities.ImportInfo{
+				err = uc.storage.CreateImport(ctx, agentdto.ImportInfo{
 					BookID:     match.TargetBookID,
 					BookURL:    match.OriginBookURL,
 					FSPath:     relativePath,
