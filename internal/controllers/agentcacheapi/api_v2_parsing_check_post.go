@@ -8,9 +8,9 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIParsingBookCheckPost(
+func (c *Controller) APIV2ParsingCheckPost(
 	ctx context.Context,
-	req *agentapi.APIParsingBookCheckPostReq,
+	req *agentapi.APIV2ParsingCheckPostReq,
 ) (*agentapi.BooksCheckResult, error) {
 	result, err := c.parsingUseCases.BooksExists(ctx, req.Urls)
 	if err != nil {

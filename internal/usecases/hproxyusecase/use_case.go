@@ -11,11 +11,11 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 var errCanNotParse = errors.New("can't parse")
@@ -35,12 +35,6 @@ type storage interface {
 
 type agentSystem interface {
 	BooksCheck(ctx context.Context, agentID uuid.UUID, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error)
-	PagesCheck(
-		ctx context.Context,
-		agentID uuid.UUID,
-		urls []serveragentdto.AgentPageURL,
-	) ([]serveragentdto.AgentPageCheckResult, error)
-
 	PageLoad(ctx context.Context, agentID uuid.UUID, u serveragentdto.AgentPageURL) (io.Reader, error)
 
 	HProxyList(ctx context.Context, agentID uuid.UUID, u url.URL) (hproxymodel.List, error)

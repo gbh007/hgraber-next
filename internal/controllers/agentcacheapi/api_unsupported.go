@@ -7,10 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIFsCreatePost(
+func (c *Controller) APIV2FsFilePost(
 	ctx context.Context,
-	req agentapi.APIFsCreatePostReq,
-	params agentapi.APIFsCreatePostParams,
+	req agentapi.APIV2FsFilePostReq,
+	params agentapi.APIV2FsFilePostParams,
 ) error {
 	return apiError{
 		Code:    http.StatusBadRequest,
@@ -18,9 +18,9 @@ func (c *Controller) APIFsCreatePost(
 	}
 }
 
-func (c *Controller) APIFsDeletePost(
+func (c *Controller) APIV2FsFileIDDelete(
 	ctx context.Context,
-	req *agentapi.APIFsDeletePostReq,
+	params agentapi.APIV2FsFileIDDeleteParams,
 ) error {
 	return apiError{
 		Code:    http.StatusBadRequest,
@@ -28,67 +28,47 @@ func (c *Controller) APIFsDeletePost(
 	}
 }
 
-func (c *Controller) APIFsGetGet(
+func (c *Controller) APIV2FsFileIDGet(
 	ctx context.Context,
-	params agentapi.APIFsGetGetParams,
-) (agentapi.APIFsGetGetOK, error) {
-	return agentapi.APIFsGetGetOK{}, apiError{
+	params agentapi.APIV2FsFileIDGetParams,
+) (agentapi.APIV2FsFileIDGetOK, error) {
+	return agentapi.APIV2FsFileIDGetOK{}, apiError{
 		Code:    http.StatusBadRequest,
 		Details: "unsupported api",
 	}
 }
 
-func (c *Controller) APIParsingBookMultiPost(
+func (c *Controller) APIV2ParsingListPost(
 	ctx context.Context,
-	req *agentapi.APIParsingBookMultiPostReq,
-) (*agentapi.BooksCheckResult, error) {
+	req *agentapi.APIV2ParsingListPostReq,
+) (*agentapi.APIV2ParsingListPostOK, error) {
 	return nil, apiError{
 		Code:    http.StatusBadRequest,
 		Details: "unsupported api",
 	}
 }
 
-func (c *Controller) APIFsInfoPost(
+func (c *Controller) APIV2FsGet(
 	ctx context.Context,
-	req *agentapi.APIFsInfoPostReq,
-) (*agentapi.APIFsInfoPostOK, error) {
+	params agentapi.APIV2FsGetParams,
+) (*agentapi.APIV2FsGetOK, error) {
 	return nil, apiError{
 		Code:    http.StatusBadRequest,
 		Details: "unsupported api",
 	}
 }
 
-func (c *Controller) APIHighwayFileIDExtGet(
+func (c *Controller) APIV2HighwayFileIDExtGet(
 	ctx context.Context,
-	params agentapi.APIHighwayFileIDExtGetParams,
-) (*agentapi.APIHighwayFileIDExtGetOKHeaders, error) {
+	params agentapi.APIV2HighwayFileIDExtGetParams,
+) (*agentapi.APIV2HighwayFileIDExtGetOKHeaders, error) {
 	return nil, apiError{
 		Code:    http.StatusBadRequest,
 		Details: "unsupported api",
 	}
 }
 
-func (c *Controller) APIHighwayTokenCreatePost(ctx context.Context) (*agentapi.APIHighwayTokenCreatePostOK, error) {
-	return nil, apiError{
-		Code:    http.StatusBadRequest,
-		Details: "unsupported api",
-	}
-}
-
-func (c *Controller) APIHproxyParseBookPost(
-	ctx context.Context,
-	req *agentapi.APIHproxyParseBookPostReq,
-) (*agentapi.APIHproxyParseBookPostOK, error) {
-	return nil, apiError{
-		Code:    http.StatusBadRequest,
-		Details: "unsupported api",
-	}
-}
-
-func (c *Controller) APIHproxyParseListPost(
-	ctx context.Context,
-	req *agentapi.APIHproxyParseListPostReq,
-) (*agentapi.APIHproxyParseListPostOK, error) {
+func (c *Controller) APIV2HighwayTokenPost(ctx context.Context) (*agentapi.APIV2HighwayTokenPostOK, error) {
 	return nil, apiError{
 		Code:    http.StatusBadRequest,
 		Details: "unsupported api",

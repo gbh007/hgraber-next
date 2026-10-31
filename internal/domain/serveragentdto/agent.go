@@ -39,15 +39,6 @@ type AgentPageURL struct {
 	ImageURL url.URL
 }
 
-type AgentPageCheckResult struct {
-	BookURL       url.URL
-	ImageURL      url.URL
-	IsUnsupported bool
-	IsPossible    bool
-	HasError      bool
-	ErrorReason   string
-}
-
 type AgentExportData struct {
 	BookID   uuid.UUID
 	BookName string

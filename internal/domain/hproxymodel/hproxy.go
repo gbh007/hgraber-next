@@ -4,6 +4,7 @@ import (
 	"net/url"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 )
 
 type ListBook struct {
@@ -33,6 +34,10 @@ type BookAttribute struct {
 	Code   string
 	Name   string
 	Values []BookAttributeValue
+}
+
+func (ba BookAttribute) StringValues() []string {
+	return lo.Map(ba.Values, func(v BookAttributeValue, _ int) string { return v.Name })
 }
 
 type BookAttributeValue struct {

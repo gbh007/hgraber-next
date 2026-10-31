@@ -13,10 +13,10 @@ import (
 )
 
 func (a *FSAdapter) Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error {
-	err := a.rawClient.APIFsCreatePost(
+	err := a.rawClient.APIV2FsFilePost(
 		ctx,
-		agentapi.APIFsCreatePostReq{Data: body},
-		agentapi.APIFsCreatePostParams{FileID: fileID},
+		agentapi.APIV2FsFilePostReq{Data: body},
+		agentapi.APIV2FsFilePostParams{FileID: fileID},
 	)
 	if err != nil {
 		return enrichError(err)
@@ -26,7 +26,7 @@ func (a *FSAdapter) Create(ctx context.Context, fileID uuid.UUID, body io.Reader
 }
 
 func (a *FSAdapter) Delete(ctx context.Context, fileID uuid.UUID) error {
-	err := a.rawClient.APIFsDeletePost(ctx, &agentapi.APIFsDeletePostReq{FileID: fileID})
+	err := a.rawClient.APIV2FsFileIDDelete(ctx, agentapi.APIV2FsFileIDDeleteParams{ID: fileID})
 	if err != nil {
 		return enrichError(err)
 	}
@@ -35,7 +35,7 @@ func (a *FSAdapter) Delete(ctx context.Context, fileID uuid.UUID) error {
 }
 
 func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error) {
-	res, err := a.rawClient.APIFsGetGet(ctx, agentapi.APIFsGetGetParams{FileID: fileID})
+	res, err := a.rawClient.APIV2FsFileIDGet(ctx, agentapi.APIV2FsFileIDGetParams{ID: fileID})
 	if err != nil {
 		return nil, enrichError(err)
 	}
@@ -44,7 +44,7 @@ func (a *FSAdapter) Get(ctx context.Context, fileID uuid.UUID) (io.Reader, error
 }
 
 func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes bool) (fsmodel.FSState, error) {
-	res, err := a.rawClient.APIFsInfoPost(ctx, &agentapi.APIFsInfoPostReq{
+	res, err := a.rawClient.APIV2FsGet(ctx, agentapi.APIV2FsGetParams{
 		IncludeFileIds:   agentapi.NewOptBool(includeFileIDs),
 		IncludeFileSizes: agentapi.NewOptBool(includeFileSizes),
 	})
@@ -54,7 +54,7 @@ func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes 
 
 	return fsmodel.FSState{
 		FileIDs: res.FileIds,
-		Files: pkg.Map(res.Files, func(raw agentapi.APIFsInfoPostOKFilesItem) fsmodel.FSStateFile {
+		Files: pkg.Map(res.Files, func(raw agentapi.APIV2FsGetOKFilesItem) fsmodel.FSStateFile {
 			return fsmodel.FSStateFile{
 				ID:        raw.ID,
 				Size:      raw.Size,
@@ -68,7 +68,7 @@ func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes 
 }
 
 func (a *FSAdapter) CreateHighwayToken(ctx context.Context) (string, time.Time, error) {
-	res, err := a.rawClient.APIHighwayTokenCreatePost(ctx)
+	res, err := a.rawClient.APIV2HighwayTokenPost(ctx)
 	if err != nil {
 		return "", time.Time{}, enrichError(err)
 	}

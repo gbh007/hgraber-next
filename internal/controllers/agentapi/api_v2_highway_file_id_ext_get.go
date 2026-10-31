@@ -10,7 +10,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIHighwayFileIDExtGet(ctx context.Context, params agentapi.APIHighwayFileIDExtGetParams) (*agentapi.APIHighwayFileIDExtGetOKHeaders, error) {
+func (c *Controller) APIV2HighwayFileIDExtGet(
+	ctx context.Context,
+	params agentapi.APIV2HighwayFileIDExtGetParams,
+) (*agentapi.APIV2HighwayFileIDExtGetOKHeaders, error) {
 	if c.highwayUseCase == nil {
 		return nil, apiError{
 			Code:    http.StatusBadRequest,
@@ -52,9 +55,9 @@ func (c *Controller) APIHighwayFileIDExtGet(ctx context.Context, params agentapi
 		contentType = "application/octet-stream"
 	}
 
-	return &agentapi.APIHighwayFileIDExtGetOKHeaders{
+	return &agentapi.APIV2HighwayFileIDExtGetOKHeaders{
 		ContentType: contentType,
-		Response: agentapi.APIHighwayFileIDExtGetOK{
+		Response: agentapi.APIV2HighwayFileIDExtGetOK{
 			Data: body,
 		},
 	}, nil

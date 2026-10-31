@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIFsInfoPost(ctx context.Context, req *agentapi.APIFsInfoPostReq) (*agentapi.APIFsInfoPostOK, error) {
+func (c *Controller) APIV2FsGet(
+	ctx context.Context,
+	params agentapi.APIV2FsGetParams,
+) (*agentapi.APIV2FsGetOK, error) {
 	if c.fileUseCase == nil {
 		return nil, apiError{
 			Code:    http.StatusBadRequest,
@@ -17,12 +20,12 @@ func (c *Controller) APIFsInfoPost(ctx context.Context, req *agentapi.APIFsInfoP
 		}
 	}
 
-	state, err := c.fileUseCase.State(ctx, req.IncludeFileIds.Value, req.IncludeFileSizes.Value)
+	state, err := c.fileUseCase.State(ctx, params.IncludeFileIds.Value, params.IncludeFileSizes.Value)
 	if err != nil {
 		return nil, err
 	}
 
-	return &agentapi.APIFsInfoPostOK{
+	return &agentapi.APIV2FsGetOK{
 		FileIds: state.FileIDs,
 		TotalFileCount: agentapi.OptInt64{
 			Value: state.TotalFileCount,
@@ -36,8 +39,8 @@ func (c *Controller) APIFsInfoPost(ctx context.Context, req *agentapi.APIFsInfoP
 			Value: state.AvailableSize,
 			Set:   state.AvailableSize > 0,
 		},
-		Files: pkg.Map(state.Files, func(raw fsmodel.FSStateFile) agentapi.APIFsInfoPostOKFilesItem {
-			return agentapi.APIFsInfoPostOKFilesItem{
+		Files: pkg.Map(state.Files, func(raw fsmodel.FSStateFile) agentapi.APIV2FsGetOKFilesItem {
+			return agentapi.APIV2FsGetOKFilesItem{
 				ID:        raw.ID,
 				Size:      raw.Size,
 				CreatedAt: raw.CreatedAt,

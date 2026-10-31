@@ -6,10 +6,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIImportArchivePost(
+func (c *Controller) APIV2FsArchivePost(
 	ctx context.Context,
-	req agentapi.APIImportArchivePostReq,
-	params agentapi.APIImportArchivePostParams,
+	req agentapi.APIV2FsArchivePostReq,
+	params agentapi.APIV2FsArchivePostParams,
 ) error {
 	_, err := c.exportUseCases.ImportArchive(ctx, req.Data, true, false)
 	if err != nil {

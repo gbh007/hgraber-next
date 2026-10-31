@@ -10,7 +10,7 @@ import (
 )
 
 func (a *Adapter) BooksCheck(ctx context.Context, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error) {
-	res, err := a.rawClient.APIParsingBookCheckPost(ctx, &agentapi.APIParsingBookCheckPostReq{
+	res, err := a.rawClient.APIV2ParsingCheckPost(ctx, &agentapi.APIV2ParsingCheckPostReq{
 		Urls: urls,
 	})
 	if err != nil {

@@ -8,8 +8,8 @@ import (
 	"log/slog"
 	"net/url"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 func (uc *UseCase) Image(ctx context.Context, bookURL, imageURL url.URL) (io.Reader, error) {
@@ -21,15 +21,7 @@ func (uc *UseCase) Image(ctx context.Context, bookURL, imageURL url.URL) (io.Rea
 	}
 
 	for _, agent := range agents {
-		pagesInfo, err := uc.agentSystem.PagesCheck(
-			ctx, agent.ID,
-			[]serveragentdto.AgentPageURL{
-				{
-					BookURL:  bookURL,
-					ImageURL: imageURL,
-				},
-			},
-		)
+		pagesInfo, err := uc.agentSystem.BooksCheck(ctx, agent.ID, []url.URL{bookURL})
 
 		if errors.Is(err, serveragentdto.ErrAgentAPIOffline) {
 			uc.logger.DebugContext(
@@ -52,7 +44,7 @@ func (uc *UseCase) Image(ctx context.Context, bookURL, imageURL url.URL) (io.Rea
 		}
 
 		for _, info := range pagesInfo {
-			if !info.IsPossible || info.ImageURL.String() != imageURL.String() {
+			if !info.IsPossible || info.URL.String() != bookURL.String() {
 				continue
 			}
 

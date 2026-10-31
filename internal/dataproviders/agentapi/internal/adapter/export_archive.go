@@ -9,12 +9,12 @@ import (
 )
 
 func (a *Adapter) ExportArchive(ctx context.Context, data serveragentdto.AgentExportData) error {
-	err := a.rawClient.APIImportArchivePost(
+	err := a.rawClient.APIV2FsArchivePost(
 		ctx,
-		agentapi.APIImportArchivePostReq{
+		agentapi.APIV2FsArchivePostReq{
 			Data: data.Body,
 		},
-		agentapi.APIImportArchivePostParams{
+		agentapi.APIV2FsArchivePostParams{
 			BookID:   data.BookID,
 			BookName: data.BookName,
 			BookURL:  optURL(data.BookURL),

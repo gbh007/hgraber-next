@@ -13,139 +13,112 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// APICoreStatusGet implements GET /api/core/status operation.
-//
-// Получение данных о состоянии агента.
-//
-// GET /api/core/status
-func (UnimplementedHandler) APICoreStatusGet(ctx context.Context) (r *APICoreStatusGetOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIFsCreatePost implements POST /api/fs/create operation.
-//
-// Создание нового файла.
-//
-// POST /api/fs/create
-func (UnimplementedHandler) APIFsCreatePost(ctx context.Context, req APIFsCreatePostReq, params APIFsCreatePostParams) error {
-	return ht.ErrNotImplemented
-}
-
-// APIFsDeletePost implements POST /api/fs/delete operation.
-//
-// Удаление файла.
-//
-// POST /api/fs/delete
-func (UnimplementedHandler) APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) error {
-	return ht.ErrNotImplemented
-}
-
-// APIFsGetGet implements GET /api/fs/get operation.
-//
-// Получение файла.
-//
-// GET /api/fs/get
-func (UnimplementedHandler) APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (r APIFsGetGetOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIFsInfoPost implements POST /api/fs/info operation.
-//
-// Получение информации о состоянии файловой системы.
-//
-// POST /api/fs/info
-func (UnimplementedHandler) APIFsInfoPost(ctx context.Context, req *APIFsInfoPostReq) (r *APIFsInfoPostOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIHighwayFileIDExtGet implements GET /api/highway/file/{id}.{ext} operation.
-//
-// Получение файла через highway.
-//
-// GET /api/highway/file/{id}.{ext}
-func (UnimplementedHandler) APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (r *APIHighwayFileIDExtGetOKHeaders, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIHighwayTokenCreatePost implements POST /api/highway/token/create operation.
-//
-// Создание нового токена для highway.
-//
-// POST /api/highway/token/create
-func (UnimplementedHandler) APIHighwayTokenCreatePost(ctx context.Context) (r *APIHighwayTokenCreatePostOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIHproxyParseBookPost implements POST /api/hproxy/parse/book operation.
-//
-// Парсинг данных книги по ссылке.
-//
-// POST /api/hproxy/parse/book
-func (UnimplementedHandler) APIHproxyParseBookPost(ctx context.Context, req *APIHproxyParseBookPostReq) (r *APIHproxyParseBookPostOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIHproxyParseListPost implements POST /api/hproxy/parse/list operation.
-//
-// Парсинг списка данных по ссылке.
-//
-// POST /api/hproxy/parse/list
-func (UnimplementedHandler) APIHproxyParseListPost(ctx context.Context, req *APIHproxyParseListPostReq) (r *APIHproxyParseListPostOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIImportArchivePost implements POST /api/import/archive operation.
+// APIV2FsArchivePost implements POST /api/v2/fs/archive operation.
 //
 // Загрузка архива.
 //
-// POST /api/import/archive
-func (UnimplementedHandler) APIImportArchivePost(ctx context.Context, req APIImportArchivePostReq, params APIImportArchivePostParams) error {
+// POST /api/v2/fs/archive
+func (UnimplementedHandler) APIV2FsArchivePost(ctx context.Context, req APIV2FsArchivePostReq, params APIV2FsArchivePostParams) error {
 	return ht.ErrNotImplemented
 }
 
-// APIParsingBookCheckPost implements POST /api/parsing/book/check operation.
+// APIV2FsFileIDDelete implements DELETE /api/v2/fs/file/{id} operation.
 //
-// Предварительная проверка ссылок на новые книги.
+// Удаление файла.
 //
-// POST /api/parsing/book/check
-func (UnimplementedHandler) APIParsingBookCheckPost(ctx context.Context, req *APIParsingBookCheckPostReq) (r *BooksCheckResult, _ error) {
+// DELETE /api/v2/fs/file/{id}
+func (UnimplementedHandler) APIV2FsFileIDDelete(ctx context.Context, params APIV2FsFileIDDeleteParams) error {
+	return ht.ErrNotImplemented
+}
+
+// APIV2FsFileIDGet implements GET /api/v2/fs/file/{id} operation.
+//
+// Получение файла.
+//
+// GET /api/v2/fs/file/{id}
+func (UnimplementedHandler) APIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDGetParams) (r APIV2FsFileIDGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// APIParsingBookMultiPost implements POST /api/parsing/book/multi operation.
+// APIV2FsFilePost implements POST /api/v2/fs/file operation.
+//
+// Создание нового файла.
+//
+// POST /api/v2/fs/file
+func (UnimplementedHandler) APIV2FsFilePost(ctx context.Context, req APIV2FsFilePostReq, params APIV2FsFilePostParams) error {
+	return ht.ErrNotImplemented
+}
+
+// APIV2FsGet implements GET /api/v2/fs operation.
+//
+// Получение информации о состоянии файловой системы.
+//
+// GET /api/v2/fs
+func (UnimplementedHandler) APIV2FsGet(ctx context.Context, params APIV2FsGetParams) (r *APIV2FsGetOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV2HighwayFileIDExtGet implements GET /api/v2/highway/file/{id}.{ext} operation.
+//
+// Получение файла через highway.
+//
+// GET /api/v2/highway/file/{id}.{ext}
+func (UnimplementedHandler) APIV2HighwayFileIDExtGet(ctx context.Context, params APIV2HighwayFileIDExtGetParams) (r *APIV2HighwayFileIDExtGetOKHeaders, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV2HighwayTokenPost implements POST /api/v2/highway/token operation.
+//
+// Создание нового токена для highway.
+//
+// POST /api/v2/highway/token
+func (UnimplementedHandler) APIV2HighwayTokenPost(ctx context.Context) (r *APIV2HighwayTokenPostOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV2ParsingBookPost implements POST /api/v2/parsing/book operation.
+//
+// Обработка новой книги.
+//
+// POST /api/v2/parsing/book
+func (UnimplementedHandler) APIV2ParsingBookPost(ctx context.Context, req *APIV2ParsingBookPostReq) (r *BookDetails, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV2ParsingCheckPost implements POST /api/v2/parsing/check operation.
+//
+// Предварительная проверка ссылок на новые книги.
+//
+// POST /api/v2/parsing/check
+func (UnimplementedHandler) APIV2ParsingCheckPost(ctx context.Context, req *APIV2ParsingCheckPostReq) (r *BooksCheckResult, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV2ParsingListPost implements POST /api/v2/parsing/list operation.
 //
 // Обработка ссылки с набором книг (например всех глав
 // манги).
 //
-// POST /api/parsing/book/multi
-func (UnimplementedHandler) APIParsingBookMultiPost(ctx context.Context, req *APIParsingBookMultiPostReq) (r *BooksCheckResult, _ error) {
+// POST /api/v2/parsing/list
+func (UnimplementedHandler) APIV2ParsingListPost(ctx context.Context, req *APIV2ParsingListPostReq) (r *APIV2ParsingListPostOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// APIParsingBookPost implements POST /api/parsing/book operation.
-//
-// Обработка новой книги.
-//
-// POST /api/parsing/book
-func (UnimplementedHandler) APIParsingBookPost(ctx context.Context, req *APIParsingBookPostReq) (r *BookDetails, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIParsingPageCheckPost implements POST /api/parsing/page/check operation.
-//
-// Предварительная проверка ссылок для загрузки страниц.
-//
-// POST /api/parsing/page/check
-func (UnimplementedHandler) APIParsingPageCheckPost(ctx context.Context, req *APIParsingPageCheckPostReq) (r *APIParsingPageCheckPostOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIParsingPagePost implements POST /api/parsing/page operation.
+// APIV2ParsingPagePost implements POST /api/v2/parsing/page operation.
 //
 // Загрузка изображения страницы.
 //
-// POST /api/parsing/page
-func (UnimplementedHandler) APIParsingPagePost(ctx context.Context, req *APIParsingPagePostReq) (r APIParsingPagePostOK, _ error) {
+// POST /api/v2/parsing/page
+func (UnimplementedHandler) APIV2ParsingPagePost(ctx context.Context, req *APIV2ParsingPagePostReq) (r APIV2ParsingPagePostOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV2StatusGet implements GET /api/v2/status operation.
+//
+// Получение данных о состоянии агента.
+//
+// GET /api/v2/status
+func (UnimplementedHandler) APIV2StatusGet(ctx context.Context) (r *APIV2StatusGetOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

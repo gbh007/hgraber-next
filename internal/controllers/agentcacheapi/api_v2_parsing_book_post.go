@@ -7,11 +7,12 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
+	"github.com/samber/lo"
 )
 
-func (c *Controller) APIParsingBookPost(
+func (c *Controller) APIV2ParsingBookPost(
 	ctx context.Context,
-	req *agentapi.APIParsingBookPostReq,
+	req *agentapi.APIV2ParsingBookPostReq,
 ) (*agentapi.BookDetails, error) {
 	details, err := c.parsingUseCases.BookByURL(ctx, req.URL)
 	if err != nil {
@@ -32,8 +33,12 @@ func (c *Controller) APIParsingBookPost(
 			details.Attributes,
 			func(code string, values []string) agentapi.BookDetailsAttributesItem {
 				return agentapi.BookDetailsAttributesItem{
-					Code:   agentapi.BookDetailsAttributesItemCode(code),
-					Values: values,
+					Code: code,
+					Values: lo.Map(values, func(v string, _ int) agentapi.BookDetailsAttributesItemValuesItem {
+						return agentapi.BookDetailsAttributesItemValuesItem{
+							Name: v,
+						}
+					}),
 				}
 			},
 		),

@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIParsingBookCheckPost(ctx context.Context, req *agentapi.APIParsingBookCheckPostReq) (*agentapi.BooksCheckResult, error) {
+func (c *Controller) APIV2ParsingCheckPost(
+	ctx context.Context,
+	req *agentapi.APIV2ParsingCheckPostReq,
+) (*agentapi.BooksCheckResult, error) {
 	if c.parsingUseCases == nil {
 		return nil, apiError{
 			Code:    http.StatusBadRequest,

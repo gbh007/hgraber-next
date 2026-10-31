@@ -5,13 +5,14 @@ import (
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
+	"github.com/samber/lo"
 )
 
 func (a *Adapter) HProxyList(ctx context.Context, u url.URL) (hproxymodel.List, error) {
-	res, err := a.rawClient.APIHproxyParseListPost(ctx, &agentapi.APIHproxyParseListPostReq{
-		URL: u,
+	res, err := a.rawClient.APIV2ParsingListPost(ctx, &agentapi.APIV2ParsingListPostReq{
+		URL:     u,
+		OnePage: agentapi.NewOptBool(true),
 	})
 	if err != nil {
 		return hproxymodel.List{}, enrichError(err)
@@ -25,13 +26,13 @@ func (a *Adapter) HProxyList(ctx context.Context, u url.URL) (hproxymodel.List, 
 
 	for _, result := range res.Results {
 		switch result.Type {
-		case agentapi.APIHproxyParseListPostOKResultsItemTypeList:
+		case agentapi.APIV2ParsingListPostOKResultsItemTypeList:
 			data.Pagination = append(data.Pagination, hproxymodel.ListPage{
 				ExtURL: result.LinkURL,
 				Name:   result.Name.Value,
 			})
 
-		case agentapi.APIHproxyParseListPostOKResultsItemTypeDetails:
+		case agentapi.APIV2ParsingListPostOKResultsItemTypeDetails:
 			var previewURL *url.URL
 
 			if result.PreviewURL.Set {
@@ -56,7 +57,7 @@ func (a *Adapter) HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (hp
 		pl = agentapi.NewOptInt(*pageLimit)
 	}
 
-	res, err := a.rawClient.APIHproxyParseBookPost(ctx, &agentapi.APIHproxyParseBookPostReq{
+	res, err := a.rawClient.APIV2ParsingBookPost(ctx, &agentapi.APIV2ParsingBookPostReq{
 		URL:       u,
 		PageLimit: pl,
 	})
@@ -75,21 +76,22 @@ func (a *Adapter) HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (hp
 		ExURL:      res.URL,
 		PreviewURL: previewURL,
 		PageCount:  res.PageCount,
-		Pages: pkg.Map(res.Pages, func(p agentapi.APIHproxyParseBookPostOKPagesItem) hproxymodel.BookPage {
+		Pages: lo.Map(res.Pages, func(p agentapi.BookDetailsPagesItem, _ int) hproxymodel.BookPage {
 			return hproxymodel.BookPage{
 				PageNumber:    p.PageNumber,
 				ExtPreviewURL: p.URL,
 			}
 		}),
-		Attributes: pkg.Map(
+		Attributes: lo.Map(
 			res.Attributes,
-			func(attr agentapi.APIHproxyParseBookPostOKAttributesItem) hproxymodel.BookAttribute {
+			func(attr agentapi.BookDetailsAttributesItem, _ int) hproxymodel.BookAttribute {
 				return hproxymodel.BookAttribute{
 					Code: attr.Code,
-					Values: pkg.Map(
+					Values: lo.Map(
 						attr.Values,
 						func(
-							v agentapi.APIHproxyParseBookPostOKAttributesItemValuesItem,
+							v agentapi.BookDetailsAttributesItemValuesItem,
+							_ int,
 						) hproxymodel.BookAttributeValue {
 							var u *url.URL
 

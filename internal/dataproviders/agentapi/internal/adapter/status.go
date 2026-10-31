@@ -9,23 +9,23 @@ import (
 )
 
 func (a *Adapter) Status(ctx context.Context) (serveragentdto.AgentStatus, error) {
-	res, err := a.rawClient.APICoreStatusGet(ctx)
+	res, err := a.rawClient.APIV2StatusGet(ctx)
 	if err != nil {
 		return serveragentdto.AgentStatus{}, enrichError(err)
 	}
 
 	return serveragentdto.AgentStatus{
 		StartAt:   res.StartAt,
-		IsOK:      res.Status == agentapi.APICoreStatusGetOKStatusOk,
-		IsWarning: res.Status == agentapi.APICoreStatusGetOKStatusWarning,
-		IsError:   res.Status == agentapi.APICoreStatusGetOKStatusError,
+		IsOK:      res.Status == agentapi.APIV2StatusGetOKStatusOk,
+		IsWarning: res.Status == agentapi.APIV2StatusGetOKStatusWarning,
+		IsError:   res.Status == agentapi.APIV2StatusGetOKStatusError,
 		Problems: pkg.Map(
 			res.Problems,
-			func(p agentapi.APICoreStatusGetOKProblemsItem) serveragentdto.AgentStatusProblem {
+			func(p agentapi.APIV2StatusGetOKProblemsItem) serveragentdto.AgentStatusProblem {
 				return serveragentdto.AgentStatusProblem{
-					IsInfo:    p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeInfo,
-					IsWarning: p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeWarning,
-					IsError:   p.Type == agentapi.APICoreStatusGetOKProblemsItemTypeError,
+					IsInfo:    p.Type == agentapi.APIV2StatusGetOKProblemsItemTypeInfo,
+					IsWarning: p.Type == agentapi.APIV2StatusGetOKProblemsItemTypeWarning,
+					IsError:   p.Type == agentapi.APIV2StatusGetOKProblemsItemTypeError,
 					Details:   p.Details,
 				}
 			},

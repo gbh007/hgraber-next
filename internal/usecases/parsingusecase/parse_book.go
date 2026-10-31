@@ -9,8 +9,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
+	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
@@ -22,7 +22,7 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.B
 		return errors.New("missing url")
 	}
 
-	info, err := uc.agentSystem.BookParse(agentCtx, agentID, *book.OriginURL)
+	info, err := uc.agentSystem.BookParse(agentCtx, agentID, *book.OriginURL, nil)
 	if err != nil {
 		return fmt.Errorf("agent parse: %w", err)
 	}
@@ -31,7 +31,7 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.B
 		attributes := make(map[string][]string, core.PossibleAttributeCount)
 
 		for _, attr := range info.Attributes {
-			attributes[attr.Code] = attr.Values
+			attributes[attr.Code] = attr.StringValues()
 		}
 
 		err = uc.storage.UpdateOriginAttributes(ctx, book.ID, attributes)
@@ -60,13 +60,14 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.B
 	err = uc.storage.UpdateBookPages(
 		ctx,
 		book.ID,
-		pkg.Map(info.Pages, func(p serveragentdto.AgentBookDetailsPagesItem) core.Page {
+		pkg.Map(info.Pages, func(p hproxymodel.BookPage) core.Page {
 			return core.Page{
 				BookID:     book.ID,
 				PageNumber: p.PageNumber,
-				Ext:        path.Ext(p.Filename),
-				OriginURL:  &p.URL,
-				CreateAt:   time.Now(),
+				// FIXME: подумать над способом лучше
+				Ext:       path.Ext(p.ExtPreviewURL.Path),
+				OriginURL: &p.ExtPreviewURL,
+				CreateAt:  time.Now(),
 			}
 		}),
 	)

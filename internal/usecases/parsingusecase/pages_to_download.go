@@ -5,10 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"maps"
+	"net/url"
+	"slices"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
@@ -44,23 +47,20 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownlo
 
 	toDownload := make([]parsing.PageForDownloadWithAgent, 0, len(pages))
 
-	urlMap := pkg.SliceToMap(pages, func(p core.PageForDownload) (serveragentdto.AgentPageURL, core.PageForDownload) {
-		return serveragentdto.AgentPageURL{
-			BookURL:  *p.BookURL,
-			ImageURL: *p.ImageURL,
-		}, p
-	})
+	urlMap := make(map[url.URL][]core.PageForDownload)
+
+	for _, p := range pages {
+		urlMap[*p.BookURL] = append(urlMap[*p.BookURL], p)
+	}
 
 	for _, agent := range agents {
 		if len(urlMap) == 0 {
 			break
 		}
 
-		pagesInfo, err := uc.agentSystem.PagesCheck(
+		pagesInfo, err := uc.agentSystem.BooksCheck(
 			ctx, agent.ID,
-			pkg.MapToSlice(urlMap, func(u serveragentdto.AgentPageURL, _ core.PageForDownload) serveragentdto.AgentPageURL {
-				return u
-			}),
+			slices.Collect(maps.Keys(urlMap)),
 		)
 
 		if errors.Is(err, serveragentdto.ErrAgentAPIOffline) {
@@ -88,22 +88,19 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownlo
 				continue
 			}
 
-			u := serveragentdto.AgentPageURL{
-				BookURL:  info.BookURL,
-				ImageURL: info.ImageURL,
-			}
-
-			page, ok := urlMap[u]
+			pages, ok := urlMap[info.URL]
 			if !ok {
 				continue
 			}
 
-			toDownload = append(toDownload, parsing.PageForDownloadWithAgent{
-				PageForDownload: page,
-				AgentID:         agent.ID,
-			})
+			for _, page := range pages {
+				toDownload = append(toDownload, parsing.PageForDownloadWithAgent{
+					PageForDownload: page,
+					AgentID:         agent.ID,
+				})
+			}
 
-			delete(urlMap, u)
+			delete(urlMap, info.URL)
 		}
 	}
 

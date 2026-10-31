@@ -30,7 +30,6 @@ type ParsingUseCases interface {
 	CheckBooks(ctx context.Context, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error)
 	ParseBook(ctx context.Context, u url.URL) (serveragentdto.AgentBookDetails, error)
 	DownloadPage(ctx context.Context, bookURL, imageURL url.URL) (io.Reader, error)
-	CheckPages(ctx context.Context, pages []serveragentdto.AgentPageURL) ([]serveragentdto.AgentPageCheckResult, error)
 	MultiHandle(ctx context.Context, multiUrl url.URL) ([]serveragentdto.AgentBookCheckResult, error)
 
 	HProxyBook(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error)

@@ -21,7 +21,6 @@ var errAccessForbidden = errors.New("access forbidden")
 
 type parsingUseCases interface {
 	BooksExists(ctx context.Context, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error)
-	PagesExists(ctx context.Context, urls []serveragentdto.AgentPageURL) ([]serveragentdto.AgentPageCheckResult, error)
 	BookByURL(ctx context.Context, u url.URL) (core.BookContainer, error)
 	PageBodyByURL(ctx context.Context, u url.URL) (io.Reader, error)
 }

@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIHproxyParseBookPost(ctx context.Context, req *agentapi.APIHproxyParseBookPostReq) (*agentapi.APIHproxyParseBookPostOK, error) {
+func (c *Controller) APIV2ParsingBookPost(
+	ctx context.Context,
+	req *agentapi.APIV2ParsingBookPostReq,
+) (*agentapi.BookDetails, error) {
 	if c.parsingUseCases == nil {
 		return nil, apiError{
 			Code:    http.StatusBadRequest,
@@ -28,23 +31,23 @@ func (c *Controller) APIHproxyParseBookPost(ctx context.Context, req *agentapi.A
 		return nil, err
 	}
 
-	return &agentapi.APIHproxyParseBookPostOK{
+	return &agentapi.BookDetails{
 		Name:       details.Name,
 		URL:        details.URL,
 		PreviewURL: OptURL(details.PreviewURL),
 		PageCount:  details.PageCount,
-		Pages: pkg.Map(details.Pages, func(p parserdto.Page) agentapi.APIHproxyParseBookPostOKPagesItem {
-			return agentapi.APIHproxyParseBookPostOKPagesItem{
+		Pages: pkg.Map(details.Pages, func(p parserdto.Page) agentapi.BookDetailsPagesItem {
+			return agentapi.BookDetailsPagesItem{
 				PageNumber: p.PageNumber,
 				URL:        p.URL,
 				Filename:   p.Filename,
 			}
 		}),
-		Attributes: pkg.Map(details.Attributes, func(attr parserdto.Attribute) agentapi.APIHproxyParseBookPostOKAttributesItem {
-			return agentapi.APIHproxyParseBookPostOKAttributesItem{
+		Attributes: pkg.Map(details.Attributes, func(attr parserdto.Attribute) agentapi.BookDetailsAttributesItem {
+			return agentapi.BookDetailsAttributesItem{
 				Code: attr.Code,
-				Values: pkg.Map(attr.Values, func(v parserdto.AttributeValue) agentapi.APIHproxyParseBookPostOKAttributesItemValuesItem {
-					return agentapi.APIHproxyParseBookPostOKAttributesItemValuesItem{
+				Values: pkg.Map(attr.Values, func(v parserdto.AttributeValue) agentapi.BookDetailsAttributesItemValuesItem {
+					return agentapi.BookDetailsAttributesItemValuesItem{
 						Name: v.Value,
 						URL:  OptURL(v.URL),
 					}

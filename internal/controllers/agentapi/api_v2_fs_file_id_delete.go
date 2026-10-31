@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIFsCreatePost(ctx context.Context, req agentapi.APIFsCreatePostReq, params agentapi.APIFsCreatePostParams) error {
+func (c *Controller) APIV2FsFileIDDelete(
+	ctx context.Context,
+	params agentapi.APIV2FsFileIDDeleteParams,
+) error {
 	if c.fileUseCase == nil {
 		return apiError{
 			Code:    http.StatusBadRequest,
@@ -17,10 +20,10 @@ func (c *Controller) APIFsCreatePost(ctx context.Context, req agentapi.APIFsCrea
 		}
 	}
 
-	err := c.fileUseCase.Create(ctx, params.FileID, req.Data)
-	if errors.Is(err, core.ErrFileAlreadyExists) {
+	err := c.fileUseCase.Delete(ctx, params.ID)
+	if errors.Is(err, core.ErrFileNotFound) {
 		return apiError{
-			Code:    http.StatusConflict,
+			Code:    http.StatusNotFound,
 			Details: err.Error(),
 		}
 	}

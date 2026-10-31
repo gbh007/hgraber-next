@@ -24,7 +24,7 @@ tags:
     description: API агента для использования в качестве прокси системы на оригинальный сайт
 
 paths:
-  /api/core/status:
+  /api/v2/status:
     get:
       description: Получение данных о состоянии агента
       summary: Получение данных о состоянии агента
@@ -78,7 +78,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/parsing/book/check:
+  /api/v2/parsing/check:
     post:
       description: Предварительная проверка ссылок на новые книги
       summary: Предварительная проверка ссылок на новые книги
@@ -113,12 +113,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/parsing/book/multi:
+  /api/v2/parsing/list:
     post:
       description: Обработка ссылки с набором книг (например всех глав манги)
       summary: Обработка ссылки с набором книг
       tags:
         - parsing
+        - hproxy
       requestBody:
         required: true
         content:
@@ -130,15 +131,50 @@ paths:
                   type: string
                   format: uri
                   description: Ссылка на внешние систему
+                one_page:
+                  type: boolean
+                  description: Обработать только 1 страницу
               required:
                 - url
       responses:
         200:
-          description: Успешная проверка
+          description: Успех
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BooksCheckResult"
+                type: object
+                properties:
+                  results:
+                    type: array
+                    description: Результаты обработки
+                    items:
+                      type: object
+                      description: Экземпляр
+                      properties:
+                        link_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на экземпляр
+                        name:
+                          type: string
+                          description: Название экземпляра
+                        preview_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на превью экземпляра
+                        type:
+                          type: string
+                          description: Тип экземпляра
+                          enum:
+                            - details
+                            - list
+                      required:
+                        - link_url
+                        - type
+                  next_url:
+                    type: string
+                    format: uri
+                    description: Ссылка на следующую страницу
         default:
           description: Ошибка
           content:
@@ -146,12 +182,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/parsing/book:
+  /api/v2/parsing/book:
     post:
       description: Обработка новой книги
       summary: Обработка новой книги
       tags:
         - parsing
+        - hproxy
       requestBody:
         required: true
         content:
@@ -163,6 +200,9 @@ paths:
                   type: string
                   format: uri
                   description: Ссылка на внешнюю систему
+                page_limit:
+                  type: integer
+                  description: Ограничение на количество страниц для парсинга
               required:
                 - url
       responses:
@@ -179,84 +219,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/parsing/page/check:
-    post:
-      description: Предварительная проверка ссылок для загрузки страниц
-      summary: Предварительная проверка ссылок для загрузки страниц
-      tags:
-        - parsing
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                urls:
-                  type: array
-                  description: Ссылки на внешние системы
-                  items:
-                    type: object
-                    properties:
-                      book_url:
-                        type: string
-                        format: uri
-                        description: Ссылка на книгу во внешней системе
-                      image_url:
-                        type: string
-                        format: uri
-                        description: Ссылка на изображение во внешней системе
-                    required:
-                      - book_url
-                      - image_url
-              required:
-                - urls
-      responses:
-        200:
-          description: Успешная проверка
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  result:
-                    type: array
-                    description: Результат обработки
-                    items:
-                      type: object
-                      properties:
-                        book_url:
-                          type: string
-                          format: uri
-                          description: Ссылка на книгу во внешней системе
-                        image_url:
-                          type: string
-                          format: uri
-                          description: Ссылка на изображение во внешней системе
-                        result:
-                          type: string
-                          description: Результат проверки
-                          enum:
-                            - ok
-                            - unsupported
-                            - error
-                        error_details:
-                          type: string
-                          description: Данные об ошибке во время обработки
-                      required:
-                        - book_url
-                        - image_url
-                        - result
-                required:
-                  - result
-        default:
-          description: Ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /api/parsing/page:
+  /api/v2/parsing/page:
     post:
       description: Загрузка изображения страницы
       summary: Загрузка изображения страницы
@@ -295,7 +258,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/import/archive:
+  /api/v2/fs/archive:
     post:
       description: Загрузка архива
       summary: Загрузка архива
@@ -339,7 +302,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/fs/create:
+  /api/v2/fs/file:
     post:
       description: Создание нового файла
       summary: Создание нового файла
@@ -370,16 +333,16 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/fs/get:
+  /api/v2/fs/file/{id}:
     get:
       description: Получение файла
       summary: Получение файла
       tags:
         - fs
       parameters:
-        - name: file-id
+        - name: id
           description: ID файла в системе
-          in: query
+          in: path
           required: true
           schema:
             type: string
@@ -398,26 +361,46 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      description: Удаление файла
+      summary: Удаление файла
+      tags:
+        - fs
+      parameters:
+        - name: id
+          description: ID файла в системе
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: Успешное удаление
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
-  /api/fs/info:
-    post:
+  /api/v2/fs:
+    get:
       description: Получение информации о состоянии файловой системы
       summary: Получение информации о состоянии файловой системы
       tags:
         - fs
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                include_file_ids:
-                  type: boolean
-                  description: Включить в ответ ID файлов в файловой системе
-                include_file_sizes:
-                  type: boolean
-                  description: Включить в ответ размер файлов в файловой системе
+      parameters:
+        - name: include_file_ids
+          description: Включить в ответ ID файлов в файловой системе
+          in: query
+          schema:
+            type: boolean
+        - name: include_file_sizes
+          description: Включить в ответ размер файлов в файловой системе
+          in: query
+          schema:
+            type: boolean
       responses:
         200:
           description: Успешный ответ с данными
@@ -472,36 +455,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/fs/delete:
-    post:
-      description: Удаление файла
-      summary: Удаление файла
-      tags:
-        - fs
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                file_id:
-                  type: string
-                  format: uuid
-                  description: ID файла для удаления
-              required:
-                - file_id
-      responses:
-        204:
-          description: Успешное удаление
-        default:
-          description: Ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /api/highway/token/create:
+  /api/v2/highway/token:
     post:
       description: Создание нового токена для highway
       summary: Создание нового токена для highway
@@ -532,7 +486,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/highway/file/{id}.{ext}:
+  /api/v2/highway/file/{id}.{ext}:
     get:
       description: Получение файла через highway
       summary: Получение файла через highway
@@ -575,179 +529,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/hproxy/parse/list:
-    post:
-      description: Парсинг списка данных по ссылке
-      summary: Парсинг списка данных по ссылке
-      tags:
-        - hproxy
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                url:
-                  type: string
-                  format: uri
-                  description: Ссылка для обработки
-              required:
-                - url
-      responses:
-        200:
-          description: Успешный ответ с данными
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - results
-                properties:
-                  results:
-                    type: array
-                    description: Результаты обработки
-                    items:
-                      type: object
-                      description: Экземпляр
-                      properties:
-                        link_url:
-                          type: string
-                          format: uri
-                          description: Ссылка на экземпляр
-                        name:
-                          type: string
-                          description: Название экземпляра
-                        preview_url:
-                          type: string
-                          format: uri
-                          description: Ссылка на превью экземпляра
-                        type:
-                          type: string
-                          description: Тип экземпляра
-                          enum:
-                            - details
-                            - list
-                      required:
-                        - link_url
-                        - type
-                  next_url:
-                    type: string
-                    format: uri
-                    description: Ссылка на следующую страницу
-        default:
-          description: Ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /api/hproxy/parse/book:
-    post:
-      description: Парсинг данных книги по ссылке
-      summary: Парсинг данных книги по ссылке
-      tags:
-        - hproxy
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                url:
-                  type: string
-                  format: uri
-                  description: Ссылка для обработки
-                page_limit:
-                  type: integer
-                  description: Ограничение на количество страниц для парсинга
-              required:
-                - url
-      responses:
-        200:
-          description: Успешный ответ с данными
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - name
-                  - url
-                  - page_count
-                  - pages
-                  - attributes
-                properties:
-                  name:
-                    type: string
-                    description: Название книги
-                  url:
-                    type: string
-                    format: uri
-                    description: Ссылка на внешнюю систему
-                  preview_url:
-                    type: string
-                    format: uri
-                    description: Ссылка на превью
-                  page_count:
-                    type: integer
-                    description: Количество страниц
-                  pages:
-                    type: array
-                    description: данные страниц книги
-                    items:
-                      type: object
-                      properties:
-                        page_number:
-                          type: integer
-                          description: Номер страницы в книге
-                          minimum: 1
-                        url:
-                          type: string
-                          format: uri
-                          description: Ссылка на изображение во внешней системе
-                        filename:
-                          type: string
-                          description: Название файла с расширением
-                          example: 1.jpg
-                      required:
-                        - page_number
-                        - url
-                        - filename
-                  attributes:
-                    type: array
-                    description: Данные атрибутов книги
-                    items:
-                      type: object
-                      properties:
-                        code:
-                          type: string
-                          description: Код атрибута
-                        values:
-                          type: array
-                          description: Значения атрибута
-                          items:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                description: Название
-                              url:
-                                type: string
-                                format: uri
-                                description: Ссылка на фильтрацию по значению
-                            required:
-                              - name
-                      required:
-                        - code
-                        - values
-        default:
-          description: Ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
 components:
   schemas:
     ErrorResponse:
@@ -765,45 +546,27 @@ components:
 
     BookDetails:
       type: object
-      description: Данные книги
+      required:
+        - name
+        - url
+        - page_count
+        - pages
+        - attributes
       properties:
+        name:
+          type: string
+          description: Название книги
         url:
           type: string
           format: uri
           description: Ссылка на внешнюю систему
-        name:
+        preview_url:
           type: string
-          description: Название книги
+          format: uri
+          description: Ссылка на превью
         page_count:
           type: integer
           description: Количество страниц
-        attributes:
-          type: array
-          description: Данные атрибутов книги
-          items:
-            type: object
-            properties:
-              code:
-                type: string
-                description: Код атрибута
-                # FIXME: убрать это ограничение
-                enum:
-                  - author
-                  - category
-                  - character
-                  - group
-                  - language
-                  - parody
-                  - tag
-              values:
-                type: array
-                description: Значения атрибута
-                items:
-                  type: string
-
-            required:
-              - code
-              - values
         pages:
           type: array
           description: данные страниц книги
@@ -826,12 +589,33 @@ components:
               - page_number
               - url
               - filename
-      required:
-        - url
-        - name
-        - page_count
-        - attributes
-        - pages
+        attributes:
+          type: array
+          description: Данные атрибутов книги
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Код атрибута
+              values:
+                type: array
+                description: Значения атрибута
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Название
+                    url:
+                      type: string
+                      format: uri
+                      description: Ссылка на фильтрацию по значению
+                  required:
+                    - name
+            required:
+              - code
+              - values
 
     BooksCheckResult:
       type: object

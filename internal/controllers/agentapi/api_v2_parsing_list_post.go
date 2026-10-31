@@ -9,7 +9,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIHproxyParseListPost(ctx context.Context, req *agentapi.APIHproxyParseListPostReq) (*agentapi.APIHproxyParseListPostOK, error) {
+func (c *Controller) APIV2ParsingListPost(
+	ctx context.Context,
+	req *agentapi.APIV2ParsingListPostReq,
+) (*agentapi.APIV2ParsingListPostOK, error) {
 	if c.parsingUseCases == nil {
 		return nil, apiError{
 			Code:    http.StatusBadRequest,
@@ -28,18 +31,18 @@ func (c *Controller) APIHproxyParseListPost(ctx context.Context, req *agentapi.A
 		nextPage = agentapi.NewOptURI(*list.NextURL)
 	}
 
-	return &agentapi.APIHproxyParseListPostOK{
-		Results: pkg.Map(list.Units, func(u parserdto.BookListUnit) agentapi.APIHproxyParseListPostOKResultsItem {
-			var t agentapi.APIHproxyParseListPostOKResultsItemType
+	return &agentapi.APIV2ParsingListPostOK{
+		Results: pkg.Map(list.Units, func(u parserdto.BookListUnit) agentapi.APIV2ParsingListPostOKResultsItem {
+			var t agentapi.APIV2ParsingListPostOKResultsItemType
 
 			switch u.Type {
 			case parserdto.DetailsHProxyListUnitType:
-				t = agentapi.APIHproxyParseListPostOKResultsItemTypeDetails
+				t = agentapi.APIV2ParsingListPostOKResultsItemTypeDetails
 			case parserdto.ListHProxyListUnitType:
-				t = agentapi.APIHproxyParseListPostOKResultsItemTypeList
+				t = agentapi.APIV2ParsingListPostOKResultsItemTypeList
 			}
 
-			return agentapi.APIHproxyParseListPostOKResultsItem{
+			return agentapi.APIV2ParsingListPostOKResultsItem{
 				LinkURL:    u.LinkURL,
 				Name:       OptString(u.Name),
 				PreviewURL: OptURL(u.PreviewURL),

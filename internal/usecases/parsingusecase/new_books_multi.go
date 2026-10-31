@@ -10,9 +10,9 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 //nolint:gocognit,cyclop // будет исправлено позднее
@@ -45,7 +45,10 @@ urlLoop:
 	for _, multiURL := range urls {
 	agentLoop:
 		for _, agent := range agents {
-			booksInfo, err := uc.agentSystem.BooksCheckMultiple(ctx, agent.ID, multiURL)
+			checkRes, err := uc.agentSystem.BooksCheck(ctx, agent.ID, []url.URL{multiURL})
+			if len(checkRes) != 1 || !checkRes[0].IsPossible {
+				continue agentLoop
+			}
 
 			if errors.Is(err, serveragentdto.ErrAgentAPIOffline) {
 				uc.logger.DebugContext(
@@ -59,83 +62,87 @@ urlLoop:
 
 			if err != nil {
 				uc.logger.ErrorContext(
-					ctx, "agent check book",
+					ctx, "agent check url",
 					slog.String("agent_id", agent.ID.String()),
 					slog.String("error", err.Error()),
+					slog.String("url", multiURL.String()),
 				)
 
 				continue
 			}
 
-			if len(booksInfo) == 0 {
+			list, err := uc.agentSystem.ParseList(ctx, agent.ID, multiURL, false)
+			if err != nil {
+				uc.logger.ErrorContext(
+					ctx, "agent parse list",
+					slog.String("agent_id", agent.ID.String()),
+					slog.String("error", err.Error()),
+					slog.String("url", multiURL.String()),
+				)
+
+				continue
+			}
+
+			if len(list.Books) == 0 {
 				continue agentLoop
 			}
 
-			newUrls := make([]url.URL, 0, len(booksInfo))
+			newUrls := make([]url.URL, 0, len(list.Books))
 
-			for _, info := range booksInfo {
-				switch {
-				case info.IsUnsupported:
-					continue agentLoop
+			for _, info := range list.Books {
+				u := info.ExtURL
 
-				case info.HasError:
-					continue agentLoop
+				urlsToCheck, err := mirrorCalculator.GetClones(u)
+				if err != nil {
+					return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
+						"agent (%s) calc duplicates (%s): %w", agent.ID.String(), u.String(), err,
+					)
+				}
 
-				case info.IsPossible:
-					u := info.URL
+				urlsToCheck = append(urlsToCheck, u)
 
-					urlsToCheck, err := mirrorCalculator.GetClones(u)
+				ids, err := uc.existsInStorage(ctx, urlsToCheck)
+				if err != nil {
+					return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
+						"agent (%s) check duplicates (%s): %w", agent.ID.String(), u.String(), err,
+					)
+				}
+
+				if len(ids) > 0 {
+					result.Details.RegisterDuplicate(u, ids)
+
+					continue
+				}
+
+				if flags.MaxAuthors > 0 {
+					pageCountLimit := 0
+					needSkip := false
+
+					extendInfo, err := uc.agentSystem.HProxyBook(ctx, agent.ID, u, &pageCountLimit)
 					if err != nil {
 						return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
-							"agent (%s) calc duplicates (%s): %w", agent.ID.String(), u.String(), err,
+							"agent (%s) get book detail info (%s): %w", agent.ID.String(), u.String(), err,
 						)
 					}
 
-					urlsToCheck = append(urlsToCheck, u)
+					for _, attr := range extendInfo.Attributes {
+						if attr.Code == core.AttributeCodeAuthor {
+							if len(attr.Values) > flags.MaxAuthors {
+								needSkip = true
 
-					ids, err := uc.existsInStorage(ctx, urlsToCheck)
-					if err != nil {
-						return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
-							"agent (%s) check duplicates (%s): %w", agent.ID.String(), u.String(), err,
-						)
+								break
+							}
+						}
 					}
 
-					if len(ids) > 0 {
-						result.Details.RegisterDuplicate(u, ids)
+					if needSkip {
+						result.Details.RegisterSkipped(u)
 
 						continue
 					}
-
-					if flags.MaxAuthors > 0 {
-						pageCountLimit := 0
-						needSkip := false
-
-						extendInfo, err := uc.agentSystem.HProxyBook(ctx, agent.ID, u, &pageCountLimit)
-						if err != nil {
-							return parsing.MultiHandleMultipleResult{}, fmt.Errorf(
-								"agent (%s) get book detail info (%s): %w", agent.ID.String(), u.String(), err,
-							)
-						}
-
-						for _, attr := range extendInfo.Attributes {
-							if attr.Code == core.AttributeCodeAuthor {
-								if len(attr.Values) > flags.MaxAuthors {
-									needSkip = true
-
-									break
-								}
-							}
-						}
-
-						if needSkip {
-							result.Details.RegisterSkipped(u)
-
-							continue
-						}
-					}
-
-					newUrls = append(newUrls, u)
 				}
+
+				newUrls = append(newUrls, u)
 			}
 
 			for _, u := range newUrls {

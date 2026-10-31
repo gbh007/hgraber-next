@@ -7,9 +7,12 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIParsingPagePost(ctx context.Context, req *agentapi.APIParsingPagePostReq) (agentapi.APIParsingPagePostOK, error) {
+func (c *Controller) APIV2ParsingPagePost(
+	ctx context.Context,
+	req *agentapi.APIV2ParsingPagePostReq,
+) (agentapi.APIV2ParsingPagePostOK, error) {
 	if c.parsingUseCases == nil {
-		return agentapi.APIParsingPagePostOK{}, apiError{
+		return agentapi.APIV2ParsingPagePostOK{}, apiError{
 			Code:    http.StatusBadRequest,
 			Details: "unsupported api",
 		}
@@ -17,10 +20,10 @@ func (c *Controller) APIParsingPagePost(ctx context.Context, req *agentapi.APIPa
 
 	body, err := c.parsingUseCases.DownloadPage(ctx, req.BookURL, req.ImageURL)
 	if err != nil {
-		return agentapi.APIParsingPagePostOK{}, err
+		return agentapi.APIV2ParsingPagePostOK{}, err
 	}
 
-	return agentapi.APIParsingPagePostOK{
+	return agentapi.APIV2ParsingPagePostOK{
 		Data: body,
 	}, nil
 }

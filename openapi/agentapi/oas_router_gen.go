@@ -11,47 +11,36 @@ import (
 )
 
 var (
-	rn1AllowedHeaders = map[string]string{
-		"GET": "X-Hg-Agent-Token",
-	}
-	rn3AllowedHeaders = map[string]string{
-		"POST": "Content-Type,File-Id,X-Hg-Agent-Token",
-	}
-	rn5AllowedHeaders = map[string]string{
-		"POST": "Content-Type,X-Hg-Agent-Token",
-	}
 	rn6AllowedHeaders = map[string]string{
 		"GET": "X-Hg-Agent-Token",
 	}
-	rn7AllowedHeaders = map[string]string{
-		"POST": "Content-Type,X-Hg-Agent-Token",
+	rn1AllowedHeaders = map[string]string{
+		"POST": "Book-Id,Book-Name,Book-Url,Content-Type,X-Hg-Agent-Token",
+	}
+	rn5AllowedHeaders = map[string]string{
+		"POST": "Content-Type,File-Id,X-Hg-Agent-Token",
+	}
+	rn4AllowedHeaders = map[string]string{
+		"DELETE": "X-Hg-Agent-Token",
+		"GET":    "X-Hg-Agent-Token",
 	}
 	rn13AllowedHeaders = map[string]string{
 		"POST": "X-Hg-Agent-Token",
 	}
-	rn15AllowedHeaders = map[string]string{
+	rn14AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+	rn16AllowedHeaders = map[string]string{
 		"POST": "Content-Type,X-Hg-Agent-Token",
 	}
 	rn17AllowedHeaders = map[string]string{
 		"POST": "Content-Type,X-Hg-Agent-Token",
 	}
 	rn18AllowedHeaders = map[string]string{
-		"POST": "Book-Id,Book-Name,Book-Url,Content-Type,X-Hg-Agent-Token",
-	}
-	rn22AllowedHeaders = map[string]string{
 		"POST": "Content-Type,X-Hg-Agent-Token",
 	}
 	rn19AllowedHeaders = map[string]string{
-		"POST": "Content-Type,X-Hg-Agent-Token",
-	}
-	rn21AllowedHeaders = map[string]string{
-		"POST": "Content-Type,X-Hg-Agent-Token",
-	}
-	rn25AllowedHeaders = map[string]string{
-		"POST": "Content-Type,X-Hg-Agent-Token",
-	}
-	rn24AllowedHeaders = map[string]string{
-		"POST": "Content-Type,X-Hg-Agent-Token",
+		"GET": "X-Hg-Agent-Token",
 	}
 )
 
@@ -94,9 +83,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/api/"
+		case '/': // Prefix: "/api/v2/"
 
-			if l := len("/api/"); len(elem) >= l && elem[0:l] == "/api/" {
+			if l := len("/api/v2/"); len(elem) >= l && elem[0:l] == "/api/v2/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -106,23 +95,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'c': // Prefix: "core/status"
+			case 'f': // Prefix: "fs"
 
-				if l := len("core/status"); len(elem) >= l && elem[0:l] == "core/status" {
+				if l := len("fs"); len(elem) >= l && elem[0:l] == "fs" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleAPICoreStatusGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleAPIV2FsGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, notAllowedParams{
 							allowedMethods: "GET",
-							allowedHeaders: rn1AllowedHeaders,
+							allowedHeaders: rn6AllowedHeaders,
 							acceptPost:     "",
 							acceptPatch:    "",
 						})
@@ -130,136 +118,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					return
 				}
-
-			case 'f': // Prefix: "fs/"
-
-				if l := len("fs/"); len(elem) >= l && elem[0:l] == "fs/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					break
-				}
 				switch elem[0] {
-				case 'c': // Prefix: "create"
+				case '/': // Prefix: "/"
 
-					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIFsCreatePostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, notAllowedParams{
-								allowedMethods: "POST",
-								allowedHeaders: rn3AllowedHeaders,
-								acceptPost:     "application/octet-stream",
-								acceptPatch:    "",
-							})
-						}
-
-						return
-					}
-
-				case 'd': // Prefix: "delete"
-
-					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIFsDeletePostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, notAllowedParams{
-								allowedMethods: "POST",
-								allowedHeaders: rn5AllowedHeaders,
-								acceptPost:     "application/json",
-								acceptPatch:    "",
-							})
-						}
-
-						return
-					}
-
-				case 'g': // Prefix: "get"
-
-					if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "GET":
-							s.handleAPIFsGetGetRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, notAllowedParams{
-								allowedMethods: "GET",
-								allowedHeaders: rn6AllowedHeaders,
-								acceptPost:     "",
-								acceptPatch:    "",
-							})
-						}
-
-						return
-					}
-
-				case 'i': // Prefix: "info"
-
-					if l := len("info"); len(elem) >= l && elem[0:l] == "info" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIFsInfoPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, notAllowedParams{
-								allowedMethods: "POST",
-								allowedHeaders: rn7AllowedHeaders,
-								acceptPost:     "application/json",
-								acceptPatch:    "",
-							})
-						}
-
-						return
-					}
-
-				}
-
-			case 'h': // Prefix: "h"
-
-				if l := len("h"); len(elem) >= l && elem[0:l] == "h" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					break
-				}
-				switch elem[0] {
-				case 'i': // Prefix: "ighway/"
-
-					if l := len("ighway/"); len(elem) >= l && elem[0:l] == "ighway/" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -269,56 +131,87 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
-					case 'f': // Prefix: "file/"
+					case 'a': // Prefix: "archive"
 
-						if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
+						if l := len("archive"); len(elem) >= l && elem[0:l] == "archive" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						// Param: "id"
-						// Match until "."
-						idx := strings.IndexByte(elem, '.')
-						if idx < 0 {
-							idx = len(elem)
-						}
-						args[0] = elem[:idx]
-						elem = elem[idx:]
-
 						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIV2FsArchivePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, notAllowedParams{
+									allowedMethods: "POST",
+									allowedHeaders: rn1AllowedHeaders,
+									acceptPost:     "application/octet-stream",
+									acceptPatch:    "",
+								})
+							}
+
+							return
+						}
+
+					case 'f': // Prefix: "file"
+
+						if l := len("file"); len(elem) >= l && elem[0:l] == "file" {
+							elem = elem[l:]
+						} else {
 							break
 						}
-						switch elem[0] {
-						case '.': // Prefix: "."
 
-							if l := len("."); len(elem) >= l && elem[0:l] == "." {
+						if len(elem) == 0 {
+							switch r.Method {
+							case "POST":
+								s.handleAPIV2FsFilePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, notAllowedParams{
+									allowedMethods: "POST",
+									allowedHeaders: rn5AllowedHeaders,
+									acceptPost:     "application/octet-stream",
+									acceptPatch:    "",
+								})
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
-							// Param: "ext"
+							// Param: "id"
 							// Leaf parameter, slashes are prohibited
 							idx := strings.IndexByte(elem, '/')
 							if idx >= 0 {
 								break
 							}
-							args[1] = elem
+							args[0] = elem
 							elem = ""
 
 							if len(elem) == 0 {
 								// Leaf node.
 								switch r.Method {
-								case "GET":
-									s.handleAPIHighwayFileIDExtGetRequest([2]string{
+								case "DELETE":
+									s.handleAPIV2FsFileIDDeleteRequest([1]string{
 										args[0],
-										args[1],
+									}, elemIsEscaped, w, r)
+								case "GET":
+									s.handleAPIV2FsFileIDGetRequest([1]string{
+										args[0],
 									}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, notAllowedParams{
-										allowedMethods: "GET",
-										allowedHeaders: nil,
+										allowedMethods: "DELETE,GET",
+										allowedHeaders: rn4AllowedHeaders,
 										acceptPost:     "",
 										acceptPatch:    "",
 									})
@@ -329,23 +222,72 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						}
 
-					case 't': // Prefix: "token/create"
+					}
 
-						if l := len("token/create"); len(elem) >= l && elem[0:l] == "token/create" {
+				}
+
+			case 'h': // Prefix: "highway/"
+
+				if l := len("highway/"); len(elem) >= l && elem[0:l] == "highway/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'f': // Prefix: "file/"
+
+					if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Match until "."
+					idx := strings.IndexByte(elem, '.')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case '.': // Prefix: "."
+
+						if l := len("."); len(elem) >= l && elem[0:l] == "." {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
+						// Param: "ext"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[1] = elem
+						elem = ""
+
 						if len(elem) == 0 {
 							// Leaf node.
 							switch r.Method {
-							case "POST":
-								s.handleAPIHighwayTokenCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+							case "GET":
+								s.handleAPIV2HighwayFileIDExtGetRequest([2]string{
+									args[0],
+									args[1],
+								}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, notAllowedParams{
-									allowedMethods: "POST",
-									allowedHeaders: rn13AllowedHeaders,
+									allowedMethods: "GET",
+									allowedHeaders: nil,
 									acceptPost:     "",
 									acceptPatch:    "",
 								})
@@ -356,95 +298,31 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					}
 
-				case 'p': // Prefix: "proxy/parse/"
+				case 't': // Prefix: "token"
 
-					if l := len("proxy/parse/"); len(elem) >= l && elem[0:l] == "proxy/parse/" {
+					if l := len("token"); len(elem) >= l && elem[0:l] == "token" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'b': // Prefix: "book"
-
-						if l := len("book"); len(elem) >= l && elem[0:l] == "book" {
-							elem = elem[l:]
-						} else {
-							break
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIV2HighwayTokenPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: rn13AllowedHeaders,
+								acceptPost:     "",
+								acceptPatch:    "",
+							})
 						}
 
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIHproxyParseBookPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, notAllowedParams{
-									allowedMethods: "POST",
-									allowedHeaders: rn15AllowedHeaders,
-									acceptPost:     "application/json",
-									acceptPatch:    "",
-								})
-							}
-
-							return
-						}
-
-					case 'l': // Prefix: "list"
-
-						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIHproxyParseListPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, notAllowedParams{
-									allowedMethods: "POST",
-									allowedHeaders: rn17AllowedHeaders,
-									acceptPost:     "application/json",
-									acceptPatch:    "",
-								})
-							}
-
-							return
-						}
-
+						return
 					}
 
-				}
-
-			case 'i': // Prefix: "import/archive"
-
-				if l := len("import/archive"); len(elem) >= l && elem[0:l] == "import/archive" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleAPIImportArchivePostRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, notAllowedParams{
-							allowedMethods: "POST",
-							allowedHeaders: rn18AllowedHeaders,
-							acceptPost:     "application/octet-stream",
-							acceptPatch:    "",
-						})
-					}
-
-					return
 				}
 
 			case 'p': // Prefix: "parsing/"
@@ -468,13 +346,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					if len(elem) == 0 {
+						// Leaf node.
 						switch r.Method {
 						case "POST":
-							s.handleAPIParsingBookPostRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleAPIV2ParsingBookPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, notAllowedParams{
 								allowedMethods: "POST",
-								allowedHeaders: rn22AllowedHeaders,
+								allowedHeaders: rn14AllowedHeaders,
 								acceptPost:     "application/json",
 								acceptPatch:    "",
 							})
@@ -482,71 +361,55 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						return
 					}
-					switch elem[0] {
-					case '/': // Prefix: "/"
 
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-							elem = elem[l:]
-						} else {
-							break
+				case 'c': // Prefix: "check"
+
+					if l := len("check"); len(elem) >= l && elem[0:l] == "check" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIV2ParsingCheckPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: rn16AllowedHeaders,
+								acceptPost:     "application/json",
+								acceptPatch:    "",
+							})
 						}
 
-						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'c': // Prefix: "check"
+						return
+					}
 
-							if l := len("check"); len(elem) >= l && elem[0:l] == "check" {
-								elem = elem[l:]
-							} else {
-								break
-							}
+				case 'l': // Prefix: "list"
 
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPIParsingBookCheckPostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, notAllowedParams{
-										allowedMethods: "POST",
-										allowedHeaders: rn19AllowedHeaders,
-										acceptPost:     "application/json",
-										acceptPatch:    "",
-									})
-								}
+					if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+						elem = elem[l:]
+					} else {
+						break
+					}
 
-								return
-							}
-
-						case 'm': // Prefix: "multi"
-
-							if l := len("multi"); len(elem) >= l && elem[0:l] == "multi" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPIParsingBookMultiPostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, notAllowedParams{
-										allowedMethods: "POST",
-										allowedHeaders: rn21AllowedHeaders,
-										acceptPost:     "application/json",
-										acceptPatch:    "",
-									})
-								}
-
-								return
-							}
-
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIV2ParsingListPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: rn17AllowedHeaders,
+								acceptPost:     "application/json",
+								acceptPatch:    "",
+							})
 						}
 
+						return
 					}
 
 				case 'p': // Prefix: "page"
@@ -558,13 +421,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					if len(elem) == 0 {
+						// Leaf node.
 						switch r.Method {
 						case "POST":
-							s.handleAPIParsingPagePostRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleAPIV2ParsingPagePostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, notAllowedParams{
 								allowedMethods: "POST",
-								allowedHeaders: rn25AllowedHeaders,
+								allowedHeaders: rn18AllowedHeaders,
 								acceptPost:     "application/json",
 								acceptPatch:    "",
 							})
@@ -572,34 +436,32 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						return
 					}
-					switch elem[0] {
-					case '/': // Prefix: "/check"
 
-						if l := len("/check"); len(elem) >= l && elem[0:l] == "/check" {
-							elem = elem[l:]
-						} else {
-							break
-						}
+				}
 
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIParsingPageCheckPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, notAllowedParams{
-									allowedMethods: "POST",
-									allowedHeaders: rn24AllowedHeaders,
-									acceptPost:     "application/json",
-									acceptPatch:    "",
-								})
-							}
+			case 's': // Prefix: "status"
 
-							return
-						}
+				if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+					elem = elem[l:]
+				} else {
+					break
+				}
 
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleAPIV2StatusGetRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, notAllowedParams{
+							allowedMethods: "GET",
+							allowedHeaders: rn19AllowedHeaders,
+							acceptPost:     "",
+							acceptPatch:    "",
+						})
 					}
 
+					return
 				}
 
 			}
@@ -690,9 +552,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/api/"
+		case '/': // Prefix: "/api/v2/"
 
-			if l := len("/api/"); len(elem) >= l && elem[0:l] == "/api/" {
+			if l := len("/api/v2/"); len(elem) >= l && elem[0:l] == "/api/v2/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -702,23 +564,22 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'c': // Prefix: "core/status"
+			case 'f': // Prefix: "fs"
 
-				if l := len("core/status"); len(elem) >= l && elem[0:l] == "core/status" {
+				if l := len("fs"); len(elem) >= l && elem[0:l] == "fs" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
 					switch method {
 					case "GET":
-						r.name = APICoreStatusGetOperation
-						r.summary = "Получение данных о состоянии агента"
+						r.name = APIV2FsGetOperation
+						r.summary = "Получение информации о состоянии файловой системы"
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/api/core/status"
+						r.pathPattern = "/api/v2/fs"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -726,136 +587,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return
 					}
 				}
-
-			case 'f': // Prefix: "fs/"
-
-				if l := len("fs/"); len(elem) >= l && elem[0:l] == "fs/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					break
-				}
 				switch elem[0] {
-				case 'c': // Prefix: "create"
+				case '/': // Prefix: "/"
 
-					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIFsCreatePostOperation
-							r.summary = "Создание нового файла"
-							r.operationID = ""
-							r.operationGroup = ""
-							r.pathPattern = "/api/fs/create"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-				case 'd': // Prefix: "delete"
-
-					if l := len("delete"); len(elem) >= l && elem[0:l] == "delete" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIFsDeletePostOperation
-							r.summary = "Удаление файла"
-							r.operationID = ""
-							r.operationGroup = ""
-							r.pathPattern = "/api/fs/delete"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-				case 'g': // Prefix: "get"
-
-					if l := len("get"); len(elem) >= l && elem[0:l] == "get" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "GET":
-							r.name = APIFsGetGetOperation
-							r.summary = "Получение файла"
-							r.operationID = ""
-							r.operationGroup = ""
-							r.pathPattern = "/api/fs/get"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-				case 'i': // Prefix: "info"
-
-					if l := len("info"); len(elem) >= l && elem[0:l] == "info" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = APIFsInfoPostOperation
-							r.summary = "Получение информации о состоянии файловой системы"
-							r.operationID = ""
-							r.operationGroup = ""
-							r.pathPattern = "/api/fs/info"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-				}
-
-			case 'h': // Prefix: "h"
-
-				if l := len("h"); len(elem) >= l && elem[0:l] == "h" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					break
-				}
-				switch elem[0] {
-				case 'i': // Prefix: "ighway/"
-
-					if l := len("ighway/"); len(elem) >= l && elem[0:l] == "ighway/" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -865,55 +600,92 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
-					case 'f': // Prefix: "file/"
+					case 'a': // Prefix: "archive"
 
-						if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
+						if l := len("archive"); len(elem) >= l && elem[0:l] == "archive" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						// Param: "id"
-						// Match until "."
-						idx := strings.IndexByte(elem, '.')
-						if idx < 0 {
-							idx = len(elem)
-						}
-						args[0] = elem[:idx]
-						elem = elem[idx:]
-
 						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = APIV2FsArchivePostOperation
+								r.summary = "Загрузка архива"
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/api/v2/fs/archive"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'f': // Prefix: "file"
+
+						if l := len("file"); len(elem) >= l && elem[0:l] == "file" {
+							elem = elem[l:]
+						} else {
 							break
 						}
-						switch elem[0] {
-						case '.': // Prefix: "."
 
-							if l := len("."); len(elem) >= l && elem[0:l] == "." {
+						if len(elem) == 0 {
+							switch method {
+							case "POST":
+								r.name = APIV2FsFilePostOperation
+								r.summary = "Создание нового файла"
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/api/v2/fs/file"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
-							// Param: "ext"
+							// Param: "id"
 							// Leaf parameter, slashes are prohibited
 							idx := strings.IndexByte(elem, '/')
 							if idx >= 0 {
 								break
 							}
-							args[1] = elem
+							args[0] = elem
 							elem = ""
 
 							if len(elem) == 0 {
 								// Leaf node.
 								switch method {
-								case "GET":
-									r.name = APIHighwayFileIDExtGetOperation
-									r.summary = "Получение файла через highway"
+								case "DELETE":
+									r.name = APIV2FsFileIDDeleteOperation
+									r.summary = "Удаление файла"
 									r.operationID = ""
 									r.operationGroup = ""
-									r.pathPattern = "/api/highway/file/{id}.{ext}"
+									r.pathPattern = "/api/v2/fs/file/{id}"
 									r.args = args
-									r.count = 2
+									r.count = 1
+									return r, true
+								case "GET":
+									r.name = APIV2FsFileIDGetOperation
+									r.summary = "Получение файла"
+									r.operationID = ""
+									r.operationGroup = ""
+									r.pathPattern = "/api/v2/fs/file/{id}"
+									r.args = args
+									r.count = 1
 									return r, true
 								default:
 									return
@@ -922,122 +694,104 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 						}
 
-					case 't': // Prefix: "token/create"
-
-						if l := len("token/create"); len(elem) >= l && elem[0:l] == "token/create" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIHighwayTokenCreatePostOperation
-								r.summary = "Создание нового токена для highway"
-								r.operationID = ""
-								r.operationGroup = ""
-								r.pathPattern = "/api/highway/token/create"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-					}
-
-				case 'p': // Prefix: "proxy/parse/"
-
-					if l := len("proxy/parse/"); len(elem) >= l && elem[0:l] == "proxy/parse/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'b': // Prefix: "book"
-
-						if l := len("book"); len(elem) >= l && elem[0:l] == "book" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIHproxyParseBookPostOperation
-								r.summary = "Парсинг данных книги по ссылке"
-								r.operationID = ""
-								r.operationGroup = ""
-								r.pathPattern = "/api/hproxy/parse/book"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-					case 'l': // Prefix: "list"
-
-						if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIHproxyParseListPostOperation
-								r.summary = "Парсинг списка данных по ссылке"
-								r.operationID = ""
-								r.operationGroup = ""
-								r.pathPattern = "/api/hproxy/parse/list"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
 					}
 
 				}
 
-			case 'i': // Prefix: "import/archive"
+			case 'h': // Prefix: "highway/"
 
-				if l := len("import/archive"); len(elem) >= l && elem[0:l] == "import/archive" {
+				if l := len("highway/"); len(elem) >= l && elem[0:l] == "highway/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "POST":
-						r.name = APIImportArchivePostOperation
-						r.summary = "Загрузка архива"
-						r.operationID = ""
-						r.operationGroup = ""
-						r.pathPattern = "/api/import/archive"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
+					break
+				}
+				switch elem[0] {
+				case 'f': // Prefix: "file/"
+
+					if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
+						elem = elem[l:]
+					} else {
+						break
 					}
+
+					// Param: "id"
+					// Match until "."
+					idx := strings.IndexByte(elem, '.')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case '.': // Prefix: "."
+
+						if l := len("."); len(elem) >= l && elem[0:l] == "." {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "ext"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[1] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = APIV2HighwayFileIDExtGetOperation
+								r.summary = "Получение файла через highway"
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/api/v2/highway/file/{id}.{ext}"
+								r.args = args
+								r.count = 2
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+				case 't': // Prefix: "token"
+
+					if l := len("token"); len(elem) >= l && elem[0:l] == "token" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIV2HighwayTokenPostOperation
+							r.summary = "Создание нового токена для highway"
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/api/v2/highway/token"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
 				}
 
 			case 'p': // Prefix: "parsing/"
@@ -1061,13 +815,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					if len(elem) == 0 {
+						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = APIParsingBookPostOperation
+							r.name = APIV2ParsingBookPostOperation
 							r.summary = "Обработка новой книги"
 							r.operationID = ""
 							r.operationGroup = ""
-							r.pathPattern = "/api/parsing/book"
+							r.pathPattern = "/api/v2/parsing/book"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -1075,71 +830,55 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return
 						}
 					}
-					switch elem[0] {
-					case '/': // Prefix: "/"
 
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-							elem = elem[l:]
-						} else {
-							break
+				case 'c': // Prefix: "check"
+
+					if l := len("check"); len(elem) >= l && elem[0:l] == "check" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIV2ParsingCheckPostOperation
+							r.summary = "Предварительная проверка ссылок на новые книги"
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/api/v2/parsing/check"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
 						}
+					}
 
-						if len(elem) == 0 {
-							break
+				case 'l': // Prefix: "list"
+
+					if l := len("list"); len(elem) >= l && elem[0:l] == "list" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = APIV2ParsingListPostOperation
+							r.summary = "Обработка ссылки с набором книг"
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/api/v2/parsing/list"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
 						}
-						switch elem[0] {
-						case 'c': // Prefix: "check"
-
-							if l := len("check"); len(elem) >= l && elem[0:l] == "check" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = APIParsingBookCheckPostOperation
-									r.summary = "Предварительная проверка ссылок на новые книги"
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/api/parsing/book/check"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-						case 'm': // Prefix: "multi"
-
-							if l := len("multi"); len(elem) >= l && elem[0:l] == "multi" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = APIParsingBookMultiPostOperation
-									r.summary = "Обработка ссылки с набором книг"
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/api/parsing/book/multi"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-						}
-
 					}
 
 				case 'p': // Prefix: "page"
@@ -1151,13 +890,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					if len(elem) == 0 {
+						// Leaf node.
 						switch method {
 						case "POST":
-							r.name = APIParsingPagePostOperation
+							r.name = APIV2ParsingPagePostOperation
 							r.summary = "Загрузка изображения страницы"
 							r.operationID = ""
 							r.operationGroup = ""
-							r.pathPattern = "/api/parsing/page"
+							r.pathPattern = "/api/v2/parsing/page"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -1165,34 +905,32 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return
 						}
 					}
-					switch elem[0] {
-					case '/': // Prefix: "/check"
 
-						if l := len("/check"); len(elem) >= l && elem[0:l] == "/check" {
-							elem = elem[l:]
-						} else {
-							break
-						}
+				}
 
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = APIParsingPageCheckPostOperation
-								r.summary = "Предварительная проверка ссылок для загрузки страниц"
-								r.operationID = ""
-								r.operationGroup = ""
-								r.pathPattern = "/api/parsing/page/check"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
+			case 's': // Prefix: "status"
 
+				if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "GET":
+						r.name = APIV2StatusGetOperation
+						r.summary = "Получение данных о состоянии агента"
+						r.operationID = ""
+						r.operationGroup = ""
+						r.pathPattern = "/api/v2/status"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
 					}
-
 				}
 
 			}

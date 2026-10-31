@@ -11,13 +11,14 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
-func (c *Client) BookParse(ctx context.Context, agentID uuid.UUID, u url.URL) (serveragentdto.AgentBookDetails, error) {
+func (c *Client) BookParse(ctx context.Context, agentID uuid.UUID, u url.URL, pageLimit *int) (hproxymodel.Book, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
-		return serveragentdto.AgentBookDetails{}, err
+		return hproxymodel.Book{}, err
 	}
 
-	return adapter.BookParse(ctx, u) //nolint:wrapcheck // это обычный врапер, обертка не требуется
+	//nolint:wrapcheck // это обычный врапер, обертка не требуется
+	return adapter.BookParse(ctx, u, pageLimit)
 }
 
 func (c *Client) BooksCheck(
@@ -33,17 +34,18 @@ func (c *Client) BooksCheck(
 	return adapter.BooksCheck(ctx, urls) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
-func (c *Client) BooksCheckMultiple(
+func (c *Client) ParseList(
 	ctx context.Context,
 	agentID uuid.UUID,
 	u url.URL,
-) ([]serveragentdto.AgentBookCheckResult, error) {
+	onePage bool,
+) (hproxymodel.List, error) {
 	adapter, err := c.getAdapter(agentID)
 	if err != nil {
-		return nil, err
+		return hproxymodel.List{}, err
 	}
 
-	return adapter.BooksCheckMulti(ctx, u) //nolint:wrapcheck // это обычный врапер, обертка не требуется
+	return adapter.ParseList(ctx, u, onePage) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) ExportArchive(ctx context.Context, agentID uuid.UUID, data serveragentdto.AgentExportData) error {
@@ -62,19 +64,6 @@ func (c *Client) PageLoad(ctx context.Context, agentID uuid.UUID, u serveragentd
 	}
 
 	return adapter.PageLoad(ctx, u) //nolint:wrapcheck // это обычный врапер, обертка не требуется
-}
-
-func (c *Client) PagesCheck(
-	ctx context.Context,
-	agentID uuid.UUID,
-	urls []serveragentdto.AgentPageURL,
-) ([]serveragentdto.AgentPageCheckResult, error) {
-	adapter, err := c.getAdapter(agentID)
-	if err != nil {
-		return nil, err
-	}
-
-	return adapter.PagesCheck(ctx, urls) //nolint:wrapcheck // это обычный врапер, обертка не требуется
 }
 
 func (c *Client) Status(ctx context.Context, agentID uuid.UUID) (serveragentdto.AgentStatus, error) {

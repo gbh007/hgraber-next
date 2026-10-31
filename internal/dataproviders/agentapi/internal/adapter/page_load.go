@@ -9,7 +9,7 @@ import (
 )
 
 func (a *Adapter) PageLoad(ctx context.Context, url serveragentdto.AgentPageURL) (io.Reader, error) {
-	res, err := a.rawClient.APIParsingPagePost(ctx, &agentapi.APIParsingPagePostReq{
+	res, err := a.rawClient.APIV2ParsingPagePost(ctx, &agentapi.APIV2ParsingPagePostReq{
 		BookURL:  url.BookURL,
 		ImageURL: url.ImageURL,
 	})

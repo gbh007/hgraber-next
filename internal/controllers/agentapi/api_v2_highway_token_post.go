@@ -7,7 +7,7 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIHighwayTokenCreatePost(ctx context.Context) (*agentapi.APIHighwayTokenCreatePostOK, error) {
+func (c *Controller) APIV2HighwayTokenPost(ctx context.Context) (*agentapi.APIV2HighwayTokenPostOK, error) {
 	if c.highwayUseCase == nil {
 		return nil, apiError{
 			Code:    http.StatusBadRequest,
@@ -20,7 +20,7 @@ func (c *Controller) APIHighwayTokenCreatePost(ctx context.Context) (*agentapi.A
 		return nil, err
 	}
 
-	return &agentapi.APIHighwayTokenCreatePostOK{
+	return &agentapi.APIV2HighwayTokenPostOK{
 		ValidUntil: vu,
 		Token:      token,
 	}, nil

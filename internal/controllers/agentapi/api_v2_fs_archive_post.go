@@ -9,7 +9,11 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIImportArchivePost(ctx context.Context, req agentapi.APIImportArchivePostReq, params agentapi.APIImportArchivePostParams) error {
+func (c *Controller) APIV2FsArchivePost(
+	ctx context.Context,
+	req agentapi.APIV2FsArchivePostReq,
+	params agentapi.APIV2FsArchivePostParams,
+) error {
 	if c.importUseCase == nil {
 		return apiError{
 			Code:    http.StatusBadRequest,
