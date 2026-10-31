@@ -1,0 +1,31 @@
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-b {
+  gap: 20px;
+}
+
+.gap-m {
+  gap: 10px;
+}
+
+.gap-s {
+  gap: 5px;
+}
+
+pre {
+  padding: 10px;
+  background-color: #e6e6e6;
+  border-radius: 10px;
+}
+
+.error {
+  color: red;
+}

@@ -7,3 +7,4 @@
 /experimental/config.*
 /experimental/*.json
 /bin
+/config-agent.*

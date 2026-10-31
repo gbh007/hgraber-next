@@ -1,0 +1,54 @@
+[log]
+include_source = false
+level = "info"
+request_errors = false
+
+[api]
+addr = "127.0.0.1:8080"
+token = "agent-token"
+log_error_handler = true
+debug = false
+
+[debug_server]
+addr = "127.0.0.1:8081"
+log_error_handler = true
+debug = false
+
+[application]
+trace_endpoint = ""
+client_timeout = "1m0s"
+service_name = "hgraber-next-agent-local"
+use_unsafe_closer = false
+
+[application.pyroscope]
+endpoint = ""
+debug = false
+rate = 5
+
+[parsers]
+hg4_token = ""
+enabled = ["mock", "hgraber_local"]
+user_agent = "hgraber"
+
+[parsers.cache]
+enabled = false
+path = ".hidden/cache"
+ttl = "1h"
+clean_interval = "5m"
+
+[fs_base]
+import_path = ".hidden/imported"
+file_path = ".hidden/filedata"
+enable_deduplication = true
+import_limit_on_folder = 50
+
+[sqlite]
+file_path = "db.sqlite"
+
+[zip_scanner]
+master_addr = "http://localhost:8080"
+master_token = "local-next"
+
+[highway]
+private_key = "local-highway"
+token_lifetime = "1h"
