@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/domain/core"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
 func WriteArchiveAdapter(

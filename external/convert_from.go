@@ -3,8 +3,8 @@ package external
 import (
 	"time"
 
-	"github.com/gbh007/hgraber-next/domain/core"
-	"github.com/gbh007/hgraber-next/pkg"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
+	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func BookFromEntity(raw core.BookContainer) Book {

@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/gbh007/hgraber-next/application/server"
+	"github.com/gbh007/hgraber-next/internal/application/server"
 )
 
 func main() {

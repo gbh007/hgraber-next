@@ -1,0 +1,51 @@
+package page
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/Masterminds/squirrel"
+
+	"github.com/gbh007/hgraber-next/internal/adapters/postgresql/internal/model"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
+)
+
+func (repo *PageRepo) BookPagesWithHashByHash(ctx context.Context, hash core.FileHash) ([]core.PageWithHash, error) {
+	pageTable := model.PageTable.WithPrefix("p")
+	fileTable := model.FileTable.WithPrefix("f")
+	pageWithHashTable := model.NewPageWithHash(pageTable, fileTable)
+
+	builder := squirrel.Select(pageWithHashTable.Columns()...).
+		PlaceholderFormat(squirrel.Dollar).
+		From(pageTable.NameAlter()).
+		LeftJoin(pageWithHashTable.JoinString()).
+		Where(squirrel.Eq{
+			fileTable.ColumnMd5Sum():    hash.Md5Sum,
+			fileTable.ColumnSha256Sum(): hash.Sha256Sum,
+			fileTable.ColumnSize():      hash.Size,
+		})
+
+	query, args := builder.MustSql()
+
+	out := make([]core.PageWithHash, 0, 10) //nolint:mnd // оптимизация
+
+	rows, err := repo.Pool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("exec query: %w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		page := core.PageWithHash{}
+
+		err := rows.Scan(pageWithHashTable.Scanner(&page))
+		if err != nil {
+			return nil, fmt.Errorf("scan: %w", err)
+		}
+
+		out = append(out, page)
+	}
+
+	return out, nil
+}

@@ -1,0 +1,27 @@
+package databasepanel
+
+import (
+	"fmt"
+
+	"github.com/grafana/grafana-foundation-sdk/go/timeseries"
+
+	"github.com/gbh007/hgraber-next/internal/adapters/metric/generator/generatorcore"
+	"github.com/gbh007/hgraber-next/internal/adapters/metric/metricdatabase"
+)
+
+func LatencyQ95() *timeseries.PanelBuilder {
+	return generatorcore.SimpleTSPanel(
+		[]generatorcore.PromQLExpr{
+			{
+				Query: generatorcore.RateQuantile(
+					metricdatabase.RequestDurationName,
+					[]string{metricdatabase.StmtLabelName, metricdatabase.DBLabelName},
+					generatorcore.Q95,
+				),
+				Legend: fmt.Sprintf("{{%s}} -> {{%s}}", metricdatabase.DBLabelName, metricdatabase.StmtLabelName),
+			},
+		},
+		"Latency Q95",
+		generatorcore.UnitSecond,
+	)
+}
