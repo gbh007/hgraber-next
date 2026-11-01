@@ -28,10 +28,6 @@ type AgentParsersProxy struct {
 
 func AgentDefaultParsers() AgentParsers {
 	return AgentParsers{
-		Enabled: []string{
-			"mock",
-			"hgraber_local",
-		},
 		Cache: AgentDefaultParsersCache(),
 	}
 }

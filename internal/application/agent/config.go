@@ -15,7 +15,7 @@ func parseConfig() (agnconfig.AgentConfig, bool, error) {
 
 	flag.Parse()
 
-	c, err := config.ImportConfig(*configPath, agnconfig.AgentDefaultConfigWrapped())
+	c, err := config.ImportConfig(*configPath, agnconfig.AgentDefaultConfig)
 
 	return c, *scan, err
 }

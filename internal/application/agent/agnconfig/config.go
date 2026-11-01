@@ -27,12 +27,6 @@ func AgentDefaultConfig() AgentConfig {
 	}
 }
 
-func AgentDefaultConfigWrapped() func() AgentConfig {
-	return func() AgentConfig {
-		return AgentDefaultConfig()
-	}
-}
-
 type AgentApplication struct {
 	ClientTimeout   time.Duration `toml:"client_timeout"`
 	ServiceName     string        `toml:"service_name"`

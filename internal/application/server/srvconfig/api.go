@@ -1,5 +1,7 @@
 package srvconfig
 
+import "os"
+
 type ServerAPI struct {
 	Addr                  string `toml:"addr"`
 	ExternalAddr          string `toml:"external_addr"`
@@ -42,7 +44,7 @@ func ServerAPIDefault() ServerAPI {
 	return ServerAPI{
 		Addr:         ":8080",
 		ExternalAddr: "http://localhost:8080",
-		StaticDir:    "",
+		StaticDir:    os.Getenv("APP_API_STATIC_DIR"), // Для совместимости
 		Token:        "",
 	}
 }
