@@ -15,7 +15,7 @@ func (uc *UseCase) List(ctx context.Context, u url.URL, onePage bool) (parserdto
 	list := parserdto.BookList{}
 
 	for nextUrl != nil {
-		units, err := uc.loader.List(ctx, u)
+		units, err := uc.loader.List(ctx, *nextUrl)
 		if err != nil {
 			return parserdto.BookList{}, fmt.Errorf("loader: %w", err)
 		}
