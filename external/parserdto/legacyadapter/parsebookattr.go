@@ -31,6 +31,6 @@ func ParseBookAttr(ctx context.Context, p legacyParser, attr string) ([]string, 
 		return p.Tags(ctx)
 
 	default:
-		return []string{}, parserdto.UnknownAttributeError
+		return []string{}, parserdto.ErrUnknownAttribute
 	}
 }

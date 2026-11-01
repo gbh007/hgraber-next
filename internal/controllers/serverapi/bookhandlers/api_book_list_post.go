@@ -21,6 +21,7 @@ func (c *BookHandlersController) APIBookListPost(
 		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
+	//nolint:staticcheck // поля используются в API
 	return &serverapi.APIBookListPostOK{
 		Books: pkg.Map(bookList.Books, func(b bff.BookShort) serverapi.APIBookListPostOKBooksItem {
 			return serverapi.APIBookListPostOKBooksItem{

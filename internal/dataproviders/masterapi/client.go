@@ -7,8 +7,6 @@ import (
 
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
 	"github.com/ogen-go/ogen/ogenerrors"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/propagation"
 )
 
 const agentTimeout = time.Minute * 1
@@ -17,9 +15,9 @@ type Client struct {
 	rawClient *serverapi.Client
 }
 
-func New(baseURL string, token string) (*Client, error) {
+func New(baseURL, token string) (*Client, error) {
 	httpClient := http.Client{
-		Transport: otelPropagationRT{next: http.DefaultTransport},
+		Transport: http.DefaultTransport,
 		Timeout:   agentTimeout,
 	}
 
@@ -37,17 +35,6 @@ func New(baseURL string, token string) (*Client, error) {
 	return &Client{
 		rawClient: rawClient,
 	}, nil
-}
-
-type otelPropagationRT struct {
-	next http.RoundTripper
-}
-
-func (rt otelPropagationRT) RoundTrip(req *http.Request) (*http.Response, error) {
-	req = req.Clone(req.Context())
-	otel.GetTextMapPropagator().Inject(req.Context(), propagation.HeaderCarrier(req.Header))
-
-	return rt.next.RoundTrip(req)
 }
 
 type securitySource struct {

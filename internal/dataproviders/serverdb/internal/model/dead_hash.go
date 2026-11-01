@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
-var DeadHashTable = DeadHash{baseTable: baseTable{name: "dead_hashes"}}
+var DeadHashTable = DeadHash{name: "dead_hashes"}
 
 type DeadHash struct {
 	baseTable

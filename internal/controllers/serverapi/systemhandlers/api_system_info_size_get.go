@@ -15,6 +15,7 @@ func (c *SystemHandlersController) APISystemInfoSizeGet(
 		return nil, err
 	}
 
+	//nolint:staticcheck // поля используются в API
 	return &serverapi.APISystemInfoSizeGetOK{
 		Count:           info.BookCount,
 		DownloadedCount: info.DownloadedBookCount,

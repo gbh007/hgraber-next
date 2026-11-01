@@ -10,9 +10,7 @@ import (
 )
 
 func enrichError(err error) error {
-	var errResp *agentapi.ErrorResponseStatusCode
-
-	if errors.As(err, &errResp) {
+	if errResp, ok := errors.AsType[*agentapi.ErrorResponseStatusCode](err); ok {
 		switch errResp.StatusCode {
 		case http.StatusBadRequest:
 			return fmt.Errorf(

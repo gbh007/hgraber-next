@@ -48,14 +48,12 @@ func InitAndServe(parserInits map[string]parserdto.NewParser) {
 }
 
 func Serve(ctx context.Context, parserInits map[string]parserdto.NewParser) error {
-	logger := slog.Default()
-
 	cfg, needScan, err := parseConfig()
 	if err != nil {
 		return fmt.Errorf("parse config: %w", err)
 	}
 
-	logger = initLogger(cfg)
+	logger := initLogger(cfg)
 	slog.SetDefault(logger)
 
 	logger.InfoContext(ctx, "initializing system")

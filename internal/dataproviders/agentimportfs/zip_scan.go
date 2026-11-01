@@ -17,6 +17,7 @@ func (s *Storage) scanFiles(dirPath string, recursive bool) ([]string, error) {
 	}
 
 	res := make([]string, 0)
+
 	for _, e := range entries {
 		name := e.Name()
 		relativePath := path.Join(dirPath, name)

@@ -28,6 +28,7 @@ func (c *BookHandlersController) APIBookDetailsPost(
 		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
+	//nolint:staticcheck // поля используются в API
 	return &serverapi.APIBookDetailsPostOK{
 		Info:              c.apiCore.ConvertSimpleBook(ctx, book.Book, book.PreviewPage),
 		PageLoadedPercent: book.PageDownloadPercent(),

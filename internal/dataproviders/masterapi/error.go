@@ -10,48 +10,46 @@ import (
 )
 
 func enrichError(err error) error {
-	var errResp *serverapi.ErrorResponseStatusCode
-
-	if errors.As(err, &errResp) {
+	if errResp, ok := errors.AsType[*serverapi.ErrorResponseStatusCode](err); ok {
 		switch errResp.StatusCode {
 		case http.StatusBadRequest:
 			return fmt.Errorf(
 				"%w: %s",
-				serveragentdto.MasterAPIBadRequest,
+				serveragentdto.ErrMasterAPIBadRequest,
 				errResp.Response.Details.Value,
 			)
 		case http.StatusUnauthorized:
 			return fmt.Errorf(
 				"%w: %s",
-				serveragentdto.MasterAPIUnauthorized,
+				serveragentdto.ErrMasterAPIUnauthorized,
 				errResp.Response.Details.Value,
 			)
 
 		case http.StatusForbidden:
 			return fmt.Errorf(
 				"%w: %s",
-				serveragentdto.MasterAPIForbidden,
+				serveragentdto.ErrMasterAPIForbidden,
 				errResp.Response.Details.Value,
 			)
 
 		case http.StatusConflict:
 			return fmt.Errorf(
 				"%w: %s",
-				serveragentdto.MasterAPIConflict,
+				serveragentdto.ErrMasterAPIConflict,
 				errResp.Response.Details.Value,
 			)
 
 		case http.StatusInternalServerError:
 			return fmt.Errorf(
 				"%w: %s",
-				serveragentdto.MasterAPIInternalError,
+				serveragentdto.ErrMasterAPIInternalError,
 				errResp.Response.Details.Value,
 			)
 		}
 
 		return fmt.Errorf(
 			"%w: %s",
-			serveragentdto.MasterAPIUnknownResponse,
+			serveragentdto.ErrMasterAPIUnknownResponse,
 			errResp.Response.Details.Value,
 		)
 	}

@@ -32,9 +32,7 @@ func (c *Controller) NewError(ctx context.Context, err error) *agentapi.ErrorRes
 		}
 	}
 
-	var ae apiError
-
-	if errors.As(err, &ae) {
+	if ae, ok := errors.AsType[apiError](err); ok {
 		return &agentapi.ErrorResponseStatusCode{
 			StatusCode: ae.Code,
 			Response: agentapi.ErrorResponse{

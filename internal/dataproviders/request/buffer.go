@@ -20,7 +20,7 @@ func (r *Requester) requestBuffer(ctx context.Context, URL string, headers http.
 	if body != nil {
 		req, err = http.NewRequestWithContext(ctx, http.MethodPost, URL, body)
 	} else {
-		req, err = http.NewRequestWithContext(ctx, http.MethodGet, URL, nil)
+		req, err = http.NewRequestWithContext(ctx, http.MethodGet, URL, http.NoBody)
 	}
 
 	if err != nil {

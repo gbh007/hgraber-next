@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
-var BookLabelTable = BookLabel{baseTable: baseTable{name: "book_labels"}}
+var BookLabelTable = BookLabel{name: "book_labels"}
 
 type BookLabel struct {
 	baseTable

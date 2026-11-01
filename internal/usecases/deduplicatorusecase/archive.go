@@ -9,7 +9,7 @@ import (
 	"path"
 	"slices"
 
-	"github.com/gbh007/hgraber-next/internal/domian/archivemodel"
+	"github.com/gbh007/hgraber-next/internal/domain/archivemodel"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
@@ -39,12 +39,10 @@ func (uc *UseCase) ArchiveEntryPercentage(
 
 			md5Sums = append(md5Sums, hash.Md5Sum)
 			archiveHashes = append(archiveHashes, core.PageWithHash{
-				Page: core.Page{
-					PageNumber: pageNumber,
-					Ext:        path.Ext(filename),
-					Downloaded: true,
-				},
-				FileHash: hash,
+				PageNumber: pageNumber,
+				Ext:        path.Ext(filename),
+				Downloaded: true,
+				FileHash:   hash,
 			})
 
 			return nil

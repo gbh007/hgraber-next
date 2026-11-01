@@ -23,9 +23,7 @@ func (c *Controller) NewError(ctx context.Context, err error) *serverapi.ErrorRe
 		}
 	}
 
-	var ae apiservercore.APIError
-
-	if errors.As(err, &ae) {
+	if ae, ok := errors.AsType[apiservercore.APIError](err); ok {
 		return &serverapi.ErrorResponseStatusCode{
 			StatusCode: ae.Code,
 			Response: serverapi.ErrorResponse{

@@ -18,6 +18,7 @@ func (c *DeduplicateHandlersController) APIDeduplicateBookByPageBodyPost(
 		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
+	//nolint:staticcheck // поля используются в API
 	return &serverapi.APIDeduplicateBookByPageBodyPostOK{
 		Result: pkg.Map(
 			data,

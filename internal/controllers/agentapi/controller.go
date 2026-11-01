@@ -146,7 +146,7 @@ func New(
 	return c, nil
 }
 
-var errorAccessForbidden = errors.New("access forbidden")
+var errAccessForbidden = errors.New("access forbidden")
 
 func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string, t agentapi.HeaderAuth) (context.Context, error) {
 	if c.token == "" {
@@ -154,7 +154,7 @@ func (c *Controller) HandleHeaderAuth(ctx context.Context, operationName string,
 	}
 
 	if c.token != t.APIKey {
-		return ctx, errorAccessForbidden
+		return ctx, errAccessForbidden
 	}
 
 	return ctx, nil

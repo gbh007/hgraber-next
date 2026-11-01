@@ -23,11 +23,12 @@ import (
 var (
 	_ parserdto.Parser = (*Parser)(nil)
 
-	ParserError = errors.New("parser hgraber_v4")
+	errParser = errors.New("parser hgraber_v4")
 )
 
 type Parser struct {
 	parserdto.CoreParser
+
 	token string
 }
 
@@ -46,7 +47,7 @@ func (p *Parser) Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto
 
 	id, err := strconv.Atoi(strings.TrimPrefix(u.Path, "/"))
 	if err != nil {
-		return parserdto.Book{}, fmt.Errorf("%w: parse book id: %w", ParserError, err)
+		return parserdto.Book{}, fmt.Errorf("%w: parse book id: %w", errParser, err)
 	}
 
 	u.Scheme = "http"
@@ -56,17 +57,17 @@ func (p *Parser) Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto
 		"id": id,
 	})
 	if err != nil {
-		return parserdto.Book{}, fmt.Errorf("%w: marshal request body: %w", ParserError, err)
+		return parserdto.Book{}, fmt.Errorf("%w: marshal request body: %w", errParser, err)
 	}
 
 	raw, err := p.Requester.RequestPost(ctx, u.String(), p.headers(), bytes.NewReader(requestBody))
 	if err != nil {
-		return parserdto.Book{}, fmt.Errorf("%w: request: %w", ParserError, err)
+		return parserdto.Book{}, fmt.Errorf("%w: request: %w", errParser, err)
 	}
 
 	err = json.Unmarshal(raw, &bookParser.body)
 	if err != nil {
-		return parserdto.Book{}, fmt.Errorf("%w: unmarshal: %w", ParserError, err)
+		return parserdto.Book{}, fmt.Errorf("%w: unmarshal: %w", errParser, err)
 	}
 
 	return legacyadapter.Convert(ctx, u, bookParser)
@@ -80,7 +81,7 @@ func (p *Parser) headers() http.Header {
 	return headers
 }
 
-func (p *Parser) Image(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error) {
+func (p *Parser) Image(ctx context.Context, u, bookUrl url.URL) (io.ReadCloser, error) {
 	data, err := p.Requester.Request(ctx, u.String(), p.headers())
 	if err != nil {
 		return nil, err

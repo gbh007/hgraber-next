@@ -2,7 +2,7 @@ package agenthighway
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"io"
 	"time"
 
@@ -45,13 +45,14 @@ func (uc *UseCase) NewToken(ctx context.Context) (string, time.Time, error) {
 
 func (uc *UseCase) ValidateToken(ctx context.Context, token string) error {
 	currentTime := time.Now().Unix()
+
 	validUntil, err := uc.tokenizer.Validate(token)
 	if err != nil {
 		return err
 	}
 
 	if validUntil < currentTime {
-		return fmt.Errorf("expired token")
+		return errors.New("expired token")
 	}
 
 	return nil

@@ -1,6 +1,6 @@
 package model
 
-var BookAttributeTable = BookAttribute{baseTable: baseTable{name: "book_attributes"}}
+var BookAttributeTable = BookAttribute{name: "book_attributes"}
 
 type BookAttribute struct {
 	baseTable

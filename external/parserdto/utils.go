@@ -6,18 +6,20 @@ import (
 	"strings"
 )
 
-func TrimLastSlash(URL string, count int) string {
+func TrimLastSlash(u string, count int) string {
 	c := 0
 
-	ind := strings.LastIndexFunc(URL, func(r rune) bool {
+	ind := strings.LastIndexFunc(u, func(r rune) bool {
 		if r != rune('/') {
 			return false
 		}
+
 		c++
+
 		return c == count
 	})
 
-	return URL[:ind]
+	return u[:ind]
 }
 
 func OneMatch(rgx *regexp.Regexp, raw string) (string, bool) {

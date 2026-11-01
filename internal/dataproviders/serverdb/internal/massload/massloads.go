@@ -163,7 +163,7 @@ func (repo *MassloadRepo) massloadsBuilder(
 
 		subQuery, subArgs, err := subBuilder.ToSql()
 		if err != nil {
-			return squirrel.Select(), fmt.Errorf("build external link sub query: %w", err)
+			return squirrel.SelectBuilder{}, fmt.Errorf("build external link sub query: %w", err)
 		}
 
 		builder = builder.Where(subQuery, subArgs...)
@@ -208,7 +208,7 @@ func (repo *MassloadRepo) massloadsBuilder(
 
 		subQuery, subArgs, err := subBuilder.ToSql()
 		if err != nil {
-			return squirrel.Select(), fmt.Errorf("build attribute sub query: %w", err)
+			return squirrel.SelectBuilder{}, fmt.Errorf("build attribute sub query: %w", err)
 		}
 
 		builder = builder.Where(subQuery, subArgs...)

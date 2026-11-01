@@ -1,6 +1,6 @@
 package model
 
-var BookOriginAttributeTable = BookOriginAttribute{baseTable: baseTable{name: "book_origin_attributes"}}
+var BookOriginAttributeTable = BookOriginAttribute{name: "book_origin_attributes"}
 
 type BookOriginAttribute struct {
 	baseTable

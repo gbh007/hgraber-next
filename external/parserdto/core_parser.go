@@ -2,7 +2,7 @@ package parserdto
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"io"
 	"net/http"
 	"net/url"
@@ -47,7 +47,7 @@ func (cp CoreParser) Name() string {
 }
 
 func (cp CoreParser) Book(ctx context.Context, u url.URL, pageLimit *int) (Book, error) {
-	return Book{}, fmt.Errorf("unimplemented in core parser")
+	return Book{}, errors.New("unimplemented in core parser")
 }
 
 func (cp CoreParser) CanParse(u url.URL) bool {
@@ -60,7 +60,7 @@ func (cp CoreParser) CanParse(u url.URL) bool {
 	return false
 }
 
-func (cp CoreParser) Image(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error) {
+func (cp CoreParser) Image(ctx context.Context, u, bookUrl url.URL) (io.ReadCloser, error) {
 	data, err := cp.Requester.Request(ctx, u.String(), nil)
 	if err != nil {
 		return nil, err

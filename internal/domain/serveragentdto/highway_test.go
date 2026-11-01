@@ -12,6 +12,7 @@ func TestSimpleHighway(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	newTimeUnix, err := tokenizer.Validate(tokenizer.New(timeUnix))
 	if err != nil {
 		t.Fatal(err)
@@ -39,7 +40,7 @@ func BenchmarkSimpleHighwayValidate(b *testing.B) {
 
 	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		newTimeUnix, err := tokenizer.Validate(token)
 		if err != nil {
 			b.Fatal(err)

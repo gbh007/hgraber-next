@@ -2,7 +2,6 @@ package agentimportfs
 
 import (
 	"errors"
-	"fmt"
 	"log/slog"
 	"os"
 	"sync"
@@ -60,7 +59,7 @@ func createDir(dirPath string) error {
 	}
 
 	if info != nil && !info.IsDir() {
-		return fmt.Errorf("dir path is not dir")
+		return errors.New("dir path is not dir")
 	}
 
 	err = os.MkdirAll(dirPath, os.ModeDir|os.ModePerm)

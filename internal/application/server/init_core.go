@@ -17,7 +17,7 @@ func (a *App) initLogger() {
 	a.Logger = slog.New(slog.NewJSONHandler(os.Stderr, nil))
 }
 
-func (a *App) initCore(ctx context.Context) error {
+func (a *App) initCore(_ context.Context) error {
 	var err error
 
 	// Инициализируем логгер по умолчанию

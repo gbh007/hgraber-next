@@ -49,6 +49,7 @@ func NewDefaultParsers(
 			logger,
 			timeout,
 			&http.Transport{
+				//nolint:staticcheck // нет другого варианта
 				Dial: dialer.Dial,
 			},
 			logErrors,

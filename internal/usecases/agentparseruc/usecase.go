@@ -12,7 +12,7 @@ import (
 type loader interface {
 	HasParser(ctx context.Context, u url.URL) (bool, error)
 	Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto.Book, error)
-	Image(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error)
+	Image(ctx context.Context, u, bookUrl url.URL) (io.ReadCloser, error)
 	List(ctx context.Context, u url.URL) (parserdto.BookList, error)
 }
 

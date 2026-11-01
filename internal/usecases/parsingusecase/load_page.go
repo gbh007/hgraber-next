@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 func (uc *UseCase) DownloadPage(ctx context.Context, agentID uuid.UUID, page core.PageForDownload) error {

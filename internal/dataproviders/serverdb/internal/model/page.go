@@ -11,7 +11,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
-var PageTable = Page{baseTable: baseTable{name: "pages"}}
+var PageTable = Page{name: "pages"}
 
 type Page struct {
 	baseTable

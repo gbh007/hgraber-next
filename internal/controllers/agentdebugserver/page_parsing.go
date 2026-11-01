@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/gbh007/hgraber-next/external/parserdto"
-	"github.com/gbh007/hgraber-next/internal/domian/archivemodel"
+	"github.com/gbh007/hgraber-next/internal/domain/archivemodel"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/labstack/echo/v4"
 	"github.com/samber/lo"

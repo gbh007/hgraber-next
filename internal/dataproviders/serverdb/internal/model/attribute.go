@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
-var AttributeTable = Attribute{baseTable: baseTable{name: "attributes"}}
+var AttributeTable = Attribute{name: "attributes"}
 
 type Attribute struct {
 	baseTable

@@ -47,16 +47,16 @@ const (
 
 var (
 	MetricDatasource = dashboard.DataSourceRef{
-		Type: StrToPtr(MetricVariableType),
-		Uid:  StrToPtr(NameToVarDS(MetricVariableName)),
+		Type: new(MetricVariableType),
+		Uid:  new(NameToVarDS(MetricVariableName)),
 	}
 	LogsLokiDatasource = dashboard.DataSourceRef{
-		Type: StrToPtr(LogsVariableTypeLoki),
-		Uid:  StrToPtr(NameToVarDS(LogsVariableName)),
+		Type: new(LogsVariableTypeLoki),
+		Uid:  new(NameToVarDS(LogsVariableName)),
 	}
 	LogsVictoriaLogsDatasource = dashboard.DataSourceRef{
-		Type: StrToPtr(LogsVariableTypeVictoriaLogs),
-		Uid:  StrToPtr(NameToVarDS(LogsVariableName)),
+		Type: new(LogsVariableTypeVictoriaLogs),
+		Uid:  new(NameToVarDS(LogsVariableName)),
 	}
 	DeltaVariableValues = []string{"1m", "5m", "10m", "30m", "1h", "4h", "8h", "1d", "7d"}
 	GreenSteps          = []dashboard.Threshold{

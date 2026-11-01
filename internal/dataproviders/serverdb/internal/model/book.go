@@ -10,7 +10,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
-var BookTable = Book{baseTable: baseTable{name: "books"}}
+var BookTable = Book{name: "books"}
 
 type Book struct {
 	baseTable

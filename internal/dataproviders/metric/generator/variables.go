@@ -40,7 +40,7 @@ func (g Generator) WithVariables(builder *dashboard.DashboardBuilder) *dashboard
 			Datasource(generatorcore.MetricDatasource).
 			Multi(true).
 			Current(dashboard.VariableOption{
-				Selected: generatorcore.BoolToPtr(true),
+				Selected: new(true),
 				Text: dashboard.StringOrArrayOfString{
 					ArrayOfString: g.services,
 				},
@@ -55,12 +55,12 @@ func (g Generator) WithVariables(builder *dashboard.DashboardBuilder) *dashboard
 			NewIntervalVariableBuilder(generatorcore.DeltaVariableName).
 			Values(generatorcore.ValuesFromArray(generatorcore.DeltaVariableValues)).
 			Current(dashboard.VariableOption{
-				Selected: generatorcore.BoolToPtr(true),
+				Selected: new(true),
 				Text: dashboard.StringOrArrayOfString{
-					String: generatorcore.StrToPtr(generatorcore.DeltaVariableCurrent),
+					String: new(generatorcore.DeltaVariableCurrent),
 				},
 				Value: dashboard.StringOrArrayOfString{
-					String: generatorcore.StrToPtr(generatorcore.DeltaVariableCurrent),
+					String: new(generatorcore.DeltaVariableCurrent),
 				},
 			}).
 			Auto(true),

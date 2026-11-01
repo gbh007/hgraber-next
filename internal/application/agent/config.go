@@ -15,6 +15,7 @@ import (
 func parseConfig() (agnconfig.AgentConfig, bool, error) {
 	configPath := flag.String("config", "config.toml", "path to config")
 	scan := flag.Bool("scan", false, "scan zip file to register in db")
+
 	flag.Parse()
 
 	c, err := config.ImportConfig(*configPath, agnconfig.AgentDefaultConfigWrapped())

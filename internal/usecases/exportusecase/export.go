@@ -9,9 +9,9 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domian/archivemodel"
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
+	"github.com/gbh007/hgraber-next/internal/domain/archivemodel"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 

@@ -8,7 +8,7 @@ RUN --mount=type=cache,target="/build/node_modules" npm install
 COPY --exclude=frontend/dist --exclude=frontend/node_modules frontend/ ./
 RUN --mount=type=cache,target="/build/node_modules" npm run build
 
-FROM golang:1.26.5 AS go-builder
+FROM golang:1.27.1 AS go-builder
 
 # TODO: подумать над включением
 # RUN useradd -u 1000 nonroot

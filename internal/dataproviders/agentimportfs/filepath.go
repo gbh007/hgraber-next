@@ -41,7 +41,7 @@ func (s *Storage) limitPathPrefix() (string, error) {
 	basePrefix := time.Now().Format("2006-01-02") + "-p"
 
 	// TODO: вынести ограничение итераций в конфигурацию
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		prefix := basePrefix + strconv.Itoa(i)
 
 		c, err := s.limitFromFolder(path.Join(s.fsPath, prefix))
@@ -54,7 +54,7 @@ func (s *Storage) limitPathPrefix() (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("empty folder not found")
+	return "", errors.New("empty folder not found")
 }
 
 func (s *Storage) limitFromFolder(dirPath string) (int, error) {

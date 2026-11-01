@@ -210,6 +210,7 @@ func ConvertFSDBFilesInfoToAPI(raw *core.SizeWithCount) serverapi.OptFSDBFilesIn
 		return serverapi.OptFSDBFilesInfo{}
 	}
 
+	//nolint:staticcheck // поля используются в API
 	return serverapi.NewOptFSDBFilesInfo(serverapi.FSDBFilesInfo{
 		Count:         raw.Count,
 		Size:          raw.Size,

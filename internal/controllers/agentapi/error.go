@@ -32,9 +32,7 @@ func (c *Controller) NewError(ctx context.Context, err error) *agentapi.ErrorRes
 		}
 	}
 
-	var ae apiError
-
-	if errors.As(err, &ae) {
+	if ae, ok := errors.AsType[apiError](err); ok {
 		return &agentapi.ErrorResponseStatusCode{
 			StatusCode: ae.Code,
 			Response: agentapi.ErrorResponse{
@@ -59,7 +57,7 @@ func (c *Controller) NewError(ctx context.Context, err error) *agentapi.ErrorRes
 	case errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied):
 		httpCode = http.StatusUnauthorized
 		errorCode = "unauthorized"
-	case errors.Is(err, errorAccessForbidden):
+	case errors.Is(err, errAccessForbidden):
 		httpCode = http.StatusForbidden
 		errorCode = "forbidden"
 	case errors.Is(err, errPanicDetected):

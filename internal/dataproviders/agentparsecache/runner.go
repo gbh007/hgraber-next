@@ -78,7 +78,6 @@ func (c *Cache) Start(parentCtx context.Context) (chan struct{}, error) {
 
 					c.metricProvider.IncWebCacheCounter("expire")
 				}
-
 			}
 		}
 	}()

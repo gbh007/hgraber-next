@@ -24,6 +24,7 @@ func (c *MassloadController) APIMassloadInfoGetPost(
 	return &resp, nil
 }
 
+//nolint:staticcheck // поля используются в API
 func convertMassloadInfo(ml massloadmodel.Massload) serverapi.MassloadInfo {
 	return serverapi.MassloadInfo{
 		ID:          ml.ID,

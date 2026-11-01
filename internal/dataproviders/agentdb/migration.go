@@ -16,11 +16,11 @@ type slogGooseAdapter struct {
 	logger *slog.Logger
 }
 
-func (a slogGooseAdapter) Fatalf(format string, v ...interface{}) {
+func (a slogGooseAdapter) Fatalf(format string, v ...any) {
 	a.logger.Error(fmt.Sprintf(format, v...))
 }
 
-func (a slogGooseAdapter) Printf(format string, v ...interface{}) {
+func (a slogGooseAdapter) Printf(format string, v ...any) {
 	a.logger.Info(fmt.Sprintf(format, v...))
 }
 

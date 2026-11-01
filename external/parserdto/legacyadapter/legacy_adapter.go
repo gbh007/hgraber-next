@@ -62,6 +62,7 @@ func Convert(ctx context.Context, u url.URL, la legacyParser) (parserdto.Book, e
 	}
 
 	details.PageCount = len(pages)
+
 	details.Pages, err = lo.MapErr(pages, func(p Page, _ int) (parserdto.Page, error) {
 		u, err := url.Parse(p.URL)
 		if err != nil {
@@ -81,12 +82,12 @@ func Convert(ctx context.Context, u url.URL, la legacyParser) (parserdto.Book, e
 	for _, attrCode := range core.AllAttributes {
 		values, err := ParseBookAttr(ctx, la, attrCode)
 		if err != nil {
-			return parserdto.Book{}, fmt.Errorf("%s: %w", string(attrCode), err)
+			return parserdto.Book{}, fmt.Errorf("%s: %w", attrCode, err)
 		}
 
 		if len(values) > 0 {
 			details.Attributes = append(details.Attributes, parserdto.Attribute{
-				Code: string(attrCode),
+				Code: attrCode,
 				Values: lo.Map(values, func(v string, _ int) parserdto.AttributeValue {
 					return parserdto.AttributeValue{
 						Value: v,

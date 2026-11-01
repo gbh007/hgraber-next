@@ -23,6 +23,7 @@ func (c *FSHandlersController) APIFsListPost(
 		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
+	//nolint:staticcheck // поля используются в API
 	return &serverapi.APIFsListPostOK{
 		FileSystems: pkg.Map(storages, func(raw fsmodel.FSWithStatus) serverapi.APIFsListPostOKFileSystemsItem {
 			return serverapi.APIFsListPostOKFileSystemsItem{

@@ -37,12 +37,12 @@ func (l *Loader) getParser(u url.URL) (parserdto.Parser, error) {
 		}
 	}
 
-	return nil, parserdto.InvalidLinkError
+	return nil, parserdto.ErrInvalidLink
 }
 
 func (l *Loader) HasParser(ctx context.Context, u url.URL) (bool, error) {
 	_, err := l.getParser(u)
-	if errors.Is(err, parserdto.InvalidLinkError) {
+	if errors.Is(err, parserdto.ErrInvalidLink) {
 		return false, nil
 	}
 
@@ -73,7 +73,7 @@ func (l *Loader) Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto
 	return bookParser, nil
 }
 
-func (l *Loader) Image(ctx context.Context, u url.URL, bookUrl url.URL) (io.ReadCloser, error) {
+func (l *Loader) Image(ctx context.Context, u, bookUrl url.URL) (io.ReadCloser, error) {
 	startAt := time.Now()
 
 	p, err := l.getParser(bookUrl)

@@ -19,6 +19,7 @@ func (c *DeduplicateHandlersController) APIDeduplicateComparePost(
 		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
+	//nolint:staticcheck // поля используются в API
 	return &serverapi.APIDeduplicateComparePostOK{
 		Origin: c.apiCore.ConvertSimpleBook(ctx, data.OriginBook, data.OriginPreviewPage),
 		Target: c.apiCore.ConvertSimpleBook(ctx, data.TargetBook, data.TargetPreviewPage),

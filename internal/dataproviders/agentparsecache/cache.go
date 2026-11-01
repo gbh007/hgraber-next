@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"log/slog"
 	"os"
 	"path"
@@ -89,7 +88,7 @@ func createDir(dirPath string) error {
 	}
 
 	if info != nil && !info.IsDir() {
-		return fmt.Errorf("dir path is not dir")
+		return errors.New("dir path is not dir")
 	}
 
 	err = os.MkdirAll(dirPath, os.ModeDir|os.ModePerm)

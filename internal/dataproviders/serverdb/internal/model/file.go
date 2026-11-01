@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
-var FileTable = File{baseTable: baseTable{name: "files"}}
+var FileTable = File{name: "files"}
 
 type File struct {
 	baseTable

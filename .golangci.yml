@@ -2,25 +2,18 @@ version: "2"
 
 run:
   timeout: "5m"
-  go: "1.25"
+  go: "1.27"
 
 formatters:
   settings:
     gofumpt:
-      extra-rules: true
-    gci:
-      no-inline-comments: false
-      no-prefix-comments: false
-      custom-order: true
-      no-lex-order: false
-      sections:
-        - standard
-        - default
-        - localmodule
+      extra:
+        group-params: true
+        clothe-returns: false
+        balance-calls: true
   enable:
     - gofumpt
     - goimports
-    - gci
 
 linters:
   default: none
@@ -28,19 +21,20 @@ linters:
   exclusions:
     warn-unused: true
     generated: strict
-    paths:
-      - .hidden
     rules:
       - linters:
           - err113
         text: do not define dynamic errors
+      - linters:
+          - govet
+        text: 'shadow: declaration of "err" shadows declaration'
 
   settings:
     copyloopvar:
       check-alias: true
     errcheck:
       check-type-assertions: true
-      check-blank: false
+      check-blank: true
       disable-default-exclusions: false
       verbose: false
     gocritic:
@@ -150,56 +144,28 @@ linters:
           bodyWidth: 5
         tooManyResultsChecker:
           maxResults: 4
+    # godox:
+    #   keywords:
+    #     - FIXME
+    #     - BUG
     govet:
-      disable-all: true
+      enable-all: true
+      disable:
+        - fieldalignment
+    iface:
       enable:
-        - appends
-        - asmdecl
-        - assign
-        - atomic
-        - atomicalign
-        - bools
-        - buildtag
-        - cgocall
-        - composites
-        - copylocks
-        - deepequalerrors
-        - defers
-        - directive
-        - errorsas
-        - findcall
-        - framepointer
-        - hostport
-        - httpmux
-        - httpresponse
-        - ifaceassert
-        - loopclosure
-        - lostcancel
-        - nilfunc
-        - nilness
-        - printf
-        - reflectvaluecompare
-        - shift
-        - sigchanyzer
-        - slog
-        - sortslice
-        - stdmethods
-        - stdversion
-        - stringintconv
-        - structtag
-        - testinggoroutine
-        - tests
-        - timeformat
-        - unmarshal
-        - unreachable
-        - unsafeptr
-        - unusedresult
-        - unusedwrite
-        - waitgroup
+        - identical
+        - unused
+        - opaque
+        - unusedmethod
     revive:
       enable-all-rules: false
       rules:
+        - name: argument-limit
+          arguments:
+            - 15
         - name: atomic
+        - name: bare-return
         - name: blank-imports
         - name: bool-literal-in-expr
         - name: comment-spacings
@@ -213,6 +179,7 @@ linters:
             - allow-types-before: "*testing.T"
         - name: context-keys-type
         - name: datarace
+        - name: deep-exit
         - name: defer
         - name: dot-imports
         - name: duplicated-imports
@@ -232,6 +199,7 @@ linters:
         - name: identical-branches
         - name: identical-ifelseif-branches
         - name: identical-ifelseif-conditions
+        # - name: identical-switch-branches
         - name: identical-switch-conditions
         - name: if-return
         - name: import-alias-naming
@@ -249,11 +217,11 @@ linters:
         - name: redundant-build-tag
         - name: redundant-import-alias
         - name: redundant-test-main-exit
-        - name: string-format
-          arguments:
-            - - "fmt.Errorf[0]"
-              - "/^((.+: )+%\\w)|(%\\w(: .+)+)$/"
-              - "need use format"
+        # - name: string-format
+        #   arguments:
+        #     - - "fmt.Errorf[0]"
+        #       - "/^((.+: )+%w)|(%w(: .+)+)$/"
+        #       - 'need use format "some text: %w"'
         - name: string-of-int
         - name: superfluous-else
         - name: time-date
@@ -270,26 +238,12 @@ linters:
         - name: unreachable-code
         - name: use-any
         - name: use-errors-new
-        # FIXME: включить правило как появится в golangcilint
-        # - name: use-slices-sort
+        - name: use-slices-sort
         - name: use-waitgroup-go
         - name: useless-break
         - name: useless-fallthrough
         - name: var-declaration
         - name: waitgroup-by-value
-    sloglint:
-      kv-only: false
-      no-mixed-args: true
-      attr-only: true
-      no-global: all
-      context: scope
-      static-msg: true
-      msg-style: lowercased
-      no-raw-keys: false
-      key-naming-case: snake
-      args-on-sep-lines: false
-      forbidden-keys:
-        - err
     testifylint:
       enable-all: true
     usetesting:
@@ -307,11 +261,11 @@ linters:
     - bidichk
     - bodyclose
     - containedctx
-    - contextcheck
+    # - contextcheck
     - copyloopvar
     - embeddedstructfieldcheck
     - err113
-    - errcheck
+    # - errcheck
     - errname
     - errorlint
     - exhaustive
@@ -320,8 +274,9 @@ linters:
     - forcetypeassert
     - gocheckcompilerdirectives
     - gocritic
+    # - godox
     - govet
-    - iface
+    # - iface
     - ineffassign
     - intrange
     - iotamixing
@@ -333,20 +288,20 @@ linters:
     - nilnil
     - nlreturn
     - noctx
-    - nolintlint
     - perfsprint
+    - prealloc
     - predeclared
     - promlinter
     - reassign
     - revive
     - rowserrcheck
-    - sloglint
     - spancheck
     - sqlclosecheck
     - staticcheck
     - testifylint
     - unconvert
     - unparam
+    - unqueryvet
     - unused
     - usestdlibvars
     - usetesting

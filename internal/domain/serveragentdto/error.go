@@ -13,11 +13,11 @@ var (
 )
 
 var (
-	MasterAPIOffline         = errors.New("master: offline")
-	MasterAPIUnauthorized    = errors.New("master: unauthorized")
-	MasterAPIForbidden       = errors.New("master: forbidden")
-	MasterAPIBadRequest      = errors.New("master: bad request")
-	MasterAPIInternalError   = errors.New("master: internal error")
-	MasterAPIConflict        = errors.New("master: conflict")
-	MasterAPIUnknownResponse = errors.New("master: unknown response")
+	ErrMasterAPIOffline         = errors.New("master: offline")
+	ErrMasterAPIUnauthorized    = errors.New("master: unauthorized")
+	ErrMasterAPIForbidden       = errors.New("master: forbidden")
+	ErrMasterAPIBadRequest      = errors.New("master: bad request")
+	ErrMasterAPIInternalError   = errors.New("master: internal error")
+	ErrMasterAPIConflict        = errors.New("master: conflict")
+	ErrMasterAPIUnknownResponse = errors.New("master: unknown response")
 )

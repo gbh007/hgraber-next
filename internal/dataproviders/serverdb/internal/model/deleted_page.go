@@ -10,7 +10,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
-var DeletedPageTable = DeletedPage{baseTable: baseTable{name: "deleted_pages"}}
+var DeletedPageTable = DeletedPage{name: "deleted_pages"}
 
 type DeletedPage struct {
 	baseTable

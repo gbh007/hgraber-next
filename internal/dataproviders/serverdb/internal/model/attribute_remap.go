@@ -9,7 +9,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
-var AttributeRemapTable = AttributeRemap{baseTable: baseTable{name: "attribute_remaps"}}
+var AttributeRemapTable = AttributeRemap{name: "attribute_remaps"}
 
 type AttributeRemap struct {
 	baseTable

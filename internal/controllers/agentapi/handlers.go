@@ -100,7 +100,7 @@ func (c *Controller) methodErrorHandler(ctx context.Context, w http.ResponseWrit
 	case errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied):
 		httpCode = http.StatusUnauthorized
 		errorCode = "unauthorized"
-	case errors.Is(err, errorAccessForbidden):
+	case errors.Is(err, errAccessForbidden):
 		httpCode = http.StatusForbidden
 		errorCode = "forbidden"
 	case errors.Is(err, errPanicDetected):

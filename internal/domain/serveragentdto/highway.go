@@ -5,6 +5,7 @@ import (
 	"crypto/md5"
 	"encoding/base64"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"slices"
 )
@@ -39,7 +40,6 @@ func NewSimpleHighwayTokenizer(privateToken string) (SimpleHighwayTokenizer, err
 
 		return nil
 	}()
-
 	if err != nil {
 		return tokenizer, err
 	}
@@ -78,7 +78,7 @@ func (tokenizer SimpleHighwayTokenizer) Validate(token string) (int64, error) {
 
 	found := bytes.HasPrefix(raw, tokenizer.algorithm)
 	if !found {
-		return 0, fmt.Errorf("invalid algorithm format")
+		return 0, errors.New("invalid algorithm format")
 	}
 
 	unix := int64(binary.LittleEndian.Uint64(raw[len(tokenizer.algorithm):]))
@@ -88,7 +88,7 @@ func (tokenizer SimpleHighwayTokenizer) Validate(token string) (int64, error) {
 
 	ok := slices.Equal(hash[:], raw[len(tokenizer.algorithm)+8:])
 	if !ok {
-		return 0, fmt.Errorf("invalid sign")
+		return 0, errors.New("invalid sign")
 	}
 
 	return unix, nil

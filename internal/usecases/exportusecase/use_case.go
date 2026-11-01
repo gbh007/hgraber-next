@@ -8,9 +8,9 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 )
 
 type fileStorage interface {
