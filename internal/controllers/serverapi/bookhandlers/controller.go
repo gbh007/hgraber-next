@@ -7,7 +7,6 @@ import (
 	"net/url"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
@@ -49,7 +48,6 @@ type DeduplicateUseCases interface {
 
 type BookHandlersController struct {
 	logger *slog.Logger
-	tracer trace.Tracer
 	debug  bool
 
 	apiCore *apiservercore.Controller
@@ -64,7 +62,6 @@ type BookHandlersController struct {
 
 func New(
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	parseUseCases ParseUseCases,
 	bookUseCases BookUseCases,
 	exportUseCases ExportUseCases,
@@ -76,7 +73,6 @@ func New(
 ) *BookHandlersController {
 	c := &BookHandlersController{
 		logger:              logger,
-		tracer:              tracer,
 		parseUseCases:       parseUseCases,
 		bookUseCases:        bookUseCases,
 		exportUseCases:      exportUseCases,

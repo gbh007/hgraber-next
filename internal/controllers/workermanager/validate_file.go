@@ -5,7 +5,6 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/pkg"
@@ -19,7 +18,6 @@ type validateFileUnitUseCases interface {
 func NewFileValidator(
 	useCases validateFileUnitUseCases,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
 ) *worker.Worker[uuid.UUID] {
@@ -40,7 +38,6 @@ func NewFileValidator(
 		func(_ context.Context) ([]uuid.UUID, error) {
 			return useCases.FileIDsToValidate(), nil
 		},
-		tracer,
 		metricProvider,
 	)
 }

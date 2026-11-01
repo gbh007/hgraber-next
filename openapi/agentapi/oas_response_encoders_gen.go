@@ -11,28 +11,23 @@ import (
 	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/uri"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/trace"
 )
 
-func encodeAPIV2FsArchivePostResponse(response *APIV2FsArchivePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2FsArchivePostResponse(response *APIV2FsArchivePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIV2FsFileIDDeleteResponse(response *APIV2FsFileIDDeleteNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2FsFileIDDeleteResponse(response *APIV2FsFileIDDeleteNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIV2FsFileIDGetResponse(response APIV2FsFileIDGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2FsFileIDGetResponse(response APIV2FsFileIDGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	writer := w
 	if closer, ok := response.Data.(io.Closer); ok {
@@ -45,17 +40,15 @@ func encodeAPIV2FsFileIDGetResponse(response APIV2FsFileIDGetOK, w http.Response
 	return nil
 }
 
-func encodeAPIV2FsFileIDPostResponse(response *APIV2FsFileIDPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2FsFileIDPostResponse(response *APIV2FsFileIDPostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIV2FsGetResponse(response *APIV2FsGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2FsGetResponse(response *APIV2FsGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -66,7 +59,7 @@ func encodeAPIV2FsGetResponse(response *APIV2FsGetOK, w http.ResponseWriter, spa
 	return nil
 }
 
-func encodeAPIV2HighwayFileIDExtGetResponse(response *APIV2HighwayFileIDExtGetOKHeaders, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2HighwayFileIDExtGetResponse(response *APIV2HighwayFileIDExtGetOKHeaders, w http.ResponseWriter) error {
 	// Encoding response headers.
 	{
 		h := uri.NewHeaderEncoder(w.Header())
@@ -84,7 +77,6 @@ func encodeAPIV2HighwayFileIDExtGetResponse(response *APIV2HighwayFileIDExtGetOK
 		}
 	}
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	writer := w
 	if closer, ok := response.Response.Data.(io.Closer); ok {
@@ -97,10 +89,9 @@ func encodeAPIV2HighwayFileIDExtGetResponse(response *APIV2HighwayFileIDExtGetOK
 	return nil
 }
 
-func encodeAPIV2HighwayTokenPostResponse(response *APIV2HighwayTokenPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2HighwayTokenPostResponse(response *APIV2HighwayTokenPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -111,10 +102,9 @@ func encodeAPIV2HighwayTokenPostResponse(response *APIV2HighwayTokenPostOK, w ht
 	return nil
 }
 
-func encodeAPIV2ParsingBookPostResponse(response *BookDetails, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2ParsingBookPostResponse(response *BookDetails, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -125,10 +115,9 @@ func encodeAPIV2ParsingBookPostResponse(response *BookDetails, w http.ResponseWr
 	return nil
 }
 
-func encodeAPIV2ParsingCheckPostResponse(response *BooksCheckResult, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2ParsingCheckPostResponse(response *BooksCheckResult, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -139,10 +128,9 @@ func encodeAPIV2ParsingCheckPostResponse(response *BooksCheckResult, w http.Resp
 	return nil
 }
 
-func encodeAPIV2ParsingListPostResponse(response *APIV2ParsingListPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2ParsingListPostResponse(response *APIV2ParsingListPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -153,10 +141,9 @@ func encodeAPIV2ParsingListPostResponse(response *APIV2ParsingListPostOK, w http
 	return nil
 }
 
-func encodeAPIV2ParsingPagePostResponse(response APIV2ParsingPagePostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2ParsingPagePostResponse(response APIV2ParsingPagePostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	writer := w
 	if closer, ok := response.Data.(io.Closer); ok {
@@ -169,10 +156,9 @@ func encodeAPIV2ParsingPagePostResponse(response APIV2ParsingPagePostOK, w http.
 	return nil
 }
 
-func encodeAPIV2StatusGetResponse(response *APIV2StatusGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2StatusGetResponse(response *APIV2StatusGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -183,7 +169,7 @@ func encodeAPIV2StatusGetResponse(response *APIV2StatusGetOK, w http.ResponseWri
 	return nil
 }
 
-func encodeErrorResponse(response *ErrorResponseStatusCode, w http.ResponseWriter, span trace.Span) error {
+func encodeErrorResponse(response *ErrorResponseStatusCode, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	code := response.StatusCode
 	if code == 0 {
@@ -191,11 +177,6 @@ func encodeErrorResponse(response *ErrorResponseStatusCode, w http.ResponseWrite
 		code = http.StatusOK
 	}
 	w.WriteHeader(code)
-	if st := http.StatusText(code); code >= http.StatusBadRequest {
-		span.SetStatus(codes.Error, st)
-	} else {
-		span.SetStatus(codes.Ok, st)
-	}
 
 	e := new(jx.Encoder)
 	response.Response.Encode(e)

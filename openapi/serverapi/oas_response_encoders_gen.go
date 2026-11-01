@@ -11,21 +11,17 @@ import (
 	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/uri"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/trace"
 )
 
-func encodeAPIAgentDeletePostResponse(response *APIAgentDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAgentDeletePostResponse(response *APIAgentDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIAgentGetPostResponse(response *Agent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAgentGetPostResponse(response *Agent, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -36,10 +32,9 @@ func encodeAPIAgentGetPostResponse(response *Agent, w http.ResponseWriter, span 
 	return nil
 }
 
-func encodeAPIAgentListPostResponse(response []APIAgentListPostOKItem, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAgentListPostResponse(response []APIAgentListPostOKItem, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	e.ArrStart()
@@ -54,45 +49,39 @@ func encodeAPIAgentListPostResponse(response []APIAgentListPostOKItem, w http.Re
 	return nil
 }
 
-func encodeAPIAgentNewPostResponse(response *APIAgentNewPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAgentNewPostResponse(response *APIAgentNewPostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIAgentTaskExportPostResponse(response *APIAgentTaskExportPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAgentTaskExportPostResponse(response *APIAgentTaskExportPostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIAgentUpdatePostResponse(response *APIAgentUpdatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAgentUpdatePostResponse(response *APIAgentUpdatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIAttributeColorCreatePostResponse(response *APIAttributeColorCreatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeColorCreatePostResponse(response *APIAttributeColorCreatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIAttributeColorDeletePostResponse(response *APIAttributeColorDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeColorDeletePostResponse(response *APIAttributeColorDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIAttributeColorGetPostResponse(response *AttributeColor, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeColorGetPostResponse(response *AttributeColor, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -103,10 +92,9 @@ func encodeAPIAttributeColorGetPostResponse(response *AttributeColor, w http.Res
 	return nil
 }
 
-func encodeAPIAttributeColorListGetResponse(response *APIAttributeColorListGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeColorListGetResponse(response *APIAttributeColorListGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -117,17 +105,15 @@ func encodeAPIAttributeColorListGetResponse(response *APIAttributeColorListGetOK
 	return nil
 }
 
-func encodeAPIAttributeColorUpdatePostResponse(response *APIAttributeColorUpdatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeColorUpdatePostResponse(response *APIAttributeColorUpdatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIAttributeCountGetResponse(response *APIAttributeCountGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeCountGetResponse(response *APIAttributeCountGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -138,10 +124,9 @@ func encodeAPIAttributeCountGetResponse(response *APIAttributeCountGetOK, w http
 	return nil
 }
 
-func encodeAPIAttributeOriginCountGetResponse(response *APIAttributeOriginCountGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeOriginCountGetResponse(response *APIAttributeOriginCountGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -152,24 +137,21 @@ func encodeAPIAttributeOriginCountGetResponse(response *APIAttributeOriginCountG
 	return nil
 }
 
-func encodeAPIAttributeRemapCreatePostResponse(response *APIAttributeRemapCreatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeRemapCreatePostResponse(response *APIAttributeRemapCreatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIAttributeRemapDeletePostResponse(response *APIAttributeRemapDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeRemapDeletePostResponse(response *APIAttributeRemapDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIAttributeRemapGetPostResponse(response *AttributeRemap, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeRemapGetPostResponse(response *AttributeRemap, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -180,10 +162,9 @@ func encodeAPIAttributeRemapGetPostResponse(response *AttributeRemap, w http.Res
 	return nil
 }
 
-func encodeAPIAttributeRemapListGetResponse(response *APIAttributeRemapListGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeRemapListGetResponse(response *APIAttributeRemapListGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -194,14 +175,13 @@ func encodeAPIAttributeRemapListGetResponse(response *APIAttributeRemapListGetOK
 	return nil
 }
 
-func encodeAPIAttributeRemapUpdatePostResponse(response *APIAttributeRemapUpdatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIAttributeRemapUpdatePostResponse(response *APIAttributeRemapUpdatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIBookArchiveIDGetResponse(response *APIBookArchiveIDGetOKHeaders, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookArchiveIDGetResponse(response *APIBookArchiveIDGetOKHeaders, w http.ResponseWriter) error {
 	w.Header().Set("Access-Control-Expose-Headers", "Content-Disposition")
 	// Encoding response headers.
 	{
@@ -235,7 +215,6 @@ func encodeAPIBookArchiveIDGetResponse(response *APIBookArchiveIDGetOKHeaders, w
 		}
 	}
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	writer := w
 	if closer, ok := response.Response.Data.(io.Closer); ok {
@@ -248,17 +227,15 @@ func encodeAPIBookArchiveIDGetResponse(response *APIBookArchiveIDGetOKHeaders, w
 	return nil
 }
 
-func encodeAPIBookDeletePostResponse(response *APIBookDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookDeletePostResponse(response *APIBookDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIBookDetailsPostResponse(response *APIBookDetailsPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookDetailsPostResponse(response *APIBookDetailsPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -269,10 +246,9 @@ func encodeAPIBookDetailsPostResponse(response *APIBookDetailsPostOK, w http.Res
 	return nil
 }
 
-func encodeAPIBookListPostResponse(response *APIBookListPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookListPostResponse(response *APIBookListPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -283,10 +259,9 @@ func encodeAPIBookListPostResponse(response *APIBookListPostOK, w http.ResponseW
 	return nil
 }
 
-func encodeAPIBookPageBodyPostResponse(response APIBookPageBodyPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookPageBodyPostResponse(response APIBookPageBodyPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	writer := w
 	if closer, ok := response.Data.(io.Closer); ok {
@@ -299,17 +274,15 @@ func encodeAPIBookPageBodyPostResponse(response APIBookPageBodyPostOK, w http.Re
 	return nil
 }
 
-func encodeAPIBookPageDeletePostResponse(response *APIBookPageDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookPageDeletePostResponse(response *APIBookPageDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIBookRawPostResponse(response *BookRaw, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookRawPostResponse(response *BookRaw, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -320,10 +293,9 @@ func encodeAPIBookRawPostResponse(response *BookRaw, w http.ResponseWriter, span
 	return nil
 }
 
-func encodeAPIBookRebuildPostResponse(response *APIBookRebuildPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookRebuildPostResponse(response *APIBookRebuildPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -334,31 +306,27 @@ func encodeAPIBookRebuildPostResponse(response *APIBookRebuildPostOK, w http.Res
 	return nil
 }
 
-func encodeAPIBookRestorePostResponse(response *APIBookRestorePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookRestorePostResponse(response *APIBookRestorePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIBookStatusSetPostResponse(response *APIBookStatusSetPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookStatusSetPostResponse(response *APIBookStatusSetPostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIBookUpdatePostResponse(response *APIBookUpdatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIBookUpdatePostResponse(response *APIBookUpdatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIDeduplicateArchivePostResponse(response []APIDeduplicateArchivePostOKItem, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIDeduplicateArchivePostResponse(response []APIDeduplicateArchivePostOKItem, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	e.ArrStart()
@@ -373,10 +341,9 @@ func encodeAPIDeduplicateArchivePostResponse(response []APIDeduplicateArchivePos
 	return nil
 }
 
-func encodeAPIDeduplicateBookByPageBodyPostResponse(response *APIDeduplicateBookByPageBodyPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIDeduplicateBookByPageBodyPostResponse(response *APIDeduplicateBookByPageBodyPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -387,10 +354,9 @@ func encodeAPIDeduplicateBookByPageBodyPostResponse(response *APIDeduplicateBook
 	return nil
 }
 
-func encodeAPIDeduplicateBooksByPagePostResponse(response *APIDeduplicateBooksByPagePostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIDeduplicateBooksByPagePostResponse(response *APIDeduplicateBooksByPagePostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -401,10 +367,9 @@ func encodeAPIDeduplicateBooksByPagePostResponse(response *APIDeduplicateBooksBy
 	return nil
 }
 
-func encodeAPIDeduplicateComparePostResponse(response *APIDeduplicateComparePostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIDeduplicateComparePostResponse(response *APIDeduplicateComparePostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -415,17 +380,15 @@ func encodeAPIDeduplicateComparePostResponse(response *APIDeduplicateComparePost
 	return nil
 }
 
-func encodeAPIDeduplicateDeadHashSetPostResponse(response *APIDeduplicateDeadHashSetPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIDeduplicateDeadHashSetPostResponse(response *APIDeduplicateDeadHashSetPostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIDeduplicateUniquePagesPostResponse(response *APIDeduplicateUniquePagesPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIDeduplicateUniquePagesPostResponse(response *APIDeduplicateUniquePagesPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -436,7 +399,7 @@ func encodeAPIDeduplicateUniquePagesPostResponse(response *APIDeduplicateUniqueP
 	return nil
 }
 
-func encodeAPIFileIDGetResponse(response *APIFileIDGetOKHeaders, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIFileIDGetResponse(response *APIFileIDGetOKHeaders, w http.ResponseWriter) error {
 	// Encoding response headers.
 	{
 		h := uri.NewHeaderEncoder(w.Header())
@@ -454,7 +417,6 @@ func encodeAPIFileIDGetResponse(response *APIFileIDGetOKHeaders, w http.Response
 		}
 	}
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	writer := w
 	if closer, ok := response.Response.Data.(io.Closer); ok {
@@ -467,10 +429,9 @@ func encodeAPIFileIDGetResponse(response *APIFileIDGetOKHeaders, w http.Response
 	return nil
 }
 
-func encodeAPIFsCreatePostResponse(response *APIFsCreatePostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIFsCreatePostResponse(response *APIFsCreatePostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -481,17 +442,15 @@ func encodeAPIFsCreatePostResponse(response *APIFsCreatePostOK, w http.ResponseW
 	return nil
 }
 
-func encodeAPIFsDeletePostResponse(response *APIFsDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIFsDeletePostResponse(response *APIFsDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIFsGetPostResponse(response *FileSystemInfo, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIFsGetPostResponse(response *FileSystemInfo, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -502,10 +461,9 @@ func encodeAPIFsGetPostResponse(response *FileSystemInfo, w http.ResponseWriter,
 	return nil
 }
 
-func encodeAPIFsListPostResponse(response *APIFsListPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIFsListPostResponse(response *APIFsListPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -516,45 +474,39 @@ func encodeAPIFsListPostResponse(response *APIFsListPostOK, w http.ResponseWrite
 	return nil
 }
 
-func encodeAPIFsRemoveMismatchPostResponse(response *APIFsRemoveMismatchPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIFsRemoveMismatchPostResponse(response *APIFsRemoveMismatchPostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIFsTransferBookPostResponse(response *APIFsTransferBookPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIFsTransferBookPostResponse(response *APIFsTransferBookPostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIFsTransferPostResponse(response *APIFsTransferPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIFsTransferPostResponse(response *APIFsTransferPostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIFsUpdatePostResponse(response *APIFsUpdatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIFsUpdatePostResponse(response *APIFsUpdatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIFsValidatePostResponse(response *APIFsValidatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIFsValidatePostResponse(response *APIFsValidatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIHproxyBookPostResponse(response *APIHproxyBookPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIHproxyBookPostResponse(response *APIHproxyBookPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -565,7 +517,7 @@ func encodeAPIHproxyBookPostResponse(response *APIHproxyBookPostOK, w http.Respo
 	return nil
 }
 
-func encodeAPIHproxyFileGetResponse(response *APIHproxyFileGetOKHeaders, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIHproxyFileGetResponse(response *APIHproxyFileGetOKHeaders, w http.ResponseWriter) error {
 	// Encoding response headers.
 	{
 		h := uri.NewHeaderEncoder(w.Header())
@@ -583,7 +535,6 @@ func encodeAPIHproxyFileGetResponse(response *APIHproxyFileGetOKHeaders, w http.
 		}
 	}
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	writer := w
 	if closer, ok := response.Response.Data.(io.Closer); ok {
@@ -596,10 +547,9 @@ func encodeAPIHproxyFileGetResponse(response *APIHproxyFileGetOKHeaders, w http.
 	return nil
 }
 
-func encodeAPIHproxyListPostResponse(response *APIHproxyListPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIHproxyListPostResponse(response *APIHproxyListPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -610,17 +560,15 @@ func encodeAPIHproxyListPostResponse(response *APIHproxyListPostOK, w http.Respo
 	return nil
 }
 
-func encodeAPILabelDeletePostResponse(response *APILabelDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPILabelDeletePostResponse(response *APILabelDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPILabelGetPostResponse(response *APILabelGetPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPILabelGetPostResponse(response *APILabelGetPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -631,24 +579,21 @@ func encodeAPILabelGetPostResponse(response *APILabelGetPostOK, w http.ResponseW
 	return nil
 }
 
-func encodeAPILabelPresetCreatePostResponse(response *APILabelPresetCreatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPILabelPresetCreatePostResponse(response *APILabelPresetCreatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPILabelPresetDeletePostResponse(response *APILabelPresetDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPILabelPresetDeletePostResponse(response *APILabelPresetDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPILabelPresetGetPostResponse(response *APILabelPresetGetPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPILabelPresetGetPostResponse(response *APILabelPresetGetPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -659,10 +604,9 @@ func encodeAPILabelPresetGetPostResponse(response *APILabelPresetGetPostOK, w ht
 	return nil
 }
 
-func encodeAPILabelPresetListGetResponse(response *APILabelPresetListGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPILabelPresetListGetResponse(response *APILabelPresetListGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -673,45 +617,39 @@ func encodeAPILabelPresetListGetResponse(response *APILabelPresetListGetOK, w ht
 	return nil
 }
 
-func encodeAPILabelPresetUpdatePostResponse(response *APILabelPresetUpdatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPILabelPresetUpdatePostResponse(response *APILabelPresetUpdatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPILabelSetPostResponse(response *APILabelSetPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPILabelSetPostResponse(response *APILabelSetPostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadCalculatePostResponse(response *APIMassloadCalculatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadCalculatePostResponse(response *APIMassloadCalculatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadFlagCreatePostResponse(response *APIMassloadFlagCreatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadFlagCreatePostResponse(response *APIMassloadFlagCreatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadFlagDeletePostResponse(response *APIMassloadFlagDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadFlagDeletePostResponse(response *APIMassloadFlagDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadFlagGetPostResponse(response *MassloadFlag, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadFlagGetPostResponse(response *MassloadFlag, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -722,10 +660,9 @@ func encodeAPIMassloadFlagGetPostResponse(response *MassloadFlag, w http.Respons
 	return nil
 }
 
-func encodeAPIMassloadFlagListGetResponse(response *APIMassloadFlagListGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadFlagListGetResponse(response *APIMassloadFlagListGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -736,31 +673,27 @@ func encodeAPIMassloadFlagListGetResponse(response *APIMassloadFlagListGetOK, w 
 	return nil
 }
 
-func encodeAPIMassloadFlagUpdatePostResponse(response *APIMassloadFlagUpdatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadFlagUpdatePostResponse(response *APIMassloadFlagUpdatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadInfoAttributeCreatePostResponse(response *APIMassloadInfoAttributeCreatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoAttributeCreatePostResponse(response *APIMassloadInfoAttributeCreatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadInfoAttributeDeletePostResponse(response *APIMassloadInfoAttributeDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoAttributeDeletePostResponse(response *APIMassloadInfoAttributeDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadInfoCreatePostResponse(response *APIMassloadInfoCreatePostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoCreatePostResponse(response *APIMassloadInfoCreatePostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -771,38 +704,33 @@ func encodeAPIMassloadInfoCreatePostResponse(response *APIMassloadInfoCreatePost
 	return nil
 }
 
-func encodeAPIMassloadInfoDeletePostResponse(response *APIMassloadInfoDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoDeletePostResponse(response *APIMassloadInfoDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadInfoExternalLinkCreatePostResponse(response *APIMassloadInfoExternalLinkCreatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoExternalLinkCreatePostResponse(response *APIMassloadInfoExternalLinkCreatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadInfoExternalLinkDeletePostResponse(response *APIMassloadInfoExternalLinkDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoExternalLinkDeletePostResponse(response *APIMassloadInfoExternalLinkDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadInfoExternalLinkUpdatePostResponse(response *APIMassloadInfoExternalLinkUpdatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoExternalLinkUpdatePostResponse(response *APIMassloadInfoExternalLinkUpdatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIMassloadInfoGetPostResponse(response *MassloadInfo, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoGetPostResponse(response *MassloadInfo, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -813,10 +741,9 @@ func encodeAPIMassloadInfoGetPostResponse(response *MassloadInfo, w http.Respons
 	return nil
 }
 
-func encodeAPIMassloadInfoListPostResponse(response *APIMassloadInfoListPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoListPostResponse(response *APIMassloadInfoListPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -827,17 +754,15 @@ func encodeAPIMassloadInfoListPostResponse(response *APIMassloadInfoListPostOK, 
 	return nil
 }
 
-func encodeAPIMassloadInfoUpdatePostResponse(response *APIMassloadInfoUpdatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIMassloadInfoUpdatePostResponse(response *APIMassloadInfoUpdatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIParsingHandlePostResponse(response *APIParsingHandlePostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIParsingHandlePostResponse(response *APIParsingHandlePostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -848,24 +773,21 @@ func encodeAPIParsingHandlePostResponse(response *APIParsingHandlePostOK, w http
 	return nil
 }
 
-func encodeAPIParsingMirrorCreatePostResponse(response *APIParsingMirrorCreatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIParsingMirrorCreatePostResponse(response *APIParsingMirrorCreatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIParsingMirrorDeletePostResponse(response *APIParsingMirrorDeletePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIParsingMirrorDeletePostResponse(response *APIParsingMirrorDeletePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIParsingMirrorGetPostResponse(response *APIParsingMirrorGetPostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIParsingMirrorGetPostResponse(response *APIParsingMirrorGetPostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -876,10 +798,9 @@ func encodeAPIParsingMirrorGetPostResponse(response *APIParsingMirrorGetPostOK, 
 	return nil
 }
 
-func encodeAPIParsingMirrorListGetResponse(response *APIParsingMirrorListGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIParsingMirrorListGetResponse(response *APIParsingMirrorListGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -890,17 +811,15 @@ func encodeAPIParsingMirrorListGetResponse(response *APIParsingMirrorListGetOK, 
 	return nil
 }
 
-func encodeAPIParsingMirrorUpdatePostResponse(response *APIParsingMirrorUpdatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIParsingMirrorUpdatePostResponse(response *APIParsingMirrorUpdatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPISystemImportArchivePostResponse(response *APISystemImportArchivePostOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPISystemImportArchivePostResponse(response *APISystemImportArchivePostOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -911,10 +830,9 @@ func encodeAPISystemImportArchivePostResponse(response *APISystemImportArchivePo
 	return nil
 }
 
-func encodeAPISystemInfoSizeGetResponse(response *APISystemInfoSizeGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPISystemInfoSizeGetResponse(response *APISystemInfoSizeGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -925,10 +843,9 @@ func encodeAPISystemInfoSizeGetResponse(response *APISystemInfoSizeGetOK, w http
 	return nil
 }
 
-func encodeAPISystemInfoWorkersGetResponse(response *APISystemInfoWorkersGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPISystemInfoWorkersGetResponse(response *APISystemInfoWorkersGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -939,17 +856,15 @@ func encodeAPISystemInfoWorkersGetResponse(response *APISystemInfoWorkersGetOK, 
 	return nil
 }
 
-func encodeAPISystemTaskCreatePostResponse(response *APISystemTaskCreatePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPISystemTaskCreatePostResponse(response *APISystemTaskCreatePostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPISystemTaskResultsGetResponse(response *APISystemTaskResultsGetOK, w http.ResponseWriter, span trace.Span) error {
+func encodeAPISystemTaskResultsGetResponse(response *APISystemTaskResultsGetOK, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -960,14 +875,13 @@ func encodeAPISystemTaskResultsGetResponse(response *APISystemTaskResultsGetOK, 
 	return nil
 }
 
-func encodeAPISystemWorkerConfigPostResponse(response *APISystemWorkerConfigPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPISystemWorkerConfigPostResponse(response *APISystemWorkerConfigPostNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeAPIUserLoginPostResponse(response *APIUserLoginPostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIUserLoginPostResponse(response *APIUserLoginPostNoContent, w http.ResponseWriter) error {
 	w.Header().Set("Access-Control-Expose-Headers", "Set-Cookie")
 	// Encoding response headers.
 	{
@@ -989,12 +903,11 @@ func encodeAPIUserLoginPostResponse(response *APIUserLoginPostNoContent, w http.
 		}
 	}
 	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeErrorResponse(response *ErrorResponseStatusCode, w http.ResponseWriter, span trace.Span) error {
+func encodeErrorResponse(response *ErrorResponseStatusCode, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	code := response.StatusCode
 	if code == 0 {
@@ -1002,11 +915,6 @@ func encodeErrorResponse(response *ErrorResponseStatusCode, w http.ResponseWrite
 		code = http.StatusOK
 	}
 	w.WriteHeader(code)
-	if st := http.StatusText(code); code >= http.StatusBadRequest {
-		span.SetStatus(codes.Error, st)
-	} else {
-		span.SetStatus(codes.Ok, st)
-	}
 
 	e := new(jx.Encoder)
 	response.Response.Encode(e)

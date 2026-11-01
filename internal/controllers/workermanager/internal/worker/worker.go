@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/gbh007/hgraber-next/internal/pkg"
-	"go.opentelemetry.io/otel/trace"
 )
 
 type workerTaskGetterFunc[T any] func(context.Context) ([]T, error)
@@ -35,7 +34,6 @@ type Worker[T any] struct {
 	getter  workerTaskGetterFunc[T]
 
 	logger         *slog.Logger
-	tracer         trace.Tracer
 	metricProvider metricProvider
 
 	unitsMutex sync.Mutex
@@ -49,7 +47,6 @@ func New[T any](
 	logger *slog.Logger,
 	handler workerHandlerFunc[T],
 	getter workerTaskGetterFunc[T],
-	tracer trace.Tracer,
 	metricProvider metricProvider,
 ) *Worker[T] {
 	w := &Worker[T]{
@@ -59,7 +56,6 @@ func New[T any](
 		getter:  getter,
 
 		logger:         logger,
-		tracer:         tracer,
 		metricProvider: metricProvider,
 	}
 
@@ -100,7 +96,6 @@ func (w *Worker[T]) SetRunnersCount(newUnitCount int) {
 					int32(i), //nolint:gosec // будет исправлено позднее
 					w.logger,
 					w.handler,
-					w.tracer,
 					w.metricProvider,
 					w.queue,
 					UnitCallback{
@@ -176,16 +171,8 @@ func (w *Worker[T]) fetch(ctx context.Context) {
 		}
 	}()
 
-	ctx, span := w.tracer.Start(
-		ctx, "worker-fetch/"+w.cfg.GetName(),
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-
-	defer span.End()
-
 	data, err := w.getter(ctx)
 	if err != nil {
-		span.RecordError(err)
 		w.logger.ErrorContext(
 			ctx, "worker fetch",
 			slog.String("worker_name", w.cfg.GetName()),

@@ -7,7 +7,6 @@ import (
 	"net/url"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
@@ -43,7 +42,6 @@ type SystemUseCases interface {
 
 type SystemHandlersController struct {
 	logger *slog.Logger
-	tracer trace.Tracer
 	debug  bool
 
 	apiCore *apiservercore.Controller
@@ -55,7 +53,6 @@ type SystemHandlersController struct {
 
 func New(
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	parseUseCases ParseUseCases,
 	exportUseCases ExportUseCases,
 	systemUseCases SystemUseCases,
@@ -64,7 +61,6 @@ func New(
 ) *SystemHandlersController {
 	c := &SystemHandlersController{
 		logger:         logger,
-		tracer:         tracer,
 		parseUseCases:  parseUseCases,
 		exportUseCases: exportUseCases,
 		systemUseCases: systemUseCases,

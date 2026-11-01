@@ -19,7 +19,7 @@ type FSAdapter struct {
 // TODO: возможно стоит вынести инициализацию HTTP клиента наружу
 func New(baseURL, token string, agentTimeout time.Duration) (*Adapter, error) {
 	httpClient := http.Client{
-		Transport: agentOfflineRoundTripper{next: otelPropagationRoundTripper{next: http.DefaultTransport}},
+		Transport: agentOfflineRoundTripper{next: http.DefaultTransport},
 		Timeout:   agentTimeout,
 	}
 

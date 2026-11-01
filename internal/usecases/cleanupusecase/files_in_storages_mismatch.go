@@ -4,10 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"time"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/internal/domain/systemmodel"
@@ -20,11 +18,7 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UU
 
 		taskResult.SetName("RemoveFilesInStoragesMismatch")
 
-		ctx, span := uc.tracer.Start(ctx, "RemoveFilesInStoragesMismatch")
-		defer span.End()
-
 		taskResult.StartStage("search file ids in fs")
-		span.AddEvent("search file ids in fs", trace.WithTimestamp(time.Now()))
 
 		fsState, err := uc.fileStorage.State(ctx, true, false, fsID)
 		if err != nil {
@@ -40,7 +34,6 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UU
 		taskResult.EndStage()
 
 		taskResult.StartStage("search file ids in storage")
-		span.AddEvent("search file ids in storage", trace.WithTimestamp(time.Now()))
 
 		storageIDs, err := uc.storage.FileIDsByFilter(ctx, fsmodel.FileFilter{FSID: &fsID})
 		if err != nil {
@@ -55,7 +48,6 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UU
 
 		taskResult.StartStage("transform ids")
 		taskResult.SetTotal(int64(len(storageIDs)*2 + len(fileIDs)*2))
-		span.AddEvent("transform ids", trace.WithTimestamp(time.Now()))
 
 		fileNotInDB := pkg.SliceToMap(fileIDs, func(id uuid.UUID) (uuid.UUID, struct{}) {
 			taskResult.IncProgress()
@@ -80,8 +72,6 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UU
 
 		taskResult.EndStage()
 
-		span.AddEvent("log ids", trace.WithTimestamp(time.Now()))
-
 		uc.logger.DebugContext(
 			ctx, "RemoveFilesInStoragesMismatch",
 			slog.Int("file_not_in_fs_count", len(fileNotInFS)),
@@ -92,7 +82,6 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UU
 
 		taskResult.StartStage("remove files from fs")
 		taskResult.SetTotal(int64(len(fileNotInDB)))
-		span.AddEvent("remove files from fs", trace.WithTimestamp(time.Now()))
 
 		for id := range fileNotInDB {
 			taskResult.IncProgress()
@@ -109,7 +98,6 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UU
 
 		taskResult.StartStage("remove files from storage")
 		taskResult.SetTotal(int64(len(fileNotInFS)))
-		span.AddEvent("remove files from storage", trace.WithTimestamp(time.Now()))
 
 		for id := range fileNotInFS {
 			taskResult.IncProgress()

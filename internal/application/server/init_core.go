@@ -6,8 +6,6 @@ import (
 	"log/slog"
 	"os"
 
-	"go.opentelemetry.io/otel"
-
 	"github.com/gbh007/hgraber-next/internal/controllers/async"
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
@@ -45,8 +43,6 @@ func (a *App) initCore(_ context.Context) error {
 	if err != nil {
 		return fmt.Errorf("fail init metrics: %w", err)
 	}
-
-	a.Tracer = otel.GetTracerProvider().Tracer("hgraber-next")
 
 	a.asyncController = async.New(a.Logger)
 

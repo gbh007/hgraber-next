@@ -5,7 +5,6 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
@@ -26,7 +25,6 @@ type ExportUseCases interface {
 
 type AgentHandlersController struct {
 	logger *slog.Logger
-	tracer trace.Tracer
 	debug  bool
 
 	apiCore *apiservercore.Controller
@@ -37,7 +35,6 @@ type AgentHandlersController struct {
 
 func New(
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	agentUseCases AgentUseCases,
 	exportUseCases ExportUseCases,
 	debug bool,
@@ -45,7 +42,6 @@ func New(
 ) *AgentHandlersController {
 	c := &AgentHandlersController{
 		logger:         logger,
-		tracer:         tracer,
 		agentUseCases:  agentUseCases,
 		exportUseCases: exportUseCases,
 		debug:          debug,

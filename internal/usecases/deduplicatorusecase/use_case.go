@@ -5,7 +5,6 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
@@ -39,7 +38,6 @@ type storage interface {
 
 type UseCase struct {
 	logger *slog.Logger
-	tracer trace.Tracer
 
 	storage storage
 }
@@ -47,11 +45,9 @@ type UseCase struct {
 func New(
 	logger *slog.Logger,
 	storage storage,
-	tracer trace.Tracer,
 ) *UseCase {
 	return &UseCase{
 		logger:  logger,
 		storage: storage,
-		tracer:  tracer,
 	}
 }

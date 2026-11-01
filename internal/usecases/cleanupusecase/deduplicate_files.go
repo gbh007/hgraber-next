@@ -5,10 +5,8 @@ import (
 	"fmt"
 	"log/slog"
 	"slices"
-	"time"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
@@ -39,11 +37,7 @@ func (uc *UseCase) deduplicateFiles(
 	ctx context.Context,
 	taskResult systemmodel.TaskResultWriter,
 ) (count int, size int64, err error) {
-	ctx, span := uc.tracer.Start(ctx, "DeduplicateFiles")
-	defer span.End()
-
 	taskResult.StartStage("get fs from db")
-	span.AddEvent("get fs from db", trace.WithTimestamp(time.Now()))
 
 	storages, err := uc.storage.FileStorages(ctx)
 	if err != nil {
@@ -57,7 +51,6 @@ func (uc *UseCase) deduplicateFiles(
 	})
 
 	taskResult.StartStage("get duplicates from storage")
-	span.AddEvent("get duplicates from storage", trace.WithTimestamp(time.Now()))
 
 	files, err := uc.storage.DuplicatedFiles(ctx)
 	if err != nil {
@@ -72,7 +65,6 @@ func (uc *UseCase) deduplicateFiles(
 
 	taskResult.StartStage("transform data")
 	taskResult.SetTotal(int64(len(files)))
-	span.AddEvent("transform data", trace.WithTimestamp(time.Now()))
 
 	fileMap := make(map[core.FileHash][]core.File)
 
@@ -88,7 +80,6 @@ func (uc *UseCase) deduplicateFiles(
 
 	taskResult.StartStage("handle duplicates")
 	taskResult.SetTotal(int64(len(fileMap)))
-	span.AddEvent("handle duplicates", trace.WithTimestamp(time.Now()))
 
 	for k, files := range fileMap {
 		taskResult.IncProgress()

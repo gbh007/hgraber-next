@@ -7,7 +7,6 @@ import (
 	"net/url"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
@@ -40,7 +39,6 @@ type FSUseCases interface {
 
 type FSHandlersController struct {
 	logger *slog.Logger
-	tracer trace.Tracer
 	debug  bool
 
 	apiCore *apiservercore.Controller
@@ -52,7 +50,6 @@ type FSHandlersController struct {
 
 func New(
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	parseUseCases ParseUseCases,
 	systemUseCases SystemUseCases,
 	fsUseCases FSUseCases,
@@ -61,7 +58,6 @@ func New(
 ) *FSHandlersController {
 	c := &FSHandlersController{
 		logger:         logger,
-		tracer:         tracer,
 		parseUseCases:  parseUseCases,
 		systemUseCases: systemUseCases,
 		fsUseCases:     fsUseCases,

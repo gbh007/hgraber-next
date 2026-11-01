@@ -4,8 +4,6 @@ import (
 	"context"
 	"log/slog"
 
-	"go.opentelemetry.io/otel/trace"
-
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/systemmodel"
 )
@@ -18,7 +16,6 @@ type taskerDataProvider interface {
 func NewTasker(
 	useCases taskerDataProvider,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
 ) *worker.Worker[systemmodel.RunnableTask] {
@@ -36,7 +33,6 @@ func NewTasker(
 		func(ctx context.Context) ([]systemmodel.RunnableTask, error) {
 			return useCases.GetTask(), nil
 		},
-		tracer,
 		metricProvider,
 	)
 }

@@ -4,9 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"time"
-
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/systemmodel"
@@ -34,11 +31,7 @@ func (uc *UseCase) removeDetachedFiles(
 	ctx context.Context,
 	taskResult systemmodel.TaskResultWriter,
 ) (count int, size int64, err error) {
-	ctx, span := uc.tracer.Start(ctx, "RemoveDetachedFiles")
-	defer span.End()
-
 	taskResult.StartStage("search detached files")
-	span.AddEvent("search detached files", trace.WithTimestamp(time.Now()))
 
 	files, err := uc.storage.DetachedFiles(ctx)
 	if err != nil {
@@ -53,7 +46,6 @@ func (uc *UseCase) removeDetachedFiles(
 
 	taskResult.StartStage("remove detached files")
 	taskResult.SetTotal(int64(len(files)))
-	span.AddEvent("remove detached files", trace.WithTimestamp(time.Now()))
 
 	for _, file := range files {
 		taskResult.IncProgress()

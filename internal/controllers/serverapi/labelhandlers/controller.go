@@ -5,7 +5,6 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
@@ -24,7 +23,6 @@ type LabelUseCases interface {
 
 type LabelHandlersController struct {
 	logger *slog.Logger
-	tracer trace.Tracer
 	debug  bool
 
 	apiCore *apiservercore.Controller
@@ -34,14 +32,12 @@ type LabelHandlersController struct {
 
 func New(
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	labelUseCases LabelUseCases,
 	debug bool,
 	ac *apiservercore.Controller,
 ) *LabelHandlersController {
 	c := &LabelHandlersController{
 		logger:        logger,
-		tracer:        tracer,
 		labelUseCases: labelUseCases,
 		debug:         debug,
 		apiCore:       ac,

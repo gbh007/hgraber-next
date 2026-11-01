@@ -7,7 +7,6 @@ import (
 	"net/url"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 )
 
 type FSUseCases interface {
@@ -22,7 +21,6 @@ type config interface {
 
 type Controller struct {
 	logger *slog.Logger
-	tracer trace.Tracer
 	debug  bool
 
 	fsUseCases FSUseCases
@@ -34,7 +32,6 @@ type Controller struct {
 
 func New(
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	config config,
 	fsUseCases FSUseCases,
 ) (*Controller, error) {
@@ -45,7 +42,6 @@ func New(
 
 	c := &Controller{
 		logger:                     logger,
-		tracer:                     tracer,
 		externalServerScheme:       u.Scheme,
 		externalServerHostWithPort: u.Host,
 		fsUseCases:                 fsUseCases,

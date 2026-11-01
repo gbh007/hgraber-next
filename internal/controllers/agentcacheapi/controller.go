@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
@@ -38,7 +37,6 @@ type metricProvider interface {
 type Controller struct {
 	startAt         time.Time
 	logger          *slog.Logger
-	tracer          trace.Tracer
 	addr            string
 	debug           bool
 	logErrorHandler bool
@@ -64,7 +62,6 @@ func New(
 	config config,
 	startAt time.Time,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	parsingUseCases parsingUseCases,
 	exportUseCases exportUseCases,
 	metricProvider metricProvider,
@@ -72,7 +69,6 @@ func New(
 	c := &Controller{
 		startAt:         startAt,
 		logger:          logger,
-		tracer:          tracer,
 		addr:            config.GetAddr(),
 		debug:           config.GetDebug(),
 		logErrorHandler: config.GetLogErrorHandler(),

@@ -10,7 +10,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/mark3labs/mcp-go/server"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
@@ -42,7 +41,6 @@ type bookParserUseCases interface {
 
 type Controller struct {
 	logger             *slog.Logger
-	tracer             trace.Tracer
 	addr               string
 	token              string
 	debug              bool
@@ -55,7 +53,6 @@ type Controller struct {
 
 func New(
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	addr string,
 	token string,
 	bffUseCases bffUseCases,
@@ -67,7 +64,6 @@ func New(
 ) *Controller {
 	return &Controller{
 		logger:             logger,
-		tracer:             tracer,
 		addr:               addr,
 		token:              token,
 		bffUseCases:        bffUseCases,

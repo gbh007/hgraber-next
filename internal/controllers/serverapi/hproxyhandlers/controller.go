@@ -6,8 +6,6 @@ import (
 	"log/slog"
 	"net/url"
 
-	"go.opentelemetry.io/otel/trace"
-
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -21,7 +19,6 @@ type HProxyUseCases interface {
 
 type HProxyHandlersController struct {
 	logger *slog.Logger
-	tracer trace.Tracer
 	debug  bool
 
 	apiCore *apiservercore.Controller
@@ -31,14 +28,12 @@ type HProxyHandlersController struct {
 
 func New(
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	hProxyUseCases HProxyUseCases,
 	debug bool,
 	ac *apiservercore.Controller,
 ) *HProxyHandlersController {
 	c := &HProxyHandlersController{
 		logger:         logger,
-		tracer:         tracer,
 		hProxyUseCases: hProxyUseCases,
 		debug:          debug,
 		apiCore:        ac,

@@ -4,7 +4,6 @@ import (
 	"context"
 	"log/slog"
 
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
@@ -19,7 +18,6 @@ type exportUnitUseCases interface {
 func NewExporter(
 	useCases exportUnitUseCases,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
 ) *worker.Worker[serveragentdto.BookToExport] {
@@ -41,7 +39,6 @@ func NewExporter(
 		func(_ context.Context) ([]serveragentdto.BookToExport, error) {
 			return useCases.ExportList(), nil
 		},
-		tracer,
 		metricProvider,
 	)
 }

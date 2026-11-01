@@ -6,8 +6,6 @@ import (
 	"log/slog"
 
 	"github.com/grafana/pyroscope-go"
-	"go.opentelemetry.io/otel/trace"
-	"go.opentelemetry.io/otel/trace/noop"
 
 	"github.com/gbh007/hgraber-next/internal/application/server/srvconfig"
 	"github.com/gbh007/hgraber-next/internal/controllers/async"
@@ -36,7 +34,6 @@ import (
 type App struct {
 	Config srvconfig.ServerConfig
 	Logger *slog.Logger
-	Tracer trace.Tracer
 
 	pyroscopeProfiler *pyroscope.Profiler
 
@@ -66,9 +63,7 @@ type App struct {
 }
 
 func New() *App {
-	a := &App{
-		Tracer: noop.Tracer{},
-	}
+	a := &App{}
 	a.initLogger()
 
 	return a

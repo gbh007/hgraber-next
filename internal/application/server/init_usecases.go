@@ -39,11 +39,10 @@ func (a *App) initUseCases() {
 		a.Config.AttributeRemap.Auto,
 		a.Config.AttributeRemap.AllLower,
 	)
-	a.deduplicateUseCases = deduplicatorusecase.New(a.Logger, a.storage, a.Tracer)
-	a.cleanupUseCases = cleanupusecase.New(a.Logger, a.Tracer, a.storage, a.fileStorageAdapter)
+	a.deduplicateUseCases = deduplicatorusecase.New(a.Logger, a.storage)
+	a.cleanupUseCases = cleanupusecase.New(a.Logger, a.storage, a.fileStorageAdapter)
 	a.reBuilderUseCases = rebuilderusecase.New(
 		a.Logger,
-		a.Tracer,
 		a.storage,
 		a.Config.AttributeRemap.Auto,
 		a.Config.AttributeRemap.AllLower,

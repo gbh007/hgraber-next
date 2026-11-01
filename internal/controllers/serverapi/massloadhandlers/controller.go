@@ -5,8 +5,6 @@ import (
 	"log/slog"
 	"net/url"
 
-	"go.opentelemetry.io/otel/trace"
-
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
 )
@@ -37,7 +35,6 @@ type MassloadUseCases interface {
 
 type MassloadController struct {
 	logger *slog.Logger
-	tracer trace.Tracer
 	debug  bool
 
 	apiCore *apiservercore.Controller
@@ -47,14 +44,12 @@ type MassloadController struct {
 
 func New(
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	debug bool,
 	ac *apiservercore.Controller,
 	massloadUseCases MassloadUseCases,
 ) *MassloadController {
 	c := &MassloadController{
 		logger:           logger,
-		tracer:           tracer,
 		debug:            debug,
 		apiCore:          ac,
 		massloadUseCases: massloadUseCases,

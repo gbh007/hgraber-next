@@ -14,7 +14,6 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 	"github.com/prometheus/client_golang/prometheus"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/google/uuid"
 )
@@ -61,7 +60,6 @@ type config interface {
 type Controller struct {
 	startAt         time.Time
 	logger          *slog.Logger
-	tracer          trace.Tracer
 	addr            string
 	debug           bool
 	logErrorHandler bool
@@ -84,7 +82,6 @@ func New(
 	config config,
 	startAt time.Time,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	parsingUseCases ParsingUseCases,
 	importUseCase ImportUseCases,
 	fileUseCase FileUseCases,
@@ -95,7 +92,6 @@ func New(
 	c := &Controller{
 		startAt:         startAt,
 		logger:          logger,
-		tracer:          tracer,
 		addr:            config.GetAddr(),
 		debug:           config.GetDebug(),
 		logErrorHandler: config.GetLogErrorHandler(),

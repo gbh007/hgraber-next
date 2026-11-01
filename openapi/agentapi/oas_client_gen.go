@@ -6,18 +6,12 @@ import (
 	"context"
 	"net/url"
 	"strings"
-	"time"
 
 	"github.com/go-faster/errors"
 	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/uri"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	semconv "go.opentelemetry.io/otel/semconv/v1.37.0"
-	"go.opentelemetry.io/otel/trace"
 )
 
 func trimTrailingSlashes(u *url.URL) {
@@ -154,46 +148,12 @@ func (c *Client) APIV2FsArchivePost(ctx context.Context, request APIV2FsArchiveP
 }
 
 func (c *Client) sendAPIV2FsArchivePost(ctx context.Context, request APIV2FsArchivePostReq, params APIV2FsArchivePostParams) (res *APIV2FsArchivePostNoContent, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.URLTemplateKey.String("/api/v2/fs/archive"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2FsArchivePostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
 	pathParts[0] = "/api/v2/fs/archive"
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -202,7 +162,6 @@ func (c *Client) sendAPIV2FsArchivePost(ctx context.Context, request APIV2FsArch
 		return res, errors.Wrap(err, "encode request")
 	}
 
-	stage = "EncodeHeaderParams"
 	h := uri.NewHeaderEncoder(r.Header)
 	{
 		cfg := uri.HeaderParameterEncodingConfig{
@@ -245,7 +204,7 @@ func (c *Client) sendAPIV2FsArchivePost(ctx context.Context, request APIV2FsArch
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2FsArchivePostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -274,14 +233,12 @@ func (c *Client) sendAPIV2FsArchivePost(ctx context.Context, request APIV2FsArch
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2FsArchivePostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -301,40 +258,7 @@ func (c *Client) APIV2FsFileIDDelete(ctx context.Context, params APIV2FsFileIDDe
 }
 
 func (c *Client) sendAPIV2FsFileIDDelete(ctx context.Context, params APIV2FsFileIDDeleteParams) (res *APIV2FsFileIDDeleteNoContent, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("DELETE"),
-		semconv.URLTemplateKey.String("/api/v2/fs/file/{id}"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2FsFileIDDeleteOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [2]string
 	pathParts[0] = "/api/v2/fs/file/"
@@ -358,7 +282,6 @@ func (c *Client) sendAPIV2FsFileIDDelete(ctx context.Context, params APIV2FsFile
 	}
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "DELETE", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -368,7 +291,7 @@ func (c *Client) sendAPIV2FsFileIDDelete(ctx context.Context, params APIV2FsFile
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2FsFileIDDeleteOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -397,14 +320,12 @@ func (c *Client) sendAPIV2FsFileIDDelete(ctx context.Context, params APIV2FsFile
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2FsFileIDDeleteResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -424,40 +345,7 @@ func (c *Client) APIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDGetPa
 }
 
 func (c *Client) sendAPIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDGetParams) (res APIV2FsFileIDGetOK, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.URLTemplateKey.String("/api/v2/fs/file/{id}"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2FsFileIDGetOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [2]string
 	pathParts[0] = "/api/v2/fs/file/"
@@ -481,7 +369,6 @@ func (c *Client) sendAPIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDG
 	}
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -491,7 +378,7 @@ func (c *Client) sendAPIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDG
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2FsFileIDGetOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -520,14 +407,12 @@ func (c *Client) sendAPIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDG
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2FsFileIDGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -547,40 +432,7 @@ func (c *Client) APIV2FsFileIDPost(ctx context.Context, request APIV2FsFileIDPos
 }
 
 func (c *Client) sendAPIV2FsFileIDPost(ctx context.Context, request APIV2FsFileIDPostReq, params APIV2FsFileIDPostParams) (res *APIV2FsFileIDPostNoContent, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.URLTemplateKey.String("/api/v2/fs/file/{id}"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2FsFileIDPostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [2]string
 	pathParts[0] = "/api/v2/fs/file/"
@@ -604,7 +456,6 @@ func (c *Client) sendAPIV2FsFileIDPost(ctx context.Context, request APIV2FsFileI
 	}
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -617,7 +468,7 @@ func (c *Client) sendAPIV2FsFileIDPost(ctx context.Context, request APIV2FsFileI
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2FsFileIDPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -646,14 +497,12 @@ func (c *Client) sendAPIV2FsFileIDPost(ctx context.Context, request APIV2FsFileI
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2FsFileIDPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -673,46 +522,12 @@ func (c *Client) APIV2FsGet(ctx context.Context, params APIV2FsGetParams) (*APIV
 }
 
 func (c *Client) sendAPIV2FsGet(ctx context.Context, params APIV2FsGetParams) (res *APIV2FsGetOK, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.URLTemplateKey.String("/api/v2/fs"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2FsGetOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
 	pathParts[0] = "/api/v2/fs"
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
 	{
 		// Encode "include_file_ids" parameter.
@@ -750,7 +565,6 @@ func (c *Client) sendAPIV2FsGet(ctx context.Context, params APIV2FsGetParams) (r
 	}
 	u.RawQuery = q.Values().Encode()
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -760,7 +574,7 @@ func (c *Client) sendAPIV2FsGet(ctx context.Context, params APIV2FsGetParams) (r
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2FsGetOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -789,14 +603,12 @@ func (c *Client) sendAPIV2FsGet(ctx context.Context, params APIV2FsGetParams) (r
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2FsGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -816,40 +628,7 @@ func (c *Client) APIV2HighwayFileIDExtGet(ctx context.Context, params APIV2Highw
 }
 
 func (c *Client) sendAPIV2HighwayFileIDExtGet(ctx context.Context, params APIV2HighwayFileIDExtGetParams) (res *APIV2HighwayFileIDExtGetOKHeaders, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.URLTemplateKey.String("/api/v2/highway/file/{id}.{ext}"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2HighwayFileIDExtGetOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [4]string
 	pathParts[0] = "/api/v2/highway/file/"
@@ -892,7 +671,6 @@ func (c *Client) sendAPIV2HighwayFileIDExtGet(ctx context.Context, params APIV2H
 	}
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
 	{
 		// Encode "token" parameter.
@@ -910,20 +688,17 @@ func (c *Client) sendAPIV2HighwayFileIDExtGet(ctx context.Context, params APIV2H
 	}
 	u.RawQuery = q.Values().Encode()
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2HighwayFileIDExtGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -943,46 +718,12 @@ func (c *Client) APIV2HighwayTokenPost(ctx context.Context) (*APIV2HighwayTokenP
 }
 
 func (c *Client) sendAPIV2HighwayTokenPost(ctx context.Context) (res *APIV2HighwayTokenPostOK, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.URLTemplateKey.String("/api/v2/highway/token"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2HighwayTokenPostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
 	pathParts[0] = "/api/v2/highway/token"
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -992,7 +733,7 @@ func (c *Client) sendAPIV2HighwayTokenPost(ctx context.Context) (res *APIV2Highw
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2HighwayTokenPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -1021,14 +762,12 @@ func (c *Client) sendAPIV2HighwayTokenPost(ctx context.Context) (res *APIV2Highw
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2HighwayTokenPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -1048,46 +787,12 @@ func (c *Client) APIV2ParsingBookPost(ctx context.Context, request *APIV2Parsing
 }
 
 func (c *Client) sendAPIV2ParsingBookPost(ctx context.Context, request *APIV2ParsingBookPostReq) (res *BookDetails, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.URLTemplateKey.String("/api/v2/parsing/book"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2ParsingBookPostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
 	pathParts[0] = "/api/v2/parsing/book"
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -1100,7 +805,7 @@ func (c *Client) sendAPIV2ParsingBookPost(ctx context.Context, request *APIV2Par
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2ParsingBookPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -1129,14 +834,12 @@ func (c *Client) sendAPIV2ParsingBookPost(ctx context.Context, request *APIV2Par
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2ParsingBookPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -1156,46 +859,12 @@ func (c *Client) APIV2ParsingCheckPost(ctx context.Context, request *APIV2Parsin
 }
 
 func (c *Client) sendAPIV2ParsingCheckPost(ctx context.Context, request *APIV2ParsingCheckPostReq) (res *BooksCheckResult, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.URLTemplateKey.String("/api/v2/parsing/check"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2ParsingCheckPostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
 	pathParts[0] = "/api/v2/parsing/check"
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -1208,7 +877,7 @@ func (c *Client) sendAPIV2ParsingCheckPost(ctx context.Context, request *APIV2Pa
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2ParsingCheckPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -1237,14 +906,12 @@ func (c *Client) sendAPIV2ParsingCheckPost(ctx context.Context, request *APIV2Pa
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2ParsingCheckPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -1265,46 +932,12 @@ func (c *Client) APIV2ParsingListPost(ctx context.Context, request *APIV2Parsing
 }
 
 func (c *Client) sendAPIV2ParsingListPost(ctx context.Context, request *APIV2ParsingListPostReq) (res *APIV2ParsingListPostOK, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.URLTemplateKey.String("/api/v2/parsing/list"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2ParsingListPostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
 	pathParts[0] = "/api/v2/parsing/list"
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -1317,7 +950,7 @@ func (c *Client) sendAPIV2ParsingListPost(ctx context.Context, request *APIV2Par
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2ParsingListPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -1346,14 +979,12 @@ func (c *Client) sendAPIV2ParsingListPost(ctx context.Context, request *APIV2Par
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2ParsingListPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -1373,46 +1004,12 @@ func (c *Client) APIV2ParsingPagePost(ctx context.Context, request *APIV2Parsing
 }
 
 func (c *Client) sendAPIV2ParsingPagePost(ctx context.Context, request *APIV2ParsingPagePostReq) (res APIV2ParsingPagePostOK, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.URLTemplateKey.String("/api/v2/parsing/page"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2ParsingPagePostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
 	pathParts[0] = "/api/v2/parsing/page"
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -1425,7 +1022,7 @@ func (c *Client) sendAPIV2ParsingPagePost(ctx context.Context, request *APIV2Par
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2ParsingPagePostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -1454,14 +1051,12 @@ func (c *Client) sendAPIV2ParsingPagePost(ctx context.Context, request *APIV2Par
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2ParsingPagePostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
@@ -1481,46 +1076,12 @@ func (c *Client) APIV2StatusGet(ctx context.Context) (*APIV2StatusGetOK, error) 
 }
 
 func (c *Client) sendAPIV2StatusGet(ctx context.Context) (res *APIV2StatusGetOK, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.URLTemplateKey.String("/api/v2/status"),
-	}
-	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2StatusGetOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
 	pathParts[0] = "/api/v2/status"
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
@@ -1530,7 +1091,7 @@ func (c *Client) sendAPIV2StatusGet(ctx context.Context) (res *APIV2StatusGetOK,
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:HeaderAuth"
+
 			switch err := c.securityHeaderAuth(ctx, APIV2StatusGetOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
@@ -1559,14 +1120,12 @@ func (c *Client) sendAPIV2StatusGet(ctx context.Context) (res *APIV2StatusGetOK,
 		}
 	}
 
-	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
 	defer resp.Body.Close()
 
-	stage = "DecodeResponse"
 	result, err := decodeAPIV2StatusGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")

@@ -8,7 +8,6 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
-	"go.opentelemetry.io/otel/trace"
 )
 
 const dbName = "postgres"
@@ -22,7 +21,6 @@ type MetricProvider interface {
 
 type Repository struct {
 	Logger *slog.Logger
-	Tracer trace.Tracer
 
 	Pool *pgxpool.Pool
 }
@@ -30,7 +28,6 @@ type Repository struct {
 func New(
 	ctx context.Context,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	metricProvider MetricProvider,
 	debugPgx bool,
 	dataSourceName string,
@@ -47,7 +44,6 @@ func New(
 
 	pgxConfig.ConnConfig.Tracer = pgxTracer{
 		logger:         logger,
-		tracer:         tracer,
 		metricProvider: metricProvider,
 		debug:          debugPgx,
 	}
@@ -70,7 +66,6 @@ func New(
 
 	return &Repository{
 		Logger: logger,
-		Tracer: tracer,
 		Pool:   dbpool,
 	}, nil
 }

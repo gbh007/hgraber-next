@@ -5,7 +5,6 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
@@ -21,7 +20,6 @@ type bookWorkerUnitUseCases interface {
 func NewBookParser(
 	useCases bookWorkerUnitUseCases,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
 ) *worker.Worker[serveragentdto.BookWithAgent] {
@@ -40,7 +38,6 @@ func NewBookParser(
 			return nil
 		},
 		useCases.BooksToParse,
-		tracer,
 		metricProvider,
 	)
 }

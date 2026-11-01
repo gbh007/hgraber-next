@@ -5,7 +5,6 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
@@ -21,7 +20,6 @@ type pageWorkerUnitUseCases interface {
 func NewPageDownloader(
 	useCases pageWorkerUnitUseCases,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
 ) *worker.Worker[parsing.PageForDownloadWithAgent] {
@@ -41,7 +39,6 @@ func NewPageDownloader(
 			return nil
 		},
 		useCases.PagesToDownload,
-		tracer,
 		metricProvider,
 	)
 }

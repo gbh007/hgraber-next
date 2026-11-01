@@ -7,8 +7,6 @@ import (
 	"log/slog"
 	"net/http"
 	"time"
-
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 type Cache interface {
@@ -50,11 +48,8 @@ func New(
 
 	return &Requester{
 		client: &http.Client{
-			Timeout: timeout,
-			Transport: otelhttp.NewTransport(
-				transport,
-				otelhttp.WithPropagators(noopPropagator{}),
-			),
+			Timeout:   timeout,
+			Transport: transport,
 		},
 		logger:           logger,
 		cache:            cache,
@@ -63,35 +58,35 @@ func New(
 }
 
 // RequestString запрашивает данные по урле и возвращает их строкой
-func (r *Requester) RequestString(ctx context.Context, URL string) (string, error) {
+func (r *Requester) RequestString(ctx context.Context, u string) (string, error) {
 	if r.cache != nil {
-		v, ok := r.cache.GetString(ctx, URL)
+		v, ok := r.cache.GetString(ctx, u)
 		if ok {
 			return v, nil
 		}
 	}
 
-	buff, _, err := r.requestBuffer(ctx, URL, nil, nil)
+	buff, _, err := r.requestBuffer(ctx, u, nil, nil)
 	if err != nil {
 		return "", err
 	}
 
 	if r.cache != nil {
-		r.cache.SetString(ctx, URL, buff.String())
+		r.cache.SetString(ctx, u, buff.String())
 	}
 
 	return buff.String(), nil
 }
 
-func (r *Requester) RequestStringWithRedirect(ctx context.Context, URL string) (string, string, error) {
+func (r *Requester) RequestStringWithRedirect(ctx context.Context, u string) (string, string, error) {
 	if r.cache != nil {
-		v, ok := r.cache.GetString(ctx, URL)
+		v, ok := r.cache.GetString(ctx, u)
 		if ok {
-			return v, URL, nil
+			return v, u, nil
 		}
 	}
 
-	buff, resultURL, err := r.requestBuffer(ctx, URL, nil, nil)
+	buff, resultURL, err := r.requestBuffer(ctx, u, nil, nil)
 	if err != nil {
 		return "", "", err
 	}
@@ -104,8 +99,8 @@ func (r *Requester) RequestStringWithRedirect(ctx context.Context, URL string) (
 }
 
 // RequestBytes запрашивает данные по урле и возвращает их массивом байт
-func (r *Requester) RequestBytes(ctx context.Context, URL string) ([]byte, error) {
-	buff, _, err := r.requestBuffer(ctx, URL, nil, nil)
+func (r *Requester) RequestBytes(ctx context.Context, u string) ([]byte, error) {
+	buff, _, err := r.requestBuffer(ctx, u, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -113,22 +108,22 @@ func (r *Requester) RequestBytes(ctx context.Context, URL string) ([]byte, error
 	return buff.Bytes(), nil
 }
 
-func (r *Requester) Request(ctx context.Context, URL string, headers http.Header) (io.ReadCloser, error) {
+func (r *Requester) Request(ctx context.Context, u string, headers http.Header) (io.ReadCloser, error) {
 	if r.cache != nil {
-		v, ok := r.cache.GetBytes(ctx, URL)
+		v, ok := r.cache.GetBytes(ctx, u)
 		if ok {
 			return io.NopCloser(bytes.NewReader(v)), nil
 		}
 	}
 
 	// FIXME: работать с потоком напрямую
-	buff, _, err := r.requestBuffer(ctx, URL, headers, nil)
+	buff, _, err := r.requestBuffer(ctx, u, headers, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	if r.cache != nil {
-		r.cache.SetBytes(ctx, URL, buff.Bytes())
+		r.cache.SetBytes(ctx, u, buff.Bytes())
 	}
 
 	return io.NopCloser(buff), nil

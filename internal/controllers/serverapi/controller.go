@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/agenthandlers"
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
@@ -110,7 +109,6 @@ type Controller struct {
 	*massloadhandlers.MassloadController
 
 	logger          *slog.Logger
-	tracer          trace.Tracer
 	metricProvider  metricProvider
 	debug           bool
 	logErrorHandler bool
@@ -125,7 +123,6 @@ type Controller struct {
 
 func New( //revive:disable:argument-limit // будет исправлено позднее
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	config config,
 	metricProvider metricProvider,
 	parseUseCases ParseUseCases,
@@ -144,7 +141,6 @@ func New( //revive:disable:argument-limit // будет исправлено п�
 ) (*Controller, error) {
 	ac, err := apiservercore.New(
 		logger,
-		tracer,
 		config,
 		fsUseCases,
 	)
@@ -155,7 +151,6 @@ func New( //revive:disable:argument-limit // будет исправлено п�
 	c := &Controller{
 		AgentHandlersController: agenthandlers.New(
 			logger,
-			tracer,
 			agentUseCases,
 			exportUseCases,
 			config.GetDebug(),
@@ -163,14 +158,12 @@ func New( //revive:disable:argument-limit // будет исправлено п�
 		),
 		AttributeHandlersController: attributehandlers.New(
 			logger,
-			tracer,
 			attributeUseCases,
 			config.GetDebug(),
 			ac,
 		),
 		BookHandlersController: bookhandlers.New(
 			logger,
-			tracer,
 			parseUseCases,
 			bookUseCases,
 			exportUseCases,
@@ -182,7 +175,6 @@ func New( //revive:disable:argument-limit // будет исправлено п�
 		),
 		DeduplicateHandlersController: deduplicatehandlers.New(
 			logger,
-			tracer,
 			bffUseCases,
 			deduplicateUseCases,
 			config.GetDebug(),
@@ -190,7 +182,6 @@ func New( //revive:disable:argument-limit // будет исправлено п�
 		),
 		FSHandlersController: fshandlers.New(
 			logger,
-			tracer,
 			parseUseCases,
 			systemUseCases,
 			fsUseCases,
@@ -199,14 +190,12 @@ func New( //revive:disable:argument-limit // будет исправлено п�
 		),
 		LabelHandlersController: labelhandlers.New(
 			logger,
-			tracer,
 			labelUseCases,
 			config.GetDebug(),
 			ac,
 		),
 		SystemHandlersController: systemhandlers.New(
 			logger,
-			tracer,
 			parseUseCases,
 			exportUseCases,
 			systemUseCases,
@@ -215,21 +204,18 @@ func New( //revive:disable:argument-limit // будет исправлено п�
 		),
 		HProxyHandlersController: hproxyhandlers.New(
 			logger,
-			tracer,
 			hProxyUseCases,
 			config.GetDebug(),
 			ac,
 		),
 		MassloadController: massloadhandlers.New(
 			logger,
-			tracer,
 			config.GetDebug(),
 			ac,
 			massloadUseCases,
 		),
 
 		logger:                logger,
-		tracer:                tracer,
 		metricProvider:        metricProvider,
 		serverAddr:            config.GetAddr(),
 		debug:                 config.GetDebug(),

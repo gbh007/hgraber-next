@@ -19,7 +19,6 @@ func (a *App) initAdapters(ctx context.Context) error {
 	a.storage, err = serverdb.New(
 		ctx,
 		a.Logger,
-		a.Tracer,
 		a.metricProvider,
 		a.Config.Storage.DebugPGX,
 		a.Config.Storage.Connection,

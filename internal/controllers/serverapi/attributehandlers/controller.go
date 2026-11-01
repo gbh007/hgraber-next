@@ -4,8 +4,6 @@ import (
 	"context"
 	"log/slog"
 
-	"go.opentelemetry.io/otel/trace"
-
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
@@ -29,7 +27,6 @@ type AttributeUseCases interface {
 
 type AttributeHandlersController struct {
 	logger *slog.Logger
-	tracer trace.Tracer
 	debug  bool
 
 	apiCore *apiservercore.Controller
@@ -39,14 +36,12 @@ type AttributeHandlersController struct {
 
 func New(
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	attributeUseCases AttributeUseCases,
 	debug bool,
 	ac *apiservercore.Controller,
 ) *AttributeHandlersController {
 	c := &AttributeHandlersController{
 		logger:            logger,
-		tracer:            tracer,
 		attributeUseCases: attributeUseCases,
 		debug:             debug,
 		apiCore:           ac,

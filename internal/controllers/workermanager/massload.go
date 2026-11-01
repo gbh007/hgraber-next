@@ -4,8 +4,6 @@ import (
 	"context"
 	"log/slog"
 
-	"go.opentelemetry.io/otel/trace"
-
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/internal/pkg"
@@ -24,7 +22,6 @@ type massloadAttributeSizeUnitUseCases interface {
 func NewMassloadSize(
 	useCases massloadSizeUnitUseCases,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
 ) *worker.Worker[massloadmodel.Massload] {
@@ -43,7 +40,6 @@ func NewMassloadSize(
 			return nil
 		},
 		useCases.MassloadForUpdate,
-		tracer,
 		metricProvider,
 	)
 }
@@ -51,7 +47,6 @@ func NewMassloadSize(
 func NewMassloadAttributeSize(
 	useCases massloadAttributeSizeUnitUseCases,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
 ) *worker.Worker[massloadmodel.Attribute] {
@@ -71,7 +66,6 @@ func NewMassloadAttributeSize(
 			return nil
 		},
 		useCases.MassloadAttributesForUpdate,
-		tracer,
 		metricProvider,
 	)
 }

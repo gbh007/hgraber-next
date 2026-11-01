@@ -28,7 +28,6 @@ import (
 	"github.com/gbh007/hgraber-next/internal/usecases/agentimportapiuc"
 	"github.com/gbh007/hgraber-next/internal/usecases/agentimportdeduplicatoruc"
 	"github.com/gbh007/hgraber-next/internal/usecases/agentparseruc"
-	"go.opentelemetry.io/otel"
 )
 
 func InitAndServe(parserInits map[string]parserdto.NewParser) {
@@ -72,8 +71,6 @@ func Serve(ctx context.Context, parserInits map[string]parserdto.NewParser) erro
 	if err != nil {
 		return fmt.Errorf("fail init metrics: %w", err)
 	}
-
-	tracer := otel.GetTracerProvider().Tracer("hgraber-next-agent")
 
 	async := async.New(logger)
 
@@ -213,7 +210,6 @@ func Serve(ctx context.Context, parserInits map[string]parserdto.NewParser) erro
 			cfg.API,
 			time.Now(),
 			logger,
-			tracer,
 			agentUseCases,
 			importStorage,
 			fileStorage,

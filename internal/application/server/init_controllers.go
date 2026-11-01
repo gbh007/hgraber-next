@@ -21,43 +21,42 @@ func (a *App) initControllers(_ context.Context) error {
 
 		switch wCfg.GetName() {
 		case systemmodel.WorkerNameBook:
-			unit = workermanager.NewBookParser(a.parsingUseCases, a.Logger, a.Tracer, wCfg, a.metricProvider)
+			unit = workermanager.NewBookParser(a.parsingUseCases, a.Logger, wCfg, a.metricProvider)
 
 		case systemmodel.WorkerNamePage:
-			unit = workermanager.NewPageDownloader(a.parsingUseCases, a.Logger, a.Tracer, wCfg, a.metricProvider)
+			unit = workermanager.NewPageDownloader(a.parsingUseCases, a.Logger, wCfg, a.metricProvider)
 
 		case systemmodel.WorkerNameHasher:
-			unit = workermanager.NewHasher(a.fsUseCases, a.Logger, a.Tracer, wCfg, a.metricProvider)
+			unit = workermanager.NewHasher(a.fsUseCases, a.Logger, wCfg, a.metricProvider)
 
 		case systemmodel.WorkerNameExporter:
-			unit = workermanager.NewExporter(a.exportUseCases, a.Logger, a.Tracer, wCfg, a.metricProvider)
+			unit = workermanager.NewExporter(a.exportUseCases, a.Logger, wCfg, a.metricProvider)
 
 		case systemmodel.WorkerNameTasker:
-			unit = workermanager.NewTasker(a.tmpStorage, a.Logger, a.Tracer, wCfg, a.metricProvider)
+			unit = workermanager.NewTasker(a.tmpStorage, a.Logger, wCfg, a.metricProvider)
 
 		case systemmodel.WorkerNameFileValidator:
-			unit = workermanager.NewFileValidator(a.fsUseCases, a.Logger, a.Tracer, wCfg, a.metricProvider)
+			unit = workermanager.NewFileValidator(a.fsUseCases, a.Logger, wCfg, a.metricProvider)
 
 		case systemmodel.WorkerNameFileTransferer:
-			unit = workermanager.NewFileTransfer(a.fsUseCases, a.Logger, a.Tracer, wCfg, a.metricProvider)
+			unit = workermanager.NewFileTransfer(a.fsUseCases, a.Logger, wCfg, a.metricProvider)
 
 		case systemmodel.WorkerNameMassloadSizer:
-			unit = workermanager.NewMassloadSize(a.massloadUseCases, a.Logger, a.Tracer, wCfg, a.metricProvider)
+			unit = workermanager.NewMassloadSize(a.massloadUseCases, a.Logger, wCfg, a.metricProvider)
 
 		case systemmodel.WorkerNameMassloadAttributeSizer:
 			unit = workermanager.NewMassloadAttributeSize(
 				a.massloadUseCases,
 				a.Logger,
-				a.Tracer,
 				wCfg,
 				a.metricProvider,
 			)
 
 		case systemmodel.WorkerNameMassloadCalculation:
-			unit = workermanager.NewMassloadCalculation(a.massloadUseCases, a.Logger, a.Tracer, wCfg, a.metricProvider)
+			unit = workermanager.NewMassloadCalculation(a.massloadUseCases, a.Logger, wCfg, a.metricProvider)
 
 		case systemmodel.WorkerNameBookCalculation:
-			unit = workermanager.NewBookCalculation(a.bookUseCases, a.Logger, a.Tracer, wCfg, a.metricProvider)
+			unit = workermanager.NewBookCalculation(a.bookUseCases, a.Logger, wCfg, a.metricProvider)
 
 		default:
 			continue
@@ -70,7 +69,6 @@ func (a *App) initControllers(_ context.Context) error {
 
 	apiController, err := serverapi.New(
 		a.Logger,
-		a.Tracer,
 		a.Config.API,
 		a.metricProvider,
 		a.parsingUseCases,
@@ -98,7 +96,6 @@ func (a *App) initControllers(_ context.Context) error {
 			a.Config.AgentServer,
 			time.Now(),
 			a.Logger,
-			a.Tracer,
 			a.parsingUseCases,
 			a.exportUseCases,
 			a.metricProvider,
@@ -127,7 +124,6 @@ func (a *App) initControllers(_ context.Context) error {
 	if a.Config.MCPServer.Addr != "" {
 		mcpController := mcp.New(
 			a.Logger,
-			a.Tracer,
 			a.Config.MCPServer.Addr,
 			a.Config.MCPServer.Token,
 			a.bffUseCases,

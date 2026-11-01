@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log/slog"
 
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/dataproviders/serverdb/internal/agent"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/serverdb/internal/attribute"
@@ -39,7 +38,6 @@ type Repo struct {
 func New(
 	ctx context.Context,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	metricProvider repository.MetricProvider,
 	debugPgx bool,
 	dataSourceName string,
@@ -48,7 +46,6 @@ func New(
 	repo, err := repository.New(
 		ctx,
 		logger,
-		tracer,
 		metricProvider,
 		debugPgx,
 		dataSourceName,

@@ -6,9 +6,6 @@ import (
 	"log/slog"
 	"net/http"
 	"time"
-
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/propagation"
 )
 
 func (c *Controller) Name() string {
@@ -19,7 +16,7 @@ func (c *Controller) Start(parentCtx context.Context) (chan struct{}, error) {
 	done := make(chan struct{})
 
 	server := &http.Server{ //nolint:gosec // будет исправлено позднее
-		Handler:  otelPropagation(c.logIO(cors(c.ogenServer))),
+		Handler:  c.logIO(cors(c.ogenServer)),
 		Addr:     c.addr,
 		ErrorLog: slog.NewLogLogger(c.logger.Handler(), slog.LevelError),
 	}
@@ -66,19 +63,6 @@ func cors(next http.Handler) http.Handler {
 
 		if next != nil {
 			next.ServeHTTP(w, r)
-		}
-	})
-}
-
-func otelPropagation(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := otel.GetTextMapPropagator().Extract(
-			r.Context(),
-			propagation.HeaderCarrier(r.Header),
-		)
-
-		if next != nil {
-			next.ServeHTTP(w, r.WithContext(ctx))
 		}
 	})
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 	"log/slog"
 
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
@@ -19,7 +18,6 @@ type fileTransferUnitUseCases interface {
 func NewFileTransfer(
 	useCases fileTransferUnitUseCases,
 	logger *slog.Logger,
-	tracer trace.Tracer,
 	cfg workerConfig,
 	metricProvider metricProvider,
 ) *worker.Worker[fsmodel.FileTransfer] {
@@ -41,7 +39,6 @@ func NewFileTransfer(
 		func(_ context.Context) ([]fsmodel.FileTransfer, error) {
 			return useCases.FileTransferList(), nil
 		},
-		tracer,
 		metricProvider,
 	)
 }

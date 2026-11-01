@@ -8,9 +8,6 @@ import (
 	"strconv"
 	"sync"
 	"time"
-
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
 )
 
 type workerHandlerFunc[T any] func(context.Context, T) error
@@ -37,7 +34,6 @@ type Unit[T any] struct {
 	handler workerHandlerFunc[T]
 
 	logger         *slog.Logger
-	tracer         trace.Tracer
 	metricProvider metricProvider
 
 	callback UnitCallback
@@ -51,7 +47,6 @@ func NewUnit[T any]( //revive:disable:argument-limit // будет исправ�
 	number int32,
 	logger *slog.Logger,
 	handler workerHandlerFunc[T],
-	tracer trace.Tracer,
 	metricProvider metricProvider,
 	queue workerUnitQueue[T],
 	callback UnitCallback,
@@ -64,7 +59,6 @@ func NewUnit[T any]( //revive:disable:argument-limit // будет исправ�
 		handler:            handler,
 
 		logger:         logger,
-		tracer:         tracer,
 		metricProvider: metricProvider,
 
 		callback: callback,
@@ -92,14 +86,6 @@ func (w *Unit[T]) handleOne(ctx context.Context, value T) (err error) {
 			err = fmt.Errorf("panic detected: %v", p)
 		}
 	}()
-
-	ctx, span := w.tracer.Start(
-		ctx, "worker-job/"+w.name,
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-	defer span.End()
-
-	span.SetAttributes(attribute.Int("github.com/gbh007/hgraber-next.worker.unit", int(w.number)))
 
 	w.callback.StartHandleOne()
 	defer w.callback.FinishHandleOne()
