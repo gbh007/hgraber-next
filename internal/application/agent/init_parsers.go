@@ -1,4 +1,4 @@
-package parserloader
+package agent
 
 import (
 	"log/slog"
@@ -12,13 +12,12 @@ import (
 	"golang.org/x/net/proxy"
 )
 
-// FIXME: надо вынести в инит апки
-func NewDefaultParsers(
+func initParsers(
 	logger *slog.Logger,
 	timeout time.Duration,
 	cfg agnconfig.AgentParsers,
 	cache request.Cache,
-	metricProvider metricProvider,
+	metricProvider parserdto.MetricProvider,
 	logErrors bool,
 	defaultUserAgent string,
 	parserInits map[string]parserdto.NewParser,

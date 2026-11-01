@@ -42,6 +42,7 @@ func InitAndServe(parserInits map[string]parserdto.NewParser) {
 	if err != nil {
 		slog.Default().Error(err.Error())
 
+		//nolint:revive,gocritic // так и задумано
 		os.Exit(1)
 	}
 }
@@ -72,7 +73,7 @@ func Serve(ctx context.Context, parserInits map[string]parserdto.NewParser) erro
 		return fmt.Errorf("fail init metrics: %w", err)
 	}
 
-	async := async.New(logger)
+	asyncCnt := async.New(logger)
 
 	var (
 		importStorage   agentapi.ImportUseCases
@@ -99,11 +100,11 @@ func Serve(ctx context.Context, parserInits map[string]parserdto.NewParser) erro
 			return fmt.Errorf("create web cache: %w", err)
 		}
 
-		async.RegisterRunner(wc)
+		asyncCnt.RegisterRunner(wc)
 		cache = wc
 	}
 
-	parsers := parserloader.NewDefaultParsers(
+	parsers := initParsers(
 		logger,
 		cfg.Application.ClientTimeout,
 		cfg.Parsers,
@@ -221,11 +222,11 @@ func Serve(ctx context.Context, parserInits map[string]parserdto.NewParser) erro
 			return fmt.Errorf("fail init api controller: %w", err)
 		}
 
-		async.RegisterRunner(apiController)
+		asyncCnt.RegisterRunner(apiController)
 	}
 
 	if cfg.DebugServer.Addr != "" && agentUseCases != nil {
-		async.RegisterRunner(agentdebugserver.New(
+		asyncCnt.RegisterRunner(agentdebugserver.New(
 			cfg,
 			logger,
 			agentUseCases,
@@ -235,7 +236,7 @@ func Serve(ctx context.Context, parserInits map[string]parserdto.NewParser) erro
 	logger.InfoContext(ctx, "application start")
 	defer logger.InfoContext(ctx, "application stop")
 
-	err = async.Serve(ctx)
+	err = asyncCnt.Serve(ctx)
 	if err != nil {
 		return fmt.Errorf("fail serve: %w", err)
 	}
