@@ -1,6 +1,22 @@
 package parserdto
 
-import "net/url"
+import (
+	"net/url"
+
+	"github.com/gbh007/hgraber-next/internal/domain/core"
+)
+
+const (
+	AttributeCodeAuthor    = core.AttributeCodeAuthor
+	AttributeCodeCategory  = core.AttributeCodeCategory
+	AttributeCodeCharacter = core.AttributeCodeCharacter
+	AttributeCodeGroup     = core.AttributeCodeGroup
+	AttributeCodeLanguage  = core.AttributeCodeLanguage
+	AttributeCodeParody    = core.AttributeCodeParody
+	AttributeCodeTag       = core.AttributeCodeTag
+)
+
+var AllAttributes = core.AllAttributes
 
 type Book struct {
 	URL        url.URL

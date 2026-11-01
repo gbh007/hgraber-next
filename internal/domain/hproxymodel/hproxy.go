@@ -38,7 +38,7 @@ type BookAttribute struct {
 }
 
 func (ba BookAttribute) StringValues() []string {
-	return lo.Map(ba.Values, func(v BookAttributeValue, _ int) string { return v.Name })
+	return lo.Map(ba.Values, func(v BookAttributeValue, _ int) string { return v.ExtName })
 }
 
 type BookAttributeValue struct {

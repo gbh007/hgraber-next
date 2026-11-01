@@ -44,7 +44,7 @@ func (s *Storage) HighwayFileURL(
 	u := url.URL{
 		Scheme: info.HighwayServerScheme,
 		Host:   info.HighwayServerHostWithPort,
-		Path:   "/api/highway/file/" + fileID.String() + url.PathEscape(ext),
+		Path:   "/api/v2/highway/file/" + fileID.String() + url.PathEscape(ext),
 	}
 
 	v := url.Values{}

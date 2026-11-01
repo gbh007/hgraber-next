@@ -40,7 +40,7 @@ func migrate(ctx context.Context, logger *slog.Logger, db *sql.DB) error {
 	})
 
 	err = goose.UpContext(
-		ctx, db, "internal",
+		ctx, db, "migrations",
 		goose.WithNoColor(true),
 	)
 	if err != nil {

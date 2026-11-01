@@ -8,7 +8,7 @@ import (
 )
 
 func parseConfig() (srvconfig.ServerConfig, error) {
-	configPath := flag.String("config", "config.yaml", "path to config")
+	configPath := flag.String("config", "config.toml", "path to config")
 
 	flag.Parse()
 
