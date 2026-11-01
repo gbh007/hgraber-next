@@ -1,0 +1,28 @@
+{{ template "header" }}
+    {{ if .error }}
+        <h3 class="error">{{ .error }}</h3>
+    {{ end }}
+    <form action="/parsing" method="post" class="column gap-m">
+      <input name="u" value="" />
+
+      <label class="row gap-s">
+        <input type="checkbox" name="as-zip" value="true"/>
+        <span>Скачать архивом</span>
+      </label>
+
+      <label class="row gap-s">
+        <input type="checkbox" name="as-multi" value="true"/>
+        <span>Множественный парсинг</span>
+      </label>
+
+      <input type="submit" value="Запустить" />
+    </form>
+
+    {{ if .urls }}
+        <pre>{{ range .urls }}{{ . }}{{ "\n" }}{{ end }}</pre>
+    {{ end }}
+
+    {{ if .info }}
+        <pre>{{ .info }}</pre>
+    {{ end }}
+{{ template "footer" }}

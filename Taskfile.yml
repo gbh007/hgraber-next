@@ -39,15 +39,8 @@ tasks:
 
   go:generate:
     cmds:
-      - go tool ogen --target openapi/agentapi -package agentapi --clean openapi/agent.yaml
-      - go tool ogen --target openapi/serverapi -package serverapi --clean openapi/server.yaml
-
-  go:generate:config:
-    cmds:
-      - "go build -trimpath -o {{ .SERVICE_BIN }}/configremaper  ./cmd/configremaper"
-      - "{{ .SERVICE_BIN }}/configremaper --out config-generated.yaml"
-      - "{{ .SERVICE_BIN }}/configremaper --out config-generated.env"
-      - "{{ .SERVICE_BIN }}/configremaper --out config-generated.toml"
+      - go tool ogen --target openapi/agentapi -package agentapi --clean openapi/agent.openapi.yaml
+      - go tool ogen --target openapi/serverapi -package serverapi --clean openapi/server.openapi.yaml
 
   go:generate:grafana:
     cmds:
@@ -67,11 +60,29 @@ tasks:
       - "go build -trimpath -o {{ .SERVICE_BIN }}/server  ./cmd/server"
       - "{{ .SERVICE_BIN }}/server --config config-example.toml"
 
+  run:agent:
+    cmds:
+      - "go build -trimpath -o {{ .SERVICE_BIN }}/agent ./cmd/agent"
+      - "{{ .SERVICE_BIN }}/agent --config config-agent.toml"
+
+  run:agent:example:
+    cmds:
+      - "go build -trimpath -o {{ .SERVICE_BIN }}/agent ./cmd/agent"
+      - "{{ .SERVICE_BIN }}/agent --config config-agent-example.toml"
+
+  run:agent:scan:
+    cmds:
+      - "go build -trimpath -o {{ .SERVICE_BIN }}/agent ./cmd/agent"
+      - "{{ .SERVICE_BIN }}/agent --config config-agent.toml --scan"
+
   build:server:
     cmds:
       - CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -trimpath -o {{ .SERVICE_BIN }}/server-linux-arm64  ./cmd/server
       - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -o {{ .SERVICE_BIN }}/server-linux-amd64  ./cmd/server
       - CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath -o {{ .SERVICE_BIN }}/server-windows-amd64.exe  ./cmd/server
+      - CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -trimpath -o {{ .SERVICE_BIN }}/agent-linux-arm64  ./cmd/agent
+      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -o {{ .SERVICE_BIN }}/agent-linux-amd64  ./cmd/agent
+      - CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath -o {{ .SERVICE_BIN }}/agent-windows-amd64.exe  ./cmd/agent
 
   doc:db:
     cmd: |

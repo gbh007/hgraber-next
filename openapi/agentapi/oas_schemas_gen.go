@@ -16,223 +16,61 @@ func (s *ErrorResponseStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
 }
 
-type APICoreStatusGetOK struct {
-	// Время запуска агента.
-	StartAt time.Time `json:"start_at"`
-	// Текущее состояние агента.
-	Status APICoreStatusGetOKStatus `json:"status"`
-	// Список проблем.
-	Problems []APICoreStatusGetOKProblemsItem `json:"problems"`
-}
+// APIV2FsArchivePostNoContent is response for APIV2FsArchivePost operation.
+type APIV2FsArchivePostNoContent struct{}
 
-// GetStartAt returns the value of StartAt.
-func (s *APICoreStatusGetOK) GetStartAt() time.Time {
-	return s.StartAt
-}
-
-// GetStatus returns the value of Status.
-func (s *APICoreStatusGetOK) GetStatus() APICoreStatusGetOKStatus {
-	return s.Status
-}
-
-// GetProblems returns the value of Problems.
-func (s *APICoreStatusGetOK) GetProblems() []APICoreStatusGetOKProblemsItem {
-	return s.Problems
-}
-
-// SetStartAt sets the value of StartAt.
-func (s *APICoreStatusGetOK) SetStartAt(val time.Time) {
-	s.StartAt = val
-}
-
-// SetStatus sets the value of Status.
-func (s *APICoreStatusGetOK) SetStatus(val APICoreStatusGetOKStatus) {
-	s.Status = val
-}
-
-// SetProblems sets the value of Problems.
-func (s *APICoreStatusGetOK) SetProblems(val []APICoreStatusGetOKProblemsItem) {
-	s.Problems = val
-}
-
-type APICoreStatusGetOKProblemsItem struct {
-	// Тип проблемы.
-	Type APICoreStatusGetOKProblemsItemType `json:"type"`
-	// Описание проблемы.
-	Details string `json:"details"`
-}
-
-// GetType returns the value of Type.
-func (s *APICoreStatusGetOKProblemsItem) GetType() APICoreStatusGetOKProblemsItemType {
-	return s.Type
-}
-
-// GetDetails returns the value of Details.
-func (s *APICoreStatusGetOKProblemsItem) GetDetails() string {
-	return s.Details
-}
-
-// SetType sets the value of Type.
-func (s *APICoreStatusGetOKProblemsItem) SetType(val APICoreStatusGetOKProblemsItemType) {
-	s.Type = val
-}
-
-// SetDetails sets the value of Details.
-func (s *APICoreStatusGetOKProblemsItem) SetDetails(val string) {
-	s.Details = val
-}
-
-// Тип проблемы.
-type APICoreStatusGetOKProblemsItemType string
-
-const (
-	APICoreStatusGetOKProblemsItemTypeInfo    APICoreStatusGetOKProblemsItemType = "info"
-	APICoreStatusGetOKProblemsItemTypeWarning APICoreStatusGetOKProblemsItemType = "warning"
-	APICoreStatusGetOKProblemsItemTypeError   APICoreStatusGetOKProblemsItemType = "error"
-)
-
-// AllValues returns all APICoreStatusGetOKProblemsItemType values.
-func (APICoreStatusGetOKProblemsItemType) AllValues() []APICoreStatusGetOKProblemsItemType {
-	return []APICoreStatusGetOKProblemsItemType{
-		APICoreStatusGetOKProblemsItemTypeInfo,
-		APICoreStatusGetOKProblemsItemTypeWarning,
-		APICoreStatusGetOKProblemsItemTypeError,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s APICoreStatusGetOKProblemsItemType) MarshalText() ([]byte, error) {
-	switch s {
-	case APICoreStatusGetOKProblemsItemTypeInfo:
-		return []byte(s), nil
-	case APICoreStatusGetOKProblemsItemTypeWarning:
-		return []byte(s), nil
-	case APICoreStatusGetOKProblemsItemTypeError:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *APICoreStatusGetOKProblemsItemType) UnmarshalText(data []byte) error {
-	switch APICoreStatusGetOKProblemsItemType(data) {
-	case APICoreStatusGetOKProblemsItemTypeInfo:
-		*s = APICoreStatusGetOKProblemsItemTypeInfo
-		return nil
-	case APICoreStatusGetOKProblemsItemTypeWarning:
-		*s = APICoreStatusGetOKProblemsItemTypeWarning
-		return nil
-	case APICoreStatusGetOKProblemsItemTypeError:
-		*s = APICoreStatusGetOKProblemsItemTypeError
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-// Текущее состояние агента.
-type APICoreStatusGetOKStatus string
-
-const (
-	APICoreStatusGetOKStatusOk      APICoreStatusGetOKStatus = "ok"
-	APICoreStatusGetOKStatusWarning APICoreStatusGetOKStatus = "warning"
-	APICoreStatusGetOKStatusError   APICoreStatusGetOKStatus = "error"
-)
-
-// AllValues returns all APICoreStatusGetOKStatus values.
-func (APICoreStatusGetOKStatus) AllValues() []APICoreStatusGetOKStatus {
-	return []APICoreStatusGetOKStatus{
-		APICoreStatusGetOKStatusOk,
-		APICoreStatusGetOKStatusWarning,
-		APICoreStatusGetOKStatusError,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s APICoreStatusGetOKStatus) MarshalText() ([]byte, error) {
-	switch s {
-	case APICoreStatusGetOKStatusOk:
-		return []byte(s), nil
-	case APICoreStatusGetOKStatusWarning:
-		return []byte(s), nil
-	case APICoreStatusGetOKStatusError:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *APICoreStatusGetOKStatus) UnmarshalText(data []byte) error {
-	switch APICoreStatusGetOKStatus(data) {
-	case APICoreStatusGetOKStatusOk:
-		*s = APICoreStatusGetOKStatusOk
-		return nil
-	case APICoreStatusGetOKStatusWarning:
-		*s = APICoreStatusGetOKStatusWarning
-		return nil
-	case APICoreStatusGetOKStatusError:
-		*s = APICoreStatusGetOKStatusError
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-// APIFsCreatePostNoContent is response for APIFsCreatePost operation.
-type APIFsCreatePostNoContent struct{}
-
-type APIFsCreatePostReq struct {
+type APIV2FsArchivePostReq struct {
 	Data io.Reader
 }
 
 // Read reads data from the Data reader.
 //
 // Kept to satisfy the io.Reader interface.
-func (s APIFsCreatePostReq) Read(p []byte) (n int, err error) {
+func (s APIV2FsArchivePostReq) Read(p []byte) (n int, err error) {
 	if s.Data == nil {
 		return 0, io.EOF
 	}
 	return s.Data.Read(p)
 }
 
-// APIFsDeletePostNoContent is response for APIFsDeletePost operation.
-type APIFsDeletePostNoContent struct{}
+// APIV2FsFileIDDeleteNoContent is response for APIV2FsFileIDDelete operation.
+type APIV2FsFileIDDeleteNoContent struct{}
 
-type APIFsDeletePostReq struct {
-	// ID файла для удаления.
-	FileID uuid.UUID `json:"file_id"`
-}
-
-// GetFileID returns the value of FileID.
-func (s *APIFsDeletePostReq) GetFileID() uuid.UUID {
-	return s.FileID
-}
-
-// SetFileID sets the value of FileID.
-func (s *APIFsDeletePostReq) SetFileID(val uuid.UUID) {
-	s.FileID = val
-}
-
-type APIFsGetGetOK struct {
+type APIV2FsFileIDGetOK struct {
 	Data io.Reader
 }
 
 // Read reads data from the Data reader.
 //
 // Kept to satisfy the io.Reader interface.
-func (s APIFsGetGetOK) Read(p []byte) (n int, err error) {
+func (s APIV2FsFileIDGetOK) Read(p []byte) (n int, err error) {
 	if s.Data == nil {
 		return 0, io.EOF
 	}
 	return s.Data.Read(p)
 }
 
-type APIFsInfoPostOK struct {
+// APIV2FsFileIDPostNoContent is response for APIV2FsFileIDPost operation.
+type APIV2FsFileIDPostNoContent struct{}
+
+type APIV2FsFileIDPostReq struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APIV2FsFileIDPostReq) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+type APIV2FsGetOK struct {
 	// ID файлов что есть в файловой системе.
-	FileIds []uuid.UUID                `json:"file_ids"`
-	Files   []APIFsInfoPostOKFilesItem `json:"files"`
+	FileIds []uuid.UUID             `json:"file_ids"`
+	Files   []APIV2FsGetOKFilesItem `json:"files"`
 	// Размер файлов на файловой системе.
 	TotalFileSize OptInt64 `json:"total_file_size"`
 	// Количество файлов на файловой системе.
@@ -242,56 +80,56 @@ type APIFsInfoPostOK struct {
 }
 
 // GetFileIds returns the value of FileIds.
-func (s *APIFsInfoPostOK) GetFileIds() []uuid.UUID {
+func (s *APIV2FsGetOK) GetFileIds() []uuid.UUID {
 	return s.FileIds
 }
 
 // GetFiles returns the value of Files.
-func (s *APIFsInfoPostOK) GetFiles() []APIFsInfoPostOKFilesItem {
+func (s *APIV2FsGetOK) GetFiles() []APIV2FsGetOKFilesItem {
 	return s.Files
 }
 
 // GetTotalFileSize returns the value of TotalFileSize.
-func (s *APIFsInfoPostOK) GetTotalFileSize() OptInt64 {
+func (s *APIV2FsGetOK) GetTotalFileSize() OptInt64 {
 	return s.TotalFileSize
 }
 
 // GetTotalFileCount returns the value of TotalFileCount.
-func (s *APIFsInfoPostOK) GetTotalFileCount() OptInt64 {
+func (s *APIV2FsGetOK) GetTotalFileCount() OptInt64 {
 	return s.TotalFileCount
 }
 
 // GetAvailableSize returns the value of AvailableSize.
-func (s *APIFsInfoPostOK) GetAvailableSize() OptInt64 {
+func (s *APIV2FsGetOK) GetAvailableSize() OptInt64 {
 	return s.AvailableSize
 }
 
 // SetFileIds sets the value of FileIds.
-func (s *APIFsInfoPostOK) SetFileIds(val []uuid.UUID) {
+func (s *APIV2FsGetOK) SetFileIds(val []uuid.UUID) {
 	s.FileIds = val
 }
 
 // SetFiles sets the value of Files.
-func (s *APIFsInfoPostOK) SetFiles(val []APIFsInfoPostOKFilesItem) {
+func (s *APIV2FsGetOK) SetFiles(val []APIV2FsGetOKFilesItem) {
 	s.Files = val
 }
 
 // SetTotalFileSize sets the value of TotalFileSize.
-func (s *APIFsInfoPostOK) SetTotalFileSize(val OptInt64) {
+func (s *APIV2FsGetOK) SetTotalFileSize(val OptInt64) {
 	s.TotalFileSize = val
 }
 
 // SetTotalFileCount sets the value of TotalFileCount.
-func (s *APIFsInfoPostOK) SetTotalFileCount(val OptInt64) {
+func (s *APIV2FsGetOK) SetTotalFileCount(val OptInt64) {
 	s.TotalFileCount = val
 }
 
 // SetAvailableSize sets the value of AvailableSize.
-func (s *APIFsInfoPostOK) SetAvailableSize(val OptInt64) {
+func (s *APIV2FsGetOK) SetAvailableSize(val OptInt64) {
 	s.AvailableSize = val
 }
 
-type APIFsInfoPostOKFilesItem struct {
+type APIV2FsGetOKFilesItem struct {
 	// ID файла.
 	ID uuid.UUID `json:"id"`
 	// Размер файла.
@@ -301,103 +139,76 @@ type APIFsInfoPostOKFilesItem struct {
 }
 
 // GetID returns the value of ID.
-func (s *APIFsInfoPostOKFilesItem) GetID() uuid.UUID {
+func (s *APIV2FsGetOKFilesItem) GetID() uuid.UUID {
 	return s.ID
 }
 
 // GetSize returns the value of Size.
-func (s *APIFsInfoPostOKFilesItem) GetSize() int64 {
+func (s *APIV2FsGetOKFilesItem) GetSize() int64 {
 	return s.Size
 }
 
 // GetCreatedAt returns the value of CreatedAt.
-func (s *APIFsInfoPostOKFilesItem) GetCreatedAt() time.Time {
+func (s *APIV2FsGetOKFilesItem) GetCreatedAt() time.Time {
 	return s.CreatedAt
 }
 
 // SetID sets the value of ID.
-func (s *APIFsInfoPostOKFilesItem) SetID(val uuid.UUID) {
+func (s *APIV2FsGetOKFilesItem) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
 // SetSize sets the value of Size.
-func (s *APIFsInfoPostOKFilesItem) SetSize(val int64) {
+func (s *APIV2FsGetOKFilesItem) SetSize(val int64) {
 	s.Size = val
 }
 
 // SetCreatedAt sets the value of CreatedAt.
-func (s *APIFsInfoPostOKFilesItem) SetCreatedAt(val time.Time) {
+func (s *APIV2FsGetOKFilesItem) SetCreatedAt(val time.Time) {
 	s.CreatedAt = val
 }
 
-type APIFsInfoPostReq struct {
-	// Включить в ответ ID файлов в файловой системе.
-	IncludeFileIds OptBool `json:"include_file_ids"`
-	// Включить в ответ размер файлов в файловой системе.
-	IncludeFileSizes OptBool `json:"include_file_sizes"`
-}
-
-// GetIncludeFileIds returns the value of IncludeFileIds.
-func (s *APIFsInfoPostReq) GetIncludeFileIds() OptBool {
-	return s.IncludeFileIds
-}
-
-// GetIncludeFileSizes returns the value of IncludeFileSizes.
-func (s *APIFsInfoPostReq) GetIncludeFileSizes() OptBool {
-	return s.IncludeFileSizes
-}
-
-// SetIncludeFileIds sets the value of IncludeFileIds.
-func (s *APIFsInfoPostReq) SetIncludeFileIds(val OptBool) {
-	s.IncludeFileIds = val
-}
-
-// SetIncludeFileSizes sets the value of IncludeFileSizes.
-func (s *APIFsInfoPostReq) SetIncludeFileSizes(val OptBool) {
-	s.IncludeFileSizes = val
-}
-
-type APIHighwayFileIDExtGetOK struct {
+type APIV2HighwayFileIDExtGetOK struct {
 	Data io.Reader
 }
 
 // Read reads data from the Data reader.
 //
 // Kept to satisfy the io.Reader interface.
-func (s APIHighwayFileIDExtGetOK) Read(p []byte) (n int, err error) {
+func (s APIV2HighwayFileIDExtGetOK) Read(p []byte) (n int, err error) {
 	if s.Data == nil {
 		return 0, io.EOF
 	}
 	return s.Data.Read(p)
 }
 
-// APIHighwayFileIDExtGetOKHeaders wraps APIHighwayFileIDExtGetOK with response headers.
-type APIHighwayFileIDExtGetOKHeaders struct {
+// APIV2HighwayFileIDExtGetOKHeaders wraps APIV2HighwayFileIDExtGetOK with response headers.
+type APIV2HighwayFileIDExtGetOKHeaders struct {
 	ContentType string
-	Response    APIHighwayFileIDExtGetOK
+	Response    APIV2HighwayFileIDExtGetOK
 }
 
 // GetContentType returns the value of ContentType.
-func (s *APIHighwayFileIDExtGetOKHeaders) GetContentType() string {
+func (s *APIV2HighwayFileIDExtGetOKHeaders) GetContentType() string {
 	return s.ContentType
 }
 
 // GetResponse returns the value of Response.
-func (s *APIHighwayFileIDExtGetOKHeaders) GetResponse() APIHighwayFileIDExtGetOK {
+func (s *APIV2HighwayFileIDExtGetOKHeaders) GetResponse() APIV2HighwayFileIDExtGetOK {
 	return s.Response
 }
 
 // SetContentType sets the value of ContentType.
-func (s *APIHighwayFileIDExtGetOKHeaders) SetContentType(val string) {
+func (s *APIV2HighwayFileIDExtGetOKHeaders) SetContentType(val string) {
 	s.ContentType = val
 }
 
 // SetResponse sets the value of Response.
-func (s *APIHighwayFileIDExtGetOKHeaders) SetResponse(val APIHighwayFileIDExtGetOK) {
+func (s *APIV2HighwayFileIDExtGetOKHeaders) SetResponse(val APIV2HighwayFileIDExtGetOK) {
 	s.Response = val
 }
 
-type APIHighwayTokenCreatePostOK struct {
+type APIV2HighwayTokenPostOK struct {
 	// Время до которого будет активен токен.
 	ValidUntil time.Time `json:"valid_until"`
 	// Токен highway.
@@ -405,26 +216,422 @@ type APIHighwayTokenCreatePostOK struct {
 }
 
 // GetValidUntil returns the value of ValidUntil.
-func (s *APIHighwayTokenCreatePostOK) GetValidUntil() time.Time {
+func (s *APIV2HighwayTokenPostOK) GetValidUntil() time.Time {
 	return s.ValidUntil
 }
 
 // GetToken returns the value of Token.
-func (s *APIHighwayTokenCreatePostOK) GetToken() string {
+func (s *APIV2HighwayTokenPostOK) GetToken() string {
 	return s.Token
 }
 
 // SetValidUntil sets the value of ValidUntil.
-func (s *APIHighwayTokenCreatePostOK) SetValidUntil(val time.Time) {
+func (s *APIV2HighwayTokenPostOK) SetValidUntil(val time.Time) {
 	s.ValidUntil = val
 }
 
 // SetToken sets the value of Token.
-func (s *APIHighwayTokenCreatePostOK) SetToken(val string) {
+func (s *APIV2HighwayTokenPostOK) SetToken(val string) {
 	s.Token = val
 }
 
-type APIHproxyParseBookPostOK struct {
+type APIV2ParsingBookPostReq struct {
+	// Ссылка на внешнюю систему.
+	URL url.URL `json:"url"`
+	// Ограничение на количество страниц для парсинга.
+	PageLimit OptInt `json:"page_limit"`
+}
+
+// GetURL returns the value of URL.
+func (s *APIV2ParsingBookPostReq) GetURL() url.URL {
+	return s.URL
+}
+
+// GetPageLimit returns the value of PageLimit.
+func (s *APIV2ParsingBookPostReq) GetPageLimit() OptInt {
+	return s.PageLimit
+}
+
+// SetURL sets the value of URL.
+func (s *APIV2ParsingBookPostReq) SetURL(val url.URL) {
+	s.URL = val
+}
+
+// SetPageLimit sets the value of PageLimit.
+func (s *APIV2ParsingBookPostReq) SetPageLimit(val OptInt) {
+	s.PageLimit = val
+}
+
+type APIV2ParsingCheckPostReq struct {
+	// Ссылки на внешние системы.
+	Urls []url.URL `json:"urls"`
+}
+
+// GetUrls returns the value of Urls.
+func (s *APIV2ParsingCheckPostReq) GetUrls() []url.URL {
+	return s.Urls
+}
+
+// SetUrls sets the value of Urls.
+func (s *APIV2ParsingCheckPostReq) SetUrls(val []url.URL) {
+	s.Urls = val
+}
+
+type APIV2ParsingListPostOK struct {
+	// Результаты обработки.
+	Results []APIV2ParsingListPostOKResultsItem `json:"results"`
+	// Ссылка на следующую страницу.
+	NextURL OptURI `json:"next_url"`
+}
+
+// GetResults returns the value of Results.
+func (s *APIV2ParsingListPostOK) GetResults() []APIV2ParsingListPostOKResultsItem {
+	return s.Results
+}
+
+// GetNextURL returns the value of NextURL.
+func (s *APIV2ParsingListPostOK) GetNextURL() OptURI {
+	return s.NextURL
+}
+
+// SetResults sets the value of Results.
+func (s *APIV2ParsingListPostOK) SetResults(val []APIV2ParsingListPostOKResultsItem) {
+	s.Results = val
+}
+
+// SetNextURL sets the value of NextURL.
+func (s *APIV2ParsingListPostOK) SetNextURL(val OptURI) {
+	s.NextURL = val
+}
+
+// Экземпляр.
+type APIV2ParsingListPostOKResultsItem struct {
+	// Ссылка на экземпляр.
+	LinkURL url.URL `json:"link_url"`
+	// Название экземпляра.
+	Name OptString `json:"name"`
+	// Ссылка на превью экземпляра.
+	PreviewURL OptURI `json:"preview_url"`
+	// Тип экземпляра.
+	Type APIV2ParsingListPostOKResultsItemType `json:"type"`
+}
+
+// GetLinkURL returns the value of LinkURL.
+func (s *APIV2ParsingListPostOKResultsItem) GetLinkURL() url.URL {
+	return s.LinkURL
+}
+
+// GetName returns the value of Name.
+func (s *APIV2ParsingListPostOKResultsItem) GetName() OptString {
+	return s.Name
+}
+
+// GetPreviewURL returns the value of PreviewURL.
+func (s *APIV2ParsingListPostOKResultsItem) GetPreviewURL() OptURI {
+	return s.PreviewURL
+}
+
+// GetType returns the value of Type.
+func (s *APIV2ParsingListPostOKResultsItem) GetType() APIV2ParsingListPostOKResultsItemType {
+	return s.Type
+}
+
+// SetLinkURL sets the value of LinkURL.
+func (s *APIV2ParsingListPostOKResultsItem) SetLinkURL(val url.URL) {
+	s.LinkURL = val
+}
+
+// SetName sets the value of Name.
+func (s *APIV2ParsingListPostOKResultsItem) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetPreviewURL sets the value of PreviewURL.
+func (s *APIV2ParsingListPostOKResultsItem) SetPreviewURL(val OptURI) {
+	s.PreviewURL = val
+}
+
+// SetType sets the value of Type.
+func (s *APIV2ParsingListPostOKResultsItem) SetType(val APIV2ParsingListPostOKResultsItemType) {
+	s.Type = val
+}
+
+// Тип экземпляра.
+type APIV2ParsingListPostOKResultsItemType string
+
+const (
+	APIV2ParsingListPostOKResultsItemTypeDetails APIV2ParsingListPostOKResultsItemType = "details"
+	APIV2ParsingListPostOKResultsItemTypeList    APIV2ParsingListPostOKResultsItemType = "list"
+)
+
+// AllValues returns all APIV2ParsingListPostOKResultsItemType values.
+func (APIV2ParsingListPostOKResultsItemType) AllValues() []APIV2ParsingListPostOKResultsItemType {
+	return []APIV2ParsingListPostOKResultsItemType{
+		APIV2ParsingListPostOKResultsItemTypeDetails,
+		APIV2ParsingListPostOKResultsItemTypeList,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIV2ParsingListPostOKResultsItemType) MarshalText() ([]byte, error) {
+	switch s {
+	case APIV2ParsingListPostOKResultsItemTypeDetails:
+		return []byte(s), nil
+	case APIV2ParsingListPostOKResultsItemTypeList:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIV2ParsingListPostOKResultsItemType) UnmarshalText(data []byte) error {
+	switch APIV2ParsingListPostOKResultsItemType(data) {
+	case APIV2ParsingListPostOKResultsItemTypeDetails:
+		*s = APIV2ParsingListPostOKResultsItemTypeDetails
+		return nil
+	case APIV2ParsingListPostOKResultsItemTypeList:
+		*s = APIV2ParsingListPostOKResultsItemTypeList
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APIV2ParsingListPostReq struct {
+	// Ссылка на внешние систему.
+	URL url.URL `json:"url"`
+	// Обработать только 1 страницу.
+	OnePage OptBool `json:"one_page"`
+}
+
+// GetURL returns the value of URL.
+func (s *APIV2ParsingListPostReq) GetURL() url.URL {
+	return s.URL
+}
+
+// GetOnePage returns the value of OnePage.
+func (s *APIV2ParsingListPostReq) GetOnePage() OptBool {
+	return s.OnePage
+}
+
+// SetURL sets the value of URL.
+func (s *APIV2ParsingListPostReq) SetURL(val url.URL) {
+	s.URL = val
+}
+
+// SetOnePage sets the value of OnePage.
+func (s *APIV2ParsingListPostReq) SetOnePage(val OptBool) {
+	s.OnePage = val
+}
+
+type APIV2ParsingPagePostOK struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s APIV2ParsingPagePostOK) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+type APIV2ParsingPagePostReq struct {
+	// Ссылка на книгу во внешней системе.
+	BookURL url.URL `json:"book_url"`
+	// Ссылка на изображение во внешней системе.
+	ImageURL url.URL `json:"image_url"`
+}
+
+// GetBookURL returns the value of BookURL.
+func (s *APIV2ParsingPagePostReq) GetBookURL() url.URL {
+	return s.BookURL
+}
+
+// GetImageURL returns the value of ImageURL.
+func (s *APIV2ParsingPagePostReq) GetImageURL() url.URL {
+	return s.ImageURL
+}
+
+// SetBookURL sets the value of BookURL.
+func (s *APIV2ParsingPagePostReq) SetBookURL(val url.URL) {
+	s.BookURL = val
+}
+
+// SetImageURL sets the value of ImageURL.
+func (s *APIV2ParsingPagePostReq) SetImageURL(val url.URL) {
+	s.ImageURL = val
+}
+
+type APIV2StatusGetOK struct {
+	// Время запуска агента.
+	StartAt time.Time `json:"start_at"`
+	// Текущее состояние агента.
+	Status APIV2StatusGetOKStatus `json:"status"`
+	// Список проблем.
+	Problems []APIV2StatusGetOKProblemsItem `json:"problems"`
+}
+
+// GetStartAt returns the value of StartAt.
+func (s *APIV2StatusGetOK) GetStartAt() time.Time {
+	return s.StartAt
+}
+
+// GetStatus returns the value of Status.
+func (s *APIV2StatusGetOK) GetStatus() APIV2StatusGetOKStatus {
+	return s.Status
+}
+
+// GetProblems returns the value of Problems.
+func (s *APIV2StatusGetOK) GetProblems() []APIV2StatusGetOKProblemsItem {
+	return s.Problems
+}
+
+// SetStartAt sets the value of StartAt.
+func (s *APIV2StatusGetOK) SetStartAt(val time.Time) {
+	s.StartAt = val
+}
+
+// SetStatus sets the value of Status.
+func (s *APIV2StatusGetOK) SetStatus(val APIV2StatusGetOKStatus) {
+	s.Status = val
+}
+
+// SetProblems sets the value of Problems.
+func (s *APIV2StatusGetOK) SetProblems(val []APIV2StatusGetOKProblemsItem) {
+	s.Problems = val
+}
+
+type APIV2StatusGetOKProblemsItem struct {
+	// Тип проблемы.
+	Type APIV2StatusGetOKProblemsItemType `json:"type"`
+	// Описание проблемы.
+	Details string `json:"details"`
+}
+
+// GetType returns the value of Type.
+func (s *APIV2StatusGetOKProblemsItem) GetType() APIV2StatusGetOKProblemsItemType {
+	return s.Type
+}
+
+// GetDetails returns the value of Details.
+func (s *APIV2StatusGetOKProblemsItem) GetDetails() string {
+	return s.Details
+}
+
+// SetType sets the value of Type.
+func (s *APIV2StatusGetOKProblemsItem) SetType(val APIV2StatusGetOKProblemsItemType) {
+	s.Type = val
+}
+
+// SetDetails sets the value of Details.
+func (s *APIV2StatusGetOKProblemsItem) SetDetails(val string) {
+	s.Details = val
+}
+
+// Тип проблемы.
+type APIV2StatusGetOKProblemsItemType string
+
+const (
+	APIV2StatusGetOKProblemsItemTypeInfo    APIV2StatusGetOKProblemsItemType = "info"
+	APIV2StatusGetOKProblemsItemTypeWarning APIV2StatusGetOKProblemsItemType = "warning"
+	APIV2StatusGetOKProblemsItemTypeError   APIV2StatusGetOKProblemsItemType = "error"
+)
+
+// AllValues returns all APIV2StatusGetOKProblemsItemType values.
+func (APIV2StatusGetOKProblemsItemType) AllValues() []APIV2StatusGetOKProblemsItemType {
+	return []APIV2StatusGetOKProblemsItemType{
+		APIV2StatusGetOKProblemsItemTypeInfo,
+		APIV2StatusGetOKProblemsItemTypeWarning,
+		APIV2StatusGetOKProblemsItemTypeError,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIV2StatusGetOKProblemsItemType) MarshalText() ([]byte, error) {
+	switch s {
+	case APIV2StatusGetOKProblemsItemTypeInfo:
+		return []byte(s), nil
+	case APIV2StatusGetOKProblemsItemTypeWarning:
+		return []byte(s), nil
+	case APIV2StatusGetOKProblemsItemTypeError:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIV2StatusGetOKProblemsItemType) UnmarshalText(data []byte) error {
+	switch APIV2StatusGetOKProblemsItemType(data) {
+	case APIV2StatusGetOKProblemsItemTypeInfo:
+		*s = APIV2StatusGetOKProblemsItemTypeInfo
+		return nil
+	case APIV2StatusGetOKProblemsItemTypeWarning:
+		*s = APIV2StatusGetOKProblemsItemTypeWarning
+		return nil
+	case APIV2StatusGetOKProblemsItemTypeError:
+		*s = APIV2StatusGetOKProblemsItemTypeError
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Текущее состояние агента.
+type APIV2StatusGetOKStatus string
+
+const (
+	APIV2StatusGetOKStatusOk      APIV2StatusGetOKStatus = "ok"
+	APIV2StatusGetOKStatusWarning APIV2StatusGetOKStatus = "warning"
+	APIV2StatusGetOKStatusError   APIV2StatusGetOKStatus = "error"
+)
+
+// AllValues returns all APIV2StatusGetOKStatus values.
+func (APIV2StatusGetOKStatus) AllValues() []APIV2StatusGetOKStatus {
+	return []APIV2StatusGetOKStatus{
+		APIV2StatusGetOKStatusOk,
+		APIV2StatusGetOKStatusWarning,
+		APIV2StatusGetOKStatusError,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIV2StatusGetOKStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case APIV2StatusGetOKStatusOk:
+		return []byte(s), nil
+	case APIV2StatusGetOKStatusWarning:
+		return []byte(s), nil
+	case APIV2StatusGetOKStatusError:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIV2StatusGetOKStatus) UnmarshalText(data []byte) error {
+	switch APIV2StatusGetOKStatus(data) {
+	case APIV2StatusGetOKStatusOk:
+		*s = APIV2StatusGetOKStatusOk
+		return nil
+	case APIV2StatusGetOKStatusWarning:
+		*s = APIV2StatusGetOKStatusWarning
+		return nil
+	case APIV2StatusGetOKStatusError:
+		*s = APIV2StatusGetOKStatusError
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/BookDetails
+type BookDetails struct {
 	// Название книги.
 	Name string `json:"name"`
 	// Ссылка на внешнюю систему.
@@ -434,605 +641,9 @@ type APIHproxyParseBookPostOK struct {
 	// Количество страниц.
 	PageCount int `json:"page_count"`
 	// Данные страниц книги.
-	Pages []APIHproxyParseBookPostOKPagesItem `json:"pages"`
-	// Данные атрибутов книги.
-	Attributes []APIHproxyParseBookPostOKAttributesItem `json:"attributes"`
-}
-
-// GetName returns the value of Name.
-func (s *APIHproxyParseBookPostOK) GetName() string {
-	return s.Name
-}
-
-// GetURL returns the value of URL.
-func (s *APIHproxyParseBookPostOK) GetURL() url.URL {
-	return s.URL
-}
-
-// GetPreviewURL returns the value of PreviewURL.
-func (s *APIHproxyParseBookPostOK) GetPreviewURL() OptURI {
-	return s.PreviewURL
-}
-
-// GetPageCount returns the value of PageCount.
-func (s *APIHproxyParseBookPostOK) GetPageCount() int {
-	return s.PageCount
-}
-
-// GetPages returns the value of Pages.
-func (s *APIHproxyParseBookPostOK) GetPages() []APIHproxyParseBookPostOKPagesItem {
-	return s.Pages
-}
-
-// GetAttributes returns the value of Attributes.
-func (s *APIHproxyParseBookPostOK) GetAttributes() []APIHproxyParseBookPostOKAttributesItem {
-	return s.Attributes
-}
-
-// SetName sets the value of Name.
-func (s *APIHproxyParseBookPostOK) SetName(val string) {
-	s.Name = val
-}
-
-// SetURL sets the value of URL.
-func (s *APIHproxyParseBookPostOK) SetURL(val url.URL) {
-	s.URL = val
-}
-
-// SetPreviewURL sets the value of PreviewURL.
-func (s *APIHproxyParseBookPostOK) SetPreviewURL(val OptURI) {
-	s.PreviewURL = val
-}
-
-// SetPageCount sets the value of PageCount.
-func (s *APIHproxyParseBookPostOK) SetPageCount(val int) {
-	s.PageCount = val
-}
-
-// SetPages sets the value of Pages.
-func (s *APIHproxyParseBookPostOK) SetPages(val []APIHproxyParseBookPostOKPagesItem) {
-	s.Pages = val
-}
-
-// SetAttributes sets the value of Attributes.
-func (s *APIHproxyParseBookPostOK) SetAttributes(val []APIHproxyParseBookPostOKAttributesItem) {
-	s.Attributes = val
-}
-
-type APIHproxyParseBookPostOKAttributesItem struct {
-	// Код атрибута.
-	Code string `json:"code"`
-	// Значения атрибута.
-	Values []APIHproxyParseBookPostOKAttributesItemValuesItem `json:"values"`
-}
-
-// GetCode returns the value of Code.
-func (s *APIHproxyParseBookPostOKAttributesItem) GetCode() string {
-	return s.Code
-}
-
-// GetValues returns the value of Values.
-func (s *APIHproxyParseBookPostOKAttributesItem) GetValues() []APIHproxyParseBookPostOKAttributesItemValuesItem {
-	return s.Values
-}
-
-// SetCode sets the value of Code.
-func (s *APIHproxyParseBookPostOKAttributesItem) SetCode(val string) {
-	s.Code = val
-}
-
-// SetValues sets the value of Values.
-func (s *APIHproxyParseBookPostOKAttributesItem) SetValues(val []APIHproxyParseBookPostOKAttributesItemValuesItem) {
-	s.Values = val
-}
-
-type APIHproxyParseBookPostOKAttributesItemValuesItem struct {
-	// Название.
-	Name string `json:"name"`
-	// Ссылка на фильтрацию по значению.
-	URL OptURI `json:"url"`
-}
-
-// GetName returns the value of Name.
-func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) GetName() string {
-	return s.Name
-}
-
-// GetURL returns the value of URL.
-func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) GetURL() OptURI {
-	return s.URL
-}
-
-// SetName sets the value of Name.
-func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) SetName(val string) {
-	s.Name = val
-}
-
-// SetURL sets the value of URL.
-func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) SetURL(val OptURI) {
-	s.URL = val
-}
-
-type APIHproxyParseBookPostOKPagesItem struct {
-	// Номер страницы в книге.
-	PageNumber int `json:"page_number"`
-	// Ссылка на изображение во внешней системе.
-	URL url.URL `json:"url"`
-	// Название файла с расширением.
-	Filename string `json:"filename"`
-}
-
-// GetPageNumber returns the value of PageNumber.
-func (s *APIHproxyParseBookPostOKPagesItem) GetPageNumber() int {
-	return s.PageNumber
-}
-
-// GetURL returns the value of URL.
-func (s *APIHproxyParseBookPostOKPagesItem) GetURL() url.URL {
-	return s.URL
-}
-
-// GetFilename returns the value of Filename.
-func (s *APIHproxyParseBookPostOKPagesItem) GetFilename() string {
-	return s.Filename
-}
-
-// SetPageNumber sets the value of PageNumber.
-func (s *APIHproxyParseBookPostOKPagesItem) SetPageNumber(val int) {
-	s.PageNumber = val
-}
-
-// SetURL sets the value of URL.
-func (s *APIHproxyParseBookPostOKPagesItem) SetURL(val url.URL) {
-	s.URL = val
-}
-
-// SetFilename sets the value of Filename.
-func (s *APIHproxyParseBookPostOKPagesItem) SetFilename(val string) {
-	s.Filename = val
-}
-
-type APIHproxyParseBookPostReq struct {
-	// Ссылка для обработки.
-	URL url.URL `json:"url"`
-	// Ограничение на количество страниц для парсинга.
-	PageLimit OptInt `json:"page_limit"`
-}
-
-// GetURL returns the value of URL.
-func (s *APIHproxyParseBookPostReq) GetURL() url.URL {
-	return s.URL
-}
-
-// GetPageLimit returns the value of PageLimit.
-func (s *APIHproxyParseBookPostReq) GetPageLimit() OptInt {
-	return s.PageLimit
-}
-
-// SetURL sets the value of URL.
-func (s *APIHproxyParseBookPostReq) SetURL(val url.URL) {
-	s.URL = val
-}
-
-// SetPageLimit sets the value of PageLimit.
-func (s *APIHproxyParseBookPostReq) SetPageLimit(val OptInt) {
-	s.PageLimit = val
-}
-
-type APIHproxyParseListPostOK struct {
-	// Результаты обработки.
-	Results []APIHproxyParseListPostOKResultsItem `json:"results"`
-	// Ссылка на следующую страницу.
-	NextURL OptURI `json:"next_url"`
-}
-
-// GetResults returns the value of Results.
-func (s *APIHproxyParseListPostOK) GetResults() []APIHproxyParseListPostOKResultsItem {
-	return s.Results
-}
-
-// GetNextURL returns the value of NextURL.
-func (s *APIHproxyParseListPostOK) GetNextURL() OptURI {
-	return s.NextURL
-}
-
-// SetResults sets the value of Results.
-func (s *APIHproxyParseListPostOK) SetResults(val []APIHproxyParseListPostOKResultsItem) {
-	s.Results = val
-}
-
-// SetNextURL sets the value of NextURL.
-func (s *APIHproxyParseListPostOK) SetNextURL(val OptURI) {
-	s.NextURL = val
-}
-
-// Экземпляр.
-type APIHproxyParseListPostOKResultsItem struct {
-	// Ссылка на экземпляр.
-	LinkURL url.URL `json:"link_url"`
-	// Название экземпляра.
-	Name OptString `json:"name"`
-	// Ссылка на превью экземпляра.
-	PreviewURL OptURI `json:"preview_url"`
-	// Тип экземпляра.
-	Type APIHproxyParseListPostOKResultsItemType `json:"type"`
-}
-
-// GetLinkURL returns the value of LinkURL.
-func (s *APIHproxyParseListPostOKResultsItem) GetLinkURL() url.URL {
-	return s.LinkURL
-}
-
-// GetName returns the value of Name.
-func (s *APIHproxyParseListPostOKResultsItem) GetName() OptString {
-	return s.Name
-}
-
-// GetPreviewURL returns the value of PreviewURL.
-func (s *APIHproxyParseListPostOKResultsItem) GetPreviewURL() OptURI {
-	return s.PreviewURL
-}
-
-// GetType returns the value of Type.
-func (s *APIHproxyParseListPostOKResultsItem) GetType() APIHproxyParseListPostOKResultsItemType {
-	return s.Type
-}
-
-// SetLinkURL sets the value of LinkURL.
-func (s *APIHproxyParseListPostOKResultsItem) SetLinkURL(val url.URL) {
-	s.LinkURL = val
-}
-
-// SetName sets the value of Name.
-func (s *APIHproxyParseListPostOKResultsItem) SetName(val OptString) {
-	s.Name = val
-}
-
-// SetPreviewURL sets the value of PreviewURL.
-func (s *APIHproxyParseListPostOKResultsItem) SetPreviewURL(val OptURI) {
-	s.PreviewURL = val
-}
-
-// SetType sets the value of Type.
-func (s *APIHproxyParseListPostOKResultsItem) SetType(val APIHproxyParseListPostOKResultsItemType) {
-	s.Type = val
-}
-
-// Тип экземпляра.
-type APIHproxyParseListPostOKResultsItemType string
-
-const (
-	APIHproxyParseListPostOKResultsItemTypeDetails APIHproxyParseListPostOKResultsItemType = "details"
-	APIHproxyParseListPostOKResultsItemTypeList    APIHproxyParseListPostOKResultsItemType = "list"
-)
-
-// AllValues returns all APIHproxyParseListPostOKResultsItemType values.
-func (APIHproxyParseListPostOKResultsItemType) AllValues() []APIHproxyParseListPostOKResultsItemType {
-	return []APIHproxyParseListPostOKResultsItemType{
-		APIHproxyParseListPostOKResultsItemTypeDetails,
-		APIHproxyParseListPostOKResultsItemTypeList,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s APIHproxyParseListPostOKResultsItemType) MarshalText() ([]byte, error) {
-	switch s {
-	case APIHproxyParseListPostOKResultsItemTypeDetails:
-		return []byte(s), nil
-	case APIHproxyParseListPostOKResultsItemTypeList:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *APIHproxyParseListPostOKResultsItemType) UnmarshalText(data []byte) error {
-	switch APIHproxyParseListPostOKResultsItemType(data) {
-	case APIHproxyParseListPostOKResultsItemTypeDetails:
-		*s = APIHproxyParseListPostOKResultsItemTypeDetails
-		return nil
-	case APIHproxyParseListPostOKResultsItemTypeList:
-		*s = APIHproxyParseListPostOKResultsItemTypeList
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type APIHproxyParseListPostReq struct {
-	// Ссылка для обработки.
-	URL url.URL `json:"url"`
-}
-
-// GetURL returns the value of URL.
-func (s *APIHproxyParseListPostReq) GetURL() url.URL {
-	return s.URL
-}
-
-// SetURL sets the value of URL.
-func (s *APIHproxyParseListPostReq) SetURL(val url.URL) {
-	s.URL = val
-}
-
-// APIImportArchivePostNoContent is response for APIImportArchivePost operation.
-type APIImportArchivePostNoContent struct{}
-
-type APIImportArchivePostReq struct {
-	Data io.Reader
-}
-
-// Read reads data from the Data reader.
-//
-// Kept to satisfy the io.Reader interface.
-func (s APIImportArchivePostReq) Read(p []byte) (n int, err error) {
-	if s.Data == nil {
-		return 0, io.EOF
-	}
-	return s.Data.Read(p)
-}
-
-type APIParsingBookCheckPostReq struct {
-	// Ссылки на внешние системы.
-	Urls []url.URL `json:"urls"`
-}
-
-// GetUrls returns the value of Urls.
-func (s *APIParsingBookCheckPostReq) GetUrls() []url.URL {
-	return s.Urls
-}
-
-// SetUrls sets the value of Urls.
-func (s *APIParsingBookCheckPostReq) SetUrls(val []url.URL) {
-	s.Urls = val
-}
-
-type APIParsingBookMultiPostReq struct {
-	// Ссылка на внешние систему.
-	URL url.URL `json:"url"`
-}
-
-// GetURL returns the value of URL.
-func (s *APIParsingBookMultiPostReq) GetURL() url.URL {
-	return s.URL
-}
-
-// SetURL sets the value of URL.
-func (s *APIParsingBookMultiPostReq) SetURL(val url.URL) {
-	s.URL = val
-}
-
-type APIParsingBookPostReq struct {
-	// Ссылка на внешнюю систему.
-	URL url.URL `json:"url"`
-}
-
-// GetURL returns the value of URL.
-func (s *APIParsingBookPostReq) GetURL() url.URL {
-	return s.URL
-}
-
-// SetURL sets the value of URL.
-func (s *APIParsingBookPostReq) SetURL(val url.URL) {
-	s.URL = val
-}
-
-type APIParsingPageCheckPostOK struct {
-	// Результат обработки.
-	Result []APIParsingPageCheckPostOKResultItem `json:"result"`
-}
-
-// GetResult returns the value of Result.
-func (s *APIParsingPageCheckPostOK) GetResult() []APIParsingPageCheckPostOKResultItem {
-	return s.Result
-}
-
-// SetResult sets the value of Result.
-func (s *APIParsingPageCheckPostOK) SetResult(val []APIParsingPageCheckPostOKResultItem) {
-	s.Result = val
-}
-
-type APIParsingPageCheckPostOKResultItem struct {
-	// Ссылка на книгу во внешней системе.
-	BookURL url.URL `json:"book_url"`
-	// Ссылка на изображение во внешней системе.
-	ImageURL url.URL `json:"image_url"`
-	// Результат проверки.
-	Result APIParsingPageCheckPostOKResultItemResult `json:"result"`
-	// Данные об ошибке во время обработки.
-	ErrorDetails OptString `json:"error_details"`
-}
-
-// GetBookURL returns the value of BookURL.
-func (s *APIParsingPageCheckPostOKResultItem) GetBookURL() url.URL {
-	return s.BookURL
-}
-
-// GetImageURL returns the value of ImageURL.
-func (s *APIParsingPageCheckPostOKResultItem) GetImageURL() url.URL {
-	return s.ImageURL
-}
-
-// GetResult returns the value of Result.
-func (s *APIParsingPageCheckPostOKResultItem) GetResult() APIParsingPageCheckPostOKResultItemResult {
-	return s.Result
-}
-
-// GetErrorDetails returns the value of ErrorDetails.
-func (s *APIParsingPageCheckPostOKResultItem) GetErrorDetails() OptString {
-	return s.ErrorDetails
-}
-
-// SetBookURL sets the value of BookURL.
-func (s *APIParsingPageCheckPostOKResultItem) SetBookURL(val url.URL) {
-	s.BookURL = val
-}
-
-// SetImageURL sets the value of ImageURL.
-func (s *APIParsingPageCheckPostOKResultItem) SetImageURL(val url.URL) {
-	s.ImageURL = val
-}
-
-// SetResult sets the value of Result.
-func (s *APIParsingPageCheckPostOKResultItem) SetResult(val APIParsingPageCheckPostOKResultItemResult) {
-	s.Result = val
-}
-
-// SetErrorDetails sets the value of ErrorDetails.
-func (s *APIParsingPageCheckPostOKResultItem) SetErrorDetails(val OptString) {
-	s.ErrorDetails = val
-}
-
-// Результат проверки.
-type APIParsingPageCheckPostOKResultItemResult string
-
-const (
-	APIParsingPageCheckPostOKResultItemResultOk          APIParsingPageCheckPostOKResultItemResult = "ok"
-	APIParsingPageCheckPostOKResultItemResultUnsupported APIParsingPageCheckPostOKResultItemResult = "unsupported"
-	APIParsingPageCheckPostOKResultItemResultError       APIParsingPageCheckPostOKResultItemResult = "error"
-)
-
-// AllValues returns all APIParsingPageCheckPostOKResultItemResult values.
-func (APIParsingPageCheckPostOKResultItemResult) AllValues() []APIParsingPageCheckPostOKResultItemResult {
-	return []APIParsingPageCheckPostOKResultItemResult{
-		APIParsingPageCheckPostOKResultItemResultOk,
-		APIParsingPageCheckPostOKResultItemResultUnsupported,
-		APIParsingPageCheckPostOKResultItemResultError,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s APIParsingPageCheckPostOKResultItemResult) MarshalText() ([]byte, error) {
-	switch s {
-	case APIParsingPageCheckPostOKResultItemResultOk:
-		return []byte(s), nil
-	case APIParsingPageCheckPostOKResultItemResultUnsupported:
-		return []byte(s), nil
-	case APIParsingPageCheckPostOKResultItemResultError:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *APIParsingPageCheckPostOKResultItemResult) UnmarshalText(data []byte) error {
-	switch APIParsingPageCheckPostOKResultItemResult(data) {
-	case APIParsingPageCheckPostOKResultItemResultOk:
-		*s = APIParsingPageCheckPostOKResultItemResultOk
-		return nil
-	case APIParsingPageCheckPostOKResultItemResultUnsupported:
-		*s = APIParsingPageCheckPostOKResultItemResultUnsupported
-		return nil
-	case APIParsingPageCheckPostOKResultItemResultError:
-		*s = APIParsingPageCheckPostOKResultItemResultError
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type APIParsingPageCheckPostReq struct {
-	// Ссылки на внешние системы.
-	Urls []APIParsingPageCheckPostReqUrlsItem `json:"urls"`
-}
-
-// GetUrls returns the value of Urls.
-func (s *APIParsingPageCheckPostReq) GetUrls() []APIParsingPageCheckPostReqUrlsItem {
-	return s.Urls
-}
-
-// SetUrls sets the value of Urls.
-func (s *APIParsingPageCheckPostReq) SetUrls(val []APIParsingPageCheckPostReqUrlsItem) {
-	s.Urls = val
-}
-
-type APIParsingPageCheckPostReqUrlsItem struct {
-	// Ссылка на книгу во внешней системе.
-	BookURL url.URL `json:"book_url"`
-	// Ссылка на изображение во внешней системе.
-	ImageURL url.URL `json:"image_url"`
-}
-
-// GetBookURL returns the value of BookURL.
-func (s *APIParsingPageCheckPostReqUrlsItem) GetBookURL() url.URL {
-	return s.BookURL
-}
-
-// GetImageURL returns the value of ImageURL.
-func (s *APIParsingPageCheckPostReqUrlsItem) GetImageURL() url.URL {
-	return s.ImageURL
-}
-
-// SetBookURL sets the value of BookURL.
-func (s *APIParsingPageCheckPostReqUrlsItem) SetBookURL(val url.URL) {
-	s.BookURL = val
-}
-
-// SetImageURL sets the value of ImageURL.
-func (s *APIParsingPageCheckPostReqUrlsItem) SetImageURL(val url.URL) {
-	s.ImageURL = val
-}
-
-type APIParsingPagePostOK struct {
-	Data io.Reader
-}
-
-// Read reads data from the Data reader.
-//
-// Kept to satisfy the io.Reader interface.
-func (s APIParsingPagePostOK) Read(p []byte) (n int, err error) {
-	if s.Data == nil {
-		return 0, io.EOF
-	}
-	return s.Data.Read(p)
-}
-
-type APIParsingPagePostReq struct {
-	// Ссылка на книгу во внешней системе.
-	BookURL url.URL `json:"book_url"`
-	// Ссылка на изображение во внешней системе.
-	ImageURL url.URL `json:"image_url"`
-}
-
-// GetBookURL returns the value of BookURL.
-func (s *APIParsingPagePostReq) GetBookURL() url.URL {
-	return s.BookURL
-}
-
-// GetImageURL returns the value of ImageURL.
-func (s *APIParsingPagePostReq) GetImageURL() url.URL {
-	return s.ImageURL
-}
-
-// SetBookURL sets the value of BookURL.
-func (s *APIParsingPagePostReq) SetBookURL(val url.URL) {
-	s.BookURL = val
-}
-
-// SetImageURL sets the value of ImageURL.
-func (s *APIParsingPagePostReq) SetImageURL(val url.URL) {
-	s.ImageURL = val
-}
-
-// Данные книги.
-// Ref: #/components/schemas/BookDetails
-type BookDetails struct {
-	// Ссылка на внешнюю систему.
-	URL url.URL `json:"url"`
-	// Название книги.
-	Name string `json:"name"`
-	// Количество страниц.
-	PageCount int `json:"page_count"`
+	Pages []BookDetailsPagesItem `json:"pages"`
 	// Данные атрибутов книги.
 	Attributes []BookDetailsAttributesItem `json:"attributes"`
-	// Данные страниц книги.
-	Pages []BookDetailsPagesItem `json:"pages"`
-}
-
-// GetURL returns the value of URL.
-func (s *BookDetails) GetURL() url.URL {
-	return s.URL
 }
 
 // GetName returns the value of Name.
@@ -1040,14 +651,19 @@ func (s *BookDetails) GetName() string {
 	return s.Name
 }
 
+// GetURL returns the value of URL.
+func (s *BookDetails) GetURL() url.URL {
+	return s.URL
+}
+
+// GetPreviewURL returns the value of PreviewURL.
+func (s *BookDetails) GetPreviewURL() OptURI {
+	return s.PreviewURL
+}
+
 // GetPageCount returns the value of PageCount.
 func (s *BookDetails) GetPageCount() int {
 	return s.PageCount
-}
-
-// GetAttributes returns the value of Attributes.
-func (s *BookDetails) GetAttributes() []BookDetailsAttributesItem {
-	return s.Attributes
 }
 
 // GetPages returns the value of Pages.
@@ -1055,9 +671,9 @@ func (s *BookDetails) GetPages() []BookDetailsPagesItem {
 	return s.Pages
 }
 
-// SetURL sets the value of URL.
-func (s *BookDetails) SetURL(val url.URL) {
-	s.URL = val
+// GetAttributes returns the value of Attributes.
+func (s *BookDetails) GetAttributes() []BookDetailsAttributesItem {
+	return s.Attributes
 }
 
 // SetName sets the value of Name.
@@ -1065,14 +681,19 @@ func (s *BookDetails) SetName(val string) {
 	s.Name = val
 }
 
+// SetURL sets the value of URL.
+func (s *BookDetails) SetURL(val url.URL) {
+	s.URL = val
+}
+
+// SetPreviewURL sets the value of PreviewURL.
+func (s *BookDetails) SetPreviewURL(val OptURI) {
+	s.PreviewURL = val
+}
+
 // SetPageCount sets the value of PageCount.
 func (s *BookDetails) SetPageCount(val int) {
 	s.PageCount = val
-}
-
-// SetAttributes sets the value of Attributes.
-func (s *BookDetails) SetAttributes(val []BookDetailsAttributesItem) {
-	s.Attributes = val
 }
 
 // SetPages sets the value of Pages.
@@ -1080,108 +701,63 @@ func (s *BookDetails) SetPages(val []BookDetailsPagesItem) {
 	s.Pages = val
 }
 
+// SetAttributes sets the value of Attributes.
+func (s *BookDetails) SetAttributes(val []BookDetailsAttributesItem) {
+	s.Attributes = val
+}
+
 type BookDetailsAttributesItem struct {
 	// Код атрибута.
-	Code BookDetailsAttributesItemCode `json:"code"`
+	Code string `json:"code"`
 	// Значения атрибута.
-	Values []string `json:"values"`
+	Values []BookDetailsAttributesItemValuesItem `json:"values"`
 }
 
 // GetCode returns the value of Code.
-func (s *BookDetailsAttributesItem) GetCode() BookDetailsAttributesItemCode {
+func (s *BookDetailsAttributesItem) GetCode() string {
 	return s.Code
 }
 
 // GetValues returns the value of Values.
-func (s *BookDetailsAttributesItem) GetValues() []string {
+func (s *BookDetailsAttributesItem) GetValues() []BookDetailsAttributesItemValuesItem {
 	return s.Values
 }
 
 // SetCode sets the value of Code.
-func (s *BookDetailsAttributesItem) SetCode(val BookDetailsAttributesItemCode) {
+func (s *BookDetailsAttributesItem) SetCode(val string) {
 	s.Code = val
 }
 
 // SetValues sets the value of Values.
-func (s *BookDetailsAttributesItem) SetValues(val []string) {
+func (s *BookDetailsAttributesItem) SetValues(val []BookDetailsAttributesItemValuesItem) {
 	s.Values = val
 }
 
-// Код атрибута.
-type BookDetailsAttributesItemCode string
-
-const (
-	BookDetailsAttributesItemCodeAuthor    BookDetailsAttributesItemCode = "author"
-	BookDetailsAttributesItemCodeCategory  BookDetailsAttributesItemCode = "category"
-	BookDetailsAttributesItemCodeCharacter BookDetailsAttributesItemCode = "character"
-	BookDetailsAttributesItemCodeGroup     BookDetailsAttributesItemCode = "group"
-	BookDetailsAttributesItemCodeLanguage  BookDetailsAttributesItemCode = "language"
-	BookDetailsAttributesItemCodeParody    BookDetailsAttributesItemCode = "parody"
-	BookDetailsAttributesItemCodeTag       BookDetailsAttributesItemCode = "tag"
-)
-
-// AllValues returns all BookDetailsAttributesItemCode values.
-func (BookDetailsAttributesItemCode) AllValues() []BookDetailsAttributesItemCode {
-	return []BookDetailsAttributesItemCode{
-		BookDetailsAttributesItemCodeAuthor,
-		BookDetailsAttributesItemCodeCategory,
-		BookDetailsAttributesItemCodeCharacter,
-		BookDetailsAttributesItemCodeGroup,
-		BookDetailsAttributesItemCodeLanguage,
-		BookDetailsAttributesItemCodeParody,
-		BookDetailsAttributesItemCodeTag,
-	}
+type BookDetailsAttributesItemValuesItem struct {
+	// Название.
+	Name string `json:"name"`
+	// Ссылка на фильтрацию по значению.
+	URL OptURI `json:"url"`
 }
 
-// MarshalText implements encoding.TextMarshaler.
-func (s BookDetailsAttributesItemCode) MarshalText() ([]byte, error) {
-	switch s {
-	case BookDetailsAttributesItemCodeAuthor:
-		return []byte(s), nil
-	case BookDetailsAttributesItemCodeCategory:
-		return []byte(s), nil
-	case BookDetailsAttributesItemCodeCharacter:
-		return []byte(s), nil
-	case BookDetailsAttributesItemCodeGroup:
-		return []byte(s), nil
-	case BookDetailsAttributesItemCodeLanguage:
-		return []byte(s), nil
-	case BookDetailsAttributesItemCodeParody:
-		return []byte(s), nil
-	case BookDetailsAttributesItemCodeTag:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
+// GetName returns the value of Name.
+func (s *BookDetailsAttributesItemValuesItem) GetName() string {
+	return s.Name
 }
 
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *BookDetailsAttributesItemCode) UnmarshalText(data []byte) error {
-	switch BookDetailsAttributesItemCode(data) {
-	case BookDetailsAttributesItemCodeAuthor:
-		*s = BookDetailsAttributesItemCodeAuthor
-		return nil
-	case BookDetailsAttributesItemCodeCategory:
-		*s = BookDetailsAttributesItemCodeCategory
-		return nil
-	case BookDetailsAttributesItemCodeCharacter:
-		*s = BookDetailsAttributesItemCodeCharacter
-		return nil
-	case BookDetailsAttributesItemCodeGroup:
-		*s = BookDetailsAttributesItemCodeGroup
-		return nil
-	case BookDetailsAttributesItemCodeLanguage:
-		*s = BookDetailsAttributesItemCodeLanguage
-		return nil
-	case BookDetailsAttributesItemCodeParody:
-		*s = BookDetailsAttributesItemCodeParody
-		return nil
-	case BookDetailsAttributesItemCodeTag:
-		*s = BookDetailsAttributesItemCodeTag
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
+// GetURL returns the value of URL.
+func (s *BookDetailsAttributesItemValuesItem) GetURL() OptURI {
+	return s.URL
+}
+
+// SetName sets the value of Name.
+func (s *BookDetailsAttributesItemValuesItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetURL sets the value of URL.
+func (s *BookDetailsAttributesItemValuesItem) SetURL(val OptURI) {
+	s.URL = val
 }
 
 type BookDetailsPagesItem struct {

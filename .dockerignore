@@ -3,6 +3,7 @@
 *.toml
 *.env
 *.db
+*.sqlite
 
 .hidden
 

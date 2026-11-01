@@ -1,0 +1,104 @@
+package bffusecase
+
+import (
+	"context"
+	"errors"
+	"fmt"
+
+	"github.com/gbh007/hgraber-next/internal/domain/bff"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
+	"github.com/gbh007/hgraber-next/internal/pkg"
+)
+
+//nolint:cyclop // будет исправлено позднее
+func (uc *UseCase) BookList(ctx context.Context, filter core.BookFilter) (bff.BookList, error) {
+	count, err := uc.storage.BookCount(ctx, filter)
+	if err != nil {
+		return bff.BookList{}, fmt.Errorf("storage: get book count: %w", err)
+	}
+
+	if count == 0 { // Нет смысла пытаться обрабатывать дальше.
+		return bff.BookList{}, nil
+	}
+
+	colors, err := uc.storage.AttributeColors(ctx)
+	if err != nil {
+		return bff.BookList{}, fmt.Errorf("storage: get attribute colors: %w", err)
+	}
+
+	colorMap := make(map[string]map[string]core.AttributeColor)
+	for _, color := range colors {
+		if _, ok := colorMap[color.Code]; !ok {
+			colorMap[color.Code] = make(map[string]core.AttributeColor)
+		}
+
+		colorMap[color.Code][color.Value] = color
+	}
+
+	result := bff.BookList{
+		Count: count,
+		// FIXME: тут костыли, необходимо отказаться от расчета на сервере
+		Pages: generatePagination(
+			totalToPages(filter.Offset, filter.Limit)+1,
+			totalToPages(count, filter.Limit),
+		),
+	}
+
+	attributesInfo, err := uc.storage.Attributes(ctx)
+	if err != nil {
+		return bff.BookList{}, fmt.Errorf("storage: get attributes info: %w", err)
+	}
+
+	ids, err := uc.storage.BookIDs(ctx, filter)
+	if err != nil {
+		return bff.BookList{}, fmt.Errorf("get ids: %w", err)
+	}
+
+	result.Books = make([]bff.BookShort, 0, len(ids))
+
+	for _, bookID := range ids {
+		book, err := uc.storage.GetBook(ctx, bookID)
+		if err != nil && !errors.Is(err, core.ErrPageNotFound) {
+			return bff.BookList{}, fmt.Errorf("storage: get book (%s): %w", bookID.String(), err)
+		}
+
+		page, err := uc.storage.BookPageWithHash(ctx, bookID, core.PageNumberForPreview)
+		if err != nil && !errors.Is(err, core.ErrPageNotFound) {
+			return bff.BookList{}, fmt.Errorf("storage: get page (%s): %w", bookID.String(), err)
+		}
+
+		attributes, err := uc.storage.BookAttributes(ctx, bookID)
+		if err != nil {
+			return bff.BookList{}, fmt.Errorf("storage: get attributes (%s): %w", bookID.String(), err)
+		}
+
+		bffBook := bff.BookShort{
+			Book:          book,
+			PreviewPage:   bff.PageWithHashToPreview(page),
+			AttributesRaw: attributes,
+		}
+
+		for _, attr := range uc.convertBookAttributes(
+			ctx,
+			convertAttributes(attributesInfo),
+			attributes,
+			false,
+		) {
+			if attr.Code == core.AttributeCodeTag {
+				bffBook.Tags = pkg.Map(attr.Values, func(v bff.AttributeToWebValue) string {
+					return v.Name
+				})
+			}
+
+			for _, value := range attr.Values {
+				if color, ok := colorMap[attr.Code][value.Name]; ok {
+					bffBook.ColorAttributes = append(bffBook.ColorAttributes, color)
+				}
+			}
+		}
+
+		result.Books = append(result.Books, bffBook)
+	}
+
+	return result, nil
+}

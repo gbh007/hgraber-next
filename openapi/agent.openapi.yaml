@@ -1,0 +1,653 @@
+openapi: 3.0.0
+
+info:
+  title: HGraber agent next
+  version: 0.0.0
+
+servers:
+  - url: http://localhost:8081/
+  - url: http://localhost:8085/
+
+security:
+  - headerAuth: []
+
+tags:
+  - name: core
+    description: Базовое API агента
+  - name: parsing
+    description: API агента для парсинга книг и закачки страниц
+  - name: import
+    description: API агента для импорта архива
+  - name: fs
+    description: API агента для использования в качестве файловой системы
+  - name: hproxy
+    description: API агента для использования в качестве прокси системы на оригинальный сайт
+
+paths:
+  /api/v2/status:
+    get:
+      description: Получение данных о состоянии агента
+      summary: Получение данных о состоянии агента
+      tags:
+        - core
+      responses:
+        200:
+          description: Успешное получение статуса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  start_at:
+                    type: string
+                    format: date-time
+                    description: Время запуска агента
+                  status:
+                    type: string
+                    description: Текущее состояние агента
+                    enum:
+                      - ok
+                      - warning
+                      - error
+                  problems:
+                    type: array
+                    description: Список проблем
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Тип проблемы
+                          enum:
+                            - info
+                            - warning
+                            - error
+                        details:
+                          type: string
+                          description: Описание проблемы
+                      required:
+                        - type
+                        - details
+                required:
+                  - start_at
+                  - status
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v2/parsing/check:
+    post:
+      description: Предварительная проверка ссылок на новые книги
+      summary: Предварительная проверка ссылок на новые книги
+      tags:
+        - parsing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                urls:
+                  type: array
+                  description: Ссылки на внешние системы
+                  items:
+                    type: string
+                    format: uri
+              required:
+                - urls
+      responses:
+        200:
+          description: Успешная проверка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BooksCheckResult"
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v2/parsing/list:
+    post:
+      description: Обработка ссылки с набором книг (например всех глав манги)
+      summary: Обработка ссылки с набором книг
+      tags:
+        - parsing
+        - hproxy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: Ссылка на внешние систему
+                one_page:
+                  type: boolean
+                  description: Обработать только 1 страницу
+              required:
+                - url
+      responses:
+        200:
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    description: Результаты обработки
+                    items:
+                      type: object
+                      description: Экземпляр
+                      properties:
+                        link_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на экземпляр
+                        name:
+                          type: string
+                          description: Название экземпляра
+                        preview_url:
+                          type: string
+                          format: uri
+                          description: Ссылка на превью экземпляра
+                        type:
+                          type: string
+                          description: Тип экземпляра
+                          enum:
+                            - details
+                            - list
+                      required:
+                        - link_url
+                        - type
+                  next_url:
+                    type: string
+                    format: uri
+                    description: Ссылка на следующую страницу
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v2/parsing/book:
+    post:
+      description: Обработка новой книги
+      summary: Обработка новой книги
+      tags:
+        - parsing
+        - hproxy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: Ссылка на внешнюю систему
+                page_limit:
+                  type: integer
+                  description: Ограничение на количество страниц для парсинга
+              required:
+                - url
+      responses:
+        200:
+          description: Успешная обработка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookDetails"
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v2/parsing/page:
+    post:
+      description: Загрузка изображения страницы
+      summary: Загрузка изображения страницы
+      tags:
+        - parsing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_url:
+                  type: string
+                  format: uri
+                  description: Ссылка на книгу во внешней системе
+                image_url:
+                  type: string
+                  format: uri
+                  description: Ссылка на изображение во внешней системе
+              required:
+                - book_url
+                - image_url
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v2/fs/archive:
+    post:
+      description: Загрузка архива
+      summary: Загрузка архива
+      tags:
+        - import
+      parameters:
+        - name: Book-Id
+          description: ID книги в системе
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Book-Url
+          description: URL книги в системе
+          in: header
+          required: false
+          schema:
+            type: string
+            format: uri
+        - name: Book-Name
+          description: Название книги
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        204:
+          description: Успешная загрузка
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v2/fs/file/{id}:
+    get:
+      description: Получение файла
+      summary: Получение файла
+      tags:
+        - fs
+      parameters:
+        - name: id
+          description: ID файла в системе
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      description: Создание нового файла
+      summary: Создание нового файла
+      tags:
+        - fs
+      parameters:
+        - name: id
+          description: ID файла в системе
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        204:
+          description: Успешная загрузка
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    delete:
+      description: Удаление файла
+      summary: Удаление файла
+      tags:
+        - fs
+      parameters:
+        - name: id
+          description: ID файла в системе
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: Успешное удаление
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v2/fs:
+    get:
+      description: Получение информации о состоянии файловой системы
+      summary: Получение информации о состоянии файловой системы
+      tags:
+        - fs
+      parameters:
+        - name: include_file_ids
+          description: Включить в ответ ID файлов в файловой системе
+          in: query
+          schema:
+            type: boolean
+        - name: include_file_sizes
+          description: Включить в ответ размер файлов в файловой системе
+          in: query
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file_ids:
+                    type: array
+                    description: ID файлов что есть в файловой системе
+                    items:
+                      type: string
+                      format: uuid
+                  files:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: ID файла
+                        size:
+                          type: integer
+                          format: int64
+                          description: Размер файла
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Время создания файла
+                      required:
+                        - id
+                        - size
+                        - created_at
+                  total_file_size:
+                    type: integer
+                    format: int64
+                    description: Размер файлов на файловой системе
+                  total_file_count:
+                    type: integer
+                    format: int64
+                    description: Количество файлов на файловой системе
+                  available_size:
+                    type: integer
+                    format: int64
+                    description: Доступный (свободный) размер для загрузки файлов
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v2/highway/token:
+    post:
+      description: Создание нового токена для highway
+      summary: Создание нового токена для highway
+      tags:
+        - fs
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - valid_until
+                  - token
+                properties:
+                  valid_until:
+                    type: string
+                    format: date-time
+                    description: Время до которого будет активен токен
+                  token:
+                    type: string
+                    description: Токен highway
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v2/highway/file/{id}.{ext}:
+    get:
+      description: Получение файла через highway
+      summary: Получение файла через highway
+      security: []
+      tags:
+        - fs
+      parameters:
+        - name: id
+          description: ID файла в системе
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: ext
+          description: MIME тип файла
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: token
+          description: Токен для доступа к файлу
+          in: query
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: Успешный ответ с данными
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      description: Данные ошибки
+      properties:
+        inner_code:
+          type: string
+          description: Внутренний код ошибки
+        details:
+          type: string
+          description: Детальные данные ошибки
+      required:
+        - inner_code
+
+    BookDetails:
+      type: object
+      required:
+        - name
+        - url
+        - page_count
+        - pages
+        - attributes
+      properties:
+        name:
+          type: string
+          description: Название книги
+        url:
+          type: string
+          format: uri
+          description: Ссылка на внешнюю систему
+        preview_url:
+          type: string
+          format: uri
+          description: Ссылка на превью
+        page_count:
+          type: integer
+          description: Количество страниц
+        pages:
+          type: array
+          description: данные страниц книги
+          items:
+            type: object
+            properties:
+              page_number:
+                type: integer
+                description: Номер страницы в книге
+                minimum: 1
+              url:
+                type: string
+                format: uri
+                description: Ссылка на изображение во внешней системе
+              filename:
+                type: string
+                description: Название файла с расширением
+                example: 1.jpg
+            required:
+              - page_number
+              - url
+              - filename
+        attributes:
+          type: array
+          description: Данные атрибутов книги
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Код атрибута
+              values:
+                type: array
+                description: Значения атрибута
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Название
+                    url:
+                      type: string
+                      format: uri
+                      description: Ссылка на фильтрацию по значению
+                  required:
+                    - name
+            required:
+              - code
+              - values
+
+    BooksCheckResult:
+      type: object
+      properties:
+        result:
+          type: array
+          description: Результат обработки
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                format: uri
+                description: Ссылка на внешнюю систему
+              result:
+                type: string
+                description: Результат проверки
+                enum:
+                  - ok
+                  - unsupported
+                  - error
+              error_details:
+                type: string
+                description: Данные об ошибке во время обработки
+            required:
+              - url
+              - result
+      required:
+        - result
+
+  securitySchemes:
+    headerAuth:
+      name: X-Hg-Agent-Token
+      in: header
+      type: apiKey
+      description: Авторизация через заголовок

@@ -35,20 +35,17 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 
 // operationRolesHeaderAuth is a private map storing roles per operation.
 var operationRolesHeaderAuth = map[string][]string{
-	APICoreStatusGetOperation:          []string{},
-	APIFsCreatePostOperation:           []string{},
-	APIFsDeletePostOperation:           []string{},
-	APIFsGetGetOperation:               []string{},
-	APIFsInfoPostOperation:             []string{},
-	APIHighwayTokenCreatePostOperation: []string{},
-	APIHproxyParseBookPostOperation:    []string{},
-	APIHproxyParseListPostOperation:    []string{},
-	APIImportArchivePostOperation:      []string{},
-	APIParsingBookCheckPostOperation:   []string{},
-	APIParsingBookMultiPostOperation:   []string{},
-	APIParsingBookPostOperation:        []string{},
-	APIParsingPageCheckPostOperation:   []string{},
-	APIParsingPagePostOperation:        []string{},
+	APIV2FsArchivePostOperation:    []string{},
+	APIV2FsFileIDDeleteOperation:   []string{},
+	APIV2FsFileIDGetOperation:      []string{},
+	APIV2FsFileIDPostOperation:     []string{},
+	APIV2FsGetOperation:            []string{},
+	APIV2HighwayTokenPostOperation: []string{},
+	APIV2ParsingBookPostOperation:  []string{},
+	APIV2ParsingCheckPostOperation: []string{},
+	APIV2ParsingListPostOperation:  []string{},
+	APIV2ParsingPagePostOperation:  []string{},
+	APIV2StatusGetOperation:        []string{},
 }
 
 // GetRolesForHeaderAuth returns the required roles for the given operation.

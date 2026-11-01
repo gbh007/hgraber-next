@@ -10,8 +10,8 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeAPIFsCreatePostRequest(
-	req APIFsCreatePostReq,
+func encodeAPIV2FsArchivePostRequest(
+	req APIV2FsArchivePostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/octet-stream"
@@ -20,64 +20,8 @@ func encodeAPIFsCreatePostRequest(
 	return nil
 }
 
-func encodeAPIFsDeletePostRequest(
-	req *APIFsDeletePostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeAPIFsInfoPostRequest(
-	req *APIFsInfoPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeAPIHproxyParseBookPostRequest(
-	req *APIHproxyParseBookPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeAPIHproxyParseListPostRequest(
-	req *APIHproxyParseListPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeAPIImportArchivePostRequest(
-	req APIImportArchivePostReq,
+func encodeAPIV2FsFileIDPostRequest(
+	req APIV2FsFileIDPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/octet-stream"
@@ -86,8 +30,8 @@ func encodeAPIImportArchivePostRequest(
 	return nil
 }
 
-func encodeAPIParsingBookCheckPostRequest(
-	req *APIParsingBookCheckPostReq,
+func encodeAPIV2ParsingBookPostRequest(
+	req *APIV2ParsingBookPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -100,8 +44,8 @@ func encodeAPIParsingBookCheckPostRequest(
 	return nil
 }
 
-func encodeAPIParsingBookMultiPostRequest(
-	req *APIParsingBookMultiPostReq,
+func encodeAPIV2ParsingCheckPostRequest(
+	req *APIV2ParsingCheckPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -114,8 +58,8 @@ func encodeAPIParsingBookMultiPostRequest(
 	return nil
 }
 
-func encodeAPIParsingBookPostRequest(
-	req *APIParsingBookPostReq,
+func encodeAPIV2ParsingListPostRequest(
+	req *APIV2ParsingListPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -128,22 +72,8 @@ func encodeAPIParsingBookPostRequest(
 	return nil
 }
 
-func encodeAPIParsingPageCheckPostRequest(
-	req *APIParsingPageCheckPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeAPIParsingPagePostRequest(
-	req *APIParsingPagePostReq,
+func encodeAPIV2ParsingPagePostRequest(
+	req *APIV2ParsingPagePostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

@@ -1,0 +1,46 @@
+package parsingusecase
+
+import (
+	"context"
+	"fmt"
+	"net/url"
+
+	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
+)
+
+// TODO: тут вообще по факту не модели агента должны быть
+func (uc *UseCase) BooksExists(ctx context.Context, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error) {
+	result := make([]serveragentdto.AgentBookCheckResult, 0, len(urls))
+
+urlLoop:
+	for _, u := range urls {
+		ids, err := uc.storage.GetBookIDsByURL(ctx, u)
+		if err != nil {
+			return nil, fmt.Errorf("get books by url (%s): %w", u.String(), err)
+		}
+
+		for _, id := range ids {
+			book, err := uc.bookAdapter.BookRaw(ctx, id)
+			if err != nil {
+				return nil, fmt.Errorf("get book (%s) details by url (%s): %w", id.String(), u.String(), err)
+			}
+
+			// Только загруженные и не пересобранные книги считаем доступными.
+			if book.IsLoaded() && !book.Book.IsRebuild {
+				result = append(result, serveragentdto.AgentBookCheckResult{
+					URL:        u,
+					IsPossible: true,
+				})
+
+				continue urlLoop
+			}
+		}
+
+		result = append(result, serveragentdto.AgentBookCheckResult{
+			URL:           u,
+			IsUnsupported: true,
+		})
+	}
+
+	return result, nil
+}

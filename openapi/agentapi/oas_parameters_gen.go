@@ -15,29 +15,49 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// APIFsCreatePostParams is parameters of POST /api/fs/create operation.
-type APIFsCreatePostParams struct {
-	// ID файла в системе.
-	FileID uuid.UUID
+// APIV2FsArchivePostParams is parameters of POST /api/v2/fs/archive operation.
+type APIV2FsArchivePostParams struct {
+	// ID книги в системе.
+	BookID uuid.UUID
+	// URL книги в системе.
+	BookURL OptURI `json:",omitempty,omitzero"`
+	// Название книги.
+	BookName string
 }
 
-func unpackAPIFsCreatePostParams(packed middleware.Parameters) (params APIFsCreatePostParams) {
+func unpackAPIV2FsArchivePostParams(packed middleware.Parameters) (params APIV2FsArchivePostParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "File-Id",
+			Name: "Book-Id",
 			In:   "header",
 		}
-		params.FileID = packed[key].(uuid.UUID)
+		params.BookID = packed[key].(uuid.UUID)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "Book-Url",
+			In:   "header",
+		}
+		if v, ok := packed[key]; ok {
+			params.BookURL = v.(OptURI)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "Book-Name",
+			In:   "header",
+		}
+		params.BookName = packed[key].(string)
 	}
 	return params
 }
 
-func decodeAPIFsCreatePostParams(args [0]string, argsEscaped bool, r *http.Request) (params APIFsCreatePostParams, _ error) {
+func decodeAPIV2FsArchivePostParams(args [0]string, argsEscaped bool, r *http.Request) (params APIV2FsArchivePostParams, _ error) {
 	h := uri.NewHeaderDecoder(r.Header)
-	// Decode header: File-Id.
+	// Decode header: Book-Id.
 	if err := func() error {
 		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "File-Id",
+			Name:    "Book-Id",
 			Explode: false,
 		}
 		if err := h.HasParam(cfg); err == nil {
@@ -52,7 +72,7 @@ func decodeAPIFsCreatePostParams(args [0]string, argsEscaped bool, r *http.Reque
 					return err
 				}
 
-				params.FileID = c
+				params.BookID = c
 				return nil
 			}); err != nil {
 				return err
@@ -63,7 +83,80 @@ func decodeAPIFsCreatePostParams(args [0]string, argsEscaped bool, r *http.Reque
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "File-Id",
+			Name: "Book-Id",
+			In:   "header",
+			Err:  err,
+		}
+	}
+	// Decode header: Book-Url.
+	if err := func() error {
+		cfg := uri.HeaderParameterDecodingConfig{
+			Name:    "Book-Url",
+			Explode: false,
+		}
+		if err := h.HasParam(cfg); err == nil {
+			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotBookURLVal url.URL
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToURL(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotBookURLVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.BookURL.SetTo(paramsDotBookURLVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "Book-Url",
+			In:   "header",
+			Err:  err,
+		}
+	}
+	// Decode header: Book-Name.
+	if err := func() error {
+		cfg := uri.HeaderParameterDecodingConfig{
+			Name:    "Book-Name",
+			Explode: false,
+		}
+		if err := h.HasParam(cfg); err == nil {
+			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.BookName = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "Book-Name",
 			In:   "header",
 			Err:  err,
 		}
@@ -71,35 +164,43 @@ func decodeAPIFsCreatePostParams(args [0]string, argsEscaped bool, r *http.Reque
 	return params, nil
 }
 
-// APIFsGetGetParams is parameters of GET /api/fs/get operation.
-type APIFsGetGetParams struct {
+// APIV2FsFileIDDeleteParams is parameters of DELETE /api/v2/fs/file/{id} operation.
+type APIV2FsFileIDDeleteParams struct {
 	// ID файла в системе.
-	FileID uuid.UUID
+	ID uuid.UUID
 }
 
-func unpackAPIFsGetGetParams(packed middleware.Parameters) (params APIFsGetGetParams) {
+func unpackAPIV2FsFileIDDeleteParams(packed middleware.Parameters) (params APIV2FsFileIDDeleteParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "file-id",
-			In:   "query",
+			Name: "id",
+			In:   "path",
 		}
-		params.FileID = packed[key].(uuid.UUID)
+		params.ID = packed[key].(uuid.UUID)
 	}
 	return params
 }
 
-func decodeAPIFsGetGetParams(args [0]string, argsEscaped bool, r *http.Request) (params APIFsGetGetParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Decode query: file-id.
+func decodeAPIV2FsFileIDDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV2FsFileIDDeleteParams, _ error) {
+	// Decode path: id.
 	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "file-id",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
 
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+			if err := func() error {
 				val, err := d.DecodeValue()
 				if err != nil {
 					return err
@@ -110,18 +211,267 @@ func decodeAPIFsGetGetParams(args [0]string, argsEscaped bool, r *http.Request) 
 					return err
 				}
 
-				params.FileID = c
+				params.ID = c
 				return nil
-			}); err != nil {
+			}(); err != nil {
 				return err
 			}
 		} else {
-			return err
+			return validate.ErrFieldRequired
 		}
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "file-id",
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// APIV2FsFileIDGetParams is parameters of GET /api/v2/fs/file/{id} operation.
+type APIV2FsFileIDGetParams struct {
+	// ID файла в системе.
+	ID uuid.UUID
+}
+
+func unpackAPIV2FsFileIDGetParams(packed middleware.Parameters) (params APIV2FsFileIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAPIV2FsFileIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV2FsFileIDGetParams, _ error) {
+	// Decode path: id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// APIV2FsFileIDPostParams is parameters of POST /api/v2/fs/file/{id} operation.
+type APIV2FsFileIDPostParams struct {
+	// ID файла в системе.
+	ID uuid.UUID
+}
+
+func unpackAPIV2FsFileIDPostParams(packed middleware.Parameters) (params APIV2FsFileIDPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAPIV2FsFileIDPostParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV2FsFileIDPostParams, _ error) {
+	// Decode path: id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// APIV2FsGetParams is parameters of GET /api/v2/fs operation.
+type APIV2FsGetParams struct {
+	// Включить в ответ ID файлов в файловой системе.
+	IncludeFileIds OptBool `json:",omitempty,omitzero"`
+	// Включить в ответ размер файлов в файловой системе.
+	IncludeFileSizes OptBool `json:",omitempty,omitzero"`
+}
+
+func unpackAPIV2FsGetParams(packed middleware.Parameters) (params APIV2FsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "include_file_ids",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.IncludeFileIds = v.(OptBool)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "include_file_sizes",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.IncludeFileSizes = v.(OptBool)
+		}
+	}
+	return params
+}
+
+func decodeAPIV2FsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params APIV2FsGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: include_file_ids.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "include_file_ids",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotIncludeFileIdsVal bool
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToBool(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotIncludeFileIdsVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.IncludeFileIds.SetTo(paramsDotIncludeFileIdsVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "include_file_ids",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode query: include_file_sizes.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "include_file_sizes",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotIncludeFileSizesVal bool
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToBool(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotIncludeFileSizesVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.IncludeFileSizes.SetTo(paramsDotIncludeFileSizesVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "include_file_sizes",
 			In:   "query",
 			Err:  err,
 		}
@@ -129,8 +479,8 @@ func decodeAPIFsGetGetParams(args [0]string, argsEscaped bool, r *http.Request) 
 	return params, nil
 }
 
-// APIHighwayFileIDExtGetParams is parameters of GET /api/highway/file/{id}.{ext} operation.
-type APIHighwayFileIDExtGetParams struct {
+// APIV2HighwayFileIDExtGetParams is parameters of GET /api/v2/highway/file/{id}.{ext} operation.
+type APIV2HighwayFileIDExtGetParams struct {
 	// ID файла в системе.
 	ID uuid.UUID
 	// MIME тип файла.
@@ -139,7 +489,7 @@ type APIHighwayFileIDExtGetParams struct {
 	Token string
 }
 
-func unpackAPIHighwayFileIDExtGetParams(packed middleware.Parameters) (params APIHighwayFileIDExtGetParams) {
+func unpackAPIV2HighwayFileIDExtGetParams(packed middleware.Parameters) (params APIV2HighwayFileIDExtGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "id",
@@ -164,7 +514,7 @@ func unpackAPIHighwayFileIDExtGetParams(packed middleware.Parameters) (params AP
 	return params
 }
 
-func decodeAPIHighwayFileIDExtGetParams(args [2]string, argsEscaped bool, r *http.Request) (params APIHighwayFileIDExtGetParams, _ error) {
+func decodeAPIV2HighwayFileIDExtGetParams(args [2]string, argsEscaped bool, r *http.Request) (params APIV2HighwayFileIDExtGetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
 	if err := func() error {
@@ -289,155 +639,6 @@ func decodeAPIHighwayFileIDExtGetParams(args [2]string, argsEscaped bool, r *htt
 		return params, &ogenerrors.DecodeParamError{
 			Name: "token",
 			In:   "query",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// APIImportArchivePostParams is parameters of POST /api/import/archive operation.
-type APIImportArchivePostParams struct {
-	// ID книги в системе.
-	BookID uuid.UUID
-	// URL книги в системе.
-	BookURL OptURI `json:",omitempty,omitzero"`
-	// Название книги.
-	BookName string
-}
-
-func unpackAPIImportArchivePostParams(packed middleware.Parameters) (params APIImportArchivePostParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "Book-Id",
-			In:   "header",
-		}
-		params.BookID = packed[key].(uuid.UUID)
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "Book-Url",
-			In:   "header",
-		}
-		if v, ok := packed[key]; ok {
-			params.BookURL = v.(OptURI)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "Book-Name",
-			In:   "header",
-		}
-		params.BookName = packed[key].(string)
-	}
-	return params
-}
-
-func decodeAPIImportArchivePostParams(args [0]string, argsEscaped bool, r *http.Request) (params APIImportArchivePostParams, _ error) {
-	h := uri.NewHeaderDecoder(r.Header)
-	// Decode header: Book-Id.
-	if err := func() error {
-		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "Book-Id",
-			Explode: false,
-		}
-		if err := h.HasParam(cfg); err == nil {
-			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToUUID(val)
-				if err != nil {
-					return err
-				}
-
-				params.BookID = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "Book-Id",
-			In:   "header",
-			Err:  err,
-		}
-	}
-	// Decode header: Book-Url.
-	if err := func() error {
-		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "Book-Url",
-			Explode: false,
-		}
-		if err := h.HasParam(cfg); err == nil {
-			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotBookURLVal url.URL
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToURL(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotBookURLVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.BookURL.SetTo(paramsDotBookURLVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "Book-Url",
-			In:   "header",
-			Err:  err,
-		}
-	}
-	// Decode header: Book-Name.
-	if err := func() error {
-		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "Book-Name",
-			Explode: false,
-		}
-		if err := h.HasParam(cfg); err == nil {
-			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.BookName = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "Book-Name",
-			In:   "header",
 			Err:  err,
 		}
 	}

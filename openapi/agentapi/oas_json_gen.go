@@ -15,444 +15,14 @@ import (
 )
 
 // Encode implements json.Marshaler.
-func (s *APICoreStatusGetOK) Encode(e *jx.Encoder) {
+func (s *APIV2FsGetOK) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APICoreStatusGetOK) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("start_at")
-		json.EncodeDateTime(e, s.StartAt)
-	}
-	{
-		e.FieldStart("status")
-		s.Status.Encode(e)
-	}
-	{
-		if s.Problems != nil {
-			e.FieldStart("problems")
-			e.ArrStart()
-			for _, elem := range s.Problems {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
-		}
-	}
-}
-
-var jsonFieldsNameOfAPICoreStatusGetOK = [3]string{
-	0: "start_at",
-	1: "status",
-	2: "problems",
-}
-
-// Decode decodes APICoreStatusGetOK from json.
-func (s *APICoreStatusGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APICoreStatusGetOK to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "start_at":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := json.DecodeDateTime(d)
-				s.StartAt = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"start_at\"")
-			}
-		case "status":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				if err := s.Status.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"status\"")
-			}
-		case "problems":
-			if err := func() error {
-				s.Problems = make([]APICoreStatusGetOKProblemsItem, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem APICoreStatusGetOKProblemsItem
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Problems = append(s.Problems, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"problems\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APICoreStatusGetOK")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPICoreStatusGetOK) {
-					name = jsonFieldsNameOfAPICoreStatusGetOK[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APICoreStatusGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APICoreStatusGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APICoreStatusGetOKProblemsItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APICoreStatusGetOKProblemsItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("type")
-		s.Type.Encode(e)
-	}
-	{
-		e.FieldStart("details")
-		e.Str(s.Details)
-	}
-}
-
-var jsonFieldsNameOfAPICoreStatusGetOKProblemsItem = [2]string{
-	0: "type",
-	1: "details",
-}
-
-// Decode decodes APICoreStatusGetOKProblemsItem from json.
-func (s *APICoreStatusGetOKProblemsItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APICoreStatusGetOKProblemsItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "type":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				if err := s.Type.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"type\"")
-			}
-		case "details":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Str()
-				s.Details = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"details\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APICoreStatusGetOKProblemsItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPICoreStatusGetOKProblemsItem) {
-					name = jsonFieldsNameOfAPICoreStatusGetOKProblemsItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APICoreStatusGetOKProblemsItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APICoreStatusGetOKProblemsItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APICoreStatusGetOKProblemsItemType as json.
-func (s APICoreStatusGetOKProblemsItemType) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes APICoreStatusGetOKProblemsItemType from json.
-func (s *APICoreStatusGetOKProblemsItemType) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APICoreStatusGetOKProblemsItemType to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch APICoreStatusGetOKProblemsItemType(v) {
-	case APICoreStatusGetOKProblemsItemTypeInfo:
-		*s = APICoreStatusGetOKProblemsItemTypeInfo
-	case APICoreStatusGetOKProblemsItemTypeWarning:
-		*s = APICoreStatusGetOKProblemsItemTypeWarning
-	case APICoreStatusGetOKProblemsItemTypeError:
-		*s = APICoreStatusGetOKProblemsItemTypeError
-	default:
-		*s = APICoreStatusGetOKProblemsItemType(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s APICoreStatusGetOKProblemsItemType) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APICoreStatusGetOKProblemsItemType) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APICoreStatusGetOKStatus as json.
-func (s APICoreStatusGetOKStatus) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes APICoreStatusGetOKStatus from json.
-func (s *APICoreStatusGetOKStatus) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APICoreStatusGetOKStatus to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch APICoreStatusGetOKStatus(v) {
-	case APICoreStatusGetOKStatusOk:
-		*s = APICoreStatusGetOKStatusOk
-	case APICoreStatusGetOKStatusWarning:
-		*s = APICoreStatusGetOKStatusWarning
-	case APICoreStatusGetOKStatusError:
-		*s = APICoreStatusGetOKStatusError
-	default:
-		*s = APICoreStatusGetOKStatus(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s APICoreStatusGetOKStatus) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APICoreStatusGetOKStatus) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIFsDeletePostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIFsDeletePostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("file_id")
-		json.EncodeUUID(e, s.FileID)
-	}
-}
-
-var jsonFieldsNameOfAPIFsDeletePostReq = [1]string{
-	0: "file_id",
-}
-
-// Decode decodes APIFsDeletePostReq from json.
-func (s *APIFsDeletePostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIFsDeletePostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "file_id":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := json.DecodeUUID(d)
-				s.FileID = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"file_id\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIFsDeletePostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIFsDeletePostReq) {
-					name = jsonFieldsNameOfAPIFsDeletePostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIFsDeletePostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIFsDeletePostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIFsInfoPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIFsInfoPostOK) encodeFields(e *jx.Encoder) {
+func (s *APIV2FsGetOK) encodeFields(e *jx.Encoder) {
 	{
 		if s.FileIds != nil {
 			e.FieldStart("file_ids")
@@ -493,7 +63,7 @@ func (s *APIFsInfoPostOK) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIFsInfoPostOK = [5]string{
+var jsonFieldsNameOfAPIV2FsGetOK = [5]string{
 	0: "file_ids",
 	1: "files",
 	2: "total_file_size",
@@ -501,10 +71,10 @@ var jsonFieldsNameOfAPIFsInfoPostOK = [5]string{
 	4: "available_size",
 }
 
-// Decode decodes APIFsInfoPostOK from json.
-func (s *APIFsInfoPostOK) Decode(d *jx.Decoder) error {
+// Decode decodes APIV2FsGetOK from json.
+func (s *APIV2FsGetOK) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIFsInfoPostOK to nil")
+		return errors.New("invalid: unable to decode APIV2FsGetOK to nil")
 	}
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
@@ -530,9 +100,9 @@ func (s *APIFsInfoPostOK) Decode(d *jx.Decoder) error {
 			}
 		case "files":
 			if err := func() error {
-				s.Files = make([]APIFsInfoPostOKFilesItem, 0)
+				s.Files = make([]APIV2FsGetOKFilesItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem APIFsInfoPostOKFilesItem
+					var elem APIV2FsGetOKFilesItem
 					if err := elem.Decode(d); err != nil {
 						return err
 					}
@@ -580,34 +150,34 @@ func (s *APIFsInfoPostOK) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIFsInfoPostOK")
+		return errors.Wrap(err, "decode APIV2FsGetOK")
 	}
 
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIFsInfoPostOK) MarshalJSON() ([]byte, error) {
+func (s *APIV2FsGetOK) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIFsInfoPostOK) UnmarshalJSON(data []byte) error {
+func (s *APIV2FsGetOK) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *APIFsInfoPostOKFilesItem) Encode(e *jx.Encoder) {
+func (s *APIV2FsGetOKFilesItem) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIFsInfoPostOKFilesItem) encodeFields(e *jx.Encoder) {
+func (s *APIV2FsGetOKFilesItem) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
 		json.EncodeUUID(e, s.ID)
@@ -622,16 +192,16 @@ func (s *APIFsInfoPostOKFilesItem) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIFsInfoPostOKFilesItem = [3]string{
+var jsonFieldsNameOfAPIV2FsGetOKFilesItem = [3]string{
 	0: "id",
 	1: "size",
 	2: "created_at",
 }
 
-// Decode decodes APIFsInfoPostOKFilesItem from json.
-func (s *APIFsInfoPostOKFilesItem) Decode(d *jx.Decoder) error {
+// Decode decodes APIV2FsGetOKFilesItem from json.
+func (s *APIV2FsGetOKFilesItem) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIFsInfoPostOKFilesItem to nil")
+		return errors.New("invalid: unable to decode APIV2FsGetOKFilesItem to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -678,7 +248,7 @@ func (s *APIFsInfoPostOKFilesItem) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIFsInfoPostOKFilesItem")
+		return errors.Wrap(err, "decode APIV2FsGetOKFilesItem")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -695,8 +265,8 @@ func (s *APIFsInfoPostOKFilesItem) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIFsInfoPostOKFilesItem) {
-					name = jsonFieldsNameOfAPIFsInfoPostOKFilesItem[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfAPIV2FsGetOKFilesItem) {
+					name = jsonFieldsNameOfAPIV2FsGetOKFilesItem[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -717,107 +287,27 @@ func (s *APIFsInfoPostOKFilesItem) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIFsInfoPostOKFilesItem) MarshalJSON() ([]byte, error) {
+func (s *APIV2FsGetOKFilesItem) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIFsInfoPostOKFilesItem) UnmarshalJSON(data []byte) error {
+func (s *APIV2FsGetOKFilesItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *APIFsInfoPostReq) Encode(e *jx.Encoder) {
+func (s *APIV2HighwayTokenPostOK) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIFsInfoPostReq) encodeFields(e *jx.Encoder) {
-	{
-		if s.IncludeFileIds.Set {
-			e.FieldStart("include_file_ids")
-			s.IncludeFileIds.Encode(e)
-		}
-	}
-	{
-		if s.IncludeFileSizes.Set {
-			e.FieldStart("include_file_sizes")
-			s.IncludeFileSizes.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfAPIFsInfoPostReq = [2]string{
-	0: "include_file_ids",
-	1: "include_file_sizes",
-}
-
-// Decode decodes APIFsInfoPostReq from json.
-func (s *APIFsInfoPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIFsInfoPostReq to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "include_file_ids":
-			if err := func() error {
-				s.IncludeFileIds.Reset()
-				if err := s.IncludeFileIds.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"include_file_ids\"")
-			}
-		case "include_file_sizes":
-			if err := func() error {
-				s.IncludeFileSizes.Reset()
-				if err := s.IncludeFileSizes.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"include_file_sizes\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIFsInfoPostReq")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIFsInfoPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIFsInfoPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIHighwayTokenCreatePostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIHighwayTokenCreatePostOK) encodeFields(e *jx.Encoder) {
+func (s *APIV2HighwayTokenPostOK) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("valid_until")
 		json.EncodeDateTime(e, s.ValidUntil)
@@ -828,15 +318,15 @@ func (s *APIHighwayTokenCreatePostOK) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIHighwayTokenCreatePostOK = [2]string{
+var jsonFieldsNameOfAPIV2HighwayTokenPostOK = [2]string{
 	0: "valid_until",
 	1: "token",
 }
 
-// Decode decodes APIHighwayTokenCreatePostOK from json.
-func (s *APIHighwayTokenCreatePostOK) Decode(d *jx.Decoder) error {
+// Decode decodes APIV2HighwayTokenPostOK from json.
+func (s *APIV2HighwayTokenPostOK) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIHighwayTokenCreatePostOK to nil")
+		return errors.New("invalid: unable to decode APIV2HighwayTokenPostOK to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -871,7 +361,7 @@ func (s *APIHighwayTokenCreatePostOK) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIHighwayTokenCreatePostOK")
+		return errors.Wrap(err, "decode APIV2HighwayTokenPostOK")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -888,8 +378,8 @@ func (s *APIHighwayTokenCreatePostOK) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIHighwayTokenCreatePostOK) {
-					name = jsonFieldsNameOfAPIHighwayTokenCreatePostOK[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfAPIV2HighwayTokenPostOK) {
+					name = jsonFieldsNameOfAPIV2HighwayTokenPostOK[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -910,594 +400,27 @@ func (s *APIHighwayTokenCreatePostOK) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIHighwayTokenCreatePostOK) MarshalJSON() ([]byte, error) {
+func (s *APIV2HighwayTokenPostOK) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIHighwayTokenCreatePostOK) UnmarshalJSON(data []byte) error {
+func (s *APIV2HighwayTokenPostOK) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *APIHproxyParseBookPostOK) Encode(e *jx.Encoder) {
+func (s *APIV2ParsingBookPostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIHproxyParseBookPostOK) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("name")
-		e.Str(s.Name)
-	}
-	{
-		e.FieldStart("url")
-		json.EncodeURI(e, s.URL)
-	}
-	{
-		if s.PreviewURL.Set {
-			e.FieldStart("preview_url")
-			s.PreviewURL.Encode(e)
-		}
-	}
-	{
-		e.FieldStart("page_count")
-		e.Int(s.PageCount)
-	}
-	{
-		e.FieldStart("pages")
-		e.ArrStart()
-		for _, elem := range s.Pages {
-			elem.Encode(e)
-		}
-		e.ArrEnd()
-	}
-	{
-		e.FieldStart("attributes")
-		e.ArrStart()
-		for _, elem := range s.Attributes {
-			elem.Encode(e)
-		}
-		e.ArrEnd()
-	}
-}
-
-var jsonFieldsNameOfAPIHproxyParseBookPostOK = [6]string{
-	0: "name",
-	1: "url",
-	2: "preview_url",
-	3: "page_count",
-	4: "pages",
-	5: "attributes",
-}
-
-// Decode decodes APIHproxyParseBookPostOK from json.
-func (s *APIHproxyParseBookPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIHproxyParseBookPostOK to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "name":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Name = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
-		case "url":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := json.DecodeURI(d)
-				s.URL = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"url\"")
-			}
-		case "preview_url":
-			if err := func() error {
-				s.PreviewURL.Reset()
-				if err := s.PreviewURL.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"preview_url\"")
-			}
-		case "page_count":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				v, err := d.Int()
-				s.PageCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page_count\"")
-			}
-		case "pages":
-			requiredBitSet[0] |= 1 << 4
-			if err := func() error {
-				s.Pages = make([]APIHproxyParseBookPostOKPagesItem, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem APIHproxyParseBookPostOKPagesItem
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Pages = append(s.Pages, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"pages\"")
-			}
-		case "attributes":
-			requiredBitSet[0] |= 1 << 5
-			if err := func() error {
-				s.Attributes = make([]APIHproxyParseBookPostOKAttributesItem, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem APIHproxyParseBookPostOKAttributesItem
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Attributes = append(s.Attributes, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"attributes\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIHproxyParseBookPostOK")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00111011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIHproxyParseBookPostOK) {
-					name = jsonFieldsNameOfAPIHproxyParseBookPostOK[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIHproxyParseBookPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIHproxyParseBookPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIHproxyParseBookPostOKAttributesItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIHproxyParseBookPostOKAttributesItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("code")
-		e.Str(s.Code)
-	}
-	{
-		e.FieldStart("values")
-		e.ArrStart()
-		for _, elem := range s.Values {
-			elem.Encode(e)
-		}
-		e.ArrEnd()
-	}
-}
-
-var jsonFieldsNameOfAPIHproxyParseBookPostOKAttributesItem = [2]string{
-	0: "code",
-	1: "values",
-}
-
-// Decode decodes APIHproxyParseBookPostOKAttributesItem from json.
-func (s *APIHproxyParseBookPostOKAttributesItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIHproxyParseBookPostOKAttributesItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "code":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Code = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"code\"")
-			}
-		case "values":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				s.Values = make([]APIHproxyParseBookPostOKAttributesItemValuesItem, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem APIHproxyParseBookPostOKAttributesItemValuesItem
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Values = append(s.Values, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"values\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIHproxyParseBookPostOKAttributesItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIHproxyParseBookPostOKAttributesItem) {
-					name = jsonFieldsNameOfAPIHproxyParseBookPostOKAttributesItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIHproxyParseBookPostOKAttributesItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIHproxyParseBookPostOKAttributesItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("name")
-		e.Str(s.Name)
-	}
-	{
-		if s.URL.Set {
-			e.FieldStart("url")
-			s.URL.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfAPIHproxyParseBookPostOKAttributesItemValuesItem = [2]string{
-	0: "name",
-	1: "url",
-}
-
-// Decode decodes APIHproxyParseBookPostOKAttributesItemValuesItem from json.
-func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIHproxyParseBookPostOKAttributesItemValuesItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "name":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Name = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
-		case "url":
-			if err := func() error {
-				s.URL.Reset()
-				if err := s.URL.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"url\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIHproxyParseBookPostOKAttributesItemValuesItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIHproxyParseBookPostOKAttributesItemValuesItem) {
-					name = jsonFieldsNameOfAPIHproxyParseBookPostOKAttributesItemValuesItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIHproxyParseBookPostOKAttributesItemValuesItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIHproxyParseBookPostOKPagesItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIHproxyParseBookPostOKPagesItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("page_number")
-		e.Int(s.PageNumber)
-	}
-	{
-		e.FieldStart("url")
-		json.EncodeURI(e, s.URL)
-	}
-	{
-		e.FieldStart("filename")
-		e.Str(s.Filename)
-	}
-}
-
-var jsonFieldsNameOfAPIHproxyParseBookPostOKPagesItem = [3]string{
-	0: "page_number",
-	1: "url",
-	2: "filename",
-}
-
-// Decode decodes APIHproxyParseBookPostOKPagesItem from json.
-func (s *APIHproxyParseBookPostOKPagesItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIHproxyParseBookPostOKPagesItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "page_number":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Int()
-				s.PageNumber = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page_number\"")
-			}
-		case "url":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := json.DecodeURI(d)
-				s.URL = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"url\"")
-			}
-		case "filename":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Str()
-				s.Filename = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"filename\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIHproxyParseBookPostOKPagesItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIHproxyParseBookPostOKPagesItem) {
-					name = jsonFieldsNameOfAPIHproxyParseBookPostOKPagesItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIHproxyParseBookPostOKPagesItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIHproxyParseBookPostOKPagesItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIHproxyParseBookPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIHproxyParseBookPostReq) encodeFields(e *jx.Encoder) {
+func (s *APIV2ParsingBookPostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("url")
 		json.EncodeURI(e, s.URL)
@@ -1510,15 +433,15 @@ func (s *APIHproxyParseBookPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIHproxyParseBookPostReq = [2]string{
+var jsonFieldsNameOfAPIV2ParsingBookPostReq = [2]string{
 	0: "url",
 	1: "page_limit",
 }
 
-// Decode decodes APIHproxyParseBookPostReq from json.
-func (s *APIHproxyParseBookPostReq) Decode(d *jx.Decoder) error {
+// Decode decodes APIV2ParsingBookPostReq from json.
+func (s *APIV2ParsingBookPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIHproxyParseBookPostReq to nil")
+		return errors.New("invalid: unable to decode APIV2ParsingBookPostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -1551,7 +474,7 @@ func (s *APIHproxyParseBookPostReq) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIHproxyParseBookPostReq")
+		return errors.Wrap(err, "decode APIV2ParsingBookPostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -1568,8 +491,8 @@ func (s *APIHproxyParseBookPostReq) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIHproxyParseBookPostReq) {
-					name = jsonFieldsNameOfAPIHproxyParseBookPostReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfAPIV2ParsingBookPostReq) {
+					name = jsonFieldsNameOfAPIV2ParsingBookPostReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -1590,34 +513,144 @@ func (s *APIHproxyParseBookPostReq) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIHproxyParseBookPostReq) MarshalJSON() ([]byte, error) {
+func (s *APIV2ParsingBookPostReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIHproxyParseBookPostReq) UnmarshalJSON(data []byte) error {
+func (s *APIV2ParsingBookPostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *APIHproxyParseListPostOK) Encode(e *jx.Encoder) {
+func (s *APIV2ParsingCheckPostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIHproxyParseListPostOK) encodeFields(e *jx.Encoder) {
+func (s *APIV2ParsingCheckPostReq) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("results")
+		e.FieldStart("urls")
 		e.ArrStart()
-		for _, elem := range s.Results {
-			elem.Encode(e)
+		for _, elem := range s.Urls {
+			json.EncodeURI(e, elem)
 		}
 		e.ArrEnd()
+	}
+}
+
+var jsonFieldsNameOfAPIV2ParsingCheckPostReq = [1]string{
+	0: "urls",
+}
+
+// Decode decodes APIV2ParsingCheckPostReq from json.
+func (s *APIV2ParsingCheckPostReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIV2ParsingCheckPostReq to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "urls":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				s.Urls = make([]url.URL, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem url.URL
+					v, err := json.DecodeURI(d)
+					elem = v
+					if err != nil {
+						return err
+					}
+					s.Urls = append(s.Urls, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"urls\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIV2ParsingCheckPostReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIV2ParsingCheckPostReq) {
+					name = jsonFieldsNameOfAPIV2ParsingCheckPostReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIV2ParsingCheckPostReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIV2ParsingCheckPostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIV2ParsingListPostOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIV2ParsingListPostOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Results != nil {
+			e.FieldStart("results")
+			e.ArrStart()
+			for _, elem := range s.Results {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
 	}
 	{
 		if s.NextURL.Set {
@@ -1627,26 +660,24 @@ func (s *APIHproxyParseListPostOK) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIHproxyParseListPostOK = [2]string{
+var jsonFieldsNameOfAPIV2ParsingListPostOK = [2]string{
 	0: "results",
 	1: "next_url",
 }
 
-// Decode decodes APIHproxyParseListPostOK from json.
-func (s *APIHproxyParseListPostOK) Decode(d *jx.Decoder) error {
+// Decode decodes APIV2ParsingListPostOK from json.
+func (s *APIV2ParsingListPostOK) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIHproxyParseListPostOK to nil")
+		return errors.New("invalid: unable to decode APIV2ParsingListPostOK to nil")
 	}
-	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "results":
-			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				s.Results = make([]APIHproxyParseListPostOKResultsItem, 0)
+				s.Results = make([]APIV2ParsingListPostOKResultsItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem APIHproxyParseListPostOKResultsItem
+					var elem APIV2ParsingListPostOKResultsItem
 					if err := elem.Decode(d); err != nil {
 						return err
 					}
@@ -1674,66 +705,34 @@ func (s *APIHproxyParseListPostOK) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIHproxyParseListPostOK")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIHproxyParseListPostOK) {
-					name = jsonFieldsNameOfAPIHproxyParseListPostOK[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
+		return errors.Wrap(err, "decode APIV2ParsingListPostOK")
 	}
 
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIHproxyParseListPostOK) MarshalJSON() ([]byte, error) {
+func (s *APIV2ParsingListPostOK) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIHproxyParseListPostOK) UnmarshalJSON(data []byte) error {
+func (s *APIV2ParsingListPostOK) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *APIHproxyParseListPostOKResultsItem) Encode(e *jx.Encoder) {
+func (s *APIV2ParsingListPostOKResultsItem) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIHproxyParseListPostOKResultsItem) encodeFields(e *jx.Encoder) {
+func (s *APIV2ParsingListPostOKResultsItem) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("link_url")
 		json.EncodeURI(e, s.LinkURL)
@@ -1756,17 +755,17 @@ func (s *APIHproxyParseListPostOKResultsItem) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIHproxyParseListPostOKResultsItem = [4]string{
+var jsonFieldsNameOfAPIV2ParsingListPostOKResultsItem = [4]string{
 	0: "link_url",
 	1: "name",
 	2: "preview_url",
 	3: "type",
 }
 
-// Decode decodes APIHproxyParseListPostOKResultsItem from json.
-func (s *APIHproxyParseListPostOKResultsItem) Decode(d *jx.Decoder) error {
+// Decode decodes APIV2ParsingListPostOKResultsItem from json.
+func (s *APIV2ParsingListPostOKResultsItem) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIHproxyParseListPostOKResultsItem to nil")
+		return errors.New("invalid: unable to decode APIV2ParsingListPostOKResultsItem to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -1819,7 +818,7 @@ func (s *APIHproxyParseListPostOKResultsItem) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIHproxyParseListPostOKResultsItem")
+		return errors.Wrap(err, "decode APIV2ParsingListPostOKResultsItem")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -1836,8 +835,8 @@ func (s *APIHproxyParseListPostOKResultsItem) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIHproxyParseListPostOKResultsItem) {
-					name = jsonFieldsNameOfAPIHproxyParseListPostOKResultsItem[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfAPIV2ParsingListPostOKResultsItem) {
+					name = jsonFieldsNameOfAPIV2ParsingListPostOKResultsItem[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -1858,81 +857,88 @@ func (s *APIHproxyParseListPostOKResultsItem) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIHproxyParseListPostOKResultsItem) MarshalJSON() ([]byte, error) {
+func (s *APIV2ParsingListPostOKResultsItem) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIHproxyParseListPostOKResultsItem) UnmarshalJSON(data []byte) error {
+func (s *APIV2ParsingListPostOKResultsItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
-// Encode encodes APIHproxyParseListPostOKResultsItemType as json.
-func (s APIHproxyParseListPostOKResultsItemType) Encode(e *jx.Encoder) {
+// Encode encodes APIV2ParsingListPostOKResultsItemType as json.
+func (s APIV2ParsingListPostOKResultsItemType) Encode(e *jx.Encoder) {
 	e.Str(string(s))
 }
 
-// Decode decodes APIHproxyParseListPostOKResultsItemType from json.
-func (s *APIHproxyParseListPostOKResultsItemType) Decode(d *jx.Decoder) error {
+// Decode decodes APIV2ParsingListPostOKResultsItemType from json.
+func (s *APIV2ParsingListPostOKResultsItemType) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIHproxyParseListPostOKResultsItemType to nil")
+		return errors.New("invalid: unable to decode APIV2ParsingListPostOKResultsItemType to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch APIHproxyParseListPostOKResultsItemType(v) {
-	case APIHproxyParseListPostOKResultsItemTypeDetails:
-		*s = APIHproxyParseListPostOKResultsItemTypeDetails
-	case APIHproxyParseListPostOKResultsItemTypeList:
-		*s = APIHproxyParseListPostOKResultsItemTypeList
+	switch APIV2ParsingListPostOKResultsItemType(v) {
+	case APIV2ParsingListPostOKResultsItemTypeDetails:
+		*s = APIV2ParsingListPostOKResultsItemTypeDetails
+	case APIV2ParsingListPostOKResultsItemTypeList:
+		*s = APIV2ParsingListPostOKResultsItemTypeList
 	default:
-		*s = APIHproxyParseListPostOKResultsItemType(v)
+		*s = APIV2ParsingListPostOKResultsItemType(v)
 	}
 
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s APIHproxyParseListPostOKResultsItemType) MarshalJSON() ([]byte, error) {
+func (s APIV2ParsingListPostOKResultsItemType) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIHproxyParseListPostOKResultsItemType) UnmarshalJSON(data []byte) error {
+func (s *APIV2ParsingListPostOKResultsItemType) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *APIHproxyParseListPostReq) Encode(e *jx.Encoder) {
+func (s *APIV2ParsingListPostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIHproxyParseListPostReq) encodeFields(e *jx.Encoder) {
+func (s *APIV2ParsingListPostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("url")
 		json.EncodeURI(e, s.URL)
 	}
+	{
+		if s.OnePage.Set {
+			e.FieldStart("one_page")
+			s.OnePage.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAPIHproxyParseListPostReq = [1]string{
+var jsonFieldsNameOfAPIV2ParsingListPostReq = [2]string{
 	0: "url",
+	1: "one_page",
 }
 
-// Decode decodes APIHproxyParseListPostReq from json.
-func (s *APIHproxyParseListPostReq) Decode(d *jx.Decoder) error {
+// Decode decodes APIV2ParsingListPostReq from json.
+func (s *APIV2ParsingListPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIHproxyParseListPostReq to nil")
+		return errors.New("invalid: unable to decode APIV2ParsingListPostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -1950,12 +956,22 @@ func (s *APIHproxyParseListPostReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"url\"")
 			}
+		case "one_page":
+			if err := func() error {
+				s.OnePage.Reset()
+				if err := s.OnePage.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"one_page\"")
+			}
 		default:
 			return d.Skip()
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIHproxyParseListPostReq")
+		return errors.Wrap(err, "decode APIV2ParsingListPostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -1972,8 +988,8 @@ func (s *APIHproxyParseListPostReq) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIHproxyParseListPostReq) {
-					name = jsonFieldsNameOfAPIHproxyParseListPostReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfAPIV2ParsingListPostReq) {
+					name = jsonFieldsNameOfAPIV2ParsingListPostReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -1994,726 +1010,27 @@ func (s *APIHproxyParseListPostReq) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIHproxyParseListPostReq) MarshalJSON() ([]byte, error) {
+func (s *APIV2ParsingListPostReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIHproxyParseListPostReq) UnmarshalJSON(data []byte) error {
+func (s *APIV2ParsingListPostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *APIParsingBookCheckPostReq) Encode(e *jx.Encoder) {
+func (s *APIV2ParsingPagePostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIParsingBookCheckPostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("urls")
-		e.ArrStart()
-		for _, elem := range s.Urls {
-			json.EncodeURI(e, elem)
-		}
-		e.ArrEnd()
-	}
-}
-
-var jsonFieldsNameOfAPIParsingBookCheckPostReq = [1]string{
-	0: "urls",
-}
-
-// Decode decodes APIParsingBookCheckPostReq from json.
-func (s *APIParsingBookCheckPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIParsingBookCheckPostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "urls":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				s.Urls = make([]url.URL, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem url.URL
-					v, err := json.DecodeURI(d)
-					elem = v
-					if err != nil {
-						return err
-					}
-					s.Urls = append(s.Urls, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"urls\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIParsingBookCheckPostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIParsingBookCheckPostReq) {
-					name = jsonFieldsNameOfAPIParsingBookCheckPostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIParsingBookCheckPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIParsingBookCheckPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIParsingBookMultiPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIParsingBookMultiPostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("url")
-		json.EncodeURI(e, s.URL)
-	}
-}
-
-var jsonFieldsNameOfAPIParsingBookMultiPostReq = [1]string{
-	0: "url",
-}
-
-// Decode decodes APIParsingBookMultiPostReq from json.
-func (s *APIParsingBookMultiPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIParsingBookMultiPostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "url":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := json.DecodeURI(d)
-				s.URL = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"url\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIParsingBookMultiPostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIParsingBookMultiPostReq) {
-					name = jsonFieldsNameOfAPIParsingBookMultiPostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIParsingBookMultiPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIParsingBookMultiPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIParsingBookPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIParsingBookPostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("url")
-		json.EncodeURI(e, s.URL)
-	}
-}
-
-var jsonFieldsNameOfAPIParsingBookPostReq = [1]string{
-	0: "url",
-}
-
-// Decode decodes APIParsingBookPostReq from json.
-func (s *APIParsingBookPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIParsingBookPostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "url":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := json.DecodeURI(d)
-				s.URL = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"url\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIParsingBookPostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIParsingBookPostReq) {
-					name = jsonFieldsNameOfAPIParsingBookPostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIParsingBookPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIParsingBookPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIParsingPageCheckPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIParsingPageCheckPostOK) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("result")
-		e.ArrStart()
-		for _, elem := range s.Result {
-			elem.Encode(e)
-		}
-		e.ArrEnd()
-	}
-}
-
-var jsonFieldsNameOfAPIParsingPageCheckPostOK = [1]string{
-	0: "result",
-}
-
-// Decode decodes APIParsingPageCheckPostOK from json.
-func (s *APIParsingPageCheckPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIParsingPageCheckPostOK to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "result":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				s.Result = make([]APIParsingPageCheckPostOKResultItem, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem APIParsingPageCheckPostOKResultItem
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Result = append(s.Result, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"result\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIParsingPageCheckPostOK")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIParsingPageCheckPostOK) {
-					name = jsonFieldsNameOfAPIParsingPageCheckPostOK[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIParsingPageCheckPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIParsingPageCheckPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIParsingPageCheckPostOKResultItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIParsingPageCheckPostOKResultItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("book_url")
-		json.EncodeURI(e, s.BookURL)
-	}
-	{
-		e.FieldStart("image_url")
-		json.EncodeURI(e, s.ImageURL)
-	}
-	{
-		e.FieldStart("result")
-		s.Result.Encode(e)
-	}
-	{
-		if s.ErrorDetails.Set {
-			e.FieldStart("error_details")
-			s.ErrorDetails.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfAPIParsingPageCheckPostOKResultItem = [4]string{
-	0: "book_url",
-	1: "image_url",
-	2: "result",
-	3: "error_details",
-}
-
-// Decode decodes APIParsingPageCheckPostOKResultItem from json.
-func (s *APIParsingPageCheckPostOKResultItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIParsingPageCheckPostOKResultItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "book_url":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := json.DecodeURI(d)
-				s.BookURL = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"book_url\"")
-			}
-		case "image_url":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := json.DecodeURI(d)
-				s.ImageURL = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"image_url\"")
-			}
-		case "result":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				if err := s.Result.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"result\"")
-			}
-		case "error_details":
-			if err := func() error {
-				s.ErrorDetails.Reset()
-				if err := s.ErrorDetails.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error_details\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIParsingPageCheckPostOKResultItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIParsingPageCheckPostOKResultItem) {
-					name = jsonFieldsNameOfAPIParsingPageCheckPostOKResultItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIParsingPageCheckPostOKResultItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIParsingPageCheckPostOKResultItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes APIParsingPageCheckPostOKResultItemResult as json.
-func (s APIParsingPageCheckPostOKResultItemResult) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes APIParsingPageCheckPostOKResultItemResult from json.
-func (s *APIParsingPageCheckPostOKResultItemResult) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIParsingPageCheckPostOKResultItemResult to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch APIParsingPageCheckPostOKResultItemResult(v) {
-	case APIParsingPageCheckPostOKResultItemResultOk:
-		*s = APIParsingPageCheckPostOKResultItemResultOk
-	case APIParsingPageCheckPostOKResultItemResultUnsupported:
-		*s = APIParsingPageCheckPostOKResultItemResultUnsupported
-	case APIParsingPageCheckPostOKResultItemResultError:
-		*s = APIParsingPageCheckPostOKResultItemResultError
-	default:
-		*s = APIParsingPageCheckPostOKResultItemResult(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s APIParsingPageCheckPostOKResultItemResult) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIParsingPageCheckPostOKResultItemResult) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIParsingPageCheckPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIParsingPageCheckPostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("urls")
-		e.ArrStart()
-		for _, elem := range s.Urls {
-			elem.Encode(e)
-		}
-		e.ArrEnd()
-	}
-}
-
-var jsonFieldsNameOfAPIParsingPageCheckPostReq = [1]string{
-	0: "urls",
-}
-
-// Decode decodes APIParsingPageCheckPostReq from json.
-func (s *APIParsingPageCheckPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode APIParsingPageCheckPostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "urls":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				s.Urls = make([]APIParsingPageCheckPostReqUrlsItem, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem APIParsingPageCheckPostReqUrlsItem
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Urls = append(s.Urls, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"urls\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode APIParsingPageCheckPostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIParsingPageCheckPostReq) {
-					name = jsonFieldsNameOfAPIParsingPageCheckPostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *APIParsingPageCheckPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIParsingPageCheckPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *APIParsingPageCheckPostReqUrlsItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *APIParsingPageCheckPostReqUrlsItem) encodeFields(e *jx.Encoder) {
+func (s *APIV2ParsingPagePostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("book_url")
 		json.EncodeURI(e, s.BookURL)
@@ -2724,15 +1041,15 @@ func (s *APIParsingPageCheckPostReqUrlsItem) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIParsingPageCheckPostReqUrlsItem = [2]string{
+var jsonFieldsNameOfAPIV2ParsingPagePostReq = [2]string{
 	0: "book_url",
 	1: "image_url",
 }
 
-// Decode decodes APIParsingPageCheckPostReqUrlsItem from json.
-func (s *APIParsingPageCheckPostReqUrlsItem) Decode(d *jx.Decoder) error {
+// Decode decodes APIV2ParsingPagePostReq from json.
+func (s *APIV2ParsingPagePostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIParsingPageCheckPostReqUrlsItem to nil")
+		return errors.New("invalid: unable to decode APIV2ParsingPagePostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -2767,7 +1084,7 @@ func (s *APIParsingPageCheckPostReqUrlsItem) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIParsingPageCheckPostReqUrlsItem")
+		return errors.Wrap(err, "decode APIV2ParsingPagePostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -2784,8 +1101,8 @@ func (s *APIParsingPageCheckPostReqUrlsItem) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIParsingPageCheckPostReqUrlsItem) {
-					name = jsonFieldsNameOfAPIParsingPageCheckPostReqUrlsItem[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfAPIV2ParsingPagePostReq) {
+					name = jsonFieldsNameOfAPIV2ParsingPagePostReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -2806,81 +1123,107 @@ func (s *APIParsingPageCheckPostReqUrlsItem) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIParsingPageCheckPostReqUrlsItem) MarshalJSON() ([]byte, error) {
+func (s *APIV2ParsingPagePostReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIParsingPageCheckPostReqUrlsItem) UnmarshalJSON(data []byte) error {
+func (s *APIV2ParsingPagePostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *APIParsingPagePostReq) Encode(e *jx.Encoder) {
+func (s *APIV2StatusGetOK) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *APIParsingPagePostReq) encodeFields(e *jx.Encoder) {
+func (s *APIV2StatusGetOK) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("book_url")
-		json.EncodeURI(e, s.BookURL)
+		e.FieldStart("start_at")
+		json.EncodeDateTime(e, s.StartAt)
 	}
 	{
-		e.FieldStart("image_url")
-		json.EncodeURI(e, s.ImageURL)
+		e.FieldStart("status")
+		s.Status.Encode(e)
+	}
+	{
+		if s.Problems != nil {
+			e.FieldStart("problems")
+			e.ArrStart()
+			for _, elem := range s.Problems {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
 	}
 }
 
-var jsonFieldsNameOfAPIParsingPagePostReq = [2]string{
-	0: "book_url",
-	1: "image_url",
+var jsonFieldsNameOfAPIV2StatusGetOK = [3]string{
+	0: "start_at",
+	1: "status",
+	2: "problems",
 }
 
-// Decode decodes APIParsingPagePostReq from json.
-func (s *APIParsingPagePostReq) Decode(d *jx.Decoder) error {
+// Decode decodes APIV2StatusGetOK from json.
+func (s *APIV2StatusGetOK) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode APIParsingPagePostReq to nil")
+		return errors.New("invalid: unable to decode APIV2StatusGetOK to nil")
 	}
 	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "book_url":
+		case "start_at":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := json.DecodeURI(d)
-				s.BookURL = v
+				v, err := json.DecodeDateTime(d)
+				s.StartAt = v
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"book_url\"")
+				return errors.Wrap(err, "decode field \"start_at\"")
 			}
-		case "image_url":
+		case "status":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := json.DecodeURI(d)
-				s.ImageURL = v
-				if err != nil {
+				if err := s.Status.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"image_url\"")
+				return errors.Wrap(err, "decode field \"status\"")
+			}
+		case "problems":
+			if err := func() error {
+				s.Problems = make([]APIV2StatusGetOKProblemsItem, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem APIV2StatusGetOKProblemsItem
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Problems = append(s.Problems, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"problems\"")
 			}
 		default:
 			return d.Skip()
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode APIParsingPagePostReq")
+		return errors.Wrap(err, "decode APIV2StatusGetOK")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -2897,8 +1240,8 @@ func (s *APIParsingPagePostReq) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfAPIParsingPagePostReq) {
-					name = jsonFieldsNameOfAPIParsingPagePostReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfAPIV2StatusGetOK) {
+					name = jsonFieldsNameOfAPIV2StatusGetOK[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -2919,14 +1262,209 @@ func (s *APIParsingPagePostReq) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *APIParsingPagePostReq) MarshalJSON() ([]byte, error) {
+func (s *APIV2StatusGetOK) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *APIParsingPagePostReq) UnmarshalJSON(data []byte) error {
+func (s *APIV2StatusGetOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIV2StatusGetOKProblemsItem) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIV2StatusGetOKProblemsItem) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+	{
+		e.FieldStart("details")
+		e.Str(s.Details)
+	}
+}
+
+var jsonFieldsNameOfAPIV2StatusGetOKProblemsItem = [2]string{
+	0: "type",
+	1: "details",
+}
+
+// Decode decodes APIV2StatusGetOKProblemsItem from json.
+func (s *APIV2StatusGetOKProblemsItem) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIV2StatusGetOKProblemsItem to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "type":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		case "details":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Details = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"details\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIV2StatusGetOKProblemsItem")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAPIV2StatusGetOKProblemsItem) {
+					name = jsonFieldsNameOfAPIV2StatusGetOKProblemsItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIV2StatusGetOKProblemsItem) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIV2StatusGetOKProblemsItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIV2StatusGetOKProblemsItemType as json.
+func (s APIV2StatusGetOKProblemsItemType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes APIV2StatusGetOKProblemsItemType from json.
+func (s *APIV2StatusGetOKProblemsItemType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIV2StatusGetOKProblemsItemType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch APIV2StatusGetOKProblemsItemType(v) {
+	case APIV2StatusGetOKProblemsItemTypeInfo:
+		*s = APIV2StatusGetOKProblemsItemTypeInfo
+	case APIV2StatusGetOKProblemsItemTypeWarning:
+		*s = APIV2StatusGetOKProblemsItemTypeWarning
+	case APIV2StatusGetOKProblemsItemTypeError:
+		*s = APIV2StatusGetOKProblemsItemTypeError
+	default:
+		*s = APIV2StatusGetOKProblemsItemType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s APIV2StatusGetOKProblemsItemType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIV2StatusGetOKProblemsItemType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes APIV2StatusGetOKStatus as json.
+func (s APIV2StatusGetOKStatus) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes APIV2StatusGetOKStatus from json.
+func (s *APIV2StatusGetOKStatus) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIV2StatusGetOKStatus to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch APIV2StatusGetOKStatus(v) {
+	case APIV2StatusGetOKStatusOk:
+		*s = APIV2StatusGetOKStatusOk
+	case APIV2StatusGetOKStatusWarning:
+		*s = APIV2StatusGetOKStatusWarning
+	case APIV2StatusGetOKStatusError:
+		*s = APIV2StatusGetOKStatusError
+	default:
+		*s = APIV2StatusGetOKStatus(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s APIV2StatusGetOKStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIV2StatusGetOKStatus) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -2941,24 +1479,22 @@ func (s *BookDetails) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *BookDetails) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("url")
-		json.EncodeURI(e, s.URL)
-	}
-	{
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-		e.FieldStart("page_count")
-		e.Int(s.PageCount)
+		e.FieldStart("url")
+		json.EncodeURI(e, s.URL)
 	}
 	{
-		e.FieldStart("attributes")
-		e.ArrStart()
-		for _, elem := range s.Attributes {
-			elem.Encode(e)
+		if s.PreviewURL.Set {
+			e.FieldStart("preview_url")
+			s.PreviewURL.Encode(e)
 		}
-		e.ArrEnd()
+	}
+	{
+		e.FieldStart("page_count")
+		e.Int(s.PageCount)
 	}
 	{
 		e.FieldStart("pages")
@@ -2968,14 +1504,23 @@ func (s *BookDetails) encodeFields(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	{
+		e.FieldStart("attributes")
+		e.ArrStart()
+		for _, elem := range s.Attributes {
+			elem.Encode(e)
+		}
+		e.ArrEnd()
+	}
 }
 
-var jsonFieldsNameOfBookDetails = [5]string{
-	0: "url",
-	1: "name",
-	2: "page_count",
-	3: "attributes",
+var jsonFieldsNameOfBookDetails = [6]string{
+	0: "name",
+	1: "url",
+	2: "preview_url",
+	3: "page_count",
 	4: "pages",
+	5: "attributes",
 }
 
 // Decode decodes BookDetails from json.
@@ -2987,20 +1532,8 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "url":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := json.DecodeURI(d)
-				s.URL = v
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"url\"")
-			}
 		case "name":
-			requiredBitSet[0] |= 1 << 1
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
 				v, err := d.Str()
 				s.Name = string(v)
@@ -3011,8 +1544,30 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
+		case "url":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := json.DecodeURI(d)
+				s.URL = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"url\"")
+			}
+		case "preview_url":
+			if err := func() error {
+				s.PreviewURL.Reset()
+				if err := s.PreviewURL.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"preview_url\"")
+			}
 		case "page_count":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				v, err := d.Int()
 				s.PageCount = int(v)
@@ -3022,24 +1577,6 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"page_count\"")
-			}
-		case "attributes":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				s.Attributes = make([]BookDetailsAttributesItem, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem BookDetailsAttributesItem
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Attributes = append(s.Attributes, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"attributes\"")
 			}
 		case "pages":
 			requiredBitSet[0] |= 1 << 4
@@ -3059,6 +1596,24 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"pages\"")
 			}
+		case "attributes":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				s.Attributes = make([]BookDetailsAttributesItem, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem BookDetailsAttributesItem
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Attributes = append(s.Attributes, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"attributes\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -3069,7 +1624,7 @@ func (s *BookDetails) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011111,
+		0b00111011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -3126,13 +1681,13 @@ func (s *BookDetailsAttributesItem) Encode(e *jx.Encoder) {
 func (s *BookDetailsAttributesItem) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("code")
-		s.Code.Encode(e)
+		e.Str(s.Code)
 	}
 	{
 		e.FieldStart("values")
 		e.ArrStart()
 		for _, elem := range s.Values {
-			e.Str(elem)
+			elem.Encode(e)
 		}
 		e.ArrEnd()
 	}
@@ -3155,7 +1710,9 @@ func (s *BookDetailsAttributesItem) Decode(d *jx.Decoder) error {
 		case "code":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.Code.Decode(d); err != nil {
+				v, err := d.Str()
+				s.Code = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -3165,12 +1722,10 @@ func (s *BookDetailsAttributesItem) Decode(d *jx.Decoder) error {
 		case "values":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				s.Values = make([]string, 0)
+				s.Values = make([]BookDetailsAttributesItemValuesItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem string
-					v, err := d.Str()
-					elem = string(v)
-					if err != nil {
+					var elem BookDetailsAttributesItemValuesItem
+					if err := elem.Decode(d); err != nil {
 						return err
 					}
 					s.Values = append(s.Values, elem)
@@ -3238,52 +1793,115 @@ func (s *BookDetailsAttributesItem) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes BookDetailsAttributesItemCode as json.
-func (s BookDetailsAttributesItemCode) Encode(e *jx.Encoder) {
-	e.Str(string(s))
+// Encode implements json.Marshaler.
+func (s *BookDetailsAttributesItemValuesItem) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
 }
 
-// Decode decodes BookDetailsAttributesItemCode from json.
-func (s *BookDetailsAttributesItemCode) Decode(d *jx.Decoder) error {
+// encodeFields encodes fields.
+func (s *BookDetailsAttributesItemValuesItem) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+		if s.URL.Set {
+			e.FieldStart("url")
+			s.URL.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfBookDetailsAttributesItemValuesItem = [2]string{
+	0: "name",
+	1: "url",
+}
+
+// Decode decodes BookDetailsAttributesItemValuesItem from json.
+func (s *BookDetailsAttributesItemValuesItem) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode BookDetailsAttributesItemCode to nil")
+		return errors.New("invalid: unable to decode BookDetailsAttributesItemValuesItem to nil")
 	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "url":
+			if err := func() error {
+				s.URL.Reset()
+				if err := s.URL.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"url\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode BookDetailsAttributesItemValuesItem")
 	}
-	// Try to use constant string.
-	switch BookDetailsAttributesItemCode(v) {
-	case BookDetailsAttributesItemCodeAuthor:
-		*s = BookDetailsAttributesItemCodeAuthor
-	case BookDetailsAttributesItemCodeCategory:
-		*s = BookDetailsAttributesItemCodeCategory
-	case BookDetailsAttributesItemCodeCharacter:
-		*s = BookDetailsAttributesItemCodeCharacter
-	case BookDetailsAttributesItemCodeGroup:
-		*s = BookDetailsAttributesItemCodeGroup
-	case BookDetailsAttributesItemCodeLanguage:
-		*s = BookDetailsAttributesItemCodeLanguage
-	case BookDetailsAttributesItemCodeParody:
-		*s = BookDetailsAttributesItemCodeParody
-	case BookDetailsAttributesItemCodeTag:
-		*s = BookDetailsAttributesItemCodeTag
-	default:
-		*s = BookDetailsAttributesItemCode(v)
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfBookDetailsAttributesItemValuesItem) {
+					name = jsonFieldsNameOfBookDetailsAttributesItemValuesItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
 	}
 
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s BookDetailsAttributesItemCode) MarshalJSON() ([]byte, error) {
+func (s *BookDetailsAttributesItemValuesItem) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *BookDetailsAttributesItemCode) UnmarshalJSON(data []byte) error {
+func (s *BookDetailsAttributesItemValuesItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

@@ -10,8 +10,8 @@ import (
 	goapi "github.com/grafana/grafana-openapi-client-go/client"
 	"github.com/grafana/grafana-openapi-client-go/models"
 
-	"github.com/gbh007/hgraber-next/adapters/metric/generator"
-	"github.com/gbh007/hgraber-next/config"
+	"github.com/gbh007/hgraber-next/external/config"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/metric/generator"
 )
 
 type Config struct {
@@ -35,7 +35,7 @@ func main() {
 
 	flag.Parse()
 
-	cfg, err := config.ImportConfig(*configPath, false, func() Config { return Config{} })
+	cfg, err := config.ImportConfig(*configPath, func() Config { return Config{} })
 	if err != nil {
 		panic(err)
 	}

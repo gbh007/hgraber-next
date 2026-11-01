@@ -8,97 +8,79 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// APICoreStatusGet implements GET /api/core/status operation.
-	//
-	// Получение данных о состоянии агента.
-	//
-	// GET /api/core/status
-	APICoreStatusGet(ctx context.Context) (*APICoreStatusGetOK, error)
-	// APIFsCreatePost implements POST /api/fs/create operation.
-	//
-	// Создание нового файла.
-	//
-	// POST /api/fs/create
-	APIFsCreatePost(ctx context.Context, req APIFsCreatePostReq, params APIFsCreatePostParams) error
-	// APIFsDeletePost implements POST /api/fs/delete operation.
-	//
-	// Удаление файла.
-	//
-	// POST /api/fs/delete
-	APIFsDeletePost(ctx context.Context, req *APIFsDeletePostReq) error
-	// APIFsGetGet implements GET /api/fs/get operation.
-	//
-	// Получение файла.
-	//
-	// GET /api/fs/get
-	APIFsGetGet(ctx context.Context, params APIFsGetGetParams) (APIFsGetGetOK, error)
-	// APIFsInfoPost implements POST /api/fs/info operation.
-	//
-	// Получение информации о состоянии файловой системы.
-	//
-	// POST /api/fs/info
-	APIFsInfoPost(ctx context.Context, req *APIFsInfoPostReq) (*APIFsInfoPostOK, error)
-	// APIHighwayFileIDExtGet implements GET /api/highway/file/{id}.{ext} operation.
-	//
-	// Получение файла через highway.
-	//
-	// GET /api/highway/file/{id}.{ext}
-	APIHighwayFileIDExtGet(ctx context.Context, params APIHighwayFileIDExtGetParams) (*APIHighwayFileIDExtGetOKHeaders, error)
-	// APIHighwayTokenCreatePost implements POST /api/highway/token/create operation.
-	//
-	// Создание нового токена для highway.
-	//
-	// POST /api/highway/token/create
-	APIHighwayTokenCreatePost(ctx context.Context) (*APIHighwayTokenCreatePostOK, error)
-	// APIHproxyParseBookPost implements POST /api/hproxy/parse/book operation.
-	//
-	// Парсинг данных книги по ссылке.
-	//
-	// POST /api/hproxy/parse/book
-	APIHproxyParseBookPost(ctx context.Context, req *APIHproxyParseBookPostReq) (*APIHproxyParseBookPostOK, error)
-	// APIHproxyParseListPost implements POST /api/hproxy/parse/list operation.
-	//
-	// Парсинг списка данных по ссылке.
-	//
-	// POST /api/hproxy/parse/list
-	APIHproxyParseListPost(ctx context.Context, req *APIHproxyParseListPostReq) (*APIHproxyParseListPostOK, error)
-	// APIImportArchivePost implements POST /api/import/archive operation.
+	// APIV2FsArchivePost implements POST /api/v2/fs/archive operation.
 	//
 	// Загрузка архива.
 	//
-	// POST /api/import/archive
-	APIImportArchivePost(ctx context.Context, req APIImportArchivePostReq, params APIImportArchivePostParams) error
-	// APIParsingBookCheckPost implements POST /api/parsing/book/check operation.
+	// POST /api/v2/fs/archive
+	APIV2FsArchivePost(ctx context.Context, req APIV2FsArchivePostReq, params APIV2FsArchivePostParams) error
+	// APIV2FsFileIDDelete implements DELETE /api/v2/fs/file/{id} operation.
+	//
+	// Удаление файла.
+	//
+	// DELETE /api/v2/fs/file/{id}
+	APIV2FsFileIDDelete(ctx context.Context, params APIV2FsFileIDDeleteParams) error
+	// APIV2FsFileIDGet implements GET /api/v2/fs/file/{id} operation.
+	//
+	// Получение файла.
+	//
+	// GET /api/v2/fs/file/{id}
+	APIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDGetParams) (APIV2FsFileIDGetOK, error)
+	// APIV2FsFileIDPost implements POST /api/v2/fs/file/{id} operation.
+	//
+	// Создание нового файла.
+	//
+	// POST /api/v2/fs/file/{id}
+	APIV2FsFileIDPost(ctx context.Context, req APIV2FsFileIDPostReq, params APIV2FsFileIDPostParams) error
+	// APIV2FsGet implements GET /api/v2/fs operation.
+	//
+	// Получение информации о состоянии файловой системы.
+	//
+	// GET /api/v2/fs
+	APIV2FsGet(ctx context.Context, params APIV2FsGetParams) (*APIV2FsGetOK, error)
+	// APIV2HighwayFileIDExtGet implements GET /api/v2/highway/file/{id}.{ext} operation.
+	//
+	// Получение файла через highway.
+	//
+	// GET /api/v2/highway/file/{id}.{ext}
+	APIV2HighwayFileIDExtGet(ctx context.Context, params APIV2HighwayFileIDExtGetParams) (*APIV2HighwayFileIDExtGetOKHeaders, error)
+	// APIV2HighwayTokenPost implements POST /api/v2/highway/token operation.
+	//
+	// Создание нового токена для highway.
+	//
+	// POST /api/v2/highway/token
+	APIV2HighwayTokenPost(ctx context.Context) (*APIV2HighwayTokenPostOK, error)
+	// APIV2ParsingBookPost implements POST /api/v2/parsing/book operation.
+	//
+	// Обработка новой книги.
+	//
+	// POST /api/v2/parsing/book
+	APIV2ParsingBookPost(ctx context.Context, req *APIV2ParsingBookPostReq) (*BookDetails, error)
+	// APIV2ParsingCheckPost implements POST /api/v2/parsing/check operation.
 	//
 	// Предварительная проверка ссылок на новые книги.
 	//
-	// POST /api/parsing/book/check
-	APIParsingBookCheckPost(ctx context.Context, req *APIParsingBookCheckPostReq) (*BooksCheckResult, error)
-	// APIParsingBookMultiPost implements POST /api/parsing/book/multi operation.
+	// POST /api/v2/parsing/check
+	APIV2ParsingCheckPost(ctx context.Context, req *APIV2ParsingCheckPostReq) (*BooksCheckResult, error)
+	// APIV2ParsingListPost implements POST /api/v2/parsing/list operation.
 	//
 	// Обработка ссылки с набором книг (например всех глав
 	// манги).
 	//
-	// POST /api/parsing/book/multi
-	APIParsingBookMultiPost(ctx context.Context, req *APIParsingBookMultiPostReq) (*BooksCheckResult, error)
-	// APIParsingBookPost implements POST /api/parsing/book operation.
-	//
-	// Обработка новой книги.
-	//
-	// POST /api/parsing/book
-	APIParsingBookPost(ctx context.Context, req *APIParsingBookPostReq) (*BookDetails, error)
-	// APIParsingPageCheckPost implements POST /api/parsing/page/check operation.
-	//
-	// Предварительная проверка ссылок для загрузки страниц.
-	//
-	// POST /api/parsing/page/check
-	APIParsingPageCheckPost(ctx context.Context, req *APIParsingPageCheckPostReq) (*APIParsingPageCheckPostOK, error)
-	// APIParsingPagePost implements POST /api/parsing/page operation.
+	// POST /api/v2/parsing/list
+	APIV2ParsingListPost(ctx context.Context, req *APIV2ParsingListPostReq) (*APIV2ParsingListPostOK, error)
+	// APIV2ParsingPagePost implements POST /api/v2/parsing/page operation.
 	//
 	// Загрузка изображения страницы.
 	//
-	// POST /api/parsing/page
-	APIParsingPagePost(ctx context.Context, req *APIParsingPagePostReq) (APIParsingPagePostOK, error)
+	// POST /api/v2/parsing/page
+	APIV2ParsingPagePost(ctx context.Context, req *APIV2ParsingPagePostReq) (APIV2ParsingPagePostOK, error)
+	// APIV2StatusGet implements GET /api/v2/status operation.
+	//
+	// Получение данных о состоянии агента.
+	//
+	// GET /api/v2/status
+	APIV2StatusGet(ctx context.Context) (*APIV2StatusGetOK, error)
 	// NewError creates *ErrorResponseStatusCode from error returned by handler.
 	//
 	// Used for common default response.
