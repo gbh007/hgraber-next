@@ -4,9 +4,9 @@
 
 ### Inner imports
 
-| Name   | Path                                            | Count |
-|:-------|:------------------------------------------------|------:|
-| server | [/application/server](../application/server.md) |     1 |
+| Name   | Path                                                              | Count |
+|:-------|:------------------------------------------------------------------|------:|
+| server | [/internal/application/server](../internal/application/server.md) |     1 |
 
 ### Std imports
 
@@ -22,7 +22,7 @@
 
 ```mermaid
 erDiagram
-    "/cmd/server" ||--|{ "/application/server" : x1
+    "/cmd/server" ||--|{ "/internal/application/server" : x1
 ```
 
 ---

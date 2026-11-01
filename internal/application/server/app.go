@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/grafana/pyroscope-go"
-
 	"github.com/gbh007/hgraber-next/internal/application/server/srvconfig"
 	"github.com/gbh007/hgraber-next/internal/controllers/async"
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager"
@@ -34,8 +32,6 @@ import (
 type App struct {
 	Config srvconfig.ServerConfig
 	Logger *slog.Logger
-
-	pyroscopeProfiler *pyroscope.Profiler
 
 	metricProvider     *metric.MetricProvider
 	storage            *serverdb.Repo
@@ -70,13 +66,6 @@ func New() *App {
 }
 
 func (a *App) Close() error {
-	if a.pyroscopeProfiler != nil {
-		err := a.pyroscopeProfiler.Stop()
-		if err != nil {
-			return fmt.Errorf("stop pyroscope: %w", err)
-		}
-	}
-
 	return nil
 }
 

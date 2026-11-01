@@ -13,7 +13,6 @@ require (
 	github.com/grafana/grafana-foundation-sdk/go v0.0.12
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20251202103709-7ef691d4df1d
 	github.com/grafana/promql-builder/go v0.0.0-20250916111012-8fa9625b89a3
-	github.com/grafana/pyroscope-go v1.2.7
 	github.com/jackc/pgx/v5 v5.8.0
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/labstack/echo/v4 v4.16.3
@@ -66,7 +65,6 @@ require (
 	github.com/go-openapi/validate v0.25.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
-	github.com/grafana/pyroscope-go/godeltaprof v0.1.9 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/invopop/jsonschema v0.13.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

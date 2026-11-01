@@ -4,10 +4,10 @@
 
 ### Inner imports
 
-| Name      | Path                                                          | Count |
-|:----------|:--------------------------------------------------------------|------:|
-| generator | [/adapters/metric/generator](../adapters/metric/generator.md) |     1 |
-| config    | [/config](../config.md)                                       |     1 |
+| Name      | Path                                                                                      | Count |
+|:----------|:------------------------------------------------------------------------------------------|------:|
+| config    | [/external/config](../external/config.md)                                                 |     1 |
+| generator | [/internal/dataproviders/metric/generator](../internal/dataproviders/metric/generator.md) |     1 |
 
 ### External imports
 
@@ -30,8 +30,8 @@
 
 ```mermaid
 erDiagram
-    "/cmd/grafanagenerator" ||--|{ "/adapters/metric/generator" : x1
-    "/cmd/grafanagenerator" ||--|{ "/config" : x1
+    "/cmd/grafanagenerator" ||--|{ "/external/config" : x1
+    "/cmd/grafanagenerator" ||--|{ "/internal/dataproviders/metric/generator" : x1
 ```
 
 ---
