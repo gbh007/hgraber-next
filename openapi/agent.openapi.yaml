@@ -302,37 +302,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/v2/fs/file:
-    post:
-      description: Создание нового файла
-      summary: Создание нового файла
-      tags:
-        - fs
-      parameters:
-        - name: File-Id
-          description: ID файла в системе
-          in: header
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/octet-stream:
-            schema:
-              type: string
-              format: binary
-      responses:
-        204:
-          description: Успешная загрузка
-        default:
-          description: Ошибка
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
   /api/v2/fs/file/{id}:
     get:
       description: Получение файла
@@ -361,6 +330,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    post:
+      description: Создание нового файла
+      summary: Создание нового файла
+      tags:
+        - fs
+      parameters:
+        - name: id
+          description: ID файла в системе
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        204:
+          description: Успешная загрузка
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
     delete:
       description: Удаление файла
       summary: Удаление файла

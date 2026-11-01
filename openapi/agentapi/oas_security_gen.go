@@ -38,7 +38,7 @@ var operationRolesHeaderAuth = map[string][]string{
 	APIV2FsArchivePostOperation:    []string{},
 	APIV2FsFileIDDeleteOperation:   []string{},
 	APIV2FsFileIDGetOperation:      []string{},
-	APIV2FsFilePostOperation:       []string{},
+	APIV2FsFileIDPostOperation:     []string{},
 	APIV2FsGetOperation:            []string{},
 	APIV2HighwayTokenPostOperation: []string{},
 	APIV2ParsingBookPostOperation:  []string{},

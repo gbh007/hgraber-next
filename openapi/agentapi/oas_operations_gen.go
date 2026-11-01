@@ -9,7 +9,7 @@ const (
 	APIV2FsArchivePostOperation       OperationName = "APIV2FsArchivePost"
 	APIV2FsFileIDDeleteOperation      OperationName = "APIV2FsFileIDDelete"
 	APIV2FsFileIDGetOperation         OperationName = "APIV2FsFileIDGet"
-	APIV2FsFilePostOperation          OperationName = "APIV2FsFilePost"
+	APIV2FsFileIDPostOperation        OperationName = "APIV2FsFileIDPost"
 	APIV2FsGetOperation               OperationName = "APIV2FsGet"
 	APIV2HighwayFileIDExtGetOperation OperationName = "APIV2HighwayFileIDExtGet"
 	APIV2HighwayTokenPostOperation    OperationName = "APIV2HighwayTokenPost"

@@ -26,12 +26,12 @@ type Handler interface {
 	//
 	// GET /api/v2/fs/file/{id}
 	APIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDGetParams) (APIV2FsFileIDGetOK, error)
-	// APIV2FsFilePost implements POST /api/v2/fs/file operation.
+	// APIV2FsFileIDPost implements POST /api/v2/fs/file/{id} operation.
 	//
 	// Создание нового файла.
 	//
-	// POST /api/v2/fs/file
-	APIV2FsFilePost(ctx context.Context, req APIV2FsFilePostReq, params APIV2FsFilePostParams) error
+	// POST /api/v2/fs/file/{id}
+	APIV2FsFileIDPost(ctx context.Context, req APIV2FsFileIDPostReq, params APIV2FsFileIDPostParams) error
 	// APIV2FsGet implements GET /api/v2/fs operation.
 	//
 	// Получение информации о состоянии файловой системы.

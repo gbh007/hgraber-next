@@ -40,12 +40,12 @@ func (UnimplementedHandler) APIV2FsFileIDGet(ctx context.Context, params APIV2Fs
 	return r, ht.ErrNotImplemented
 }
 
-// APIV2FsFilePost implements POST /api/v2/fs/file operation.
+// APIV2FsFileIDPost implements POST /api/v2/fs/file/{id} operation.
 //
 // Создание нового файла.
 //
-// POST /api/v2/fs/file
-func (UnimplementedHandler) APIV2FsFilePost(ctx context.Context, req APIV2FsFilePostReq, params APIV2FsFilePostParams) error {
+// POST /api/v2/fs/file/{id}
+func (UnimplementedHandler) APIV2FsFileIDPost(ctx context.Context, req APIV2FsFileIDPostReq, params APIV2FsFileIDPostParams) error {
 	return ht.ErrNotImplemented
 }
 

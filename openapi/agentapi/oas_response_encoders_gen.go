@@ -45,7 +45,7 @@ func encodeAPIV2FsFileIDGetResponse(response APIV2FsFileIDGetOK, w http.Response
 	return nil
 }
 
-func encodeAPIV2FsFilePostResponse(response *APIV2FsFilePostNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeAPIV2FsFileIDPostResponse(response *APIV2FsFileIDPostNoContent, w http.ResponseWriter, span trace.Span) error {
 	w.WriteHeader(204)
 	span.SetStatus(codes.Ok, http.StatusText(204))
 

@@ -50,17 +50,17 @@ func (s APIV2FsFileIDGetOK) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-// APIV2FsFilePostNoContent is response for APIV2FsFilePost operation.
-type APIV2FsFilePostNoContent struct{}
+// APIV2FsFileIDPostNoContent is response for APIV2FsFileIDPost operation.
+type APIV2FsFileIDPostNoContent struct{}
 
-type APIV2FsFilePostReq struct {
+type APIV2FsFileIDPostReq struct {
 	Data io.Reader
 }
 
 // Read reads data from the Data reader.
 //
 // Kept to satisfy the io.Reader interface.
-func (s APIV2FsFilePostReq) Read(p []byte) (n int, err error) {
+func (s APIV2FsFileIDPostReq) Read(p []byte) (n int, err error) {
 	if s.Data == nil {
 		return 0, io.EOF
 	}

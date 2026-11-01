@@ -186,11 +186,11 @@ func decodeAPIV2FsFileIDGetResponse(resp *http.Response) (res APIV2FsFileIDGetOK
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeAPIV2FsFilePostResponse(resp *http.Response) (res *APIV2FsFilePostNoContent, _ error) {
+func decodeAPIV2FsFileIDPostResponse(resp *http.Response) (res *APIV2FsFileIDPostNoContent, _ error) {
 	switch resp.StatusCode {
 	case 204:
 		// Code 204.
-		return &APIV2FsFilePostNoContent{}, nil
+		return &APIV2FsFileIDPostNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorResponseStatusCode, err error) {

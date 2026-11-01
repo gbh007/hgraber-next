@@ -652,23 +652,23 @@ func (s *Server) handleAPIV2FsFileIDGetRequest(args [1]string, argsEscaped bool,
 	}
 }
 
-// handleAPIV2FsFilePostRequest handles POST /api/v2/fs/file operation.
+// handleAPIV2FsFileIDPostRequest handles POST /api/v2/fs/file/{id} operation.
 //
 // Создание нового файла.
 //
-// POST /api/v2/fs/file
-func (s *Server) handleAPIV2FsFilePostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /api/v2/fs/file/{id}
+func (s *Server) handleAPIV2FsFileIDPostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v2/fs/file"),
+		semconv.HTTPRouteKey.String("/api/v2/fs/file/{id}"),
 	}
 	// Add attributes from config.
 	otelAttrs = append(otelAttrs, s.cfg.Attributes...)
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), APIV2FsFilePostOperation,
+	ctx, span := s.cfg.Tracer.Start(r.Context(), APIV2FsFileIDPostOperation,
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -723,7 +723,7 @@ func (s *Server) handleAPIV2FsFilePostRequest(args [0]string, argsEscaped bool, 
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: APIV2FsFilePostOperation,
+			Name: APIV2FsFileIDPostOperation,
 			ID:   "",
 		}
 	)
@@ -731,7 +731,7 @@ func (s *Server) handleAPIV2FsFilePostRequest(args [0]string, argsEscaped bool, 
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityHeaderAuth(ctx, APIV2FsFilePostOperation, r)
+			sctx, ok, err := s.securityHeaderAuth(ctx, APIV2FsFileIDPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -773,7 +773,7 @@ func (s *Server) handleAPIV2FsFilePostRequest(args [0]string, argsEscaped bool, 
 			return
 		}
 	}
-	params, err := decodeAPIV2FsFilePostParams(args, argsEscaped, r)
+	params, err := decodeAPIV2FsFileIDPostParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -785,7 +785,7 @@ func (s *Server) handleAPIV2FsFilePostRequest(args [0]string, argsEscaped bool, 
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeAPIV2FsFilePostRequest(r)
+	request, rawBody, close, err := s.decodeAPIV2FsFileIDPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -801,28 +801,28 @@ func (s *Server) handleAPIV2FsFilePostRequest(args [0]string, argsEscaped bool, 
 		}
 	}()
 
-	var response *APIV2FsFilePostNoContent
+	var response *APIV2FsFileIDPostNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    APIV2FsFilePostOperation,
+			OperationName:    APIV2FsFileIDPostOperation,
 			OperationSummary: "Создание нового файла",
 			OperationID:      "",
 			Body:             request,
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "File-Id",
-					In:   "header",
-				}: params.FileID,
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
 
 		type (
-			Request  = APIV2FsFilePostReq
-			Params   = APIV2FsFilePostParams
-			Response = *APIV2FsFilePostNoContent
+			Request  = APIV2FsFileIDPostReq
+			Params   = APIV2FsFileIDPostParams
+			Response = *APIV2FsFileIDPostNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -831,14 +831,14 @@ func (s *Server) handleAPIV2FsFilePostRequest(args [0]string, argsEscaped bool, 
 		](
 			m,
 			mreq,
-			unpackAPIV2FsFilePostParams,
+			unpackAPIV2FsFileIDPostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.APIV2FsFilePost(ctx, request, params)
+				err = s.h.APIV2FsFileIDPost(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.APIV2FsFilePost(ctx, request, params)
+		err = s.h.APIV2FsFileIDPost(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorResponseStatusCode](err); ok {
@@ -857,7 +857,7 @@ func (s *Server) handleAPIV2FsFilePostRequest(args [0]string, argsEscaped bool, 
 		return
 	}
 
-	if err := encodeAPIV2FsFilePostResponse(response, w, span); err != nil {
+	if err := encodeAPIV2FsFileIDPostResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

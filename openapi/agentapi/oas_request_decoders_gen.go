@@ -49,8 +49,8 @@ func (s *Server) decodeAPIV2FsArchivePostRequest(r *http.Request) (
 	}
 }
 
-func (s *Server) decodeAPIV2FsFilePostRequest(r *http.Request) (
-	req APIV2FsFilePostReq,
+func (s *Server) decodeAPIV2FsFileIDPostRequest(r *http.Request) (
+	req APIV2FsFileIDPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -77,7 +77,7 @@ func (s *Server) decodeAPIV2FsFilePostRequest(r *http.Request) (
 	switch {
 	case ct == "application/octet-stream":
 		reader := r.Body
-		request := APIV2FsFilePostReq{Data: reader}
+		request := APIV2FsFileIDPostReq{Data: reader}
 		return request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)

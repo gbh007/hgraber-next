@@ -45,12 +45,12 @@ type Invoker interface {
 	//
 	// GET /api/v2/fs/file/{id}
 	APIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDGetParams) (APIV2FsFileIDGetOK, error)
-	// APIV2FsFilePost invokes POST /api/v2/fs/file operation.
+	// APIV2FsFileIDPost invokes POST /api/v2/fs/file/{id} operation.
 	//
 	// Создание нового файла.
 	//
-	// POST /api/v2/fs/file
-	APIV2FsFilePost(ctx context.Context, request APIV2FsFilePostReq, params APIV2FsFilePostParams) error
+	// POST /api/v2/fs/file/{id}
+	APIV2FsFileIDPost(ctx context.Context, request APIV2FsFileIDPostReq, params APIV2FsFileIDPostParams) error
 	// APIV2FsGet invokes GET /api/v2/fs operation.
 	//
 	// Получение информации о состоянии файловой системы.
@@ -536,20 +536,20 @@ func (c *Client) sendAPIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDG
 	return result, nil
 }
 
-// APIV2FsFilePost invokes POST /api/v2/fs/file operation.
+// APIV2FsFileIDPost invokes POST /api/v2/fs/file/{id} operation.
 //
 // Создание нового файла.
 //
-// POST /api/v2/fs/file
-func (c *Client) APIV2FsFilePost(ctx context.Context, request APIV2FsFilePostReq, params APIV2FsFilePostParams) error {
-	_, err := c.sendAPIV2FsFilePost(ctx, request, params)
+// POST /api/v2/fs/file/{id}
+func (c *Client) APIV2FsFileIDPost(ctx context.Context, request APIV2FsFileIDPostReq, params APIV2FsFileIDPostParams) error {
+	_, err := c.sendAPIV2FsFileIDPost(ctx, request, params)
 	return err
 }
 
-func (c *Client) sendAPIV2FsFilePost(ctx context.Context, request APIV2FsFilePostReq, params APIV2FsFilePostParams) (res *APIV2FsFilePostNoContent, err error) {
+func (c *Client) sendAPIV2FsFileIDPost(ctx context.Context, request APIV2FsFileIDPostReq, params APIV2FsFileIDPostParams) (res *APIV2FsFileIDPostNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.URLTemplateKey.String("/api/v2/fs/file"),
+		semconv.URLTemplateKey.String("/api/v2/fs/file/{id}"),
 	}
 	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
 
@@ -565,7 +565,7 @@ func (c *Client) sendAPIV2FsFilePost(ctx context.Context, request APIV2FsFilePos
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, APIV2FsFilePostOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, APIV2FsFileIDPostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -582,8 +582,26 @@ func (c *Client) sendAPIV2FsFilePost(ctx context.Context, request APIV2FsFilePos
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v2/fs/file"
+	var pathParts [2]string
+	pathParts[0] = "/api/v2/fs/file/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -591,22 +609,8 @@ func (c *Client) sendAPIV2FsFilePost(ctx context.Context, request APIV2FsFilePos
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeAPIV2FsFilePostRequest(request, r); err != nil {
+	if err := encodeAPIV2FsFileIDPostRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
-	}
-
-	stage = "EncodeHeaderParams"
-	h := uri.NewHeaderEncoder(r.Header)
-	{
-		cfg := uri.HeaderParameterEncodingConfig{
-			Name:    "File-Id",
-			Explode: false,
-		}
-		if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
-			return e.EncodeValue(conv.UUIDToString(params.FileID))
-		}); err != nil {
-			return res, errors.Wrap(err, "encode header")
-		}
 	}
 
 	{
@@ -614,7 +618,7 @@ func (c *Client) sendAPIV2FsFilePost(ctx context.Context, request APIV2FsFilePos
 		var satisfied bitset
 		{
 			stage = "Security:HeaderAuth"
-			switch err := c.securityHeaderAuth(ctx, APIV2FsFilePostOperation, r); {
+			switch err := c.securityHeaderAuth(ctx, APIV2FsFileIDPostOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -650,7 +654,7 @@ func (c *Client) sendAPIV2FsFilePost(ctx context.Context, request APIV2FsFilePos
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeAPIV2FsFilePostResponse(resp)
+	result, err := decodeAPIV2FsFileIDPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

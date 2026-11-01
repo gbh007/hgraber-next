@@ -11,23 +11,24 @@ import (
 )
 
 var (
-	rn6AllowedHeaders = map[string]string{
+	rn5AllowedHeaders = map[string]string{
 		"GET": "X-Hg-Agent-Token",
 	}
 	rn1AllowedHeaders = map[string]string{
 		"POST": "Book-Id,Book-Name,Book-Url,Content-Type,X-Hg-Agent-Token",
 	}
-	rn5AllowedHeaders = map[string]string{
-		"POST": "Content-Type,File-Id,X-Hg-Agent-Token",
-	}
 	rn4AllowedHeaders = map[string]string{
 		"DELETE": "X-Hg-Agent-Token",
 		"GET":    "X-Hg-Agent-Token",
+		"POST":   "Content-Type,X-Hg-Agent-Token",
 	}
-	rn13AllowedHeaders = map[string]string{
+	rn12AllowedHeaders = map[string]string{
 		"POST": "X-Hg-Agent-Token",
 	}
-	rn14AllowedHeaders = map[string]string{
+	rn13AllowedHeaders = map[string]string{
+		"POST": "Content-Type,X-Hg-Agent-Token",
+	}
+	rn15AllowedHeaders = map[string]string{
 		"POST": "Content-Type,X-Hg-Agent-Token",
 	}
 	rn16AllowedHeaders = map[string]string{
@@ -37,9 +38,6 @@ var (
 		"POST": "Content-Type,X-Hg-Agent-Token",
 	}
 	rn18AllowedHeaders = map[string]string{
-		"POST": "Content-Type,X-Hg-Agent-Token",
-	}
-	rn19AllowedHeaders = map[string]string{
 		"GET": "X-Hg-Agent-Token",
 	}
 )
@@ -110,7 +108,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					default:
 						s.notAllowed(w, r, notAllowedParams{
 							allowedMethods: "GET",
-							allowedHeaders: rn6AllowedHeaders,
+							allowedHeaders: rn5AllowedHeaders,
 							acceptPost:     "",
 							acceptPatch:    "",
 						})
@@ -156,70 +154,48 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							return
 						}
 
-					case 'f': // Prefix: "file"
+					case 'f': // Prefix: "file/"
 
-						if l := len("file"); len(elem) >= l && elem[0:l] == "file" {
+						if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
+						// Param: "id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
 						if len(elem) == 0 {
+							// Leaf node.
 							switch r.Method {
+							case "DELETE":
+								s.handleAPIV2FsFileIDDeleteRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "GET":
+								s.handleAPIV2FsFileIDGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
 							case "POST":
-								s.handleAPIV2FsFilePostRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleAPIV2FsFileIDPostRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, notAllowedParams{
-									allowedMethods: "POST",
-									allowedHeaders: rn5AllowedHeaders,
+									allowedMethods: "DELETE,GET,POST",
+									allowedHeaders: rn4AllowedHeaders,
 									acceptPost:     "application/octet-stream",
 									acceptPatch:    "",
 								})
 							}
 
 							return
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/"
-
-							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							// Param: "id"
-							// Leaf parameter, slashes are prohibited
-							idx := strings.IndexByte(elem, '/')
-							if idx >= 0 {
-								break
-							}
-							args[0] = elem
-							elem = ""
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "DELETE":
-									s.handleAPIV2FsFileIDDeleteRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
-								case "GET":
-									s.handleAPIV2FsFileIDGetRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, notAllowedParams{
-										allowedMethods: "DELETE,GET",
-										allowedHeaders: rn4AllowedHeaders,
-										acceptPost:     "",
-										acceptPatch:    "",
-									})
-								}
-
-								return
-							}
-
 						}
 
 					}
@@ -314,7 +290,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						default:
 							s.notAllowed(w, r, notAllowedParams{
 								allowedMethods: "POST",
-								allowedHeaders: rn13AllowedHeaders,
+								allowedHeaders: rn12AllowedHeaders,
 								acceptPost:     "",
 								acceptPatch:    "",
 							})
@@ -353,7 +329,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						default:
 							s.notAllowed(w, r, notAllowedParams{
 								allowedMethods: "POST",
-								allowedHeaders: rn14AllowedHeaders,
+								allowedHeaders: rn13AllowedHeaders,
 								acceptPost:     "application/json",
 								acceptPatch:    "",
 							})
@@ -378,7 +354,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						default:
 							s.notAllowed(w, r, notAllowedParams{
 								allowedMethods: "POST",
-								allowedHeaders: rn16AllowedHeaders,
+								allowedHeaders: rn15AllowedHeaders,
 								acceptPost:     "application/json",
 								acceptPatch:    "",
 							})
@@ -403,7 +379,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						default:
 							s.notAllowed(w, r, notAllowedParams{
 								allowedMethods: "POST",
-								allowedHeaders: rn17AllowedHeaders,
+								allowedHeaders: rn16AllowedHeaders,
 								acceptPost:     "application/json",
 								acceptPatch:    "",
 							})
@@ -428,7 +404,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						default:
 							s.notAllowed(w, r, notAllowedParams{
 								allowedMethods: "POST",
-								allowedHeaders: rn18AllowedHeaders,
+								allowedHeaders: rn17AllowedHeaders,
 								acceptPost:     "application/json",
 								acceptPatch:    "",
 							})
@@ -455,7 +431,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					default:
 						s.notAllowed(w, r, notAllowedParams{
 							allowedMethods: "GET",
-							allowedHeaders: rn19AllowedHeaders,
+							allowedHeaders: rn18AllowedHeaders,
 							acceptPost:     "",
 							acceptPatch:    "",
 						})
@@ -625,73 +601,56 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 						}
 
-					case 'f': // Prefix: "file"
+					case 'f': // Prefix: "file/"
 
-						if l := len("file"); len(elem) >= l && elem[0:l] == "file" {
+						if l := len("file/"); len(elem) >= l && elem[0:l] == "file/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
+						// Param: "id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
 						if len(elem) == 0 {
+							// Leaf node.
 							switch method {
+							case "DELETE":
+								r.name = APIV2FsFileIDDeleteOperation
+								r.summary = "Удаление файла"
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/api/v2/fs/file/{id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "GET":
+								r.name = APIV2FsFileIDGetOperation
+								r.summary = "Получение файла"
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/api/v2/fs/file/{id}"
+								r.args = args
+								r.count = 1
+								return r, true
 							case "POST":
-								r.name = APIV2FsFilePostOperation
+								r.name = APIV2FsFileIDPostOperation
 								r.summary = "Создание нового файла"
 								r.operationID = ""
 								r.operationGroup = ""
-								r.pathPattern = "/api/v2/fs/file"
+								r.pathPattern = "/api/v2/fs/file/{id}"
 								r.args = args
-								r.count = 0
+								r.count = 1
 								return r, true
 							default:
 								return
 							}
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/"
-
-							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							// Param: "id"
-							// Leaf parameter, slashes are prohibited
-							idx := strings.IndexByte(elem, '/')
-							if idx >= 0 {
-								break
-							}
-							args[0] = elem
-							elem = ""
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "DELETE":
-									r.name = APIV2FsFileIDDeleteOperation
-									r.summary = "Удаление файла"
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/api/v2/fs/file/{id}"
-									r.args = args
-									r.count = 1
-									return r, true
-								case "GET":
-									r.name = APIV2FsFileIDGetOperation
-									r.summary = "Получение файла"
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/api/v2/fs/file/{id}"
-									r.args = args
-									r.count = 1
-									return r, true
-								default:
-									return
-								}
-							}
-
 						}
 
 					}

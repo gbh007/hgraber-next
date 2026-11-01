@@ -7,10 +7,10 @@ import (
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
-func (c *Controller) APIV2FsFilePost(
+func (c *Controller) APIV2FsFileIDPost(
 	ctx context.Context,
-	req agentapi.APIV2FsFilePostReq,
-	params agentapi.APIV2FsFilePostParams,
+	req agentapi.APIV2FsFileIDPostReq,
+	params agentapi.APIV2FsFileIDPostParams,
 ) error {
 	return apiError{
 		Code:    http.StatusBadRequest,

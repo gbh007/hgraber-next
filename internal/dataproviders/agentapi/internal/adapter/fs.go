@@ -13,10 +13,10 @@ import (
 )
 
 func (a *FSAdapter) Create(ctx context.Context, fileID uuid.UUID, body io.Reader) error {
-	err := a.rawClient.APIV2FsFilePost(
+	err := a.rawClient.APIV2FsFileIDPost(
 		ctx,
-		agentapi.APIV2FsFilePostReq{Data: body},
-		agentapi.APIV2FsFilePostParams{FileID: fileID},
+		agentapi.APIV2FsFileIDPostReq{Data: body},
+		agentapi.APIV2FsFileIDPostParams{ID: fileID},
 	)
 	if err != nil {
 		return enrichError(err)

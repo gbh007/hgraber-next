@@ -296,33 +296,43 @@ func decodeAPIV2FsFileIDGetParams(args [1]string, argsEscaped bool, r *http.Requ
 	return params, nil
 }
 
-// APIV2FsFilePostParams is parameters of POST /api/v2/fs/file operation.
-type APIV2FsFilePostParams struct {
+// APIV2FsFileIDPostParams is parameters of POST /api/v2/fs/file/{id} operation.
+type APIV2FsFileIDPostParams struct {
 	// ID файла в системе.
-	FileID uuid.UUID
+	ID uuid.UUID
 }
 
-func unpackAPIV2FsFilePostParams(packed middleware.Parameters) (params APIV2FsFilePostParams) {
+func unpackAPIV2FsFileIDPostParams(packed middleware.Parameters) (params APIV2FsFileIDPostParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "File-Id",
-			In:   "header",
+			Name: "id",
+			In:   "path",
 		}
-		params.FileID = packed[key].(uuid.UUID)
+		params.ID = packed[key].(uuid.UUID)
 	}
 	return params
 }
 
-func decodeAPIV2FsFilePostParams(args [0]string, argsEscaped bool, r *http.Request) (params APIV2FsFilePostParams, _ error) {
-	h := uri.NewHeaderDecoder(r.Header)
-	// Decode header: File-Id.
+func decodeAPIV2FsFileIDPostParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV2FsFileIDPostParams, _ error) {
+	// Decode path: id.
 	if err := func() error {
-		cfg := uri.HeaderParameterDecodingConfig{
-			Name:    "File-Id",
-			Explode: false,
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
-		if err := h.HasParam(cfg); err == nil {
-			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
 				val, err := d.DecodeValue()
 				if err != nil {
 					return err
@@ -333,19 +343,19 @@ func decodeAPIV2FsFilePostParams(args [0]string, argsEscaped bool, r *http.Reque
 					return err
 				}
 
-				params.FileID = c
+				params.ID = c
 				return nil
-			}); err != nil {
+			}(); err != nil {
 				return err
 			}
 		} else {
-			return err
+			return validate.ErrFieldRequired
 		}
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "File-Id",
-			In:   "header",
+			Name: "id",
+			In:   "path",
 			Err:  err,
 		}
 	}

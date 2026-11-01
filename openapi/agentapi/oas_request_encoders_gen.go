@@ -20,8 +20,8 @@ func encodeAPIV2FsArchivePostRequest(
 	return nil
 }
 
-func encodeAPIV2FsFilePostRequest(
-	req APIV2FsFilePostReq,
+func encodeAPIV2FsFileIDPostRequest(
+	req APIV2FsFileIDPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/octet-stream"
