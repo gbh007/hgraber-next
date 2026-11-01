@@ -2,21 +2,26 @@ package agent
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log/slog"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gbh007/hgraber-next/external/parserdto"
-	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
 	"github.com/gbh007/hgraber-next/internal/controllers/agentapi"
 	"github.com/gbh007/hgraber-next/internal/controllers/agentdebugserver"
 	"github.com/gbh007/hgraber-next/internal/controllers/async"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/agentdb"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/agentimportfs"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/agentparsecache"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/localfs"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/masterapi"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/metric"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/parserloader"
+	"github.com/gbh007/hgraber-next/internal/dataproviders/request"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/internal/usecases/agenthighway"
@@ -26,27 +31,33 @@ import (
 	"go.opentelemetry.io/otel"
 )
 
-type Async interface {
-	RegisterRunner(runner async.Runner)
-	RegisterAfterStop(handler func())
+func InitAndServe(parserInits map[string]parserdto.NewParser) {
+	ctx, cancel := signal.NotifyContext(
+		context.Background(),
+		syscall.SIGINT,
+		syscall.SIGTERM,
+	)
+	defer cancel()
+
+	err := Serve(ctx, parserInits)
+	if err != nil {
+		slog.Default().Error(err.Error())
+
+		os.Exit(1)
+	}
 }
 
-type ParserInit = func(
-	ctx context.Context,
-	logger *slog.Logger,
-	cfg agnconfig.AgentConfig,
-	async Async,
-	metricProvider *metric.MetricProvider,
-) ([]parserdto.Parser, error)
+func Serve(ctx context.Context, parserInits map[string]parserdto.NewParser) error {
+	logger := slog.Default()
 
-func Serve(ctx context.Context, parserInit ParserInit) {
 	cfg, needScan, err := parseConfig()
 	if err != nil {
-		// Поскольку на этот момент нет ни логгера ни вообще ничего то выкидываем панику.
-		panic(err)
+		return fmt.Errorf("parse config: %w", err)
 	}
 
-	logger := initLogger(cfg)
+	logger = initLogger(cfg)
+	slog.SetDefault(logger)
+
 	logger.InfoContext(ctx, "initializing system")
 
 	metricProvider, err := metric.New(metric.Config{
@@ -61,12 +72,7 @@ func Serve(ctx context.Context, parserInit ParserInit) {
 		WithAgent:      true,
 	})
 	if err != nil {
-		logger.ErrorContext(
-			ctx, "fail init metrics",
-			slog.Any("error", err),
-		)
-
-		os.Exit(1)
+		return fmt.Errorf("fail init metrics: %w", err)
 	}
 
 	tracer := otel.GetTracerProvider().Tracer("hgraber-next-agent")
@@ -82,17 +88,36 @@ func Serve(ctx context.Context, parserInit ParserInit) {
 		importStorageRaw *agentimportfs.Storage
 		dbRaw            *agentdb.Storage
 		mAPI             *masterapi.Client
+
+		cache request.Cache
 	)
 
-	parsers, err := parserInit(ctx, logger, cfg, async, metricProvider)
-	if err != nil {
-		logger.ErrorContext(
-			ctx, "fail init parsers",
-			slog.Any("error", err),
+	if cfg.Parsers.Cache.Enabled {
+		wc, err := agentparsecache.New(
+			cfg.Parsers.Cache.Path,
+			logger,
+			cfg.Parsers.Cache.TTL,
+			cfg.Parsers.Cache.CleanInterval,
+			metricProvider,
 		)
+		if err != nil {
+			return fmt.Errorf("create web cache: %w", err)
+		}
 
-		os.Exit(1)
+		async.RegisterRunner(wc)
+		cache = wc
 	}
+
+	parsers := parserloader.NewDefaultParsers(
+		logger,
+		cfg.Application.ClientTimeout,
+		cfg.Parsers,
+		cache,
+		metricProvider,
+		cfg.Log.RequestErrors,
+		cfg.Parsers.UserAgent,
+		parserInits,
+	)
 
 	if len(parsers) > 0 {
 		loader := parserloader.New(parsers, metricProvider)
@@ -112,12 +137,7 @@ func Serve(ctx context.Context, parserInit ParserInit) {
 			cfg.Application.UseUnsafeCloser,
 		)
 		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail init import fs",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
+			return fmt.Errorf("fail init import fs: %w", err)
 		}
 
 		importStorage = importStorageRaw
@@ -131,12 +151,7 @@ func Serve(ctx context.Context, parserInit ParserInit) {
 	if cfg.FSBase.FilePath != "" {
 		fileStorage, err = localfs.New(cfg.FSBase.FilePath, logger)
 		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail init data fs",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
+			return fmt.Errorf("fail init data fs: %w", err)
 		}
 
 		logger.DebugContext(
@@ -148,45 +163,28 @@ func Serve(ctx context.Context, parserInit ParserInit) {
 	if cfg.Sqlite.FilePath != "" {
 		dbRaw, err = agentdb.New(ctx, logger, metricProvider, cfg.Sqlite.FilePath)
 		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail init db",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
+			return fmt.Errorf("fail init db: %w", err)
 		}
 	}
 
 	if cfg.ZipScanner.MasterAddr != "" {
 		mAPI, err = masterapi.New(cfg.ZipScanner.MasterAddr, cfg.ZipScanner.MasterToken)
 		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail init master api",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
+			return fmt.Errorf("fail init master api client: %w", err)
 		}
 	}
 
 	if needScan {
 		if dbRaw == nil || importStorageRaw == nil || mAPI == nil {
-			logger.ErrorContext(ctx, "invalid scan dependencies")
-
-			os.Exit(1)
+			return errors.New("invalid scan dependencies")
 		}
 
 		err = agentimportdeduplicatoruc.New(logger, importStorageRaw, dbRaw, mAPI).ScanZips(ctx)
 		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail scan zips",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
+			return fmt.Errorf("fail scan zips: %w", err)
 		}
 
-		return
+		return nil
 	}
 
 	if cfg.FSBase.EnableDeduplication && dbRaw != nil && importStorageRaw != nil {
@@ -198,12 +196,7 @@ func Serve(ctx context.Context, parserInit ParserInit) {
 	if fileStorage != nil && cfg.Highway.PrivateKey != "" && cfg.Highway.TokenLifetime > 0 {
 		tokenizer, err := serveragentdto.NewSimpleHighwayTokenizer(cfg.Highway.PrivateKey)
 		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail init highway tokenizer",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
+			return fmt.Errorf("fail init highway tokenizer: %w", err)
 		}
 
 		highwayUseCases = agenthighway.New(
@@ -231,12 +224,7 @@ func Serve(ctx context.Context, parserInit ParserInit) {
 			metricProvider,
 		)
 		if err != nil {
-			logger.ErrorContext(
-				ctx, "fail init api controller",
-				slog.Any("error", err),
-			)
-
-			os.Exit(1)
+			return fmt.Errorf("fail init api controller: %w", err)
 		}
 
 		async.RegisterRunner(apiController)
@@ -255,11 +243,8 @@ func Serve(ctx context.Context, parserInit ParserInit) {
 
 	err = async.Serve(ctx)
 	if err != nil {
-		logger.ErrorContext(
-			ctx, "fail serve",
-			slog.Any("error", err),
-		)
-
-		os.Exit(1)
+		return fmt.Errorf("fail serve: %w", err)
 	}
+
+	return nil
 }

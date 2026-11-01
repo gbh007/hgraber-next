@@ -7,13 +7,12 @@ import (
 
 	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/parserloader/parsers/hgraber_local"
-	"github.com/gbh007/hgraber-next/internal/dataproviders/parserloader/parsers/mock"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/request"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"golang.org/x/net/proxy"
 )
 
+// FIXME: надо вынести в инит апки
 func NewDefaultParsers(
 	logger *slog.Logger,
 	timeout time.Duration,
@@ -22,18 +21,12 @@ func NewDefaultParsers(
 	metricProvider metricProvider,
 	logErrors bool,
 	defaultUserAgent string,
+	parserInits map[string]parserdto.NewParser,
 ) []parserdto.Parser {
 	var (
 		withProxy      map[string]struct{}
 		proxyRequester *request.Requester
-		parserInits    map[string]parserdto.NewParser
 	)
-
-	// FIXME: поработать над этим блоком пока прибиваем гвоздями
-	parserInits = map[string]parserdto.NewParser{
-		"mock":          mock.New,
-		"hgraber_local": hgraber_local.New,
-	}
 
 	if cfg.Proxy.Host != "" {
 		withProxy = pkg.SliceToMap(cfg.Proxy.Enabled, func(s string) (string, struct{}) { return s, struct{}{} })

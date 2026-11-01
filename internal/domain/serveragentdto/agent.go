@@ -7,25 +7,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type AgentBookDetails struct {
-	URL        url.URL
-	Name       string
-	PageCount  int
-	Attributes []AgentBookDetailsAttributesItem
-	Pages      []AgentBookDetailsPagesItem
-}
-
-type AgentBookDetailsAttributesItem struct {
-	Code   string
-	Values []string
-}
-
-type AgentBookDetailsPagesItem struct {
-	PageNumber int
-	URL        url.URL
-	Filename   string
-}
-
 type AgentBookCheckResult struct {
 	URL           url.URL
 	IsUnsupported bool
