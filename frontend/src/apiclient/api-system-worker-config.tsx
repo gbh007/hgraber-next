@@ -1,21 +1,13 @@
-import { PostAction, useAPIPost, Response } from './client-hooks'
-
-interface systemWorkerConfigRequest {
-    runners_count: Array<systemWorkerRunnerConfig>
-}
-
-export interface systemWorkerRunnerConfig {
-    name: string
-    count: number
-}
+import { useGenPost } from './gen-hooks'
+import type { PostAction, Response } from './client-hooks'
+import { postApiSystemWorkerConfig } from './gen/system/system'
+import type { PostApiSystemWorkerConfigBody } from './gen/hGraberNext.schemas'
 
 export function useSystemWorkerConfig(): [
     Response<void | null>,
-    PostAction<systemWorkerConfigRequest>,
+    PostAction<PostApiSystemWorkerConfigBody>,
 ] {
-    const [response, fetchData] = useAPIPost<systemWorkerConfigRequest, void>(
-        '/api/system/worker/config'
+    return useGenPost<PostApiSystemWorkerConfigBody, void>(
+        postApiSystemWorkerConfig
     )
-
-    return [response, fetchData]
 }

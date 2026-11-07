@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
-import {
-    systemWorkerRunnerConfig,
-    useSystemWorkerConfig,
-} from '../../apiclient/api-system-worker-config'
+import type { PostApiSystemWorkerConfigBodyRunnersCountItem } from '../../apiclient/gen/hGraberNext.schemas'
+import { useSystemWorkerConfig } from '../../apiclient/api-system-worker-config'
 import { useSystemInfoWorkers } from '../../apiclient/api-system-info'
 
 export function RPCScreen() {
@@ -37,14 +35,16 @@ export function RPCScreen() {
 }
 
 function RunnersWidget() {
-    const [runners, setRunners] = useState<Array<systemWorkerRunnerConfig>>()
+    const [runners, setRunners] =
+        useState<Array<PostApiSystemWorkerConfigBodyRunnersCountItem>>()
     const [runnerObj, fetchRunnerData] = useSystemInfoWorkers()
 
     useEffect(() => {
         fetchRunnerData()
     }, [fetchRunnerData])
     useEffect(() => {
-        let newRunners: Array<systemWorkerRunnerConfig> = []
+        let newRunners: Array<PostApiSystemWorkerConfigBodyRunnersCountItem> =
+            []
 
         ;(runnerObj.data?.workers || []).map((e) => {
             newRunners.push({

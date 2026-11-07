@@ -1,65 +1,26 @@
+import { useGenGet, useGenPost } from './gen-hooks'
+import type { GetAction, PostAction, Response } from './client-hooks'
 import {
-    PostAction,
-    useAPIPost,
-    Response,
-    useAPIGet,
-    GetAction,
-} from './client-hooks'
-
-export interface TaskCreateRequest {
-    code: string
-}
+    getApiSystemTaskResults,
+    postApiSystemTaskCreate,
+} from './gen/system/system'
+import type {
+    GetApiSystemTaskResults200,
+    PostApiSystemTaskCreateBody,
+} from './gen/hGraberNext.schemas'
 
 export function useTaskCreate(): [
     Response<void | null>,
-    PostAction<TaskCreateRequest>,
+    PostAction<PostApiSystemTaskCreateBody>,
 ] {
-    const [response, fetchData] = useAPIPost<TaskCreateRequest, void>(
-        '/api/system/task/create'
+    return useGenPost<PostApiSystemTaskCreateBody, void>(
+        postApiSystemTaskCreate
     )
-
-    return [response, fetchData]
-}
-
-export interface TaskResultsResponse {
-    tasks: Array<TaskResultsResponseTask>
-    results?: Array<TaskResultsResponseResult>
-}
-
-export interface TaskResultsResponseTask {
-    code: string
-    name: string
-    description?: string
-}
-
-export interface TaskResultsResponseResult {
-    name: string
-    error?: string
-    result?: string
-    duration_formatted: string
-    started_at: string
-    ended_at: string
-    stages?: Array<TaskResultsResponseResultStage>
-}
-
-export interface TaskResultsResponseResultStage {
-    name: string
-    error?: string
-    result?: string
-    duration_formatted: string
-    started_at: string
-    ended_at: string
-    progress: number
-    total: number
 }
 
 export function useTaskResults(): [
-    Response<TaskResultsResponse | null>,
+    Response<GetApiSystemTaskResults200 | null>,
     GetAction,
 ] {
-    const [response, fetchData] = useAPIGet<TaskResultsResponse>(
-        '/api/system/task/results'
-    )
-
-    return [response, fetchData]
+    return useGenGet<GetApiSystemTaskResults200>(getApiSystemTaskResults)
 }

@@ -1,41 +1,16 @@
-import { PostAction, useAPIPost, Response } from './client-hooks'
-
-interface systemHandleRequest {
-    urls: Array<string>
-    is_multi: boolean
-    auto_verify: boolean
-    read_only_mode: boolean
-    max_authors?: number
-}
-
-interface systemHandleResponse {
-    total_count: number
-    loaded_count: number
-    duplicate_count: number
-    skipped_count: number
-    error_count: number
-    not_handled?: Array<string>
-    details: Array<systemHandleResponseDetails>
-}
-
-export interface systemHandleResponseDetails {
-    url: string
-    is_duplicate: boolean
-    is_skipped: boolean
-    duplicate_ids?: Array<string>
-    is_handled: boolean
-    id?: string
-    error_reason?: string
-}
+import { useGenPost } from './gen-hooks'
+import type { PostAction, Response } from './client-hooks'
+import { postApiParsingHandle } from './gen/parsing/parsing'
+import type {
+    PostApiParsingHandleBody,
+    PostApiParsingHandle200,
+} from './gen/hGraberNext.schemas'
 
 export function useSystemHandle(): [
-    Response<systemHandleResponse | null>,
-    PostAction<systemHandleRequest>,
+    Response<PostApiParsingHandle200 | null>,
+    PostAction<PostApiParsingHandleBody>,
 ] {
-    const [response, fetchData] = useAPIPost<
-        systemHandleRequest,
-        systemHandleResponse
-    >('/api/parsing/handle')
-
-    return [response, fetchData]
+    return useGenPost<PostApiParsingHandleBody, PostApiParsingHandle200>(
+        postApiParsingHandle
+    )
 }

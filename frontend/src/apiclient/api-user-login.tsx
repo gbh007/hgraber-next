@@ -1,16 +1,11 @@
-import { PostAction, useAPIPost, Response } from './client-hooks'
-
-interface userLoginRequest {
-    token: string
-}
+import { useGenPost } from './gen-hooks'
+import type { PostAction, Response } from './client-hooks'
+import { postApiUserLogin } from './gen/user/user'
+import type { PostApiUserLoginBody } from './gen/hGraberNext.schemas'
 
 export function useUserLogin(): [
     Response<void | null>,
-    PostAction<userLoginRequest>,
+    PostAction<PostApiUserLoginBody>,
 ] {
-    const [response, fetchData] = useAPIPost<userLoginRequest, void>(
-        '/api/user/login'
-    )
-
-    return [response, fetchData]
+    return useGenPost<PostApiUserLoginBody, void>(postApiUserLogin)
 }

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { systemHandleResponseDetails } from '../../apiclient/api-system-handle'
+import type { PostApiParsingHandle200DetailsItem } from '../../apiclient/gen/hGraberNext.schemas'
 import { BookDetailsLink } from '../../core/routing'
 import {
     ColorizedTextWidget,
@@ -7,7 +7,7 @@ import {
 } from '../../widgets/design-system'
 
 export function ParseDetailsWidget(props: {
-    value?: Array<systemHandleResponseDetails>
+    value?: Array<PostApiParsingHandle200DetailsItem>
 }) {
     if (!props.value) {
         return null

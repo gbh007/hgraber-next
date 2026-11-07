@@ -1,54 +1,24 @@
-import { GetAction, useAPIGet, Response } from './client-hooks'
-
-export interface SystemInfoSizeResponse {
-    count: number
-    downloaded_count: number
-    verified_count: number
-    rebuilded_count: number
-    not_load_count: number
-    deleted_count: number
-    page_count: number
-    not_load_page_count: number
-    page_without_body_count: number
-    deleted_page_count: number
-    file_count: number
-    unhashed_file_count: number
-    invalid_file_count: number
-    detached_file_count: number
-    dead_hash_count: number
-    pages_size: number
-    files_size: number
-}
-
-export interface SystemInfoWorkersResponse {
-    workers?: Array<SystemInfoWorkersResponseWorker>
-}
-
-export interface SystemInfoWorkersResponseWorker {
-    name: string
-    in_queue: number
-    in_work: number
-    runners: number
-}
+import { useGenGet } from './gen-hooks'
+import type { GetAction, Response } from './client-hooks'
+import {
+    getApiSystemInfoSize,
+    getApiSystemInfoWorkers,
+} from './gen/system/system'
+import type {
+    GetApiSystemInfoSize200,
+    GetApiSystemInfoWorkers200,
+} from './gen/hGraberNext.schemas'
 
 export function useSystemInfoSize(): [
-    Response<SystemInfoSizeResponse | null>,
+    Response<GetApiSystemInfoSize200 | null>,
     GetAction,
 ] {
-    const [response, fetchData] = useAPIGet<SystemInfoSizeResponse>(
-        '/api/system/info/size'
-    )
-
-    return [response, fetchData]
+    return useGenGet<GetApiSystemInfoSize200>(getApiSystemInfoSize)
 }
 
 export function useSystemInfoWorkers(): [
-    Response<SystemInfoWorkersResponse | null>,
+    Response<GetApiSystemInfoWorkers200 | null>,
     GetAction,
 ] {
-    const [response, fetchData] = useAPIGet<SystemInfoWorkersResponse>(
-        '/api/system/info/workers'
-    )
-
-    return [response, fetchData]
+    return useGenGet<GetApiSystemInfoWorkers200>(getApiSystemInfoWorkers)
 }
