@@ -24,7 +24,7 @@ func (c *Controller) hProxyBookTool() server.ServerTool {
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			bookUrl, err := url.Parse(request.GetString("url", ""))
 			if err != nil {
-				return nil, fmt.Errorf("parse book id: %w", err)
+				return nil, fmt.Errorf("parse book url: %w", err)
 			}
 
 			pageLimit := 0
