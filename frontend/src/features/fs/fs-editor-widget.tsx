@@ -1,11 +1,11 @@
-import { AgentListResponse } from '../../apiclient/api-agent'
 import { FileSystemInfo } from '../../apiclient/api-fs'
+import { PostApiAgentList200Item } from '../../apiclient/gen/hGraberNext.schemas'
 import { ContainerWidget } from '../../widgets/design-system'
 
 export function FSEditorWidget(props: {
     value: FileSystemInfo
     onChange: (v: FileSystemInfo) => void
-    agents?: Array<AgentListResponse>
+    agents?: Array<PostApiAgentList200Item>
 }) {
     return (
         <ContainerWidget

@@ -13,66 +13,52 @@ import type {
     PostApiAgentDeleteBody,
     PostApiAgentGetBody,
     PostApiAgentList200Item,
-    PostApiAgentList200ItemStatus,
-    PostApiAgentList200ItemStatusProblemsItem,
     PostApiAgentListBody,
     PostApiAgentNewBody,
     PostApiAgentTaskExportBody,
     PostApiAgentUpdateBody,
 } from './gen/hGraberNext.schemas'
 
-export type AgentListRequest = PostApiAgentListBody
-export type AgentListResponse = PostApiAgentList200Item
-export type AgentListResponseStatus = PostApiAgentList200ItemStatus
-export type AgentListResponseStatusProblems =
-    PostApiAgentList200ItemStatusProblemsItem
-export type AgentDeleteRequest = PostApiAgentDeleteBody
-export type AgentGetRequest = PostApiAgentGetBody
-export type AgentNewRequest = PostApiAgentNewBody
-export type AgentUpdateRequest = PostApiAgentUpdateBody
-export type AgentTaskExportRequest = PostApiAgentTaskExportBody
-export type { Agent }
-
 export function useAgentList(): [
-    Response<Array<AgentListResponse> | null>,
-    PostAction<AgentListRequest>,
+    Response<Array<PostApiAgentList200Item> | null>,
+    PostAction<PostApiAgentListBody>,
 ] {
-    return useGenPost<AgentListRequest, Array<AgentListResponse>>(
+    return useGenPost<PostApiAgentListBody, Array<PostApiAgentList200Item>>(
         postApiAgentList
     )
 }
 
 export function useAgentDelete(): [
     Response<void | null>,
-    PostAction<AgentDeleteRequest>,
+    PostAction<PostApiAgentDeleteBody>,
 ] {
-    return useGenPost<AgentDeleteRequest, void>(postApiAgentDelete)
+    return useGenPost<PostApiAgentDeleteBody, void>(postApiAgentDelete)
 }
 
 export function useAgentNew(): [
     Response<void | null>,
-    PostAction<AgentNewRequest>,
+    PostAction<PostApiAgentNewBody>,
 ] {
-    return useGenPost<AgentNewRequest, void>(postApiAgentNew)
+    return useGenPost<PostApiAgentNewBody, void>(postApiAgentNew)
 }
 
 export function useAgentGet(): [
     Response<Agent | null>,
-    PostAction<AgentGetRequest>,
+    PostAction<PostApiAgentGetBody>,
 ] {
-    return useGenPost<AgentGetRequest, Agent>(postApiAgentGet)
+    return useGenPost<PostApiAgentGetBody, Agent>(postApiAgentGet)
 }
 
 export function useAgentTaskExport(): [
     Response<void | null>,
-    PostAction<AgentTaskExportRequest>,
+    PostAction<PostApiAgentTaskExportBody>,
 ] {
-    return useGenPost<AgentTaskExportRequest, void>(postApiAgentTaskExport)
+    return useGenPost<PostApiAgentTaskExportBody, void>(postApiAgentTaskExport)
 }
 
 export function useAgentUpdate(): [
     Response<void | null>,
-    PostAction<AgentUpdateRequest>,
+    PostAction<PostApiAgentUpdateBody>,
 ] {
-    return useGenPost<AgentUpdateRequest, void>(postApiAgentUpdate)
+    return useGenPost<PostApiAgentUpdateBody, void>(postApiAgentUpdate)
 }

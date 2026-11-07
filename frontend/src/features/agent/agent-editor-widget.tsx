@@ -1,4 +1,4 @@
-import { Agent } from '../../apiclient/api-agent'
+import { Agent } from '../../apiclient/gen/hGraberNext.schemas'
 import { ContainerWidget } from '../../widgets/design-system'
 
 export function AgentEditorWidget(props: {

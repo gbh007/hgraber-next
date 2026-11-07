@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import {
-    AgentListResponse,
-    AgentListResponseStatusProblems,
-} from '../../apiclient/api-agent'
+    PostApiAgentList200Item,
+    PostApiAgentList200ItemStatusProblemsItem,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import { AgentStatusWidget } from '../../widgets/agent'
 import { AgentEditLink } from '../../core/routing'
 import {
@@ -12,7 +12,7 @@ import {
 } from '../../widgets/design-system'
 
 export function AgentInfoWidget(props: {
-    value: AgentListResponse
+    value: PostApiAgentList200Item
     onDelete: () => void
 }) {
     return (
@@ -87,7 +87,7 @@ export function AgentInfoWidget(props: {
 }
 
 function AgentStatusInfoWidget(props: {
-    value?: Array<AgentListResponseStatusProblems>
+    value?: Array<PostApiAgentList200ItemStatusProblemsItem>
 }) {
     return (
         <ContainerWidget

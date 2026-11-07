@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { AgentListResponse } from '../../apiclient/api-agent'
 import { FSListResponseUnit } from '../../apiclient/api-fs'
+import { PostApiAgentList200Item } from '../../apiclient/gen/hGraberNext.schemas'
 import { FSEditLink } from '../../core/routing'
 import { AgentStatusWidget } from '../../widgets/agent'
 import {
@@ -17,7 +17,7 @@ export function FSInfoWidget(props: {
     onValidate: () => void
     validationLoading: boolean
     onRemoveMismatch: () => void
-    agents?: AgentListResponse[]
+    agents?: PostApiAgentList200Item[]
 }) {
     return (
         <ContainerWidget

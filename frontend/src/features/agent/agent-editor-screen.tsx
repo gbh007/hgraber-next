@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import {
-    Agent,
     useAgentGet,
     useAgentNew,
     useAgentUpdate,
 } from '../../apiclient/api-agent'
+import { Agent } from '../../apiclient/gen/hGraberNext.schemas'
 import { useCallback, useEffect, useState } from 'react'
 import { AgentListLink } from '../../core/routing'
 import { AgentEditorWidget } from './agent-editor-widget'
