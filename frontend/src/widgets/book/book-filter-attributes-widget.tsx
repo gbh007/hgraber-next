@@ -1,4 +1,7 @@
-import { BookFilterAttribute } from '../../apiclient/model-book-filter'
+import {
+    BookFilterFilterAttributesItem,
+    BookFilterFilterAttributesItemType,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import { attributeCodes, BookAttributeAutocompleteList } from '../attribute'
 import {
     ContainerWidget,
@@ -7,8 +10,8 @@ import {
 } from '../design-system'
 
 export function BookFilterAttributesWidget(props: {
-    value: Array<BookFilterAttribute>
-    onChange: (v: Array<BookFilterAttribute>) => void
+    value: Array<BookFilterFilterAttributesItem>
+    onChange: (v: Array<BookFilterFilterAttributesItem>) => void
 }) {
     return (
         <ContainerWidget
@@ -62,8 +65,8 @@ export function BookFilterAttributesWidget(props: {
 }
 
 function BookFilterAttributeWidget(props: {
-    value: BookFilterAttribute
-    onChange: (v: BookFilterAttribute) => void
+    value: BookFilterFilterAttributesItem
+    onChange: (v: BookFilterFilterAttributesItem) => void
 }) {
     return (
         <ContainerWidget
@@ -91,7 +94,11 @@ function BookFilterAttributeWidget(props: {
                 className='app'
                 value={props.value.type}
                 onChange={(e) => {
-                    props.onChange({ ...props.value, type: e.target.value })
+                    props.onChange({
+                        ...props.value,
+                        type: e.target
+                            .value as BookFilterFilterAttributesItemType,
+                    })
                 }}
             >
                 <option value='like'>LIKE</option>

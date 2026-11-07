@@ -1,6 +1,9 @@
+import {
+    BookFilter,
+    BookFilterSortField,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import { AttributeCountResponseAttribute } from '../../apiclient/api-attribute'
 import { LabelPresetListResponseLabel } from '../../apiclient/api-labels'
-import { BookFilter } from '../../apiclient/model-book-filter'
 import { BookAttributeAutocompleteWidget } from '../attribute'
 import {
     ContainerWidget,
@@ -45,7 +48,7 @@ export function BookFilterWidget(props: {
                             ...props.value,
                             sort: {
                                 ...props.value.sort,
-                                field: e.target.value,
+                                field: e.target.value as BookFilterSortField,
                             },
                         })
                     }}

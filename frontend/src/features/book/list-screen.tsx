@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAppSettings } from '../../apiclient/settings'
 import styles from './list-screen.module.css'
-import { BookFilter } from '../../apiclient/model-book-filter'
+import { BookFilter } from '../../apiclient/gen/hGraberNext.schemas'
 import { useEffect, useState } from 'react'
 import {
     useAttributeColorList,

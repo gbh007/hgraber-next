@@ -1,4 +1,7 @@
-import { BookFilterLabel } from '../../apiclient/model-book-filter'
+import {
+    BookFilterFilterLabelsItem,
+    BookFilterFilterLabelsItemType,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import {
     ContainerWidget,
     DeleteButtonWidget,
@@ -6,8 +9,8 @@ import {
 } from '../design-system'
 
 export function BookFilterLabelsWidget(props: {
-    value: Array<BookFilterLabel>
-    onChange: (v: Array<BookFilterLabel>) => void
+    value: Array<BookFilterFilterLabelsItem>
+    onChange: (v: Array<BookFilterFilterLabelsItem>) => void
 }) {
     return (
         <ContainerWidget
@@ -61,8 +64,8 @@ export function BookFilterLabelsWidget(props: {
 }
 
 function BookFilterLabelWidget(props: {
-    value: BookFilterLabel
-    onChange: (v: BookFilterLabel) => void
+    value: BookFilterFilterLabelsItem
+    onChange: (v: BookFilterFilterLabelsItem) => void
 }) {
     return (
         <ContainerWidget
@@ -83,7 +86,10 @@ function BookFilterLabelWidget(props: {
                 className='app'
                 value={props.value.type}
                 onChange={(e) => {
-                    props.onChange({ ...props.value, type: e.target.value })
+                    props.onChange({
+                        ...props.value,
+                        type: e.target.value as BookFilterFilterLabelsItemType,
+                    })
                 }}
             >
                 <option value='like'>LIKE</option>

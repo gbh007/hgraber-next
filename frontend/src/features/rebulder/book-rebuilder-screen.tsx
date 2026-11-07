@@ -5,7 +5,7 @@ import {
     useBookRaw,
     useBookRebuild,
 } from '../../apiclient/api-book'
-import { BookFilter } from '../../apiclient/model-book-filter'
+import { BookFilter } from '../../apiclient/gen/hGraberNext.schemas'
 import { useBookList } from '../../apiclient/api-book-list'
 import { useBookDetails } from '../../apiclient/api-book-details'
 import { useLabelPresetList } from '../../apiclient/api-labels'

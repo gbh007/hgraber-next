@@ -1,4 +1,4 @@
-import { BookFilter } from '../apiclient/model-book-filter'
+import { BookFilter } from '../apiclient/gen/hGraberNext.schemas'
 
 export function AgentEditLink(agentID?: string) {
     return `/agent/edit/${agentID ?? 'new'}`

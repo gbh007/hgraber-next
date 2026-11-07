@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAgentList, useAgentTaskExport } from '../../apiclient/api-agent'
-import { BookFilter } from '../../apiclient/model-book-filter'
+import { BookFilter } from '../../apiclient/gen/hGraberNext.schemas'
 import { ContainerWidget, ErrorTextWidget } from '../../widgets/design-system'
 
 export function AgentExportWidget(props: { filter: BookFilter }) {

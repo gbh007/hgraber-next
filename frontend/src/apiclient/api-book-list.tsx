@@ -1,5 +1,5 @@
 import { PostAction, useAPIPost, Response } from './client-hooks'
-import { BookFilter } from './model-book-filter'
+import { BookFilter } from './gen/hGraberNext.schemas'
 import { BookSimple } from './model-book'
 
 export interface BookListResponse {

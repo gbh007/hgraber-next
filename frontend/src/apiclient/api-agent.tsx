@@ -1,148 +1,78 @@
-import { PostAction, useAPIPost, Response } from './client-hooks'
-import { BookFilter } from './model-book-filter'
+import { useGenPost } from './gen-hooks'
+import type { PostAction, Response } from './client-hooks'
+import {
+    postApiAgentDelete,
+    postApiAgentGet,
+    postApiAgentList,
+    postApiAgentNew,
+    postApiAgentTaskExport,
+    postApiAgentUpdate,
+} from './gen/agent/agent'
+import type {
+    Agent,
+    PostApiAgentDeleteBody,
+    PostApiAgentGetBody,
+    PostApiAgentList200Item,
+    PostApiAgentList200ItemStatus,
+    PostApiAgentList200ItemStatusProblemsItem,
+    PostApiAgentListBody,
+    PostApiAgentNewBody,
+    PostApiAgentTaskExportBody,
+    PostApiAgentUpdateBody,
+} from './gen/hGraberNext.schemas'
 
-interface AgentListRequest {
-    can_parse?: boolean
-    can_export?: boolean
-    can_parse_multi?: boolean
-    has_fs?: boolean
-    has_hproxy?: boolean
-    include_status?: boolean
-}
-
-export interface Agent {
-    id: string
-    name: string
-    token: string
-    addr: string
-    can_parse: boolean
-    can_parse_multi: boolean
-    can_export: boolean
-    has_fs: boolean
-    has_hproxy: boolean
-    priority: number
-    created_at: string
-}
-
-export interface AgentListResponse {
-    status?: AgentListResponseStatus
-    info: Agent
-}
-
-interface AgentListResponseStatus {
-    start_at?: string
-    check_status_error?: string
-    status: string
-    problems?: Array<AgentListResponseStatusProblems>
-}
-
-export interface AgentListResponseStatusProblems {
-    type: string
-    details: string
-}
+export type AgentListRequest = PostApiAgentListBody
+export type AgentListResponse = PostApiAgentList200Item
+export type AgentListResponseStatus = PostApiAgentList200ItemStatus
+export type AgentListResponseStatusProblems =
+    PostApiAgentList200ItemStatusProblemsItem
+export type AgentDeleteRequest = PostApiAgentDeleteBody
+export type AgentGetRequest = PostApiAgentGetBody
+export type AgentNewRequest = PostApiAgentNewBody
+export type AgentUpdateRequest = PostApiAgentUpdateBody
+export type AgentTaskExportRequest = PostApiAgentTaskExportBody
+export type { Agent }
 
 export function useAgentList(): [
     Response<Array<AgentListResponse> | null>,
     PostAction<AgentListRequest>,
 ] {
-    const [response, fetchData] = useAPIPost<
-        AgentListRequest,
-        Array<AgentListResponse>
-    >('/api/agent/list')
-
-    return [response, fetchData]
-}
-
-interface AgentDeleteRequest {
-    id: string
+    return useGenPost<AgentListRequest, Array<AgentListResponse>>(
+        postApiAgentList
+    )
 }
 
 export function useAgentDelete(): [
     Response<void | null>,
     PostAction<AgentDeleteRequest>,
 ] {
-    const [response, fetchData] = useAPIPost<AgentDeleteRequest, void>(
-        '/api/agent/delete'
-    )
-
-    return [response, fetchData]
-}
-
-export interface AgentNewRequest {
-    name: string
-    addr: string
-    token: string
-    can_parse: boolean
-    can_parse_multi: boolean
-    can_export: boolean
-    has_fs: boolean
-    has_hproxy: boolean
-    priority: number
+    return useGenPost<AgentDeleteRequest, void>(postApiAgentDelete)
 }
 
 export function useAgentNew(): [
     Response<void | null>,
     PostAction<AgentNewRequest>,
 ] {
-    const [response, fetchData] = useAPIPost<AgentNewRequest, void>(
-        '/api/agent/new'
-    )
-
-    return [response, fetchData]
-}
-
-interface AgentTaskExportRequest {
-    book_filter: BookFilter
-    exporter: string
-    delete_after: boolean
-}
-
-export function useAgentTaskExport(): [
-    Response<void | null>,
-    PostAction<AgentTaskExportRequest>,
-] {
-    const [response, fetchData] = useAPIPost<AgentTaskExportRequest, void>(
-        '/api/agent/task/export'
-    )
-
-    return [response, fetchData]
-}
-
-export interface AgentUpdateRequest {
-    id: string
-    name: string
-    token: string
-    addr: string
-    can_parse: boolean
-    can_parse_multi: boolean
-    can_export: boolean
-    has_fs: boolean
-    has_hproxy: boolean
-    priority: number
-}
-
-export function useAgentUpdate(): [
-    Response<void | null>,
-    PostAction<AgentUpdateRequest>,
-] {
-    const [response, fetchData] = useAPIPost<AgentUpdateRequest, void>(
-        '/api/agent/update'
-    )
-
-    return [response, fetchData]
-}
-
-interface AgentGetRequest {
-    id: string
+    return useGenPost<AgentNewRequest, void>(postApiAgentNew)
 }
 
 export function useAgentGet(): [
     Response<Agent | null>,
     PostAction<AgentGetRequest>,
 ] {
-    const [response, fetchData] = useAPIPost<AgentGetRequest, Agent>(
-        '/api/agent/get'
-    )
+    return useGenPost<AgentGetRequest, Agent>(postApiAgentGet)
+}
 
-    return [response, fetchData]
+export function useAgentTaskExport(): [
+    Response<void | null>,
+    PostAction<AgentTaskExportRequest>,
+] {
+    return useGenPost<AgentTaskExportRequest, void>(postApiAgentTaskExport)
+}
+
+export function useAgentUpdate(): [
+    Response<void | null>,
+    PostAction<AgentUpdateRequest>,
+] {
+    return useGenPost<AgentUpdateRequest, void>(postApiAgentUpdate)
 }
