@@ -200,7 +200,7 @@ export function HProxyBookScreen() {
                                     ) : (
                                         <span>{v.ext_name}</span>
                                     )}
-                                    {v.massloads_by_ext_url.map((ml) => (
+                                    {v.massloads_by_ext_url?.map((ml) => (
                                         <MassloadLinkWidget
                                             key={ml.id}
                                             value={ml}
@@ -221,7 +221,7 @@ export function HProxyBookScreen() {
                                             src={DeletedBadge}
                                         />
                                     )}
-                                    {v.massloads_by_name.map((ml) => (
+                                    {v.massloads_by_name?.map((ml) => (
                                         <MassloadLinkWidget
                                             key={ml.id}
                                             value={ml}

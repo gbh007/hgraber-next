@@ -1,92 +1,60 @@
+import { useGenGet, useGenPost } from './gen-hooks'
+import type { GetAction, PostAction, Response } from './client-hooks'
 import {
-    PostAction,
-    useAPIPost,
-    Response,
-    useAPIGet,
-    GetAction,
-} from './client-hooks'
-
-export interface ParsingMirrorCreateRequest {
-    name: string
-    description?: string
-    prefixes: Array<string>
-}
+    postApiParsingMirrorCreate,
+    postApiParsingMirrorUpdate,
+    postApiParsingMirrorDelete,
+    postApiParsingMirrorGet,
+    getApiParsingMirrorList,
+} from './gen/parsing/parsing'
+import type {
+    PostApiParsingMirrorCreateBody,
+    PostApiParsingMirrorUpdateBody,
+    PostApiParsingMirrorDeleteBody,
+    PostApiParsingMirrorGetBody,
+    PostApiParsingMirrorGet200,
+    GetApiParsingMirrorList200,
+} from './gen/hGraberNext.schemas'
 
 export function useParsingMirrorCreate(): [
     Response<void | null>,
-    PostAction<ParsingMirrorCreateRequest>,
+    PostAction<PostApiParsingMirrorCreateBody>,
 ] {
-    const [response, fetchData] = useAPIPost<ParsingMirrorCreateRequest, void>(
-        '/api/parsing/mirror/create'
+    return useGenPost<PostApiParsingMirrorCreateBody, void>(
+        postApiParsingMirrorCreate
     )
-
-    return [response, fetchData]
-}
-
-export interface ParsingMirrorUpdateRequest {
-    id: string
-    name: string
-    description?: string
-    prefixes: Array<string>
 }
 
 export function useParsingMirrorUpdate(): [
     Response<void | null>,
-    PostAction<ParsingMirrorUpdateRequest>,
+    PostAction<PostApiParsingMirrorUpdateBody>,
 ] {
-    const [response, fetchData] = useAPIPost<ParsingMirrorUpdateRequest, void>(
-        '/api/parsing/mirror/update'
+    return useGenPost<PostApiParsingMirrorUpdateBody, void>(
+        postApiParsingMirrorUpdate
     )
-
-    return [response, fetchData]
-}
-
-export interface ParsingMirrorDeleteRequest {
-    id: string
 }
 
 export function useParsingMirrorDelete(): [
     Response<void | null>,
-    PostAction<ParsingMirrorDeleteRequest>,
+    PostAction<PostApiParsingMirrorDeleteBody>,
 ] {
-    const [response, fetchData] = useAPIPost<ParsingMirrorDeleteRequest, void>(
-        '/api/parsing/mirror/delete'
+    return useGenPost<PostApiParsingMirrorDeleteBody, void>(
+        postApiParsingMirrorDelete
     )
-
-    return [response, fetchData]
-}
-
-export interface ParsingMirrorListResponse {
-    mirrors?: Array<ParsingMirrorListResponseLabel>
-}
-
-export interface ParsingMirrorListResponseLabel {
-    id: string
-    name: string
-    description?: string
-    prefixes: Array<string>
 }
 
 export function useParsingMirrorList(): [
-    Response<ParsingMirrorListResponse | null>,
+    Response<GetApiParsingMirrorList200 | null>,
     GetAction,
 ] {
-    const [response, fetchData] = useAPIGet<ParsingMirrorListResponse>(
-        '/api/parsing/mirror/list'
-    )
-
-    return [response, fetchData]
+    return useGenGet<GetApiParsingMirrorList200>(getApiParsingMirrorList)
 }
 
-// TODO: разделить модели
 export function useParsingMirrorGet(): [
-    Response<ParsingMirrorListResponseLabel | null>,
-    PostAction<ParsingMirrorDeleteRequest>,
+    Response<PostApiParsingMirrorGet200 | null>,
+    PostAction<PostApiParsingMirrorGetBody>,
 ] {
-    const [response, fetchData] = useAPIPost<
-        ParsingMirrorDeleteRequest,
-        ParsingMirrorListResponseLabel
-    >('/api/parsing/mirror/get')
-
-    return [response, fetchData]
+    return useGenPost<PostApiParsingMirrorGetBody, PostApiParsingMirrorGet200>(
+        postApiParsingMirrorGet
+    )
 }

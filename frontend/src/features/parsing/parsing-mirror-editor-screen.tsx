@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import type { PostApiParsingMirrorUpdateBody } from '../../apiclient/gen/hGraberNext.schemas'
 import {
-    ParsingMirrorUpdateRequest,
     useParsingMirrorCreate,
     useParsingMirrorGet,
     useParsingMirrorUpdate,
@@ -22,7 +22,7 @@ export function ParsingMirrorEditorScreen() {
         useParsingMirrorUpdate()
     const [parsingMirrorGetResponse, doGetParsingMirror] = useParsingMirrorGet()
 
-    const [data, setData] = useState<ParsingMirrorUpdateRequest>({
+    const [data, setData] = useState<PostApiParsingMirrorUpdateBody>({
         id: '',
         name: '',
         prefixes: [],

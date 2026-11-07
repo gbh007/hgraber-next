@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { HProxyBookResponsePage } from '../../apiclient/api-hproxy'
+import type { PostApiHproxyBook200PagesItem } from '../../apiclient/gen/hGraberNext.schemas'
 import { ContainerWidget } from '../../widgets/design-system'
 import {
     ImageSize,
@@ -9,7 +9,7 @@ import {
 
 export function HProxyBookPagesPreviewWidget(props: {
     url: string
-    pages?: Array<HProxyBookResponsePage>
+    pages?: Array<PostApiHproxyBook200PagesItem>
     pageLimit?: number
 }) {
     const [pageLimit, setPageLimit] = useState(20)
