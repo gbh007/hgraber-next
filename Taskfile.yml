@@ -107,3 +107,7 @@ tasks:
   ts:format:
     dir: frontend
     cmd: npx prettier --write -l ./src
+
+  ts:generate:
+    dir: frontend
+    cmd: npm run generate
