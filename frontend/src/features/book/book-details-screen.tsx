@@ -1,8 +1,11 @@
+import {
+    useBookDelete,
+    useBookDetails,
+    useBookRestore,
+    useBookStatusSet,
+} from '../../apiclient/api-book'
 import { CSSProperties, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { useBookDetails } from '../../apiclient/api-book-details'
-import { useBookDelete } from '../../apiclient/api-book-delete'
-import { useBookRestore, useBookStatusSet } from '../../apiclient/api-book'
 import {
     useDeduplicateBookByPageBody,
     useSetDeadHash,

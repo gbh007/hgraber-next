@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import {
     useSystemInfoSize,
     useSystemInfoWorkers,
-} from '../../apiclient/api-system-info'
+} from '../../apiclient/api-system'
 import styles from './main-screen.module.css'
 import { BookHandleWidget } from './book-handle-widget'
 import {

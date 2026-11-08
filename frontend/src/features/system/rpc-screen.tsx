@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import type { PostApiSystemWorkerConfigBodyRunnersCountItem } from '../../apiclient/gen/hGraberNext.schemas'
-import { useSystemWorkerConfig } from '../../apiclient/api-system-worker-config'
-import { useSystemInfoWorkers } from '../../apiclient/api-system-info'
+import {
+    useSystemInfoWorkers,
+    useSystemWorkerConfig,
+} from '../../apiclient/api-system'
 
 export function RPCScreen() {
     return (

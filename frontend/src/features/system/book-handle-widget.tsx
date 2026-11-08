@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSystemHandle } from '../../apiclient/api-system-handle'
+import { useSystemHandle } from '../../apiclient/api-system'
 import { ParseDetailsWidget } from './parse-details-widget'
 import { ContainerWidget, ErrorTextWidget } from '../../widgets/design-system'
 

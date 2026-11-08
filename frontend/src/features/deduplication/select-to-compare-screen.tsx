@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom'
-import { useBookList } from '../../apiclient/api-book-list'
+import { useBookList } from '../../apiclient/api-book'
 import type { PostApiBookList200BooksItem } from '../../apiclient/gen/hGraberNext.schemas'
 import { useAppSettings } from '../../apiclient/settings'
 import styles from './select-to-compare-screen.module.css'

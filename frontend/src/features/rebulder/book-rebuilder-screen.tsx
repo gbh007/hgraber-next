@@ -1,10 +1,12 @@
+import type { BookFilter, PostApiBookRebuildBody } from '../../apiclient/gen/hGraberNext.schemas'
+import {
+    useBookDetails,
+    useBookList,
+    useBookRaw,
+    useBookRebuild,
+} from '../../apiclient/api-book'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { useBookRaw, useBookRebuild } from '../../apiclient/api-book'
-import type { PostApiBookRebuildBody } from '../../apiclient/gen/hGraberNext.schemas'
-import { BookFilter } from '../../apiclient/gen/hGraberNext.schemas'
-import { useBookList } from '../../apiclient/api-book-list'
-import { useBookDetails } from '../../apiclient/api-book-details'
 import { useLabelPresetList } from '../../apiclient/api-labels'
 import {
     useAttributeColorList,

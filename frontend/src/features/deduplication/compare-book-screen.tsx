@@ -4,7 +4,7 @@ import {
     useDeduplicateCompare,
     useSetDeadHash,
 } from '../../apiclient/api-deduplicate'
-import { useDeleteBookPage } from '../../apiclient/api-book-delete'
+import { useDeleteBookPage } from '../../apiclient/api-book'
 import { useAttributeColorList } from '../../apiclient/api-attribute'
 import { DualReaderWidget } from './dual-reader-widget'
 import type {

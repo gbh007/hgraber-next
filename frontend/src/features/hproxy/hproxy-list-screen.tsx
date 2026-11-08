@@ -6,7 +6,7 @@ import {
     HProxyBookLink,
     HProxyListLink,
 } from '../../core/routing'
-import { useSystemHandle } from '../../apiclient/api-system-handle'
+import { useSystemHandle } from '../../apiclient/api-system'
 import {
     ColorizedTextWidget,
     ContainerWidget,

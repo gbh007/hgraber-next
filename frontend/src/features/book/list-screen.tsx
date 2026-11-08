@@ -8,7 +8,7 @@ import {
     useAttributeCount,
 } from '../../apiclient/api-attribute'
 import { useLabelPresetList } from '../../apiclient/api-labels'
-import { useBookList } from '../../apiclient/api-book-list'
+import { useBookList } from '../../apiclient/api-book'
 import { SelectToCompareLink } from '../../core/routing'
 import { AgentExportWidget } from './agent-export-widget'
 import { BookShortInfoWidget } from './book-short-info-widget'

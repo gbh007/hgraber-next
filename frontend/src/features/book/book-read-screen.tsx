@@ -2,9 +2,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import styles from './book-read-screen.module.css'
 import { useCallback, useEffect, useState } from 'react'
 import type { PageSimple } from '../../apiclient/gen/hGraberNext.schemas'
-import { useBookDetails } from '../../apiclient/api-book-details'
+import {
+    useBookDetails,
+    useDeleteBookPage,
+} from '../../apiclient/api-book'
 import { useSetDeadHash } from '../../apiclient/api-deduplicate'
-import { useDeleteBookPage } from '../../apiclient/api-book-delete'
 import { BookDetailsLink, BookReaderLink } from '../../core/routing'
 import {
     ColorizedTextWidget,
