@@ -171,8 +171,8 @@ type Handler interface {
 	// APIBookRestorePost implements POST /api/book/restore operation.
 	//
 	// Пытается восстановить книгу или ее страницы
-	// (восстановление может быть не возможно если данные
-	// уже были очищены).
+	// (восстановление может быть не возможно если данные уже
+	// были очищены).
 	//
 	// POST /api/book/restore
 	APIBookRestorePost(ctx context.Context, req *APIBookRestorePostReq) error
@@ -215,8 +215,8 @@ type Handler interface {
 	APIDeduplicateComparePost(ctx context.Context, req *APIDeduplicateComparePostReq) (*APIDeduplicateComparePostOK, error)
 	// APIDeduplicateDeadHashSetPost implements POST /api/deduplicate/dead-hash/set operation.
 	//
-	// Устанавливает значение мертвых хешей для книги или
-	// ее страницы.
+	// Устанавливает значение мертвых хешей для книги или ее
+	// страницы.
 	//
 	// POST /api/deduplicate/dead-hash/set
 	APIDeduplicateDeadHashSetPost(ctx context.Context, req *APIDeduplicateDeadHashSetPostReq) error

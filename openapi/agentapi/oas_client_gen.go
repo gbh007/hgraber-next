@@ -4,6 +4,7 @@ package agentapi
 
 import (
 	"context"
+	"io"
 	"net/url"
 	"strings"
 
@@ -237,7 +238,14 @@ func (c *Client) sendAPIV2FsArchivePost(ctx context.Context, request APIV2FsArch
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2FsArchivePostResponse(resp)
 	if err != nil {
@@ -324,7 +332,14 @@ func (c *Client) sendAPIV2FsFileIDDelete(ctx context.Context, params APIV2FsFile
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2FsFileIDDeleteResponse(resp)
 	if err != nil {
@@ -411,7 +426,14 @@ func (c *Client) sendAPIV2FsFileIDGet(ctx context.Context, params APIV2FsFileIDG
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2FsFileIDGetResponse(resp)
 	if err != nil {
@@ -501,7 +523,14 @@ func (c *Client) sendAPIV2FsFileIDPost(ctx context.Context, request APIV2FsFileI
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2FsFileIDPostResponse(resp)
 	if err != nil {
@@ -607,7 +636,14 @@ func (c *Client) sendAPIV2FsGet(ctx context.Context, params APIV2FsGetParams) (r
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2FsGetResponse(resp)
 	if err != nil {
@@ -697,7 +733,14 @@ func (c *Client) sendAPIV2HighwayFileIDExtGet(ctx context.Context, params APIV2H
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2HighwayFileIDExtGetResponse(resp)
 	if err != nil {
@@ -766,7 +809,14 @@ func (c *Client) sendAPIV2HighwayTokenPost(ctx context.Context) (res *APIV2Highw
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2HighwayTokenPostResponse(resp)
 	if err != nil {
@@ -838,7 +888,14 @@ func (c *Client) sendAPIV2ParsingBookPost(ctx context.Context, request *APIV2Par
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2ParsingBookPostResponse(resp)
 	if err != nil {
@@ -910,7 +967,14 @@ func (c *Client) sendAPIV2ParsingCheckPost(ctx context.Context, request *APIV2Pa
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2ParsingCheckPostResponse(resp)
 	if err != nil {
@@ -983,7 +1047,14 @@ func (c *Client) sendAPIV2ParsingListPost(ctx context.Context, request *APIV2Par
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2ParsingListPostResponse(resp)
 	if err != nil {
@@ -1055,7 +1126,14 @@ func (c *Client) sendAPIV2ParsingPagePost(ctx context.Context, request *APIV2Par
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2ParsingPagePostResponse(resp)
 	if err != nil {
@@ -1124,7 +1202,14 @@ func (c *Client) sendAPIV2StatusGet(ctx context.Context) (res *APIV2StatusGetOK,
 	if err != nil {
 		return res, errors.Wrap(err, "do request")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer func() {
+		// Drain the body to EOF before closing, so the underlying
+		// connection can be reused by the Transport regardless of the
+		// response status code. See https://github.com/ogen-go/ogen/issues/1670.
+		_, _ = io.Copy(io.Discard, body)
+		_ = body.Close()
+	}()
 
 	result, err := decodeAPIV2StatusGetResponse(resp)
 	if err != nil {

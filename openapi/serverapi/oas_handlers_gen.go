@@ -4135,8 +4135,8 @@ func (s *Server) handleAPIBookRebuildPostRequest(args [0]string, argsEscaped boo
 // handleAPIBookRestorePostRequest handles POST /api/book/restore operation.
 //
 // Пытается восстановить книгу или ее страницы
-// (восстановление может быть не возможно если данные
-// уже были очищены).
+// (восстановление может быть не возможно если данные уже
+// были очищены).
 //
 // POST /api/book/restore
 func (s *Server) handleAPIBookRestorePostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -5257,8 +5257,8 @@ func (s *Server) handleAPIDeduplicateComparePostRequest(args [0]string, argsEsca
 
 // handleAPIDeduplicateDeadHashSetPostRequest handles POST /api/deduplicate/dead-hash/set operation.
 //
-// Устанавливает значение мертвых хешей для книги или
-// ее страницы.
+// Устанавливает значение мертвых хешей для книги или ее
+// страницы.
 //
 // POST /api/deduplicate/dead-hash/set
 func (s *Server) handleAPIDeduplicateDeadHashSetPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {

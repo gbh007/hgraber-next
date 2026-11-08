@@ -1397,14 +1397,14 @@ type APIBookDetailsPostOKSize struct {
 	// Deprecated: schema marks this property as deprecated.
 	UniqueFormatted string `json:"unique_formatted"`
 	// Размер уникальных файлов книги без учета мертвых
-	// хешей  в человекочитаемом виде.
+	// хешей в человекочитаемом виде.
 	UniqueWithoutDeadHashesFormatted string `json:"unique_without_dead_hashes_formatted"`
 	// Размер файлов в книге что пересекаются с другими
 	// книгами в человекочитаемом виде.
 	//
 	// Deprecated: schema marks this property as deprecated.
 	SharedFormatted string `json:"shared_formatted"`
-	// Размер мертвых хешей в книге  в человекочитаемом виде.
+	// Размер мертвых хешей в книге в человекочитаемом виде.
 	//
 	// Deprecated: schema marks this property as deprecated.
 	DeadHashesFormatted string `json:"dead_hashes_formatted"`
@@ -2044,8 +2044,8 @@ type APIBookRebuildPostReqFlags struct {
 	OnlyUnique OptBool `json:"only_unique"`
 	// Исключить страницы с мертвыми хешами.
 	ExcludeDeadHashPages OptBool `json:"exclude_dead_hash_pages"`
-	// Включать только уникальные страницы не содержащиеся
-	// в других книгах.
+	// Включать только уникальные страницы не содержащиеся в
+	// других книгах.
 	Only1Copy OptBool `json:"only_1_copy"`
 	// Проставить каждой страницы метки об оригинальной
 	// книге если ее нет.
@@ -2381,8 +2381,8 @@ type APIDeduplicateBookByPageBodyPostOKResultItem struct {
 	TargetSize int64 `json:"target_size"`
 	// Общий размер книг без учета внутренних страниц дублей.
 	SharedSize int64 `json:"shared_size"`
-	// Общий размер книг без учета внутренних страниц
-	// дублей и мертвых хешей.
+	// Общий размер книг без учета внутренних страниц дублей
+	// и мертвых хешей.
 	SharedSizeWithoutDeadHashes int64 `json:"shared_size_without_dead_hashes"`
 	// Общее количество страниц книг без учета внутренних
 	// страниц дублей.
@@ -2398,8 +2398,8 @@ type APIDeduplicateBookByPageBodyPostOKResultItem struct {
 	//
 	// Deprecated: schema marks this property as deprecated.
 	SharedSizeFormatted string `json:"shared_size_formatted"`
-	// Общий размер книг без учета внутренних страниц
-	// дублей и мертвых хешей.
+	// Общий размер книг без учета внутренних страниц дублей
+	// и мертвых хешей.
 	//
 	// Deprecated: schema marks this property as deprecated.
 	SharedSizeWithoutDeadHashesFormatted string `json:"shared_size_without_dead_hashes_formatted"`
@@ -5902,8 +5902,7 @@ type APISystemInfoSizeGetOK struct {
 	NotLoadPageCount int `json:"not_load_page_count"`
 	// Количество страниц без тела (файла).
 	PageWithoutBodyCount int `json:"page_without_body_count"`
-	// Количество удаленных страниц (которые не были
-	// очищены).
+	// Количество удаленных страниц (которые не были очищены).
 	DeletedPageCount int `json:"deleted_page_count"`
 	// Количество файлов.
 	FileCount int `json:"file_count"`
