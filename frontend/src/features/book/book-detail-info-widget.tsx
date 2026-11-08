@@ -99,6 +99,7 @@ export function BookDetailInfoWidget(
                     <ContainerWidget
                         direction='row'
                         gap='small'
+                        wrap
                     >
                         {props.book.info.origin_url ? (
                             <a href={props.book.info.origin_url}>
