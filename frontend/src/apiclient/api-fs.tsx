@@ -1,188 +1,92 @@
-import { PostAction, useAPIPost, Response } from './client-hooks'
-import { FSDBFilesInfo } from './model-fs'
-
-export interface FileSystemInfo {
-    id: string
-    name: string
-    description?: string
-    agent_id?: string
-    path?: string
-    download_priority: number
-    deduplicate_priority: number
-    highway_enabled: boolean
-    highway_addr?: string
-    created_at: string
-}
-
-export interface FSGetRequest {
-    id: string
-}
+import { useGenPost } from './gen-hooks'
+import type { PostAction, Response } from './gen-hooks'
+import {
+    postApiFsGet,
+    postApiFsCreate,
+    postApiFsUpdate,
+    postApiFsDelete,
+    postApiFsList,
+    postApiFsValidate,
+    postApiFsRemoveMismatch,
+    postApiFsTransfer,
+    postApiFsTransferBook,
+} from './gen/fs/fs'
+import type {
+    FileSystemInfo,
+    PostApiFsGetBody,
+    PostApiFsCreateBody,
+    PostApiFsCreate200,
+    PostApiFsUpdateBody,
+    PostApiFsDeleteBody,
+    PostApiFsListBody,
+    PostApiFsList200,
+    PostApiFsValidateBody,
+    PostApiFsRemoveMismatchBody,
+    PostApiFsTransferBody,
+    PostApiFsTransferBookBody,
+} from './gen/hGraberNext.schemas'
 
 export function useFSGet(): [
     Response<FileSystemInfo | null>,
-    PostAction<FSGetRequest>,
+    PostAction<PostApiFsGetBody>,
 ] {
-    const [response, fetchData] = useAPIPost<FSGetRequest, FileSystemInfo>(
-        '/api/fs/get'
-    )
-
-    return [response, fetchData]
-}
-
-export interface FSCreateRequest {
-    name: string
-    description?: string
-    agent_id?: string
-    path?: string
-    download_priority: number
-    deduplicate_priority: number
-    highway_enabled: boolean
-    highway_addr?: string
-}
-
-export interface FSCreateResponse {
-    id: string
+    return useGenPost<PostApiFsGetBody, FileSystemInfo>(postApiFsGet)
 }
 
 export function useFSCreate(): [
-    Response<FSCreateResponse | null>,
-    PostAction<FSCreateRequest>,
+    Response<PostApiFsCreate200 | null>,
+    PostAction<PostApiFsCreateBody>,
 ] {
-    const [response, fetchData] = useAPIPost<FSCreateRequest, FSCreateResponse>(
-        '/api/fs/create'
-    )
-
-    return [response, fetchData]
-}
-
-export interface FSUpdateRequest {
-    id: string
-    name: string
-    description?: string
-    agent_id?: string
-    path?: string
-    download_priority: number
-    deduplicate_priority: number
-    highway_enabled: boolean
-    highway_addr?: string
+    return useGenPost<PostApiFsCreateBody, PostApiFsCreate200>(postApiFsCreate)
 }
 
 export function useFSUpdate(): [
     Response<void | null>,
-    PostAction<FSUpdateRequest>,
+    PostAction<PostApiFsUpdateBody>,
 ] {
-    const [response, fetchData] = useAPIPost<FSUpdateRequest, void>(
-        '/api/fs/update'
-    )
-
-    return [response, fetchData]
-}
-
-export interface FSDeleteRequest {
-    id: string
+    return useGenPost<PostApiFsUpdateBody, void>(postApiFsUpdate)
 }
 
 export function useFSDelete(): [
     Response<void | null>,
-    PostAction<FSDeleteRequest>,
+    PostAction<PostApiFsDeleteBody>,
 ] {
-    const [response, fetchData] = useAPIPost<FSDeleteRequest, void>(
-        '/api/fs/delete'
-    )
-
-    return [response, fetchData]
-}
-
-export interface FSListRequest {
-    include_db_file_size?: boolean
-    include_available_size?: boolean
-}
-
-export interface FSListResponse {
-    file_systems?: Array<FSListResponseUnit>
-}
-
-export interface FSListResponseUnit {
-    info: FileSystemInfo
-    is_legacy: boolean
-    db_files_info?: FSDBFilesInfo
-    db_invalid_files_info?: FSDBFilesInfo
-    db_detached_files_info?: FSDBFilesInfo
-    available_size?: number
+    return useGenPost<PostApiFsDeleteBody, void>(postApiFsDelete)
 }
 
 export function useFSList(): [
-    Response<FSListResponse | null>,
-    PostAction<FSListRequest>,
+    Response<PostApiFsList200 | null>,
+    PostAction<PostApiFsListBody>,
 ] {
-    const [response, fetchData] = useAPIPost<FSListRequest, FSListResponse>(
-        '/api/fs/list'
-    )
-
-    return [response, fetchData]
-}
-
-export interface FSValidateRequest {
-    id: string
+    return useGenPost<PostApiFsListBody, PostApiFsList200>(postApiFsList)
 }
 
 export function useFSValidate(): [
     Response<void | null>,
-    PostAction<FSValidateRequest>,
+    PostAction<PostApiFsValidateBody>,
 ] {
-    const [response, fetchData] = useAPIPost<FSValidateRequest, void>(
-        '/api/fs/validate'
-    )
-
-    return [response, fetchData]
-}
-
-export interface FSRemoveMismatchRequest {
-    id: string
+    return useGenPost<PostApiFsValidateBody, void>(postApiFsValidate)
 }
 
 export function useFSRemoveMismatch(): [
     Response<void | null>,
-    PostAction<FSRemoveMismatchRequest>,
+    PostAction<PostApiFsRemoveMismatchBody>,
 ] {
-    const [response, fetchData] = useAPIPost<FSRemoveMismatchRequest, void>(
-        '/api/fs/remove-mismatch'
+    return useGenPost<PostApiFsRemoveMismatchBody, void>(
+        postApiFsRemoveMismatch
     )
-
-    return [response, fetchData]
-}
-
-export interface FSTransferRequest {
-    from: string
-    to: string
-    only_preview_pages?: boolean
 }
 
 export function useFSTransfer(): [
     Response<void | null>,
-    PostAction<FSTransferRequest>,
+    PostAction<PostApiFsTransferBody>,
 ] {
-    const [response, fetchData] = useAPIPost<FSTransferRequest, void>(
-        '/api/fs/transfer'
-    )
-
-    return [response, fetchData]
-}
-
-export interface FSTransferBookRequest {
-    book_id: string
-    to: string
-    page_number?: number
-    only_preview_pages?: boolean
+    return useGenPost<PostApiFsTransferBody, void>(postApiFsTransfer)
 }
 
 export function useFSTransferBook(): [
     Response<void | null>,
-    PostAction<FSTransferBookRequest>,
+    PostAction<PostApiFsTransferBookBody>,
 ] {
-    const [response, fetchData] = useAPIPost<FSTransferBookRequest, void>(
-        '/api/fs/transfer/book'
-    )
-
-    return [response, fetchData]
+    return useGenPost<PostApiFsTransferBookBody, void>(postApiFsTransferBook)
 }

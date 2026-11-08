@@ -1,38 +1,11 @@
-import { PostAction, useAPIPost, Response } from './client-hooks'
-import { BookFilter } from './gen/hGraberNext.schemas'
-import { BookSimple } from './model-book'
-
-export interface BookListResponse {
-    books?: Array<BookShortInfo>
-    count: number
-    pages: Array<BookListResponsePages>
-}
-
-export interface BookShortInfo {
-    info: BookSimple
-    color_attributes?: Array<BookShortInfoColorAttributes>
-}
-
-export interface BookShortInfoColorAttributes {
-    code: string
-    value: string
-    text_color: string
-    background_color: string
-}
-
-export interface BookListResponsePages {
-    value: number
-    is_current: boolean
-    is_separator: boolean
-}
+import { useGenPost } from './gen-hooks'
+import type { PostAction, Response } from './gen-hooks'
+import { postApiBookList } from './gen/book/book'
+import type { BookFilter, PostApiBookList200 } from './gen/hGraberNext.schemas'
 
 export function useBookList(): [
-    Response<BookListResponse | null>,
+    Response<PostApiBookList200 | null>,
     PostAction<BookFilter>,
 ] {
-    const [response, fetchData] = useAPIPost<BookFilter, BookListResponse>(
-        '/api/book/list'
-    )
-
-    return [response, fetchData]
+    return useGenPost<BookFilter, PostApiBookList200>(postApiBookList)
 }

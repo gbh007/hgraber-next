@@ -1,9 +1,9 @@
-import {
+import type {
     AttributeColor,
-    AttributeCountResponseAttribute,
-} from '../../apiclient/api-attribute'
-import { LabelPresetListResponseLabel } from '../../apiclient/api-labels'
-import { BookRaw } from '../../apiclient/model-book'
+    GetApiAttributeCount200AttributesItem,
+    GetApiLabelPresetList200PresetsItem,
+} from '../../apiclient/gen/hGraberNext.schemas'
+import { BookRaw } from '../../apiclient/gen/hGraberNext.schemas'
 import {
     BookAttributeInfoEditorWidget,
     BookLabelInfoEditorWidget,
@@ -14,8 +14,8 @@ import { ContainerWidget } from '../../widgets/design-system'
 export function BookEditorWidget(props: {
     value: BookRaw
     onChange: (v: BookRaw) => void
-    labelsAutoComplete?: Array<LabelPresetListResponseLabel>
-    attributeCount?: Array<AttributeCountResponseAttribute>
+    labelsAutoComplete?: Array<GetApiLabelPresetList200PresetsItem>
+    attributeCount?: Array<GetApiAttributeCount200AttributesItem>
     attributeColors?: Array<AttributeColor>
 }) {
     return (

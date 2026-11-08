@@ -7,7 +7,10 @@ import {
 import { useDeleteBookPage } from '../../apiclient/api-book-delete'
 import { useAttributeColorList } from '../../apiclient/api-attribute'
 import { DualReaderWidget } from './dual-reader-widget'
-import { BookSimple, BookSimplePage } from '../../apiclient/model-book'
+import type {
+    BookSimple,
+    PageSimple,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import { BookDetailsLink } from '../../core/routing'
 import {
     ContainerWidget,
@@ -222,10 +225,7 @@ export function CompareBookScreen() {
                 <DualReaderWidget
                     aBookID={compareResult.data.origin.id}
                     bBookID={compareResult.data.target.id}
-                    onCreateDeadHash={(
-                        bookID: string,
-                        page: BookSimplePage
-                    ) => {
+                    onCreateDeadHash={(bookID: string, page: PageSimple) => {
                         const bookName =
                             originBookID == bookID
                                 ? originBookName
@@ -255,10 +255,7 @@ export function CompareBookScreen() {
                             })
                         )
                     }}
-                    onDeleteDeadHash={(
-                        bookID: string,
-                        page: BookSimplePage
-                    ) => {
+                    onDeleteDeadHash={(bookID: string, page: PageSimple) => {
                         const bookName =
                             originBookID == bookID
                                 ? originBookName
@@ -288,7 +285,7 @@ export function CompareBookScreen() {
                             })
                         )
                     }}
-                    onDeletePage={(bookID: string, page: BookSimplePage) => {
+                    onDeletePage={(bookID: string, page: PageSimple) => {
                         const bookName =
                             originBookID == bookID
                                 ? originBookName
@@ -318,10 +315,7 @@ export function CompareBookScreen() {
                             })
                         )
                     }}
-                    onDeleteAllPages={(
-                        bookID: string,
-                        page: BookSimplePage
-                    ) => {
+                    onDeleteAllPages={(bookID: string, page: PageSimple) => {
                         const bookName =
                             originBookID == bookID
                                 ? originBookName
@@ -358,7 +352,7 @@ export function CompareBookScreen() {
                     }}
                     onDeleteAllPagesWithDeadHash={(
                         bookID: string,
-                        page: BookSimplePage
+                        page: PageSimple
                     ) => {
                         if (
                             !confirm(

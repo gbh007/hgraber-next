@@ -1,9 +1,9 @@
-import { BookListResponsePages } from '../../apiclient/api-book-list'
+import type { PostApiBookList200PagesItem } from '../../apiclient/gen/hGraberNext.schemas'
 import styles from './paginator-widget.module.css'
 
 // TODO: выглядит как виджет для фичи книги, перенести
 export function PaginatorWidget(props: {
-    value: Array<BookListResponsePages>
+    value: Array<PostApiBookList200PagesItem>
     onChange: (v: number) => void
 }) {
     return (

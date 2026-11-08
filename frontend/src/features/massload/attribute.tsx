@@ -1,4 +1,5 @@
-import { MassloadInfoListRequestAttribute } from '../../apiclient/api-massload'
+import type { PostApiMassloadInfoListBodyFilterAttributesItem } from '../../apiclient/gen/hGraberNext.schemas'
+import { PostApiMassloadInfoListBodyFilterAttributesItemType } from '../../apiclient/gen/hGraberNext.schemas'
 import {
     attributeCodes,
     BookAttributeAutocompleteList,
@@ -10,8 +11,10 @@ import {
 } from '../../widgets/design-system'
 
 export function FilterAttributesWidget(props: {
-    value: Array<MassloadInfoListRequestAttribute>
-    onChange: (v: Array<MassloadInfoListRequestAttribute>) => void
+    value: Array<PostApiMassloadInfoListBodyFilterAttributesItem>
+    onChange: (
+        v: Array<PostApiMassloadInfoListBodyFilterAttributesItem>
+    ) => void
 }) {
     return (
         <ContainerWidget
@@ -66,8 +69,8 @@ export function FilterAttributesWidget(props: {
 }
 
 export function FilterAttributeWidget(props: {
-    value: MassloadInfoListRequestAttribute
-    onChange: (v: MassloadInfoListRequestAttribute) => void
+    value: PostApiMassloadInfoListBodyFilterAttributesItem
+    onChange: (v: PostApiMassloadInfoListBodyFilterAttributesItem) => void
 }) {
     return (
         <ContainerWidget
@@ -95,7 +98,11 @@ export function FilterAttributeWidget(props: {
                 className='app'
                 value={props.value.type}
                 onChange={(e) => {
-                    props.onChange({ ...props.value, type: e.target.value })
+                    props.onChange({
+                        ...props.value,
+                        type: e.target
+                            .value as PostApiMassloadInfoListBodyFilterAttributesItemType,
+                    })
                 }}
             >
                 <option value='like'>LIKE</option>

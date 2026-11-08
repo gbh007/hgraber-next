@@ -4,12 +4,12 @@ import {
     useAttributeCount,
 } from '../../apiclient/api-attribute'
 import {
-    MassloadInfoListRequest,
     useMassloadCalculate,
     useMassloadFlagList,
     useMassloadInfoDelete,
     useMassloadInfoList,
 } from '../../apiclient/api-massload'
+import type { PostApiMassloadInfoListBody } from '../../apiclient/gen/hGraberNext.schemas'
 import { MassloadFilterWidget } from './massload-filter-widget'
 import { MassloadListWidget } from './massload-list-widget'
 import {
@@ -30,7 +30,7 @@ export function MassloadListScreen() {
     const [massLoadCalculateResponse, doMassloadCalculate] =
         useMassloadCalculate()
 
-    const defaultFilterValue: MassloadInfoListRequest = {
+    const defaultFilterValue: PostApiMassloadInfoListBody = {
         sort: {
             field: 'id',
             desc: false,
@@ -38,7 +38,7 @@ export function MassloadListScreen() {
     }
 
     const [filter, setFilter] =
-        useState<MassloadInfoListRequest>(defaultFilterValue)
+        useState<PostApiMassloadInfoListBody>(defaultFilterValue)
 
     useEffect(() => {
         fetchAttributeColorList()

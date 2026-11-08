@@ -1,94 +1,51 @@
-import { PostAction, useAPIPost, Response } from './client-hooks'
-import { BookRaw } from './model-book'
+import { useGenPost } from './gen-hooks'
+import type { PostAction, Response } from './gen-hooks'
+import {
+    postApiBookUpdate,
+    postApiBookRaw,
+    postApiBookRebuild,
+    postApiBookRestore,
+    postApiBookStatusSet,
+} from './gen/book/book'
+import type {
+    BookRaw,
+    PostApiBookRawBody,
+    PostApiBookRebuildBody,
+    PostApiBookRebuild200,
+    PostApiBookRestoreBody,
+    PostApiBookStatusSetBody,
+} from './gen/hGraberNext.schemas'
 
 export function useBookUpdate(): [Response<void | null>, PostAction<BookRaw>] {
-    const [response, fetchData] = useAPIPost<BookRaw, void>('/api/book/update')
-
-    return [response, fetchData]
-}
-
-export interface BookRawRequest {
-    id?: string
-    url?: string
+    return useGenPost<BookRaw, void>(postApiBookUpdate)
 }
 
 export function useBookRaw(): [
     Response<BookRaw | null>,
-    PostAction<BookRawRequest>,
+    PostAction<PostApiBookRawBody>,
 ] {
-    const [response, fetchData] = useAPIPost<BookRawRequest, BookRaw>(
-        '/api/book/raw'
-    )
-
-    return [response, fetchData]
-}
-
-export interface BookRebuildRequest {
-    old_book: BookRaw
-    selected_pages: Array<number>
-    merge_with_book?: string
-    flags?: BookRebuildRequestFlags
-    page_order: Array<number>
-}
-
-export interface BookRebuildRequestFlags {
-    only_unique?: boolean
-    exclude_dead_hash_pages?: boolean
-    only_1_copy?: boolean
-    set_origin_labels?: boolean
-    extract_mode?: boolean
-    mark_unused_pages_as_dead_hash?: boolean
-    mark_unused_pages_as_deleted?: boolean
-    mark_empty_book_as_deleted_after_remove_pages?: boolean
-    auto_verify?: boolean
-    page_re_order?: boolean
-}
-
-export interface BookRebuildResponse {
-    id: string
+    return useGenPost<PostApiBookRawBody, BookRaw>(postApiBookRaw)
 }
 
 export function useBookRebuild(): [
-    Response<BookRebuildResponse | null>,
-    PostAction<BookRebuildRequest>,
+    Response<PostApiBookRebuild200 | null>,
+    PostAction<PostApiBookRebuildBody>,
 ] {
-    const [response, fetchData] = useAPIPost<
-        BookRebuildRequest,
-        BookRebuildResponse
-    >('/api/book/rebuild')
-
-    return [response, fetchData]
-}
-
-export interface BookRestoreRequest {
-    book_id: string
-    only_pages?: boolean
+    return useGenPost<PostApiBookRebuildBody, PostApiBookRebuild200>(
+        postApiBookRebuild
+    )
 }
 
 export function useBookRestore(): [
     Response<void | null>,
-    PostAction<BookRestoreRequest>,
+    PostAction<PostApiBookRestoreBody>,
 ] {
-    const [response, fetchData] = useAPIPost<BookRestoreRequest, void>(
-        '/api/book/restore'
-    )
-
-    return [response, fetchData]
-}
-
-export interface BookStatusSetRequest {
-    id: string
-    status: 'verify' | 'rebuild'
-    value: boolean
+    return useGenPost<PostApiBookRestoreBody, void>(postApiBookRestore)
 }
 
 export function useBookStatusSet(): [
     Response<void | null>,
-    PostAction<BookStatusSetRequest>,
+    PostAction<PostApiBookStatusSetBody>,
 ] {
-    const [response, fetchData] = useAPIPost<BookStatusSetRequest, void>(
-        '/api/book/status/set'
-    )
-
-    return [response, fetchData]
+    return useGenPost<PostApiBookStatusSetBody, void>(postApiBookStatusSet)
 }

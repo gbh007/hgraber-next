@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { DeduplicateBookByPageBodyResponseResult } from '../../apiclient/api-deduplicate'
+import type { PostApiDeduplicateBookByPageBody200ResultItem } from '../../apiclient/gen/hGraberNext.schemas'
 import { BooksSimpleWidget } from '../../widgets/book'
 import { BookCompareLink } from '../../core/routing'
 import {
@@ -12,7 +12,7 @@ import {
 
 export function BookDuplicates(props: {
     originID: string
-    deduplicateBookInfo?: Array<DeduplicateBookByPageBodyResponseResult>
+    deduplicateBookInfo?: Array<PostApiDeduplicateBookByPageBody200ResultItem>
 }) {
     if (!props.deduplicateBookInfo) {
         return null

@@ -1,5 +1,5 @@
-import { LabelPresetListResponseLabel } from '../../apiclient/api-labels'
-import { BookRawLabel } from '../../apiclient/model-book'
+import type { GetApiLabelPresetList200PresetsItem } from '../../apiclient/gen/hGraberNext.schemas'
+import type { BookRawLabelsItem } from '../../apiclient/gen/hGraberNext.schemas'
 import {
     ContainerWidget,
     DatetimePickerWidget,
@@ -8,9 +8,9 @@ import {
 import { BookLabelPresetAutocompleteWidget } from '../label'
 
 export function BookLabelInfoEditorWidget(props: {
-    value: Array<BookRawLabel>
-    onChange: (v: Array<BookRawLabel>) => void
-    labelsAutoComplete?: Array<LabelPresetListResponseLabel>
+    value: Array<BookRawLabelsItem>
+    onChange: (v: Array<BookRawLabelsItem>) => void
+    labelsAutoComplete?: Array<GetApiLabelPresetList200PresetsItem>
 }) {
     return (
         <ContainerWidget
@@ -99,8 +99,8 @@ export function BookLabelInfoEditorWidget(props: {
 }
 
 function LabelEditor(props: {
-    value: BookRawLabel
-    onChange: (v: BookRawLabel) => void
+    value: BookRawLabelsItem
+    onChange: (v: BookRawLabelsItem) => void
     onDelete: () => void
 }) {
     return (

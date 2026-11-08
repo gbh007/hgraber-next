@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FSListResponseUnit } from '../../apiclient/api-fs'
+import type { PostApiFsList200FileSystemsItem } from '../../apiclient/gen/hGraberNext.schemas'
 import { PostApiAgentList200Item } from '../../apiclient/gen/hGraberNext.schemas'
 import { FSEditLink } from '../../core/routing'
 import { AgentStatusWidget } from '../../widgets/agent'
@@ -12,7 +12,7 @@ import {
 } from '../../widgets/design-system'
 
 export function FSInfoWidget(props: {
-    value: FSListResponseUnit
+    value: PostApiFsList200FileSystemsItem
     onDelete: () => void
     onValidate: () => void
     validationLoading: boolean

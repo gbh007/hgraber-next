@@ -4,7 +4,6 @@ import {
     useAttributeCount,
 } from '../../apiclient/api-attribute'
 import {
-    MassloadInfo,
     useMassloadAttributeCreate,
     useMassloadAttributeDelete,
     useMassloadExternalLinkCreate,
@@ -16,6 +15,7 @@ import {
     useMassloadInfoGet,
     useMassloadInfoUpdate,
 } from '../../apiclient/api-massload'
+import type { MassloadInfo } from '../../apiclient/gen/hGraberNext.schemas'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
     MassloadEditorLink,
@@ -98,7 +98,11 @@ export function MassloadEditorScreen() {
                 fetchMassloadGet({ id: massloadID })
             })
         } else {
-            doMassloadCreate(data).then(() => {
+            doMassloadCreate({
+                name: data.name,
+                description: data.description,
+                flags: data.flags,
+            }).then(() => {
                 // FIXME: работает криво, нужно в промис докидывать данные ответа.
                 // navigate(MassloadEditorLink(massLoadCreateResponse.data?.id))
             })

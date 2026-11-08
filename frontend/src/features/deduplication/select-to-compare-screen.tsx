@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom'
-import { BookShortInfo, useBookList } from '../../apiclient/api-book-list'
+import { useBookList } from '../../apiclient/api-book-list'
+import type { PostApiBookList200BooksItem } from '../../apiclient/gen/hGraberNext.schemas'
 import { useAppSettings } from '../../apiclient/settings'
 import styles from './select-to-compare-screen.module.css'
 import { BookFilter } from '../../apiclient/gen/hGraberNext.schemas'
@@ -64,8 +65,10 @@ export function SelectToCompareScreen() {
         fetchLabelPresets()
     }, [fetchLabelPresets])
 
-    const [originPreview, setOriginPreview] = useState<BookShortInfo>()
-    const [targetPreview, setTargetPreview] = useState<BookShortInfo>()
+    const [originPreview, setOriginPreview] =
+        useState<PostApiBookList200BooksItem>()
+    const [targetPreview, setTargetPreview] =
+        useState<PostApiBookList200BooksItem>()
 
     return (
         <ContainerWidget
@@ -253,11 +256,11 @@ export function SelectToCompareScreen() {
 }
 
 function BooksList(props: {
-    value?: Array<BookShortInfo>
+    value?: Array<PostApiBookList200BooksItem>
     selectedOrigin?: string
     selectedTarget?: string
-    onChangeTarget: (v: BookShortInfo) => void
-    onChangeOrigin: (v: BookShortInfo) => void
+    onChangeTarget: (v: PostApiBookList200BooksItem) => void
+    onChangeOrigin: (v: PostApiBookList200BooksItem) => void
 }) {
     return (
         <div className={styles.preview}>

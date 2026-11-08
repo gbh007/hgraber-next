@@ -1,5 +1,5 @@
 import { PropsWithChildren, useState } from 'react'
-import { BookSimplePage } from '../../apiclient/model-book'
+import type { PageSimple } from '../../apiclient/gen/hGraberNext.schemas'
 import { Link } from 'react-router-dom'
 import { BookLabelEditLink, DeduplicatePageLink } from '../../core/routing'
 import { BookTransferCoordinatorWidget } from '../fs'
@@ -9,7 +9,7 @@ export function BookReadActionButtonWidget(
     props: PropsWithChildren & {
         bookID: string
         pageNumber: number
-        currentPage?: BookSimplePage
+        currentPage?: PageSimple
         onCreateDeadHash: () => void
         onDeleteDeadHash: () => void
         onDeletePage: () => void

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { BookSimplePage } from '../../apiclient/model-book'
+import type { PageSimple } from '../../apiclient/gen/hGraberNext.schemas'
 import { ReaderWidget } from './reader-widget'
 import { BookReadActionButtonWidget } from '../../widgets/book'
 import {
@@ -10,21 +10,21 @@ import {
 export function DualReaderWidget(props: {
     aBookID: string
     aPageCount?: number
-    aPages?: Array<BookSimplePage>
+    aPages?: Array<PageSimple>
     bBookID: string
     bPageCount?: number
-    bPages?: Array<BookSimplePage>
-    onCreateDeadHash: (bookID: string, page: BookSimplePage) => void
-    onDeleteDeadHash: (bookID: string, page: BookSimplePage) => void
-    onDeletePage: (bookID: string, page: BookSimplePage) => void
-    onDeleteAllPages: (bookID: string, page: BookSimplePage) => void
-    onDeleteAllPagesWithDeadHash: (bookID: string, page: BookSimplePage) => void
+    bPages?: Array<PageSimple>
+    onCreateDeadHash: (bookID: string, page: PageSimple) => void
+    onDeleteDeadHash: (bookID: string, page: PageSimple) => void
+    onDeletePage: (bookID: string, page: PageSimple) => void
+    onDeleteAllPages: (bookID: string, page: PageSimple) => void
+    onDeleteAllPagesWithDeadHash: (bookID: string, page: PageSimple) => void
 }) {
     const [currentAIndex, setCurrentAIndex] = useState(0)
-    const [currentAPage, setCurrentAPage] = useState<BookSimplePage>()
+    const [currentAPage, setCurrentAPage] = useState<PageSimple>()
 
     const [currentBIndex, setCurrentBIndex] = useState(0)
-    const [currentBPage, setCurrentBPage] = useState<BookSimplePage>()
+    const [currentBPage, setCurrentBPage] = useState<PageSimple>()
 
     useEffect(() => {
         setCurrentAIndex(0)

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BookSimplePage } from '../../apiclient/model-book'
+import type { PageSimple } from '../../apiclient/gen/hGraberNext.schemas'
 import { ImageSize } from './image-size'
 import {
     PageImagePreviewWidget,
@@ -11,7 +11,7 @@ import { ContainerWidget } from '../design-system'
 
 export function BookPagesPreviewWidget(props: {
     bookID: string
-    pages?: Array<BookSimplePage>
+    pages?: Array<PageSimple>
     pageLimit?: number
 }) {
     const [pageLimit, setPageLimit] = useState(20)

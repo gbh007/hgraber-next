@@ -1,5 +1,5 @@
 import { useGenPost } from './gen-hooks'
-import type { PostAction, Response } from './client-hooks'
+import type { PostAction, Response } from './gen-hooks'
 import { postApiParsingHandle } from './gen/parsing/parsing'
 import type {
     PostApiParsingHandleBody,

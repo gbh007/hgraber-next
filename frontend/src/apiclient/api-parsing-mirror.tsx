@@ -1,5 +1,5 @@
 import { useGenGet, useGenPost } from './gen-hooks'
-import type { GetAction, PostAction, Response } from './client-hooks'
+import type { GetAction, PostAction, Response } from './gen-hooks'
 import {
     postApiParsingMirrorCreate,
     postApiParsingMirrorUpdate,

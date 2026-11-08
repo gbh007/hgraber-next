@@ -1,11 +1,11 @@
-import { BookShortInfo } from '../../apiclient/api-book-list'
+import type { PostApiBookList200BooksItem } from '../../apiclient/gen/hGraberNext.schemas'
 import { BooksSimpleWidget } from '../../widgets/book'
 import styles from './book-rebuilder.module.css'
 
 export function BooksList(props: {
-    value?: Array<BookShortInfo>
+    value?: Array<PostApiBookList200BooksItem>
     selected?: string
-    onChange: (v: BookShortInfo) => void
+    onChange: (v: PostApiBookList200BooksItem) => void
 }) {
     return (
         <div className={styles.preview}>

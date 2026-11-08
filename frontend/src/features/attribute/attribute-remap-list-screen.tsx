@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react'
 import {
-    AttributeRemapCreateRequest,
-    AttributeRemapDeleteRequest,
-    AttributeRemapUpdateRequest,
     useAttributeColorList,
     useAttributeCount,
     useAttributeOriginCount,
@@ -11,6 +8,12 @@ import {
     useAttributeRemapList,
     useAttributeRemapUpdate,
 } from '../../apiclient/api-attribute'
+import type {
+    PostApiAttributeRemapCreateBody,
+    PostApiAttributeRemapDeleteBody,
+    PostApiAttributeRemapUpdateBody,
+} from '../../apiclient/gen/hGraberNext.schemas'
+
 import { AttributeRemapEditorWidget } from './attribute-remap-editor-widget'
 import { ContainerWidget, ErrorTextWidget } from '../../widgets/design-system'
 import {
@@ -183,21 +186,21 @@ export function AttributeRemapListScreen() {
                                     }
                                     key={attr.code + attr.value}
                                     onCreate={(
-                                        v: AttributeRemapCreateRequest
+                                        v: PostApiAttributeRemapCreateBody
                                     ) => {
                                         doAttributeRemapCreate(v).then(() =>
                                             fetchAttributeRemapList()
                                         )
                                     }}
                                     onUpdate={(
-                                        v: AttributeRemapUpdateRequest
+                                        v: PostApiAttributeRemapUpdateBody
                                     ) => {
                                         doAttributeRemapUpdate(v).then(() =>
                                             fetchAttributeRemapList()
                                         )
                                     }}
                                     onDelete={(
-                                        v: AttributeRemapDeleteRequest
+                                        v: PostApiAttributeRemapDeleteBody
                                     ) => {
                                         doAttributeRemapDelete(v).then(() =>
                                             fetchAttributeRemapList()
@@ -238,21 +241,21 @@ export function AttributeRemapListScreen() {
                                     }
                                     key={attr.code + attr.value}
                                     onCreate={(
-                                        v: AttributeRemapCreateRequest
+                                        v: PostApiAttributeRemapCreateBody
                                     ) => {
                                         doAttributeRemapCreate(v).then(() =>
                                             fetchAttributeRemapList()
                                         )
                                     }}
                                     onUpdate={(
-                                        v: AttributeRemapUpdateRequest
+                                        v: PostApiAttributeRemapUpdateBody
                                     ) => {
                                         doAttributeRemapUpdate(v).then(() =>
                                             fetchAttributeRemapList()
                                         )
                                     }}
                                     onDelete={(
-                                        v: AttributeRemapDeleteRequest
+                                        v: PostApiAttributeRemapDeleteBody
                                     ) => {
                                         doAttributeRemapDelete(v).then(() =>
                                             fetchAttributeRemapList()
@@ -293,21 +296,21 @@ export function AttributeRemapListScreen() {
                                     }
                                     key={attr.code + attr.value}
                                     onCreate={(
-                                        v: AttributeRemapCreateRequest
+                                        v: PostApiAttributeRemapCreateBody
                                     ) => {
                                         doAttributeRemapCreate(v).then(() =>
                                             fetchAttributeRemapList()
                                         )
                                     }}
                                     onUpdate={(
-                                        v: AttributeRemapUpdateRequest
+                                        v: PostApiAttributeRemapUpdateBody
                                     ) => {
                                         doAttributeRemapUpdate(v).then(() =>
                                             fetchAttributeRemapList()
                                         )
                                     }}
                                     onDelete={(
-                                        v: AttributeRemapDeleteRequest
+                                        v: PostApiAttributeRemapDeleteBody
                                     ) => {
                                         doAttributeRemapDelete(v).then(() =>
                                             fetchAttributeRemapList()

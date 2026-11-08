@@ -4,7 +4,7 @@ import {
     RebuildedBadge,
     VerifiedBadge,
 } from '../../widgets/design-system/index'
-import { BookFlags } from '../../apiclient/model-book'
+import { BookFlags } from '../../apiclient/gen/hGraberNext.schemas'
 import { ImageSize } from './image-size'
 import { BadgeWidget } from './badge-widget'
 

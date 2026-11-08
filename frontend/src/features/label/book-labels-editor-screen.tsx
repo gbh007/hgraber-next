@@ -1,12 +1,15 @@
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import {
-    LabelDeleteRequest,
-    LabelSetRequest,
     useLabelDelete,
     useLabelGet,
     useLabelPresetList,
     useLabelSet,
 } from '../../apiclient/api-labels'
+import type {
+    PostApiLabelDeleteBody,
+    PostApiLabelSetBody,
+} from '../../apiclient/gen/hGraberNext.schemas'
+
 import { useEffect } from 'react'
 import { BookDetailsLink } from '../../core/routing'
 import { BookLabelEditorWidget } from './book-label-editor-widget'
@@ -74,12 +77,12 @@ export function BookLabelsEditorScreen() {
             </ContainerWidget>
             <BookLabelEditorWidget
                 bookID={bookID}
-                onCreate={(v: LabelSetRequest) => {
+                onCreate={(v: PostApiLabelSetBody) => {
                     doSetLabel(v).then(() => {
                         fetchLabels({ book_id: bookID })
                     })
                 }}
-                onDelete={(v: LabelDeleteRequest) => {
+                onDelete={(v: PostApiLabelDeleteBody) => {
                     doDeleteLabel(v).then(() => {
                         fetchLabels({ book_id: bookID })
                     })

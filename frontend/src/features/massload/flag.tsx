@@ -1,4 +1,4 @@
-import { MassloadFlag } from '../../apiclient/api-massload'
+import type { MassloadFlag } from '../../apiclient/gen/hGraberNext.schemas'
 import { ContainerWidget } from '../../widgets/design-system'
 
 export function MassloadFlagViewWidget(props: {

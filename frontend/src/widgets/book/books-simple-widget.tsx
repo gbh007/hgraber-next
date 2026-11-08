@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react'
-import { BookSimple } from '../../apiclient/model-book'
+import { BookSimple } from '../../apiclient/gen/hGraberNext.schemas'
 import { ImageSize } from './image-size'
 import { Link } from 'react-router-dom'
 import { BookDetailsLink } from '../../core/routing'

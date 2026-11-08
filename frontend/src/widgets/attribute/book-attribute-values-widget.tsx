@@ -1,5 +1,5 @@
-import { AttributeColor } from '../../apiclient/api-attribute'
-import { BookAttributeValue } from '../../apiclient/model-book'
+import type { AttributeColor } from '../../apiclient/gen/hGraberNext.schemas'
+import type { BookAttributeValuesV2Item } from '../../apiclient/gen/hGraberNext.schemas'
 import { ContainerWidget } from '../design-system'
 import { BookAttributeValueWidget } from './book-attribute'
 import { MassloadLinkWidget } from './massload-link-widget'
@@ -7,7 +7,7 @@ import { MassloadLinkWidget } from './massload-link-widget'
 export function BookAttributeValuesWidget(props: {
     code: string
     values: Array<string>
-    valuesV2?: Array<BookAttributeValue>
+    valuesV2?: Array<BookAttributeValuesV2Item>
     colors?: Array<AttributeColor>
 }) {
     const colors = props.colors?.filter((color) => color.code == props.code)

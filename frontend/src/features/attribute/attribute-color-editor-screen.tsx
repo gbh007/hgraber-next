@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
-    AttributeColor,
     useAttributeColorCreate,
     useAttributeColorGet,
     useAttributeColorUpdate,
     useAttributeCount,
 } from '../../apiclient/api-attribute'
+import type { AttributeColor } from '../../apiclient/gen/hGraberNext.schemas'
+
 import { AttributeColorEditLink } from '../../core/routing'
 import { ContainerWidget, ErrorTextWidget } from '../../widgets/design-system'
 import {

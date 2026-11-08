@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { BookRaw } from '../../apiclient/model-book'
+import { BookRaw } from '../../apiclient/gen/hGraberNext.schemas'
 import { useBookRaw, useBookUpdate } from '../../apiclient/api-book'
 import { useLabelPresetList } from '../../apiclient/api-labels'
 import {

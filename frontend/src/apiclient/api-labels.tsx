@@ -1,154 +1,88 @@
+import { useGenGet, useGenPost } from './gen-hooks'
+import type { GetAction, PostAction, Response } from './gen-hooks'
 import {
-    PostAction,
-    useAPIPost,
-    Response,
-    useAPIGet,
-    GetAction,
-} from './client-hooks'
-
-export interface LabelSetRequest {
-    book_id: string
-    page_number?: number
-    name: string
-    value: string
-}
+    postApiLabelSet,
+    postApiLabelDelete,
+    postApiLabelGet,
+    postApiLabelPresetCreate,
+    postApiLabelPresetUpdate,
+    postApiLabelPresetDelete,
+    postApiLabelPresetGet,
+    getApiLabelPresetList,
+} from './gen/label/label'
+import type {
+    PostApiLabelSetBody,
+    PostApiLabelDeleteBody,
+    PostApiLabelGetBody,
+    PostApiLabelGet200,
+    PostApiLabelPresetCreateBody,
+    PostApiLabelPresetUpdateBody,
+    PostApiLabelPresetDeleteBody,
+    PostApiLabelPresetGetBody,
+    PostApiLabelPresetGet200,
+    GetApiLabelPresetList200,
+} from './gen/hGraberNext.schemas'
 
 export function useLabelSet(): [
     Response<void | null>,
-    PostAction<LabelSetRequest>,
+    PostAction<PostApiLabelSetBody>,
 ] {
-    const [response, fetchData] = useAPIPost<LabelSetRequest, void>(
-        '/api/label/set'
-    )
-
-    return [response, fetchData]
-}
-
-export interface LabelDeleteRequest {
-    book_id: string
-    page_number?: number
-    name: string
+    return useGenPost<PostApiLabelSetBody, void>(postApiLabelSet)
 }
 
 export function useLabelDelete(): [
     Response<void | null>,
-    PostAction<LabelDeleteRequest>,
+    PostAction<PostApiLabelDeleteBody>,
 ] {
-    const [response, fetchData] = useAPIPost<LabelDeleteRequest, void>(
-        '/api/label/delete'
-    )
-
-    return [response, fetchData]
-}
-
-export interface LabelGetRequest {
-    book_id: string
-}
-
-export interface LabelGetResponse {
-    labels?: Array<LabelGetResponseLabel>
-}
-
-export interface LabelGetResponseLabel {
-    book_id: string
-    page_number: number
-    name: string
-    value: string
-    created_at: string
+    return useGenPost<PostApiLabelDeleteBody, void>(postApiLabelDelete)
 }
 
 export function useLabelGet(): [
-    Response<LabelGetResponse | null>,
-    PostAction<LabelGetRequest>,
+    Response<PostApiLabelGet200 | null>,
+    PostAction<PostApiLabelGetBody>,
 ] {
-    const [response, fetchData] = useAPIPost<LabelGetRequest, LabelGetResponse>(
-        '/api/label/get'
-    )
-
-    return [response, fetchData]
-}
-
-export interface LabelPresetCreateRequest {
-    name: string
-    description?: string
-    values: Array<string>
+    return useGenPost<PostApiLabelGetBody, PostApiLabelGet200>(postApiLabelGet)
 }
 
 export function useLabelPresetCreate(): [
     Response<void | null>,
-    PostAction<LabelPresetCreateRequest>,
+    PostAction<PostApiLabelPresetCreateBody>,
 ] {
-    const [response, fetchData] = useAPIPost<LabelPresetCreateRequest, void>(
-        '/api/label/preset/create'
+    return useGenPost<PostApiLabelPresetCreateBody, void>(
+        postApiLabelPresetCreate
     )
-
-    return [response, fetchData]
-}
-
-export interface LabelPresetUpdateRequest {
-    name: string
-    description?: string
-    values: Array<string>
 }
 
 export function useLabelPresetUpdate(): [
     Response<void | null>,
-    PostAction<LabelPresetUpdateRequest>,
+    PostAction<PostApiLabelPresetUpdateBody>,
 ] {
-    const [response, fetchData] = useAPIPost<LabelPresetUpdateRequest, void>(
-        '/api/label/preset/update'
+    return useGenPost<PostApiLabelPresetUpdateBody, void>(
+        postApiLabelPresetUpdate
     )
-
-    return [response, fetchData]
-}
-
-export interface LabelPresetDeleteRequest {
-    name: string
 }
 
 export function useLabelPresetDelete(): [
     Response<void | null>,
-    PostAction<LabelPresetDeleteRequest>,
+    PostAction<PostApiLabelPresetDeleteBody>,
 ] {
-    const [response, fetchData] = useAPIPost<LabelPresetDeleteRequest, void>(
-        '/api/label/preset/delete'
+    return useGenPost<PostApiLabelPresetDeleteBody, void>(
+        postApiLabelPresetDelete
     )
-
-    return [response, fetchData]
-}
-
-export interface LabelPresetListResponse {
-    presets?: Array<LabelPresetListResponseLabel>
-}
-
-export interface LabelPresetListResponseLabel {
-    name: string
-    description?: string
-    values: Array<string>
-    created_at: string
-    updated_at?: string
 }
 
 export function useLabelPresetList(): [
-    Response<LabelPresetListResponse | null>,
+    Response<GetApiLabelPresetList200 | null>,
     GetAction,
 ] {
-    const [response, fetchData] = useAPIGet<LabelPresetListResponse>(
-        '/api/label/preset/list'
-    )
-
-    return [response, fetchData]
+    return useGenGet<GetApiLabelPresetList200>(getApiLabelPresetList)
 }
 
-// TODO: разделить модели
 export function useLabelPresetGet(): [
-    Response<LabelPresetListResponseLabel | null>,
-    PostAction<LabelPresetDeleteRequest>,
+    Response<PostApiLabelPresetGet200 | null>,
+    PostAction<PostApiLabelPresetGetBody>,
 ] {
-    const [response, fetchData] = useAPIPost<
-        LabelPresetDeleteRequest,
-        LabelPresetListResponseLabel
-    >('/api/label/preset/get')
-
-    return [response, fetchData]
+    return useGenPost<PostApiLabelPresetGetBody, PostApiLabelPresetGet200>(
+        postApiLabelPresetGet
+    )
 }

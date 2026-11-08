@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BookSimplePage } from '../../apiclient/model-book'
+import type { PageSimple } from '../../apiclient/gen/hGraberNext.schemas'
 import { PageSelectorReaderWidget } from './page-selector-reader-widget'
 import { PageListPreview } from './page-list-preview'
 import { ContainerWidget } from '../../widgets/design-system'
@@ -9,7 +9,7 @@ export function BookPagesSelectWidget(props: {
     value: Array<number>
     onChange: (v: Array<number>) => void
     bookID: string
-    pages?: Array<BookSimplePage>
+    pages?: Array<PageSimple>
     pageCount?: number
     pageOrder: Array<number>
     onPageOrderChange: (v: Array<number>) => void
@@ -34,7 +34,7 @@ export function BookPagesSelectWidget(props: {
         )
         .filter((page) => showDeadHash || !page.has_dead_hash)
         .sort(
-            (a: BookSimplePage, b: BookSimplePage) =>
+            (a: PageSimple, b: PageSimple) =>
                 props.pageOrder.findIndex((v) => v == a.page_number) -
                 props.pageOrder.findIndex((v) => v == b.page_number)
         )

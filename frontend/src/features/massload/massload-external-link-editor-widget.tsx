@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MassloadInfoExternalLink } from '../../apiclient/api-massload'
+import type { MassloadInfoExternalLinksItem } from '../../apiclient/gen/hGraberNext.schemas'
 import {
     ColorizedTextWidget,
     ContainerWidget,
@@ -12,7 +12,7 @@ interface linkData {
 }
 
 export function MassloadExternalLinkEditorWidget(props: {
-    value?: Array<MassloadInfoExternalLink>
+    value?: Array<MassloadInfoExternalLinksItem>
     onCreate: (v: linkData) => void
     onUpdate: (v: linkData) => void
     onDelete: (url: string) => void

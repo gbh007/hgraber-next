@@ -1,7 +1,7 @@
-import { LabelPresetListResponseLabel } from '../../apiclient/api-labels'
+import type { GetApiLabelPresetList200PresetsItem } from '../../apiclient/gen/hGraberNext.schemas'
 
 export function BookLabelPresetAutocompleteWidget(props: {
-    labelsAutoComplete?: Array<LabelPresetListResponseLabel>
+    labelsAutoComplete?: Array<GetApiLabelPresetList200PresetsItem>
 }) {
     if (!props.labelsAutoComplete) {
         return null

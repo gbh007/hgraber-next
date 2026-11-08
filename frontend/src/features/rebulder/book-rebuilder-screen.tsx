@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import {
-    BookRebuildRequest,
-    useBookRaw,
-    useBookRebuild,
-} from '../../apiclient/api-book'
+import { useBookRaw, useBookRebuild } from '../../apiclient/api-book'
+import type { PostApiBookRebuildBody } from '../../apiclient/gen/hGraberNext.schemas'
 import { BookFilter } from '../../apiclient/gen/hGraberNext.schemas'
 import { useBookList } from '../../apiclient/api-book-list'
 import { useBookDetails } from '../../apiclient/api-book-details'
@@ -21,20 +18,21 @@ export function BookRebuilderScreen() {
     const params = useParams()
     const bookID = params.bookID!
 
-    const [bookRebuildData, setBookRebuildData] = useState<BookRebuildRequest>({
-        old_book: {
-            create_at: new Date().toJSON(),
-            id: '',
-            name: '',
-            page_count: 0,
-        },
-        flags: {
-            set_origin_labels: true,
-            auto_verify: true,
-        },
-        selected_pages: [],
-        page_order: [],
-    })
+    const [bookRebuildData, setBookRebuildData] =
+        useState<PostApiBookRebuildBody>({
+            old_book: {
+                create_at: new Date().toJSON(),
+                id: '',
+                name: '',
+                page_count: 0,
+            },
+            flags: {
+                set_origin_labels: true,
+                auto_verify: true,
+            },
+            selected_pages: [],
+            page_order: [],
+        })
 
     const [bookFilter, setBookFilter] = useState<BookFilter>({
         pagination: {

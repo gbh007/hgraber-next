@@ -1,38 +1,16 @@
-import { PostAction, useAPIPost, Response } from './client-hooks'
-import {
-    BookAttribute,
-    BookDetailsSize,
-    BookSimple,
-    BookSimplePage,
-} from './model-book'
-import { FSDBFilesInfo } from './model-fs'
-
-export interface BookDetailsRequest {
-    id: string
-}
-
-export interface BookDetails {
-    info: BookSimple
-    page_loaded_percent: number
-    attributes?: Array<BookAttribute>
-    pages?: Array<BookSimplePage>
-    size?: BookDetailsSize
-    fs_disposition?: Array<BookDetailsFSDisposition>
-}
-
-export interface BookDetailsFSDisposition {
-    id: string
-    name: string
-    files: FSDBFilesInfo
-}
+import { useGenPost } from './gen-hooks'
+import type { PostAction, Response } from './gen-hooks'
+import { postApiBookDetails } from './gen/book/book'
+import type {
+    PostApiBookDetailsBody,
+    PostApiBookDetails200,
+} from './gen/hGraberNext.schemas'
 
 export function useBookDetails(): [
-    Response<BookDetails | null>,
-    PostAction<BookDetailsRequest>,
+    Response<PostApiBookDetails200 | null>,
+    PostAction<PostApiBookDetailsBody>,
 ] {
-    const [response, fetchData] = useAPIPost<BookDetailsRequest, BookDetails>(
-        '/api/book/details'
+    return useGenPost<PostApiBookDetailsBody, PostApiBookDetails200>(
+        postApiBookDetails
     )
-
-    return [response, fetchData]
 }

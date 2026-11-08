@@ -1,20 +1,20 @@
 import { useState } from 'react'
-import {
-    LabelDeleteRequest,
-    LabelGetResponseLabel,
-    LabelPresetListResponseLabel,
-    LabelSetRequest,
-} from '../../apiclient/api-labels'
+import type {
+    GetApiLabelPresetList200PresetsItem,
+    PostApiLabelDeleteBody,
+    PostApiLabelGet200LabelsItem,
+    PostApiLabelSetBody,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import { BookLabelPresetAutocompleteWidget } from '../../widgets/label'
 import { ContainerWidget, HumanTimeWidget } from '../../widgets/design-system'
 
 export function BookLabelEditorWidget(props: {
     bookID: string
     pageNumber?: number
-    value?: Array<LabelGetResponseLabel>
-    labelsAutoComplete?: Array<LabelPresetListResponseLabel>
-    onDelete: (v: LabelDeleteRequest) => void
-    onCreate: (v: LabelSetRequest) => void
+    value?: Array<PostApiLabelGet200LabelsItem>
+    labelsAutoComplete?: Array<GetApiLabelPresetList200PresetsItem>
+    onDelete: (v: PostApiLabelDeleteBody) => void
+    onCreate: (v: PostApiLabelSetBody) => void
 }) {
     const [pageNumber, setPageNumber] = useState(props.pageNumber ?? 0)
     const [name, setName] = useState('')

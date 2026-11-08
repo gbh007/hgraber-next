@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
-import { AttributeColor } from '../../apiclient/api-attribute'
-import { MassloadFlag, MassloadInfo } from '../../apiclient/api-massload'
+import type { AttributeColor } from '../../apiclient/gen/hGraberNext.schemas'
+import type {
+    MassloadFlag,
+    MassloadInfo,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import { MassloadFlagViewWidget } from './flag'
 import { HProxyListLink } from '../../core/routing'
 import {

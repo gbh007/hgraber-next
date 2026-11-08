@@ -3,11 +3,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { MassloadFlagEditLink, MassloadFlagListLink } from '../../core/routing'
 import { ContainerWidget, ErrorTextWidget } from '../../widgets/design-system'
 import {
-    MassloadFlag,
     useMassloadFlagCreate,
     useMassloadFlagGet,
     useMassloadFlagUpdate,
 } from '../../apiclient/api-massload'
+import type { MassloadFlag } from '../../apiclient/gen/hGraberNext.schemas'
 import { MassloadFlagEditorWidget } from './massload-flag-editor-widget'
 
 export function MassloadFlagEditorScreen() {

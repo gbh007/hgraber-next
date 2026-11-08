@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BookSimplePage } from '../../apiclient/model-book'
+import type { PageSimple } from '../../apiclient/gen/hGraberNext.schemas'
 import styles from './book-rebuilder.module.css'
 import { Link } from 'react-router-dom'
 import { BookReaderLink } from '../../core/routing'
@@ -10,7 +10,7 @@ export function PageListPreview(props: {
     value: Array<number>
     onChange: (v: Array<number>) => void
     bookID: string
-    pages?: Array<BookSimplePage>
+    pages?: Array<PageSimple>
     previewSize: ImageSize
     pageDragAndDrop?: (a: number, b: number) => void
     enablePageReOrder: boolean

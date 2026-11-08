@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom'
 import {
-    LabelPresetCreateRequest,
     useLabelPresetCreate,
     useLabelPresetGet,
     useLabelPresetUpdate,
 } from '../../apiclient/api-labels'
+import type { PostApiLabelPresetCreateBody } from '../../apiclient/gen/hGraberNext.schemas'
+
 import { useEffect, useState } from 'react'
 import {
     ContainerWidget,
@@ -22,7 +23,7 @@ export function LabelPresetEditorScreen() {
         useLabelPresetUpdate()
     const [labelPresetGetResponse, doGetLabelPreset] = useLabelPresetGet()
 
-    const [data, setData] = useState<LabelPresetCreateRequest>({
+    const [data, setData] = useState<PostApiLabelPresetCreateBody>({
         name: '',
         values: [],
     })

@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import styles from './books-by-page-screen.module.css'
 import { useDeduplicateBooksByPage } from '../../apiclient/api-deduplicate'
 import { useEffect } from 'react'
-import { BookSimple } from '../../apiclient/model-book'
+import { BookSimple } from '../../apiclient/gen/hGraberNext.schemas'
 import { BooksSimpleWidget } from '../../widgets/book'
 import { ErrorTextWidget } from '../../widgets/design-system'
 

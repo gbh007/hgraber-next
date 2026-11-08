@@ -1,10 +1,21 @@
 import axios from 'axios'
 import { useCallback, useState } from 'react'
-import type { Response, PostAction, GetAction } from './client-hooks'
 import type { AxiosResponse } from 'axios'
 
+export type GetAction = () => Promise<void>
+export type PostAction<T> = (data: T) => Promise<void>
+
+export interface Response<T> {
+    data: T
+    isLoading: boolean
+    isError: boolean
+    isUnauthorize: boolean
+    errorText: string
+    cleanData: () => void
+}
+
 // Обёртки над сгенерированным в ./gen клиентом (orval)
-// с интерфейсом Response из ./client-hooks
+// с интерфейсом Response
 export function useGenPost<RequestType, ResponseType>(
     generatePost: (data: RequestType) => Promise<AxiosResponse<ResponseType>>
 ): [Response<ResponseType | null>, PostAction<RequestType>] {

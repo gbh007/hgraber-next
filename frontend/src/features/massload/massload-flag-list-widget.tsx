@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { MassloadFlagEditLink } from '../../core/routing'
-import { MassloadFlag } from '../../apiclient/api-massload'
+import type { MassloadFlag } from '../../apiclient/gen/hGraberNext.schemas'
 import {
     ContainerWidget,
     DeleteButtonWidget,

@@ -1,5 +1,5 @@
 import { useGenGet } from './gen-hooks'
-import type { GetAction, Response } from './client-hooks'
+import type { GetAction, Response } from './gen-hooks'
 import {
     getApiSystemInfoSize,
     getApiSystemInfoWorkers,

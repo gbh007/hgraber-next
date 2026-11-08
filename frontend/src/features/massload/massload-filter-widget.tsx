@@ -1,8 +1,9 @@
-import { AttributeCountResponseAttribute } from '../../apiclient/api-attribute'
-import {
+import type { GetApiAttributeCount200AttributesItem } from '../../apiclient/gen/hGraberNext.schemas'
+import { PostApiMassloadInfoListBodySortField } from '../../apiclient/gen/hGraberNext.schemas'
+import type {
     MassloadFlag,
-    MassloadInfoListRequest,
-} from '../../apiclient/api-massload'
+    PostApiMassloadInfoListBody,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import { BookAttributeAutocompleteWidget } from '../../widgets/attribute'
 import {
     ContainerWidget,
@@ -12,9 +13,9 @@ import { FilterAttributesWidget } from './attribute'
 import { MassloadFlagPickerWidget } from './flag'
 
 export function MassloadFilterWidget(props: {
-    value: MassloadInfoListRequest
-    onChange: (v: MassloadInfoListRequest) => void
-    attributeCount?: Array<AttributeCountResponseAttribute>
+    value: PostApiMassloadInfoListBody
+    onChange: (v: PostApiMassloadInfoListBody) => void
+    attributeCount?: Array<GetApiAttributeCount200AttributesItem>
     flagInfos: Array<MassloadFlag>
 }) {
     return (
@@ -149,7 +150,8 @@ export function MassloadFilterWidget(props: {
                             ...props.value,
                             sort: {
                                 ...props.value.sort,
-                                field: e.target.value,
+                                field: e.target
+                                    .value as PostApiMassloadInfoListBodySortField,
                             },
                         })
                     }}

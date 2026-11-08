@@ -1,13 +1,16 @@
 import { useState } from 'react'
-import {
+import type {
     AttributeColor,
-    AttributeCountResponseAttribute,
-} from '../../apiclient/api-attribute'
-import { BookRebuildRequest } from '../../apiclient/api-book'
-import { BookListResponse, BookShortInfo } from '../../apiclient/api-book-list'
-import { LabelPresetListResponseLabel } from '../../apiclient/api-labels'
-import { BookSimplePage } from '../../apiclient/model-book'
-import { BookFilter } from '../../apiclient/gen/hGraberNext.schemas'
+    GetApiAttributeCount200AttributesItem,
+    GetApiLabelPresetList200PresetsItem,
+} from '../../apiclient/gen/hGraberNext.schemas'
+import type {
+    BookFilter,
+    PostApiBookList200,
+    PostApiBookList200BooksItem,
+    PostApiBookRebuildBody,
+    PageSimple,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import { BuilderFlagsWidget } from './builder-flags-widget'
 import { BooksList } from './books-list'
 import { BookPagesSelectWidget } from './book-pages-select-widget'
@@ -22,19 +25,20 @@ import {
 } from '../../widgets/book'
 
 export function BookRebuilderWidget(props: {
-    value: BookRebuildRequest
-    onChange: (v: BookRebuildRequest) => void
+    value: PostApiBookRebuildBody
+    onChange: (v: PostApiBookRebuildBody) => void
     targetBookFilter: BookFilter
     targetBookFilterChange: (v: BookFilter) => void
     getTargetBooks: (data: BookFilter) => void // TODO: Сильно перегруженный виджет, подумать над возможностью его упрощения
-    targetBookResponse?: BookListResponse
-    pages?: Array<BookSimplePage>
+    targetBookResponse?: PostApiBookList200
+    pages?: Array<PageSimple>
     pageCount?: number
-    labelsAutoComplete?: Array<LabelPresetListResponseLabel>
-    attributeCount?: Array<AttributeCountResponseAttribute>
+    labelsAutoComplete?: Array<GetApiLabelPresetList200PresetsItem>
+    attributeCount?: Array<GetApiAttributeCount200AttributesItem>
     attributeColors?: Array<AttributeColor>
 }) {
-    const [targetPreview, setTargetPreview] = useState<BookShortInfo>()
+    const [targetPreview, setTargetPreview] =
+        useState<PostApiBookList200BooksItem>()
 
     return (
         <ContainerWidget
@@ -200,7 +204,7 @@ export function BookRebuilderWidget(props: {
                 bookID={props.value.old_book.id}
                 pages={props.pages}
                 pageCount={props.pageCount}
-                pageOrder={props.value.page_order}
+                pageOrder={props.value.page_order ?? []}
                 onPageOrderChange={(e) =>
                     props.onChange({ ...props.value, page_order: e })
                 }

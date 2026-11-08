@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { AttributeColor } from '../../apiclient/api-attribute'
-import { BookShortInfo } from '../../apiclient/api-book-list'
+import type { AttributeColor } from '../../apiclient/gen/hGraberNext.schemas'
+import type { PostApiBookList200BooksItem } from '../../apiclient/gen/hGraberNext.schemas'
 import { BookDetailsLink } from '../../core/routing'
 import { BookImagePreviewWidget } from '../../widgets/book'
 import {
@@ -12,7 +12,7 @@ import {
 import { BookAttributeValueWidget } from '../../widgets/attribute'
 
 export function BookShortInfoWidget(props: {
-    value: BookShortInfo
+    value: PostApiBookList200BooksItem
     colors?: Array<AttributeColor>
 }) {
     const book = props.value

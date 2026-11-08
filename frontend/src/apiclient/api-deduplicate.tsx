@@ -1,137 +1,69 @@
-import { PostAction, useAPIPost, Response } from './client-hooks'
-import { BookAttribute, BookSimple, BookSimplePage } from './model-book'
-
-export interface DeduplicateBookByPageBodyRequest {
-    book_id: string
-}
-
-export interface DeduplicateBookByPageBodyResponse {
-    result?: Array<DeduplicateBookByPageBodyResponseResult>
-}
-
-export interface DeduplicateBookByPageBodyResponseResult {
-    book: BookSimple
-    origin_covered_target: number
-    target_covered_origin: number
-    origin_covered_target_without_dead_hashes: number
-    target_covered_origin_without_dead_hashes: number
-
-    target_size: number
-    shared_size: number
-    shared_size_without_dead_hashes: number
-    shared_page_count: number
-    shared_page_count_without_dead_hashes: number
-
-    target_avg_page_size: number
-    target_page_count: number
-}
+import { useGenPost } from './gen-hooks'
+import type { PostAction, Response } from './gen-hooks'
+import {
+    postApiDeduplicateBookByPageBody,
+    postApiDeduplicateCompare,
+    postApiDeduplicateUniquePages,
+    postApiDeduplicateBooksByPage,
+    postApiDeduplicateDeadHashSet,
+} from './gen/deduplicate/deduplicate'
+import type {
+    PostApiDeduplicateBookByPageBodyBody,
+    PostApiDeduplicateBookByPageBody200,
+    PostApiDeduplicateCompareBody,
+    PostApiDeduplicateCompare200,
+    PostApiDeduplicateUniquePagesBody,
+    PostApiDeduplicateUniquePages200,
+    PostApiDeduplicateBooksByPageBody,
+    PostApiDeduplicateBooksByPage200,
+    PostApiDeduplicateDeadHashSetBody,
+} from './gen/hGraberNext.schemas'
 
 export function useDeduplicateBookByPageBody(): [
-    Response<DeduplicateBookByPageBodyResponse | null>,
-    PostAction<DeduplicateBookByPageBodyRequest>,
+    Response<PostApiDeduplicateBookByPageBody200 | null>,
+    PostAction<PostApiDeduplicateBookByPageBodyBody>,
 ] {
-    const [response, fetchData] = useAPIPost<
-        DeduplicateBookByPageBodyRequest,
-        DeduplicateBookByPageBodyResponse
-    >('/api/deduplicate/book-by-page-body')
-
-    return [response, fetchData]
-}
-
-export interface DeduplicateCompareRequest {
-    origin_book_id: string
-    target_book_id: string
-}
-
-export interface DeduplicateCompareResponse {
-    origin: BookSimple
-    target: BookSimple
-
-    origin_covered_target: number
-    target_covered_origin: number
-    origin_covered_target_without_dead_hashes: number
-    target_covered_origin_without_dead_hashes: number
-
-    origin_pages?: Array<BookSimplePage>
-    both_pages?: Array<BookSimplePage>
-    target_pages?: Array<BookSimplePage>
-
-    origin_attributes?: Array<BookAttribute>
-    both_attributes?: Array<BookAttribute>
-    target_attributes?: Array<BookAttribute>
-
-    origin_book_size?: number
-    target_book_size?: number
-    origin_page_avg_size?: number
-    target_page_avg_size?: number
+    return useGenPost<
+        PostApiDeduplicateBookByPageBodyBody,
+        PostApiDeduplicateBookByPageBody200
+    >(postApiDeduplicateBookByPageBody)
 }
 
 export function useDeduplicateCompare(): [
-    Response<DeduplicateCompareResponse | null>,
-    PostAction<DeduplicateCompareRequest>,
+    Response<PostApiDeduplicateCompare200 | null>,
+    PostAction<PostApiDeduplicateCompareBody>,
 ] {
-    const [response, fetchData] = useAPIPost<
-        DeduplicateCompareRequest,
-        DeduplicateCompareResponse
-    >('/api/deduplicate/compare')
-
-    return [response, fetchData]
-}
-
-export interface UniqueBookPagesRequest {
-    book_id: string
-}
-
-export interface UniqueBookPagesResponse {
-    pages?: Array<BookSimplePage>
+    return useGenPost<
+        PostApiDeduplicateCompareBody,
+        PostApiDeduplicateCompare200
+    >(postApiDeduplicateCompare)
 }
 
 export function useUniqueBookPages(): [
-    Response<UniqueBookPagesResponse | null>,
-    PostAction<UniqueBookPagesRequest>,
+    Response<PostApiDeduplicateUniquePages200 | null>,
+    PostAction<PostApiDeduplicateUniquePagesBody>,
 ] {
-    const [response, fetchData] = useAPIPost<
-        UniqueBookPagesRequest,
-        UniqueBookPagesResponse
-    >('/api/deduplicate/unique-pages')
-
-    return [response, fetchData]
-}
-
-export interface DeduplicateBooksByPageRequest {
-    book_id: string
-    page_number: number
-}
-
-export interface DeduplicateBooksByPageResponse {
-    books?: Array<BookSimple>
+    return useGenPost<
+        PostApiDeduplicateUniquePagesBody,
+        PostApiDeduplicateUniquePages200
+    >(postApiDeduplicateUniquePages)
 }
 
 export function useDeduplicateBooksByPage(): [
-    Response<DeduplicateBooksByPageResponse | null>,
-    PostAction<DeduplicateBooksByPageRequest>,
+    Response<PostApiDeduplicateBooksByPage200 | null>,
+    PostAction<PostApiDeduplicateBooksByPageBody>,
 ] {
-    const [response, fetchData] = useAPIPost<
-        DeduplicateBooksByPageRequest,
-        DeduplicateBooksByPageResponse
-    >('/api/deduplicate/books-by-page')
-
-    return [response, fetchData]
-}
-
-export interface SetDeadHashRequest {
-    book_id: string
-    page_number?: number
-    value: boolean
+    return useGenPost<
+        PostApiDeduplicateBooksByPageBody,
+        PostApiDeduplicateBooksByPage200
+    >(postApiDeduplicateBooksByPage)
 }
 
 export function useSetDeadHash(): [
     Response<void | null>,
-    PostAction<SetDeadHashRequest>,
+    PostAction<PostApiDeduplicateDeadHashSetBody>,
 ] {
-    const [response, fetchData] = useAPIPost<SetDeadHashRequest, void>(
-        '/api/deduplicate/dead-hash/set'
+    return useGenPost<PostApiDeduplicateDeadHashSetBody, void>(
+        postApiDeduplicateDeadHashSet
     )
-
-    return [response, fetchData]
 }

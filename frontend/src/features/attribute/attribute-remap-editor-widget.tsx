@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import {
+import type {
     AttributeColor,
-    AttributeCountResponseAttribute,
-    AttributeOriginCountResponseAttribute,
-    AttributeRemapCreateRequest,
-    AttributeRemapDeleteRequest,
-    AttributeRemapUpdateRequest,
-} from '../../apiclient/api-attribute'
+    GetApiAttributeCount200AttributesItem,
+    GetApiAttributeOriginCount200AttributesItem,
+    PostApiAttributeRemapCreateBody,
+    PostApiAttributeRemapDeleteBody,
+    PostApiAttributeRemapUpdateBody,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import {
     ColorizedTextWidget,
     ContainerWidget,
@@ -27,11 +27,11 @@ export function AttributeRemapEditorWidget(props: {
     }
     isNew: boolean
     colors?: Array<AttributeColor>
-    onCreate: (v: AttributeRemapCreateRequest) => void
-    onUpdate: (v: AttributeRemapUpdateRequest) => void
-    onDelete: (v: AttributeRemapDeleteRequest) => void
-    attributeCount?: Array<AttributeCountResponseAttribute>
-    originAttributeCount?: Array<AttributeOriginCountResponseAttribute>
+    onCreate: (v: PostApiAttributeRemapCreateBody) => void
+    onUpdate: (v: PostApiAttributeRemapUpdateBody) => void
+    onDelete: (v: PostApiAttributeRemapDeleteBody) => void
+    attributeCount?: Array<GetApiAttributeCount200AttributesItem>
+    originAttributeCount?: Array<GetApiAttributeOriginCount200AttributesItem>
 }) {
     const [remap, setRemap] = useState<{
         code: string

@@ -1,10 +1,6 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import {
-    FileSystemInfo,
-    useFSCreate,
-    useFSGet,
-    useFSUpdate,
-} from '../../apiclient/api-fs'
+import type { FileSystemInfo } from '../../apiclient/gen/hGraberNext.schemas'
+import { useFSCreate, useFSGet, useFSUpdate } from '../../apiclient/api-fs'
 import { useCallback, useEffect, useState } from 'react'
 import { FSListLink } from '../../core/routing'
 import { useAgentList } from '../../apiclient/api-agent'

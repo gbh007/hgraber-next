@@ -1,12 +1,12 @@
-import { BookRebuildRequestFlags } from '../../apiclient/api-book'
+import type { PostApiBookRebuildBodyFlags } from '../../apiclient/gen/hGraberNext.schemas'
 import {
     ColorizedTextWidget,
     ContainerWidget,
 } from '../../widgets/design-system'
 
 export function BuilderFlagsWidget(props: {
-    value?: BookRebuildRequestFlags
-    onChange: (v: BookRebuildRequestFlags) => void
+    value?: PostApiBookRebuildBodyFlags
+    onChange: (v: PostApiBookRebuildBodyFlags) => void
 }) {
     return (
         <ContainerWidget

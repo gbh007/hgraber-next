@@ -1,6 +1,6 @@
 import { PropsWithChildren, useCallback, useState } from 'react'
 import styles from './reader-widget.module.css'
-import { BookSimplePage } from '../../apiclient/model-book'
+import type { PageSimple } from '../../apiclient/gen/hGraberNext.schemas'
 import { PageBadgesWidget } from '../../widgets/book'
 import { ContainerWidget } from '../../widgets/design-system'
 
@@ -8,8 +8,8 @@ export function ReaderWidget(
     props: PropsWithChildren & {
         bookID: string
         pageCount?: number
-        pages?: Array<BookSimplePage>
-        currentPage?: BookSimplePage
+        pages?: Array<PageSimple>
+        currentPage?: PageSimple
         currentIndex: number
         prevPage: () => void
         nextPage: () => void

@@ -1,4 +1,4 @@
-import { BookRaw } from '../../apiclient/model-book'
+import { BookRaw } from '../../apiclient/gen/hGraberNext.schemas'
 import { ContainerWidget } from '../design-system'
 
 export function BookMainInfoEditorWidget(props: {

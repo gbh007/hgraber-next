@@ -1,5 +1,5 @@
-import { AttributeColor } from '../../apiclient/api-attribute'
-import { BookAttribute } from '../../apiclient/model-book'
+import type { AttributeColor } from '../../apiclient/gen/hGraberNext.schemas'
+import { BookAttribute } from '../../apiclient/gen/hGraberNext.schemas'
 import { BookAttributeValuesWidget } from '../attribute'
 import { ContainerWidget } from '../design-system'
 

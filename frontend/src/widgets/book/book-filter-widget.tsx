@@ -2,8 +2,10 @@ import {
     BookFilter,
     BookFilterSortField,
 } from '../../apiclient/gen/hGraberNext.schemas'
-import { AttributeCountResponseAttribute } from '../../apiclient/api-attribute'
-import { LabelPresetListResponseLabel } from '../../apiclient/api-labels'
+import type {
+    GetApiAttributeCount200AttributesItem,
+    GetApiLabelPresetList200PresetsItem,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import { BookAttributeAutocompleteWidget } from '../attribute'
 import {
     ContainerWidget,
@@ -18,8 +20,8 @@ import { BookFilterLabelsWidget } from './book-filter-labels-widget'
 export function BookFilterWidget(props: {
     value: BookFilter
     onChange: (v: BookFilter) => void
-    attributeCount?: Array<AttributeCountResponseAttribute>
-    labelsAutoComplete?: Array<LabelPresetListResponseLabel>
+    attributeCount?: Array<GetApiAttributeCount200AttributesItem>
+    labelsAutoComplete?: Array<GetApiLabelPresetList200PresetsItem>
 }) {
     return (
         <ContainerWidget

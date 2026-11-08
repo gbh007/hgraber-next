@@ -1,36 +1,21 @@
-import { PostAction, useAPIPost, Response } from './client-hooks'
-
-export interface BookDeleteRequest {
-    book_id: string
-    type: 'soft' | 'page_and_copy' | 'dead_hashed_pages'
-    mark_as_deleted_empty_book?: boolean
-}
+import { useGenPost } from './gen-hooks'
+import type { PostAction, Response } from './gen-hooks'
+import { postApiBookDelete, postApiBookPageDelete } from './gen/book/book'
+import type {
+    PostApiBookDeleteBody,
+    PostApiBookPageDeleteBody,
+} from './gen/hGraberNext.schemas'
 
 export function useBookDelete(): [
     Response<void | null>,
-    PostAction<BookDeleteRequest>,
+    PostAction<PostApiBookDeleteBody>,
 ] {
-    const [response, fetchData] = useAPIPost<BookDeleteRequest, void>(
-        '/api/book/delete'
-    )
-
-    return [response, fetchData]
-}
-
-export interface DeleteBookPageRequest {
-    type: 'one' | 'all_copy'
-    book_id: string
-    page_number: number
-    set_dead_hash?: boolean
+    return useGenPost<PostApiBookDeleteBody, void>(postApiBookDelete)
 }
 
 export function useDeleteBookPage(): [
     Response<void | null>,
-    PostAction<DeleteBookPageRequest>,
+    PostAction<PostApiBookPageDeleteBody>,
 ] {
-    const [response, fetchData] = useAPIPost<DeleteBookPageRequest, void>(
-        '/api/book/page/delete'
-    )
-
-    return [response, fetchData]
+    return useGenPost<PostApiBookPageDeleteBody, void>(postApiBookPageDelete)
 }

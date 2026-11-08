@@ -1,8 +1,8 @@
-import {
+import type {
     AttributeColor,
-    AttributeCountResponseAttribute,
-} from '../../apiclient/api-attribute'
-import { BookRawAttribute } from '../../apiclient/model-book'
+    GetApiAttributeCount200AttributesItem,
+} from '../../apiclient/gen/hGraberNext.schemas'
+import type { BookRawAttributesItem } from '../../apiclient/gen/hGraberNext.schemas'
 import {
     attributeCodes,
     BookAttributeAutocompleteList,
@@ -15,9 +15,9 @@ import {
 } from '../design-system'
 
 export function BookAttributeInfoEditorWidget(props: {
-    value: Array<BookRawAttribute>
-    onChange: (v: Array<BookRawAttribute>) => void
-    attributeCount?: Array<AttributeCountResponseAttribute>
+    value: Array<BookRawAttributesItem>
+    onChange: (v: Array<BookRawAttributesItem>) => void
+    attributeCount?: Array<GetApiAttributeCount200AttributesItem>
     colors?: Array<AttributeColor>
 }) {
     return (
@@ -72,8 +72,8 @@ export function BookAttributeInfoEditorWidget(props: {
 }
 
 function AttributeEditor(props: {
-    value: BookRawAttribute
-    onChange: (v: BookRawAttribute) => void
+    value: BookRawAttributesItem
+    onChange: (v: BookRawAttributesItem) => void
     onDelete: () => void
     colors?: Array<AttributeColor>
 }) {

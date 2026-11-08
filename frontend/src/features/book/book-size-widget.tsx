@@ -1,11 +1,11 @@
-import { BookDetailsSize } from '../../apiclient/model-book'
+import type { PostApiBookDetails200Size } from '../../apiclient/gen/hGraberNext.schemas'
 import {
     ColorizedTextWidget,
     ContainerWidget,
     prettySize,
 } from '../../widgets/design-system'
 
-export function BookSizeWidget(props: { value?: BookDetailsSize }) {
+export function BookSizeWidget(props: { value?: PostApiBookDetails200Size }) {
     if (!props.value) {
         return null
     }

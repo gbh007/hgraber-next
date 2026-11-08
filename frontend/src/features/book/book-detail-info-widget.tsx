@@ -1,7 +1,9 @@
 import { PropsWithChildren } from 'react'
-import { BookDetails } from '../../apiclient/api-book-details'
-import { DeduplicateBookByPageBodyResponseResult } from '../../apiclient/api-deduplicate'
-import { AttributeColor } from '../../apiclient/api-attribute'
+import type {
+    PostApiBookDetails200,
+    PostApiDeduplicateBookByPageBody200ResultItem,
+} from '../../apiclient/gen/hGraberNext.schemas'
+import type { AttributeColor } from '../../apiclient/gen/hGraberNext.schemas'
 import { BookSizeWidget } from './book-size-widget'
 import { BookDuplicates } from './book-duplicates'
 import {
@@ -19,8 +21,8 @@ import { Link } from 'react-router-dom'
 
 export function BookDetailInfoWidget(
     props: PropsWithChildren & {
-        book: BookDetails
-        deduplicateBookInfo?: Array<DeduplicateBookByPageBodyResponseResult>
+        book: PostApiBookDetails200
+        deduplicateBookInfo?: Array<PostApiDeduplicateBookByPageBody200ResultItem>
         colors?: Array<AttributeColor>
     }
 ) {

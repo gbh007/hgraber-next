@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useAgentList } from '../../apiclient/api-agent'
 import {
-    FSTransferRequest,
     useFSDelete,
     useFSList,
     useFSRemoveMismatch,
     useFSTransfer,
     useFSValidate,
 } from '../../apiclient/api-fs'
+import type { PostApiFsTransferBody } from '../../apiclient/gen/hGraberNext.schemas'
 import { Link } from 'react-router-dom'
 import { FSEditLink } from '../../core/routing'
 import { FSInfoWidget } from './fs-info-widget'
@@ -41,10 +41,11 @@ export function FSListScreen() {
         fetchAgentList({ include_status: true })
     }, [fetchAgentList])
 
-    const [transferRequest, setTransferRequest] = useState<FSTransferRequest>({
-        from: '',
-        to: '',
-    })
+    const [transferRequest, setTransferRequest] =
+        useState<PostApiFsTransferBody>({
+            from: '',
+            to: '',
+        })
 
     return (
         <ContainerWidget

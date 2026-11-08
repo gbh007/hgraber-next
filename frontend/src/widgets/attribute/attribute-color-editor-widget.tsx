@@ -1,4 +1,4 @@
-import { AttributeColor } from '../../apiclient/api-attribute'
+import type { AttributeColor } from '../../apiclient/gen/hGraberNext.schemas'
 import { ContainerWidget } from '../design-system'
 import {
     BookAttributeAutocompleteList,

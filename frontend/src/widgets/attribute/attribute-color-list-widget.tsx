@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { AttributeColor } from '../../apiclient/api-attribute'
+import type { AttributeColor } from '../../apiclient/gen/hGraberNext.schemas'
 import { AttributeColorEditLink } from '../../core/routing'
 import { BookAttributeValueWidget } from './book-attribute'
 import { ColorizedTextWidget, ContainerWidget } from '../design-system'

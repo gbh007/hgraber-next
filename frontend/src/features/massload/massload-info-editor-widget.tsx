@@ -1,4 +1,7 @@
-import { MassloadFlag, MassloadInfo } from '../../apiclient/api-massload'
+import type {
+    MassloadFlag,
+    MassloadInfo,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import {
     ColorizedTextWidget,
     ContainerWidget,

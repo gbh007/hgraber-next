@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { BookSimplePage } from '../../apiclient/model-book'
+import type { PageSimple } from '../../apiclient/gen/hGraberNext.schemas'
 import styles from './book-rebuilder.module.css'
 import { ContainerWidget } from '../../widgets/design-system'
 import { PageBadgesWidget } from '../../widgets/book'
@@ -9,14 +9,14 @@ export function PageSelectorReaderWidget(props: {
     onChange: (v: Array<number>) => void
     bookID: string
     pageCount?: number
-    pages?: Array<BookSimplePage>
+    pages?: Array<PageSimple>
 }) {
     if (!props.pages) {
         return null
     }
 
     const [currentIndex, setCurrentIndex] = useState(0)
-    const [currentPage, setCurrentPage] = useState<BookSimplePage>()
+    const [currentPage, setCurrentPage] = useState<PageSimple>()
 
     useEffect(() => {
         setCurrentIndex(0)

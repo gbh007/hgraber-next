@@ -1,4 +1,4 @@
-import { FileSystemInfo } from '../../apiclient/api-fs'
+import type { FileSystemInfo } from '../../apiclient/gen/hGraberNext.schemas'
 import { PostApiAgentList200Item } from '../../apiclient/gen/hGraberNext.schemas'
 import { ContainerWidget } from '../../widgets/design-system'
 

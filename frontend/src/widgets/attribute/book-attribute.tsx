@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import {
+import type {
     AttributeColor,
-    AttributeCountResponseAttribute,
-} from '../../apiclient/api-attribute'
+    GetApiAttributeCount200AttributesItem,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import { attributeCodes } from './codes'
 import { BookListLinkAttribute } from '../../core/routing'
 
@@ -61,7 +61,7 @@ export function BookAttributeValueWidget(props: {
 }
 
 export function BookAttributeAutocompleteWidget(props: {
-    attributeCount?: Array<AttributeCountResponseAttribute>
+    attributeCount?: Array<GetApiAttributeCount200AttributesItem>
     isOrigin?: boolean
 }) {
     if (!props.attributeCount) {

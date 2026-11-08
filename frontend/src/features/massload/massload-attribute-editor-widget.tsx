@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { AttributeColor } from '../../apiclient/api-attribute'
-import { MassloadInfoAttribute } from '../../apiclient/api-massload'
+import type { AttributeColor } from '../../apiclient/gen/hGraberNext.schemas'
+import type { MassloadInfoAttributesItem } from '../../apiclient/gen/hGraberNext.schemas'
 import {
     ColorizedTextWidget,
     ContainerWidget,
@@ -13,7 +13,7 @@ import {
 } from '../../widgets/attribute'
 
 export function MassloadAttributeEditorWidget(props: {
-    value?: Array<MassloadInfoAttribute>
+    value?: Array<MassloadInfoAttributesItem>
     onCreate: (code: string, text: string) => void
     onDelete: (code: string, text: string) => void
     colors?: Array<AttributeColor>
