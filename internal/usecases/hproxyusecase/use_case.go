@@ -16,6 +16,8 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
+
+	"github.com/samber/lo"
 )
 
 var errCanNotParse = errors.New("can't parse")
@@ -85,4 +87,37 @@ func (uc *UseCase) existsInStorage(ctx context.Context, urls []url.URL) ([]uuid.
 	}
 
 	return []uuid.UUID{}, nil
+}
+
+func (uc *UseCase) massloadsByURL(
+	ctx context.Context,
+	mirrorCalculator parsing.URLCloner,
+	u url.URL,
+) ([]hproxymodel.MassloadInfo, error) {
+	clones, err := mirrorCalculator.GetClones(u)
+	if err != nil {
+		return nil, fmt.Errorf("calc clones: %w", err)
+	}
+
+	urls := append([]url.URL{u}, clones...)
+
+	massloadsByURL := make(map[int]massloadmodel.Massload, len(urls))
+
+	for _, link := range urls {
+		mls, err := uc.storage.MassloadsByExternalLink(ctx, link)
+		if err != nil {
+			return nil, fmt.Errorf("get massloads by url (%s): %w", link.String(), err)
+		}
+
+		for _, ml := range mls {
+			massloadsByURL[ml.ID] = ml
+		}
+	}
+
+	return lo.MapToSlice(massloadsByURL, func(_ int, ml massloadmodel.Massload) hproxymodel.MassloadInfo {
+		return hproxymodel.MassloadInfo{
+			ID:   ml.ID,
+			Name: ml.Name,
+		}
+	}), nil
 }

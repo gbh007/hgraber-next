@@ -3329,6 +3329,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  massload_ids:
+                    type: array
+                    description: ИД массовых загрузок совпадающих по ссылке напрямую или через зеркала
+                    items:
+                      type: integer
+                      description: ИД массовой загрузки
                   books:
                     type: array
                     description: Список книг

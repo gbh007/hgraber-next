@@ -3887,10 +3887,18 @@ func (s *APIHproxyFileGetOKHeaders) SetResponse(val APIHproxyFileGetOK) {
 }
 
 type APIHproxyListPostOK struct {
+	// ИД массовых загрузок совпадающих по ссылке напрямую
+	// или через зеркала.
+	MassloadIds []int `json:"massload_ids"`
 	// Список книг.
 	Books []APIHproxyListPostOKBooksItem `json:"books"`
 	// Данные пагинации.
 	Pagination []APIHproxyListPostOKPaginationItem `json:"pagination"`
+}
+
+// GetMassloadIds returns the value of MassloadIds.
+func (s *APIHproxyListPostOK) GetMassloadIds() []int {
+	return s.MassloadIds
 }
 
 // GetBooks returns the value of Books.
@@ -3901,6 +3909,11 @@ func (s *APIHproxyListPostOK) GetBooks() []APIHproxyListPostOKBooksItem {
 // GetPagination returns the value of Pagination.
 func (s *APIHproxyListPostOK) GetPagination() []APIHproxyListPostOKPaginationItem {
 	return s.Pagination
+}
+
+// SetMassloadIds sets the value of MassloadIds.
+func (s *APIHproxyListPostOK) SetMassloadIds(val []int) {
+	s.MassloadIds = val
 }
 
 // SetBooks sets the value of Books.

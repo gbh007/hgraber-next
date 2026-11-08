@@ -1734,6 +1734,8 @@ export type PostApiHproxyList200PaginationItem = {
 };
 
 export type PostApiHproxyList200 = {
+  /** ИД массовых загрузок совпадающих по ссылке напрямую или через зеркала */
+  massload_ids?: number[];
   /** Список книг */
   books?: PostApiHproxyList200BooksItem[];
   /** Данные пагинации */

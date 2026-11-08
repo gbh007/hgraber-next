@@ -80,6 +80,13 @@ func (uc *UseCase) List(ctx context.Context, u url.URL) (hproxymodel.List, error
 				list.Books[i].ExistsIDs = ids
 			}
 
+			massloads, err := uc.massloadsByURL(ctx, mirrorCalculator, u)
+			if err != nil {
+				return hproxymodel.List{}, fmt.Errorf("get massloads: %w", err)
+			}
+
+			list.Massloads = massloads
+
 			return list, nil
 		}
 	}

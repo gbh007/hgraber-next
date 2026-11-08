@@ -19,6 +19,7 @@ func (c *HProxyHandlersController) APIHproxyListPost(
 	}
 
 	return &serverapi.APIHproxyListPostOK{
+		MassloadIds: pkg.Map(data.Massloads, func(ml hproxymodel.MassloadInfo) int { return ml.ID }),
 		Books: pkg.Map(data.Books, func(b hproxymodel.ListBook) serverapi.APIHproxyListPostOKBooksItem {
 			return serverapi.APIHproxyListPostOKBooksItem{
 				ExtURL:     b.ExtURL,

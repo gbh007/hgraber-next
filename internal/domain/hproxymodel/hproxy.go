@@ -23,6 +23,7 @@ type List struct {
 	Books      []ListBook
 	Pagination []ListPage
 	NextPage   *url.URL
+	Massloads  []MassloadInfo
 }
 
 type BookPage struct {

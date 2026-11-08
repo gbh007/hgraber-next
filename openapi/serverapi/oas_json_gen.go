@@ -10085,6 +10085,16 @@ func (s *APIHproxyListPostOK) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *APIHproxyListPostOK) encodeFields(e *jx.Encoder) {
 	{
+		if s.MassloadIds != nil {
+			e.FieldStart("massload_ids")
+			e.ArrStart()
+			for _, elem := range s.MassloadIds {
+				e.Int(elem)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
 		if s.Books != nil {
 			e.FieldStart("books")
 			e.ArrStart()
@@ -10106,9 +10116,10 @@ func (s *APIHproxyListPostOK) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAPIHproxyListPostOK = [2]string{
-	0: "books",
-	1: "pagination",
+var jsonFieldsNameOfAPIHproxyListPostOK = [3]string{
+	0: "massload_ids",
+	1: "books",
+	2: "pagination",
 }
 
 // Decode decodes APIHproxyListPostOK from json.
@@ -10119,6 +10130,25 @@ func (s *APIHproxyListPostOK) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
+		case "massload_ids":
+			if err := func() error {
+				s.MassloadIds = make([]int, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem int
+					v, err := d.Int()
+					elem = int(v)
+					if err != nil {
+						return err
+					}
+					s.MassloadIds = append(s.MassloadIds, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"massload_ids\"")
+			}
 		case "books":
 			if err := func() error {
 				s.Books = make([]APIHproxyListPostOKBooksItem, 0)

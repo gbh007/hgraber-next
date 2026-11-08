@@ -5,6 +5,7 @@ import {
     BookDetailsLink,
     HProxyBookLink,
     HProxyListLink,
+    MassloadViewLink,
 } from '../../core/routing'
 import { useSystemHandle } from '../../apiclient/api-system'
 import {
@@ -174,6 +175,26 @@ export function HProxyListScreen() {
                     </div>
                 </ContainerWidget>
             </ContainerWidget>
+
+            {(hProxyListResponse.data?.massload_ids?.length ?? 0) > 0 ? (
+                <ContainerWidget
+                    appContainer
+                    direction='row'
+                    gap='small'
+                    wrap
+                >
+                    <span>Массовые загрузки:</span>
+                    {hProxyListResponse.data?.massload_ids?.map((id) => (
+                        <Link
+                            key={id}
+                            to={MassloadViewLink(id)}
+                            className='app-button'
+                        >
+                            {id}
+                        </Link>
+                    ))}
+                </ContainerWidget>
+            ) : null}
 
             <ContainerWidget
                 direction='columns'
