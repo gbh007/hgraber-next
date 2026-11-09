@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { useHProxyList } from '../../apiclient/api-hproxy'
 import { useEffect, useState } from 'react'
+import type { BookFilter } from '../../apiclient/gen/hGraberNext.schemas'
 import {
     BookDetailsLink,
     HProxyBookLink,
@@ -8,12 +9,14 @@ import {
     MassloadViewLink,
 } from '../../core/routing'
 import { useSystemHandle } from '../../apiclient/api-system'
+import { useAttributeCount } from '../../apiclient/api-attribute'
 import {
     ColorizedTextWidget,
     ContainerWidget,
     ErrorTextWidget,
 } from '../../widgets/design-system'
 import {
+    BookFilterWidget,
     BookImagePreviewWidget,
     ImageSize,
     PreviewSizeWidget,
@@ -28,7 +31,13 @@ export function HProxyListScreen() {
 
     const [currentURL, setCurrentURL] = useState('')
     const [isReadOnlyMode, setIsReadOnlyMode] = useState(false)
-    const [maxAuthors, setMaxAuthors] = useState(0)
+    const [filter, setFilter] = useState<BookFilter>({})
+
+    const [attributeCountResponse, getAttributeCount] = useAttributeCount()
+
+    useEffect(() => {
+        getAttributeCount()
+    }, [getAttributeCount])
 
     useEffect(() => {
         const u = searchParams.get('url')
@@ -54,6 +63,7 @@ export function HProxyListScreen() {
             gap='medium'
         >
             <ErrorTextWidget value={hProxyListResponse} />
+            <ErrorTextWidget value={attributeCountResponse} />
 
             <ContainerWidget
                 appContainer
@@ -100,19 +110,6 @@ export function HProxyListScreen() {
                     />
                 </label>
 
-                <label>
-                    <span>Максимум авторов</span>
-                    <input
-                        className='app'
-                        onChange={(e) => {
-                            setMaxAuthors(e.target.valueAsNumber)
-                        }}
-                        type='number'
-                        value={maxAuthors}
-                        autoComplete='off'
-                    />
-                </label>
-
                 <button
                     className='app'
                     onClick={() => {
@@ -124,7 +121,7 @@ export function HProxyListScreen() {
                                 hProxyListResponse.data?.books?.map(
                                     (b) => b.ext_url
                                 ) ?? [],
-                            max_authors: maxAuthors,
+                            filter: filter,
                         })
                     }}
                     disabled={systemHandleResponse.isLoading}
@@ -139,7 +136,7 @@ export function HProxyListScreen() {
                             is_multi: true,
                             read_only_mode: isReadOnlyMode,
                             urls: [currentURL],
-                            max_authors: maxAuthors,
+                            filter: filter,
                         })
                     }}
                     disabled={systemHandleResponse.isLoading}
@@ -174,6 +171,23 @@ export function HProxyListScreen() {
                         {systemHandleResponse.data?.error_count || 0}
                     </div>
                 </ContainerWidget>
+            </ContainerWidget>
+
+            <ContainerWidget
+                appContainer
+                direction='column'
+                gap='medium'
+            >
+                <details>
+                    <summary>Фильтр загрузки</summary>
+                    <BookFilterWidget
+                        value={filter}
+                        onChange={setFilter}
+                        attributeCount={
+                            attributeCountResponse.data?.attributes
+                        }
+                    />
+                </details>
             </ContainerWidget>
 
             {(hProxyListResponse.data?.massload_ids?.length ?? 0) > 0 ? (

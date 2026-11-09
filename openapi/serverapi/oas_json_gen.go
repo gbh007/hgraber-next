@@ -15144,9 +15144,9 @@ func (s *APIParsingHandlePostReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.MaxAuthors.Set {
-			e.FieldStart("max_authors")
-			s.MaxAuthors.Encode(e)
+		if s.Filter.Set {
+			e.FieldStart("filter")
+			s.Filter.Encode(e)
 		}
 	}
 }
@@ -15156,7 +15156,7 @@ var jsonFieldsNameOfAPIParsingHandlePostReq = [5]string{
 	1: "is_multi",
 	2: "auto_verify",
 	3: "read_only_mode",
-	4: "max_authors",
+	4: "filter",
 }
 
 // Decode decodes APIParsingHandlePostReq from json.
@@ -15218,15 +15218,15 @@ func (s *APIParsingHandlePostReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"read_only_mode\"")
 			}
-		case "max_authors":
+		case "filter":
 			if err := func() error {
-				s.MaxAuthors.Reset()
-				if err := s.MaxAuthors.Decode(d); err != nil {
+				s.Filter.Reset()
+				if err := s.Filter.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"max_authors\"")
+				return errors.Wrap(err, "decode field \"filter\"")
 			}
 		default:
 			return d.Skip()
@@ -23173,6 +23173,39 @@ func (s OptAPIMassloadInfoListPostReqSortField) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptAPIMassloadInfoListPostReqSortField) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes BookFilter as json.
+func (o OptBookFilter) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes BookFilter from json.
+func (o *OptBookFilter) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptBookFilter to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptBookFilter) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptBookFilter) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

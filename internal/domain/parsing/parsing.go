@@ -4,13 +4,17 @@ import (
 	"net/url"
 
 	"github.com/google/uuid"
+
+	"github.com/gbh007/hgraber-next/internal/domain/core"
 )
 
 type ParseFlags struct {
 	AutoVerify bool
 	ReadOnly   bool
-	// TODO: временное размещение
-	MaxAuthors int
+
+	// Фильтр книг для массовой обработки,
+	// проверка происходит по данным разобранной внешней книги.
+	Filter core.BookFilter
 }
 
 type FirstHandleMultipleResult struct {

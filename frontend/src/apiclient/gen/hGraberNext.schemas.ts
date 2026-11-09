@@ -1041,8 +1041,7 @@ export type PostApiParsingHandleBody = {
   auto_verify?: boolean;
   /** Пометить книги подтвержденными */
   read_only_mode?: boolean;
-  /** Максимальное количество авторов (экспериментальная опция) */
-  max_authors?: number;
+  filter?: BookFilter;
 };
 
 export type PostApiParsingHandle200DetailsItem = {

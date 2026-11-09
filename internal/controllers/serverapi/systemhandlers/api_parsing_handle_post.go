@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
+	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
@@ -13,11 +14,16 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 	ctx context.Context,
 	req *serverapi.APIParsingHandlePostReq,
 ) (*serverapi.APIParsingHandlePostOK, error) {
+	filter := core.BookFilter{}
+	if req.Filter.Set {
+		filter = apiservercore.ConvertAPIBookFilter(req.Filter.Value)
+	}
+
 	if req.IsMulti.Value {
 		result, err := c.parseUseCases.NewBooksMulti(ctx, req.Urls, parsing.ParseFlags{
 			AutoVerify: req.AutoVerify.Value,
 			ReadOnly:   req.ReadOnlyMode.Value,
-			MaxAuthors: req.MaxAuthors.Value,
+			Filter:     filter,
 		})
 		if err != nil {
 			return nil, err
@@ -38,7 +44,7 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 	result, err := c.parseUseCases.NewBooks(ctx, req.Urls, parsing.ParseFlags{
 		AutoVerify: req.AutoVerify.Value,
 		ReadOnly:   req.ReadOnlyMode.Value,
-		MaxAuthors: req.MaxAuthors.Value,
+		Filter:     filter,
 	})
 	if err != nil {
 		return nil, err

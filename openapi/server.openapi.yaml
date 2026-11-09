@@ -1386,9 +1386,8 @@ paths:
                 read_only_mode:
                   type: boolean
                   description: Пометить книги подтвержденными
-                max_authors:
-                  type: integer
-                  description: Максимальное количество авторов (экспериментальная опция)
+                filter:
+                  $ref: "#/components/schemas/BookFilter"
               required:
                 - urls
       responses:

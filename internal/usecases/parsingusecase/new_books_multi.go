@@ -114,9 +114,10 @@ urlLoop:
 					continue
 				}
 
-				if flags.MaxAuthors > 0 {
+				// Разбор деталей нужен только для проверки фильтра,
+				// без него не тратим время на дорогой вызов.
+				if len(flags.Filter.Fields.Attributes) > 0 || flags.Filter.Fields.Name != "" {
 					pageCountLimit := 0
-					needSkip := false
 
 					extendInfo, err := uc.agentSystem.BookParse(ctx, agent.ID, u, &pageCountLimit)
 					if err != nil {
@@ -125,17 +126,7 @@ urlLoop:
 						)
 					}
 
-					for _, attr := range extendInfo.Attributes {
-						if attr.Code == core.AttributeCodeAuthor {
-							if len(attr.Values) > flags.MaxAuthors {
-								needSkip = true
-
-								break
-							}
-						}
-					}
-
-					if needSkip {
+					if !bookMatchesFilter(flags.Filter, extendInfo) {
 						result.Details.RegisterSkipped(u)
 
 						continue

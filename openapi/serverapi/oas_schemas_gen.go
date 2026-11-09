@@ -5551,10 +5551,8 @@ type APIParsingHandlePostReq struct {
 	// Пометить книги подтвержденными.
 	AutoVerify OptBool `json:"auto_verify"`
 	// Пометить книги подтвержденными.
-	ReadOnlyMode OptBool `json:"read_only_mode"`
-	// Максимальное количество авторов (экспериментальная
-	// опция).
-	MaxAuthors OptInt `json:"max_authors"`
+	ReadOnlyMode OptBool       `json:"read_only_mode"`
+	Filter       OptBookFilter `json:"filter"`
 }
 
 // GetUrls returns the value of Urls.
@@ -5577,9 +5575,9 @@ func (s *APIParsingHandlePostReq) GetReadOnlyMode() OptBool {
 	return s.ReadOnlyMode
 }
 
-// GetMaxAuthors returns the value of MaxAuthors.
-func (s *APIParsingHandlePostReq) GetMaxAuthors() OptInt {
-	return s.MaxAuthors
+// GetFilter returns the value of Filter.
+func (s *APIParsingHandlePostReq) GetFilter() OptBookFilter {
+	return s.Filter
 }
 
 // SetUrls sets the value of Urls.
@@ -5602,9 +5600,9 @@ func (s *APIParsingHandlePostReq) SetReadOnlyMode(val OptBool) {
 	s.ReadOnlyMode = val
 }
 
-// SetMaxAuthors sets the value of MaxAuthors.
-func (s *APIParsingHandlePostReq) SetMaxAuthors(val OptInt) {
-	s.MaxAuthors = val
+// SetFilter sets the value of Filter.
+func (s *APIParsingHandlePostReq) SetFilter(val OptBookFilter) {
+	s.Filter = val
 }
 
 // APIParsingMirrorCreatePostNoContent is response for APIParsingMirrorCreatePost operation.
@@ -9193,6 +9191,52 @@ func (o OptAPIMassloadInfoListPostReqSortField) Get() (v APIMassloadInfoListPost
 
 // Or returns value if set, or given parameter if does not.
 func (o OptAPIMassloadInfoListPostReqSortField) Or(d APIMassloadInfoListPostReqSortField) APIMassloadInfoListPostReqSortField {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptBookFilter returns new OptBookFilter with value set to v.
+func NewOptBookFilter(v BookFilter) OptBookFilter {
+	return OptBookFilter{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookFilter is optional BookFilter.
+type OptBookFilter struct {
+	Value BookFilter
+	Set   bool
+}
+
+// IsSet returns true if OptBookFilter was set.
+func (o OptBookFilter) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookFilter) Reset() {
+	var v BookFilter
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookFilter) SetTo(v BookFilter) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookFilter) Get() (v BookFilter, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookFilter) Or(d BookFilter) BookFilter {
 	if v, ok := o.Get(); ok {
 		return v
 	}
