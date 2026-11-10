@@ -1950,6 +1950,114 @@
                   },
                   "overrides": []
                }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (service_name) (hgraber_next_agent_web_cache_bytes{service_name=~\"$service_name\"})",
+                     "legendFormat": "{{service_name}}"
+                  }
+               ],
+               "title": "Web cache size",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 0,
+                  "y": 116
+               },
+               "repeatDirection": "h",
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "bytes",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
+            },
+            {
+               "type": "timeseries",
+               "targets": [
+                  {
+                     "expr": "sum by (service_name) (hgraber_next_agent_web_cache_file_total{service_name=~\"$service_name\"})",
+                     "legendFormat": "{{service_name}}"
+                  }
+               ],
+               "title": "Web cache file count",
+               "transparent": false,
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${metrics}"
+               },
+               "gridPos": {
+                  "h": 9,
+                  "w": 12,
+                  "x": 12,
+                  "y": 116
+               },
+               "repeatDirection": "h",
+               "options": {
+                  "legend": {
+                     "displayMode": "table",
+                     "placement": "bottom",
+                     "showLegend": true,
+                     "sortBy": "Mean",
+                     "sortDesc": true,
+                     "calcs": [
+                        "mean",
+                        "lastNotNull"
+                     ]
+                  },
+                  "tooltip": {
+                     "mode": "",
+                     "sort": ""
+                  }
+               },
+               "fieldConfig": {
+                  "defaults": {
+                     "unit": "short",
+                     "thresholds": {
+                        "mode": "",
+                        "steps": [
+                           {
+                              "value": null,
+                              "color": "green"
+                           }
+                        ]
+                     }
+                  },
+                  "overrides": []
+               }
             }
          ]
       },
@@ -1961,7 +2069,7 @@
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 116
+            "y": 125
          },
          "id": 0,
          "panels": [
@@ -1983,7 +2091,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 117
+                  "y": 126
                },
                "repeatDirection": "h",
                "options": {
@@ -2037,7 +2145,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 117
+                  "y": 126
                },
                "repeatDirection": "h",
                "options": {
@@ -2091,7 +2199,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 126
+                  "y": 135
                },
                "repeatDirection": "h",
                "options": {
@@ -2145,7 +2253,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 126
+                  "y": 135
                },
                "repeatDirection": "h",
                "options": {
@@ -2191,7 +2299,7 @@
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 135
+            "y": 144
          },
          "id": 0,
          "panels": [
@@ -2213,7 +2321,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 136
+                  "y": 145
                },
                "repeatDirection": "h",
                "options": {
@@ -2267,7 +2375,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 136
+                  "y": 145
                },
                "repeatDirection": "h",
                "options": {
@@ -2321,7 +2429,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 145
+                  "y": 154
                },
                "repeatDirection": "h",
                "options": {
@@ -2378,7 +2486,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 145
+                  "y": 154
                },
                "repeatDirection": "h",
                "options": {
@@ -2428,7 +2536,7 @@
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 154
+            "y": 163
          },
          "id": 0,
          "panels": [
@@ -2450,7 +2558,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 155
+                  "y": 164
                },
                "repeatDirection": "h",
                "options": {
@@ -2504,7 +2612,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 155
+                  "y": 164
                },
                "repeatDirection": "h",
                "options": {
@@ -2558,7 +2666,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 164
+                  "y": 173
                },
                "repeatDirection": "h",
                "options": {
@@ -2612,7 +2720,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 12,
-                  "y": 164
+                  "y": 173
                },
                "repeatDirection": "h",
                "options": {
@@ -2669,7 +2777,7 @@
                   "h": 9,
                   "w": 12,
                   "x": 0,
-                  "y": 173
+                  "y": 182
                },
                "repeatDirection": "h",
                "options": {

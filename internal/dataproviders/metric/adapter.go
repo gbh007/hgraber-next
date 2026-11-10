@@ -163,6 +163,16 @@ func New(cfg Config) (p *MetricProvider, err error) {
 		if err != nil {
 			return nil, fmt.Errorf("register agent web cache counter: %w", err)
 		}
+
+		err = reg.Register(metricagent.WebCacheBytes)
+		if err != nil {
+			return nil, fmt.Errorf("register agent web cache bytes: %w", err)
+		}
+
+		err = reg.Register(metricagent.WebCacheFileTotal)
+		if err != nil {
+			return nil, fmt.Errorf("register agent web cache file total: %w", err)
+		}
 	}
 
 	if cfg.WithGo {

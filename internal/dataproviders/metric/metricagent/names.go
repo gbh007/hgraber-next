@@ -22,4 +22,14 @@ var (
 		SubSystemName,
 		"web_cache_total",
 	)
+	WebCacheBytesName = prometheus.BuildFQName(
+		metriccore.SystemName,
+		SubSystemName,
+		"web_cache_bytes",
+	)
+	WebCacheFileTotalName = prometheus.BuildFQName(
+		metriccore.SystemName,
+		SubSystemName,
+		"web_cache_file_total",
+	)
 )

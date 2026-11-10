@@ -13,3 +13,11 @@ func (MetricProvider) RegisterParserActionTime(action, parserName string, d time
 func (MetricProvider) IncWebCacheCounter(action string) {
 	metricagent.WebCacheCounter.WithLabelValues(action).Inc()
 }
+
+func (MetricProvider) SetWebCacheSize(size int64) {
+	metricagent.WebCacheBytes.Set(float64(size))
+}
+
+func (MetricProvider) SetWebCacheFileTotal(count int64) {
+	metricagent.WebCacheFileTotal.Set(float64(count))
+}

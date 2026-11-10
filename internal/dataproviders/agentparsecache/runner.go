@@ -45,6 +45,11 @@ func (c *Cache) Start(parentCtx context.Context) (chan struct{}, error) {
 
 				limit := time.Now().Add(-c.ttl)
 
+				var (
+					cacheSize  int64
+					cacheCount int64
+				)
+
 				for _, fileInfo := range fileList {
 					name := fileInfo.Name()
 
@@ -63,6 +68,19 @@ func (c *Cache) Start(parentCtx context.Context) (chan struct{}, error) {
 					}
 
 					if !ok || t.After(limit) {
+						info, err := fileInfo.Info()
+						if err != nil {
+							c.logger.Error(
+								"web cache clean: get file info",
+								slog.Any("error", err),
+							)
+
+							continue
+						}
+
+						cacheSize += info.Size()
+						cacheCount++
+
 						continue
 					}
 
@@ -78,6 +96,9 @@ func (c *Cache) Start(parentCtx context.Context) (chan struct{}, error) {
 
 					c.metricProvider.IncWebCacheCounter("expire")
 				}
+
+				c.metricProvider.SetWebCacheSize(cacheSize)
+				c.metricProvider.SetWebCacheFileTotal(cacheCount)
 			}
 		}
 	}()

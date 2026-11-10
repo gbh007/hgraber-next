@@ -15,6 +15,8 @@ func WithRow(builder *dashboard.DashboardBuilder) *dashboard.DashboardBuilder {
 			WithPanel(generatorcore.WithPanelSize(WorkerRPS(), generatorcore.PanelSizeHalf)).
 			WithPanel(generatorcore.WithPanelSize(WorkerStat(), generatorcore.PanelSizeHalf)).
 			WithPanel(generatorcore.WithPanelSize(WebCacheRPS(), generatorcore.PanelSizeHalf)).
+			WithPanel(generatorcore.WithPanelSize(WebCacheSize(), generatorcore.PanelSizeHalf)).
+			WithPanel(generatorcore.WithPanelSize(WebCacheFileCount(), generatorcore.PanelSizeHalf)).
 			Collapsed(true),
 	)
 

@@ -16,4 +16,14 @@ var (
 		Name: WebCacheTotalName,
 		Help: "Количество действий с кешом для реквестера",
 	}, []string{metriccore.ActionLabel})
+
+	WebCacheBytes = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: WebCacheBytesName,
+		Help: "Размер файлов кеша для реквестера",
+	})
+
+	WebCacheFileTotal = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: WebCacheFileTotalName,
+		Help: "Количество файлов кеша",
+	})
 )

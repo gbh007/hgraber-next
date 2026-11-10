@@ -17,6 +17,8 @@ const fileSuffix = ".ac"
 
 type metricProvider interface {
 	IncWebCacheCounter(action string)
+	SetWebCacheSize(size int64)
+	SetWebCacheFileTotal(count int64)
 }
 
 type Cache struct {
