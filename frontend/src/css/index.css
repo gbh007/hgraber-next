@@ -144,6 +144,26 @@ button.app:hover {
     background: var(--app-primary);
 }
 
+span.app-button {
+    text-decoration: none;
+}
+
+span.app-button.app-disabled,
+Link.app-button.app-disabled,
+a.app-button.app-disabled {
+    cursor: default;
+    text-decoration: none;
+    background: var(--app-disabled-background-color);
+    color: var(--app-disabled-color);
+}
+
+span.app-button.app-disabled:hover,
+Link.app-button.app-disabled:hover,
+a.app-button.app-disabled:hover {
+    border: 1px solid var(--app-border-color);
+    background: var(--app-disabled-background-color);
+}
+
 button.app:disabled {
     background: var(--app-disabled-background-color);
     color: var(--app-disabled-color);

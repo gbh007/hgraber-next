@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { MassloadFlagEditLink, MassloadFlagListLink } from '../../core/routing'
+import { useNavigate, useParams } from 'react-router-dom'
+import { MassloadFlagEditLink } from '../../core/routing'
 import { ContainerWidget, ErrorTextWidget } from '../../widgets/design-system'
 import {
     useMassloadFlagCreate,
@@ -64,13 +64,6 @@ export function MassloadFlagEditorScreen() {
             <ErrorTextWidget value={massloadFlagGetResponse} />
             <ErrorTextWidget value={massloadFlagCreateResponse} />
             <ErrorTextWidget value={massloadFlagUpdateResponse} />
-
-            <Link
-                className='app-button'
-                to={MassloadFlagListLink()}
-            >
-                Список
-            </Link>
 
             <MassloadFlagEditorWidget
                 onChange={setData}

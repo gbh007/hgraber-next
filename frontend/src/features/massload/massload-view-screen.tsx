@@ -6,7 +6,7 @@ import {
     useMassloadInfoGet,
 } from '../../apiclient/api-massload'
 import { Link, useParams } from 'react-router-dom'
-import { MassloadEditorLink, MassloadListLink } from '../../core/routing'
+import { MassloadEditorLink } from '../../core/routing'
 import { MassloadViewWidget } from './massload-view-widget'
 import { ContainerWidget, ErrorTextWidget } from '../../widgets/design-system'
 
@@ -50,12 +50,6 @@ export function MassloadViewScreen() {
                 gap='medium'
                 wrap
             >
-                <Link
-                    className='app-button'
-                    to={MassloadListLink()}
-                >
-                    Список
-                </Link>
                 <Link
                     className='app-button'
                     to={MassloadEditorLink(massloadID)}

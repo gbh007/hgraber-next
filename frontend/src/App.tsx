@@ -19,6 +19,7 @@ import {
     TasksLink,
 } from './core/routing'
 import { AppTheme, ThemeContext } from './core/context'
+import { BreadcrumbWidget } from './widgets/design-system'
 import { HProxyBookScreen } from './features/hproxy/hproxy-book-screen'
 import { HProxyListScreen } from './features/hproxy/hproxy-list-screen'
 import { MassloadListScreen } from './features/massload/massload-list-screen'
@@ -388,6 +389,8 @@ function SimpleWrapper(props: PropsWithChildren) {
                 <Link to={HProxyListLink()}>HProxy</Link>
                 <Link to={MenuLink()}>Меню</Link>
             </div>
+
+            <BreadcrumbWidget />
 
             <div className='app-body'>{props.children}</div>
         </>

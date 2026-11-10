@@ -139,12 +139,6 @@ export function MassloadEditorScreen() {
                 gap='medium'
                 wrap
             >
-                <Link
-                    className='app-button'
-                    to={MassloadListLink()}
-                >
-                    Список
-                </Link>
                 {isExists ? (
                     <Link
                         className='app-button'

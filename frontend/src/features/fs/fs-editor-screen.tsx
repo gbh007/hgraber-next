@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import type { FileSystemInfo } from '../../apiclient/gen/hGraberNext.schemas'
 import { useFSCreate, useFSGet, useFSUpdate } from '../../apiclient/api-fs'
 import { useCallback, useEffect, useState } from 'react'
@@ -62,15 +62,6 @@ export function FSEditorScreen() {
             <ErrorTextWidget value={fsCreateResponse} />
             <ErrorTextWidget value={fsUpdateResponse} />
             <ErrorTextWidget value={agentsResponse} />
-
-            <div>
-                <Link
-                    className='app-button'
-                    to={FSListLink()}
-                >
-                    Список файловых систем
-                </Link>
-            </div>
 
             <ContainerWidget
                 appContainer
