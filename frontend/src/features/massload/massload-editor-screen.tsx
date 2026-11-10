@@ -84,7 +84,7 @@ export function MassloadEditorScreen() {
         if (massLoadCreateResponse.data?.id ?? 0 > 0) {
             navigate(MassloadEditorLink(massLoadCreateResponse.data?.id))
         }
-    }, [massLoadCreateResponse.data?.id])
+    }, [massLoadCreateResponse.data?.id, navigate])
 
     useEffect(() => {
         if (isExists) {
@@ -107,7 +107,14 @@ export function MassloadEditorScreen() {
                 // navigate(MassloadEditorLink(massLoadCreateResponse.data?.id))
             })
         }
-    }, [doMassloadUpdate, doMassloadCreate, navigate, isExists, data])
+    }, [
+        doMassloadUpdate,
+        doMassloadCreate,
+        fetchMassloadGet,
+        massloadID,
+        isExists,
+        data,
+    ])
 
     return (
         <ContainerWidget

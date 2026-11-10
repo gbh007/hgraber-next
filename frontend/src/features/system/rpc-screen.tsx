@@ -45,7 +45,7 @@ function RunnersWidget() {
         fetchRunnerData()
     }, [fetchRunnerData])
     useEffect(() => {
-        let newRunners: Array<PostApiSystemWorkerConfigBodyRunnersCountItem> =
+        const newRunners: Array<PostApiSystemWorkerConfigBodyRunnersCountItem> =
             []
 
         ;(runnerObj.data?.workers || []).map((e) => {

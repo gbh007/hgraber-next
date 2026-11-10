@@ -86,7 +86,7 @@ export function BookPagesSelectWidget(props: {
                                     return
                                 }
 
-                                let newPageOrder = props.pageOrder.filter(
+                                const newPageOrder = props.pageOrder.filter(
                                     (_, i) => i < firstIndex
                                 )
                                 newPageOrder.push(

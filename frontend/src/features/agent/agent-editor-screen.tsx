@@ -54,7 +54,7 @@ export function AgentEditorScreen() {
         } else {
             doAgentNew(data).then(() => navigate(AgentListLink()))
         }
-    }, [doAgentUpdate, doAgentNew, isExists, data])
+    }, [doAgentUpdate, doAgentNew, isExists, data, navigate])
 
     return (
         <div>

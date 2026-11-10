@@ -18,22 +18,24 @@ export function ReaderWidget(
 ) {
     const [goToIndex, setGoToIndex] = useState(0)
 
-    if (!props.pages) {
-        return null
-    }
+    const { prevPage, nextPage } = props
 
     const goGo = useCallback(
         (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
             const pos = event.currentTarget.getBoundingClientRect()
             const dx = (event.pageX - pos.left) / (pos.right - pos.left)
             if (dx < 0.3) {
-                props.prevPage()
+                prevPage()
             } else {
-                props.nextPage()
+                nextPage()
             }
         },
-        [props.prevPage, props.nextPage]
+        [prevPage, nextPage]
     )
+
+    if (!props.pages) {
+        return null
+    }
 
     return (
         <ContainerWidget

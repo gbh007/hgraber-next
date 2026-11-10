@@ -2,10 +2,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import styles from './book-read-screen.module.css'
 import { useCallback, useEffect, useState } from 'react'
 import type { PageSimple } from '../../apiclient/gen/hGraberNext.schemas'
-import {
-    useBookDetails,
-    useDeleteBookPage,
-} from '../../apiclient/api-book'
+import { useBookDetails, useDeleteBookPage } from '../../apiclient/api-book'
 import { useSetDeadHash } from '../../apiclient/api-deduplicate'
 import { BookDetailsLink, BookReaderLink } from '../../core/routing'
 import {
@@ -50,7 +47,7 @@ export function BookReadScreen() {
         (page: number) => {
             navigate(BookReaderLink(bookID, page))
         },
-        [bookID]
+        [bookID, navigate]
     )
 
     const pages = bookDetailsResponse.data?.pages
@@ -69,7 +66,7 @@ export function BookReadScreen() {
         if (pageNumberInArray) {
             goPage(pageNumberInArray)
         }
-    }, [bookDetailsResponse.data, bookID, pageNumber, goPage, pages])
+    }, [pageNumber, goPage, pages])
 
     const nextPage = useCallback(() => {
         if (pageNumber == bookDetailsResponse.data?.info.page_count) return
@@ -83,10 +80,10 @@ export function BookReadScreen() {
         if (pageNumberInArray) {
             goPage(pageNumberInArray)
         }
-    }, [bookDetailsResponse.data, bookID, pageNumber, goPage, pages])
+    }, [bookDetailsResponse.data?.info.page_count, pageNumber, goPage, pages])
 
     const goGo = useCallback(
-        (event: any) => {
+        (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
             const pos = document
                 .getElementById('main-image')!
                 .getBoundingClientRect()

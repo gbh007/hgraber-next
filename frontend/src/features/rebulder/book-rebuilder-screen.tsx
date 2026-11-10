@@ -1,4 +1,7 @@
-import type { BookFilter, PostApiBookRebuildBody } from '../../apiclient/gen/hGraberNext.schemas'
+import type {
+    BookFilter,
+    PostApiBookRebuildBody,
+} from '../../apiclient/gen/hGraberNext.schemas'
 import {
     useBookDetails,
     useBookList,
@@ -78,6 +81,9 @@ export function BookRebuilderScreen() {
 
     useEffect(() => {
         getBooks(bookFilter)
+        // загрузка целевых книг только при монтировании — далее запрос явно
+        // инициирует target-book-widget через getTargetBooks
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getBooks])
     useEffect(() => {
         fetchLabelPresets()
@@ -87,17 +93,17 @@ export function BookRebuilderScreen() {
     }, [getAttributeOriginCount])
 
     useEffect(() => {
-        if (bookRawResponse.data) {
-            setBookRebuildData({
-                ...bookRebuildData,
+        const bookRaw = bookRawResponse.data
+        if (bookRaw) {
+            setBookRebuildData((state) => ({
+                ...state,
                 old_book: {
-                    ...bookRawResponse.data,
-                    name: 'Rebuild: ' + bookRawResponse.data.name,
+                    ...bookRaw,
+                    name: 'Rebuild: ' + bookRaw.name,
                 },
                 selected_pages: [],
-                page_order:
-                    bookRawResponse.data.pages?.map((e) => e.page_number) ?? [],
-            })
+                page_order: bookRaw.pages?.map((e) => e.page_number) ?? [],
+            }))
         }
     }, [bookRawResponse.data])
 

@@ -45,7 +45,7 @@ export function MassloadListScreen() {
     }, [fetchAttributeColorList])
     useEffect(() => {
         doMassloadList(filter)
-    }, [doMassloadList])
+    }, [doMassloadList, filter])
     useEffect(() => {
         fetchMassloadFlagList()
     }, [fetchMassloadFlagList])

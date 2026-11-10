@@ -34,11 +34,11 @@ export function LabelPresetEditorScreen() {
         }
     }, [labelPresetGetResponse.data])
 
-    if (labelPresetName) {
-        useEffect(() => {
+    useEffect(() => {
+        if (labelPresetName) {
             doGetLabelPreset({ name: labelPresetName })
-        }, [doGetLabelPreset, labelPresetName])
-    }
+        }
+    }, [doGetLabelPreset, labelPresetName])
 
     return (
         <ContainerWidget

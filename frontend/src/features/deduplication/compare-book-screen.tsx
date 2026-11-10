@@ -395,7 +395,7 @@ function BookShortInfo(props: {
         return
     }
 
-    const originDomain = /https?:\/\/([^\/]+)\/.*/.exec(
+    const originDomain = /https?:\/\/([^/]+)\/.*/.exec(
         props.value.origin_url ?? ''
     )?.[1]
 

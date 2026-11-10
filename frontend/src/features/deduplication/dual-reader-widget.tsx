@@ -45,7 +45,7 @@ export function DualReaderWidget(props: {
     const prevAPage = useCallback(() => {
         if (currentAIndex == 0) return
         setCurrentAIndex(currentAIndex - 1)
-    }, [props.aPages, currentAIndex])
+    }, [currentAIndex])
 
     const nextAPage = useCallback(() => {
         if (currentAIndex == props.aPages!.length - 1) return
@@ -57,13 +57,13 @@ export function DualReaderWidget(props: {
             if (i < 1 || i >= props.aPages!.length - 1) return
             setCurrentAIndex(i - 1)
         },
-        [props.aPages, currentAIndex]
+        [props.aPages]
     )
 
     const prevBPage = useCallback(() => {
         if (currentBIndex == 0) return
         setCurrentBIndex(currentBIndex - 1)
-    }, [props.bPages, currentBIndex])
+    }, [currentBIndex])
 
     const nextBPage = useCallback(() => {
         if (currentBIndex == props.bPages!.length - 1) return
@@ -75,7 +75,7 @@ export function DualReaderWidget(props: {
             if (i < 1 || i >= props.bPages!.length - 1) return
             setCurrentBIndex(i - 1)
         },
-        [props.bPages, currentBIndex]
+        [props.bPages]
     )
 
     const prevBothPage = useCallback(() => {
@@ -83,7 +83,7 @@ export function DualReaderWidget(props: {
         if (currentAIndex == 0) return
         setCurrentBIndex(currentBIndex - 1)
         setCurrentAIndex(currentAIndex - 1)
-    }, [props.bPages, currentBIndex, props.aPages, currentAIndex])
+    }, [currentBIndex, currentAIndex])
 
     const nextBothPage = useCallback(() => {
         if (currentAIndex == props.aPages!.length - 1) return

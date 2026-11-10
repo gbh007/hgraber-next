@@ -46,7 +46,7 @@ export function FSEditorScreen() {
         } else {
             doFSCreate(data).then(() => navigate(FSListLink()))
         }
-    }, [doFSUpdate, doFSCreate, isExists, data])
+    }, [doFSUpdate, doFSCreate, isExists, data, navigate])
 
     const [agentsResponse, getAgents] = useAgentList()
     useEffect(() => {

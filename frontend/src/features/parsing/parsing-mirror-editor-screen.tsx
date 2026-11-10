@@ -34,11 +34,11 @@ export function ParsingMirrorEditorScreen() {
         }
     }, [parsingMirrorGetResponse.data])
 
-    if (mirrorID) {
-        useEffect(() => {
+    useEffect(() => {
+        if (mirrorID) {
             doGetParsingMirror({ id: mirrorID })
-        }, [doGetParsingMirror, mirrorID])
-    }
+        }
+    }, [doGetParsingMirror, mirrorID])
 
     return (
         <ContainerWidget

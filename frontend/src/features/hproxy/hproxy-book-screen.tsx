@@ -38,7 +38,7 @@ export function HProxyBookScreen() {
 
         setCurrentURL(u)
         doHProxyBook({ url: u, page_limit: pageLimit })
-    }, [doHProxyBook, searchParams])
+    }, [doHProxyBook, searchParams, pageLimit])
 
     const downloadedFlags = {
         is_deleted: false,

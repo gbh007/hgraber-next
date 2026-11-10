@@ -24,5 +24,13 @@ export default tseslint.config(
                 { allowConstantExport: true },
             ],
         },
+    },
+    // barrel-файлы с реэкспортом компонентов: правило не умеет проверять
+    // `export *`, поэтому для index-файлов отключаем
+    {
+        files: ['**/index.{ts,tsx}'],
+        rules: {
+            'react-refresh/only-export-components': 'off',
+        },
     }
 )

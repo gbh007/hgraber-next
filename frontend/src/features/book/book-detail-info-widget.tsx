@@ -26,7 +26,7 @@ export function BookDetailInfoWidget(
         colors?: Array<AttributeColor>
     }
 ) {
-    const originDomain = /https?:\/\/([^\/]+)\/.*/.exec(
+    const originDomain = /https?:\/\/([^/]+)\/.*/.exec(
         props.book.info.origin_url ?? ''
     )?.[1]
     return (

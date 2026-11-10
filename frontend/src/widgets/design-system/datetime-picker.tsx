@@ -24,7 +24,7 @@ function transformDatetimeToInput(v: string): string {
         return ''
     }
 
-    let dt = new Date(v)
+    const dt = new Date(v)
 
     return `${dt.getFullYear()}-${leadZero(dt.getMonth() + 1)}-${leadZero(dt.getDate())}T${leadZero(dt.getHours())}:${leadZero(dt.getMinutes())}:${leadZero(dt.getSeconds())}`
 }

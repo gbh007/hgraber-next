@@ -2,7 +2,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useAppSettings } from '../../apiclient/settings'
 import styles from './list-screen.module.css'
 import { BookFilter } from '../../apiclient/gen/hGraberNext.schemas'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
     useAttributeColorList,
     useAttributeCount,
@@ -20,20 +20,23 @@ import {
 import { BookFilterWidget, PaginatorWidget } from '../../widgets/book'
 
 export function ListScreen() {
-    const [settings, _] = useAppSettings()
+    const [settings] = useAppSettings()
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const defaultFilterValue: BookFilter = {
-        pagination: { count: settings.book_on_page, page: 1 },
-        filter: {
-            flags: {
-                delete_status: 'except',
-                download_status: 'only',
-                verify_status: 'only',
+    const defaultFilterValue = useMemo<BookFilter>(
+        () => ({
+            pagination: { count: settings.book_on_page, page: 1 },
+            filter: {
+                flags: {
+                    delete_status: 'except',
+                    download_status: 'only',
+                    verify_status: 'only',
+                },
             },
-        },
-        sort: { field: 'created_at', desc: true },
-    }
+            sort: { field: 'created_at', desc: true },
+        }),
+        [settings.book_on_page]
+    )
 
     const [bookFilter, setBookFilter] = useState<BookFilter>(defaultFilterValue)
 
@@ -58,18 +61,18 @@ export function ListScreen() {
     useEffect(() => {
         try {
             const filter = JSON.parse(searchParams.get('filter')!)
+            // фильтр в URL всегда полный объект; при отсутствии в URL —
+            // используем дефолт, чтобы не тянуть устаревший state
+            const mergedFilter = filter
+                ? { ...defaultFilterValue, ...filter }
+                : defaultFilterValue
 
-            if (!filter) {
-                setBookFilter(defaultFilterValue)
-                getBooks(defaultFilterValue)
-            } else {
-                setBookFilter({ ...bookFilter, ...filter })
-                getBooks({ ...bookFilter, ...filter })
-            }
+            setBookFilter(mergedFilter)
+            getBooks(mergedFilter)
         } catch (err) {
             console.log(err)
         }
-    }, [setBookFilter, searchParams])
+    }, [setBookFilter, searchParams, getBooks, defaultFilterValue])
 
     return (
         <ContainerWidget

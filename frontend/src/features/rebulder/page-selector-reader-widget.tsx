@@ -11,28 +11,21 @@ export function PageSelectorReaderWidget(props: {
     pageCount?: number
     pages?: Array<PageSimple>
 }) {
-    if (!props.pages) {
-        return null
-    }
-
     const [currentIndex, setCurrentIndex] = useState(0)
-    const [currentPage, setCurrentPage] = useState<PageSimple>()
 
     useEffect(() => {
         setCurrentIndex(0)
-    }, [props.bookID, props.pages.length])
+    }, [props.bookID, props.pages?.length])
 
-    useEffect(() => {
-        setCurrentPage(props.pages![currentIndex])
-    }, [currentIndex])
+    const currentPage = props.pages?.[currentIndex]
 
     const prevPage = useCallback(() => {
         if (currentIndex == 0) return
         setCurrentIndex(currentIndex - 1)
-    }, [props.pages, currentIndex])
+    }, [currentIndex])
 
     const nextPage = useCallback(() => {
-        if (currentIndex == props.pages!.length - 1) return
+        if (currentIndex == (props.pages?.length ?? 0) - 1) return
         setCurrentIndex(currentIndex + 1)
     }, [props.pages, currentIndex])
 
@@ -48,6 +41,10 @@ export function PageSelectorReaderWidget(props: {
         },
         [prevPage, nextPage]
     )
+
+    if (!props.pages) {
+        return null
+    }
 
     return (
         <ContainerWidget
@@ -88,19 +85,19 @@ export function PageSelectorReaderWidget(props: {
                                 className='app'
                                 type='checkbox'
                                 checked={props.value.includes(
-                                    currentPage!.page_number
+                                    currentPage.page_number
                                 )}
                                 onChange={(e) =>
                                     props.onChange(
                                         e.target.checked
                                             ? [
                                                   ...props.value,
-                                                  currentPage!.page_number,
+                                                  currentPage.page_number,
                                               ]
                                             : props.value.filter(
                                                   (v) =>
                                                       v !=
-                                                      currentPage!.page_number
+                                                      currentPage.page_number
                                               )
                                     )
                                 }

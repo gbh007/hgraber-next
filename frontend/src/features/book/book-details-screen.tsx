@@ -4,7 +4,7 @@ import {
     useBookRestore,
     useBookStatusSet,
 } from '../../apiclient/api-book'
-import { CSSProperties, useEffect } from 'react'
+import { CSSProperties, useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
     useDeduplicateBookByPageBody,
@@ -51,9 +51,16 @@ export function BookDetailsScreen() {
         getBookDetails({ id: bookID })
     }, [getBookDetails, bookID])
 
+    // сбрасывать результат дедупликации при смене книги; не трогаем его на
+    // каждое обновление ответа (иначе свежий результат сотрётся сразу после
+    // загрузки)
+    const lastCleanedBookID = useRef(bookID)
     useEffect(() => {
-        bookDeduplicateResponse.cleanData()
-    }, [bookID])
+        if (lastCleanedBookID.current !== bookID) {
+            lastCleanedBookID.current = bookID
+            bookDeduplicateResponse.cleanData()
+        }
+    }, [bookID, bookDeduplicateResponse])
 
     const hasPages = (bookDetailsResponse.data?.pages?.length ?? 0) > 0
     const hasUniquePages =
