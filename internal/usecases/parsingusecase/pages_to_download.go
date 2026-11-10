@@ -88,12 +88,12 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownlo
 				continue
 			}
 
-			pages, ok := urlMap[info.URL]
+			urlPages, ok := urlMap[info.URL]
 			if !ok {
 				continue
 			}
 
-			for _, page := range pages {
+			for _, page := range urlPages {
 				toDownload = append(toDownload, parsing.PageForDownloadWithAgent{
 					PageForDownload: page,
 					AgentID:         agent.ID,

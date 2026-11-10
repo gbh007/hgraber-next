@@ -43,11 +43,10 @@ func (uc *UseCase) NewBooksMulti(
 
 urlLoop:
 	for _, multiURL := range urls {
-	agentLoop:
 		for _, agent := range agents {
 			checkRes, err := uc.agentSystem.BooksCheck(ctx, agent.ID, []url.URL{multiURL})
 			if len(checkRes) != 1 || !checkRes[0].IsPossible {
-				continue agentLoop
+				continue
 			}
 
 			if errors.Is(err, serveragentdto.ErrAgentAPIOffline) {
@@ -84,7 +83,7 @@ urlLoop:
 			}
 
 			if len(list.Books) == 0 {
-				continue agentLoop
+				continue
 			}
 
 			newUrls := make([]url.URL, 0, len(list.Books))

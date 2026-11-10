@@ -9,7 +9,7 @@ import (
 )
 
 // requestBuffer запрашивает данные по урле и возвращает их в виде буффера
-func (r *Requester) requestBuffer(ctx context.Context, URL string, headers http.Header, body io.Reader) (*bytes.Buffer, string, error) {
+func (r *Requester) requestBuffer(ctx context.Context, u string, headers http.Header, body io.Reader) (*bytes.Buffer, string, error) {
 	buff := new(bytes.Buffer)
 
 	var (
@@ -18,9 +18,9 @@ func (r *Requester) requestBuffer(ctx context.Context, URL string, headers http.
 	)
 
 	if body != nil {
-		req, err = http.NewRequestWithContext(ctx, http.MethodPost, URL, body)
+		req, err = http.NewRequestWithContext(ctx, http.MethodPost, u, body)
 	} else {
-		req, err = http.NewRequestWithContext(ctx, http.MethodGet, URL, http.NoBody)
+		req, err = http.NewRequestWithContext(ctx, http.MethodGet, u, http.NoBody)
 	}
 
 	if err != nil {
@@ -53,7 +53,7 @@ func (r *Requester) requestBuffer(ctx context.Context, URL string, headers http.
 	}()
 
 	if response.StatusCode < 200 || response.StatusCode > 299 {
-		return nil, "", fmt.Errorf("load %s: unsuccess status: %s", URL, response.Status)
+		return nil, "", fmt.Errorf("load %s: unsuccess status: %s", u, response.Status)
 	}
 
 	_, err = buff.ReadFrom(response.Body)
@@ -63,9 +63,9 @@ func (r *Requester) requestBuffer(ctx context.Context, URL string, headers http.
 
 	if response.Request != nil &&
 		response.Request.URL != nil &&
-		response.Request.URL.String() != URL {
-		URL = response.Request.URL.String()
+		response.Request.URL.String() != u {
+		u = response.Request.URL.String()
 	}
 
-	return buff, URL, nil
+	return buff, u, nil
 }

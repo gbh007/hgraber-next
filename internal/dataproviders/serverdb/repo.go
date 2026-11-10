@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log/slog"
 
-
 	"github.com/gbh007/hgraber-next/internal/dataproviders/serverdb/internal/agent"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/serverdb/internal/attribute"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/serverdb/internal/book"

@@ -78,7 +78,7 @@ func (r *Requester) RequestString(ctx context.Context, u string) (string, error)
 	return buff.String(), nil
 }
 
-func (r *Requester) RequestStringWithRedirect(ctx context.Context, u string) (string, string, error) {
+func (r *Requester) RequestStringWithRedirect(ctx context.Context, u string) (body, resultURL string, err error) {
 	if r.cache != nil {
 		v, ok := r.cache.GetString(ctx, u)
 		if ok {

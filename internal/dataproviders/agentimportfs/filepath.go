@@ -16,7 +16,7 @@ func (s *Storage) filepath(bookID uuid.UUID, bookName string) (relativePath, abs
 	relativePath = s.relativePath(bookID, bookName)
 	absolutePath = path.Join(s.fsPath, relativePath)
 
-	return
+	return relativePath, absolutePath
 }
 
 func (s *Storage) relativePath(bookID uuid.UUID, bookName string) string {

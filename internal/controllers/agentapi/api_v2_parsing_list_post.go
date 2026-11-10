@@ -40,6 +40,8 @@ func (c *Controller) APIV2ParsingListPost(
 				t = agentapi.APIV2ParsingListPostOKResultsItemTypeDetails
 			case parserdto.ListHProxyListUnitType:
 				t = agentapi.APIV2ParsingListPostOKResultsItemTypeList
+			case parserdto.UnknownHProxyListUnitType:
+				// неизвестный тип — оставляем значение по умолчанию
 			}
 
 			return agentapi.APIV2ParsingListPostOKResultsItem{

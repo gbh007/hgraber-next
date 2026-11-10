@@ -10,6 +10,7 @@ import (
 func parseConfig() (srvconfig.ServerConfig, error) {
 	configPath := flag.String("config", "config.toml", "path to config")
 
+	//nolint:revive // флаг парсится в Init-фазе приложения, вынос парсинга флагов из application-слоя усложнит код без пользы
 	flag.Parse()
 
 	//nolint:wrapcheck // здесь обертка не нужна

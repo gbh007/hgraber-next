@@ -21,7 +21,7 @@ func (c *Controller) GetFileURL(ctx context.Context, fileID uuid.UUID, ext strin
 		// FIXME: подумать над местом получше,
 		// или более явным пробросом контекста,
 		// или автообновлением токенов, чтобы не было надобности в ошибках.
-		ctx, cancel := context.WithTimeout(ctx, time.Minute)
+		ctx, cancel := context.WithTimeout(ctx, time.Minute) //nolint:govet // ложное срабатывание, дальше нужен внешний ctx
 		defer cancel()
 
 		u, ok, err := c.fsUseCases.HighwayFileURL(ctx, fileID, ext, fsID)

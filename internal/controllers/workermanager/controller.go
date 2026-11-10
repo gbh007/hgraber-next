@@ -56,14 +56,10 @@ func (c *Controller) Start(ctx context.Context) (chan struct{}, error) {
 
 	wg := new(sync.WaitGroup)
 
-	wg.Add(len(c.workerUnits))
-
 	for _, w := range c.workerUnits {
-		go func(ctx context.Context, w WorkerUnit) {
-			defer wg.Done()
-
+		wg.Go(func() {
 			w.Serve(ctx)
-		}(ctx, w)
+		})
 	}
 
 	go func() {

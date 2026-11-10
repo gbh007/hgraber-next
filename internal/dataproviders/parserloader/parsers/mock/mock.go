@@ -16,7 +16,7 @@ import (
 var (
 	_ parserdto.Parser = (*Parser)(nil)
 
-	ParserError = errors.New("parser mock")
+	ErrParser = errors.New("parser mock")
 )
 
 type Parser struct {
@@ -42,7 +42,7 @@ func (p *Parser) Book(ctx context.Context, u url.URL, pageLimit *int) (parserdto
 
 	body, err := p.Requester.RequestString(ctx, u.String())
 	if err != nil {
-		return parserdto.Book{}, fmt.Errorf("%w: %w", ParserError, err)
+		return parserdto.Book{}, fmt.Errorf("%w: %w", ErrParser, err)
 	}
 
 	bookParser.body = body
