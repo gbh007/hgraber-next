@@ -18,7 +18,7 @@ import (
 func WorkerErrorsDelta() *piechart.PanelBuilder {
 	return piechart.
 		NewPanelBuilder().
-		Title("Worker errors at "+generatorcore.NameToVar(generatorcore.DeltaVariableName)).
+		Title("Worker errors").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().

@@ -16,7 +16,7 @@ import (
 func ParserHandleDelta() *barchart.PanelBuilder {
 	return barchart.
 		NewPanelBuilder().
-		Title("Parser handle at " + generatorcore.NameToVar(generatorcore.DeltaVariableName)).
+		Title("Parser handle").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().

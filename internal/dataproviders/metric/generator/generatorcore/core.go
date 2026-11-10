@@ -19,10 +19,9 @@ const (
 
 	ServiceVariableName = "service_name"
 
-	DeltaVariableName    = "deltaInterval"
-	DeltaVariableCurrent = "4h"
-
-	RateIntervalVar = "$__rate_interval" // TODO: возможно где-то есть готовый
+	RateIntervalVar  = "$__rate_interval" // TODO: возможно где-то есть готовый
+	IntervalVar      = "$__interval"
+	RangeIntervalVar = "$__range"
 
 	LegendAuto = "__auto"
 	LELabel    = "le"
@@ -58,8 +57,7 @@ var (
 		Type: new(LogsVariableTypeVictoriaLogs),
 		Uid:  new(NameToVarDS(LogsVariableName)),
 	}
-	DeltaVariableValues = []string{"1m", "5m", "10m", "30m", "1h", "4h", "8h", "1d", "7d"}
-	GreenSteps          = []dashboard.Threshold{
+	GreenSteps = []dashboard.Threshold{
 		{
 			Color: "green",
 		},

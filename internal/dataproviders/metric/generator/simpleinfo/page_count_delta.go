@@ -20,13 +20,13 @@ func PageCountDelta() *barchart.PanelBuilder {
 			promql.
 				Vector(metricserver.PageTotalName).
 				Labels(generatorcore.ServiceFilterPromQL).
-				Range(generatorcore.NameToVar(generatorcore.DeltaVariableName)),
+				Range(generatorcore.RangeIntervalVar),
 		),
 	).By([]string{metriccore.TypeLabel})
 
 	return barchart.
 		NewPanelBuilder().
-		Title("Page delta count at " + generatorcore.NameToVar(generatorcore.DeltaVariableName)).
+		Title("Page delta count").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().

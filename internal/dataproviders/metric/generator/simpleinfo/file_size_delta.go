@@ -21,14 +21,14 @@ func FileSizeDelta() *barchart.PanelBuilder {
 					Labels(generatorcore.ServiceFilterPromQL).
 					Label(k, v).
 					Label(metriccore.ServiceTypeLabel, metriccore.ServiceTypeLabelValueServer).
-					Range(generatorcore.NameToVar(generatorcore.DeltaVariableName)),
+					Range(generatorcore.RangeIntervalVar),
 			),
 		).By([]string{metriccore.TypeLabel}).String()
 	}
 
 	return barchart.
 		NewPanelBuilder().
-		Title("File delta size at " + generatorcore.NameToVar(generatorcore.DeltaVariableName)).
+		Title("File delta size").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().

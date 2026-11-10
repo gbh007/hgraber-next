@@ -21,13 +21,13 @@ func FileCountDelta() *barchart.PanelBuilder {
 				Vector(metricfs.FileTotalName).
 				Labels(generatorcore.ServiceFilterPromQL).
 				Label(metriccore.ServiceTypeLabel, metriccore.ServiceTypeLabelValueServer).
-				Range(generatorcore.NameToVar(generatorcore.DeltaVariableName)),
+				Range(generatorcore.RangeIntervalVar),
 		),
 	).By([]string{metriccore.TypeLabel})
 
 	return barchart.
 		NewPanelBuilder().
-		Title("File delta count at " + generatorcore.NameToVar(generatorcore.DeltaVariableName)).
+		Title("File delta count").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().

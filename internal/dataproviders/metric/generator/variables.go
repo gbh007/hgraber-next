@@ -50,21 +50,5 @@ func (g Generator) WithVariables(builder *dashboard.DashboardBuilder) *dashboard
 			}).
 			Refresh(dashboard.VariableRefreshOnTimeRangeChanged),
 	)
-	builder.WithVariable(
-		dashboard.
-			NewIntervalVariableBuilder(generatorcore.DeltaVariableName).
-			Values(generatorcore.ValuesFromArray(generatorcore.DeltaVariableValues)).
-			Current(dashboard.VariableOption{
-				Selected: new(true),
-				Text: dashboard.StringOrArrayOfString{
-					String: new(generatorcore.DeltaVariableCurrent),
-				},
-				Value: dashboard.StringOrArrayOfString{
-					String: new(generatorcore.DeltaVariableCurrent),
-				},
-			}).
-			Auto(true),
-	)
-
 	return builder
 }

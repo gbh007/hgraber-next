@@ -29,7 +29,7 @@ func Heatmap(title, metric, unit string) *heatmap.PanelBuilder {
 						String(),
 				).
 				Format(prometheus.PromQueryFormatHeatmap).
-				Interval(generatorcore.NameToVar(generatorcore.DeltaVariableName)).
+				Interval(generatorcore.IntervalVar).
 				LegendFormat(generatorcore.LegendAuto),
 		}).
 		Tooltip(heatmap.NewHeatmapTooltipBuilder().Mode(common.TooltipDisplayModeSingle)).

@@ -16,7 +16,7 @@ import (
 func WorkerHandleDelta() *barchart.PanelBuilder {
 	return barchart.
 		NewPanelBuilder().
-		Title("Worker handle at " + generatorcore.NameToVar(generatorcore.DeltaVariableName)).
+		Title("Worker handle").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().

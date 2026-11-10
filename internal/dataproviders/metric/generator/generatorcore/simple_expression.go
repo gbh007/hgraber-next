@@ -42,7 +42,7 @@ func IncreaseIntervalExpr(metric string, by []string) string {
 			promql.
 				Vector(metric).
 				Labels(ServiceFilterPromQL).
-				Range(NameToVar(DeltaVariableName)),
+				Range(RangeIntervalVar),
 		),
 	)
 

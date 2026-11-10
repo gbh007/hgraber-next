@@ -215,7 +215,7 @@
          "type": "barchart",
          "targets": [
             {
-               "expr": "sum by (type) (delta(hgraber_next_server_book_total{service_name=~\"$service_name\",service_type=\"server\"}[$deltaInterval]))",
+               "expr": "sum by (type) (delta(hgraber_next_server_book_total{service_name=~\"$service_name\",service_type=\"server\"}[$__range]))",
                "instant": true,
                "range": false,
                "legendFormat": "{{type}}",
@@ -225,7 +225,7 @@
                }
             }
          ],
-         "title": "Book delta count at $deltaInterval",
+         "title": "Book delta count",
          "transparent": false,
          "datasource": {
             "type": "prometheus",
@@ -258,7 +258,7 @@
          "type": "barchart",
          "targets": [
             {
-               "expr": "sum by (type) (delta(hgraber_next_server_page_total{service_name=~\"$service_name\"}[$deltaInterval]))",
+               "expr": "sum by (type) (delta(hgraber_next_server_page_total{service_name=~\"$service_name\"}[$__range]))",
                "instant": true,
                "range": false,
                "legendFormat": "{{type}}",
@@ -268,7 +268,7 @@
                }
             }
          ],
-         "title": "Page delta count at $deltaInterval",
+         "title": "Page delta count",
          "transparent": false,
          "datasource": {
             "type": "prometheus",
@@ -301,7 +301,7 @@
          "type": "barchart",
          "targets": [
             {
-               "expr": "sum by (type) (delta(hgraber_next_fs_file_total{service_name=~\"$service_name\",service_type=\"server\"}[$deltaInterval]))",
+               "expr": "sum by (type) (delta(hgraber_next_fs_file_total{service_name=~\"$service_name\",service_type=\"server\"}[$__range]))",
                "instant": true,
                "range": false,
                "legendFormat": "{{type}}",
@@ -311,7 +311,7 @@
                }
             }
          ],
-         "title": "File delta count at $deltaInterval",
+         "title": "File delta count",
          "transparent": false,
          "datasource": {
             "type": "prometheus",
@@ -344,7 +344,7 @@
          "type": "barchart",
          "targets": [
             {
-               "expr": "sum by (type) (delta(hgraber_next_fs_file_bytes{service_name=~\"$service_name\",type=\"fs\",service_type=\"server\"}[$deltaInterval]))",
+               "expr": "sum by (type) (delta(hgraber_next_fs_file_bytes{service_name=~\"$service_name\",type=\"fs\",service_type=\"server\"}[$__range]))",
                "instant": true,
                "range": false,
                "legendFormat": "На диске",
@@ -354,7 +354,7 @@
                }
             },
             {
-               "expr": "sum by (type) (delta(hgraber_next_fs_file_bytes{service_name=~\"$service_name\",type=\"page\",service_type=\"server\"}[$deltaInterval]))",
+               "expr": "sum by (type) (delta(hgraber_next_fs_file_bytes{service_name=~\"$service_name\",type=\"page\",service_type=\"server\"}[$__range]))",
                "instant": true,
                "range": false,
                "legendFormat": "В страницах",
@@ -364,7 +364,7 @@
                }
             }
          ],
-         "title": "File delta size at $deltaInterval",
+         "title": "File delta size",
          "transparent": false,
          "datasource": {
             "type": "prometheus",
@@ -397,7 +397,7 @@
          "type": "piechart",
          "targets": [
             {
-               "expr": "sum by (success) (increase(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$deltaInterval]))",
+               "expr": "sum by (success) (increase(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$__range]))",
                "instant": true,
                "range": false,
                "legendFormat": "{{success}}",
@@ -407,7 +407,7 @@
                }
             }
          ],
-         "title": "Worker errors at $deltaInterval",
+         "title": "Worker errors",
          "transparent": false,
          "datasource": {
             "type": "prometheus",
@@ -556,7 +556,7 @@
          "type": "barchart",
          "targets": [
             {
-               "expr": "sum by (worker_name, success) (increase(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$deltaInterval]))",
+               "expr": "sum by (worker_name, success) (increase(hgraber_next_server_worker_execution_task_seconds_count{service_name=~\"$service_name\"}[$__range]))",
                "instant": true,
                "range": false,
                "legendFormat": "{{worker_name}}/{{success}}",
@@ -566,7 +566,7 @@
                }
             }
          ],
-         "title": "Worker handle at $deltaInterval",
+         "title": "Worker handle",
          "transparent": false,
          "datasource": {
             "type": "prometheus",
@@ -625,7 +625,7 @@
          "type": "barchart",
          "targets": [
             {
-               "expr": "sum by (action, parser_name) (increase(hgraber_next_agent_parser_action_seconds_count{service_name=~\"$service_name\"}[$deltaInterval]))",
+               "expr": "sum by (action, parser_name) (increase(hgraber_next_agent_parser_action_seconds_count{service_name=~\"$service_name\"}[$__range]))",
                "instant": true,
                "range": false,
                "legendFormat": "{{parser_name}} -\u003e {{action}}",
@@ -635,7 +635,7 @@
                }
             }
          ],
-         "title": "Parser handle at $deltaInterval",
+         "title": "Parser handle",
          "transparent": false,
          "datasource": {
             "type": "prometheus",
@@ -1200,7 +1200,7 @@
                      "expr": "sum by (le) (hgraber_next_statistic_book_size_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "interval": "$deltaInterval"
+                     "interval": "$__interval"
                   }
                ],
                "title": "Book sizes",
@@ -1270,7 +1270,7 @@
                      "expr": "sum by (le) (hgraber_next_statistic_page_size_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "interval": "$deltaInterval"
+                     "interval": "$__interval"
                   }
                ],
                "title": "Page sizes",
@@ -1340,7 +1340,7 @@
                      "expr": "sum by (le) (hgraber_next_statistic_page_in_book_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "interval": "$deltaInterval"
+                     "interval": "$__interval"
                   }
                ],
                "title": "Page in book",
@@ -1410,7 +1410,7 @@
                      "expr": "sum by (le) (hgraber_next_statistic_pages_size_by_author_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "interval": "$deltaInterval"
+                     "interval": "$__interval"
                   }
                ],
                "title": "Page sizes by authors",
@@ -1480,7 +1480,7 @@
                      "expr": "sum by (le) (hgraber_next_statistic_books_by_author_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "interval": "$deltaInterval"
+                     "interval": "$__interval"
                   }
                ],
                "title": "Book by authors",
@@ -1550,7 +1550,7 @@
                      "expr": "sum by (le) (hgraber_next_statistic_pages_by_author_bucket{service_name=~\"$service_name\"})",
                      "format": "heatmap",
                      "legendFormat": "__auto",
-                     "interval": "$deltaInterval"
+                     "interval": "$__interval"
                   }
                ],
                "title": "Page by authors",
@@ -2765,23 +2765,6 @@
             "refresh": 2,
             "includeAll": false,
             "auto": false,
-            "auto_min": "10s",
-            "auto_count": 30
-         },
-         {
-            "type": "interval",
-            "name": "deltaInterval",
-            "skipUrlSync": false,
-            "query": "1m,5m,10m,30m,1h,4h,8h,1d,7d",
-            "current": {
-               "selected": true,
-               "text": "4h",
-               "value": "4h"
-            },
-            "multi": false,
-            "allowCustomValue": true,
-            "includeAll": false,
-            "auto": true,
             "auto_min": "10s",
             "auto_count": 30
          }

@@ -21,13 +21,13 @@ func BookCountDelta() *barchart.PanelBuilder {
 				Vector(metricserver.BookTotalName).
 				Labels(generatorcore.ServiceFilterPromQL).
 				Label(metriccore.ServiceTypeLabel, metriccore.ServiceTypeLabelValueServer).
-				Range(generatorcore.NameToVar(generatorcore.DeltaVariableName)),
+				Range(generatorcore.RangeIntervalVar),
 		),
 	).By([]string{metriccore.TypeLabel})
 
 	return barchart.
 		NewPanelBuilder().
-		Title("Book delta count at " + generatorcore.NameToVar(generatorcore.DeltaVariableName)).
+		Title("Book delta count").
 		Targets([]cog.Builder[variants.Dataquery]{
 			prometheus.
 				NewDataqueryBuilder().
