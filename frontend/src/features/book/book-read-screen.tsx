@@ -4,6 +4,12 @@ import { useCallback, useEffect, useState } from 'react'
 import type { PageSimple } from '../../apiclient/gen/hGraberNext.schemas'
 import { useBookDetails, useDeleteBookPage } from '../../apiclient/api-book'
 import { useSetDeadHash } from '../../apiclient/api-deduplicate'
+import {
+    DEFAULT_READER_ACTION_BUTTON,
+    READER_ACTION_BUTTON_OPTIONS,
+    useAppSettings,
+} from '../../apiclient/settings'
+import type { ReaderActionButton } from '../../apiclient/settings'
 import { BookDetailsLink, BookReaderLink } from '../../core/routing'
 import {
     ColorizedTextWidget,
@@ -27,6 +33,10 @@ export function BookReadScreen() {
     const [bookDetailsResponse, getBookDetails] = useBookDetails()
     const [setDeadHashResponse, doSetDeadHash] = useSetDeadHash()
     const [deletePageResponse, doDeletePage] = useDeleteBookPage()
+
+    const [appSettings] = useAppSettings()
+    const readerActionButton: ReaderActionButton =
+        appSettings.reader_action_button ?? DEFAULT_READER_ACTION_BUTTON
 
     const navigate = useNavigate()
 
@@ -110,6 +120,136 @@ export function BookReadScreen() {
         }
     }, [prevPage, nextPage])
 
+    const deletePage = useCallback(() => {
+        if (!currentPage) {
+            return
+        }
+
+        if (!confirm('Удалить эту страницу? (ЭТО НЕОБРАТИМО)')) {
+            return
+        }
+
+        doDeletePage({
+            type: 'one',
+            book_id: bookID,
+            page_number: currentPage.page_number,
+        }).then(() => {
+            getBookDetails({ id: bookID })
+        })
+    }, [currentPage, bookID, doDeletePage, getBookDetails])
+
+    const createDeadHash = useCallback(() => {
+        if (!currentPage) {
+            return
+        }
+
+        if (!confirm('Создать мертвых хеш для таких страниц?')) {
+            return
+        }
+
+        doSetDeadHash({
+            book_id: bookID,
+            page_number: currentPage.page_number,
+            value: true,
+        }).then(() => {
+            getBookDetails({ id: bookID })
+        })
+    }, [currentPage, bookID, doSetDeadHash, getBookDetails])
+
+    const deleteDeadHash = useCallback(() => {
+        if (!currentPage) {
+            return
+        }
+
+        if (!confirm('Удалить мертвых хеш для таких страниц?')) {
+            return
+        }
+
+        doSetDeadHash({
+            book_id: bookID,
+            page_number: currentPage.page_number,
+            value: false,
+        }).then(() => {
+            getBookDetails({ id: bookID })
+        })
+    }, [currentPage, bookID, doSetDeadHash, getBookDetails])
+
+    const deleteAllCopies = useCallback(() => {
+        if (!currentPage) {
+            return
+        }
+
+        if (!confirm('Удалить такие страницы? (ЭТО НЕОБРАТИМО)')) {
+            return
+        }
+
+        const setDeadHash = confirm(
+            'Установить для текущих страниц мертвый хеш?'
+        )
+
+        doDeletePage({
+            type: 'all_copy',
+            book_id: bookID,
+            page_number: currentPage.page_number,
+            set_dead_hash: setDeadHash,
+        }).then(() => {
+            getBookDetails({ id: bookID })
+        })
+    }, [currentPage, bookID, doDeletePage, getBookDetails])
+
+    const bottomButtonAction = useCallback(() => {
+        switch (readerActionButton) {
+            case 'dead_hash':
+                return currentPage?.has_dead_hash
+                    ? deleteDeadHash()
+                    : createDeadHash()
+            case 'delete_page':
+                return deletePage()
+            case 'delete_all_copy':
+                return deleteAllCopies()
+            default:
+                return
+        }
+    }, [
+        readerActionButton,
+        currentPage,
+        deletePage,
+        createDeadHash,
+        deleteDeadHash,
+        deleteAllCopies,
+    ])
+
+    const bottomButtonLabel = (() => {
+        if (readerActionButton === 'dead_hash') {
+            return currentPage?.has_dead_hash
+                ? 'Удалить мертвый хеш'
+                : 'Создать мертвый хеш'
+        }
+
+        return READER_ACTION_BUTTON_OPTIONS.find(
+            (option) => option.value === readerActionButton
+        )?.label
+    })()
+
+    // цвета как у соответствующих пунктов в опциях читалки
+    const bottomButtonColor = (() => {
+        switch (readerActionButton) {
+            case 'dead_hash':
+                return 'danger-lite'
+            case 'delete_page':
+                return 'danger-lite'
+            case 'delete_all_copy':
+                return 'danger'
+            default:
+                return 'danger'
+        }
+    })()
+
+    const bottomButtonBold = readerActionButton !== 'dead_hash'
+
+    const showBottomButton =
+        currentPage !== undefined && readerActionButton !== 'nothing'
+
     return (
         <div>
             <ErrorTextWidget value={bookDetailsResponse} />
@@ -160,33 +300,16 @@ export function BookReadScreen() {
                             <span className={styles.pageNavigate}>{'>'}</span>
                         </button>
                     </span>
-                    {currentPage ? (
+                    {showBottomButton ? (
                         <button
                             className='app'
-                            onClick={() => {
-                                if (
-                                    !confirm(
-                                        'Удалить такие страницы и добавить их в мертвый хеш? (ЭТО НЕОБРАТИМО)'
-                                    )
-                                ) {
-                                    return
-                                }
-
-                                doDeletePage({
-                                    type: 'all_copy',
-                                    book_id: bookID,
-                                    page_number: currentPage.page_number,
-                                    set_dead_hash: true,
-                                }).then(() => {
-                                    getBookDetails({ id: bookID })
-                                })
-                            }}
+                            onClick={bottomButtonAction}
                         >
                             <ColorizedTextWidget
-                                bold
-                                color='danger'
+                                bold={bottomButtonBold}
+                                color={bottomButtonColor}
                             >
-                                Удалить такие страницы
+                                {bottomButtonLabel}
                             </ColorizedTextWidget>
                         </button>
                     ) : null}
@@ -194,95 +317,10 @@ export function BookReadScreen() {
                         bookID={bookID}
                         pageNumber={pageNumber}
                         currentPage={currentPage}
-                        onCreateDeadHash={() => {
-                            if (!currentPage) {
-                                return
-                            }
-
-                            if (
-                                !confirm(
-                                    'Создать мертвых хеш для таких страниц?'
-                                )
-                            ) {
-                                return
-                            }
-
-                            doSetDeadHash({
-                                book_id: bookID,
-                                page_number: currentPage.page_number,
-                                value: true,
-                            }).then(() => {
-                                getBookDetails({ id: bookID })
-                            })
-                        }}
-                        onDeleteDeadHash={() => {
-                            if (!currentPage) {
-                                return
-                            }
-
-                            if (
-                                !confirm(
-                                    'Удалить мертвых хеш для таких страниц?'
-                                )
-                            ) {
-                                return
-                            }
-
-                            doSetDeadHash({
-                                book_id: bookID,
-                                page_number: currentPage.page_number,
-                                value: false,
-                            }).then(() => {
-                                getBookDetails({ id: bookID })
-                            })
-                        }}
-                        onDeletePage={() => {
-                            if (!currentPage) {
-                                return
-                            }
-
-                            if (
-                                !confirm(
-                                    'Удалить эту страницу? (ЭТО НЕОБРАТИМО)'
-                                )
-                            ) {
-                                return
-                            }
-
-                            doDeletePage({
-                                type: 'one',
-                                book_id: bookID,
-                                page_number: currentPage.page_number,
-                            }).then(() => {
-                                getBookDetails({ id: bookID })
-                            })
-                        }}
-                        onDeleteAllPages={() => {
-                            if (!currentPage) {
-                                return
-                            }
-
-                            if (
-                                !confirm(
-                                    'Удалить такие страницы? (ЭТО НЕОБРАТИМО)'
-                                )
-                            ) {
-                                return
-                            }
-
-                            const setDeadHash = confirm(
-                                'Установить для текущих страниц мертвый хеш?'
-                            )
-
-                            doDeletePage({
-                                type: 'all_copy',
-                                book_id: bookID,
-                                page_number: currentPage.page_number,
-                                set_dead_hash: setDeadHash,
-                            }).then(() => {
-                                getBookDetails({ id: bookID })
-                            })
-                        }}
+                        onCreateDeadHash={createDeadHash}
+                        onDeleteDeadHash={deleteDeadHash}
+                        onDeletePage={deletePage}
+                        onDeleteAllPages={deleteAllCopies}
                     >
                         <label>
                             <input

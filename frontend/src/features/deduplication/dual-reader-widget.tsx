@@ -6,6 +6,12 @@ import {
     ColorizedTextWidget,
     ContainerWidget,
 } from '../../widgets/design-system'
+import {
+    DEFAULT_READER_ACTION_BUTTON,
+    READER_ACTION_BUTTON_OPTIONS,
+    useAppSettings,
+} from '../../apiclient/settings'
+import type { ReaderActionButton } from '../../apiclient/settings'
 
 export function DualReaderWidget(props: {
     aBookID: string
@@ -18,13 +24,55 @@ export function DualReaderWidget(props: {
     onDeleteDeadHash: (bookID: string, page: PageSimple) => void
     onDeletePage: (bookID: string, page: PageSimple) => void
     onDeleteAllPages: (bookID: string, page: PageSimple) => void
-    onDeleteAllPagesWithDeadHash: (bookID: string, page: PageSimple) => void
 }) {
     const [currentAIndex, setCurrentAIndex] = useState(0)
     const [currentAPage, setCurrentAPage] = useState<PageSimple>()
 
     const [currentBIndex, setCurrentBIndex] = useState(0)
     const [currentBPage, setCurrentBPage] = useState<PageSimple>()
+
+    const [appSettings] = useAppSettings()
+    const readerActionButton: ReaderActionButton =
+        appSettings.reader_action_button ?? DEFAULT_READER_ACTION_BUTTON
+
+    const bottomButtonAction = useCallback(
+        (bookID: string, page: PageSimple) => {
+            switch (readerActionButton) {
+                case 'dead_hash':
+                    return page.has_dead_hash
+                        ? props.onDeleteDeadHash(bookID, page)
+                        : props.onCreateDeadHash(bookID, page)
+                case 'delete_page':
+                    return props.onDeletePage(bookID, page)
+                case 'delete_all_copy':
+                    return props.onDeleteAllPages(bookID, page)
+                default:
+                    return
+            }
+        },
+        [readerActionButton, props]
+    )
+
+    const bottomButtonLabelFor = (page: PageSimple) => {
+        if (readerActionButton === 'dead_hash') {
+            return page.has_dead_hash
+                ? 'Удалить мертвый хеш'
+                : 'Создать мертвый хеш'
+        }
+
+        return READER_ACTION_BUTTON_OPTIONS.find(
+            (option) => option.value === readerActionButton
+        )?.label
+    }
+
+    // цвета как у соответствующих пунктов в опциях читалки
+    const bottomButtonColor =
+        readerActionButton === 'delete_all_copy' ? 'danger' : 'danger-lite'
+
+    const bottomButtonBold = readerActionButton !== 'dead_hash'
+
+    const isButtonApplicable = (page?: PageSimple) =>
+        page !== undefined && readerActionButton !== 'nothing'
 
     useEffect(() => {
         setCurrentAIndex(0)
@@ -160,22 +208,24 @@ export function DualReaderWidget(props: {
                                     )
                                 }
                             />
-                            <button
-                                className='app'
-                                onClick={() =>
-                                    props.onDeleteAllPagesWithDeadHash(
-                                        props.aBookID,
-                                        currentAPage
-                                    )
-                                }
-                            >
-                                <ColorizedTextWidget
-                                    bold
-                                    color='danger'
+                            {isButtonApplicable(currentAPage) ? (
+                                <button
+                                    className='app'
+                                    onClick={() =>
+                                        bottomButtonAction(
+                                            props.aBookID,
+                                            currentAPage!
+                                        )
+                                    }
                                 >
-                                    Удалить такие страницы
-                                </ColorizedTextWidget>
-                            </button>
+                                    <ColorizedTextWidget
+                                        bold={bottomButtonBold}
+                                        color={bottomButtonColor}
+                                    >
+                                        {bottomButtonLabelFor(currentAPage!)}
+                                    </ColorizedTextWidget>
+                                </button>
+                            ) : null}
                             <span>
                                 {/* это специальная заглушка для равномерного размещения компонентов */}
                             </span>
@@ -223,22 +273,24 @@ export function DualReaderWidget(props: {
                                     )
                                 }
                             />
-                            <button
-                                className='app'
-                                onClick={() =>
-                                    props.onDeleteAllPagesWithDeadHash(
-                                        props.bBookID,
-                                        currentBPage
-                                    )
-                                }
-                            >
-                                <ColorizedTextWidget
-                                    bold
-                                    color='danger'
+                            {isButtonApplicable(currentBPage) ? (
+                                <button
+                                    className='app'
+                                    onClick={() =>
+                                        bottomButtonAction(
+                                            props.bBookID,
+                                            currentBPage!
+                                        )
+                                    }
                                 >
-                                    Удалить такие страницы
-                                </ColorizedTextWidget>
-                            </button>
+                                    <ColorizedTextWidget
+                                        bold={bottomButtonBold}
+                                        color={bottomButtonColor}
+                                    >
+                                        {bottomButtonLabelFor(currentBPage!)}
+                                    </ColorizedTextWidget>
+                                </button>
+                            ) : null}
                             <span>
                                 {/* это специальная заглушка для равномерного размещения компонентов */}
                             </span>

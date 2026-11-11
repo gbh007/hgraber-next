@@ -350,30 +350,6 @@ export function CompareBookScreen() {
                             })
                         )
                     }}
-                    onDeleteAllPagesWithDeadHash={(
-                        bookID: string,
-                        page: PageSimple
-                    ) => {
-                        if (
-                            !confirm(
-                                'Удалить такие страницы и добавить их в мертвый хеш? (ЭТО НЕОБРАТИМО)'
-                            )
-                        ) {
-                            return
-                        }
-
-                        doDeletePage({
-                            type: 'all_copy',
-                            book_id: bookID,
-                            page_number: page.page_number,
-                            set_dead_hash: true,
-                        }).then(() =>
-                            doCompare({
-                                origin_book_id: originBookID,
-                                target_book_id: targetBookID,
-                            })
-                        )
-                    }}
                     aPageCount={compareResult.data.origin.page_count}
                     bPageCount={compareResult.data.target.page_count}
                     aPages={originPages}

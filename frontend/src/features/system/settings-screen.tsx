@@ -1,7 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import { ThemeContext } from '../../core/context'
 import { useUserLogin } from '../../apiclient/api-system'
-import { useAppSettings } from '../../apiclient/settings'
+import {
+    DEFAULT_READER_ACTION_BUTTON,
+    READER_ACTION_BUTTON_OPTIONS,
+    useAppSettings,
+} from '../../apiclient/settings'
 import { ContainerWidget, ErrorTextWidget } from '../../widgets/design-system'
 
 export function SettingsScreen() {
@@ -83,6 +87,34 @@ export function SettingsScreen() {
                     Авторизоваться
                 </button>
             </ContainerWidget>
+            <ContainerWidget
+                appContainer
+                direction='column'
+                gap='medium'
+            >
+                <b>Кнопка внизу читалки</b>
+                {READER_ACTION_BUTTON_OPTIONS.map((option) => (
+                    <label key={option.value}>
+                        <input
+                            className='app'
+                            type='radio'
+                            checked={
+                                (appSettings.reader_action_button ??
+                                    DEFAULT_READER_ACTION_BUTTON) ===
+                                option.value
+                            }
+                            onChange={() =>
+                                setSettings({
+                                    ...appSettings,
+                                    reader_action_button: option.value,
+                                })
+                            }
+                        />
+                        <span>{option.label}</span>
+                    </label>
+                ))}
+            </ContainerWidget>
+
             <ContainerWidget
                 appContainer
                 direction='column'
