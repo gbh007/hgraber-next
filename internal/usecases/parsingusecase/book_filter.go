@@ -10,17 +10,34 @@ import (
 	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
+// filterHasConditions вернет true, если фильтр задает хотя бы одно условие,
+// требующее проверки разобранной книги.
+func filterHasConditions(filter core.BookFilter) bool {
+	return filter.Fields.Name != "" ||
+		len(filter.Fields.Attributes) > 0 ||
+		filter.PageCountFrom > 0 ||
+		filter.PageCountTo > 0
+}
+
 // bookMatchesFilter проверит попадание разобранной книги под фильтр.
 // Семантика условий аналогична SQL версии построения запроса (см. build_books_filter.go).
-// Учитываются только Fields.Name и Fields.Attributes, остальное игнорируется.
+// Учитываются только Fields.Name, Fields.Attributes и диапазон PageCount, остальное игнорируется.
 //
 //nolint:cyclop // switch по всем типам условий
 func bookMatchesFilter(filter core.BookFilter, book hproxymodel.Book) bool {
-	if filter.Fields.Name == "" && len(filter.Fields.Attributes) == 0 {
+	if !filterHasConditions(filter) {
 		return true
 	}
 
 	if filter.Fields.Name != "" && !matchLike(filter.Fields.Name, book.Name) {
+		return false
+	}
+
+	if filter.PageCountFrom > 0 && book.PageCount < filter.PageCountFrom {
+		return false
+	}
+
+	if filter.PageCountTo > 0 && book.PageCount >= filter.PageCountTo {
 		return false
 	}
 

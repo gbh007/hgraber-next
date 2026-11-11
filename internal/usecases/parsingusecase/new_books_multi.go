@@ -115,7 +115,7 @@ urlLoop:
 
 				// Разбор деталей нужен только для проверки фильтра,
 				// без него не тратим время на дорогой вызов.
-				if len(flags.Filter.Fields.Attributes) > 0 || flags.Filter.Fields.Name != "" {
+				if filterHasConditions(flags.Filter) {
 					pageCountLimit := 0
 
 					extendInfo, err := uc.agentSystem.BookParse(ctx, agent.ID, u, &pageCountLimit)

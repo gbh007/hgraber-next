@@ -49,6 +49,14 @@ func (c *Controller) bookListTool() server.ServerTool {
 				"filter.tags",
 				mcp.WithStringItems(),
 			),
+			mcp.WithNumber(
+				"filter.page_count_from",
+				mcp.Description("page count from"),
+			),
+			mcp.WithNumber(
+				"filter.page_count_to",
+				mcp.Description("page count to"),
+			),
 			mcp.WithString(
 				"sort.by",
 				mcp.Enum(
@@ -75,9 +83,12 @@ func (c *Controller) bookListTool() server.ServerTool {
 				Fields: core.BookFilterFields{
 					Name: request.GetString("filter.name", ""),
 				},
-				Desc:   request.GetString("sort order", "") == "desc",
+				Desc:   request.GetString("sort.order", "") == "desc",
 				Limit:  request.GetInt("limit", 0),
 				Offset: request.GetInt("offset", 0),
+
+				PageCountFrom: request.GetInt("filter.page_count_from", 0),
+				PageCountTo:   request.GetInt("filter.page_count_to", 0),
 			}
 
 			if v := request.GetStringSlice("filter.authors", nil); len(v) > 0 {
@@ -136,7 +147,7 @@ func (c *Controller) bookListTool() server.ServerTool {
 				})
 			}
 
-			switch request.GetString("sort by", "") {
+			switch request.GetString("sort.by", "") {
 			case "page count":
 				filter.OrderBy = core.BookFilterOrderByPageCount
 			case "name":

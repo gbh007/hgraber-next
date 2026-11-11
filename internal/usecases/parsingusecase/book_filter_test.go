@@ -365,6 +365,93 @@ func TestBookMatchesFilter(t *testing.T) {
 			book: hproxymodel.Book{},
 			want: true,
 		},
+		{
+			desc: "page_count от совпало",
+			filter: core.BookFilter{
+				PageCountFrom: 10,
+			},
+			book: hproxymodel.Book{
+				PageCount: 10,
+			},
+			want: true,
+		},
+		{
+			desc: "page_count от меньше",
+			filter: core.BookFilter{
+				PageCountFrom: 10,
+			},
+			book: hproxymodel.Book{
+				PageCount: 9,
+			},
+			want: false,
+		},
+		{
+			desc: "page_count до совпало",
+			filter: core.BookFilter{
+				PageCountTo: 10,
+			},
+			book: hproxymodel.Book{
+				PageCount: 9,
+			},
+			want: true,
+		},
+		{
+			desc: "page_count до не совпало",
+			filter: core.BookFilter{
+				PageCountTo: 10,
+			},
+			book: hproxymodel.Book{
+				PageCount: 10,
+			},
+			want: false,
+		},
+		{
+			desc: "page_count диапазон внутри",
+			filter: core.BookFilter{
+				PageCountFrom: 10,
+				PageCountTo:   100,
+			},
+			book: hproxymodel.Book{
+				PageCount: 50,
+			},
+			want: true,
+		},
+		{
+			desc: "page_count диапазон, нет данных",
+			filter: core.BookFilter{
+				PageCountFrom: 10,
+			},
+			book: hproxymodel.Book{},
+			want: false,
+		},
+		{
+			desc: "page_count диапазон и имя, имя не совпало",
+			filter: core.BookFilter{
+				PageCountFrom: 10,
+				Fields: core.BookFilterFields{
+					Name: "мир",
+				},
+			},
+			book: hproxymodel.Book{
+				Name:      "что-то другое",
+				PageCount: 50,
+			},
+			want: false,
+		},
+		{
+			desc: "page_count диапазон и имя, оба совпали",
+			filter: core.BookFilter{
+				PageCountFrom: 10,
+				Fields: core.BookFilterFields{
+					Name: "мир",
+				},
+			},
+			book: hproxymodel.Book{
+				Name:      "в мире животных",
+				PageCount: 50,
+			},
+			want: true,
+		},
 	}
 
 	for _, tc := range testCases {

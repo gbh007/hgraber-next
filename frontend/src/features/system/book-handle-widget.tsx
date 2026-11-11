@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSystemHandle } from '../../apiclient/api-system'
+import { BookFilter } from '../../apiclient/gen/hGraberNext.schemas'
+import { BookFilterWidget } from '../../widgets/book/book-filter-widget'
 import { ParseDetailsWidget } from './parse-details-widget'
 import { ContainerWidget, ErrorTextWidget } from '../../widgets/design-system'
 
@@ -8,6 +10,7 @@ export function BookHandleWidget() {
     const [isMultiParse, setIsMultiParse] = useState(false)
     const [isAutoVerify, setIsAutoVerify] = useState(false)
     const [isReadOnlyMode, setIsReadOnlyMode] = useState(false)
+    const [filter, setFilter] = useState<BookFilter>({})
 
     const [systemHandleResponse, doSystemHandle] = useSystemHandle()
 
@@ -87,12 +90,20 @@ export function BookHandleWidget() {
                                 is_multi: isMultiParse,
                                 auto_verify: isAutoVerify,
                                 read_only_mode: isReadOnlyMode,
+                                filter: filter,
                             })
                         }}
                         disabled={systemHandleResponse.isLoading}
                     >
                         Загрузить
                     </button>
+                    <details>
+                        <summary>Фильтр загрузки</summary>
+                        <BookFilterWidget
+                            value={filter}
+                            onChange={setFilter}
+                        />
+                    </details>
                 </ContainerWidget>
                 <ContainerWidget direction='column'>
                     <ErrorTextWidget value={systemHandleResponse} />
@@ -107,6 +118,10 @@ export function BookHandleWidget() {
                     <div>
                         <b>Дубликаты: </b>
                         {systemHandleResponse.data?.duplicate_count || 0}
+                    </div>
+                    <div>
+                        <b>Пропущено: </b>
+                        {systemHandleResponse.data?.skipped_count || 0}
                     </div>
                     <div>
                         <b>Ошибки: </b>

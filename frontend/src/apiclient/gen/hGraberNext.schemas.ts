@@ -263,6 +263,16 @@ export type BookFilterFilterCreatedAt = {
 };
 
 /**
+ * Фильтрация по количеству страниц книги
+ */
+export type BookFilterFilterPageCount = {
+  /** Количество страниц от */
+  from?: number;
+  /** Количество страниц до */
+  to?: number;
+};
+
+/**
  * Различные флаги
  */
 export type BookFilterFilterFlags = {
@@ -338,6 +348,8 @@ export type BookFilterFilter = {
   name?: string;
   /** Фильтрация по дате создания книги */
   created_at?: BookFilterFilterCreatedAt;
+  /** Фильтрация по количеству страниц книги */
+  page_count?: BookFilterFilterPageCount;
   /** Различные флаги */
   flags?: BookFilterFilterFlags;
   /** Фильтр по атрибутам */

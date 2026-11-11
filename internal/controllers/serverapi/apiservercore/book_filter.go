@@ -74,6 +74,9 @@ func ConvertAPIBookFilter(req serverapi.BookFilter) core.BookFilter {
 	filter.From = req.Filter.Value.CreatedAt.Value.From.Value
 	filter.To = req.Filter.Value.CreatedAt.Value.To.Value
 
+	filter.PageCountFrom = req.Filter.Value.PageCount.Value.From.Value
+	filter.PageCountTo = req.Filter.Value.PageCount.Value.To.Value
+
 	filter.Fields.Attributes = make([]core.BookFilterAttribute, 0, len(req.Filter.Value.Attributes))
 
 	for _, attr := range req.Filter.Value.Attributes {

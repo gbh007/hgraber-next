@@ -145,6 +145,65 @@ export function BookFilterWidget(props: {
             <ContainerWidget
                 direction='row'
                 gap='small'
+                wrap
+            >
+                <span>Страниц</span>
+                <label>
+                    <span>От</span>
+                    <input
+                        className='app'
+                        type='number'
+                        min={1}
+                        value={
+                            props.value.filter?.page_count?.from ?? ''
+                        }
+                        onChange={(e) => {
+                            const v = Number(e.target.value)
+
+                            props.onChange({
+                                ...props.value,
+                                filter: {
+                                    ...props.value.filter,
+                                    page_count: {
+                                        ...props.value.filter?.page_count,
+                                        from: v > 0 ? v : undefined,
+                                    },
+                                },
+                            })
+                        }}
+                        placeholder='От'
+                        autoComplete='off'
+                    />
+                </label>
+                <label>
+                    <span>До</span>
+                    <input
+                        className='app'
+                        type='number'
+                        min={1}
+                        value={props.value.filter?.page_count?.to ?? ''}
+                        onChange={(e) => {
+                            const v = Number(e.target.value)
+
+                            props.onChange({
+                                ...props.value,
+                                filter: {
+                                    ...props.value.filter,
+                                    page_count: {
+                                        ...props.value.filter?.page_count,
+                                        to: v > 0 ? v : undefined,
+                                    },
+                                },
+                            })
+                        }}
+                        placeholder='До'
+                        autoComplete='off'
+                    />
+                </label>
+            </ContainerWidget>
+            <ContainerWidget
+                direction='row'
+                gap='small'
             >
                 <span>Название</span>
                 <input

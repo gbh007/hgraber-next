@@ -80,6 +80,9 @@ type BookFilter struct {
 	From time.Time
 	To   time.Time
 
+	PageCountFrom int
+	PageCountTo   int
+
 	OriginAttributes bool
 
 	ShowDeleted        BookFilterShowType

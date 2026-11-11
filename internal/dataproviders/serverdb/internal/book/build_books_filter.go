@@ -142,6 +142,18 @@ func (repo *BookRepo) buildBooksFilter(
 		})
 	}
 
+	if filter.PageCountFrom > 0 {
+		builder = builder.Where(squirrel.GtOrEq{
+			bookTable.ColumnPageCount(): filter.PageCountFrom,
+		})
+	}
+
+	if filter.PageCountTo > 0 {
+		builder = builder.Where(squirrel.Lt{
+			bookTable.ColumnPageCount(): filter.PageCountTo,
+		})
+	}
+
 	switch filter.ShowDeleted {
 	case core.BookFilterShowTypeOnly:
 		builder = builder.Where(squirrel.Eq{bookTable.ColumnDeleted(): true})

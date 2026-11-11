@@ -6974,6 +6974,8 @@ type BookFilterFilter struct {
 	Name OptString `json:"name"`
 	// Фильтрация по дате создания книги.
 	CreatedAt OptBookFilterFilterCreatedAt `json:"created_at"`
+	// Фильтрация по количеству страниц книги.
+	PageCount OptBookFilterFilterPageCount `json:"page_count"`
 	// Различные флаги.
 	Flags OptBookFilterFilterFlags `json:"flags"`
 	// Фильтр по атрибутам.
@@ -6991,6 +6993,11 @@ func (s *BookFilterFilter) GetName() OptString {
 // GetCreatedAt returns the value of CreatedAt.
 func (s *BookFilterFilter) GetCreatedAt() OptBookFilterFilterCreatedAt {
 	return s.CreatedAt
+}
+
+// GetPageCount returns the value of PageCount.
+func (s *BookFilterFilter) GetPageCount() OptBookFilterFilterPageCount {
+	return s.PageCount
 }
 
 // GetFlags returns the value of Flags.
@@ -7016,6 +7023,11 @@ func (s *BookFilterFilter) SetName(val OptString) {
 // SetCreatedAt sets the value of CreatedAt.
 func (s *BookFilterFilter) SetCreatedAt(val OptBookFilterFilterCreatedAt) {
 	s.CreatedAt = val
+}
+
+// SetPageCount sets the value of PageCount.
+func (s *BookFilterFilter) SetPageCount(val OptBookFilterFilterPageCount) {
+	s.PageCount = val
 }
 
 // SetFlags sets the value of Flags.
@@ -7365,6 +7377,34 @@ func (s *BookFilterFilterLabelsItemType) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+// Фильтрация по количеству страниц книги.
+type BookFilterFilterPageCount struct {
+	// Количество страниц от.
+	From OptInt `json:"from"`
+	// Количество страниц до.
+	To OptInt `json:"to"`
+}
+
+// GetFrom returns the value of From.
+func (s *BookFilterFilterPageCount) GetFrom() OptInt {
+	return s.From
+}
+
+// GetTo returns the value of To.
+func (s *BookFilterFilterPageCount) GetTo() OptInt {
+	return s.To
+}
+
+// SetFrom sets the value of From.
+func (s *BookFilterFilterPageCount) SetFrom(val OptInt) {
+	s.From = val
+}
+
+// SetTo sets the value of To.
+func (s *BookFilterFilterPageCount) SetTo(val OptInt) {
+	s.To = val
 }
 
 // Выбор для значений флага книги.
@@ -9375,6 +9415,52 @@ func (o OptBookFilterFilterFlags) Get() (v BookFilterFilterFlags, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptBookFilterFilterFlags) Or(d BookFilterFilterFlags) BookFilterFilterFlags {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptBookFilterFilterPageCount returns new OptBookFilterFilterPageCount with value set to v.
+func NewOptBookFilterFilterPageCount(v BookFilterFilterPageCount) OptBookFilterFilterPageCount {
+	return OptBookFilterFilterPageCount{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookFilterFilterPageCount is optional BookFilterFilterPageCount.
+type OptBookFilterFilterPageCount struct {
+	Value BookFilterFilterPageCount
+	Set   bool
+}
+
+// IsSet returns true if OptBookFilterFilterPageCount was set.
+func (o OptBookFilterFilterPageCount) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookFilterFilterPageCount) Reset() {
+	var v BookFilterFilterPageCount
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookFilterFilterPageCount) SetTo(v BookFilterFilterPageCount) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookFilterFilterPageCount) Get() (v BookFilterFilterPageCount, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookFilterFilterPageCount) Or(d BookFilterFilterPageCount) BookFilterFilterPageCount {
 	if v, ok := o.Get(); ok {
 		return v
 	}

@@ -4586,6 +4586,16 @@ components:
                   type: string
                   format: date-time
                   description: Время создание книги до
+            page_count:
+              type: object
+              description: Фильтрация по количеству страниц книги
+              properties:
+                from:
+                  type: integer
+                  description: Количество страниц от
+                to:
+                  type: integer
+                  description: Количество страниц до
             flags:
               type: object
               description: Различные флаги

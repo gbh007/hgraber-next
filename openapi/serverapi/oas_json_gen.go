@@ -19112,6 +19112,12 @@ func (s *BookFilterFilter) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.PageCount.Set {
+			e.FieldStart("page_count")
+			s.PageCount.Encode(e)
+		}
+	}
+	{
 		if s.Flags.Set {
 			e.FieldStart("flags")
 			s.Flags.Encode(e)
@@ -19139,12 +19145,13 @@ func (s *BookFilterFilter) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfBookFilterFilter = [5]string{
+var jsonFieldsNameOfBookFilterFilter = [6]string{
 	0: "name",
 	1: "created_at",
-	2: "flags",
-	3: "attributes",
-	4: "labels",
+	2: "page_count",
+	3: "flags",
+	4: "attributes",
+	5: "labels",
 }
 
 // Decode decodes BookFilterFilter from json.
@@ -19174,6 +19181,16 @@ func (s *BookFilterFilter) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"created_at\"")
+			}
+		case "page_count":
+			if err := func() error {
+				s.PageCount.Reset()
+				if err := s.PageCount.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_count\"")
 			}
 		case "flags":
 			if err := func() error {
@@ -19875,6 +19892,86 @@ func (s BookFilterFilterLabelsItemType) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *BookFilterFilterLabelsItemType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *BookFilterFilterPageCount) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *BookFilterFilterPageCount) encodeFields(e *jx.Encoder) {
+	{
+		if s.From.Set {
+			e.FieldStart("from")
+			s.From.Encode(e)
+		}
+	}
+	{
+		if s.To.Set {
+			e.FieldStart("to")
+			s.To.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfBookFilterFilterPageCount = [2]string{
+	0: "from",
+	1: "to",
+}
+
+// Decode decodes BookFilterFilterPageCount from json.
+func (s *BookFilterFilterPageCount) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BookFilterFilterPageCount to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "from":
+			if err := func() error {
+				s.From.Reset()
+				if err := s.From.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"from\"")
+			}
+		case "to":
+			if err := func() error {
+				s.To.Reset()
+				if err := s.To.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"to\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode BookFilterFilterPageCount")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *BookFilterFilterPageCount) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BookFilterFilterPageCount) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -23305,6 +23402,39 @@ func (s OptBookFilterFilterFlags) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptBookFilterFilterFlags) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes BookFilterFilterPageCount as json.
+func (o OptBookFilterFilterPageCount) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes BookFilterFilterPageCount from json.
+func (o *OptBookFilterFilterPageCount) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptBookFilterFilterPageCount to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptBookFilterFilterPageCount) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptBookFilterFilterPageCount) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
