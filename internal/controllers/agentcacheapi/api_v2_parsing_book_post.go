@@ -5,7 +5,6 @@ import (
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 	"github.com/samber/lo"
 )
@@ -29,7 +28,7 @@ func (c *Controller) APIV2ParsingBookPost(
 		URL:       u,
 		Name:      details.Book.Name,
 		PageCount: details.Book.PageCount,
-		Attributes: pkg.MapToSlice(
+		Attributes: lo.MapToSlice(
 			details.Attributes,
 			func(code string, values []string) agentapi.BookDetailsAttributesItem {
 				return agentapi.BookDetailsAttributesItem{
@@ -42,7 +41,7 @@ func (c *Controller) APIV2ParsingBookPost(
 				}
 			},
 		),
-		Pages: pkg.Map(details.Pages, func(p core.Page) agentapi.BookDetailsPagesItem {
+		Pages: lo.Map(details.Pages, func(p core.Page, _ int) agentapi.BookDetailsPagesItem {
 			var u url.URL
 
 			if p.OriginURL != nil {

@@ -5,16 +5,16 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/dataproviders/serverdb/internal/model"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (repo *DeadHashRepo) SetDeadHashes(ctx context.Context, hashes []core.DeadHash) error {
 	table := model.DeadHashTable
 
-	batches := pkg.Batching(hashes, 5000) //nolint:mnd // отдельная константа не нужна
+	batches := lo.Chunk(hashes, 5000) //nolint:mnd // отдельная константа не нужна
 
 	for _, batch := range batches {
 		builder := squirrel.Insert(table.Name()).

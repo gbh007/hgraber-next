@@ -7,11 +7,11 @@ import (
 	"slices"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/internal/domain/systemmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (uc *UseCase) DeduplicateFiles(_ context.Context) (systemmodel.RunnableTask, error) {
@@ -46,7 +46,7 @@ func (uc *UseCase) deduplicateFiles(
 		return count, size, err
 	}
 
-	storageMap := pkg.SliceToMap(storages, func(s fsmodel.FileStorageSystem) (uuid.UUID, fsmodel.FileStorageSystem) {
+	storageMap := lo.SliceToMap(storages, func(s fsmodel.FileStorageSystem) (uuid.UUID, fsmodel.FileStorageSystem) {
 		return s.ID, s
 	})
 

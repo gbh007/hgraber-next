@@ -5,8 +5,8 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *DeduplicateHandlersController) APIDeduplicateBookByPageBodyPost(
@@ -20,9 +20,9 @@ func (c *DeduplicateHandlersController) APIDeduplicateBookByPageBodyPost(
 
 	//nolint:staticcheck // поля используются в API
 	return &serverapi.APIDeduplicateBookByPageBodyPostOK{
-		Result: pkg.Map(
+		Result: lo.Map(
 			data,
-			func(raw bff.DeduplicateBookResult) serverapi.APIDeduplicateBookByPageBodyPostOKResultItem {
+			func(raw bff.DeduplicateBookResult, _ int) serverapi.APIDeduplicateBookByPageBodyPostOKResultItem {
 				//nolint:golines,lll // будет исправлено позднее
 				return serverapi.APIDeduplicateBookByPageBodyPostOKResultItem{
 					Book:                                 c.apiCore.ConvertSimpleBook(ctx, raw.TargetBook, raw.PreviewPage),

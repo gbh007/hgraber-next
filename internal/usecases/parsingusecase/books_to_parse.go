@@ -9,7 +9,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 func (uc *UseCase) BooksToParse(ctx context.Context) ([]serveragentdto.BookWithAgent, error) {
@@ -29,7 +29,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]serveragentdto.BookWithA
 		return nil, fmt.Errorf("get agents: %w", err)
 	}
 
-	books = pkg.SliceFilter(books, func(b core.Book) bool {
+	books = lo.Filter(books, func(b core.Book, _ int) bool {
 		hasURL := b.OriginURL != nil
 		if !hasURL {
 			uc.logger.WarnContext(
@@ -43,7 +43,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]serveragentdto.BookWithA
 
 	toParse := make([]serveragentdto.BookWithAgent, 0, len(books))
 
-	urlMap := pkg.SliceToMap(books, func(b core.Book) (url.URL, core.Book) {
+	urlMap := lo.SliceToMap(books, func(b core.Book) (url.URL, core.Book) {
 		return *b.OriginURL, b
 	})
 
@@ -55,7 +55,7 @@ func (uc *UseCase) BooksToParse(ctx context.Context) ([]serveragentdto.BookWithA
 		booksInfo, err := uc.agentSystem.BooksCheck(
 			ctx,
 			agent.ID,
-			pkg.MapToSlice(urlMap, func(_ url.URL, b core.Book) url.URL {
+			lo.MapToSlice(urlMap, func(_ url.URL, b core.Book) url.URL {
 				return *b.OriginURL
 			}),
 		)

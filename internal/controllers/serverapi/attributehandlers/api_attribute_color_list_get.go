@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *AttributeHandlersController) APIAttributeColorListGet(
@@ -17,7 +17,7 @@ func (c *AttributeHandlersController) APIAttributeColorListGet(
 	}
 
 	return &serverapi.APIAttributeColorListGetOK{
-		Colors: pkg.Map(colors, func(raw core.AttributeColor) serverapi.AttributeColor {
+		Colors: lo.Map(colors, func(raw core.AttributeColor, _ int) serverapi.AttributeColor {
 			return serverapi.AttributeColor(raw)
 		}),
 	}, nil

@@ -7,11 +7,11 @@ import (
 	"slices"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 //nolint:cyclop,funlen // будет исправлено позднее
@@ -157,7 +157,7 @@ func (uc *UseCase) BookDetails(ctx context.Context, bookID uuid.UUID) (bff.BookD
 }
 
 func convertAttributes(attributes []core.Attribute) map[string]core.Attribute {
-	return pkg.SliceToMap(attributes, func(attribute core.Attribute) (string, core.Attribute) {
+	return lo.SliceToMap(attributes, func(attribute core.Attribute) (string, core.Attribute) {
 		return attribute.Code, attribute
 	})
 }
@@ -168,11 +168,11 @@ func (uc *UseCase) convertBookAttributes(
 	bookAttributes map[string][]string,
 	withMassload bool,
 ) []bff.AttributeToWeb {
-	result := pkg.MapToSlice(bookAttributes, func(code string, values []string) bff.AttributeToWeb {
+	result := lo.MapToSlice(bookAttributes, func(code string, values []string) bff.AttributeToWeb {
 		return bff.AttributeToWeb{
 			Code: code,
 			Name: attributes[code].PluralName,
-			Values: pkg.Map(values, func(v string) bff.AttributeToWebValue {
+			Values: lo.Map(values, func(v string, _ int) bff.AttributeToWebValue {
 				var (
 					mlByAttr []massloadmodel.Massload
 					err      error
@@ -191,7 +191,7 @@ func (uc *UseCase) convertBookAttributes(
 
 				return bff.AttributeToWebValue{
 					Name: v,
-					MassloadsByName: pkg.Map(mlByAttr, func(ml massloadmodel.Massload) bff.MassloadInfo {
+					MassloadsByName: lo.Map(mlByAttr, func(ml massloadmodel.Massload, _ int) bff.MassloadInfo {
 						return bff.MassloadInfo{
 							ID:   ml.ID,
 							Name: ml.Name,

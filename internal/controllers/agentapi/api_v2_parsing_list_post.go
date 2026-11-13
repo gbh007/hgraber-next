@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gbh007/hgraber-next/external/parserdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
+	"github.com/samber/lo"
 )
 
 func (c *Controller) APIV2ParsingListPost(
@@ -32,7 +32,7 @@ func (c *Controller) APIV2ParsingListPost(
 	}
 
 	return &agentapi.APIV2ParsingListPostOK{
-		Results: pkg.Map(list.Units, func(u parserdto.BookListUnit) agentapi.APIV2ParsingListPostOKResultsItem {
+		Results: lo.Map(list.Units, func(u parserdto.BookListUnit, _ int) agentapi.APIV2ParsingListPostOKResultsItem {
 			var t agentapi.APIV2ParsingListPostOKResultsItemType
 
 			switch u.Type {

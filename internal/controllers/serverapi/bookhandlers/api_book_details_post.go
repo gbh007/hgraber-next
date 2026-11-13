@@ -8,8 +8,8 @@ import (
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *BookHandlersController) APIBookDetailsPost(
@@ -32,8 +32,10 @@ func (c *BookHandlersController) APIBookDetailsPost(
 	return &serverapi.APIBookDetailsPostOK{
 		Info:              c.apiCore.ConvertSimpleBook(ctx, book.Book, book.PreviewPage),
 		PageLoadedPercent: book.PageDownloadPercent(),
-		Attributes:        pkg.Map(book.Attributes, apiservercore.ConvertBookAttribute),
-		Pages: pkg.Map(book.Pages, func(page bff.PreviewPage) serverapi.PageSimple {
+		Attributes: lo.Map(book.Attributes, func(attr bff.AttributeToWeb, _ int) serverapi.BookAttribute {
+			return apiservercore.ConvertBookAttribute(attr)
+		}),
+		Pages: lo.Map(book.Pages, func(page bff.PreviewPage, _ int) serverapi.PageSimple {
 			return c.apiCore.ConvertPreviewPage(ctx, page)
 		}),
 		Size: serverapi.OptAPIBookDetailsPostOKSize{
@@ -58,9 +60,9 @@ func (c *BookHandlersController) APIBookDetailsPost(
 			},
 			Set: book.Size.Total > 0,
 		},
-		FsDisposition: pkg.Map(
+		FsDisposition: lo.Map(
 			book.FSDisposition,
-			func(raw bff.BookDetailsFSDisposition) serverapi.APIBookDetailsPostOKFsDispositionItem {
+			func(raw bff.BookDetailsFSDisposition, _ int) serverapi.APIBookDetailsPostOKFsDispositionItem {
 				return serverapi.APIBookDetailsPostOKFsDispositionItem{
 					ID:   raw.ID,
 					Name: raw.Name,

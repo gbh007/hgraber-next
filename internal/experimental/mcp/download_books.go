@@ -7,9 +7,9 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (c *Controller) downloadBooksTool() server.ServerTool {
@@ -32,7 +32,7 @@ func (c *Controller) downloadBooksTool() server.ServerTool {
 			),
 		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			urls, err := pkg.MapWithError(request.GetStringSlice("urls", nil), func(s string) (url.URL, error) {
+			urls, err := lo.MapErr(request.GetStringSlice("urls", nil), func(s string, _ int) (url.URL, error) {
 				u, err := url.Parse(s)
 				if err != nil {
 					return url.URL{}, fmt.Errorf("parse url: %w", err)

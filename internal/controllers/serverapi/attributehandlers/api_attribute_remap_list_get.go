@@ -5,8 +5,8 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *AttributeHandlersController) APIAttributeRemapListGet(
@@ -18,7 +18,7 @@ func (c *AttributeHandlersController) APIAttributeRemapListGet(
 	}
 
 	return &serverapi.APIAttributeRemapListGetOK{
-		Remaps: pkg.Map(colors, func(raw core.AttributeRemap) serverapi.AttributeRemap { //nolint:gocritic,golines,lll // не понятно в чем проблема
+		Remaps: lo.Map(colors, func(raw core.AttributeRemap, _ int) serverapi.AttributeRemap { //nolint:gocritic,golines,lll // не понятно в чем проблема
 			return apiservercore.ConvertAttributeRemapToAPI(raw)
 		}),
 	}, nil

@@ -7,7 +7,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 func (uc *UseCase) MassloadForUpdate(ctx context.Context) ([]massloadmodel.Massload, error) {
@@ -32,7 +32,7 @@ func (uc *UseCase) UpdateSize(ctx context.Context, ml massloadmodel.Massload) er
 	}
 
 	for code, values := range attrMap {
-		attrMap[code] = pkg.Unique(values)
+		attrMap[code] = lo.Union(values)
 	}
 
 	filesInfo, err := uc.storage.AttributesFileSize(ctx, attrMap)
@@ -47,7 +47,7 @@ func (uc *UseCase) UpdateSize(ctx context.Context, ml massloadmodel.Massload) er
 
 	bookCount, err := uc.storage.BookCount(ctx, core.BookFilter{
 		Fields: core.BookFilterFields{
-			Attributes: pkg.MapToSlice(attrMap, func(k string, v []string) core.BookFilterAttribute {
+			Attributes: lo.MapToSlice(attrMap, func(k string, v []string) core.BookFilterAttribute {
 				return core.BookFilterAttribute{
 					Code:   k,
 					Type:   core.BookFilterAttributeTypeIn,
@@ -106,7 +106,7 @@ func (uc *UseCase) UpdateAttributesSize(ctx context.Context, attr massloadmodel.
 
 	bookCount, err := uc.storage.BookCount(ctx, core.BookFilter{
 		Fields: core.BookFilterFields{
-			Attributes: pkg.MapToSlice(attrMap, func(k string, v []string) core.BookFilterAttribute {
+			Attributes: lo.MapToSlice(attrMap, func(k string, v []string) core.BookFilterAttribute {
 				return core.BookFilterAttribute{
 					Code:   k,
 					Type:   core.BookFilterAttributeTypeIn,

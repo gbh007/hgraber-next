@@ -7,7 +7,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 // filterHasConditions вернет true, если фильтр задает хотя бы одно условие,
@@ -104,7 +104,7 @@ func bookMatchesFilter(filter core.BookFilter, book hproxymodel.Book) bool {
 func parsedAttributeValues(book hproxymodel.Book, code string) []string {
 	for _, attr := range book.Attributes {
 		if attr.Code == code {
-			return pkg.Unique(attr.StringValues())
+			return lo.Union(attr.StringValues())
 		}
 	}
 

@@ -5,8 +5,8 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *DeduplicateHandlersController) APIDeduplicateArchivePost(
@@ -18,7 +18,7 @@ func (c *DeduplicateHandlersController) APIDeduplicateArchivePost(
 		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
-	return pkg.Map(data, func(raw core.DeduplicateArchiveResult) serverapi.APIDeduplicateArchivePostOKItem {
+	return lo.Map(data, func(raw core.DeduplicateArchiveResult, _ int) serverapi.APIDeduplicateArchivePostOKItem {
 		return serverapi.APIDeduplicateArchivePostOKItem{
 			BookID:                 raw.TargetBookID,
 			BookOriginURL:          apiservercore.OptURL(raw.OriginBookURL),

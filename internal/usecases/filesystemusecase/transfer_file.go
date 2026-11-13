@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (uc *UseCase) TransferFSFiles(ctx context.Context, from, to uuid.UUID, onlyPreview bool) error {
@@ -26,7 +26,7 @@ func (uc *UseCase) TransferFSFiles(ctx context.Context, from, to uuid.UUID, only
 		return fmt.Errorf("storage: file ids by filter: %w", err)
 	}
 
-	uc.tmpStorage.AddToFileTransfer(pkg.Map(ids, func(fileID uuid.UUID) fsmodel.FileTransfer {
+	uc.tmpStorage.AddToFileTransfer(lo.Map(ids, func(fileID uuid.UUID, _ int) fsmodel.FileTransfer {
 		return fsmodel.FileTransfer{
 			FileID: fileID,
 			FSID:   to,
@@ -47,7 +47,7 @@ func (uc *UseCase) TransferFSFilesByBook(ctx context.Context, bookID, to uuid.UU
 		return fmt.Errorf("storage: file ids by filter: %w", err)
 	}
 
-	uc.tmpStorage.AddToFileTransfer(pkg.Map(ids, func(fileID uuid.UUID) fsmodel.FileTransfer {
+	uc.tmpStorage.AddToFileTransfer(lo.Map(ids, func(fileID uuid.UUID, _ int) fsmodel.FileTransfer {
 		return fsmodel.FileTransfer{
 			FileID: fileID,
 			FSID:   to,

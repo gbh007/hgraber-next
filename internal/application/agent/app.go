@@ -23,11 +23,11 @@ import (
 	"github.com/gbh007/hgraber-next/internal/dataproviders/parserloader"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/request"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/internal/usecases/agenthighway"
 	"github.com/gbh007/hgraber-next/internal/usecases/agentimportapiuc"
 	"github.com/gbh007/hgraber-next/internal/usecases/agentimportdeduplicatoruc"
 	"github.com/gbh007/hgraber-next/internal/usecases/agentparseruc"
+	"github.com/samber/lo"
 )
 
 func InitAndServe(parserInits map[string]parserdto.NewParser) {
@@ -202,7 +202,7 @@ func Serve(ctx context.Context, parserInits map[string]parserdto.NewParser) erro
 		)
 	}
 
-	parserNames := pkg.Map(parsers, func(parser parserdto.Parser) string {
+	parserNames := lo.Map(parsers, func(parser parserdto.Parser, _ int) string {
 		return parser.Name()
 	})
 

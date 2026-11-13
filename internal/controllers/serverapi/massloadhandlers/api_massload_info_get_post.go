@@ -6,8 +6,8 @@ import (
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *MassloadController) APIMassloadInfoGetPost(
@@ -48,9 +48,9 @@ func convertMassloadInfo(ml massloadmodel.Massload) serverapi.MassloadInfo {
 
 		CreatedAt: ml.CreatedAt,
 		UpdatedAt: apiservercore.OptTime(ml.UpdatedAt),
-		ExternalLinks: pkg.Map(
+		ExternalLinks: lo.Map(
 			ml.ExternalLinks,
-			func(link massloadmodel.ExternalLink) serverapi.MassloadInfoExternalLinksItem {
+			func(link massloadmodel.ExternalLink, _ int) serverapi.MassloadInfoExternalLinksItem {
 				return serverapi.MassloadInfoExternalLinksItem{
 					URL:           link.URL,
 					AutoCheck:     link.AutoCheck,
@@ -62,7 +62,7 @@ func convertMassloadInfo(ml massloadmodel.Massload) serverapi.MassloadInfo {
 				}
 			},
 		),
-		Attributes: pkg.Map(ml.Attributes, func(attr massloadmodel.Attribute) serverapi.MassloadInfoAttributesItem {
+		Attributes: lo.Map(ml.Attributes, func(attr massloadmodel.Attribute, _ int) serverapi.MassloadInfoAttributesItem {
 			return serverapi.MassloadInfoAttributesItem{
 				Code:  attr.Code,
 				Value: attr.Value,

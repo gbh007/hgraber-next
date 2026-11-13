@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 func (uc *UseCase) handleAttributes(
@@ -83,7 +83,7 @@ func (uc *UseCase) handleAttributes(
 		})
 	}
 
-	newAttrs = pkg.SliceFilter(newAttrs, func(ba hproxymodel.BookAttribute) bool {
+	newAttrs = lo.Filter(newAttrs, func(ba hproxymodel.BookAttribute, _ int) bool {
 		return len(ba.Values) > 0
 	})
 
@@ -106,9 +106,9 @@ func (uc *UseCase) setMassloadToAttributes(
 			}
 
 			if len(mlByAttr) > 0 {
-				newAttrs[i].Values[j].MassloadsByName = pkg.Map(
+				newAttrs[i].Values[j].MassloadsByName = lo.Map(
 					mlByAttr,
-					func(ml massloadmodel.Massload) hproxymodel.MassloadInfo {
+					func(ml massloadmodel.Massload, _ int) hproxymodel.MassloadInfo {
 						return hproxymodel.MassloadInfo{
 							ID:   ml.ID,
 							Name: ml.Name,
@@ -127,9 +127,9 @@ func (uc *UseCase) setMassloadToAttributes(
 			}
 
 			if len(mlByURL) > 0 {
-				newAttrs[i].Values[j].MassloadsByURL = pkg.Map(
+				newAttrs[i].Values[j].MassloadsByURL = lo.Map(
 					mlByURL,
-					func(ml massloadmodel.Massload) hproxymodel.MassloadInfo {
+					func(ml massloadmodel.Massload, _ int) hproxymodel.MassloadInfo {
 						return hproxymodel.MassloadInfo{
 							ID:   ml.ID,
 							Name: ml.Name,
@@ -144,7 +144,7 @@ func (uc *UseCase) setMassloadToAttributes(
 }
 
 func convertAttributes(attributes []core.Attribute) map[string]core.Attribute {
-	return pkg.SliceToMap(attributes, func(attribute core.Attribute) (string, core.Attribute) {
+	return lo.SliceToMap(attributes, func(attribute core.Attribute) (string, core.Attribute) {
 		return attribute.Code, attribute
 	})
 }

@@ -6,10 +6,10 @@ import (
 	"slices"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 //nolint:cyclop,funlen // будет исправлено позднее
@@ -62,7 +62,7 @@ func (uc *UseCase) BookPagesCompare(
 		md5Sums = append(md5Sums, page.Md5Sum)
 	}
 
-	md5Sums = pkg.Unique(md5Sums)
+	md5Sums = lo.Union(md5Sums)
 
 	deadHashes, err := uc.storage.DeadHashesByMD5Sums(ctx, md5Sums)
 	if err != nil {

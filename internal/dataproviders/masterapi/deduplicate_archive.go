@@ -6,8 +6,8 @@ import (
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/internal/domain/agentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *Client) DeduplicateArchive(ctx context.Context, body io.Reader) ([]agentdto.DeduplicateArchiveResult, error) {
@@ -18,7 +18,7 @@ func (c *Client) DeduplicateArchive(ctx context.Context, body io.Reader) ([]agen
 		return nil, enrichError(err)
 	}
 
-	return pkg.Map(res, func(raw serverapi.APIDeduplicateArchivePostOKItem) agentdto.DeduplicateArchiveResult {
+	return lo.Map(res, func(raw serverapi.APIDeduplicateArchivePostOKItem, _ int) agentdto.DeduplicateArchiveResult {
 		var u *url.URL
 
 		if raw.BookOriginURL.IsSet() {

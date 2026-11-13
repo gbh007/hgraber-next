@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 const PossibleAttributeCount = 7
@@ -59,7 +59,7 @@ func MergeAttributeMap(a, b map[string][]string) map[string][]string {
 	maps.Copy(result, a)
 
 	for code, values := range b {
-		result[code] = pkg.Unique(result[code], values)
+		result[code] = lo.Union(result[code], values)
 	}
 
 	for code, values := range result {
@@ -156,7 +156,7 @@ func (rmp AttributeRemaper) Remap(origin map[string][]string) map[string][]strin
 	}
 
 	for code := range attributes {
-		attributes[code] = pkg.Unique(attributes[code])
+		attributes[code] = lo.Union(attributes[code])
 	}
 
 	for code, values := range attributes {

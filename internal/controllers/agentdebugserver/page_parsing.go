@@ -14,7 +14,6 @@ import (
 
 	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/domain/archivemodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/labstack/echo/v4"
 	"github.com/samber/lo"
 )
@@ -80,15 +79,15 @@ func (cnt *Controller) pageParsing(c echo.Context) error {
 			PageCount:        details.PageCount,
 			CreateAt:         time.Now(),
 			AttributesParsed: true,
-			Attributes: pkg.Map(details.Attributes, func(raw parserdto.Attribute) archivemodel.Attribute {
+			Attributes: lo.Map(details.Attributes, func(raw parserdto.Attribute, _ int) archivemodel.Attribute {
 				return archivemodel.Attribute{
 					Code: raw.Code,
-					Values: pkg.Map(raw.Values, func(v parserdto.AttributeValue) string {
+					Values: lo.Map(raw.Values, func(v parserdto.AttributeValue, _ int) string {
 						return v.Value
 					}),
 				}
 			}),
-			Pages: pkg.Map(details.Pages, func(p parserdto.Page) archivemodel.Page {
+			Pages: lo.Map(details.Pages, func(p parserdto.Page, _ int) archivemodel.Page {
 				return archivemodel.Page{
 					PageNumber: p.PageNumber,
 					Ext:        path.Ext(p.Filename),
@@ -116,7 +115,7 @@ func (cnt *Controller) pageParsing(c echo.Context) error {
 
 	buff := &bytes.Buffer{}
 
-	pageUrls := pkg.SliceToMap(details.Pages, func(p parserdto.Page) (int, url.URL) {
+	pageUrls := lo.SliceToMap(details.Pages, func(p parserdto.Page) (int, url.URL) {
 		return p.PageNumber, p.URL
 	})
 

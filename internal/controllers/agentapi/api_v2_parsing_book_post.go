@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gbh007/hgraber-next/external/parserdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
+	"github.com/samber/lo"
 )
 
 func (c *Controller) APIV2ParsingBookPost(
@@ -36,17 +36,17 @@ func (c *Controller) APIV2ParsingBookPost(
 		URL:        details.URL,
 		PreviewURL: OptURL(details.PreviewURL),
 		PageCount:  details.PageCount,
-		Pages: pkg.Map(details.Pages, func(p parserdto.Page) agentapi.BookDetailsPagesItem {
+		Pages: lo.Map(details.Pages, func(p parserdto.Page, _ int) agentapi.BookDetailsPagesItem {
 			return agentapi.BookDetailsPagesItem{
 				PageNumber: p.PageNumber,
 				URL:        p.URL,
 				Filename:   p.Filename,
 			}
 		}),
-		Attributes: pkg.Map(details.Attributes, func(attr parserdto.Attribute) agentapi.BookDetailsAttributesItem {
+		Attributes: lo.Map(details.Attributes, func(attr parserdto.Attribute, _ int) agentapi.BookDetailsAttributesItem {
 			return agentapi.BookDetailsAttributesItem{
 				Code: attr.Code,
-				Values: pkg.Map(attr.Values, func(v parserdto.AttributeValue) agentapi.BookDetailsAttributesItemValuesItem {
+				Values: lo.Map(attr.Values, func(v parserdto.AttributeValue, _ int) agentapi.BookDetailsAttributesItemValuesItem {
 					return agentapi.BookDetailsAttributesItemValuesItem{
 						Name: v.Value,
 						URL:  OptURL(v.URL),

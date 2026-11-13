@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 func BookFromEntity(raw core.BookContainer) Book {
@@ -24,13 +24,13 @@ func BookFromEntity(raw core.BookContainer) Book {
 		CreateAt:         raw.Book.CreateAt,
 		AttributesParsed: raw.Book.AttributesParsed,
 		Labels:           labels[0],
-		Attributes: pkg.MapToSlice(raw.Attributes, func(code string, values []string) Attribute {
+		Attributes: lo.MapToSlice(raw.Attributes, func(code string, values []string) Attribute {
 			return Attribute{
 				Code:   code,
 				Values: values,
 			}
 		}),
-		Pages: pkg.Map(raw.Pages, func(p core.Page) Page {
+		Pages: lo.Map(raw.Pages, func(p core.Page, _ int) Page {
 			u := ""
 			if p.OriginURL != nil {
 				u = p.OriginURL.String()

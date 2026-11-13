@@ -12,7 +12,7 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownloadWithAgent, error) {
@@ -32,7 +32,7 @@ func (uc *UseCase) PagesToDownload(ctx context.Context) ([]parsing.PageForDownlo
 		return nil, fmt.Errorf("get agents: %w", err)
 	}
 
-	pages = pkg.SliceFilter(pages, func(b core.PageForDownload) bool {
+	pages = lo.Filter(pages, func(b core.PageForDownload, _ int) bool {
 		hasURL := b.BookURL != nil && b.ImageURL != nil
 		if !hasURL {
 			uc.logger.WarnContext(

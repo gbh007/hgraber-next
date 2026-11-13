@@ -50,5 +50,6 @@ func (g Generator) WithVariables(builder *dashboard.DashboardBuilder) *dashboard
 			}).
 			Refresh(dashboard.VariableRefreshOnTimeRangeChanged),
 	)
+
 	return builder
 }

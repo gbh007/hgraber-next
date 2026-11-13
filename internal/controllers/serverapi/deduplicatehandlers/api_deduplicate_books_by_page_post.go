@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *DeduplicateHandlersController) APIDeduplicateBooksByPagePost(
@@ -18,7 +18,7 @@ func (c *DeduplicateHandlersController) APIDeduplicateBooksByPagePost(
 	}
 
 	return &serverapi.APIDeduplicateBooksByPagePostOK{
-		Books: pkg.Map(data, func(raw bff.BookWithPreviewPage) serverapi.BookSimple {
+		Books: lo.Map(data, func(raw bff.BookWithPreviewPage, _ int) serverapi.BookSimple {
 			return c.apiCore.ConvertSimpleBook(ctx, raw.Book, raw.PreviewPage)
 		}),
 	}, nil

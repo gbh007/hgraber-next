@@ -6,9 +6,9 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (c *Controller) attributesCountTool() server.ServerTool {
@@ -28,7 +28,7 @@ func (c *Controller) attributesCountTool() server.ServerTool {
 
 			// FIXME: перенести фильтрацию в репозиторий
 			if code := request.GetString("filter.type", ""); code != "" {
-				variants = pkg.SliceFilter(variants, func(av core.AttributeVariant) bool {
+				variants = lo.Filter(variants, func(av core.AttributeVariant, _ int) bool {
 					return av.Code == code
 				})
 			}
@@ -44,7 +44,7 @@ func (c *Controller) attributesCountTool() server.ServerTool {
 			}
 
 			return mcp.NewToolResultStructuredOnly(map[string]any{
-				"attributes": pkg.Map(variants, func(av core.AttributeVariant) attributeData {
+				"attributes": lo.Map(variants, func(av core.AttributeVariant, _ int) attributeData {
 					return attributeData{
 						Type:  av.Code,
 						Value: av.Value,

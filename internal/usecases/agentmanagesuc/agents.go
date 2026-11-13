@@ -7,7 +7,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 func (uc *UseCase) Agents(
@@ -20,7 +20,7 @@ func (uc *UseCase) Agents(
 		return nil, fmt.Errorf("storage get agents: %w", err)
 	}
 
-	res := pkg.Map(agents, func(a core.Agent) serveragentdto.AgentWithStatus {
+	res := lo.Map(agents, func(a core.Agent, _ int) serveragentdto.AgentWithStatus {
 		return serveragentdto.AgentWithStatus{
 			Agent: a,
 		}

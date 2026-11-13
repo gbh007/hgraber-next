@@ -6,10 +6,10 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
 	"github.com/gbh007/hgraber-next/internal/domain/systemmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UUID) (systemmodel.RunnableTask, error) {
@@ -49,12 +49,12 @@ func (uc *UseCase) RemoveFilesInStoragesMismatch(_ context.Context, fsID uuid.UU
 		taskResult.StartStage("transform ids")
 		taskResult.SetTotal(int64(len(storageIDs)*2 + len(fileIDs)*2))
 
-		fileNotInDB := pkg.SliceToMap(fileIDs, func(id uuid.UUID) (uuid.UUID, struct{}) {
+		fileNotInDB := lo.SliceToMap(fileIDs, func(id uuid.UUID) (uuid.UUID, struct{}) {
 			taskResult.IncProgress()
 
 			return id, struct{}{}
 		})
-		fileNotInFS := pkg.SliceToMap(storageIDs, func(id uuid.UUID) (uuid.UUID, struct{}) {
+		fileNotInFS := lo.SliceToMap(storageIDs, func(id uuid.UUID) (uuid.UUID, struct{}) {
 			taskResult.IncProgress()
 
 			return id, struct{}{}

@@ -7,7 +7,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
 	"github.com/gbh007/hgraber-next/internal/domain/systemmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 func (uc *UseCase) MassloadForUpdateCalculation(ctx context.Context) ([]massloadmodel.Massload, error) {
@@ -124,9 +124,9 @@ func (uc *UseCase) updateCalculation(ctx context.Context, ml massloadmodel.Massl
 
 		needUpdate := false
 		link.UpdatedAt = time.Now()
-		booksAhead := int64(len(pkg.Unique(info.urlsAhead)))
-		newBooks := int64(len(pkg.Unique(info.urlsNew)))
-		existingBooks := int64(len(pkg.Unique(info.urlsExisting)))
+		booksAhead := int64(len(lo.Union(info.urlsAhead)))
+		newBooks := int64(len(lo.Union(info.urlsNew)))
+		existingBooks := int64(len(lo.Union(info.urlsExisting)))
 
 		if link.BooksAhead == nil || *link.BooksAhead != booksAhead {
 			link.BooksAhead = &booksAhead
@@ -161,9 +161,9 @@ func (uc *UseCase) updateCalculation(ctx context.Context, ml massloadmodel.Massl
 
 	needUpdate := false
 	ml.UpdatedAt = time.Now()
-	booksAhead := int64(len(pkg.Unique(all.urlsAhead)))
-	newBooks := int64(len(pkg.Unique(all.urlsNew)))
-	existingBooks := int64(len(pkg.Unique(all.urlsExisting)))
+	booksAhead := int64(len(lo.Union(all.urlsAhead)))
+	newBooks := int64(len(lo.Union(all.urlsNew)))
+	existingBooks := int64(len(lo.Union(all.urlsExisting)))
 
 	if ml.BooksAhead == nil || *ml.BooksAhead != booksAhead {
 		ml.BooksAhead = &booksAhead

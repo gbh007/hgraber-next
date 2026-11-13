@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *LabelHandlersController) APILabelGetPost(
@@ -18,7 +18,7 @@ func (c *LabelHandlersController) APILabelGetPost(
 	}
 
 	return &serverapi.APILabelGetPostOK{
-		Labels: pkg.Map(labels, func(raw core.BookLabel) serverapi.APILabelGetPostOKLabelsItem {
+		Labels: lo.Map(labels, func(raw core.BookLabel, _ int) serverapi.APILabelGetPostOKLabelsItem {
 			return serverapi.APILabelGetPostOKLabelsItem{
 				BookID:     raw.BookID,
 				PageNumber: raw.PageNumber,

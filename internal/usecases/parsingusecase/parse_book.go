@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.Book) error {
@@ -60,7 +60,7 @@ func (uc *UseCase) ParseBook(ctx context.Context, agentID uuid.UUID, book core.B
 	err = uc.storage.UpdateBookPages(
 		ctx,
 		book.ID,
-		pkg.Map(info.Pages, func(p hproxymodel.BookPage) core.Page {
+		lo.Map(info.Pages, func(p hproxymodel.BookPage, _ int) core.Page {
 			return core.Page{
 				BookID:     book.ID,
 				PageNumber: p.PageNumber,

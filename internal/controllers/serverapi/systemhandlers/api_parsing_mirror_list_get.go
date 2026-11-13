@@ -5,8 +5,8 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *SystemHandlersController) APIParsingMirrorListGet(
@@ -18,7 +18,7 @@ func (c *SystemHandlersController) APIParsingMirrorListGet(
 	}
 
 	return &serverapi.APIParsingMirrorListGetOK{
-		Mirrors: pkg.Map(mirrors, func(mirror parsing.URLMirror) serverapi.APIParsingMirrorListGetOKMirrorsItem {
+		Mirrors: lo.Map(mirrors, func(mirror parsing.URLMirror, _ int) serverapi.APIParsingMirrorListGetOKMirrorsItem {
 			return serverapi.APIParsingMirrorListGetOKMirrorsItem{
 				ID:          mirror.ID,
 				Name:        mirror.Name,

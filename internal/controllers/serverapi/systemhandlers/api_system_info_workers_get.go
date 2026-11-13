@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/internal/domain/systemmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *SystemHandlersController) APISystemInfoWorkersGet(
@@ -14,7 +14,7 @@ func (c *SystemHandlersController) APISystemInfoWorkersGet(
 	workers := c.systemUseCases.WorkersInfo(ctx)
 
 	return &serverapi.APISystemInfoWorkersGetOK{
-		Workers: pkg.Map(workers, func(w systemmodel.SystemWorkerStat) serverapi.APISystemInfoWorkersGetOKWorkersItem {
+		Workers: lo.Map(workers, func(w systemmodel.SystemWorkerStat, _ int) serverapi.APISystemInfoWorkersGetOKWorkersItem {
 			return serverapi.APISystemInfoWorkersGetOKWorkersItem{
 				Name:    w.Name,
 				InQueue: w.InQueueCount,

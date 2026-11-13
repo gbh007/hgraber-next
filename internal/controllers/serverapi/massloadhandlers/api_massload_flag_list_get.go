@@ -5,8 +5,8 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *MassloadController) APIMassloadFlagListGet(ctx context.Context) (*serverapi.APIMassloadFlagListGetOK, error) {
@@ -16,7 +16,9 @@ func (c *MassloadController) APIMassloadFlagListGet(ctx context.Context) (*serve
 	}
 
 	return &serverapi.APIMassloadFlagListGetOK{
-		Flags: pkg.Map(flags, convertMassloadFlag),
+		Flags: lo.Map(flags, func(flag massloadmodel.Flag, _ int) serverapi.MassloadFlag {
+			return convertMassloadFlag(flag)
+		}),
 	}, nil
 }
 

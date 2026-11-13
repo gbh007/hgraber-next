@@ -5,8 +5,8 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *HProxyHandlersController) APIHproxyBookPost(
@@ -30,37 +30,37 @@ func (c *HProxyHandlersController) APIHproxyBookPost(
 		PreviewURL: c.filePreview(ctx, book.ExURL, book.PreviewURL),
 		PageCount:  book.PageCount,
 		ExistsIds:  book.ExistsIDs,
-		Pages: pkg.Map(book.Pages, func(p hproxymodel.BookPage) serverapi.APIHproxyBookPostOKPagesItem {
+		Pages: lo.Map(book.Pages, func(p hproxymodel.BookPage, _ int) serverapi.APIHproxyBookPostOKPagesItem {
 			return serverapi.APIHproxyBookPostOKPagesItem{
 				PageNumber: p.PageNumber,
 				PreviewURL: c.apiCore.GetHProxyFileURL(ctx, book.ExURL, p.ExtPreviewURL),
 			}
 		}),
-		Attributes: pkg.Map(
+		Attributes: lo.Map(
 			book.Attributes,
-			func(attr hproxymodel.BookAttribute) serverapi.APIHproxyBookPostOKAttributesItem {
+			func(attr hproxymodel.BookAttribute, _ int) serverapi.APIHproxyBookPostOKAttributesItem {
 				return serverapi.APIHproxyBookPostOKAttributesItem{
 					Code: attr.Code,
 					Name: attr.Name,
-					Values: pkg.Map(
+					Values: lo.Map(
 						attr.Values,
-						func(v hproxymodel.BookAttributeValue) serverapi.APIHproxyBookPostOKAttributesItemValuesItem {
+						func(v hproxymodel.BookAttributeValue, _ int) serverapi.APIHproxyBookPostOKAttributesItemValuesItem {
 							return serverapi.APIHproxyBookPostOKAttributesItemValuesItem{
 								ExtName: v.ExtName,
 								Name:    apiservercore.OptString(v.Name),
 								ExtURL:  apiservercore.OptURL(v.ExtURL),
-								MassloadsByName: pkg.Map(
+								MassloadsByName: lo.Map(
 									v.MassloadsByName,
-									func(ml hproxymodel.MassloadInfo) serverapi.APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem { //nolint:lll // будет исправлено позднее
+									func(ml hproxymodel.MassloadInfo, _ int) serverapi.APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem { //nolint:lll // будет исправлено позднее
 										return serverapi.APIHproxyBookPostOKAttributesItemValuesItemMassloadsByNameItem{
 											ID:   ml.ID,
 											Name: ml.Name,
 										}
 									},
 								),
-								MassloadsByExtURL: pkg.Map(
+								MassloadsByExtURL: lo.Map(
 									v.MassloadsByURL,
-									func(ml hproxymodel.MassloadInfo) serverapi.APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem { //nolint:lll // будет исправлено позднее
+									func(ml hproxymodel.MassloadInfo, _ int) serverapi.APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem { //nolint:lll // будет исправлено позднее
 										return serverapi.APIHproxyBookPostOKAttributesItemValuesItemMassloadsByExtURLItem{ //nolint:lll // будет исправлено позднее
 											ID:   ml.ID,
 											Name: ml.Name,

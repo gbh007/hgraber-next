@@ -8,7 +8,7 @@ import (
 	"github.com/gbh007/hgraber-next/external/parserdto"
 	"github.com/gbh007/hgraber-next/internal/application/agent/agnconfig"
 	"github.com/gbh007/hgraber-next/internal/dataproviders/request"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 	"golang.org/x/net/proxy"
 )
 
@@ -28,7 +28,7 @@ func initParsers(
 	)
 
 	if cfg.Proxy.Host != "" {
-		withProxy = pkg.SliceToMap(cfg.Proxy.Enabled, func(s string) (string, struct{}) { return s, struct{}{} })
+		withProxy = lo.SliceToMap(cfg.Proxy.Enabled, func(s string) (string, struct{}) { return s, struct{}{} })
 
 		var auth *proxy.Auth
 

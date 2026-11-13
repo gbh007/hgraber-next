@@ -5,8 +5,8 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/hproxymodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *HProxyHandlersController) APIHproxyListPost(
@@ -19,8 +19,8 @@ func (c *HProxyHandlersController) APIHproxyListPost(
 	}
 
 	return &serverapi.APIHproxyListPostOK{
-		MassloadIds: pkg.Map(data.Massloads, func(ml hproxymodel.MassloadInfo) int { return ml.ID }),
-		Books: pkg.Map(data.Books, func(b hproxymodel.ListBook) serverapi.APIHproxyListPostOKBooksItem {
+		MassloadIds: lo.Map(data.Massloads, func(ml hproxymodel.MassloadInfo, _ int) int { return ml.ID }),
+		Books: lo.Map(data.Books, func(b hproxymodel.ListBook, _ int) serverapi.APIHproxyListPostOKBooksItem {
 			return serverapi.APIHproxyListPostOKBooksItem{
 				ExtURL:     b.ExtURL,
 				Name:       apiservercore.OptString(b.Name),
@@ -28,7 +28,7 @@ func (c *HProxyHandlersController) APIHproxyListPost(
 				ExistsIds:  b.ExistsIDs,
 			}
 		}),
-		Pagination: pkg.Map(data.Pagination, func(p hproxymodel.ListPage) serverapi.APIHproxyListPostOKPaginationItem {
+		Pagination: lo.Map(data.Pagination, func(p hproxymodel.ListPage, _ int) serverapi.APIHproxyListPostOKPaginationItem {
 			return serverapi.APIHproxyListPostOKPaginationItem{
 				ExtURL: p.ExtURL,
 				Name:   p.Name,

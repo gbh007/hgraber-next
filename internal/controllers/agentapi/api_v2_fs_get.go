@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
+	"github.com/samber/lo"
 )
 
 func (c *Controller) APIV2FsGet(
@@ -39,7 +39,7 @@ func (c *Controller) APIV2FsGet(
 			Value: state.AvailableSize,
 			Set:   state.AvailableSize > 0,
 		},
-		Files: pkg.Map(state.Files, func(raw fsmodel.FSStateFile) agentapi.APIV2FsGetOKFilesItem {
+		Files: lo.Map(state.Files, func(raw fsmodel.FSStateFile, _ int) agentapi.APIV2FsGetOKFilesItem {
 			return agentapi.APIV2FsGetOKFilesItem{
 				ID:        raw.ID,
 				Size:      raw.Size,

@@ -6,8 +6,8 @@ import (
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *DeduplicateHandlersController) APIDeduplicateComparePost(
@@ -24,19 +24,25 @@ func (c *DeduplicateHandlersController) APIDeduplicateComparePost(
 		Origin: c.apiCore.ConvertSimpleBook(ctx, data.OriginBook, data.OriginPreviewPage),
 		Target: c.apiCore.ConvertSimpleBook(ctx, data.TargetBook, data.TargetPreviewPage),
 
-		OriginPages: pkg.Map(data.OriginPages, func(page bff.PreviewPage) serverapi.PageSimple {
+		OriginPages: lo.Map(data.OriginPages, func(page bff.PreviewPage, _ int) serverapi.PageSimple {
 			return c.apiCore.ConvertPreviewPage(ctx, page)
 		}),
-		BothPages: pkg.Map(data.BothPages, func(page bff.PreviewPage) serverapi.PageSimple {
+		BothPages: lo.Map(data.BothPages, func(page bff.PreviewPage, _ int) serverapi.PageSimple {
 			return c.apiCore.ConvertPreviewPage(ctx, page)
 		}),
-		TargetPages: pkg.Map(data.TargetPages, func(page bff.PreviewPage) serverapi.PageSimple {
+		TargetPages: lo.Map(data.TargetPages, func(page bff.PreviewPage, _ int) serverapi.PageSimple {
 			return c.apiCore.ConvertPreviewPage(ctx, page)
 		}),
 
-		OriginAttributes: pkg.Map(data.OriginAttributes, apiservercore.ConvertBookAttribute),
-		BothAttributes:   pkg.Map(data.BothAttributes, apiservercore.ConvertBookAttribute),
-		TargetAttributes: pkg.Map(data.TargetAttributes, apiservercore.ConvertBookAttribute),
+		OriginAttributes: lo.Map(data.OriginAttributes, func(attr bff.AttributeToWeb, _ int) serverapi.BookAttribute {
+			return apiservercore.ConvertBookAttribute(attr)
+		}),
+		BothAttributes: lo.Map(data.BothAttributes, func(attr bff.AttributeToWeb, _ int) serverapi.BookAttribute {
+			return apiservercore.ConvertBookAttribute(attr)
+		}),
+		TargetAttributes: lo.Map(data.TargetAttributes, func(attr bff.AttributeToWeb, _ int) serverapi.BookAttribute {
+			return apiservercore.ConvertBookAttribute(attr)
+		}),
 
 		OriginCoveredTarget:                  data.EntryPercentage,
 		TargetCoveredOrigin:                  data.ReverseEntryPercentage,

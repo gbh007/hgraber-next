@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *AttributeHandlersController) APIAttributeCountGet(
@@ -17,7 +17,7 @@ func (c *AttributeHandlersController) APIAttributeCountGet(
 	}
 
 	return &serverapi.APIAttributeCountGetOK{
-		Attributes: pkg.Map(attributes, func(raw core.AttributeVariant) serverapi.APIAttributeCountGetOKAttributesItem {
+		Attributes: lo.Map(attributes, func(raw core.AttributeVariant, _ int) serverapi.APIAttributeCountGetOKAttributesItem {
 			return serverapi.APIAttributeCountGetOKAttributesItem{
 				Code:  raw.Code,
 				Value: raw.Value,

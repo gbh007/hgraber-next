@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *DeduplicateHandlersController) APIDeduplicateUniquePagesPost(
@@ -18,7 +18,7 @@ func (c *DeduplicateHandlersController) APIDeduplicateUniquePagesPost(
 	}
 
 	return &serverapi.APIDeduplicateUniquePagesPostOK{
-		Pages: pkg.Map(data, func(page bff.PreviewPage) serverapi.PageSimple {
+		Pages: lo.Map(data, func(page bff.PreviewPage, _ int) serverapi.PageSimple {
 			return c.apiCore.ConvertPreviewPage(ctx, page)
 		}),
 	}, nil

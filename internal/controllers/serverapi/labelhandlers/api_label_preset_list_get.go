@@ -5,8 +5,8 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *LabelHandlersController) APILabelPresetListGet(
@@ -18,7 +18,7 @@ func (c *LabelHandlersController) APILabelPresetListGet(
 	}
 
 	return &serverapi.APILabelPresetListGetOK{
-		Presets: pkg.Map(presets, func(raw core.BookLabelPreset) serverapi.APILabelPresetListGetOKPresetsItem {
+		Presets: lo.Map(presets, func(raw core.BookLabelPreset, _ int) serverapi.APILabelPresetListGetOKPresetsItem {
 			return serverapi.APILabelPresetListGetOKPresetsItem{
 				Name:        raw.Name,
 				Description: apiservercore.OptString(raw.Description),

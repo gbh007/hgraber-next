@@ -1,7 +1,6 @@
 package generatorcore
 
 import (
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/grafana/grafana-foundation-sdk/go/cog"
 	"github.com/grafana/grafana-foundation-sdk/go/cog/variants"
 	"github.com/grafana/grafana-foundation-sdk/go/common"
@@ -9,6 +8,7 @@ import (
 	"github.com/grafana/grafana-foundation-sdk/go/prometheus"
 	"github.com/grafana/grafana-foundation-sdk/go/table"
 	"github.com/grafana/grafana-foundation-sdk/go/timeseries"
+	"github.com/samber/lo"
 )
 
 type PromQLExpr struct {
@@ -20,7 +20,7 @@ func SimpleTSPanel(exprs []PromQLExpr, title, unit string) *timeseries.PanelBuil
 	return timeseries.
 		NewPanelBuilder().
 		Title(title).
-		Targets(pkg.Map(exprs, func(expr PromQLExpr) cog.Builder[variants.Dataquery] {
+		Targets(lo.Map(exprs, func(expr PromQLExpr, _ int) cog.Builder[variants.Dataquery] {
 			legend := LegendAuto
 			if expr.Legend != "" {
 				legend = expr.Legend
@@ -40,7 +40,7 @@ func SimpleTSPanel(exprs []PromQLExpr, title, unit string) *timeseries.PanelBuil
 func SimpleTablePanel(exprs []PromQLExpr, title, unit string) *table.PanelBuilder {
 	return table.NewPanelBuilder().
 		Title(title).
-		Targets(pkg.Map(exprs, func(expr PromQLExpr) cog.Builder[variants.Dataquery] {
+		Targets(lo.Map(exprs, func(expr PromQLExpr, _ int) cog.Builder[variants.Dataquery] {
 			legend := LegendAuto
 			if expr.Legend != "" {
 				legend = expr.Legend

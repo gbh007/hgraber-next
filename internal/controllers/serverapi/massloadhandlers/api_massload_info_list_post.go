@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 //nolint:cyclop,funlen // будет исправлено позднее
@@ -77,6 +77,8 @@ func (c *MassloadController) APIMassloadInfoListPost(
 	}
 
 	return &serverapi.APIMassloadInfoListPostOK{
-		Massloads: pkg.Map(mls, convertMassloadInfo),
+		Massloads: lo.Map(mls, func(ml massloadmodel.Massload, _ int) serverapi.MassloadInfo {
+			return convertMassloadInfo(ml)
+		}),
 	}, nil
 }

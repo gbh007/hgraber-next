@@ -6,8 +6,8 @@ import (
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *FSHandlersController) APIFsListPost(
@@ -25,7 +25,7 @@ func (c *FSHandlersController) APIFsListPost(
 
 	//nolint:staticcheck // поля используются в API
 	return &serverapi.APIFsListPostOK{
-		FileSystems: pkg.Map(storages, func(raw fsmodel.FSWithStatus) serverapi.APIFsListPostOKFileSystemsItem {
+		FileSystems: lo.Map(storages, func(raw fsmodel.FSWithStatus, _ int) serverapi.APIFsListPostOKFileSystemsItem {
 			return serverapi.APIFsListPostOKFileSystemsItem{
 				Info:                apiservercore.ConvertFileSystemInfoToAPI(raw.Info),
 				IsLegacy:            raw.IsLegacy,

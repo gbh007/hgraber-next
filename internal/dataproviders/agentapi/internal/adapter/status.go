@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
+	"github.com/samber/lo"
 )
 
 func (a *Adapter) Status(ctx context.Context) (serveragentdto.AgentStatus, error) {
@@ -19,9 +19,9 @@ func (a *Adapter) Status(ctx context.Context) (serveragentdto.AgentStatus, error
 		IsOK:      res.Status == agentapi.APIV2StatusGetOKStatusOk,
 		IsWarning: res.Status == agentapi.APIV2StatusGetOKStatusWarning,
 		IsError:   res.Status == agentapi.APIV2StatusGetOKStatusError,
-		Problems: pkg.Map(
+		Problems: lo.Map(
 			res.Problems,
-			func(p agentapi.APIV2StatusGetOKProblemsItem) serveragentdto.AgentStatusProblem {
+			func(p agentapi.APIV2StatusGetOKProblemsItem, _ int) serveragentdto.AgentStatusProblem {
 				return serveragentdto.AgentStatusProblem{
 					IsInfo:    p.Type == agentapi.APIV2StatusGetOKProblemsItemTypeInfo,
 					IsWarning: p.Type == agentapi.APIV2StatusGetOKProblemsItemTypeWarning,

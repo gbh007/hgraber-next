@@ -6,10 +6,10 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (c *Controller) bookListTool() server.ServerTool {
@@ -162,7 +162,7 @@ func (c *Controller) bookListTool() server.ServerTool {
 			}
 
 			return mcp.NewToolResultStructuredOnly(map[string]any{
-				"books": pkg.Map(list.Books, func(b bff.BookShort) bookData {
+				"books": lo.Map(list.Books, func(b bff.BookShort, _ int) bookData {
 					data := bookData{
 						ID:        b.Book.ID,
 						Name:      b.Book.Name,

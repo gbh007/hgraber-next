@@ -6,8 +6,8 @@ import (
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *Controller) ConvertPreviewPageURL(ctx context.Context, p bff.PreviewPage) serverapi.OptURI {
@@ -72,15 +72,15 @@ func ConvertBookAttribute(a bff.AttributeToWeb) serverapi.BookAttribute {
 	return serverapi.BookAttribute{
 		Code: a.Code,
 		Name: a.Name,
-		Values: pkg.Map(a.Values, func(v bff.AttributeToWebValue) string {
+		Values: lo.Map(a.Values, func(v bff.AttributeToWebValue, _ int) string {
 			return v.Name
 		}),
-		ValuesV2: pkg.Map(a.Values, func(v bff.AttributeToWebValue) serverapi.BookAttributeValuesV2Item {
+		ValuesV2: lo.Map(a.Values, func(v bff.AttributeToWebValue, _ int) serverapi.BookAttributeValuesV2Item {
 			return serverapi.BookAttributeValuesV2Item{
 				Name: v.Name,
-				MassloadsByName: pkg.Map(
+				MassloadsByName: lo.Map(
 					v.MassloadsByName,
-					func(m bff.MassloadInfo) serverapi.BookAttributeValuesV2ItemMassloadsByNameItem {
+					func(m bff.MassloadInfo, _ int) serverapi.BookAttributeValuesV2ItemMassloadsByNameItem {
 						return serverapi.BookAttributeValuesV2ItemMassloadsByNameItem{
 							ID:   m.ID,
 							Name: m.Name,
@@ -99,13 +99,13 @@ func ConvertBookFullToBookRaw(book core.BookContainer) *serverapi.BookRaw {
 		OriginURL: OptURL(book.Book.OriginURL),
 		Name:      book.Book.Name,
 		PageCount: book.Book.PageCount,
-		Attributes: pkg.MapToSlice(book.Attributes, func(code string, values []string) serverapi.BookRawAttributesItem {
+		Attributes: lo.MapToSlice(book.Attributes, func(code string, values []string) serverapi.BookRawAttributesItem {
 			return serverapi.BookRawAttributesItem{
 				Code:   code,
 				Values: values,
 			}
 		}),
-		Pages: pkg.Map(book.Pages, func(p core.Page) serverapi.BookRawPagesItem {
+		Pages: lo.Map(book.Pages, func(p core.Page, _ int) serverapi.BookRawPagesItem {
 			return serverapi.BookRawPagesItem{
 				PageNumber: p.PageNumber,
 				OriginURL:  OptURL(p.OriginURL),
@@ -115,7 +115,7 @@ func ConvertBookFullToBookRaw(book core.BookContainer) *serverapi.BookRaw {
 				LoadAt:     OptTime(p.LoadAt),
 			}
 		}),
-		Labels: pkg.Map(book.Labels, func(l core.BookLabel) serverapi.BookRawLabelsItem {
+		Labels: lo.Map(book.Labels, func(l core.BookLabel, _ int) serverapi.BookRawLabelsItem {
 			return serverapi.BookRawLabelsItem{
 				PageNumber: l.PageNumber,
 				Name:       l.Name,
@@ -140,7 +140,7 @@ func ConvertBookRawToBookFull(book *serverapi.BookRaw) core.BookContainer {
 			CreateAt:  book.CreateAt,
 			// FIXME: нет ряд полей, возможно стоит расширить api
 		},
-		Pages: pkg.Map(book.Pages, func(raw serverapi.BookRawPagesItem) core.Page {
+		Pages: lo.Map(book.Pages, func(raw serverapi.BookRawPagesItem, _ int) core.Page {
 			return core.Page{
 				BookID:     book.ID,
 				PageNumber: raw.PageNumber,
@@ -152,10 +152,10 @@ func ConvertBookRawToBookFull(book *serverapi.BookRaw) core.BookContainer {
 				// FIXME: нет ряд полей, возможно стоит расширить api
 			}
 		}),
-		Attributes: pkg.SliceToMap(book.Attributes, func(raw serverapi.BookRawAttributesItem) (string, []string) {
+		Attributes: lo.SliceToMap(book.Attributes, func(raw serverapi.BookRawAttributesItem) (string, []string) {
 			return raw.Code, raw.Values
 		}),
-		Labels: pkg.Map(book.Labels, func(raw serverapi.BookRawLabelsItem) core.BookLabel {
+		Labels: lo.Map(book.Labels, func(raw serverapi.BookRawLabelsItem, _ int) core.BookLabel {
 			return core.BookLabel{
 				BookID:     book.ID,
 				PageNumber: raw.PageNumber,

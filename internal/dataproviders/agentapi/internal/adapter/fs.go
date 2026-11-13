@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
 )
 
@@ -54,7 +54,7 @@ func (a *FSAdapter) State(ctx context.Context, includeFileIDs, includeFileSizes 
 
 	return fsmodel.FSState{
 		FileIDs: res.FileIds,
-		Files: pkg.Map(res.Files, func(raw agentapi.APIV2FsGetOKFilesItem) fsmodel.FSStateFile {
+		Files: lo.Map(res.Files, func(raw agentapi.APIV2FsGetOKFilesItem, _ int) fsmodel.FSStateFile {
 			return fsmodel.FSStateFile{
 				ID:        raw.ID,
 				Size:      raw.Size,

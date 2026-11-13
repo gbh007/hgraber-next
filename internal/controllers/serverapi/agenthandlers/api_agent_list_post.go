@@ -6,8 +6,8 @@ import (
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *AgentHandlersController) APIAgentListPost(
@@ -25,7 +25,7 @@ func (c *AgentHandlersController) APIAgentListPost(
 		return nil, err //nolint:wrapcheck // будет исправлено позднее
 	}
 
-	responseAgents := pkg.Map(agents, func(agent serveragentdto.AgentWithStatus) serverapi.APIAgentListPostOKItem {
+	responseAgents := lo.Map(agents, func(agent serveragentdto.AgentWithStatus, _ int) serverapi.APIAgentListPostOKItem {
 		status := serverapi.OptAPIAgentListPostOKItemStatus{}
 
 		switch {
@@ -54,9 +54,9 @@ func (c *AgentHandlersController) APIAgentListPost(
 
 			status = serverapi.NewOptAPIAgentListPostOKItemStatus(serverapi.APIAgentListPostOKItemStatus{
 				StartAt: serverapi.NewOptDateTime(agent.Status.StartAt),
-				Problems: pkg.Map(
+				Problems: lo.Map(
 					agent.Status.Problems,
-					func(p serveragentdto.AgentStatusProblem) serverapi.APIAgentListPostOKItemStatusProblemsItem {
+					func(p serveragentdto.AgentStatusProblem, _ int) serverapi.APIAgentListPostOKItemStatusProblemsItem {
 						t := serverapi.APIAgentListPostOKItemStatusProblemsItemTypeError
 
 						switch {

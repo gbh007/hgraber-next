@@ -7,7 +7,7 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 //nolint:cyclop // будет исправлено позднее
@@ -85,7 +85,7 @@ func (uc *UseCase) BookList(ctx context.Context, filter core.BookFilter) (bff.Bo
 			false,
 		) {
 			if attr.Code == core.AttributeCodeTag {
-				bffBook.Tags = pkg.Map(attr.Values, func(v bff.AttributeToWebValue) string {
+				bffBook.Tags = lo.Map(attr.Values, func(v bff.AttributeToWebValue, _ int) string {
 					return v.Name
 				})
 			}

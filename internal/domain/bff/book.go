@@ -5,9 +5,9 @@ import (
 	"math"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type StatusFlag byte
@@ -39,13 +39,13 @@ type BookDetails struct {
 }
 
 func (book BookDetails) PageDownloadPercent() float64 {
-	downloadedPageCount := pkg.SliceReduce(book.Pages, func(v int, p PreviewPage) int {
+	downloadedPageCount := lo.Reduce(book.Pages, func(v int, p PreviewPage, _ int) int {
 		if p.Downloaded {
 			v++
 		}
 
 		return v
-	})
+	}, 0)
 
 	//nolint:mnd // будет исправлено позднее
 	return math.Round(float64(downloadedPageCount)*10000/float64(len(book.Pages))) / 100

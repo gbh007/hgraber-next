@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/jackc/pgx/v5"
+	"github.com/samber/lo"
 )
 
 var (
@@ -63,7 +63,7 @@ func (t pgxTracer) TraceQueryEnd(ctx context.Context, conn *pgx.Conn, data pgx.T
 }
 
 func (t pgxTracer) TraceBatchStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchStartData) context.Context {
-	queries := pkg.Map(data.Batch.QueuedQueries, func(q *pgx.QueuedQuery) string {
+	queries := lo.Map(data.Batch.QueuedQueries, func(q *pgx.QueuedQuery, _ int) string {
 		if q == nil {
 			return ""
 		}

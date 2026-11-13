@@ -5,8 +5,8 @@ import (
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/agentapi"
+	"github.com/samber/lo"
 )
 
 func (a *Adapter) BooksCheck(ctx context.Context, urls []url.URL) ([]serveragentdto.AgentBookCheckResult, error) {
@@ -21,7 +21,7 @@ func (a *Adapter) BooksCheck(ctx context.Context, urls []url.URL) ([]serveragent
 }
 
 func convertBooksCheckResult(checkResult *agentapi.BooksCheckResult) []serveragentdto.AgentBookCheckResult {
-	return pkg.Map(checkResult.Result, func(v agentapi.BooksCheckResultResultItem) serveragentdto.AgentBookCheckResult {
+	return lo.Map(checkResult.Result, func(v agentapi.BooksCheckResultResultItem, _ int) serveragentdto.AgentBookCheckResult {
 		return serveragentdto.AgentBookCheckResult{
 			URL:           v.URL,
 			IsUnsupported: v.Result == agentapi.BooksCheckResultResultItemResultUnsupported,

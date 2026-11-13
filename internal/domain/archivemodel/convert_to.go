@@ -5,7 +5,7 @@ import (
 	"net/url"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
+	"github.com/samber/lo"
 )
 
 func BookToEntity(raw Book) (core.BookContainer, error) {
@@ -70,7 +70,7 @@ func BookToEntity(raw Book) (core.BookContainer, error) {
 	b := core.BookContainer{
 		Book:   book,
 		Labels: labels,
-		Attributes: pkg.SliceToMap(raw.Attributes, func(attr Attribute) (string, []string) {
+		Attributes: lo.SliceToMap(raw.Attributes, func(attr Attribute) (string, []string) {
 			return attr.Code, attr.Values
 		}),
 		Pages: pages,

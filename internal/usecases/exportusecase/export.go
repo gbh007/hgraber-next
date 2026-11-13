@@ -8,11 +8,11 @@ import (
 	"io"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/archivemodel"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter core.BookFilter, deleteAfter bool) error {
@@ -24,7 +24,7 @@ func (uc *UseCase) Export(ctx context.Context, agentID uuid.UUID, filter core.Bo
 	}
 
 	uc.tmpStorage.AddToExport(
-		pkg.Map(books, func(bookID uuid.UUID) serveragentdto.BookToExport {
+		lo.Map(books, func(bookID uuid.UUID, _ int) serveragentdto.BookToExport {
 			return serveragentdto.BookToExport{
 				AgentID:           agentID,
 				BookID:            bookID,

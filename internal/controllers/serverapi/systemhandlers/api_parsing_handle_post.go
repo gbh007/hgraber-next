@@ -6,8 +6,8 @@ import (
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *SystemHandlersController) APIParsingHandlePost(
@@ -64,7 +64,7 @@ func (c *SystemHandlersController) APIParsingHandlePost(
 func convertAPIParsingHandlePostOKDetails(
 	raw []parsing.BookHandleResult,
 ) []serverapi.APIParsingHandlePostOKDetailsItem {
-	return pkg.Map(raw, func(b parsing.BookHandleResult) serverapi.APIParsingHandlePostOKDetailsItem {
+	return lo.Map(raw, func(b parsing.BookHandleResult, _ int) serverapi.APIParsingHandlePostOKDetailsItem {
 		return serverapi.APIParsingHandlePostOKDetailsItem{
 			URL:          b.URL,
 			IsDuplicate:  b.IsDuplicate,

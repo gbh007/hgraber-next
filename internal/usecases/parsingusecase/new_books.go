@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 //nolint:gocognit,cyclop,funlen // будет исправлено позднее
@@ -41,8 +41,8 @@ func (uc *UseCase) NewBooks(
 		Details: make([]parsing.BookHandleResult, 0, len(urls)),
 	}
 
-	urlSet := pkg.SliceToSet(urls)
-	bookIDsByURL := pkg.SliceToMap(urls, func(u url.URL) (url.URL, uuid.UUID) {
+	urlSet := lo.Keyify(urls)
+	bookIDsByURL := lo.SliceToMap(urls, func(u url.URL) (url.URL, uuid.UUID) {
 		return u, uuid.Must(uuid.NewV7())
 	})
 
@@ -83,7 +83,7 @@ func (uc *UseCase) NewBooks(
 			break
 		}
 
-		booksInfo, err := uc.agentSystem.BooksCheck(ctx, agent.ID, pkg.SetToSlice(urlSet))
+		booksInfo, err := uc.agentSystem.BooksCheck(ctx, agent.ID, lo.Keys(urlSet))
 
 		if errors.Is(err, serveragentdto.ErrAgentAPIOffline) {
 			uc.logger.DebugContext(

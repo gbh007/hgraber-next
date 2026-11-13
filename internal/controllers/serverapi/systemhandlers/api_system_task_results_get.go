@@ -6,8 +6,8 @@ import (
 
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/systemmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *SystemHandlersController) APISystemTaskResultsGet(
@@ -18,9 +18,9 @@ func (c *SystemHandlersController) APISystemTaskResultsGet(
 		return nil, err
 	}
 
-	responseResults := pkg.Map(
+	responseResults := lo.Map(
 		result,
-		func(raw *systemmodel.TaskResult) serverapi.APISystemTaskResultsGetOKResultsItem {
+		func(raw *systemmodel.TaskResult, _ int) serverapi.APISystemTaskResultsGetOKResultsItem {
 			return serverapi.APISystemTaskResultsGetOKResultsItem{
 				Name:              raw.Name,
 				Error:             apiservercore.OptString(raw.Error),
@@ -28,10 +28,10 @@ func (c *SystemHandlersController) APISystemTaskResultsGet(
 				DurationFormatted: max(raw.Duration(), 0).String(),
 				StartedAt:         raw.StartedAt,
 				EndedAt:           raw.EndedAt,
-				Stages: pkg.Map(
+				Stages: lo.Map(
 					raw.Stages,
 					//nolint:lll // будет исправлено позднее
-					func(rawStage *systemmodel.TaskResultStage) serverapi.APISystemTaskResultsGetOKResultsItemStagesItem {
+					func(rawStage *systemmodel.TaskResultStage, _ int) serverapi.APISystemTaskResultsGetOKResultsItemStagesItem {
 						return serverapi.APISystemTaskResultsGetOKResultsItemStagesItem{
 							Name:              rawStage.Name,
 							Error:             apiservercore.OptString(rawStage.Error),

@@ -6,8 +6,8 @@ import (
 	"github.com/gbh007/hgraber-next/internal/controllers/serverapi/apiservercore"
 	"github.com/gbh007/hgraber-next/internal/domain/bff"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 	"github.com/gbh007/hgraber-next/openapi/serverapi"
+	"github.com/samber/lo"
 )
 
 func (c *BookHandlersController) APIBookListPost(
@@ -23,13 +23,13 @@ func (c *BookHandlersController) APIBookListPost(
 
 	//nolint:staticcheck // поля используются в API
 	return &serverapi.APIBookListPostOK{
-		Books: pkg.Map(bookList.Books, func(b bff.BookShort) serverapi.APIBookListPostOKBooksItem {
+		Books: lo.Map(bookList.Books, func(b bff.BookShort, _ int) serverapi.APIBookListPostOKBooksItem {
 			return serverapi.APIBookListPostOKBooksItem{
 				Info: c.apiCore.ConvertSimpleBook(ctx, b.Book, b.PreviewPage),
 				Tags: b.Tags,
-				ColorAttributes: pkg.Map(
+				ColorAttributes: lo.Map(
 					b.ColorAttributes,
-					func(attr core.AttributeColor) serverapi.APIBookListPostOKBooksItemColorAttributesItem {
+					func(attr core.AttributeColor, _ int) serverapi.APIBookListPostOKBooksItemColorAttributesItem {
 						return serverapi.APIBookListPostOKBooksItemColorAttributesItem{
 							Code:            attr.Code,
 							Value:           attr.Value,
@@ -40,7 +40,7 @@ func (c *BookHandlersController) APIBookListPost(
 				),
 			}
 		}),
-		Pages: pkg.Map(bookList.Pages, func(v int) serverapi.APIBookListPostOKPagesItem {
+		Pages: lo.Map(bookList.Pages, func(v, _ int) serverapi.APIBookListPostOKPagesItem {
 			return serverapi.APIBookListPostOKPagesItem{
 				Value:       v,
 				IsCurrent:   v == req.Pagination.Value.Page.Value,
