@@ -10,7 +10,9 @@ import (
 	"github.com/samber/lo"
 )
 
-func (c *Client) DeduplicateArchive(ctx context.Context, body io.Reader) ([]agentdto.DeduplicateArchiveResult, error) {
+func (c *Client) DeduplicateArchive(ctx context.Context, body io.ReadCloser) ([]agentdto.DeduplicateArchiveResult, error) {
+	defer body.Close()
+
 	res, err := c.rawClient.APIDeduplicateArchivePost(ctx, serverapi.APIDeduplicateArchivePostReq{
 		Data: body,
 	})

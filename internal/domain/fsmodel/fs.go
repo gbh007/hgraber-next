@@ -15,6 +15,7 @@ type FSWithStatus struct {
 	Info FileStorageSystem
 
 	// Признак того что это устаревшее хранилище через конфиг
+	// FIXME: удалить как устаревшее
 	IsLegacy bool
 
 	DBFile         *core.SizeWithCount

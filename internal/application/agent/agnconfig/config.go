@@ -28,9 +28,8 @@ func AgentDefaultConfig() AgentConfig {
 }
 
 type AgentApplication struct {
-	ClientTimeout   time.Duration `toml:"client_timeout"`
-	ServiceName     string        `toml:"service_name"`
-	UseUnsafeCloser bool          `toml:"use_unsafe_closer"`
+	ClientTimeout time.Duration `toml:"client_timeout"`
+	ServiceName   string        `toml:"service_name"`
 }
 
 func AgentDefaultApplication() AgentApplication {

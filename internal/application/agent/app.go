@@ -130,7 +130,6 @@ func Serve(ctx context.Context, parserInits map[string]parserdto.NewParser) erro
 			metricProvider,
 			cfg.FSBase.ImportPath,
 			cfg.FSBase.ImportLimitOnFolder,
-			cfg.Application.UseUnsafeCloser,
 		)
 		if err != nil {
 			return fmt.Errorf("fail init import fs: %w", err)

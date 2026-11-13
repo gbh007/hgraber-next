@@ -22,8 +22,6 @@ type Storage struct {
 
 	limitOnFolder int
 	fsLimitMutex  sync.Mutex
-
-	useUnsafeCloser bool
 }
 
 func New(
@@ -31,7 +29,6 @@ func New(
 	metricProvider metricProvider,
 	path string,
 	limitOnFolder int,
-	useUnsafeCloser bool,
 ) (*Storage, error) {
 	err := createDir(path)
 	if err != nil {
@@ -42,9 +39,8 @@ func New(
 		logger:         logger,
 		metricProvider: metricProvider,
 
-		fsPath:          path,
-		limitOnFolder:   limitOnFolder,
-		useUnsafeCloser: useUnsafeCloser,
+		fsPath:        path,
+		limitOnFolder: limitOnFolder,
 	}, nil
 }
 

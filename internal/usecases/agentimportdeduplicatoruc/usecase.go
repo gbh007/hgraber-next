@@ -10,7 +10,7 @@ import (
 
 type importFS interface {
 	AllZips(ctx context.Context) ([]string, error)
-	Get(ctx context.Context, relativePath string) (io.Reader, error)
+	Get(ctx context.Context, relativePath string) (io.ReadCloser, error)
 }
 
 type storage interface {
@@ -22,7 +22,7 @@ type storage interface {
 }
 
 type masterAPI interface {
-	DeduplicateArchive(ctx context.Context, body io.Reader) ([]agentdto.DeduplicateArchiveResult, error)
+	DeduplicateArchive(ctx context.Context, body io.ReadCloser) ([]agentdto.DeduplicateArchiveResult, error)
 }
 
 type UseCase struct {

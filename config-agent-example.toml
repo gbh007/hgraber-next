@@ -17,7 +17,6 @@ debug = false
 [application]
 client_timeout = "1m0s"
 service_name = "hgraber-next-agent-local"
-use_unsafe_closer = false
 
 [parsers]
 hg4_token = ""
