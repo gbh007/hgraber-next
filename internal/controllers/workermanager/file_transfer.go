@@ -2,11 +2,11 @@ package workermanager
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/fsmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type fileTransferUnitUseCases interface {
@@ -26,10 +26,9 @@ func NewFileTransfer(
 		func(ctx context.Context, transfer fsmodel.FileTransfer) error {
 			err := useCases.TransferFile(ctx, transfer)
 			if err != nil {
-				return pkg.WrapError(
-					err, "fail transfer file",
-					pkg.ErrorArgument("file_id", transfer.FileID),
-					pkg.ErrorArgument("fs_id", transfer.FSID),
+				return fmt.Errorf(
+					"fail transfer file (file_id: %s, fs_id: %s): %w",
+					transfer.FileID.String(), transfer.FSID.String(), err,
 				)
 			}
 

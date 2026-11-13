@@ -2,11 +2,11 @@ package workermanager
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type hasherUnitUseCases interface {
@@ -26,10 +26,7 @@ func NewHasher(
 		func(ctx context.Context, file core.File) error {
 			err := useCases.HandleFileHash(ctx, file)
 			if err != nil {
-				return pkg.WrapError(
-					err, "fail hash file",
-					pkg.ErrorArgument("file_id", file.ID),
-				)
+				return fmt.Errorf("fail hash file (file_id: %s): %w", file.ID.String(), err)
 			}
 
 			return nil

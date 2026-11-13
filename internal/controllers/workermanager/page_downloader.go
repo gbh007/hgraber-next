@@ -2,6 +2,7 @@ package workermanager
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"github.com/google/uuid"
@@ -9,7 +10,6 @@ import (
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/parsing"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type pageWorkerUnitUseCases interface {
@@ -29,10 +29,9 @@ func NewPageDownloader(
 		func(ctx context.Context, page parsing.PageForDownloadWithAgent) error {
 			err := useCases.DownloadPage(ctx, page.AgentID, page.PageForDownload)
 			if err != nil {
-				return pkg.WrapError(
-					err, "fail download page",
-					pkg.ErrorArgument("book_id", page.BookID),
-					pkg.ErrorArgument("page_number", page.PageNumber),
+				return fmt.Errorf(
+					"fail download page (book_id: %s, page_number: %d): %w",
+					page.BookID.String(), page.PageNumber, err,
 				)
 			}
 

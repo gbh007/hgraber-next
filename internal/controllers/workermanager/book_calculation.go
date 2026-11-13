@@ -2,12 +2,12 @@ package workermanager
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type bookCalculationUnitUseCases interface {
@@ -27,10 +27,7 @@ func NewBookCalculation(
 		func(ctx context.Context, id uuid.UUID) error {
 			err := useCases.CalculateBook(ctx, id)
 			if err != nil {
-				return pkg.WrapError(
-					err, "fail update book calculation",
-					pkg.ErrorArgument("book_id", id.String()),
-				)
+				return fmt.Errorf("fail update book calculation (book_id: %s): %w", id.String(), err)
 			}
 
 			return nil

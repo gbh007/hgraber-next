@@ -2,11 +2,11 @@ package workermanager
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type massloadCalculationUnitUseCases interface {
@@ -26,10 +26,7 @@ func NewMassloadCalculation(
 		func(ctx context.Context, ml massloadmodel.Massload) error {
 			err := useCases.UpdateCalculation(ctx, ml)
 			if err != nil {
-				return pkg.WrapError(
-					err, "fail update massload calculation info",
-					pkg.ErrorArgument("massload_id", ml.ID),
-				)
+				return fmt.Errorf("fail update massload calculation info (massload_id: %d): %w", ml.ID, err)
 			}
 
 			return nil

@@ -2,11 +2,11 @@ package workermanager
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/massloadmodel"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type massloadSizeUnitUseCases interface {
@@ -31,10 +31,7 @@ func NewMassloadSize(
 		func(ctx context.Context, ml massloadmodel.Massload) error {
 			err := useCases.UpdateSize(ctx, ml)
 			if err != nil {
-				return pkg.WrapError(
-					err, "fail update massload size info",
-					pkg.ErrorArgument("massload_id", ml.ID),
-				)
+				return fmt.Errorf("fail update massload size info (massload_id: %d): %w", ml.ID, err)
 			}
 
 			return nil
@@ -56,10 +53,9 @@ func NewMassloadAttributeSize(
 		func(ctx context.Context, attr massloadmodel.Attribute) error {
 			err := useCases.UpdateAttributesSize(ctx, attr)
 			if err != nil {
-				return pkg.WrapError(
-					err, "fail update massload attribute size info",
-					pkg.ErrorArgument("code", attr.Code),
-					pkg.ErrorArgument("value", attr.Value),
+				return fmt.Errorf(
+					"fail update massload attribute size info (code: %s, value: %s): %w",
+					attr.Code, attr.Value, err,
 				)
 			}
 

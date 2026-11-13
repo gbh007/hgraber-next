@@ -2,11 +2,11 @@ package workermanager
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type exportUnitUseCases interface {
@@ -26,10 +26,9 @@ func NewExporter(
 		func(ctx context.Context, toExport serveragentdto.BookToExport) error {
 			err := useCases.ExportArchive(ctx, toExport, true)
 			if err != nil {
-				return pkg.WrapError(
-					err, "fail export book",
-					pkg.ErrorArgument("book_id", toExport.BookID),
-					pkg.ErrorArgument("agent_id", toExport.AgentID),
+				return fmt.Errorf(
+					"fail export book (book_id: %s, agent_id: %s): %w",
+					toExport.BookID.String(), toExport.AgentID.String(), err,
 				)
 			}
 

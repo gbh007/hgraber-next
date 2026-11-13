@@ -2,12 +2,12 @@ package workermanager
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"github.com/google/uuid"
 
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type validateFileUnitUseCases interface {
@@ -27,10 +27,7 @@ func NewFileValidator(
 		func(ctx context.Context, fileID uuid.UUID) error {
 			err := useCases.ValidateFile(ctx, fileID)
 			if err != nil {
-				return pkg.WrapError(
-					err, "fail validate file",
-					pkg.ErrorArgument("file_id", fileID),
-				)
+				return fmt.Errorf("fail validate file (file_id: %s): %w", fileID.String(), err)
 			}
 
 			return nil

@@ -2,6 +2,7 @@ package workermanager
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"github.com/google/uuid"
@@ -9,7 +10,6 @@ import (
 	"github.com/gbh007/hgraber-next/internal/controllers/workermanager/internal/worker"
 	"github.com/gbh007/hgraber-next/internal/domain/core"
 	"github.com/gbh007/hgraber-next/internal/domain/serveragentdto"
-	"github.com/gbh007/hgraber-next/internal/pkg"
 )
 
 type bookWorkerUnitUseCases interface {
@@ -29,10 +29,7 @@ func NewBookParser(
 		func(ctx context.Context, book serveragentdto.BookWithAgent) error {
 			err := useCases.ParseBook(ctx, book.AgentID, book.Book)
 			if err != nil {
-				return pkg.WrapError(
-					err, "fail parse book",
-					pkg.ErrorArgument("book_id", book.ID),
-				)
+				return fmt.Errorf("fail parse book (book_id: %s): %w", book.ID.String(), err)
 			}
 
 			return nil
